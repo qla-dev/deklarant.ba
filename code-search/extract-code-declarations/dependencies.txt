@@ -1,0 +1,3 @@
+camelot
+progressbar2
+pandas
