@@ -1,0 +1,5 @@
+pymupdf
+progressbar2
+pandas
+sentence-transformers
+faiss-cpu
