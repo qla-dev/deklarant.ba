@@ -226,13 +226,89 @@ def fix_tarifna_oznaka_and_naziv(df: pd.DataFrame):
                 df.at[index, "Naziv"] = tarifna_oznaka[split_index:].strip()  # Remaining text
     return df
 
+def roman_to_int(roman: str) -> int:
+    roman_to_value = {
+        'I': 1,
+        'V': 5,
+        'X': 10,
+        'L': 50,
+        'C': 100,
+        'D': 500,
+        'M': 1000
+    }
+    total = 0
+    prev_value = 0
+
+    for char in reversed(roman):
+        current_value = roman_to_value[char]
+        if current_value < prev_value:
+            total -= current_value
+        else:
+            total += current_value
+        prev_value = current_value
+
+    return total
+
+last_known_head = None
+last_known_section = None
+total_heads = 0
+total_sections = 0
+non_existing_heads = [77, 98]
+def extract_head_and_section(page: fitz.Page):
+    # Iterate through all the text on the page
+    global last_known_head
+    global last_known_section
+    global total_heads
+    global total_sections
+    next_text_is_section = False
+    next_text_is_head = False
+
+    for text in page.get_text().split("\n"):
+        text: str = text.strip()
+        if next_text_is_section:
+            if '\n' in text:
+                continue
+            # print("SECTION")
+            # print(text)
+            last_known_section = text
+            total_sections += 1
+            next_text_is_section = False
+        if next_text_is_head:
+            if '\n' in text:
+                continue
+            # print("HEAD")
+            # print(text)
+            last_known_head = text
+            total_heads += 1
+            next_text_is_head = False
+        if text.startswith('ODJELJAK '):
+            non_empty = list(filter(bool, text.split(' ')))
+            num = non_empty[1].strip()
+            if roman_to_int(num) != total_sections + 1:
+                raise RuntimeError(f"Expected section {total_sections + 1} but found {text} instead")
+            # Sections reset at 2 and then sections start
+            if roman_to_int(num) == 2 and total_heads == 0:
+                total_sections = -1
+            next_text_is_section = True
+        if text.startswith('GLAVA '):
+            non_empty = list(filter(bool, text.split(' ')))
+            num = int(non_empty[1].strip())
+            while total_heads + 1 in non_existing_heads:
+                total_heads += 1
+            if num != total_heads + 1:
+                raise RuntimeError(f"Expected GLAVA {total_heads + 1} but found {text} instead")
+            next_text_is_head = True
+
 def do_page(pdf: fitz.Document, page_number: int):
     page = pdf[page_number]
+    extract_head_and_section(page)
     vertical_lines, horizontal_lines = detect_table_lines_from_pdf(page)
     df = map_text_to_dataframe(page, vertical_lines, horizontal_lines)
     df = remove_and_test_first_rows(df)
     df = rename_columns(df)
     df = fix_tarifna_oznaka_and_naziv(df)
+    df["Odjeljak"] = [last_known_section] * len(df)
+    df["Glava"] = [last_known_head] * len(df)
     os.makedirs('debug_assets/extracted-table-declarations-csv', exist_ok=True)
     df.to_csv(f'debug_assets/extracted-table-declarations-csv/table_{page_number}.csv', index=False)
     return df
@@ -246,11 +322,17 @@ def clean_name(name):
     return name
 
 # Process the hierarchy based on the number of "–" characters
-def process_hierarchy(naziv_column):
+def process_hierarchy(df: pd.DataFrame):
     hierarchy = []
     result = []
-    
-    for name in naziv_column:
+
+    for _i, row in df.iterrows():
+        name = row["Naziv"]
+        section = row["Odjeljak"]
+        head = row["Glava"]
+        assert section, f"{name} is missing section"
+        assert head, f"{name} is missing head"
+
         if pd.isna(name):
             continue
 
@@ -266,7 +348,7 @@ def process_hierarchy(naziv_column):
         hierarchy.append(clean)
         
         # Join the hierarchy into a ">>>"
-        result.append(" >>> ".join(hierarchy))
+        result.append(" >>> ".join([section, head] + hierarchy))
     
     return result
 
@@ -286,6 +368,6 @@ if __name__ == '__main__':
 
     single_table = pd.concat(dfs, ignore_index=True)
 
-    single_table["Naziv"] = process_hierarchy(single_table["Naziv"])
+    single_table["Naziv"] = process_hierarchy(single_table)
 
     single_table.to_csv("assets/extracted_table.csv", index=False)

@@ -1,0 +1,80 @@
+from flask import Flask, request, jsonify, render_template_string
+from model.search import perform_search
+
+# Define the "search" function
+def search(query):
+    print("Searching for '", query, "'")
+    results = perform_search(query)[:10]
+    return results
+
+# Create the Flask app
+app = Flask(__name__)
+
+@app.route('/search-api')
+def handle_request():
+    query = request.args.get("query")
+    if query:
+        return jsonify(search(query))
+    else:
+        return jsonify({"error": "Missing 'query' parameter"}), 400
+
+# HTML template for GET route
+HTML_TEMPLATE = """
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <style>
+        strong {
+            display: inline-block;
+            width: 120px;
+        }
+        li {
+            margin-top: 20px;
+        }
+        body {
+            font-family: "Roboto", serif;
+            font-optical-sizing: auto;
+            font-weight: <weight>;
+            font-style: normal;
+            font-variation-settings: "wdth" 100;
+        }
+    </style>
+</head>
+<body>
+    <form method="GET">
+        <label for="query">Search Query:</label>
+        <input type="text" id="query" name="query" required>
+        <button type="submit">Search</button>
+    </form>
+    {% if query %}
+    <h2>You searched for: {{ query }}</h2>
+    {% endif %}
+    {% if results %}
+    <ul>
+        {% for result in results %}
+        <li>
+            <strong>Naziv:</strong> {{ result['entry']['Naziv'] }}<br>
+            <strong>Tarifna oznaka:</strong> {{ result['entry']['Tarifna oznaka'] }}<br>
+            <strong>Closeness:</strong> {{ result['closeness'] }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</body>
+</html>
+"""
+
+@app.route('/', methods=['GET'])
+def search_page():
+    query = request.args.get('query')
+    results = search(query) if query else None
+    return render_template_string(HTML_TEMPLATE, query=query, results=results)
+
+if __name__ == "__main__":
+    app.run(port=8080, host="0.0.0.0")

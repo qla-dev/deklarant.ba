@@ -1,11 +1,20 @@
 import pandas as pd
 from sentence_transformers import SentenceTransformer
 import faiss
-import numpy as np
 import os
 import pickle
 
-MODEL_NAME = "paraphrase-multilingual-MiniLM-L12-v2"
+MODEL_NAMES = [
+    "all-mpnet-base-v2",
+    # "sentence-t5-xxl",
+    # "openai/clip-vit-large-patch14",
+    # "gtr-t5-large",
+    # "text-embedding-ada-002"
+]
+
+MODELS = {}
+for model_name in MODEL_NAMES:
+    MODELS[model_name] = SentenceTransformer(model_name)
 
 # Load CSV and preprocess data
 def preprocess_csv(file_path):
@@ -21,59 +30,81 @@ def preprocess_csv(file_path):
 def generate_embeddings(data, column_name):
     cache_dir = "debug_assets"
     os.makedirs(cache_dir, exist_ok=True)
-    cache_path = os.path.join(cache_dir, f"{MODEL_NAME}.pkl")
+    all_embeddings = {}
 
-    if os.path.exists(cache_path):
-        print(f"Loading embeddings from cache: {cache_path}")
-        with open(cache_path, "rb") as f:
-            embeddings = pickle.load(f)
-    else:
-        print(f"Generating embeddings and caching to: {cache_path}")
-        model = SentenceTransformer(MODEL_NAME)
-        embeddings = model.encode(data[column_name].tolist(), show_progress_bar=True)
-        with open(cache_path, "wb") as f:
-            pickle.dump(embeddings, f)
+    for model_name in MODEL_NAMES:
+        cache_path = os.path.join(cache_dir, f"{model_name}.pkl")
 
-    return embeddings
+        if os.path.exists(cache_path):
+            print(f"Loading embeddings from cache: {cache_path}")
+            with open(cache_path, "rb") as f:
+                all_embeddings[model_name] = pickle.load(f)
+        else:
+            print(f"Generating embeddings and caching to: {cache_path}")
+            model = MODELS[model_name]
+            embeddings = model.encode(data[column_name].tolist(), show_progress_bar=True)
+            all_embeddings[model_name] = embeddings
+            with open(cache_path, "wb") as f:
+                pickle.dump(embeddings, f)
+
+    return all_embeddings
 
 # Build FAISS index for the embeddings
 def build_faiss_index(embeddings):
-    dim = embeddings.shape[1]
-    index = faiss.IndexFlatL2(dim)
-    index.add(embeddings)
-    return index
+    indices = {}
+    for model_name, embedding_array in embeddings.items():
+        dim = embedding_array.shape[1]
+        index = faiss.IndexFlatL2(dim)
+        index.add(embedding_array)
+        indices[model_name] = index
+    return indices
 
-# Search FAISS index for the closest match
-def search_faiss_index(query, index, data):
-    model = SentenceTransformer(MODEL_NAME)
-    query_embedding = model.encode([query])
-    distances, indices = index.search(query_embedding, len(data))  # Search for all matches
-    
-    # Return array of tuples (row, similarity)
-    results = [(data.iloc[idx], dist) for idx, dist in zip(indices[0], distances[0])]
-    return results
+# Search FAISS index for the closest match across models
+def search_faiss_index(query, indices, data):
+    results = []
+    query_embeddings = {}
+
+    # Generate query embeddings for all models
+    for model_name in MODEL_NAMES:
+        model = MODELS[model_name]
+        query_embeddings[model_name] = model.encode([query])
+
+    # Perform search for each model
+    for model_name, index in indices.items():
+        distances, indices_array = index.search(query_embeddings[model_name], len(data))
+        results.append((distances[0], indices_array[0]))
+
+    # Combine and sort by the sum of distances
+    aggregated_results = {}
+    for model_distances, model_indices in results:
+        for idx, dist in zip(model_indices, model_distances):
+            if idx in aggregated_results:
+                aggregated_results[idx] += dist
+            else:
+                aggregated_results[idx] = dist
+
+    # Convert to sorted list of tuples (index, sum_of_distances)
+    sorted_results = sorted(aggregated_results.items(), key=lambda x: x[1])
+    return sorted_results
+
+# File path to your CSV
+file_path = "assets/extracted_table.csv"
+# Preprocess the CSV
+data = preprocess_csv(file_path)
+# Generate embeddings for the "Naziv" column
+all_embeddings = generate_embeddings(data, column_name="Naziv - ENG")
+# Build FAISS indices
+indices = build_faiss_index(all_embeddings)
+
+def perform_search(query: str):
+    results = search_faiss_index(query.lower(), indices, data)
+    ret = [{
+        "entry": data.iloc[int(idx)].to_dict(),
+        "closeness": float(sum_of_distances)
+    } for (idx, sum_of_distances) in results]
+    return ret
 
 # Main script
 if __name__ == "__main__":
-    # File path to your CSV
-    file_path = "assets/extracted_table.csv"
-
-    # Preprocess the CSV
-    data = preprocess_csv(file_path)
-
-    # Generate embeddings for the "Naziv" column
-    embeddings = generate_embeddings(data, column_name="Naziv")
-
-    # Build FAISS index
-    index = build_faiss_index(np.array(embeddings))
-
-    # Query the index
-    query = "Vjeverica"  # Replace with your query
-    results = search_faiss_index(query, index, data)
-
-    # Output the results
-    for row, similarity in reversed(results[:10]):
-        print("Row:")
-        print(row)
-        print("Distance:", similarity)
-
+    for result in reversed(perform_search("chocolate")[:10]):
+        print(result)
