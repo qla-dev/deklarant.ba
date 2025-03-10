@@ -15,7 +15,7 @@
 
                     <a href="index" class="logo logo-light">
                         <span class="logo-sm">
-                            <img src="{{ URL::asset('build/images/logo-sm.png') }}" alt="" height="22">
+                            <img src="{{ URL::asset('build/images/logo-sm.png') }}" alt="" height="22"><!-- Test commit !-->
                         </span>
                         <span class="logo-lg">
                             <img src="{{ URL::asset('build/images/logo-light.png') }}" alt="" height="17">
