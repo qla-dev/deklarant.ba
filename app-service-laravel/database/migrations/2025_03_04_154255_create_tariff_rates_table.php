@@ -15,7 +15,8 @@ return new class extends Migration {
             $table->string('item_code')->unique();
             $table->string('name');
             $table->string('tariff_rate');
-            
+            $table->string('supplementary_unit')->nullable();
+
             // Tariff rates for different countries/regions
             $table->string('EU')->nullable();
             $table->string('CEFTA')->nullable();

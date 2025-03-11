@@ -10,8 +10,12 @@ class PackageController extends Controller
 {
     public function index()
     {
-        return response()->json(Package::all());
+        return response()->json([
+            'message' => 'Packages retrieved successfully',
+            'data' => Package::all()->makeHidden(['created_at', 'updated_at'])
+        ]);
     }
+
 
     public function store(Request $request)
     {
@@ -23,7 +27,10 @@ class PackageController extends Controller
         ]);
 
         $package = Package::create($data);
-        return response()->json($package, 201);
+        return response()->json([
+            'message' => 'The data has been stored successfully',
+            'data' => $package
+        ], 201);
     }
 
     public function show(Package $package)

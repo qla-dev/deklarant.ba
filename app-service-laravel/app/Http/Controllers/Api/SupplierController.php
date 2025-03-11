@@ -16,7 +16,6 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'user_id' => 'required|exists:users,id',
             'name' => 'required|string',
             'address' => 'required|string',
             'tax_id' => 'required|string|unique:suppliers,tax_id',

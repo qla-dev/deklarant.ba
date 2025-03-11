@@ -14,11 +14,13 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('supplier_id'); 
+            $table->unsignedBigInteger('user_id'); 
             $table->float('total_price');
             $table->date('date_of_issue');
             $table->string('country_of_origin');
             $table->timestamps();
 
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
         });
     }

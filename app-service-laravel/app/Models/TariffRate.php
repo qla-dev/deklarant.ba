@@ -9,7 +9,7 @@ class TariffRate extends Model
 {
     use HasFactory;
 
-    protected $table = 'tarrif_rates';
+    protected $table = 'tariff_rates';
     
     protected $fillable = [
         'item_code', 
