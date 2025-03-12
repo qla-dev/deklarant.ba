@@ -6,19 +6,19 @@
                 <div class="navbar-box horizontal-logo me-4">
                     <a href="index" class="logo logo-dark">
                         <span class="logo-sm">
-                            <img src="{{ URL::asset('build/images/logo-sm.png') }}" alt="" height="22">
+                            <img src="<?php echo e(URL::asset('build/images/logo-sm.png')); ?>" alt="" height="22">
                         </span>
                         <span class="logo-lg">
-                            <img src="{{ URL::asset('build/images/logo.svg') }}" alt="" height="35">
+                            <img src="<?php echo e(URL::asset('build/images/logo.svg')); ?>" alt="" height="35">
                         </span>
                     </a>
 
                     <a href="index" class="logo logo-light">
                         <span class="logo-sm">
-                            <img src="{{ URL::asset('build/images/logo-sm.png') }}" alt="" height="22">
+                            <img src="<?php echo e(URL::asset('build/images/logo-sm.png')); ?>" alt="" height="22">
                         </span>
                         <span class="logo-lg">
-                            <img src="{{ URL::asset('build/images/logo-light.png') }}" alt="" height="17">
+                            <img src="<?php echo e(URL::asset('build/images/logo-light.png')); ?>" alt="" height="17">
                         </span>
                     </a>
                 </div>
@@ -75,7 +75,7 @@
                                 <!-- item -->
                                 <a href="javascript:void(0);" class="dropdown-item notify-item py-2">
                                     <div class="d-flex">
-                                        <img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                        <img src="<?php echo e(URL::asset('build/images/users/avatar-2.jpg')); ?>" class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                         <div class="flex-grow-1">
                                             <h6 class="m-0">Angela Bernier</h6>
                                             <span class="fs-11 mb-0 text-muted">Manager</span>
@@ -85,7 +85,7 @@
                                 <!-- item -->
                                 <a href="javascript:void(0);" class="dropdown-item notify-item py-2">
                                     <div class="d-flex">
-                                        <img src="{{ URL::asset('build/images/users/avatar-3.jpg') }}" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                        <img src="<?php echo e(URL::asset('build/images/users/avatar-3.jpg')); ?>" class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                         <div class="flex-grow-1">
                                             <h6 class="m-0">David Grasso</h6>
                                             <span class="fs-11 mb-0 text-muted">Web Designer</span>
@@ -95,7 +95,7 @@
                                 <!-- item -->
                                 <a href="javascript:void(0);" class="dropdown-item notify-item py-2">
                                     <div class="d-flex">
-                                        <img src="{{ URL::asset('build/images/users/avatar-5.jpg') }}" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                        <img src="<?php echo e(URL::asset('build/images/users/avatar-5.jpg')); ?>" class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                         <div class="flex-grow-1">
                                             <h6 class="m-0">Mike Bunch</h6>
                                             <span class="fs-11 mb-0 text-muted">React Developer</span>
@@ -132,78 +132,78 @@
 
                 <div class="dropdown ms-1 topbar-head-dropdown header-item me-5">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        @switch(Session::get('lang'))
-                        @case('ru')
-                        <img src="{{ URL::asset('build/images/flags/russia.svg') }}" class="rounded " alt="Header Language" height="18">
-                        @break
-                        @case('it')
-                        <img src="{{ URL::asset('build/images/flags/italy.svg') }}" class="rounded " alt="Header Language" height="18">
-                        @break
-                        @case('sp')
-                        <img src="{{ URL::asset('build/images/flags/spain.svg') }}" class="rounded " alt="Header Language" height="18">
-                        @break
-                        @case('ch')
-                        <img src="{{ URL::asset('build/images/flags/china.svg') }}" class="rounded " alt="Header Language" height="18">
-                        @break
-                        @case('fr')
-                        <img src="{{ URL::asset('build/images/flags/french.svg') }}" class="rounded " alt="Header Language" height="18">
-                        @break
-                        @case('gr')
-                        <img src="{{ URL::asset('build/images/flags/germany.svg') }}" class="rounded " alt="Header Language" height="18">
-                        @break
-                        @case('ae')
-                        <img src="{{ URL::asset('build/images/flags/ae.svg') }}" class="rounded " alt="Header Language" height="18">
-                        @break
-                        @default
-                        <img src="{{ URL::asset('build/images/flags/us.svg') }}" class="rounded border border-info " alt="Header Language" height="20">
-                        @endswitch
+                        <?php switch(Session::get('lang')):
+                        case ('ru'): ?>
+                        <img src="<?php echo e(URL::asset('build/images/flags/russia.svg')); ?>" class="rounded " alt="Header Language" height="18">
+                        <?php break; ?>
+                        <?php case ('it'): ?>
+                        <img src="<?php echo e(URL::asset('build/images/flags/italy.svg')); ?>" class="rounded " alt="Header Language" height="18">
+                        <?php break; ?>
+                        <?php case ('sp'): ?>
+                        <img src="<?php echo e(URL::asset('build/images/flags/spain.svg')); ?>" class="rounded " alt="Header Language" height="18">
+                        <?php break; ?>
+                        <?php case ('ch'): ?>
+                        <img src="<?php echo e(URL::asset('build/images/flags/china.svg')); ?>" class="rounded " alt="Header Language" height="18">
+                        <?php break; ?>
+                        <?php case ('fr'): ?>
+                        <img src="<?php echo e(URL::asset('build/images/flags/french.svg')); ?>" class="rounded " alt="Header Language" height="18">
+                        <?php break; ?>
+                        <?php case ('gr'): ?>
+                        <img src="<?php echo e(URL::asset('build/images/flags/germany.svg')); ?>" class="rounded " alt="Header Language" height="18">
+                        <?php break; ?>
+                        <?php case ('ae'): ?>
+                        <img src="<?php echo e(URL::asset('build/images/flags/ae.svg')); ?>" class="rounded " alt="Header Language" height="18">
+                        <?php break; ?>
+                        <?php default: ?>
+                        <img src="<?php echo e(URL::asset('build/images/flags/us.svg')); ?>" class="rounded border border-info " alt="Header Language" height="20">
+                        <?php endswitch; ?>
                     </button>
                     <div class="dropdown-menu dropdown-menu-end">
 
                         <!-- item-->
-                        <a href="{{ url('index/en') }}" class="dropdown-item notify-item language py-2" data-lang="en" title="English">
-                            <img src="{{ URL::asset('build/images/flags/us.svg') }}" alt="user-image" class="me-2 rounded" height="18">
+                        <a href="<?php echo e(url('index/en')); ?>" class="dropdown-item notify-item language py-2" data-lang="en" title="English">
+                            <img src="<?php echo e(URL::asset('build/images/flags/us.svg')); ?>" alt="user-image" class="me-2 rounded" height="18">
                             <span class="align-middle">English</span>
                         </a>
 
                         <!-- item-->
-                        <a href="{{ url('index/sp') }}" class="dropdown-item notify-item language" data-lang="sp" title="Spanish">
-                            <img src="{{ URL::asset('build/images/flags/spain.svg') }}" alt="user-image" class="me-2 rounded" height="18">
+                        <a href="<?php echo e(url('index/sp')); ?>" class="dropdown-item notify-item language" data-lang="sp" title="Spanish">
+                            <img src="<?php echo e(URL::asset('build/images/flags/spain.svg')); ?>" alt="user-image" class="me-2 rounded" height="18">
                             <span class="align-middle">Española</span>
                         </a>
 
                         <!-- item-->
-                        <a href="{{ url('index/gr') }}" class="dropdown-item notify-item language" data-lang="gr" title="German">
-                            <img src="{{ URL::asset('build/images/flags/germany.svg') }}" alt="user-image" class="me-2 rounded" height="18"> <span class="align-middle">Deutsche</span>
+                        <a href="<?php echo e(url('index/gr')); ?>" class="dropdown-item notify-item language" data-lang="gr" title="German">
+                            <img src="<?php echo e(URL::asset('build/images/flags/germany.svg')); ?>" alt="user-image" class="me-2 rounded" height="18"> <span class="align-middle">Deutsche</span>
                         </a>
 
                         <!-- item-->
-                        <a href="{{ url('index/it') }}" class="dropdown-item notify-item language" data-lang="it" title="Italian">
-                            <img src="{{ URL::asset('build/images/flags/italy.svg') }}" alt="user-image" class="me-2 rounded" height="18">
+                        <a href="<?php echo e(url('index/it')); ?>" class="dropdown-item notify-item language" data-lang="it" title="Italian">
+                            <img src="<?php echo e(URL::asset('build/images/flags/italy.svg')); ?>" alt="user-image" class="me-2 rounded" height="18">
                             <span class="align-middle">Italiana</span>
                         </a>
 
                         <!-- item-->
-                        <a href="{{ url('index/ru') }}" class="dropdown-item notify-item language" data-lang="ru" title="Russian">
-                            <img src="{{ URL::asset('build/images/flags/russia.svg') }}" alt="user-image" class="me-2 rounded" height="18">
+                        <a href="<?php echo e(url('index/ru')); ?>" class="dropdown-item notify-item language" data-lang="ru" title="Russian">
+                            <img src="<?php echo e(URL::asset('build/images/flags/russia.svg')); ?>" alt="user-image" class="me-2 rounded" height="18">
                             <span class="align-middle">русский</span>
                         </a>
 
                         <!-- item-->
-                        <a href="{{ url('index/ch') }}" class="dropdown-item notify-item language" data-lang="ch" title="Chinese">
-                            <img src="{{ URL::asset('build/images/flags/china.svg') }}" alt="user-image" class="me-2 rounded" height="18">
+                        <a href="<?php echo e(url('index/ch')); ?>" class="dropdown-item notify-item language" data-lang="ch" title="Chinese">
+                            <img src="<?php echo e(URL::asset('build/images/flags/china.svg')); ?>" alt="user-image" class="me-2 rounded" height="18">
                             <span class="align-middle">中国人</span>
                         </a>
 
                         <!-- item-->
-                        <a href="{{ url('index/fr') }}" class="dropdown-item notify-item language" data-lang="fr" title="French">
-                            <img src="{{ URL::asset('build/images/flags/french.svg') }}" alt="user-image" class="me-2 rounded" height="18">
+                        <a href="<?php echo e(url('index/fr')); ?>" class="dropdown-item notify-item language" data-lang="fr" title="French">
+                            <img src="<?php echo e(URL::asset('build/images/flags/french.svg')); ?>" alt="user-image" class="me-2 rounded" height="18">
                             <span class="align-middle">français</span>
                         </a>
 
                         <!-- item-->
-                        <a href="{{ url('index/ae') }}" class="dropdown-item notify-item language" data-lang="ae" title="Arabic">
-                            <img src="{{URL::asset('build/images/flags/ae.svg')}}" alt="user-image" class="me-2 rounded" height="18">
+                        <a href="<?php echo e(url('index/ae')); ?>" class="dropdown-item notify-item language" data-lang="ae" title="Arabic">
+                            <img src="<?php echo e(URL::asset('build/images/flags/ae.svg')); ?>" alt="user-image" class="me-2 rounded" height="18">
                             <span class="align-middle">Arabic</span>
                         </a>
                     </div>
@@ -230,19 +230,19 @@
                             <div class="row g-0">
                                 <div class="col">
                                     <a class="dropdown-icon-item" href="#!">
-                                        <img src="{{ URL::asset('build/images/brands/github.png') }}" alt="Github">
+                                        <img src="<?php echo e(URL::asset('build/images/brands/github.png')); ?>" alt="Github">
                                         <span>GitHub</span>
                                     </a>
                                 </div>
                                 <div class="col">
                                     <a class="dropdown-icon-item" href="#!">
-                                        <img src="{{ URL::asset('build/images/brands/bitbucket.png') }}" alt="bitbucket">
+                                        <img src="<?php echo e(URL::asset('build/images/brands/bitbucket.png')); ?>" alt="bitbucket">
                                         <span>Bitbucket</span>
                                     </a>
                                 </div>
                                 <div class="col">
                                     <a class="dropdown-icon-item" href="#!">
-                                        <img src="{{ URL::asset('build/images/brands/dribbble.png') }}" alt="dribbble">
+                                        <img src="<?php echo e(URL::asset('build/images/brands/dribbble.png')); ?>" alt="dribbble">
                                         <span>Dribbble</span>
                                     </a>
                                 </div>
@@ -251,19 +251,19 @@
                             <div class="row g-0">
                                 <div class="col">
                                     <a class="dropdown-icon-item" href="#!">
-                                        <img src="{{ URL::asset('build/images/brands/dropbox.png') }}" alt="dropbox">
+                                        <img src="<?php echo e(URL::asset('build/images/brands/dropbox.png')); ?>" alt="dropbox">
                                         <span>Dropbox</span>
                                     </a>
                                 </div>
                                 <div class="col">
                                     <a class="dropdown-icon-item" href="#!">
-                                        <img src="{{ URL::asset('build/images/brands/mail_chimp.png') }}" alt="mail_chimp">
+                                        <img src="<?php echo e(URL::asset('build/images/brands/mail_chimp.png')); ?>" alt="mail_chimp">
                                         <span>Mail Chimp</span>
                                     </a>
                                 </div>
                                 <div class="col">
                                     <a class="dropdown-icon-item" href="#!">
-                                        <img src="{{ URL::asset('build/images/brands/slack.png') }}" alt="slack">
+                                        <img src="<?php echo e(URL::asset('build/images/brands/slack.png')); ?>" alt="slack">
                                         <span>Slack</span>
                                     </a>
                                 </div>
@@ -359,7 +359,7 @@
 
                                     <div class="text-reset notification-item d-block dropdown-item position-relative">
                                         <div class="d-flex">
-                                            <img src="{{URL::asset('build/images/users/avatar-2.jpg')}}" class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic">
+                                            <img src="<?php echo e(URL::asset('build/images/users/avatar-2.jpg')); ?>" class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic">
                                             <div class="flex-grow-1">
                                                 <a href="#!" class="stretched-link">
                                                     <h6 class="mt-0 mb-1 fs-13 fw-semibold">Angela Bernier</h6>
@@ -408,7 +408,7 @@
 
                                     <div class="text-reset notification-item d-block dropdown-item position-relative">
                                         <div class="d-flex">
-                                            <img src="{{URL::asset('build/images/users/avatar-8.jpg')}}" class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic">
+                                            <img src="<?php echo e(URL::asset('build/images/users/avatar-8.jpg')); ?>" class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic">
                                             <div class="flex-grow-1">
                                                 <a href="#!" class="stretched-link">
                                                     <h6 class="mt-0 mb-1 fs-13 fw-semibold">Maureen Gibson</h6>
@@ -441,7 +441,7 @@
                                 <div data-simplebar style="max-height: 300px;" class="pe-2">
                                     <div class="text-reset notification-item d-block dropdown-item">
                                         <div class="d-flex">
-                                            <img src="{{URL::asset('build/images/users/avatar-3.jpg')}}" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                            <img src="<?php echo e(URL::asset('build/images/users/avatar-3.jpg')); ?>" class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                             <div class="flex-grow-1">
                                                 <a href="#!" class="stretched-link">
                                                     <h6 class="mt-0 mb-1 fs-13 fw-semibold">James Lemire</h6>
@@ -464,7 +464,7 @@
 
                                     <div class="text-reset notification-item d-block dropdown-item">
                                         <div class="d-flex">
-                                            <img src="{{URL::asset('build/images/users/avatar-2.jpg')}}" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                            <img src="<?php echo e(URL::asset('build/images/users/avatar-2.jpg')); ?>" class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                             <div class="flex-grow-1">
                                                 <a href="#!" class="stretched-link">
                                                     <h6 class="mt-0 mb-1 fs-13 fw-semibold">Angela Bernier</h6>
@@ -488,7 +488,7 @@
 
                                     <div class="text-reset notification-item d-block dropdown-item">
                                         <div class="d-flex">
-                                            <img src="{{URL::asset('build/images/users/avatar-6.jpg')}}" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                            <img src="<?php echo e(URL::asset('build/images/users/avatar-6.jpg')); ?>" class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                             <div class="flex-grow-1">
                                                 <a href="#!" class="stretched-link">
                                                     <h6 class="mt-0 mb-1 fs-13 fw-semibold">Kenneth Brown</h6>
@@ -512,7 +512,7 @@
 
                                     <div class="text-reset notification-item d-block dropdown-item">
                                         <div class="d-flex">
-                                            <img src="{{URL::asset('build/images/users/avatar-8.jpg')}}" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                            <img src="<?php echo e(URL::asset('build/images/users/avatar-8.jpg')); ?>" class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                             <div class="flex-grow-1">
                                                 <a href="#!" class="stretched-link">
                                                     <h6 class="mt-0 mb-1 fs-13 fw-semibold">Maureen Gibson</h6>
@@ -553,9 +553,9 @@
                 <div class="dropdown ms-sm header-item topbar-user">
                     <button type="button" class="btn shadow-none" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
                         <span class="d-flex align-items-center">
-                            <img class="rounded-circle  border border-info border-2 header-profile-user" src="@if (Auth::user()->avatar != ''){{ URL::asset('images/' . Auth::user()->avatar) }}@else{{ URL::asset('build/images/users/avatar-1.jpg') }}@endif" alt="Header Avatar">
+                            <img class="rounded-circle  border border-info border-2 header-profile-user" src="<?php if(Auth::user()->avatar != ''): ?><?php echo e(URL::asset('images/' . Auth::user()->avatar)); ?><?php else: ?><?php echo e(URL::asset('build/images/users/avatar-1.jpg')); ?><?php endif; ?>" alt="Header Avatar">
                             <span class="text-start ms-xl-2">
-                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{Auth::user()->name}}</span>
+                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text"><?php echo e(Auth::user()->name); ?></span>
                                 <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Founder</span>
                                 
                                 
@@ -575,9 +575,9 @@
                         <a class="dropdown-item" href="pages-profile"><i class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Balance : <b>$5971.67</b></span></a>
                         <a class="dropdown-item" href="pages-profile-settings"><span class="badge bg-success-subtle text-success mt-1 float-end">New</span><i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Settings</span></a>
                         <a class="dropdown-item" href="auth-lockscreen-basic"><i class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Lock screen</span></a>
-                        <a class="dropdown-item " href="javascript:void();" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="bx bx-power-off font-size-16 align-middle me-1"></i> <span key="t-logout">@lang('translation.logout')</span></a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
+                        <a class="dropdown-item " href="javascript:void();" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="bx bx-power-off font-size-16 align-middle me-1"></i> <span key="t-logout"><?php echo app('translator')->get('translation.logout'); ?></span></a>
+                        <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST" style="display: none;">
+                            <?php echo csrf_field(); ?>
                         </form>
 
                         <!-- Buttons Group -->
@@ -620,3 +620,4 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<?php /**PATH C:\xampp\htdocs\edeklarant\app-service-laravel\resources\views/layouts/topbar.blade.php ENDPATH**/ ?>

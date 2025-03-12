@@ -163,7 +163,7 @@
             }
 
             &.active {
-                color: var(--#{$prefix}topnav-item-active-color);
+                color: red;
             }
         }
     }
