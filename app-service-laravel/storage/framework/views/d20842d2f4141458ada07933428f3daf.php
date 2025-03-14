@@ -1,21 +1,21 @@
-@extends('layouts.layouts-horizontal')
 
-@section('title')
-    @lang('translation.horizontal')
-@endsection
 
-@section('css')
-    <link href="{{ URL::asset('build/libs/jsvectormap/jsvectormap.min.css') }}" rel="stylesheet">
-@endsection
+<?php $__env->startSection('title'); ?>
+    <?php echo app('translator')->get('translation.horizontal'); ?>
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('css'); ?>
+    <link href="<?php echo e(URL::asset('build/libs/jsvectormap/jsvectormap.min.css')); ?>" rel="stylesheet">
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
 <div class="text-center my-4">
     <!-- User Avatar -->
-    <img src="@if (Auth::user()->avatar != ''){{ URL::asset('images/' . Auth::user()->avatar) }}@else{{ URL::asset('build/images/users/avatar-1.jpg') }}@endif" 
+    <img src="<?php if(Auth::user()->avatar != ''): ?><?php echo e(URL::asset('images/' . Auth::user()->avatar)); ?><?php else: ?><?php echo e(URL::asset('build/images/users/avatar-1.jpg')); ?><?php endif; ?>" 
          class="rounded-circle border border-info shadow-sm mb-3" width="100" height="100" alt="User Avatar">
 
     <!-- Welcome Message -->
-    <h2 class="fw-bold text-info">Dobrodošli na eDeklarant, {{ Auth::user()->name }}!</h2>
+    <h2 class="fw-bold text-info">Dobrodošli na eDeklarant, <?php echo e(Auth::user()->name); ?>!</h2>
 
     <!-- Subtitle -->
     <p class="text-muted fs-5">Iskoristite sve mogućnosti koje platforma nudi.</p>
@@ -30,7 +30,7 @@
                 <span class="fw-semibold">Vaš trenutni paket je <b>Starter</b></span>
             </div>
             <div class="card-body text-center py-4">
-                <img src="{{ URL::asset('build/images/analyze.png') }}" class="img-fluid mb-3" width="90" alt="Upgrade Image">
+                <img src="<?php echo e(URL::asset('build/images/analyze.png')); ?>" class="img-fluid mb-3" width="90" alt="Upgrade Image">
                 <h5 class="fw-semibold mb-3">Nadogradite paket</h5>
                 <a href="pages-pricing" class="btn btn-info w-100">
                     <i class="ri-arrow-up-circle-line fs-18 me-2"></i> Nadogradite paket
@@ -46,7 +46,7 @@
                 <span class="fw-semibold">Preostalo još <b>5</b> skeniranja</span>
             </div>
             <div class="card-body text-center py-4">
-                <img src="{{ URL::asset('build/images/screww.png') }}" class="img-fluid mb-3" width="90" alt="Scan Image">
+                <img src="<?php echo e(URL::asset('build/images/screww.png')); ?>" class="img-fluid mb-3" width="90" alt="Scan Image">
                 <h5 class="fw-semibold mb-3">Započnite analizu fakture</h5>
                 <a href="pages-scan" class="btn btn-info w-100">
                     <i class="ri-qr-scan-2-line fs-18 me-2"></i> Pokreni skeniranje
@@ -107,7 +107,7 @@
                     <i class="ri-arrow-up-line align-middle"></i> 9.32 %
                 </span> vs. prethodni mjesec
             </p>
-            <canvas id="doughnut3" class="chartjs-chart"></canvas>
+            <canvas id="doughnut3" class="chartjs-chart" style="width: 10px; height: 10px;"></canvas>
         </div>
     </div>
 
@@ -124,22 +124,22 @@
                     <i class="ri-arrow-down-line align-middle"></i> 4.21 %
                 </span> vs. prethodni mjesec
             </p>
-            <canvas id="doughnut4" class="chartjs-chart" ></canvas>
+            <canvas id="doughnut4" class="chartjs-chart" style="width: 30px; height: 30px;"></canvas>
         </div>
     </div>
 </div>
 
 
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('script')
-    <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
-    <script src="{{ URL::asset('build/js/pages/dashboard-analytics.init.js') }}"></script>
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
-    <script src="{{ URL::asset('build/libs/chart.js/chart.umd.js') }}"></script>
-    <script src="{{ URL::asset('build/js/pages/chartjs.init.js') }}"></script>
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
+<?php $__env->startSection('script'); ?>
+    <script src="<?php echo e(URL::asset('build/libs/apexcharts/apexcharts.min.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('build/js/pages/dashboard-analytics.init.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('build/libs/chart.js/chart.umd.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('build/js/pages/chartjs.init.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 
 
     <script>
@@ -206,4 +206,6 @@
             createDoughnutChart("doughnut4", 4.21);
         });
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.layouts-horizontal', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\edeklarant\app-service-laravel\resources\views/layouts-horizontal.blade.php ENDPATH**/ ?>
