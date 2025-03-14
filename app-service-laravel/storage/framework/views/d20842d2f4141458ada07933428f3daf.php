@@ -9,17 +9,69 @@
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
-<div class="text-center my-4">
-    <!-- User Avatar -->
-    <img src="<?php if(Auth::user()->avatar != ''): ?><?php echo e(URL::asset('images/' . Auth::user()->avatar)); ?><?php else: ?><?php echo e(URL::asset('build/images/users/avatar-1.jpg')); ?><?php endif; ?>" 
-         class="rounded-circle border border-info shadow-sm mb-3" width="100" height="100" alt="User Avatar">
+<div class="row align-items-center text-center">
+    <!-- Left Elements -->
+    <div class="col-md-2">
+        <div class="card card-animate rounded-4 border border-info shadow-lg py-3">
+            <h5 class="text-muted text-uppercase fs-13">Total Invoices</h5>
+            <div class="d-flex align-items-center justify-content-center">
+                <i class="ri-file-text-line display-6 text-info"></i>
+                <h2 class="mb-0 ms-2"><span class="counter-value" data-target="320"></span></h2>
+            </div>
+        </div>
+    </div>
 
-    <!-- Welcome Message -->
-    <h2 class="fw-bold text-info">Dobrodošli na eDeklarant, <?php echo e(Auth::user()->name); ?>!</h2>
+    <div class="col-md-2">
+        <div class="card card-animate rounded-4 border border-info shadow-lg py-3">
+            <h5 class="text-muted text-uppercase fs-13">Total Scans</h5>
+            <div class="d-flex align-items-center justify-content-center">
+                <i class="ri-scan-2-line display-6 text-info"></i>
+                <h2 class="mb-0 ms-2"><span class="counter-value" data-target="128"></span></h2>
+            </div>
+        </div>
+    </div>
 
-    <!-- Subtitle -->
-    <p class="text-muted fs-5">Iskoristite sve mogućnosti koje platforma nudi.</p>
+    <!-- Centered Avatar & Welcome Message (Without Card) -->
+    <div class="col-md-4 text-center">
+        <img src="<?php if(Auth::user()->avatar != ''): ?><?php echo e(URL::asset('images/' . Auth::user()->avatar)); ?><?php else: ?><?php echo e(URL::asset('build/images/users/avatar-1.jpg')); ?><?php endif; ?>"
+             class="rounded-circle border border-info shadow-sm mb-3" width="90" height="90" alt="User Avatar">
+        <h4 class="fw-bold text-info">Dobrodošli na eDeklarant, <?php echo e(Auth::user()->name); ?>!</h4>
+        <p class="text-muted fs-5">Iskoristite sve mogućnosti platforme.</p>
+    </div>
+
+    <!-- Right Elements -->
+    <div class="col-md-2">
+        <div class="card card-animate rounded-4 border border-info shadow-lg py-3">
+            <h5 class="text-muted text-uppercase fs-13">Total Suppliers</h5>
+            <div class="d-flex align-items-center justify-content-center">
+                <i class="ri-truck-line display-6 text-info"></i>
+                <h2 class="mb-0 ms-2"><span class="counter-value" data-target="56"></span></h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+    <div class="card card-animate rounded-4 border border-info shadow-lg py-3">
+        <h5 class="text-muted text-uppercase fs-13">Prosječno Vrijeme Skeniranja</h5>
+        <div class="d-flex align-items-center justify-content-center">
+            <i class="ri-time-line display-6 text-info"></i>
+                <h2 class="mb-0 ms-2">
+                <span class="counter-value" data-target="47"></span> sec
+                
+
+            </h2>
+        </div>
+        
+        <!-- Progress Bar with Fixed Width -->
+        
+    </div>
 </div>
+
+
+</div>
+
+
+
 
 <!-- Nadogradite paket i Smart Scan kartice -->
 <div class="row justify-content-center mt-4">
@@ -42,7 +94,7 @@
     <!-- Kartica za Smart Scan -->
     <div class="col-md-6">
         <div class="card card-animate border border-info rounded-4 shadow-lg h-100 d-flex flex-column">
-            <div class="alert alert-info border-0 rounded-top-4 m-0 d-flex justify-content-center py-2">
+            <div class="alert alert-info rounded-top-4 m-0 d-flex justify-content-center py-2">
                 <span class="fw-semibold">Preostalo još <b>5</b> skeniranja</span>
             </div>
             <div class="card-body text-center py-4">
@@ -61,11 +113,11 @@
     <!-- Dostupna skeniranja -->
     <div class="col-md-3">
         <div class="card card-animate rounded-4 border border-info shadow-lg p-3 d-flex flex-column align-items-center text-center">
-        <div class="alert alert-info border-0 rounded-top-4 text-center w-100 py-1">
+        <div class="alert alert-info border border-info rounded-top-4 text-center w-100 py-1">
                 <span class="fw-semibold">Dostupna skeniranja</span>
             </div>
             <i class="ri-scan-2-line fs-1 text-info mt-2"></i>
-            <h2 class="mt-2 ff-secondary fw-semibold"><span class="counter-value" data-target="28">0</span></h2>
+            <h2 class="mt-2 ff-secondary fw-semibold"><span class="counter-num" data-target="28">0</span></h2>
             <p class="mb-1 text-muted">
                 <span class="badge bg-light text-success">
                     <i class="ri-arrow-up-line align-middle"></i> 16.24 %
@@ -78,12 +130,12 @@
     <!-- Broj skeniranih faktura -->
     <div class="col-md-3">
         <div class="card card-animate rounded-4 border border-info shadow-lg p-3 d-flex flex-column align-items-center text-center">
-            <div class="alert alert-info border-0 rounded-top-4 text-center w-100 py-1">
+            <div class="alert alert-info border border-info rounded-top-4 text-center w-100 py-1">
                 <span class="fw-semibold">Broj skeniranih faktura</span>
             </div>
             <i class="ri-file-list-3-line fs-1 text-info mt-2"></i>
             <h2 class="mt-2 ff-secondary fw-semibold">
-                <span class="counter-value" data-target="27.66">0</span>k
+                <span class="counter-num" data-target="27.66">0</span>k
             </h2>
             <p class="mb-1 text-muted">
                 <span class="badge bg-light text-danger">
@@ -97,34 +149,34 @@
     <!-- Broj carinskih tarifa -->
     <div class="col-md-3">
         <div class="card card-animate rounded-4 border border-info shadow-lg p-3 d-flex flex-column align-items-center text-center">
-            <div class="alert alert-info border-0 rounded-top-4 text-center w-100 py-1">
+            <div class="alert alert-info border border-info rounded-top-4 text-center w-100 py-1">
                 <span class="fw-semibold">Broj carinskih tarifa</span>
             </div>
             <i class="ri-barcode-box-line fs-1 text-info mt-2"></i>
-            <h2 class="mt-2 ff-secondary fw-semibold"><span class="counter-value" data-target="19">0</span></h2>
+            <h2 class="mt-2 ff-secondary fw-semibold"><span class="counter-num" data-target="19">0</span></h2>
             <p class="mb-1 text-muted">
                 <span class="badge bg-light text-success">
                     <i class="ri-arrow-up-line align-middle"></i> 9.32 %
                 </span> vs. prethodni mjesec
             </p>
-            <canvas id="doughnut3" class="chartjs-chart" style="width: 10px; height: 10px;"></canvas>
+            <canvas id="doughnut3" class="chartjs-chart"></canvas>
         </div>
     </div>
 
     <!-- Broj dobavljača -->
     <div class="col-md-3">
         <div class="card card-animate rounded-4 border border-info shadow-lg p-3 d-flex flex-column align-items-center text-center">
-            <div class="alert alert-info border-0 rounded-top-4 text-center w-100 py-1">
+            <div class="alert alert-info border border-info rounded-top-4 text-center w-100 py-1">
                 <span class="fw-semibold">Broj dobavljača</span>
             </div>
             <i class="ri-truck-line fs-1 text-info mt-2"></i>
-            <h2 class="mt-2 ff-secondary fw-semibold"><span class="counter-value" data-target="12">0</span></h2>
+            <h2 class="mt-2 ff-secondary fw-semibold"><span class="counter-num" data-target="12">0</span></h2>
             <p class="mb-1 text-muted">
                 <span class="badge bg-light text-danger">
                     <i class="ri-arrow-down-line align-middle"></i> 4.21 %
                 </span> vs. prethodni mjesec
             </p>
-            <canvas id="doughnut4" class="chartjs-chart" style="width: 30px; height: 30px;"></canvas>
+            <canvas id="doughnut4" class="chartjs-chart" ></canvas>
         </div>
     </div>
 </div>
@@ -206,6 +258,40 @@
             createDoughnutChart("doughnut4", 4.21);
         });
     </script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        function counter() {
+            var counterElements = document.querySelectorAll(".counter-num");
+            var speed = 10000000; // Adjust the speed (higher = slower animation)
+
+            counterElements.forEach((counter) => {
+                function updateCount() {
+                    var target = +counter.getAttribute("data-target");
+                    var count = +counter.innerText || 0;
+                    var increment = target / speed;
+
+                    if (increment < 1) increment = 1;
+
+                    if (count < target) {
+                        counter.innerText = (count + increment).toFixed(0);
+                        setTimeout(updateCount, 15); // Delay for a smoother effect
+                    } else {
+                        counter.innerText = numberWithCommas(target);
+                    }
+                }
+                updateCount();
+            });
+        }
+
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        counter(); // Run the counter function
+    });
+</script>
+
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.layouts-horizontal', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\edeklarant\app-service-laravel\resources\views/layouts-horizontal.blade.php ENDPATH**/ ?>
