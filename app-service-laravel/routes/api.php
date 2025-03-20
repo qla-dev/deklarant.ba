@@ -8,6 +8,9 @@ use App\Http\Controllers\Api\PackageController;
 use App\Http\Controllers\Api\UserPackageController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\TariffRateController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\StatsController;
+use App\Http\Controllers\Api\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +27,7 @@ use App\Http\Controllers\Api\TariffRateController;
 Route::apiResource('packages', PackageController::class);
 Route::apiResource('tariff-rates', TariffRateController::class);
 
+
 // Protected Routes (Require Authentication)
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('invoices')->group(function () {
@@ -37,21 +41,48 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{invoiceId}', [InvoiceController::class, 'destroy']);
     });
     
+
     // INVOICE ITEM ROUTES
     Route::get('invoice-items', [InvoiceItemController::class, 'index']);
     Route::put('invoice-items/{invoiceItemId}',[InvoiceItemController::class, 'update']);
     Route::apiResource('invoices.invoice-items', InvoiceItemController::class)->except(['index', 'show']);
     Route::get('invoices/{invoiceId}/invoice-items', [InvoiceItemController::class,'getInvoiceItemsSingleInvoice']);
 
+
     // SUPPLIER ROUTES
     Route::apiResource('suppliers', SupplierController::class);
+
 
     // USER PACKAGES ROUTES
     Route::apiResource('user-packages', UserPackageController::class);
     Route::post('user-packages/users/{userId}/packages/{packageId}', [UserPackageController::class, 'store']);
     Route::delete('user-packages/users/{userId}/packages/{packageId}', [UserPackageController::class, 'destroy']);
+
+    
 });
 
-Route::get('/user', function (Request $request) {
-    return response()->json($request->user());
+
+// LOGIN AND REGISTER ROUTES
+Route::prefix('auth')->group(function () {
+    Route::post('/register', [AuthController::class, 'registerUser']);
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+    Route::get('/my-token', [AuthController::class, 'myToken']);
 });
+
+
+// STATISTICS ROUTES
+Route::get('/statistics', [StatsController::class, 'getStatistics']);
+Route::get('/statistics/users/{id}', [StatsController::class, 'getUserStatisticsById'])->where('id', '[0-9]+');
+Route::get('/statistics/suppliers/{id}', [StatsController::class, 'getSupplierStatisticsById'])->where('id', '[0-9]+');
+
+
+Route::get('/suppliers/{id}/annual-profit', [StatsController::class, 'getSupplierAnnualProfit']);
+Route::get('/suppliers/{id}/last-year-profit', [StatsController::class, 'getSupplierLastYearProfit']);
+
+
+Route::get('/users', [UserController::class, 'getAllUsers']);
+Route::get('/users/{id}', [UserController::class, 'getUserById']);
+Route::put('/users/{id}', [UserController::class, 'updateUser']);
+Route::delete('/users/{id}', [UserController::class, 'deleteUser']);
+

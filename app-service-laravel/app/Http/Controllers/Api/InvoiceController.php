@@ -17,7 +17,7 @@ class InvoiceController extends Controller
             $invoices = Invoice::with('items')->get();
             return response()->json($invoices);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to retrieve invoices'], 500);
+            return response()->json(['error' => 'Failed to retrieve invoices. Please try again later.'], 500);
         }
     }
 
@@ -27,7 +27,7 @@ class InvoiceController extends Controller
             $invoice = Invoice::with('items')->findOrFail($id);
             return response()->json($invoice);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Invoice not found'], 404);
+            return response()->json(['error' => 'Invoice not found with the given ID.'], 404);
         }
     }
 
@@ -37,10 +37,14 @@ class InvoiceController extends Controller
             $invoices = Invoice::where('supplier_id', $supplierId)
                 ->with(['items'])
                 ->get();
+            
+            if ($invoices->isEmpty()) {
+                return response()->json(['error' => 'No invoices found for the specified supplier.'], 404);
+            }
 
             return response()->json($invoices);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to retrieve invoices'], 500);
+            return response()->json(['error' => 'Failed to retrieve invoices. Please check the supplier ID and try again.'], 500);
         }
     }
 
@@ -50,27 +54,28 @@ class InvoiceController extends Controller
             $invoices = Invoice::where('user_id', $userId)
                 ->with(['items'])
                 ->get();
+            
+            if ($invoices->isEmpty()) {
+                return response()->json(['error' => 'No invoices found for the specified user.'], 404);
+            }
 
             return response()->json($invoices);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to retrieve invoices'], 500);
+            return response()->json(['error' => 'Failed to retrieve invoices. Please check the user ID and try again.'], 500);
         }
     }
 
     public function store(Request $request, $userId, $supplierId)
     {
         try {
-            // Validate request
             $data = $request->validate([
                 'total_price' => 'required|numeric',
                 'date_of_issue' => 'required|date',
                 'country_of_origin' => 'required|string',
             ]);
 
-            // Ensure supplier exists
             $supplier = Supplier::findOrFail($supplierId);
 
-            // Create invoice
             $invoice = Invoice::create([
                 'user_id' => $userId,
                 'supplier_id' => $supplier->id,
@@ -80,27 +85,30 @@ class InvoiceController extends Controller
             ]);
 
             return response()->json([
-                'message' => 'Invoice created successfully',
+                'message' => 'Invoice created successfully.',
                 'data' => $invoice
             ], 201);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Supplier not found'], 404);
+            return response()->json(['error' => 'Supplier not found. Please check the supplier ID and try again.'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to create invoice: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Failed to create invoice. ' . $e->getMessage()], 500);
         }
     }
 
-        public function update(Request $request, $invoiceId)
+    public function update(Request $request, $invoiceId)
     {
         try {
             $invoice = Invoice::findOrFail($invoiceId);
             $invoice->update($request->all());
 
-            return response()->json($invoice);
+            return response()->json([
+                'message' => 'Invoice updated successfully.',
+                'data' => $invoice
+            ]);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Invoice not found'], 404);
+            return response()->json(['error' => 'Invoice not found with the given ID.'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to update invoice'], 500);
+            return response()->json(['error' => 'Failed to update invoice. Please check the data and try again.'], 500);
         }
     }
 
@@ -110,12 +118,11 @@ class InvoiceController extends Controller
             $invoice = Invoice::findOrFail($invoiceId);
             $invoice->delete();
 
-            return response()->json(['message' => 'Invoice deleted successfully']);
+            return response()->json(['message' => 'Invoice deleted successfully.']);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Invoice not found'], 404);
+            return response()->json(['error' => 'Invoice not found with the given ID.'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to delete invoice'], 500);
+            return response()->json(['error' => 'Failed to delete invoice. Please try again later.'], 500);
         }
     }
-
 }

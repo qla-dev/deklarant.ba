@@ -13,87 +13,100 @@ class InvoiceItemController extends Controller
 {
     public function index()
     {
-        return response()->json(InvoiceItem::all());
+        try {
+            $invoiceItems = InvoiceItem::all();
+            return response()->json($invoiceItems);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Failed to retrieve invoice items. Please try again later.'], 500);
+        }
     }
 
     public function store(Request $request, $invoice_id)
     {
-        // Validate request
-        $data = $request->validate([
-            'item_code' => 'required|string',
-            'item_description_original' => 'required|string',
-            'item_description' => 'required|string',
-            'quantity' => 'required|integer',
-            'base_price' => 'required|numeric',
-            'total_price' => 'required|numeric',
-            'currency' => 'required|string',
-            'best_customs_code_matches' => 'required|array', // Change to array if coming as array
-        ]);
+        try {
+            $data = $request->validate([
+                'item_code' => 'required|string',
+                'item_description_original' => 'required|string',
+                'item_description' => 'required|string',
+                'quantity' => 'required|integer',
+                'base_price' => 'required|numeric',
+                'total_price' => 'required|numeric',
+                'currency' => 'required|string',
+                'best_customs_code_matches' => 'required|array',
+            ]);
     
-        // Ensure the invoice exists
-        $invoice = Invoice::findOrFail($invoice_id);
+            $invoice = Invoice::findOrFail($invoice_id);
     
-        // Add invoice_id to the data
-        $data['invoice_id'] = $invoice_id;
+            $data['invoice_id'] = $invoice_id;
     
-        // Create item and associate it with the invoice
-        $invoiceItem = $invoice->items()->create($data);
+            $invoiceItem = $invoice->items()->create($data);
     
-        return response()->json($invoiceItem, 201);
+            return response()->json([
+                'message' => 'Invoice item created successfully.',
+                'data' => $invoiceItem
+            ], 201);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Invoice not found. Please check the invoice ID and try again.'], 404);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Failed to create invoice item: ' . $e->getMessage()], 500);
+        }
     }
     
     public function getInvoiceItemsSingleInvoice($invoiceId)
-{
-    try {
-        // Retrieve all items that belong to the given invoice
-        $invoiceItems = InvoiceItem::where('invoice_id', $invoiceId)->get();
-
-        if ($invoiceItems->isEmpty()) {
-            throw new ModelNotFoundException();
-        }
-
-        return response()->json($invoiceItems);
-    } catch (ModelNotFoundException $e) {
-        return response()->json(['error' => 'No invoice items found for the specified invoice'], 404);
-    }
-}
-
-public function update(Request $request, $invoiceItemId)
-{
-    try {
-        // Retrieve the specific invoice item by ID
-        $invoiceItem = InvoiceItem::findOrFail($invoiceItemId);
-
-        // Validate the request data
-        $data = $request->validate([
-            'item_code' => 'required|string',
-            'item_description_original' => 'required|string',
-            'item_description' => 'required|string',
-            'quantity' => 'required|integer',
-            'base_price' => 'required|numeric',
-            'total_price' => 'required|numeric',
-            'currency' => 'required|string',
-            'best_customs_code_matches' => 'required|array',
-        ]);
-
-        // Update the invoice item
-        $invoiceItem->update($data);
-
-        return response()->json([
-            'message' => 'Invoice item updated successfully',
-            'data' => $invoiceItem
-        ]);
-    } catch (ModelNotFoundException $e) {
-        return response()->json(['error' => 'Invoice item not found'], 404);
-    } catch (Exception $e) {
-        return response()->json(['error' => 'Failed to update invoice item: ' . $e->getMessage()], 500);
-    }
-}
-
-
-    public function destroy(InvoiceItem $invoiceItem)
     {
-        $invoiceItem->delete();
-        return response()->json(['message' => 'Invoice Item deleted']);
+        try {
+            $invoiceItems = InvoiceItem::where('invoice_id', $invoiceId)->get();
+    
+            if ($invoiceItems->isEmpty()) {
+                return response()->json(['error' => 'No invoice items found for the specified invoice.'], 404);
+            }
+    
+            return response()->json($invoiceItems);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Failed to retrieve invoice items. Please check the invoice ID and try again.'], 500);
+        }
+    }
+
+    public function update(Request $request, $invoiceItemId)
+    {
+        try {
+            $invoiceItem = InvoiceItem::findOrFail($invoiceItemId);
+
+            $data = $request->validate([
+                'item_code' => 'required|string',
+                'item_description_original' => 'required|string',
+                'item_description' => 'required|string',
+                'quantity' => 'required|integer',
+                'base_price' => 'required|numeric',
+                'total_price' => 'required|numeric',
+                'currency' => 'required|string',
+                'best_customs_code_matches' => 'required|array',
+            ]);
+    
+            $invoiceItem->update($data);
+    
+            return response()->json([
+                'message' => 'Invoice item updated successfully.',
+                'data' => $invoiceItem
+            ]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Invoice item not found. Please check the item ID and try again.'], 404);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Failed to update invoice item: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function destroy($invoiceItemId)
+    {
+        try {
+            $invoiceItem = InvoiceItem::findOrFail($invoiceItemId);
+            $invoiceItem->delete();
+    
+            return response()->json(['message' => 'Invoice item deleted successfully.']);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Invoice item not found. Please check the item ID and try again.'], 404);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Failed to delete invoice item. Please try again later.'], 500);
+        }
     }
 }

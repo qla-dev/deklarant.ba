@@ -3,43 +3,81 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
-     */
     protected $fillable = [
-        'name',
+        'username',
         'email',
         'password',
         'avatar',
+        'first_name',
+        'last_name',
+        'phone_number',
+        'skills',
+        'designation',
+        'website',
+        'city',
+        'country',
+        'zip_code',
+        'description',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'skills' => 'array',
     ];
+
+    /**
+     * Accessor to format the joining_date as a date from created_at
+     */
+    public function getJoiningDateAttribute()
+    {
+        return $this->created_at ? $this->created_at->format('d M, Y') : null;
+    }
+
+    /**
+     * Retrieve a user by email.
+     */
+    public static function getUserByEmail($email)
+    {
+        return self::where('email', $email)->first();
+    }
+
+    /**
+     * Create a user instance from local database data.
+     */
+    public static function fromLocalDatabase(array $userData)
+    {
+        return new self([
+            'id'       => $userData['id'],
+            'username' => $userData['username'],
+            'email'    => $userData['email'],
+            'password' => Hash::make($userData['password']),
+            'avatar'   => $userData['avatar'],
+            'first_name' => $userData['first_name'] ?? null,
+            'last_name' => $userData['last_name'] ?? null,
+            'phone_number' => $userData['phone_number'] ?? null,
+            'skills' => $userData['skills'] ?? [],
+            'designation' => $userData['designation'] ?? null,
+            'website' => $userData['website'] ?? null,
+            'city' => $userData['city'] ?? null,
+            'country' => $userData['country'] ?? null,
+            'zip_code' => $userData['zip_code'] ?? null,
+            'description' => $userData['description'] ?? null,
+        ]);
+    }
 }
