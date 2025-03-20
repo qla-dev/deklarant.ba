@@ -43,7 +43,7 @@
 
                     <!-- Sadržaj centriran ispod -->
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
-                        <h6 class="text-muted text-uppercase fs-11 mb-1">Ukupno faktura</h6>
+                        <h6 class="text-muted text-uppercase fs-11 mb-1">Broj skeniranih faktura</h6>
                         <div class="d-flex align-items-center justify-content-center">
                             <i class="ri-file-text-line fs-1 text-info mb-1"></i>
                             <h3 class="mb-0 ms-2"><span class="counter-value" data-target="128"></span></h3>
@@ -63,10 +63,10 @@
 
                     <!-- Sadržaj centriran ispod -->
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
-                        <h6 class="text-muted text-uppercase fs-11 mb-1">Ukupno skeniranja</h6>
+                        <h6 class="text-muted text-uppercase fs-11 mb-1">Dostupna skeniranja</h6>
                         <div class="d-flex align-items-center justify-content-center">
                             <i class="ri-scan-2-line fs-1 text-info mb-1"></i>
-                            <h3 class="mb-0 ms-2"><span class="counter-value" data-target="128"></span></h3>
+                            <h3 class="mb-0 ms-2"><span class="counter-value" data-target="26"></span></h3>
                         </div>
                     </div>
                 </div>
@@ -116,9 +116,10 @@
                     
                     <!-- Sadržaj centriran ispod -->
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
-                        <h6 class="text-muted text-uppercase fs-11 mb-1">Vrijeme skeniranja</h6>
+                        <h6 class="text-muted text-uppercase fs-11 mb-1">Broj carinskih tarifa</h6>
                         <div class="d-flex align-items-center justify-content-center">
-                            <i class="ri-time-line fs-1 text-info"></i>
+                        <i class="ri-barcode-box-line fs-1 text-info"></i>
+
                             <h3 class="mb-0 ms-2"><span class="counter-value" data-target="128"></span></h3>
                         </div>
                     </div>
@@ -156,7 +157,7 @@
             <div class="card-body" style="z-index:1;">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1 overflow-hidden">
-                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Dostupna skeniranja</p>
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Izvršena skeniranja</p>
                         <h4 class="fs-22 fw-semibold ff-secondary mb-0">
                             <span class="counter-value" data-target="28">0</span>
                         </h4>
@@ -406,6 +407,7 @@
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
     <script src="{{ URL::asset('build/js/pages/dashboard-nft.init.js') }}"></script>
+    
 
 
     <script>
