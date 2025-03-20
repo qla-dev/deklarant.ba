@@ -1105,7 +1105,7 @@ File: Main Js File
     // Counter Number
     function counter() {
         var counter = document.querySelectorAll(".counter-value");
-        var speed = 100; // The lower the slower
+        var speed = 250; // The lower the slower
         counter &&
             Array.from(counter).forEach(function (counter_value) {
                 function updateCount() {
