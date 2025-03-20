@@ -1,10 +1,10 @@
-@extends('layouts.master-without-nav')
 
-@section('title')
+
+<?php $__env->startSection('title'); ?>
     Prijava
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="auth-page-wrapper pt-5">
     <!-- Background Overlay -->
     <div class="auth-one-bg-position auth-one-bg" id="auth-particles">
@@ -22,7 +22,7 @@
             <div class="row">
                 <div class="col-lg-12 text-center mt-sm-5 mb-4">
                     <a href="index" class="d-inline-block auth-logo">
-                        <img src="{{ URL::asset('build/images/logo-dark.svg')}}" alt="Logo" height="35">
+                        <img src="<?php echo e(URL::asset('build/images/logo-dark.svg')); ?>" alt="Logo" height="35">
                     </a>
                     <p class="mt-3 fs-15 fw-medium text-dark">Pristupite svom računu</p>
                 </div>
@@ -39,29 +39,57 @@
                             </div>
 
                             <div class="p-2 mt-4">
-                                <form action="{{ route('login') }}" method="POST">
-                                    @csrf
+                                <form action="<?php echo e(route('login')); ?>" method="POST">
+                                    <?php echo csrf_field(); ?>
                                     <!-- Username -->
                                     <div class="mb-3">
                                         <label for="username" class="form-label text-info">Korisničko ime <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control border-info @error('email') is-invalid @enderror" value="{{ old('email', 'admin@themesbrand.com') }}" id="username" name="email" placeholder="Unesite korisničko ime">
-                                        @error('email')
-                                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                                        @enderror
+                                        <input type="text" class="form-control border-info <?php $__errorArgs = ['email'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" value="<?php echo e(old('email', 'admin@themesbrand.com')); ?>" id="username" name="email" placeholder="Unesite korisničko ime">
+                                        <?php $__errorArgs = ['email'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                            <span class="invalid-feedback" role="alert"><strong><?php echo e($message); ?></strong></span>
+                                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                     </div>
 
                                     <!-- Password -->
                                     <div class="mb-3">
                                         <div class="d-flex justify-content-between">
                                             <label class="form-label text-info" for="password-input">Lozinka <span class="text-danger">*</span></label>
-                                            <a href="{{ route('password.update') }}" class="text-muted">Zaboravili ste lozinku?</a>
+                                            <a href="<?php echo e(route('password.update')); ?>" class="text-muted">Zaboravili ste lozinku?</a>
                                         </div>
                                         <div class="position-relative">
-                                            <input type="password" class="form-control border-info pe-5 password-input @error('password') is-invalid @enderror" name="password" placeholder="Unesite lozinku" id="password-input">
+                                            <input type="password" class="form-control border-info pe-5 password-input <?php $__errorArgs = ['password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" name="password" placeholder="Unesite lozinku" id="password-input">
                                             <button class="btn btn-link position-absolute end-0 top-0 text-muted password-addon" type="button"><i class="ri-eye-fill align-middle"></i></button>
-                                            @error('password')
-                                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                                            @enderror
+                                            <?php $__errorArgs = ['password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                <span class="invalid-feedback" role="alert"><strong><?php echo e($message); ?></strong></span>
+                                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                         </div>
                                     </div>
 
@@ -119,9 +147,11 @@
         <!-- end Footer -->
     </div>
     <!-- end auth-page-wrapper -->
-@endsection
-@section('script')
-    <script src="{{ URL::asset('build/libs/particles.js/particles.js') }}"></script>
-    <script src="{{ URL::asset('build/js/pages/particles.app.js') }}"></script>
-    <script src="{{ URL::asset('build/js/pages/form-validation.init.js') }}"></script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
+    <script src="<?php echo e(URL::asset('build/libs/particles.js/particles.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('build/js/pages/particles.app.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('build/js/pages/form-validation.init.js')); ?>"></script>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.master-without-nav', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\edeklarant\app-service-laravel\resources\views/auth/login.blade.php ENDPATH**/ ?>

@@ -1,11 +1,11 @@
-@extends('layouts.layouts-horizontal')
 
-@section('title')
-    @lang('translation.horizontal')
-@endsection
 
-@section('css')
-    <link href="{{ URL::asset('build/libs/jsvectormap/jsvectormap.min.css') }}" rel="stylesheet">
+<?php $__env->startSection('title'); ?>
+    <?php echo app('translator')->get('translation.horizontal'); ?>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('css'); ?>
+    <link href="<?php echo e(URL::asset('build/libs/jsvectormap/jsvectormap.min.css')); ?>" rel="stylesheet">
     <style>
 
         .my-alert {
@@ -21,9 +21,9 @@
 
 
     </style>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 
 <!-- Top part -->
@@ -76,9 +76,9 @@
             <div class="col-md-4 border-end d-flex align-items-center border-0 rounded-0 alert alert-light p-1 m-0">
                 <div class="p-2 text-center d-flex flex-column h-100 w-100 justify-content-center align-items-center">
                     <div class="card-body text-center">
-                        <img src="@if (Auth::user()->avatar != ''){{ URL::asset('images/' . Auth::user()->avatar) }}@else{{ URL::asset('build/images/users/avatar-1.jpg') }}@endif"
+                        <img src="<?php if(Auth::user()->avatar != ''): ?><?php echo e(URL::asset('images/' . Auth::user()->avatar)); ?><?php else: ?><?php echo e(URL::asset('build/images/users/avatar-1.jpg')); ?><?php endif; ?>"
                             class="rounded-circle shadow-sm mb-1" width="60" height="60" alt="Korisnički avatar">
-                        <h6 class="fw-bold text-dark mb-1">Dobrodošli na eDeklarant, {{ Auth::user()->name }}!</h6>
+                        <h6 class="fw-bold text-dark mb-1">Dobrodošli na eDeklarant, <?php echo e(Auth::user()->name); ?>!</h6>
                         <p class="fw-semibold fs-7 mb-1 text-dark">Vaš trenutni paket je <b>Starter</b></p>
                     </div>
 
@@ -396,17 +396,17 @@
 
 
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('script')
-    <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
-    <script src="{{ URL::asset('build/js/pages/dashboard-analytics.init.js') }}"></script>
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
-    <script src="{{ URL::asset('build/libs/chart.js/chart.umd.js') }}"></script>
-    <script src="{{ URL::asset('build/js/pages/chartjs.init.js') }}"></script>
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
+<?php $__env->startSection('script'); ?>
+    <script src="<?php echo e(URL::asset('build/libs/apexcharts/apexcharts.min.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('build/js/pages/dashboard-analytics.init.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('build/libs/chart.js/chart.umd.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('build/js/pages/chartjs.init.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 
-    <script src="{{ URL::asset('build/js/pages/dashboard-nft.init.js') }}"></script>
+    <script src="<?php echo e(URL::asset('build/js/pages/dashboard-nft.init.js')); ?>"></script>
     
 
 
@@ -539,4 +539,6 @@
 });
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.layouts-horizontal', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\edeklarant\app-service-laravel\resources\views/layouts-horizontal.blade.php ENDPATH**/ ?>
