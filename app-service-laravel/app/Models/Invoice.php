@@ -16,7 +16,9 @@ class Invoice extends Model
         'supplier_id',
         'total_price',
         'date_of_issue',
-        'country_of_origin'
+        'country_of_origin',
+        'scan_time',
+        'scanned'
     ];
 
     public function items()

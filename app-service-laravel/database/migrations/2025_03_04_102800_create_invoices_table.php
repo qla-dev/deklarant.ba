@@ -18,6 +18,8 @@ return new class extends Migration
             $table->float('total_price');
             $table->date('date_of_issue');
             $table->string('country_of_origin');
+            $table->float('scan_time')->nullable();
+            $table->integer('scanned')->default(0);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

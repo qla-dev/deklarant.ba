@@ -77,19 +77,26 @@ Route::get('/statistics', [StatsController::class, 'getStatistics']);
 Route::get('/statistics/users/{id}', [StatsController::class, 'getUserStatisticsById'])->where('id', '[0-9]+');
 Route::get('/statistics/suppliers/{id}', [StatsController::class, 'getSupplierStatisticsById'])->where('id', '[0-9]+');
 
-
 Route::get('/suppliers/{id}/annual-profit', [StatsController::class, 'getSupplierAnnualProfit']);
 Route::get('/suppliers/{id}/last-year-profit', [StatsController::class, 'getSupplierLastYearProfit']);
 
+
+// USERS ROUTES
 
 Route::get('/users', [UserController::class, 'getAllUsers']);
 Route::get('/users/{id}', [UserController::class, 'getUserById']);
 Route::put('/users/{id}', [UserController::class, 'updateUser']);
 Route::delete('/users/{id}', [UserController::class, 'deleteUser']);
 
+
+// FILE MANAGER ROUTES
+
 Route::post('/storage/uploads', [FileManagerController::class, 'uploadFile']);
 Route::post('/apps-file-manager/create-folder', [FileManagerController::class, 'createFolder']);
 Route::get('/folders/{path?}', [FileManagerController::class, 'showFolder'])->where('path', '.*');
+
+// SCAN ROUTES
+Route::post('/invoices/{invoiceId}/scan', [InvoiceController::class, 'scan']);
 
 
 
