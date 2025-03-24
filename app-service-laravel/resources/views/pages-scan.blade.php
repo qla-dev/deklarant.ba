@@ -117,6 +117,9 @@
 @endsection
 
 @section('script')
+<script src="{{ URL::asset('build/js/pages/dashboard-nft.init.js') }}"></script>
+<script src="{{ URL::asset('build/js/app.js') }}"></script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const dropzone = document.getElementById("dropzone");

@@ -34,7 +34,7 @@
             <!-- Lijevi elementi (2 kolone) -->
             <div class="col-md-2 border-end border-3">
                 <div class="d-flex flex-column h-100">
-                    
+
                     <!-- Obavijest u gornjem lijevom uglu -->
                     <div class="bg-info text-white text-center py-1 rounded-0">
                         <i class="ri-alert-line me-1"></i>
@@ -46,7 +46,8 @@
                         <h6 class="text-muted text-uppercase fs-11 mb-1">Broj skeniranih faktura</h6>
                         <div class="d-flex align-items-center justify-content-center">
                             <i class="ri-file-text-line fs-1 text-info mb-1"></i>
-                            <h3 class="mb-0 ms-2"><span class="counter-value" data-target="128"></span></h3>
+                            <!-- Here we will insert the API value dynamically -->
+                            <h3 class="mb-0 ms-2"><span id="usedScans" class="counter-value">0</span></h3>
                         </div>
                     </div>
                 </div>
@@ -66,7 +67,7 @@
                         <h6 class="text-muted text-uppercase fs-11 mb-1">Dostupna skeniranja</h6>
                         <div class="d-flex align-items-center justify-content-center">
                             <i class="ri-scan-2-line fs-1 text-info mb-1"></i>
-                            <h3 class="mb-0 ms-2"><span class="counter-value" data-target="26"></span></h3>
+                            <h3 class="mb-0 ms-2"><span class="counter-value" id="remainScans">0</span></h3>
                         </div>
                     </div>
                 </div>
@@ -105,7 +106,7 @@
                         <h6 class="text-muted text-uppercase fs-11 mb-1">Ukupno dobavljača</h6>
                         <div class="d-flex align-items-center justify-content-center">
                             <i class="ri-truck-line fs-1 text-info"></i>
-                            <h3 class="mb-0 ms-2"><span class="counter-value" data-target="128"></span></h3>
+                            <h3 class="mb-0 ms-2"><span class="counter-value" id="totalSuppliers">0</span></h3>
                         </div>
                     </div>
                 </div>
@@ -185,9 +186,9 @@
             <div class="card-body" style="z-index:1;">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1 overflow-hidden">
-                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Broj faktura</p>
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3" >Broj faktura</p>
                         <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                            <span class="counter-value" data-target="45">0</span>
+                            <span class="counter-value" data-target="45" id="totalInvoices">0</span>
                         </h4>
                     </div>
                     <div class="flex-shrink-0">
@@ -407,6 +408,8 @@
     <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 
     <script src="<?php echo e(URL::asset('build/js/pages/dashboard-nft.init.js')); ?>"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     
 
 
@@ -538,6 +541,46 @@
     });
 });
 </script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const USER_ID = <?php echo e(auth()->id() ?? 'null'); ?>;
+    const BASE_URL = "<?php echo e(url('')); ?>"; 
+    const API_URL = `${BASE_URL}/api/statistics/users/${USER_ID}`;
+
+    // Fetch data from API using Axios
+    axios.get(API_URL)
+        .then(response => {
+            if (response.data) {
+                // List of fields to update
+                const fields = {
+                    totalSuppliers: response.data.total_suppliers ?? 0,  // Default to 0 if undefined
+                    totalInvoices: response.data.total_invoices ?? 0,
+                    usedScans: response.data.used_scans ?? 0,
+                    remainScans: response.data.remaining_scans ?? 0
+                };
+
+                // Loop through each field and update the respective HTML element
+                for (const [id, value] of Object.entries(fields)) {
+                    const element = document.getElementById(id);
+                    if (element !== null) {
+                        element.innerText = value;
+                    } else {
+                        console.warn(`Element with ID '${id}' not found in DOM.`);
+                    }
+                }
+            } else {
+                console.error("API response does not contain expected data.");
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching API data:", error);
+        });
+});
+</script> 
+
+
 
 <?php $__env->stopSection(); ?>
 
