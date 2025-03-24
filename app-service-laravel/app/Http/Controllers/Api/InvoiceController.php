@@ -125,4 +125,35 @@ class InvoiceController extends Controller
             return response()->json(['error' => 'Failed to delete invoice. Please try again later.'], 500);
         }
     }
+
+    public function scan($invoiceId)
+{
+    $start = microtime(true); // Start time
+
+    try {
+        $invoice = Invoice::findOrFail($invoiceId);
+
+        if ($invoice->scanned == 1) {
+            return response()->json([
+                'message' => 'This invoice has already been scanned.'
+            ], 409); // 409 = Conflict
+        }
+
+        $invoice->scanned = 1;
+
+        $duration = microtime(true) - $start; // Duration in seconds (float)
+        $invoice->scan_time = round($duration, 3); // Rounded to 3 decimal places
+        $invoice->save();
+
+        return response()->json([
+            'message' => 'Invoice scanned successfully.',
+            'data' => $invoice
+        ]);
+    } catch (ModelNotFoundException $e) {
+        return response()->json(['error' => 'Invoice not found with the given ID.'], 404);
+    } catch (Exception $e) {
+        return response()->json(['error' => 'Failed to scan invoice. Please try again later.'], 500);
+    }
+}
+
 }

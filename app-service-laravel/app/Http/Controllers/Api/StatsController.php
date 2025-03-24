@@ -64,8 +64,12 @@ class StatsController extends Controller
                                         ->groupBy('country_of_origin')
                                         ->pluck('count', 'country_of_origin');
 
-            // Used scans = number of invoices for the user
-            $usedScans = $invoiceCount;
+
+            // Used scans = number of invoices for the user where scanned = 1
+            $usedScans = Invoice::where('user_id', $user->id)
+                                ->where('scanned', 1)
+                                ->count();
+
 
             // Calculate remaining scans for the user via `UserPackage`
             $totalScans = Package::whereIn('id', function ($query) use ($user) {
