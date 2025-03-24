@@ -32,7 +32,7 @@ class AuthController extends Controller
                 'username'  => 'required|string|unique:users,username',
                 'password'  => 'required|min:6',
                 'confirm_password' => 'required|min:6',
-                'avatar'    => 'required|string|ends_with:.jpg,.jpeg', // Only jpg allowed
+                'avatar'    => 'nullable|string|ends_with:.jpg,.jpeg', // Only jpg allowed
             ]);
 
             if ($validatedData['password'] !== $validatedData['confirm_password']) {
@@ -43,8 +43,9 @@ class AuthController extends Controller
                 'email'    => $validatedData['email'],
                 'username' => $validatedData['username'],
                 'password' => Hash::make($validatedData['password']),
-                'avatar'   => $validatedData['avatar'],
+                'avatar'   => $validatedData['avatar'] ?? null, // fallback to null if not set
             ]);
+            
 
             // Proceed to login the user
             $loginRequest = new Request([
