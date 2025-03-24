@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\TariffRateController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\StatsController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\FileManagerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -85,4 +86,10 @@ Route::get('/users', [UserController::class, 'getAllUsers']);
 Route::get('/users/{id}', [UserController::class, 'getUserById']);
 Route::put('/users/{id}', [UserController::class, 'updateUser']);
 Route::delete('/users/{id}', [UserController::class, 'deleteUser']);
+
+Route::post('/storage/uploads', [FileManagerController::class, 'uploadFile']);
+Route::post('/apps-file-manager/create-folder', [FileManagerController::class, 'createFolder']);
+Route::get('/folders/{path?}', [FileManagerController::class, 'showFolder'])->where('path', '.*');
+
+
 
