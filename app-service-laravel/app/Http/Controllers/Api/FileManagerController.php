@@ -11,31 +11,36 @@ class FileManagerController extends Controller
     public function uploadFile(Request $request)
 {
     $request->validate([
-        'file' => 'required|file|max:5120' // max 5MB
+        'file' => 'required|file|max:5120', // max 5MB
+        'folder' => 'nullable|string'       // optional folder input
     ]);
 
     $file = $request->file('file');
+    $folder = trim($request->input('folder', ''), '/'); // remove trailing slashes if any
+
     $originalName = $file->getClientOriginalName();
     $fileName = pathinfo($originalName, PATHINFO_FILENAME);
     $extension = $file->getClientOriginalExtension();
 
     $disk = Storage::disk('public');
-    $directory = 'uploads';
-    $filePath = $directory . '/' . $originalName;
+
+    // Build base path
+    $directory = $folder ? "uploads/{$folder}" : 'uploads';
+    $fullPath = $directory . '/' . $originalName;
     $finalName = $originalName;
     $counter = 1;
 
-    // Check if file exists, and if so, rename with suffix (1), (2), etc.
-    while ($disk->exists($filePath)) {
+    // Handle duplicate filenames
+    while ($disk->exists($fullPath)) {
         $finalName = $fileName . "({$counter})." . $extension;
-        $filePath = $directory . '/' . $finalName;
+        $fullPath = $directory . '/' . $finalName;
         $counter++;
     }
 
-    // Store file
-    $path = $file->storeAs($directory, $finalName, 'public');
+    // Store the file
+    $storedPath = $file->storeAs($directory, $finalName, 'public');
 
-    // Check if it was renamed or not
+    // Build a message
     $message = ($finalName !== $originalName)
         ? "There is already a file with that name, the new file has been stored as {$finalName}"
         : 'File uploaded successfully!';
@@ -44,8 +49,8 @@ class FileManagerController extends Controller
         'message' => $message,
         'original_name' => $originalName,
         'stored_as' => $finalName,
-        'path' => $path,
-        'url' => asset('storage/' . $path)
+        'path' => $storedPath,
+        'url' => asset('storage/' . $storedPath)
     ]);
 }
 
