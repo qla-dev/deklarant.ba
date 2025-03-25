@@ -704,9 +704,9 @@
                 <div class="dropdown ms-sm-3 header-item topbar-user">
                     <button type="button" class="btn shadow-none" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="d-flex align-items-center">
-                            <img class="rounded-circle header-profile-user" src="@if (Auth::user()->avatar != ''){{ URL::asset('images/' . Auth::user()->avatar) }}@else{{ URL::asset('build/images/users/avatar-1.jpg') }}@endif" alt="Header Avatar">
+                        <img id="topbar-avatar" class="rounded-circle header-profile-user" src="/build/images/users/avatar-1.jpg" alt="Header Avatar" width="32" height="32">
                             <span class="text-start ms-xl-2">
-                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{Auth::user()->name}}</span>
+                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text" id="topbar-username">Korisnik</span>
                                 <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Founder</span>
                             </span>
                         </span>
@@ -722,10 +722,11 @@
                         <a class="dropdown-item" href="pages-profile"><i class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Balance : <b>$5971.67</b></span></a>
                         <a class="dropdown-item" href="pages-profile-settings"><span class="badge bg-success-subtle text-success mt-1 float-end">New</span><i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Settings</span></a>
                         <a class="dropdown-item" href="auth-lockscreen-basic"><i class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Lock screen</span></a>
-                        <a class="dropdown-item " href="javascript:void();" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="bx bx-power-off font-size-16 align-middle me-1"></i> <span key="t-logout">@lang('translation.logout')</span></a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form>
+                        <a class="dropdown-item" href="javascript:void(0);" id="logout-link">
+                            <i class="bx bx-power-off font-size-16 align-middle me-1"></i> 
+                            <span key="t-logout">@lang('translation.logout')</span>
+                        </a>
+
                     </div>
                 </div>
             </div>
@@ -757,3 +758,37 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const logoutLink = document.getElementById("logout-link");
+
+        if (logoutLink) {
+            logoutLink.addEventListener("click", async function () {
+                const token = localStorage.getItem("auth_token");
+
+                if (!token) {
+                    return window.location.href = "/login";
+                }
+
+                try {
+                    await axios.post("/api/auth/logout", {}, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+                } catch (err) {
+                    console.error("Logout failed:", err);
+                }
+
+                localStorage.removeItem("auth_token");
+                localStorage.removeItem("user");
+                window.location.href = "/login";
+            });
+        }
+    });
+</script>
+
+
+

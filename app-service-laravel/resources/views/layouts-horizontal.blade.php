@@ -30,23 +30,17 @@
 <div class="col-xl-12">
     <div class="card card-animate border-0 shadow-sm h-100">
         <div class="row g-0">
-            
-            <!-- Lijevi elementi (2 kolone) -->
+            <!-- Left Columns -->
             <div class="col-md-2 border-end border-3">
                 <div class="d-flex flex-column h-100">
-
-                    <!-- Obavijest u gornjem lijevom uglu -->
                     <div class="bg-info text-white text-center py-1 rounded-0">
                         <i class="ri-alert-line me-1"></i>
                         <span>Testna poruka <b>123</b> test.</span>
                     </div>
-
-                    <!-- Sadržaj centriran ispod -->
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
                         <h6 class="text-muted text-uppercase fs-11 mb-1">Broj skeniranih faktura</h6>
                         <div class="d-flex align-items-center justify-content-center">
                             <i class="ri-file-text-line fs-1 text-info mb-1"></i>
-                            <!-- Here we will insert the API value dynamically -->
                             <h3 class="mb-0 ms-2"><span id="usedScans" class="counter-value">0</span></h3>
                         </div>
                     </div>
@@ -55,14 +49,10 @@
 
             <div class="col-md-2 border-end border-3">
                 <div class="d-flex flex-column h-100">
-                    
-                    <!-- Obavijest (isti naslov za drugu kolonu) -->
                     <div class="bg-info text-white text-center py-1 rounded-0">
                         <i class="ri-alert-line me-1"></i>
                         <span>Testna poruka <b>123</b> test.</span>
                     </div>
-
-                    <!-- Sadržaj centriran ispod -->
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
                         <h6 class="text-muted text-uppercase fs-11 mb-1">Dostupna skeniranja</h6>
                         <div class="d-flex align-items-center justify-content-center">
@@ -73,17 +63,14 @@
                 </div>
             </div>
 
-            <!-- Srednji dio sa avatarom -->
+            <!-- Middle Avatar Section -->
             <div class="col-md-4 border-end d-flex align-items-center border-0 rounded-0 alert alert-light p-1 m-0">
                 <div class="p-2 text-center d-flex flex-column h-100 w-100 justify-content-center align-items-center">
                     <div class="card-body text-center">
-                        <img src="@if (Auth::user()->avatar != ''){{ URL::asset('images/' . Auth::user()->avatar) }}@else{{ URL::asset('build/images/users/avatar-1.jpg') }}@endif"
-                            class="rounded-circle shadow-sm mb-1" width="60" height="60" alt="Korisnički avatar">
-                        <h6 class="fw-bold text-dark mb-1">Dobrodošli na eDeklarant, {{ Auth::user()->name }}!</h6>
+                        <img id="user-avatar" src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" class="rounded-circle shadow-sm mb-1" width="60" height="60" alt="Korisnički avatar">
+                        <h6 class="fw-bold text-dark mb-1" id="welcome-user">Dobrodošli na eDeklarant!</h6>
                         <p class="fw-semibold fs-7 mb-1 text-dark">Vaš trenutni paket je <b>Starter</b></p>
                     </div>
-
-                    <!-- Dugmad poredana jedno pored drugog -->
                     <div class="card-footer bg-transparent border-0 w-100">
                         <div class="d-flex justify-content-center gap-2 w-100">
                             <a href="pages-pricing" class="btn btn-info text-white w-50 btn-sm">
@@ -91,17 +78,15 @@
                             </a>
                             <a href="pages-scan" class="btn btn-info w-50 animated-btn btn-sm">
                                 <i class="ri-qr-scan-2-line fs-14 me-1"></i> Pokreni skeniranje
-                            </a>   
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Desni elementi (2 kolone) -->
+            <!-- Right Columns remain unchanged -->
             <div class="col-md-2 border-end">
                 <div class="d-flex flex-column h-100">
-                    
-                    <!-- Sadržaj centriran ispod -->
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
                         <h6 class="text-muted text-uppercase fs-11 mb-1">Ukupno dobavljača</h6>
                         <div class="d-flex align-items-center justify-content-center">
@@ -114,21 +99,18 @@
 
             <div class="col-md-2">
                 <div class="d-flex flex-column h-100">
-                    
-                    <!-- Sadržaj centriran ispod -->
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
                         <h6 class="text-muted text-uppercase fs-11 mb-1">Broj carinskih tarifa</h6>
                         <div class="d-flex align-items-center justify-content-center">
-                        <i class="ri-barcode-box-line fs-1 text-info"></i>
-
+                            <i class="ri-barcode-box-line fs-1 text-info"></i>
                             <h3 class="mb-0 ms-2"><span class="counter-value" data-target="128"></span></h3>
                         </div>
                     </div>
                 </div>
             </div>
 
-        </div> <!-- Kraj reda -->
-    </div> <!-- Kraj kartice -->
+        </div>
+    </div>
 </div>
 
 
@@ -382,7 +364,7 @@
 
 
 
-    <!-- Bottom part -->
+    
 
 
      
@@ -544,41 +526,73 @@
 
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const USER_ID = {{ auth()->id() ?? 'null' }};
-    const BASE_URL = "{{ url('') }}"; 
-    const API_URL = `${BASE_URL}/api/statistics/users/${USER_ID}`;
+document.addEventListener("DOMContentLoaded", async function () {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = localStorage.getItem("auth_token");
 
-    // Fetch data from API using Axios
-    axios.get(API_URL)
-        .then(response => {
-            if (response.data) {
-                // List of fields to update
-                const fields = {
-                    totalSuppliers: response.data.total_suppliers ?? 0,  // Default to 0 if undefined
-                    totalInvoices: response.data.total_invoices ?? 0,
-                    usedScans: response.data.used_scans ?? 0,
-                    remainScans: response.data.remaining_scans ?? 0
-                };
+    if (!user || !token) {
+        console.warn("User or token missing in localStorage.");
+        return;
+    }
 
-                // Loop through each field and update the respective HTML element
-                for (const [id, value] of Object.entries(fields)) {
-                    const element = document.getElementById(id);
-                    if (element !== null) {
-                        element.innerText = value;
-                    } else {
-                        console.warn(`Element with ID '${id}' not found in DOM.`);
-                    }
-                }
-            } else {
-                console.error("API response does not contain expected data.");
+    const API_URL = `/api/statistics/users/${user.id}`;
+
+    try {
+        const response = await axios.get(API_URL, {
+            headers: {
+                Authorization: `Bearer ${token}`
             }
-        })
-        .catch(error => {
-            console.error("Error fetching API data:", error);
         });
+
+        const stats = response.data || {};
+        const fields = {
+            totalSuppliers: stats.total_suppliers ?? 0,
+            totalInvoices: stats.total_invoices ?? 0,
+            usedScans: stats.used_scans ?? 0,
+            remainScans: stats.remaining_scans ?? 0
+        };
+
+        Object.entries(fields).forEach(([id, value]) => {
+            const el = document.getElementById(id);
+            if (el) el.innerText = value;
+        });
+
+    } catch (error) {
+        console.error("Error fetching statistics:", error);
+    }
 });
-</script> 
+</script>
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (user) {
+        const welcome = document.getElementById("welcome-user");
+        if (welcome) {
+            welcome.innerText = `Dobrodošli na eDeklarant, ${user.username}!`;
+        }
+
+        const avatar = document.getElementById("user-avatar");
+        if (avatar) {
+            const avatarUrl = `/storage/uploads/avatars/${user.avatar}`;
+            // Check if the image loads correctly, fallback if not
+            const testImg = new Image();
+            testImg.onload = function () {
+                avatar.src = avatarUrl;
+            };
+            testImg.onerror = function () {
+                avatar.src = "/build/images/users/avatar-1.jpg";
+            };
+            testImg.src = avatarUrl;
+        }
+    }
+});
+
+</script>
+
 
 
 

@@ -40,65 +40,31 @@
                             <div class="card-body p-4">
                                 <div class="text-center mt-2">
                                     <h5 class="text-info">Kreiraj novi eDeklarant račun</h5>
-                                    
                                 </div>
                                 <div class="p-2 mt-4">
-                                    <form class="needs-validation" novalidate method="POST"
-                                        action="{{ route('register') }}" enctype="multipart/form-data">
-                                        @csrf
+                                    <form id="registerForm" enctype="multipart/form-data">
                                         <div class="mb-3">
                                             <label for="useremail" class="form-label text-info">Email <span class="text-danger">*</span></label>
-                                            <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                                name="email" value="{{ old('email') }}" id="useremail"
-                                                placeholder="Enter email address" required>
-                                            @error('email')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
-                                            <div class="invalid-feedback">
-                                                Please enter email
-                                            </div>
+                                            <input type="email" class="form-control" name="email" id="useremail" placeholder="Enter email address" required>
+                                            <div class="invalid-feedback">Please enter email</div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="username" class="form-label text-info">Username <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                                name="name" value="{{ old('name') }}" id="username"
-                                                placeholder="Enter username" required>
-                                            @error('name')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
-                                            <div class="invalid-feedback">
-                                                Please enter username
-                                            </div>
+                                            <input type="text" class="form-control" name="username" id="username" placeholder="Enter username" required>
+                                            <div class="invalid-feedback">Please enter username</div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="userpassword" class="form-label text-info">Password <span class="text-danger">*</span></label>
-                                            <input type="password"
-                                                class="form-control @error('password') is-invalid @enderror" name="password"
-                                                id="userpassword" placeholder="Enter password" required>
-                                            @error('password')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
-                                            <div class="invalid-feedback">
-                                                Please enter password
-                                            </div>
+                                            <input type="password" class="form-control" name="password" id="userpassword" placeholder="Enter password" required>
+                                            <div class="invalid-feedback">Please enter password</div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="input-password" class="text-info">Confirm Password <span class="text-danger">*</span></label>
-                                            <input type="password"
-                                                class="form-control @error('password_confirmation') is-invalid @enderror"
-                                                name="password_confirmation" id="input-password"
-                                                placeholder="Enter Confirm Password" required>
+                                            <input type="password" class="form-control" name="confirm_password" id="input-password" placeholder="Enter Confirm Password" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="input-avatar" class="text-info">Avatar <span class="text-danger">*</span></label>
-                                            <input type="file" class="form-control @error('avatar') is-invalid @enderror"
-                                                name="avatar" id="input-avatar" required>
+                                            <input type="file" class="form-control" name="avatar" id="input-avatar" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="language" class="text-info">Language</label>
@@ -117,8 +83,7 @@
                             </div>
                         </div>
                         <div class="mt-4 text-center">
-                            <p class="text-info">Already have an account? <a href="{{ route('login') }}"
-                                    class="fw-semibold text-info text-decoration-underline"> Log in </a></p>
+                            <p class="text-info">Already have an account? <a href="{{ route('login') }}" class="fw-semibold text-info text-decoration-underline"> Log in </a></p>
                         </div>
                     </div>
                 </div>
@@ -129,5 +94,61 @@
 @section('script')
     <script src="{{ URL::asset('build/libs/particles.js/particles.js') }}"></script>
     <script src="{{ URL::asset('build/js/pages/particles.app.js') }}"></script>
-    <script src="{{ URL::asset('build/js/pages/form-validation.init.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("registerForm");
+        const avatarInput = document.getElementById("input-avatar");
+
+        form.addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const avatarFile = avatarInput.files[0];
+            const macAddress = '11:22:33:44:55'; // optional: make this dynamic later
+
+            try {
+                // Step 1: Upload avatar to /api/storage/uploads
+                const avatarUploadForm = new FormData();
+                avatarUploadForm.append("file", avatarFile);
+                avatarUploadForm.append("folder", "avatars");
+
+                const uploadResponse = await axios.post("/api/storage/uploads", avatarUploadForm, {
+                    headers: { "Content-Type": "multipart/form-data" }
+                });
+
+                const avatarFilename = uploadResponse.data.stored_as;
+                formData.set("avatar", avatarFilename); // overwrite file field with stored name
+
+                // Step 2: Register user with uploaded avatar filename
+                const registerResponse = await axios.post("/api/auth/register", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        "MAC-Address": macAddress
+                    }
+                });
+
+                const { token, user, message } = registerResponse.data;
+
+                // Step 3: Save auth data
+                localStorage.setItem("auth_token", token);
+                localStorage.setItem("user", JSON.stringify(user));
+
+                // Step 4: Set default auth header for future Axios requests
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+                // Step 5: Redirect to homepage (or dashboard)
+                alert(message || "Registration successful!");
+                window.location.href = "/";
+
+            } catch (error) {
+                console.error(error);
+                const msg = error.response?.data?.message || error.response?.data?.error || "Registration failed.";
+                alert(msg);
+            }
+        });
+    });
+</script>
+
 @endsection

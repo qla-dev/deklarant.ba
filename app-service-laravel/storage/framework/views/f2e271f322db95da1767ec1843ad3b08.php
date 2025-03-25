@@ -40,121 +40,31 @@
                             <div class="card-body p-4">
                                 <div class="text-center mt-2">
                                     <h5 class="text-info">Kreiraj novi eDeklarant račun</h5>
-                                    
                                 </div>
                                 <div class="p-2 mt-4">
-                                    <form class="needs-validation" novalidate method="POST"
-                                        action="<?php echo e(route('register')); ?>" enctype="multipart/form-data">
-                                        <?php echo csrf_field(); ?>
+                                    <form id="registerForm" enctype="multipart/form-data">
                                         <div class="mb-3">
                                             <label for="useremail" class="form-label text-info">Email <span class="text-danger">*</span></label>
-                                            <input type="email" class="form-control <?php $__errorArgs = ['email'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>"
-                                                name="email" value="<?php echo e(old('email')); ?>" id="useremail"
-                                                placeholder="Enter email address" required>
-                                            <?php $__errorArgs = ['email'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong><?php echo e($message); ?></strong>
-                                                </span>
-                                            <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                                            <div class="invalid-feedback">
-                                                Please enter email
-                                            </div>
+                                            <input type="email" class="form-control" name="email" id="useremail" placeholder="Enter email address" required>
+                                            <div class="invalid-feedback">Please enter email</div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="username" class="form-label text-info">Username <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control <?php $__errorArgs = ['name'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>"
-                                                name="name" value="<?php echo e(old('name')); ?>" id="username"
-                                                placeholder="Enter username" required>
-                                            <?php $__errorArgs = ['name'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong><?php echo e($message); ?></strong>
-                                                </span>
-                                            <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                                            <div class="invalid-feedback">
-                                                Please enter username
-                                            </div>
+                                            <input type="text" class="form-control" name="username" id="username" placeholder="Enter username" required>
+                                            <div class="invalid-feedback">Please enter username</div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="userpassword" class="form-label text-info">Password <span class="text-danger">*</span></label>
-                                            <input type="password"
-                                                class="form-control <?php $__errorArgs = ['password'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>" name="password"
-                                                id="userpassword" placeholder="Enter password" required>
-                                            <?php $__errorArgs = ['password'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong><?php echo e($message); ?></strong>
-                                                </span>
-                                            <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                                            <div class="invalid-feedback">
-                                                Please enter password
-                                            </div>
+                                            <input type="password" class="form-control" name="password" id="userpassword" placeholder="Enter password" required>
+                                            <div class="invalid-feedback">Please enter password</div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="input-password" class="text-info">Confirm Password <span class="text-danger">*</span></label>
-                                            <input type="password"
-                                                class="form-control <?php $__errorArgs = ['password_confirmation'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>"
-                                                name="password_confirmation" id="input-password"
-                                                placeholder="Enter Confirm Password" required>
+                                            <input type="password" class="form-control" name="confirm_password" id="input-password" placeholder="Enter Confirm Password" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="input-avatar" class="text-info">Avatar <span class="text-danger">*</span></label>
-                                            <input type="file" class="form-control <?php $__errorArgs = ['avatar'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>"
-                                                name="avatar" id="input-avatar" required>
+                                            <input type="file" class="form-control" name="avatar" id="input-avatar" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="language" class="text-info">Language</label>
@@ -173,8 +83,7 @@ unset($__errorArgs, $__bag); ?>"
                             </div>
                         </div>
                         <div class="mt-4 text-center">
-                            <p class="text-info">Already have an account? <a href="<?php echo e(route('login')); ?>"
-                                    class="fw-semibold text-info text-decoration-underline"> Log in </a></p>
+                            <p class="text-info">Already have an account? <a href="<?php echo e(route('login')); ?>" class="fw-semibold text-info text-decoration-underline"> Log in </a></p>
                         </div>
                     </div>
                 </div>
@@ -185,7 +94,62 @@ unset($__errorArgs, $__bag); ?>"
 <?php $__env->startSection('script'); ?>
     <script src="<?php echo e(URL::asset('build/libs/particles.js/particles.js')); ?>"></script>
     <script src="<?php echo e(URL::asset('build/js/pages/particles.app.js')); ?>"></script>
-    <script src="<?php echo e(URL::asset('build/js/pages/form-validation.init.js')); ?>"></script>
-<?php $__env->stopSection(); ?>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("registerForm");
+        const avatarInput = document.getElementById("input-avatar");
+
+        form.addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const avatarFile = avatarInput.files[0];
+            const macAddress = '11:22:33:44:55'; // optional: make this dynamic later
+
+            try {
+                // Step 1: Upload avatar to /api/storage/uploads
+                const avatarUploadForm = new FormData();
+                avatarUploadForm.append("file", avatarFile);
+                avatarUploadForm.append("folder", "avatars");
+
+                const uploadResponse = await axios.post("/api/storage/uploads", avatarUploadForm, {
+                    headers: { "Content-Type": "multipart/form-data" }
+                });
+
+                const avatarFilename = uploadResponse.data.stored_as;
+                formData.set("avatar", avatarFilename); // overwrite file field with stored name
+
+                // Step 2: Register user with uploaded avatar filename
+                const registerResponse = await axios.post("/api/auth/register", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        "MAC-Address": macAddress
+                    }
+                });
+
+                const { token, user, message } = registerResponse.data;
+
+                // Step 3: Save auth data
+                localStorage.setItem("auth_token", token);
+                localStorage.setItem("user", JSON.stringify(user));
+
+                // Step 4: Set default auth header for future Axios requests
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+                // Step 5: Redirect to homepage (or dashboard)
+                alert(message || "Registration successful!");
+                window.location.href = "/";
+
+            } catch (error) {
+                console.error(error);
+                const msg = error.response?.data?.message || error.response?.data?.error || "Registration failed.";
+                alert(msg);
+            }
+        });
+    });
+</script>
+
+<?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.master-without-nav', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\edeklarant\app-service-laravel\resources\views/auth/register.blade.php ENDPATH**/ ?>

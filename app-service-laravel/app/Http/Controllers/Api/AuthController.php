@@ -32,7 +32,7 @@ class AuthController extends Controller
                 'username'  => 'required|string|unique:users,username',
                 'password'  => 'required|min:6',
                 'confirm_password' => 'required|min:6',
-                'avatar'    => 'required|string|ends_with:.jpg,.jpeg', // Only jpg allowed
+                'avatar'    => 'required|string|ends_with:.jpg,.jpeg,.png', // Only jpg allowed
             ]);
 
             if ($validatedData['password'] !== $validatedData['confirm_password']) {

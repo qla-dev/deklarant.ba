@@ -8,7 +8,7 @@
         .dropzone {
             width: 450px;
             height: 450px;
-            border: 10px dashedrgb(35, 37, 37); /* Thicker dashed border */
+            border: 10px dashed rgb(35, 37, 37); /* Fixed typo */
             border-radius: 12px;
             background-color: #f8f9fa;
             text-align: center;
@@ -30,12 +30,11 @@
             display: none;
         }
 
-        /* Custom corners */
         .corner {
             position: absolute;
             width: 50px;
             height: 50px;
-            border: 7px solid #299cdb; /* Thicker corner borders */
+            border: 7px solid #299cdb;
         }
 
         .corner-top-left { top: -4px; left: -4px; border-right: none; border-bottom: none; }
@@ -43,7 +42,6 @@
         .corner-bottom-left { bottom: -4px; left: -4px; border-right: none; border-top: none; }
         .corner-bottom-right { bottom: -4px; right: -4px; border-left: none; border-top: none; }
 
-        /* File preview */
         .file-list {
             margin-top: 15px;
             width: 100%;
@@ -76,9 +74,8 @@
             font-weight: bold;
         }
 
-        /* Bigger icon for document scan */
         .scan-icon {
-            font-size: 100px; /* Bigger icon */
+            font-size: 100px;
             color: #299cdb;
         }
 
@@ -89,26 +86,20 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-md-6 d-flex justify-content-center">
-            
-            <!-- Drag & Drop File Upload Section -->
             <div class="dropzone" id="dropzone">
                 <input type="file" id="fileInput" multiple>
-                
-                <!-- Custom Corner Borders -->
                 <div class="corner corner-top-left"></div>
                 <div class="corner corner-top-right"></div>
                 <div class="corner corner-bottom-left"></div>
                 <div class="corner corner-bottom-right"></div>
-                
-                <!-- Dropzone Content -->
                 <div class="text-center" id="dropzone-content">
-                <i class="ri-file-2-line text-info fs-1"></i> <!-- Larger Scan Icon -->
+                    <i class="ri-file-2-line text-info fs-1"></i>
                     <p class="mt-3">Povucite i ispustite dokumente ovdje ili kliknite za odabir</p>
                 </div>
-
-                <!-- File List (Hidden initially) -->
                 <div class="file-list" id="fileList" style="display: none;"></div>
-
+                <div class="progress mt-3" style="width: 100%; display: none;" id="uploadProgressContainer">
+                <div id="uploadProgressBar" class="progress-bar bg-info" role="progressbar" style="width: 0%">0%</div>
+                </div>
             </div>
 
         </div>
@@ -117,78 +108,126 @@
 @endsection
 
 @section('script')
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="{{ URL::asset('build/js/pages/dashboard-nft.init.js') }}"></script>
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const dropzone = document.getElementById("dropzone");
-            const fileInput = document.getElementById("fileInput");
-            const fileList = document.getElementById("fileList");
-            const dropzoneContent = document.getElementById("dropzone-content");
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const dropzone = document.getElementById("dropzone");
+        const fileInput = document.getElementById("fileInput");
+        const fileList = document.getElementById("fileList");
+        const dropzoneContent = document.getElementById("dropzone-content");
+        const progressContainer = document.getElementById("uploadProgressContainer");
+        const progressBar = document.getElementById("uploadProgressBar");
 
-            // Function to update file list
-            function updateFileList(files) {
-                fileList.innerHTML = "";
-                if (files.length > 0) {
-                    fileList.style.display = "block";
-                    dropzoneContent.style.display = "none";
-                } else {
-                    fileList.style.display = "none";
-                    dropzoneContent.style.display = "block";
-                }
-
-                Array.from(files).forEach((file, index) => {
-                    const fileItem = document.createElement("div");
-                    fileItem.classList.add("file-item");
-
-                    const fileName = document.createElement("span");
-                    fileName.textContent = file.name;
-
-                    const removeBtn = document.createElement("span");
-                    removeBtn.textContent = "×";
-                    removeBtn.classList.add("remove-file");
-                    removeBtn.dataset.index = index;
-
-                    removeBtn.addEventListener("click", function () {
-                        let dt = new DataTransfer();
-                        let fileArray = Array.from(fileInput.files);
-                        fileArray.splice(index, 1);
-                        fileArray.forEach(f => dt.items.add(f));
-                        fileInput.files = dt.files;
-                        updateFileList(fileInput.files);
-                    });
-
-                    fileItem.appendChild(fileName);
-                    fileItem.appendChild(removeBtn);
-                    fileList.appendChild(fileItem);
-                });
+        function updateFileList(files) {
+            fileList.innerHTML = "";
+            if (files.length > 0) {
+                fileList.style.display = "block";
+                dropzoneContent.style.display = "none";
+            } else {
+                fileList.style.display = "none";
+                dropzoneContent.style.display = "block";
             }
 
-            // Handle drag-and-drop
-            dropzone.addEventListener("dragover", (e) => {
-                e.preventDefault();
-                dropzone.classList.add("bg-light");
+            Array.from(files).forEach((file, index) => {
+                const fileItem = document.createElement("div");
+                fileItem.classList.add("file-item");
+
+                const fileName = document.createElement("span");
+                fileName.textContent = file.name;
+
+                const removeBtn = document.createElement("span");
+                removeBtn.textContent = "×";
+                removeBtn.classList.add("remove-file");
+                removeBtn.dataset.index = index;
+
+                removeBtn.addEventListener("click", function () {
+                    let dt = new DataTransfer();
+                    let fileArray = Array.from(fileInput.files);
+                    fileArray.splice(index, 1);
+                    fileArray.forEach(f => dt.items.add(f));
+                    fileInput.files = dt.files;
+                    updateFileList(fileInput.files);
+                });
+
+                fileItem.appendChild(fileName);
+                fileItem.appendChild(removeBtn);
+                fileList.appendChild(fileItem);
+            });
+        }
+
+        function uploadFiles(files) {
+            const formData = new FormData();
+            Array.from(files).forEach(file => {
+                formData.append('file', file);
             });
 
-            dropzone.addEventListener("dragleave", () => {
-                dropzone.classList.remove("bg-light");
+            progressContainer.style.display = "block";
+            progressBar.style.width = "0%";
+            progressBar.innerText = "0%";
+
+            axios.post('/api/storage/uploads', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                onUploadProgress: function (progressEvent) {
+                    const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                    progressBar.style.width = percent + "%";
+                    progressBar.innerText = percent + "%";
+                }
+            })
+            .then(response => {
+                progressBar.style.width = "100%";
+                progressBar.innerText = "100%";
+                console.log('Upload successful:', response.data);
+                alert(response.data.message);
+
+                setTimeout(() => {
+                    if (confirm("Želite li uploadati još jedan dokument?")) {
+                        fileInput.value = "";
+                        updateFileList([]);
+                        progressBar.style.width = "0%";
+                        progressBar.innerText = "0%";
+                        progressContainer.style.display = "none";
+                    }
+                }, 300);
+            })
+            .catch(error => {
+                console.error('Upload failed:', error);
+                alert('Upload failed. Please try again.');
+                progressContainer.style.display = "none";
             });
+        }
 
-            dropzone.addEventListener("drop", (e) => {
-                e.preventDefault();
-                dropzone.classList.remove("bg-light");
-                let dt = new DataTransfer();
-                Array.from(fileInput.files).forEach(f => dt.items.add(f)); // Keep existing files
-                Array.from(e.dataTransfer.files).forEach(f => dt.items.add(f)); // Add new files
-                fileInput.files = dt.files;
-                updateFileList(fileInput.files);
-            });
-
-            // Handle file input click
-            dropzone.addEventListener("click", () => fileInput.click());
-
-            fileInput.addEventListener("change", () => updateFileList(fileInput.files));
+        dropzone.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            dropzone.classList.add("bg-light");
         });
-    </script>
+
+        dropzone.addEventListener("dragleave", () => {
+            dropzone.classList.remove("bg-light");
+        });
+
+        dropzone.addEventListener("drop", (e) => {
+            e.preventDefault();
+            dropzone.classList.remove("bg-light");
+            let dt = new DataTransfer();
+            Array.from(fileInput.files).forEach(f => dt.items.add(f));
+            Array.from(e.dataTransfer.files).forEach(f => dt.items.add(f));
+            fileInput.files = dt.files;
+            updateFileList(fileInput.files);
+            uploadFiles(fileInput.files);
+        });
+
+        dropzone.addEventListener("click", () => fileInput.click());
+
+        fileInput.addEventListener("change", () => {
+            updateFileList(fileInput.files);
+            uploadFiles(fileInput.files);
+        });
+    });
+</script>
+
 @endsection
