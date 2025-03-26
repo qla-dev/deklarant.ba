@@ -10,6 +10,7 @@ use App\Models\Package;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 use Exception;
 
 class StatsController extends Controller
@@ -78,14 +79,33 @@ class StatsController extends Controller
 
             $remainingScans = max($totalScans - $usedScans, 0);
 
-            return response()->json([
-                'user_id' => $user->id,
-                'total_suppliers' => $supplierCount,
-                'total_invoices' => $invoiceCount,
-                'invoices_by_country' => $invoicesByCountry,
-                'used_scans' => $usedScans,
-                'remaining_scans' => $remainingScans
-            ], 200);
+            $topSuppliers = Supplier::select('suppliers.id', 'suppliers.name')
+                ->join('invoices', 'suppliers.id', '=', 'invoices.supplier_id')
+                ->where('invoices.user_id', $user->id)
+                ->groupBy('suppliers.id', 'suppliers.name')
+                ->get()
+                ->map(function ($supplier) {
+                    $fullSupplier = Supplier::find($supplier->id); // To get manually changed data from the database
+                    return [
+                        'id' => $supplier->id,
+                        'name' => $supplier->name,
+                        'annual_profit' => $fullSupplier ? $fullSupplier->getAnnualProfitAvg() : 0
+                    ];
+                })
+                ->sortByDesc('annual_profit') // Order by annual profit descending
+                ->take(5) // Limit to top 5
+                ->values();
+
+        return response()->json([
+            'user_id' => $user->id,
+            'total_suppliers' => $supplierCount,
+            'total_invoices' => $invoiceCount,
+            'invoices_by_country' => $invoicesByCountry,
+            'used_scans' => $usedScans,
+            'remaining_scans' => $remainingScans,
+            'suppliers' => $topSuppliers
+        ], 200);
+
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'error' => 'User not found',
@@ -175,14 +195,8 @@ class StatsController extends Controller
 
     $now = Carbon::now();
     $supplierCreationDate = Carbon::parse($supplier->created_at);
-    
-    // Calculate the number of full years since supplier was created
-    $yearsActive = $supplierCreationDate->diffInYears($now);
-    
-    // Ensure at least 1 year (avoid division by zero)
-    $yearsActive = max($yearsActive, 1);
+    $yearsActive = max($supplierCreationDate->diffInYears($now), 1);
 
-    // Sum total invoice prices for all time for this supplier
     $totalProfit = Invoice::where('supplier_id', $supplier->id)->sum('total_price');
 
     // Calculate the average annual profit
