@@ -7,281 +7,383 @@
 @endsection
 @section('content')
 
+    <!-- Profile Foreground -->
     <div class="profile-foreground position-relative mx-n4 mt-n4">
         <div class="profile-wid-bg">
-            <img src="{{ URL::asset('build/images/profile-bg.jpg') }}" alt="" class="profile-wid-img" />
+            <img src="{{ URL::asset('build/images/profile-bg.jpg') }}" class="profile-wid-img" alt="Profile Background">
         </div>
     </div>
-    <div class="pt-4 mb-4 mb-lg-3 pb-lg-4 profile-wrapper">
-        <div class="row g-4">
+
+    <!-- Profile Header -->
+    <div class="pt-4 mb-4 profile-wrapper pb-lg-4">
+        <div class="row g-4 align-items-center">
             <div class="col-auto">
                 <div class="avatar-lg">
-                    <img src="@if (Auth::user()->avatar != '') {{ URL::asset('images/' . Auth::user()->avatar) }}@else{{ URL::asset('build/images/users/avatar-1.jpg') }} @endif" alt="user-img" class="img-thumbnail rounded-circle" />
+                    <img id="user-avatar" src="/build/images/users/avatar-1.jpg" class="img-thumbnail rounded-circle" alt="User Avatar">
                 </div>
             </div>
-            <!--end col-->
             <div class="col">
                 <div class="p-2">
                     <h3 class="text-white mb-1">Anna Adame</h3>
-                    <p class="text-white text-opacity-75">Owner & Founder</p>
-                    <div class="hstack text-white-50 gap-1">
-                        <div class="me-2"><i
-                                class="ri-map-pin-user-line me-1 text-white text-opacity-75 fs-16 align-middle"></i>California,
-                            United States</div>
-                        <div><i class="ri-building-line me-1 text-white text-opacity-75 fs-16 align-middle"></i>Themesbrand
-                        </div>
+                    <p class="text-white-50">Owner & Founder</p>
+                    <div class="hstack text-white-50 gap-2">
+                        <span><i class="ri-map-pin-user-line align-middle"></i> California, United States</span>
+                        <span><i class="ri-building-line align-middle"></i> Themesbrand</span>
                     </div>
                 </div>
             </div>
-            <!--end col-->
             <div class="col-12 col-lg-auto order-last order-lg-0">
-                <div class="row text text-white-50 text-center">
-                    <div class="col-lg-6 col-4">
-                        <div class="p-2">
-                            <h4 class="text-white mb-1">24.3K</h4>
-                            <p class="fs-14 mb-0">Followers</p>
-                        </div>
+                <div class="row text-center text-white-50">
+                    <div class="col-6">
+                        <h4 class="text-white mb-1">24.3K</h4>
+                        <p class="fs-14 mb-0">Followers</p>
                     </div>
-                    <div class="col-lg-6 col-4">
-                        <div class="p-2">
-                            <h4 class="text-white mb-1">1.3K</h4>
-                            <p class="fs-14 mb-0">Following</p>
-                        </div>
+                    <div class="col-6">
+                        <h4 class="text-white mb-1">1.3K</h4>
+                        <p class="fs-14 mb-0">Following</p>
                     </div>
                 </div>
             </div>
-            <!--end col-->
-
         </div>
-        <!--end row-->
     </div>
 
+    <!-- Main Content -->
     <div class="row">
         <div class="col-lg-12">
-            <div>
-                <div class="d-flex profile-wrapper">
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-pills animation-nav profile-nav gap-2 gap-lg-3 flex-grow-1" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link fs-14 active" data-bs-toggle="tab" href="#overview-tab" role="tab">
-                                <i class="ri-airplay-fill d-inline-block d-md-none"></i> <span
-                                    class="d-none d-md-inline-block">Overview</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link fs-14" data-bs-toggle="tab" href="#activities" role="tab">
-                                <i class="ri-list-unordered d-inline-block d-md-none"></i> <span
-                                    class="d-none d-md-inline-block">Activities</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link fs-14" data-bs-toggle="tab" href="#projects" role="tab">
-                                <i class="ri-price-tag-line d-inline-block d-md-none"></i> <span
-                                    class="d-none d-md-inline-block">Projects</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link fs-14" data-bs-toggle="tab" href="#documents" role="tab">
-                                <i class="ri-folder-4-line d-inline-block d-md-none"></i> <span
-                                    class="d-none d-md-inline-block">Documents</span>
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="flex-shrink-0">
-                        <a href="pages-profile-settings" class="btn btn-success"><i
-                                class="ri-edit-box-line align-bottom"></i> Edit Profile</a>
-                    </div>
-                </div>
-                <!-- Tab panes -->
-                <div class="tab-content pt-4 text-muted">
-                    <div class="tab-pane active" id="overview-tab" role="tabpanel">
-                        <div class="row">
-                            <div class="col-xxl-3">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title mb-5">Complete Your Profile</h5>
-                                        <div class="progress animated-progress custom-progress progress-label">
-                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 30%"
-                                                aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">
-                                                <div class="label">30%</div>
+
+            <!-- Navigation Tabs -->
+            <ul class="nav nav-pills animation-nav profile-nav py-3 flex-grow-1 gap-2 " role="tablist">
+
+                <li class="nav-item">
+                    <a class="nav-link  active" data-bs-toggle="tab" href="#overview-tab">Overview</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#activities">Activities</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#projects">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#documents">Documents</a>
+                </li>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+
+                <!-- Overview Tab -->
+                <div class="tab-pane fade show active" id="overview-tab">
+                    <div class="row">
+
+                        <!-- Left Side Cards -->
+                        <div class="col-xxl-3"> 
+                            <!-- Current Plan Card -->
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <p class="fw-semibold">Vaš trenutni paket je <b>Starter</b></p>
+                                    <a href="pages-pricing" class="btn btn-info text-white btn-sm">
+                                        <i class="ri-arrow-up-circle-line"></i> Nadogradite paket
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Info Card -->
+                            
+                            <!-- Suppliers Card -->
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Moji dobavljači</h5>
+                                    <div class="d-flex align-items-center py-2">
+                                        <img src="{{ URL::asset('build/images/users/orbico.png') }}" class="avatar-xs rounded-circle me-3">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-0">ORBICO</h6>
+                                            <small class="text-muted">Bosna i Hercegovina</small>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center py-2">
+                                        <img src="{{ URL::asset('build/images/users/hifa.png') }}" class="avatar-xs rounded-circle me-3">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-0">HIFA</h6>
+                                            <small class="text-muted">Bosna i Hercegovina</small>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center py-2">
+                                        <img src="{{ URL::asset('build/images/users/samsung.png') }}" class="avatar-xs rounded-circle me-3">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-0">Samsung</h6>
+                                            <small class="text-muted">Južna Koreja</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="card-title mb-0">Moji dokumenti</h5>
+                                        <a data-bs-toggle="tab"
+                                        href="#activities" id="viewAllDocuments" class="text-info fs-13">View all</a>
+                                    </div>
+
+                                    <div class="row g-3">
+                                        <div class="col-6 col-sm-3">
+                                            <div class="text-center">
+                                                <i class="ri-file-pdf-2-line fs-24 text-info"></i>
+                                                <p class="fs-13 text-muted mt-1 mb-0">Dokument.pdf</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-sm-3">
+                                            <div class="text-center">
+                                                <i class="ri-file-image-line fs-24 text-info"></i>
+                                                <p class="fs-13 text-muted mt-1 mb-0">Slika.jpg</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-sm-3">
+                                            <div class="text-center">
+                                                <i class="ri-file-excel-2-line fs-24 text-info"></i>
+                                                <p class="fs-13 text-muted mt-1 mb-0">Tabela.xlsx</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-sm-3">
+                                            <div class="text-center">
+                                                <i class="ri-file-image-line fs-24 text-info"></i>
+                                                <p class="fs-13 text-muted mt-1 mb-0">Grafika.png</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title mb-3">Info</h5>
-                                        <div class="table-responsive">
-                                            <table class="table table-borderless mb-0">
-                                                <tbody>
-                                                    <tr>
-                                                        <th class="ps-0" scope="row">Full Name :</th>
-                                                        <td class="text-muted">Anna Adame</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th class="ps-0" scope="row">Mobile :</th>
-                                                        <td class="text-muted">+(1) 987 6543</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th class="ps-0" scope="row">E-mail :</th>
-                                                        <td class="text-muted">daveadame@velzon.com</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th class="ps-0" scope="row">Location :</th>
-                                                        <td class="text-muted">California, United States
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th class="ps-0" scope="row">Joining Date</th>
-                                                        <td class="text-muted">24 Nov 2021</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div><!-- end card body -->
-                                </div><!-- end card -->
 
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title mb-4">Portfolio</h5>
-                                        <div class="d-flex flex-wrap gap-2">
-                                            <div>
-                                                <a href="javascript:void(0);" class="avatar-xs d-block">
-                                                    <span
-                                                        class="avatar-title rounded-circle fs-16 bg-body text-light shadow">
-                                                        <i class="ri-github-fill"></i>
-                                                    </span>
-                                                </a>
-                                            </div>
-                                            <div>
-                                                <a href="javascript:void(0);" class="avatar-xs d-block">
-                                                    <span class="avatar-title rounded-circle fs-16 bg-primary shadow">
-                                                        <i class="ri-global-fill"></i>
-                                                    </span>
-                                                </a>
-                                            </div>
-                                            <div>
-                                                <a href="javascript:void(0);" class="avatar-xs d-block">
-                                                    <span class="avatar-title rounded-circle fs-16 bg-success shadow">
-                                                        <i class="ri-dribbble-fill"></i>
-                                                    </span>
-                                                </a>
-                                            </div>
-                                            <div>
-                                                <a href="javascript:void(0);" class="avatar-xs d-block">
-                                                    <span class="avatar-title rounded-circle fs-16 bg-danger shadow">
-                                                        <i class="ri-pinterest-fill"></i>
-                                                    </span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end card body -->
-                                </div><!-- end card -->
+                        </div>
 
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title mb-4">Skills</h5>
-                                        <div class="d-flex flex-wrap gap-2 fs-15">
-                                            <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary">Photoshop</a>
-                                            <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary">illustrator</a>
-                                            <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary">HTML</a>
-                                            <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary">CSS</a>
-                                            <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary">Javascript</a>
-                                            <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary">Php</a>
-                                            <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary">Python</a>
-                                        </div>
-                                    </div><!-- end card body -->
-                                </div><!-- end card -->
-
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-center mb-4">
-                                            <div class="flex-grow-1">
-                                                <h5 class="card-title mb-0">Suggestions</h5>
-                                            </div>
-                                            <div class="flex-shrink-0">
-                                                <div class="dropdown">
-                                                    <a href="#" role="button" id="dropdownMenuLink2"
-                                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="ri-more-2-fill fs-14"></i>
-                                                    </a>
-
-                                                    <ul class="dropdown-menu dropdown-menu-end"
-                                                        aria-labelledby="dropdownMenuLink2">
-                                                        <li><a class="dropdown-item" href="#">View</a>
-                                                        </li>
-                                                        <li><a class="dropdown-item" href="#">Edit</a>
-                                                        </li>
-                                                        <li><a class="dropdown-item" href="#">Delete</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="d-flex align-items-center py-3">
-                                                <div class="avatar-xs flex-shrink-0 me-3">
-                                                    <img src="{{ URL::asset('build/images/users/avatar-3.jpg') }}" alt=""
-                                                        class="img-fluid rounded-circle shadow" />
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <div>
-                                                        <h5 class="fs-14 mb-1">Esther James</h5>
-                                                        <p class="fs-13 text-muted mb-0">Frontend
-                                                            Developer</p>
+                        <!-- Personal Details Form -->
+                        <div class="col-xxl-9">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="tab-pane"  role="tabpanel">
+                                        <form action="javascript:void(0);">
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="firstnameInput" class="form-label text-info">
+                                                           Ime</label>
+                                                        <input type="text" class="form-control" id="firstnameInput"
+                                                            placeholder="Unesite vaše ime">
                                                     </div>
                                                 </div>
-                                                <div class="flex-shrink-0 ms-2">
-                                                    <button type="button"
-                                                        class="btn btn-sm btn-outline-success shadow-none"><i
-                                                            class="ri-user-add-line align-middle"></i></button>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex align-items-center py-3">
-                                                <div class="avatar-xs flex-shrink-0 me-3">
-                                                    <img src="{{ URL::asset('build/images/users/avatar-4.jpg') }}" alt=""
-                                                        class="img-fluid rounded-circle shadow" />
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <div>
-                                                        <h5 class="fs-14 mb-1">Jacqueline Steve</h5>
-                                                        <p class="fs-13 text-muted mb-0">UI/UX Designer
-                                                        </p>
+                                                <!--end col-->
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="lastnameInput" class="form-label text-info">Prezime</label>
+                                                        <input type="text" class="form-control" id="lastnameInput"
+                                                            placeholder="Enter your lastname" value="Surname" >
                                                     </div>
                                                 </div>
-                                                <div class="flex-shrink-0 ms-2">
-                                                    <button type="button"
-                                                        class="btn btn-sm btn-outline-success shadow-none"><i
-                                                            class="ri-user-add-line align-middle"></i></button>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex align-items-center py-3">
-                                                <div class="avatar-xs flex-shrink-0 me-3">
-                                                    <img src="{{ URL::asset('build/images/users/avatar-5.jpg') }}" alt=""
-                                                        class="img-fluid rounded-circle shadow" />
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <div>
-                                                        <h5 class="fs-14 mb-1">George Whalen</h5>
-                                                        <p class="fs-13 text-muted mb-0">Backend
-                                                            Developer</p>
+                                                <!--end col-->
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="phonenumberInput" class="form-label text-info">Broj mobitela</label>
+                                                        <input type="text" class="form-control" id="phonenumberInput"
+                                                            placeholder="Unesite Vaš broj mobitela">
                                                     </div>
                                                 </div>
-                                                <div class="flex-shrink-0 ms-2">
-                                                    <button type="button"
-                                                        class="btn btn-sm btn-outline-success shadow-none"><i
-                                                            class="ri-user-add-line align-middle"></i></button>
+                                                <!--end col-->
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="emailInput" class="form-label text-info">Email
+                                                            adresa</label>
+                                                        <input type="email" class="form-control" id="emailInput"
+                                                            placeholder="Enter your email" >
+                                                    </div>
                                                 </div>
+                                                <!--end col-->
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="JoiningdatInput" class="form-label text-info">Joining
+                                                            Date</label>
+                                                        <input type="text" class="form-control" data-provider="flatpickr"
+                                                            id="JoiningdatInput" data-date-format="d M, Y"
+                                                            data-deafult-date="24 Nov, 2021" placeholder="Select date" />
+                                                    </div>
+                                                </div>
+                                                <!--end col-->
+                                                
+                                                <!--end col-->
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="designationInput" class="form-label text-info">Designation</label>
+                                                        <input type="text" class="form-control" id="designationInput"
+                                                            placeholder="Designation" value="Lead Designer / Developer">
+                                                    </div>
+                                                </div>
+                                                <!--end col-->
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="websiteInput1" class="form-label text-info">Website</label>
+                                                        <input type="text" class="form-control" id="websiteInput1"
+                                                            placeholder="www.example.com" value="www.velzon.com" />
+                                                    </div>
+                                                </div>
+                                                <!--end col-->
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="cityInput" class="form-label text-info">City</label>
+                                                        <input type="text" class="form-control" id="cityInput" placeholder="City"
+                                                            value="California" />
+                                                    </div>
+                                                </div>
+                                                <!--end col-->
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="countryInput" class="form-label text-info">Country</label>
+                                                        <input type="text" class="form-control" id="countryInput"
+                                                            placeholder="Country" value="United States" />
+                                                    </div>
+                                                </div>
+                                                <!--end col-->
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="zipcodeInput" class="form-label text-info">Zip
+                                                            Code</label>
+                                                        <input type="text" class="form-control" minlength="5" maxlength="6"
+                                                            id="zipcodeInput" placeholder="Enter zipcode" value="90011">
+                                                    </div>
+                                                </div>
+                                                <!--end col-->
+                                                <div class="col-lg-12">
+                                                    <div class="mb-3 pb-2">
+                                                        <label for="exampleFormControlTextarea"
+                                                            class="form-label text-info">Description</label>
+                                                        <textarea class="form-control" id="exampleFormControlTextarea" placeholder="Enter your description"
+                                                            rows="3">Hi I'm Anna Adame,It will be as simple as Occidental; in fact, it will be Occidental. To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental is European languages are members of the same family.</textarea>
+                                                    </div>
+                                                </div>
+                                                <!--end col-->
+                                                <div class="col-lg-12">
+                                                    <div class="hstack gap-2 justify-content-center">
+                                                        <button type="submit" class="btn btn-info">Ažuriraj podatke</button>
+                                                        
+                                                    </div>
+                                                </div>
+                                                <!--end col-->
                                             </div>
-                                        </div>
-                                    </div><!-- end card body -->
+                                        <!--end row-->
+                                        </form>
+                                   
+                                    </div>
+
+                                    
                                 </div>
-                                <!--end card-->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="tab-pane fade " id="activities">
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Document</th>
+                                    <th scope="col">Supplier</th>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-info">
+                                <tr>
+                                    <td>1</td>
+                                    <td class="fw-semibold">Ugovor_o_saradnji.pdf</td>
+                                    <td>
+                                        <img src="{{ URL::asset('build/images/users/orbico.png') }}" class="avatar-xs rounded-circle me-2">
+                                        ORBICO
+                                    </td>
+                                    <td><span class="badge bg bg-info">PDF</span></td>
+                                    <td><a href="#" class="link-primary">View</a></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td class="fw-semibold">Cjenovnik.xlsx</td>
+                                    <td>
+                                        <img src="{{ URL::asset('build/images/users/hifa.png') }}" class="avatar-xs rounded-circle me-2">
+                                        HIFA
+                                    </td>
+                                    <td><span class="badge bg-success">Excel</span></td>
+                                    <td><a href="#" class="link-primary">View</a></td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td class="fw-semibold">Ponuda_Samsung.jpg</td>
+                                    <td>
+                                        <img src="{{ URL::asset('build/images/users/samsung.png') }}" class="avatar-xs rounded-circle me-2">
+                                        Samsung
+                                    </td>
+                                    <td><span class="badge bg-warning">Image</span></td>
+                                    <td><a href="#" class="link-primary">View</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+            
+        </div>
+    </div>
+
 @endsection
+
+
 @section('script')
     <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
-
     <script src="{{ URL::asset('build/js/pages/profile.init.js') }}"></script>
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const avatarImg = document.getElementById('user-avatar');
+            const token = localStorage.getItem('token');
+
+            if (token) {
+                axios.get('/api/auth/me', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                .then(response => {
+                    const user = response.data;
+                    if (user.avatar && user.avatar !== '') {
+                        const avatarUrl = `/storage/uploads/avatars/${user.avatar}`;
+
+                        const testImg = new Image();
+                        testImg.onload = function () {
+                            avatarImg.src = avatarUrl;
+                        };
+                        testImg.onerror = function () {
+                            avatarImg.src = "/build/images/users/avatar-1.jpg";
+                        };
+                        testImg.src = avatarUrl;
+                    }
+                })
+                .catch(error => {
+                    console.error("Greška prilikom dohvata korisnika:", error);
+                });
+            }
+        });
+    </script>
+    <script>
+        document.getElementById('viewAllDocuments').addEventListener('click', function(event) {
+        event.preventDefault();
+
+    // Manually trigger the Bootstrap tab
+        const triggerTab = new bootstrap.Tab(document.querySelector('a[href="#activities"]'));
+        triggerTab.show();
+        });
+
+    </script>
 @endsection
