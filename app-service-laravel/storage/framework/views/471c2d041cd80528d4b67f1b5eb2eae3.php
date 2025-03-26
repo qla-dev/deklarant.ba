@@ -25,9 +25,7 @@
                 <div class="card-body p-4">
                     <div class="text-center">
                         <div class="profile-user position-relative d-inline-block mx-auto  mb-4">
-                            <img src="<?php if(Auth::user()->avatar != ''): ?> <?php echo e(URL::asset('images/' . Auth::user()->avatar)); ?><?php else: ?><?php echo e(URL::asset('build/images/users/avatar-1.jpg')); ?> <?php endif; ?>"
-                                class="rounded-circle avatar-xl img-thumbnail user-profile-image  shadow"
-                                alt="user-profile-image">
+                            <img id="user-avatar" src="/build/images/users/avatar-1.jpg" alt="user-img" class="img-thumbnail rounded-circle" />
                             <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
                                 <input id="profile-img-file-input" type="file" class="profile-img-file-input">
                                 <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
@@ -673,5 +671,7 @@
     <script src="<?php echo e(URL::asset('build/js/pages/profile-setting.init.js')); ?>"></script>
     <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 <?php $__env->stopSection(); ?>
+
+
 
 <?php echo $__env->make('layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\edeklarant\app-service-laravel\resources\views/pages-profile-settings.blade.php ENDPATH**/ ?>

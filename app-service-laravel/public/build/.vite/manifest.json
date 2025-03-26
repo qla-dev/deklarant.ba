@@ -1,9 +1,12 @@
 {
+
+
  
   "auth-one-bg.jpg": {
     "file": "icons/auth-one-bg.jpg",
     "src": "auth-one-bg.jpg"
   },
+
   "bg-home.jpg": {
     "file": "icons/bg-home.jpg",
     "src": "bg-home.jpg"
@@ -13,7 +16,10 @@
     "src": "bg-pattern.png"
   },
 
+
+
  
+
   "boxicons.eot": {
     "file": "icons/boxicons.eot",
     "src": "boxicons.eot"
@@ -34,6 +40,13 @@
     "file": "icons/boxicons.woff2",
     "src": "boxicons.woff2"
   },
+
+  "businessman.jpg": {
+    "file": "icons/businessman.jpg",
+    "src": "businessman.jpg"
+  },
+
+
 
   "chat-bg-pattern.png": {
     "file": "icons/chat-bg-pattern.png",
@@ -181,6 +194,8 @@
     "file": "icons/materialdesignicons-webfont.woff2",
     "src": "materialdesignicons-webfont.woff2"
   },
+
+
 
   "modal-bg.png": {
     "file": "icons/modal-bg.png",
