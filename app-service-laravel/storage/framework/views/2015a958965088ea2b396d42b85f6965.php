@@ -6,10 +6,10 @@
     <link href="<?php echo e(URL::asset('build/libs/jsvectormap/jsvectormap.min.css')); ?>" rel="stylesheet">
     <style>
         .dropzone {
-            width: 450px;
+            width:450px;
             height: 450px;
-            border: 10px dashed rgb(35, 37, 37); /* Fixed typo */
-            border-radius: 12px;
+            border: dashed rgb(59, 171, 171); /* Fixed typo */
+           
             background-color: #f8f9fa;
             text-align: center;
             padding: 50px;
@@ -75,36 +75,40 @@
         }
 
         .scan-icon {
-            font-size: 100px;
+            font-size: 150px;
             color: #299cdb;
         }
+       
 
     </style>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
-<div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="col-md-6 d-flex justify-content-center">
-            <div class="dropzone" id="dropzone">
-                <input type="file" id="fileInput" multiple>
-                <div class="corner corner-top-left"></div>
-                <div class="corner corner-top-right"></div>
-                <div class="corner corner-bottom-left"></div>
-                <div class="corner corner-bottom-right"></div>
-                <div class="text-center" id="dropzone-content">
-                    <i class="ri-file-2-line text-info fs-1"></i>
-                    <p class="mt-3">Povucite i ispustite dokumente ovdje ili kliknite za odabir</p>
-                </div>
-                <div class="file-list" id="fileList" style="display: none;"></div>
-                <div class="progress mt-3" style="width: 100%; display: none;" id="uploadProgressContainer">
-                <div id="uploadProgressBar" class="progress-bar bg-info" role="progressbar" style="width: 0%">0%</div>
-                </div>
-            </div>
 
+
+    <!-- your dropzone -->
+
+<div class=" d-flex justify-content-center align-items-center" >
+    <div class="dropzone" id="dropzone">
+        <input type="file" id="fileInput" multiple>
+        <div class="corner corner-top-left"></div>
+        <div class="corner corner-top-right"></div>
+        <div class="corner corner-bottom-left"></div>
+        <div class="corner corner-bottom-right"></div>
+        <div class="text-center" id="dropzone-content">
+            <i class="ri-file-2-line text-info fs-1"></i>
+            <p class="mt-3">Povucite i ispustite dokumente ovdje ili kliknite za odabir</p>
+        </div>
+        <div class="file-list" id="fileList" style="display: none;"></div>
+        <div class="progress mt-3" style="width: 100%; display: none;" id="uploadProgressContainer">
+            <div id="uploadProgressBar" class="progress-bar bg-info" role="progressbar" style="width: 0%">0%</div>
         </div>
     </div>
 </div>
+
+   
+
+
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('script'); ?>

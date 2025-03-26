@@ -27,7 +27,8 @@
 
 
 <!-- Top part -->
-<div class="col-xl-12">
+ 
+<div class="col-xl-12 ">
     <div class="card card-animate border-0 shadow-sm h-100">
         <div class="row g-0">
             <!-- Left Columns -->
@@ -113,18 +114,9 @@
     </div>
 </div>
 
-
-
-
-
-
-
-
-
 <!-- Mid part of layout -->
 
-
-<div class="row g-2  mt-2 w-100">
+<div class="row g-1  mt-2">
     <!-- Card 1 -->
     <div class="col-xl-3 col-md-6">
         <div class="card card-animate overflow-hidden">
@@ -357,6 +349,9 @@
         </div><!-- end card -->
     </div>
 </div>
+
+<!-- Test div -->
+
 
 
 

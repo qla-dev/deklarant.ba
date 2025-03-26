@@ -1,4 +1,208 @@
 {
+  "bg-home.jpg": {
+    "file": "icons/bg-home.jpg",
+    "src": "bg-home.jpg"
+  },
+  "bg-pattern.png": {
+    "file": "icons/bg-pattern.png",
+    "src": "bg-pattern.png"
+  },
+  "boxicons.eot": {
+    "file": "icons/boxicons.eot",
+    "src": "boxicons.eot"
+  },
+  "boxicons.svg": {
+    "file": "icons/boxicons.svg",
+    "src": "boxicons.svg"
+  },
+  "boxicons.ttf": {
+    "file": "icons/boxicons.ttf",
+    "src": "boxicons.ttf"
+  },
+  "boxicons.woff": {
+    "file": "icons/boxicons.woff",
+    "src": "boxicons.woff"
+  },
+  "boxicons.woff2": {
+    "file": "icons/boxicons.woff2",
+    "src": "boxicons.woff2"
+  },
+  "businessman.jpg": {
+    "file": "icons/businessman.jpg",
+    "src": "businessman.jpg"
+  },
+  "chat-bg-pattern.png": {
+    "file": "icons/chat-bg-pattern.png",
+    "src": "chat-bg-pattern.png"
+  },
+  "cover-pattern.png": {
+    "file": "icons/cover-pattern.png",
+    "src": "cover-pattern.png"
+  },
+  "file.png": {
+    "file": "icons/file.png",
+    "src": "file.png"
+  },
+  "hkgrotesk-bold.woff": {
+    "file": "icons/hkgrotesk-bold.woff",
+    "src": "hkgrotesk-bold.woff"
+  },
+  "hkgrotesk-light.eot": {
+    "file": "icons/hkgrotesk-light.eot",
+    "src": "hkgrotesk-light.eot"
+  },
+  "hkgrotesk-light.woff": {
+    "file": "icons/hkgrotesk-light.woff",
+    "src": "hkgrotesk-light.woff"
+  },
+  "hkgrotesk-medium.eot": {
+    "file": "icons/hkgrotesk-medium.eot",
+    "src": "hkgrotesk-medium.eot"
+  },
+  "hkgrotesk-medium.woff": {
+    "file": "icons/hkgrotesk-medium.woff",
+    "src": "hkgrotesk-medium.woff"
+  },
+  "hkgrotesk-regular.eot": {
+    "file": "icons/hkgrotesk-regular.eot",
+    "src": "hkgrotesk-regular.eot"
+  },
+  "hkgrotesk-regular.woff": {
+    "file": "icons/hkgrotesk-regular.woff",
+    "src": "hkgrotesk-regular.woff"
+  },
+  "hkgrotesk-semibold.eot": {
+    "file": "icons/hkgrotesk-semibold.eot",
+    "src": "hkgrotesk-semibold.eot"
+  },
+  "hkgrotesk-semibold.woff": {
+    "file": "icons/hkgrotesk-semibold.woff",
+    "src": "hkgrotesk-semibold.woff"
+  },
+  "img-1.jpg": {
+    "file": "icons/img-1.jpg",
+    "src": "img-1.jpg"
+  },
+  "img-2.jpg": {
+    "file": "icons/img-2.jpg",
+    "src": "img-2.jpg"
+  },
+  "img-3.jpg": {
+    "file": "icons/img-3.jpg",
+    "src": "img-3.jpg"
+  },
+  "img-4.jpg": {
+    "file": "icons/img-4.jpg",
+    "src": "img-4.jpg"
+  },
+  "la-brands-400.eot": {
+    "file": "icons/la-brands-400.eot",
+    "src": "la-brands-400.eot"
+  },
+  "la-brands-400.svg": {
+    "file": "icons/la-brands-400.svg",
+    "src": "la-brands-400.svg"
+  },
+  "la-brands-400.ttf": {
+    "file": "icons/la-brands-400.ttf",
+    "src": "la-brands-400.ttf"
+  },
+  "la-brands-400.woff": {
+    "file": "icons/la-brands-400.woff",
+    "src": "la-brands-400.woff"
+  },
+  "la-brands-400.woff2": {
+    "file": "icons/la-brands-400.woff2",
+    "src": "la-brands-400.woff2"
+  },
+  "la-regular-400.eot": {
+    "file": "icons/la-regular-400.eot",
+    "src": "la-regular-400.eot"
+  },
+  "la-regular-400.svg": {
+    "file": "icons/la-regular-400.svg",
+    "src": "la-regular-400.svg"
+  },
+  "la-regular-400.ttf": {
+    "file": "icons/la-regular-400.ttf",
+    "src": "la-regular-400.ttf"
+  },
+  "la-regular-400.woff": {
+    "file": "icons/la-regular-400.woff",
+    "src": "la-regular-400.woff"
+  },
+  "la-regular-400.woff2": {
+    "file": "icons/la-regular-400.woff2",
+    "src": "la-regular-400.woff2"
+  },
+  "la-solid-900.eot": {
+    "file": "icons/la-solid-900.eot",
+    "src": "la-solid-900.eot"
+  },
+  "la-solid-900.svg": {
+    "file": "icons/la-solid-900.svg",
+    "src": "la-solid-900.svg"
+  },
+  "la-solid-900.ttf": {
+    "file": "icons/la-solid-900.ttf",
+    "src": "la-solid-900.ttf"
+  },
+  "la-solid-900.woff": {
+    "file": "icons/la-solid-900.woff",
+    "src": "la-solid-900.woff"
+  },
+  "la-solid-900.woff2": {
+    "file": "icons/la-solid-900.woff2",
+    "src": "la-solid-900.woff2"
+  },
+  "marketplace.png": {
+    "file": "icons/marketplace.png",
+    "src": "marketplace.png"
+  },
+  "materialdesignicons-webfont.eot": {
+    "file": "icons/materialdesignicons-webfont.eot",
+    "src": "materialdesignicons-webfont.eot"
+  },
+  "materialdesignicons-webfont.ttf": {
+    "file": "icons/materialdesignicons-webfont.ttf",
+    "src": "materialdesignicons-webfont.ttf"
+  },
+  "materialdesignicons-webfont.woff": {
+    "file": "icons/materialdesignicons-webfont.woff",
+    "src": "materialdesignicons-webfont.woff"
+  },
+  "materialdesignicons-webfont.woff2": {
+    "file": "icons/materialdesignicons-webfont.woff2",
+    "src": "materialdesignicons-webfont.woff2"
+  },
+  "modal-bg.png": {
+    "file": "icons/modal-bg.png",
+    "src": "modal-bg.png"
+  },
+  "new.png": {
+    "file": "icons/new.png",
+    "src": "new.png"
+  },
+  "remixicon.eot": {
+    "file": "icons/remixicon.eot",
+    "src": "remixicon.eot"
+  },
+  "remixicon.svg": {
+    "file": "icons/remixicon.svg",
+    "src": "remixicon.svg"
+  },
+  "remixicon.ttf": {
+    "file": "icons/remixicon.ttf",
+    "src": "remixicon.ttf"
+  },
+  "remixicon.woff": {
+    "file": "icons/remixicon.woff",
+    "src": "remixicon.woff"
+  },
+  "remixicon.woff2": {
+    "file": "icons/remixicon.woff2",
+    "src": "remixicon.woff2"
+  },
   "resources/fonts/boxicons.eot": {
     "file": "icons/boxicons.eot",
     "src": "resources/fonts/boxicons.eot"
@@ -226,5 +430,9 @@
     "file": "css/icons.min.css",
     "src": "resources/scss/icons.scss",
     "isEntry": true
+  },
+  "us.svg": {
+    "file": "icons/us.svg",
+    "src": "us.svg"
   }
 }
