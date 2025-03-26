@@ -234,5 +234,12 @@ return [
     "links" => "Links",
     "range-area" => "Range Area",
     "funnel" => "Funnel",
+    "home" => "Home Page",
+    "statistic"=>"Statistics",
+    "exclist" => "Exchange list",
+    "myorder" => "My orders",
+    "clients" => "My Clients",
+    "declarant" => "Declarants database"
+
 ];
 ?>

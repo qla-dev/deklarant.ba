@@ -1,6 +1,20 @@
 <!-- ========== App Menu ========== -->
 <div class="app-menu navbar-menu">
     <!-- LOGO -->
+
+   
+
+    <div id="scrollbar" style="height: 50px!important;">
+        <div class="container-fluid d-flex justify-content-center  ">
+
+        
+            <ul class="navbar-nav  " id="navbar-nav">
+                
+                <li class="nav-item me-3">
+                    <a class="nav-link menu-link me-3" href="#sidebarDashboards" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarDashboards">
+                        <i class="ri-home-line text-info"></i> <span><?php echo app('translator')->get('translation.home'); ?>
+
     <div class="navbar-brand-box" >
         <!-- Dark Logo-->
         <a href="index" class="logo logo-dark">
@@ -38,6 +52,7 @@
                     <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarDashboards">
                         <i class="mdi mdi-speedometer"></i> <span><?php echo app('translator')->get('translation.dashboards'); ?>
+
                         </span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarDashboards">
@@ -74,11 +89,20 @@
                             </li>
                         </ul>
                     </div>
+
+                </li> 
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarApps">
+                        <i class="ri-bar-chart-line text-info"></i> <span><?php echo app('translator')->get('translation.statistic'); ?>
+
                 </li> <!-- end Dashboard Menu -->
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarApps">
                         <i class="mdi mdi-view-grid-plus-outline"></i> <span><?php echo app('translator')->get('translation.apps'); ?>
+
                         </span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarApps">
@@ -446,10 +470,18 @@
                     </div>
                 </li>
 
+
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarLayouts" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarLayouts">
+                        <i class="ri-file-line text-info "></i> <span><?php echo app('translator')->get('translation.myorder'); ?></span> <span
+
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarLayouts" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarLayouts">
                         <i class="mdi mdi-view-carousel-outline"></i> <span><?php echo app('translator')->get('translation.layouts'); ?></span> <span
+
                             class="badge badge-pill bg-danger"><?php echo app('translator')->get('translation.hot'); ?></span>
 
                     </a>
@@ -476,6 +508,12 @@
                     </div>
                 </li> <!-- end Dashboard Menu -->
 
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarAuth">
+                        <i class="mdi mdi-account-circle-outline text-info"></i> <span><?php echo app('translator')->get('translation.clients'); ?>
+
                 <li class="menu-title"><i class="ri-more-fill"></i> <span><?php echo app('translator')->get('translation.pages'); ?>
                     </span></li>
 
@@ -483,6 +521,7 @@
                     <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarAuth">
                         <i class="mdi mdi-account-circle-outline"></i> <span><?php echo app('translator')->get('translation.authentication'); ?>
+
                         </span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarAuth">
@@ -672,7 +711,11 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarPages">
+
+                        <i class="mdi mdi-sticker-text-outline text-info"></i> <span><?php echo app('translator')->get('translation.declarant'); ?>
+
                         <i class="mdi mdi-sticker-text-outline"></i> <span><?php echo app('translator')->get('translation.pages'); ?>
+
                         </span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarPages">
@@ -767,6 +810,9 @@
                         </ul>
                     </div>
                 </li>
+
+                
+
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarLanding" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarLanding">
@@ -786,13 +832,18 @@
                         </ul>
                     </div>
                 </li>
+
                 <li class="menu-title"><i class="ri-more-fill"></i> <span><?php echo app('translator')->get('translation.components'); ?>
                     </span></li>
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarUI" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarUI">
+
+                        <i class="ri-exchange-dollar-line text-info"></i> <span><?php echo app('translator')->get('translation.exclist'); ?>
+
                         <i class="mdi mdi-cube-outline"></i> <span><?php echo app('translator')->get('translation.base-ui'); ?>
+
                         </span>
                     </a>
                     <div class="collapse menu-dropdown mega-dropdown-menu" id="sidebarUI">
@@ -908,6 +959,18 @@
                         </div>
                     </div>
                 </li>
+
+
+                
+
+                
+
+                
+
+                
+
+                
+              
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarAdvanceUI" data-bs-toggle="collapse" role="button"
@@ -1274,6 +1337,7 @@
                         </ul>
                     </div>
                 </li>
+
 
             </ul>
         </div>

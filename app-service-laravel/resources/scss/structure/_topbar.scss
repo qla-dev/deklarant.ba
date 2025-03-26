@@ -23,9 +23,7 @@
 
 .navbar-header {
     display: flex;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-    align-items: center;
+    
     margin: 0 auto;
     height: $header-height;
     padding: 0 $grid-gutter-width 0 calc(#{$grid-gutter-width} * 0.5)
@@ -56,7 +54,7 @@
     .btn-topbar {
         height: 42px;
         width: 42px;
-        color: var(--#{$prefix}header-item-sub-color);
+        color: #17a2b8;
         transition: all 0.5s ease;
 
         &:hover, &:focus, &:active, &.active {
@@ -75,7 +73,7 @@
     }
 
     .user-name-text {
-        color: var(--#{$prefix}header-item-color);
+        color: black;
     }
 }
 
@@ -92,6 +90,7 @@
         background-color: var(--#{$prefix}topbar-search-bg);
         color: var(--#{$prefix}topbar-search-color);
         box-shadow: none;
+        
     }
 
     span.search-widget-icon {
@@ -128,6 +127,11 @@
     }
 }
 
+
+
+
+
+
 // Mega menu
 
 .megamenu-list {
@@ -160,8 +164,8 @@
 }
 
 .header-profile-user {
-    height: 32px;
-    width: 32px;
+    height: 40px;
+    width: 40px;
 }
 
 .topbar-badge-sm {
@@ -176,7 +180,7 @@
 
 .topbar-user {
     @media (min-width: 768px) {
-        background-color: var(--#{$prefix}topbar-user-bg);
+        background-color: white;
     }
 
     .dropdown-menu {
@@ -219,6 +223,19 @@
     &:hover {
         background-color: var(--#{$prefix}dropdown-link-hover-bg);
     }
+}
+.topbar-user:hover .user-name-text,
+.topbar-user:hover .user-name-sub-text {
+    opacity: 1;
+    transform: translateX(0);
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.user-name-text,
+.user-name-sub-text {
+    opacity: 0;
+    transform: translateX(10px);
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
 
 // Full Screen
