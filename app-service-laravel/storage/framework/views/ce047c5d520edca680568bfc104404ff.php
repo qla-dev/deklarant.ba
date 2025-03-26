@@ -1,6 +1,7 @@
 <!-- ========== App Menu ========== -->
 <div class="app-menu navbar-menu">
     <!-- LOGO -->
+
    
 
     <div id="scrollbar" style="height: 50px!important;">
@@ -13,6 +14,45 @@
                     <a class="nav-link menu-link me-3" href="#sidebarDashboards" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarDashboards">
                         <i class="ri-home-line text-info"></i> <span><?php echo app('translator')->get('translation.home'); ?>
+
+    <div class="navbar-brand-box" >
+        <!-- Dark Logo-->
+        <a href="index" class="logo logo-dark">
+            <span class="logo-sm">
+                <img src="<?php echo e(URL::asset('build/images/logo-sm.png')); ?>" alt="" height="22">
+            </span>
+            <span class="logo-lg">
+                <img src="<?php echo e(URL::asset('build/images/logo-dark.png')); ?>" alt="" height="17">
+            </span>
+        </a>
+        <!-- Light Logo-->
+        <a href="index" class="logo logo-light">
+            <span class="logo-sm">
+                <img src="<?php echo e(URL::asset('build/images/logo-sm.png')); ?>" alt="" height="22">
+            </span>
+            <span class="logo-lg">
+                <img src="<?php echo e(URL::asset('build/images/logo-light.png')); ?>" alt="" height="17">
+            </span>
+        </a>
+        <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
+            id="vertical-hover">
+            <i class="ri-record-circle-line"></i>
+        </button>
+    </div>
+
+    <div id="scrollbar" style="height: 50px!important;">
+        <div class="container-fluid">
+
+            <div id="two-column-menu">
+            </div>
+            <ul class="navbar-nav" id="navbar-nav">
+                <li class="menu-title"><span><?php echo app('translator')->get('translation.menu'); ?>
+                    </span></li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarDashboards">
+                        <i class="mdi mdi-speedometer"></i> <span><?php echo app('translator')->get('translation.dashboards'); ?>
+
                         </span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarDashboards">
@@ -49,12 +89,20 @@
                             </li>
                         </ul>
                     </div>
+
                 </li> 
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarApps">
                         <i class="ri-bar-chart-line text-info"></i> <span><?php echo app('translator')->get('translation.statistic'); ?>
+
+                </li> <!-- end Dashboard Menu -->
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarApps">
+                        <i class="mdi mdi-view-grid-plus-outline"></i> <span><?php echo app('translator')->get('translation.apps'); ?>
+
                         </span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarApps">
@@ -423,10 +471,17 @@
                 </li>
 
 
+
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarLayouts" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarLayouts">
                         <i class="ri-file-line text-info "></i> <span><?php echo app('translator')->get('translation.myorder'); ?></span> <span
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarLayouts" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarLayouts">
+                        <i class="mdi mdi-view-carousel-outline"></i> <span><?php echo app('translator')->get('translation.layouts'); ?></span> <span
+
                             class="badge badge-pill bg-danger"><?php echo app('translator')->get('translation.hot'); ?></span>
 
                     </a>
@@ -453,10 +508,20 @@
                     </div>
                 </li> <!-- end Dashboard Menu -->
 
+
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarAuth">
                         <i class="mdi mdi-account-circle-outline text-info"></i> <span><?php echo app('translator')->get('translation.clients'); ?>
+
+                <li class="menu-title"><i class="ri-more-fill"></i> <span><?php echo app('translator')->get('translation.pages'); ?>
+                    </span></li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarAuth">
+                        <i class="mdi mdi-account-circle-outline"></i> <span><?php echo app('translator')->get('translation.authentication'); ?>
+
                         </span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarAuth">
@@ -646,7 +711,11 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarPages">
+
                         <i class="mdi mdi-sticker-text-outline text-info"></i> <span><?php echo app('translator')->get('translation.declarant'); ?>
+
+                        <i class="mdi mdi-sticker-text-outline"></i> <span><?php echo app('translator')->get('translation.pages'); ?>
+
                         </span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarPages">
@@ -741,14 +810,40 @@
                         </ul>
                     </div>
                 </li>
+
                 
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarLanding" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarLanding">
+                        <i class="ri-rocket-line"></i> <span><?php echo app('translator')->get('translation.landing'); ?></span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarLanding">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="landing" class="nav-link"> <?php echo app('translator')->get('translation.one-page'); ?> </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="nft-landing" class="nav-link"> <?php echo app('translator')->get('translation.nft-landing'); ?> </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="job-landing" class="nav-link"><?php echo app('translator')->get('translation.job'); ?></a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
                 <li class="menu-title"><i class="ri-more-fill"></i> <span><?php echo app('translator')->get('translation.components'); ?>
                     </span></li>
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarUI" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarUI">
+
                         <i class="ri-exchange-dollar-line text-info"></i> <span><?php echo app('translator')->get('translation.exclist'); ?>
+
+                        <i class="mdi mdi-cube-outline"></i> <span><?php echo app('translator')->get('translation.base-ui'); ?>
+
                         </span>
                     </a>
                     <div class="collapse menu-dropdown mega-dropdown-menu" id="sidebarUI">
@@ -865,6 +960,7 @@
                     </div>
                 </li>
 
+
                 
 
                 
@@ -875,6 +971,372 @@
 
                 
               
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarAdvanceUI" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarAdvanceUI">
+                        <i class="mdi mdi-layers-triple-outline"></i> <span><?php echo app('translator')->get('translation.advance-ui'); ?>
+                        </span>
+
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarAdvanceUI">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="advance-ui-sweetalerts" class="nav-link"><?php echo app('translator')->get('translation.sweet-alerts'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="advance-ui-nestable" class="nav-link"><?php echo app('translator')->get('translation.nestable-list'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="advance-ui-scrollbar" class="nav-link"><?php echo app('translator')->get('translation.scrollbar'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="advance-ui-animation" class="nav-link"><?php echo app('translator')->get('translation.animation'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="advance-ui-tour" class="nav-link"><?php echo app('translator')->get('translation.tour'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="advance-ui-swiper" class="nav-link"><?php echo app('translator')->get('translation.swiper-slider'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="advance-ui-ratings" class="nav-link"><?php echo app('translator')->get('translation.ratings'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="advance-ui-highlight" class="nav-link"><?php echo app('translator')->get('translation.highlight'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="advance-ui-scrollspy" class="nav-link"><?php echo app('translator')->get('translation.scrollSpy'); ?>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="widgets">
+                        <i class="mdi mdi-puzzle-outline"></i> <span><?php echo app('translator')->get('translation.widgets'); ?>
+                        </span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarForms" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarForms">
+                        <i class="mdi mdi-form-select"></i> <span><?php echo app('translator')->get('translation.forms'); ?>
+                        </span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarForms">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="forms-elements" class="nav-link"><?php echo app('translator')->get('translation.basic-elements'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="forms-select" class="nav-link"><?php echo app('translator')->get('translation.form-select'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="forms-checkboxs-radios" class="nav-link"><?php echo app('translator')->get('translation.checkboxs-radios'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="forms-pickers" class="nav-link"><?php echo app('translator')->get('translation.pickers'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="forms-masks" class="nav-link"><?php echo app('translator')->get('translation.input-masks'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="forms-advanced" class="nav-link"><?php echo app('translator')->get('translation.advanced'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="forms-range-sliders" class="nav-link"><?php echo app('translator')->get('translation.range-slider'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="forms-validation" class="nav-link"><?php echo app('translator')->get('translation.validation'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="forms-wizard" class="nav-link"><?php echo app('translator')->get('translation.wizard'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="forms-editors" class="nav-link"><?php echo app('translator')->get('translation.editors'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="forms-file-uploads" class="nav-link"><?php echo app('translator')->get('translation.file-uploads'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="forms-layouts" class="nav-link"><?php echo app('translator')->get('translation.form-layouts'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="forms-select2" class="nav-link"><?php echo app('translator')->get('translation.select2'); ?></a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarTables" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarTables">
+                        <i class="mdi mdi-grid-large"></i> <span><?php echo app('translator')->get('translation.tables'); ?>
+                        </span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarTables">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="tables-basic" class="nav-link"><?php echo app('translator')->get('translation.basic-tables'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="tables-gridjs" class="nav-link"><?php echo app('translator')->get('translation.grid-js'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="tables-listjs" class="nav-link"><?php echo app('translator')->get('translation.list-js'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="tables-datatables" class="nav-link"><?php echo app('translator')->get('translation.datatables'); ?></a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarCharts" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarCharts">
+                        <i class="mdi mdi-chart-donut"></i> <span><?php echo app('translator')->get('translation.charts'); ?>
+                        </span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarCharts">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="#sidebarApexcharts" class="nav-link" data-bs-toggle="collapse"
+                                    role="button" aria-expanded="false"
+                                    aria-controls="sidebarApexcharts"><?php echo app('translator')->get('translation.apexcharts'); ?>
+
+                                </a>
+                                <div class="collapse menu-dropdown" id="sidebarApexcharts">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a href="charts-apex-line" class="nav-link"><?php echo app('translator')->get('translation.line'); ?>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="charts-apex-area" class="nav-link"><?php echo app('translator')->get('translation.area'); ?>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="charts-apex-column" class="nav-link"><?php echo app('translator')->get('translation.column'); ?>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="charts-apex-bar" class="nav-link"><?php echo app('translator')->get('translation.bar'); ?>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="charts-apex-mixed" class="nav-link"><?php echo app('translator')->get('translation.mixed'); ?>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="charts-apex-timeline" class="nav-link"><?php echo app('translator')->get('translation.timeline'); ?>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="charts-apex-range-area" class="nav-link"
+                                               ><?php echo app('translator')->get('translation.range-area'); ?></a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="charts-apex-funnel" class="nav-link"
+                                               ><?php echo app('translator')->get('translation.funnel'); ?></a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="charts-apex-candlestick" class="nav-link"><?php echo app('translator')->get('translation.candlstick'); ?>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="charts-apex-boxplot" class="nav-link"><?php echo app('translator')->get('translation.boxplot'); ?>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="charts-apex-bubble" class="nav-link"><?php echo app('translator')->get('translation.bubble'); ?>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="charts-apex-scatter" class="nav-link"><?php echo app('translator')->get('translation.scatter'); ?>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="charts-apex-heatmap" class="nav-link"><?php echo app('translator')->get('translation.heatmap'); ?>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="charts-apex-treemap" class="nav-link"><?php echo app('translator')->get('translation.treemap'); ?>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="charts-apex-pie" class="nav-link"><?php echo app('translator')->get('translation.pie'); ?>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="charts-apex-radialbar" class="nav-link"><?php echo app('translator')->get('translation.radialbar'); ?>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="charts-apex-radar" class="nav-link"><?php echo app('translator')->get('translation.radar'); ?>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="charts-apex-polar" class="nav-link"><?php echo app('translator')->get('translation.polar-area'); ?>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="charts-apex-slope" class="nav-link"><span
+                                                   ><?php echo app('translator')->get('translation.slope'); ?></span> <span
+                                                    class="badge badge-pill bg-success"
+                                                   ><?php echo app('translator')->get('translation.new'); ?></span></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a href="charts-chartjs" class="nav-link"><?php echo app('translator')->get('translation.chartjs'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="charts-echarts" class="nav-link"><?php echo app('translator')->get('translation.echarts'); ?>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarIcons" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarIcons">
+                        <i class="mdi mdi-android-studio"></i> <span><?php echo app('translator')->get('translation.icons'); ?>
+                        </span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarIcons">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="icons-remix" class="nav-link"><span><?php echo app('translator')->get('translation.remix'); ?></span>
+                                    <span class="badge badge-pill bg-info">v4.3</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="icons-boxicons" class="nav-link"><span><?php echo app('translator')->get('translation.boxicons'); ?></span><span
+                                        class="badge badge-pill bg-info">v2.1.4</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="icons-materialdesign"
+                                    class="nav-link"><span><?php echo app('translator')->get('translation.material-design'); ?></span><span
+                                        class="badge badge-pill bg-info">v7.2.96</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="icons-lineawesome" class="nav-link"><?php echo app('translator')->get('translation.line-awesome'); ?></a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="icons-feather" class="nav-link"><span><?php echo app('translator')->get('translation.feather'); ?></span> <span class="badge badge-pill bg-info">v4.29.2</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="icons-crypto" class="nav-link"> <span><?php echo app('translator')->get('translation.crypto-svg'); ?></span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarMaps" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarMaps">
+                        <i class="mdi mdi-map-marker-outline"></i> <span><?php echo app('translator')->get('translation.maps'); ?>
+                        </span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarMaps">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="maps-google" class="nav-link">
+                                    <?php echo app('translator')->get('translation.google'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="maps-vector" class="nav-link">
+                                    <?php echo app('translator')->get('translation.vector'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="maps-leaflet" class="nav-link">
+                                    <?php echo app('translator')->get('translation.leaflet'); ?>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarMultilevel" data-bs-toggle="collapse"
+                        role="button" aria-expanded="false" aria-controls="sidebarMultilevel">
+                        <i class="mdi mdi-share-variant-outline"></i> <span><?php echo app('translator')->get('translation.multi-level'); ?>
+                        </span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarMultilevel">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="#" class="nav-link"><?php echo app('translator')->get('translation.level-1.1'); ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#sidebarAccount" class="nav-link" data-bs-toggle="collapse"
+                                    role="button" aria-expanded="false"
+                                    aria-controls="sidebarAccount"><?php echo app('translator')->get('translation.level-1.2'); ?>
+
+                                </a>
+                                <div class="collapse menu-dropdown" id="sidebarAccount">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a href="#" class="nav-link"><?php echo app('translator')->get('translation.level-2.1'); ?>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#sidebarCrm" class="nav-link" data-bs-toggle="collapse"
+                                                role="button" aria-expanded="false"
+                                                aria-controls="sidebarCrm"><?php echo app('translator')->get('translation.level-2.2'); ?>
+
+                                            </a>
+                                            <div class="collapse menu-dropdown" id="sidebarCrm">
+                                                <ul class="nav nav-sm flex-column">
+                                                    <li class="nav-item">
+                                                        <a href="#" class="nav-link"><?php echo app('translator')->get('translation.level-3.1'); ?>
+                                                        </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a href="#" class="nav-link"><?php echo app('translator')->get('translation.level-3.2'); ?>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
 
 
             </ul>

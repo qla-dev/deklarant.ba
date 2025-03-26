@@ -29,10 +29,11 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         if (view()->exists($request->path())) {
-            return view($request->path());
+            return response()->view($request->path());
         }
-        return abort(404);
+        return response()->json(['error' => 'Page not found'], 404);
     }
+
 
     public function root()
     {
@@ -55,7 +56,7 @@ class HomeController extends Controller
     public function updateProfile(Request $request, $id)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email'],
             'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:1024'],
         ]);

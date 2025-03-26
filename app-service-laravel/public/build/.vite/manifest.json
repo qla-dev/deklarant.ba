@@ -1,4 +1,5 @@
 {
+ 
   "auth-one-bg.jpg": {
     "file": "icons/auth-one-bg.jpg",
     "src": "auth-one-bg.jpg"
@@ -11,6 +12,8 @@
     "file": "icons/bg-pattern.png",
     "src": "bg-pattern.png"
   },
+
+ 
   "boxicons.eot": {
     "file": "icons/boxicons.eot",
     "src": "boxicons.eot"
@@ -31,6 +34,7 @@
     "file": "icons/boxicons.woff2",
     "src": "boxicons.woff2"
   },
+
   "chat-bg-pattern.png": {
     "file": "icons/chat-bg-pattern.png",
     "src": "chat-bg-pattern.png"
@@ -95,6 +99,7 @@
     "file": "icons/img-4.jpg",
     "src": "img-4.jpg"
   },
+
   "la-brands-400.eot": {
     "file": "icons/la-brands-400.eot",
     "src": "la-brands-400.eot"
@@ -159,6 +164,7 @@
     "file": "icons/marketplace.png",
     "src": "marketplace.png"
   },
+
   "materialdesignicons-webfont.eot": {
     "file": "icons/materialdesignicons-webfont.eot",
     "src": "materialdesignicons-webfont.eot"
@@ -175,6 +181,7 @@
     "file": "icons/materialdesignicons-webfont.woff2",
     "src": "materialdesignicons-webfont.woff2"
   },
+
   "modal-bg.png": {
     "file": "icons/modal-bg.png",
     "src": "modal-bg.png"
@@ -183,6 +190,7 @@
     "file": "icons/new.png",
     "src": "new.png"
   },
+
   "remixicon.eot": {
     "file": "icons/remixicon.eot",
     "src": "remixicon.eot"
@@ -355,9 +363,9 @@
     "file": "icons/remixicon.woff2",
     "src": "resources/fonts/remixicon.woff2"
   },
-  "resources/images/auth-one-bg.jpg": {
-    "file": "icons/auth-one-bg.jpg",
-    "src": "resources/images/auth-one-bg.jpg"
+  "resources/images/businessman.jpg": {
+    "file": "icons/businessman.jpg",
+    "src": "resources/images/businessman.jpg"
   },
   "resources/images/chat-bg-pattern.png": {
     "file": "icons/chat-bg-pattern.png",
