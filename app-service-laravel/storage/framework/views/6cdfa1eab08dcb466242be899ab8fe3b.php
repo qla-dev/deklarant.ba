@@ -40,6 +40,14 @@
 
     <!-- JAVASCRIPT -->
     <?php echo $__env->make('layouts.vendor-scripts', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+
+
+    <!-- Bootstrap JS (Includes Popper.js for dropdowns) -->
+
+
+
+    
+
 </body>
 
 </html>

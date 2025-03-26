@@ -1,4 +1,19 @@
 {
+ 
+  "auth-one-bg.jpg": {
+    "file": "icons/auth-one-bg.jpg",
+    "src": "auth-one-bg.jpg"
+  },
+  "bg-home.jpg": {
+    "file": "icons/bg-home.jpg",
+    "src": "bg-home.jpg"
+  },
+  "bg-pattern.png": {
+    "file": "icons/bg-pattern.png",
+    "src": "bg-pattern.png"
+  },
+
+ 
   "boxicons.eot": {
     "file": "icons/boxicons.eot",
     "src": "boxicons.eot"
@@ -19,6 +34,72 @@
     "file": "icons/boxicons.woff2",
     "src": "boxicons.woff2"
   },
+
+  "chat-bg-pattern.png": {
+    "file": "icons/chat-bg-pattern.png",
+    "src": "chat-bg-pattern.png"
+  },
+  "cover-pattern.png": {
+    "file": "icons/cover-pattern.png",
+    "src": "cover-pattern.png"
+  },
+  "file.png": {
+    "file": "icons/file.png",
+    "src": "file.png"
+  },
+  "hkgrotesk-bold.woff": {
+    "file": "icons/hkgrotesk-bold.woff",
+    "src": "hkgrotesk-bold.woff"
+  },
+  "hkgrotesk-light.eot": {
+    "file": "icons/hkgrotesk-light.eot",
+    "src": "hkgrotesk-light.eot"
+  },
+  "hkgrotesk-light.woff": {
+    "file": "icons/hkgrotesk-light.woff",
+    "src": "hkgrotesk-light.woff"
+  },
+  "hkgrotesk-medium.eot": {
+    "file": "icons/hkgrotesk-medium.eot",
+    "src": "hkgrotesk-medium.eot"
+  },
+  "hkgrotesk-medium.woff": {
+    "file": "icons/hkgrotesk-medium.woff",
+    "src": "hkgrotesk-medium.woff"
+  },
+  "hkgrotesk-regular.eot": {
+    "file": "icons/hkgrotesk-regular.eot",
+    "src": "hkgrotesk-regular.eot"
+  },
+  "hkgrotesk-regular.woff": {
+    "file": "icons/hkgrotesk-regular.woff",
+    "src": "hkgrotesk-regular.woff"
+  },
+  "hkgrotesk-semibold.eot": {
+    "file": "icons/hkgrotesk-semibold.eot",
+    "src": "hkgrotesk-semibold.eot"
+  },
+  "hkgrotesk-semibold.woff": {
+    "file": "icons/hkgrotesk-semibold.woff",
+    "src": "hkgrotesk-semibold.woff"
+  },
+  "img-1.jpg": {
+    "file": "icons/img-1.jpg",
+    "src": "img-1.jpg"
+  },
+  "img-2.jpg": {
+    "file": "icons/img-2.jpg",
+    "src": "img-2.jpg"
+  },
+  "img-3.jpg": {
+    "file": "icons/img-3.jpg",
+    "src": "img-3.jpg"
+  },
+  "img-4.jpg": {
+    "file": "icons/img-4.jpg",
+    "src": "img-4.jpg"
+  },
+
   "la-brands-400.eot": {
     "file": "icons/la-brands-400.eot",
     "src": "la-brands-400.eot"
@@ -79,6 +160,11 @@
     "file": "icons/la-solid-900.woff2",
     "src": "la-solid-900.woff2"
   },
+  "marketplace.png": {
+    "file": "icons/marketplace.png",
+    "src": "marketplace.png"
+  },
+
   "materialdesignicons-webfont.eot": {
     "file": "icons/materialdesignicons-webfont.eot",
     "src": "materialdesignicons-webfont.eot"
@@ -95,6 +181,16 @@
     "file": "icons/materialdesignicons-webfont.woff2",
     "src": "materialdesignicons-webfont.woff2"
   },
+
+  "modal-bg.png": {
+    "file": "icons/modal-bg.png",
+    "src": "modal-bg.png"
+  },
+  "new.png": {
+    "file": "icons/new.png",
+    "src": "new.png"
+  },
+
   "remixicon.eot": {
     "file": "icons/remixicon.eot",
     "src": "remixicon.eot"
@@ -342,5 +438,9 @@
     "file": "css/icons.min.css",
     "src": "resources/scss/icons.scss",
     "isEntry": true
+  },
+  "us.svg": {
+    "file": "icons/us.svg",
+    "src": "us.svg"
   }
 }
