@@ -556,7 +556,7 @@
 
                         <img id="topbar-avatar" class="rounded-circle header-profile-user" src="/build/images/users/avatar-1.jpg" alt="Header Avatar" width="32" height="32">
 
-                            <img class="rounded-circle  border border-info border-2 header-profile-user" src="@if (Auth::user()->avatar != ''){{ URL::asset('images/' . Auth::user()->avatar) }}@else{{ URL::asset('build/images/users/avatar-1.jpg') }}@endif" alt="Header Avatar">
+                            
 
                             <span class="text-start ms-xl-2">
                                 <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text" id="topbar-username">Korisnik</span>
@@ -662,6 +662,28 @@
             });
         }
     });
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (user) {
+        const topbarAvatar = document.getElementById("topbar-avatar");
+
+        if (topbarAvatar) {
+            const avatarUrl = `/storage/uploads/avatars/${user.avatar}`;
+
+            const testImg = new Image();
+            testImg.onload = function () {
+                topbarAvatar.src = avatarUrl;
+            };
+            testImg.onerror = function () {
+                topbarAvatar.src = "/build/images/users/avatar-1.jpg";
+            };
+            testImg.src = avatarUrl;
+        }
+    }
+});
 </script>
 
 

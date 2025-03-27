@@ -354,26 +354,6 @@
 
 
 
-
-
-
-
-
-    
-
-
-     
-
-    
-
-    
-    
-
-
-
-
-
-
 @endsection
 
 @section('script')
