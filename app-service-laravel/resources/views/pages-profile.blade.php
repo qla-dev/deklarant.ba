@@ -287,10 +287,10 @@
                             <thead class="table-light">
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Document</th>
-                                    <th scope="col">Supplier</th>
-                                    <th scope="col">Type</th>
-                                    <th scope="col">Actions</th>
+                                    <th scope="col">Moje fakture</th>
+                                    <th scope="col">Dobavljači</th>
+                                    <th scope="col">Tip</th>
+                                    <th scope="col">Mogućnosti</th>
                                 </tr>
                             </thead>
                             <tbody class="table-info">
