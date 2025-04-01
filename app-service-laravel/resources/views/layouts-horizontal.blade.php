@@ -239,7 +239,7 @@
     
 </div>
 
-<div class="row g-3 mt-0">
+<div class="row g-3">
     <!-- Left Column (2 rows, each with 2 cards) -->
     <div class="col-md-6">
     <!-- First Row of Cards -->
@@ -322,7 +322,7 @@
     </div>
 
     <!-- Second Row of Cards -->
-    <div class="row g-2 mt-2">
+    <div class="row g-2">
         <div class="col-md-6 d-flex">
             <div class="card w-100 ">
                 <div class="card-body">
@@ -402,6 +402,7 @@
 </div>
 
 
+
     <!-- Right Column (2 cards with lists) -->
     <div class="col-md-6">
         <div class="row g-3">
@@ -412,28 +413,28 @@
                         <h4 class="card-title mb-0 flex-grow-1">Zadnje korišteni dobavljači</h4>
                     </div>
                     <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
                             <div>
                                 <p class="fs-14 mb-0">Hifa</p>
                                 <p class="fs-12 text-muted mb-0">Owner: John Doe</p>
                             </div>
                             <div class="fs-14">75%</div>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
                             <div>
                                 <p class="fs-14 mb-0">Orbico</p>
                                 <p class="fs-12 text-muted mb-0">Owner: Jane Smith</p>
                             </div>
                             <div class="fs-14">85%</div>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
                             <div>
                                 <p class="fs-14 mb-0">DHL</p>
                                 <p class="fs-12 text-muted mb-0">Owner: Michael Brown</p>
                             </div>
                             <div class="fs-14">90%</div>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
                             <div>
                                 <p class="fs-14 mb-0">Samsung</p>
                                 <p class="fs-12 text-muted mb-0">Owner: Sarah Lee</p>
@@ -451,28 +452,28 @@
                         <h4 class="card-title mb-0 flex-grow-1">Zadnje korišteni dobavljači</h4>
                     </div>
                     <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
                             <div>
                                 <p class="fs-14 mb-0">Hifa</p>
                                 <p class="fs-12 text-muted mb-0">Owner: John Doe</p>
                             </div>
                             <div class="fs-14">75%</div>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
                             <div>
                                 <p class="fs-14 mb-0">Orbico</p>
                                 <p class="fs-12 text-muted mb-0">Owner: Jane Smith</p>
                             </div>
                             <div class="fs-14">85%</div>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
                             <div>
                                 <p class="fs-14 mb-0">DHL</p>
                                 <p class="fs-12 text-muted mb-0">Owner: Michael Brown</p>
                             </div>
                             <div class="fs-14">90%</div>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
                             <div>
                                 <p class="fs-14 mb-0">Samsung</p>
                                 <p class="fs-12 text-muted mb-0">Owner: Sarah Lee</p>
