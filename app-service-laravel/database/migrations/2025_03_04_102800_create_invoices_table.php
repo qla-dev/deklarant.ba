@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('supplier_id'); 
             $table->unsignedBigInteger('user_id'); 
+            $table->string('file_name');
             $table->float('total_price');
             $table->date('date_of_issue');
             $table->string('country_of_origin');
