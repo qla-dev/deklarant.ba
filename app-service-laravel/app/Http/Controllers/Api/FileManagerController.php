@@ -11,12 +11,12 @@ class FileManagerController extends Controller
     public function uploadFile(Request $request)
 {
     $request->validate([
-        'file' => 'required|file|max:5120', // max 5MB
-        'folder' => 'nullable|string'       // optional folder input
+        'file' => 'required|file|max:5120|mimes:png,jpg,jpeg,pdf,webp,xlsx',
+        'folder' => 'nullable|string'
     ]);
 
     $file = $request->file('file');
-    $folder = trim($request->input('folder', ''), '/'); // remove trailing slashes if any
+    $folder = trim($request->input('folder', ''), '/');
 
     $originalName = $file->getClientOriginalName();
     $fileName = pathinfo($originalName, PATHINFO_FILENAME);
@@ -24,23 +24,19 @@ class FileManagerController extends Controller
 
     $disk = Storage::disk('public');
 
-    // Build base path
     $directory = $folder ? "uploads/{$folder}" : 'uploads';
     $fullPath = $directory . '/' . $originalName;
     $finalName = $originalName;
     $counter = 1;
 
-    // Handle duplicate filenames
     while ($disk->exists($fullPath)) {
         $finalName = $fileName . "({$counter})." . $extension;
         $fullPath = $directory . '/' . $finalName;
         $counter++;
     }
 
-    // Store the file
     $storedPath = $file->storeAs($directory, $finalName, 'public');
 
-    // Build a message
     $message = ($finalName !== $originalName)
         ? "There is already a file with that name, the new file has been stored as {$finalName}"
         : 'File uploaded successfully!';
