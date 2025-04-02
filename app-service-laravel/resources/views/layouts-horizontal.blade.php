@@ -7,6 +7,7 @@
 @section('css')
     <link href="{{ URL::asset('build/libs/jsvectormap/jsvectormap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
 
         .my-alert {
@@ -18,6 +19,8 @@
             
             color: white !important;
         }
+
+       
      
         /* Ensure the swiper-container behaves as expected */
         
@@ -114,7 +117,7 @@
                         <h6 class="text-muted text-uppercase fs-11 mb-1">Broj carinskih tarifa</h6>
                         <div class="d-flex align-items-center justify-content-center">
                             <i class="ri-barcode-box-line fs-1 text-info"></i>
-                            <h3 class="mb-0 ms-2"><span class="counter-value" data-target="128"></span></h3>
+                            <h3 class="mb-0 ms-2"><span class="counter-value" data-target="128">0</span></h3>
                         </div>
                     </div>
                 </div>
@@ -239,255 +242,174 @@
     
 </div>
 
-<div class="row g-3">
-    <!-- Left Column (2 rows, each with 2 cards) -->
-    <div class="col-md-6">
-    <!-- First Row of Cards -->
-    <div class="row g-2">
-        <div class="col-md-6 d-flex">
-            <div class="card w-100">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="card-title mb-0">Moji dokumenti</h5>
-                        <a data-bs-toggle="tab" href="#activities" id="viewAllDocuments" class="text-info fs-13">View all</a>
-                    </div>
-                    <div class="row g-2">
-                        <!-- Documents in the same row -->
-                        <div class="col-6 col-sm-3">
-                            <div class="text-center">
-                                <i class="ri-file-pdf-2-line fs-24 text-info"></i>
-                                <p class="fs-6 text-muted mt-1 mb-0">Dokument.pdf</p>
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-3">
-                            <div class="text-center">
-                                <i class="ri-file-image-line fs-24 text-info"></i>
-                                <p class="fs-6 text-muted mt-1 mb-0">Slika.jpg</p>
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-3">
-                            <div class="text-center">
-                                <i class="ri-file-image-line fs-24 text-info"></i>
-                                <p class="fs-6 text-muted mt-1 mb-0">Grafika.png</p>
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-3">
-                            <div class="text-center">
-                                <i class="ri-file-excel-2-line fs-24 text-info"></i>
-                                <p class="fs-6 text-muted mt-1 mb-0">Tabela.xlsx</p>
-                            </div>
-                        </div>
-                    </div>
+<div class="row mt-2">
+  <div class="col-12 px-1">
+    <div class="row mb-2 g-2 mx-0">
+      <!-- LEFT COLUMN -->
+      <div class="col-xl-6">
+        <div class="row g-1 mx-1">
+          <!-- 4 cards in 2 rows -->
+          <div class="col-md-6 d-flex">
+            <div class="card w-100 h-100 ">
+              <div class="card-body">
+                <h5 class="card-title">Moji dokumenti</h5>
+                <div class="row d-flex text-center">
+                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
+                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
+                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
+                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
                 </div>
+              </div>
             </div>
+          </div>
+          <div class="col-md-6 d-flex">
+            <div class="card h-100 w-100">
+              <div class="card-body">
+                <h5 class="card-title">Moji dokumenti</h5>
+                <div class="row d-flex text-center">
+                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
+                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
+                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
+                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 d-flex">
+            <div class="card h-100 w-100">
+              <div class="card-body">
+                <h5 class="card-title">Moji dokumenti</h5>
+                <div class="row d-flex text-center">
+                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
+                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
+                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
+                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 d-flex">
+            <div class="card h-100 w-100">
+              <div class="card-body">
+                
+                <h5 class="card-title">Moji dokumenti</h5>
+                
+                <div class="row d-flex text-center">
+                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
+                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
+                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
+                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="col-md-6 d-flex">
-            <div class="card w-100 ">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="card-title mb-0">Moji dokumenti</h5>
-                        <a data-bs-toggle="tab" href="#activities" id="viewAllDocuments" class="text-info fs-13">View all</a>
-                    </div>
-                    <div class="row g-2">
-                        <!-- Documents in the same row -->
-                        <div class="col-6 col-sm-3">
-                            <div class="text-center">
-                                <i class="ri-file-pdf-2-line fs-24 text-info"></i>
-                                <p class="fs-6 text-muted mt-1 mb-0">Dokument.pdf</p>
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-3">
-                            <div class="text-center">
-                                <i class="ri-file-image-line fs-24 text-info"></i>
-                                <p class="fs-6 text-muted mt-1 mb-0">Grafika.png</p>
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-3">
-                            <div class="text-center">
-                                <i class="ri-file-image-line fs-24 text-info"></i>
-                                <p class="fs-6 text-muted mt-1 mb-0">Grafika.png</p>
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-3">
-                            <div class="text-center">
-                                <i class="ri-file-excel-2-line fs-24 text-info"></i>
-                                <p class="fs-6 text-muted mt-1 mb-0">Tabela.xlsx</p>
-                            </div>
-                        </div>
+      <!-- RIGHT COLUMN -->
+      <div class="col-xl-6 d-flex flex-column">
+        <div class="row g-1 flex-fill mx-0">
+          <div class="col-md-6 d-flex">
+            <div class="card w-100 h-100">
+              <div class="card-header">
+                <h5 class="mb-0">Zadnje korištene tarife</h5>
+              </div>
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <div>
+                        <div class="fw-semibold">8471.30</div>
+                        <div class="text-muted fs-12">Laptop</div>
+                  </div>
+                    <div class="text-success fs-13">
+                        18% <i class="ri-arrow-up-line ms-1"></i>
                     </div>
                 </div>
+              
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <div>
+                        <div class="fw-semibold">8471.30</div>
+                        <div class="text-muted fs-12">Laptop</div>
+                  </div>
+                    <div class="text-success fs-13">
+                        18% <i class="ri-arrow-up-line ms-1"></i>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <div>
+                        <div class="fw-semibold">8471.30</div>
+                        <div class="text-muted fs-12">Laptop</div>
+                  </div>
+                    <div class="text-success fs-13">
+                        18% <i class="ri-arrow-up-line ms-1"></i>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <div>
+                        <div class="fw-semibold">8471.30</div>
+                        <div class="text-muted fs-12">Laptop</div>
+                  </div>
+                    <div class="text-success fs-13">
+                        18% <i class="ri-arrow-up-line ms-1"></i>
+                    </div>
+                </div>
+                
+              </div>
             </div>
+          </div>
+          <div class="col-md-6 d-flex">
+            <div class="card w-100 h-100">
+              <div class="card-header">
+                <h5 class="mb-0">Zadnje korišteni dobavljači</h5>
+              </div>
+              <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                    <div>
+                        <div class="fw-semibold">Hifa Petrol</div>
+                        <div class="text-muted fs-12">Venan Hadžiselimović</div>
+                  </div>
+                    <div class="text-success fs-13">
+                        23% <i class="ri-arrow-up-line ms-1"></i>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <div>
+                        <div class="fw-semibold">Hifa Petrol</div>
+                        <div class="text-muted fs-12">Venan Hadžiselimović</div>
+                  </div>
+                    <div class="text-success fs-13">
+                        23% <i class="ri-arrow-up-line ms-1"></i>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <div>
+                        <div class="fw-semibold">Hifa Petrol</div>
+                        <div class="text-muted fs-12">Venan Hadžiselimović</div>
+                  </div>
+                    <div class="text-success fs-13">
+                        23% <i class="ri-arrow-up-line ms-1"></i>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <div>
+                        <div class="fw-semibold">Hifa Petrol</div>
+                        <div class="text-muted fs-12">Venan Hadžiselimović</div>
+                  </div>
+                    <div class="text-success fs-13">
+                        23% <i class="ri-arrow-up-line ms-1"></i>
+                    </div>
+                </div>
+              
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+
     </div>
-
-    <!-- Second Row of Cards -->
-    <div class="row g-2">
-        <div class="col-md-6 d-flex">
-            <div class="card w-100 ">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="card-title mb-0">Moji dokumenti</h5>
-                        <a data-bs-toggle="tab" href="#activities" id="viewAllDocuments" class="text-info fs-13">View all</a>
-                    </div>
-                    <div class="row g-2">
-                        <!-- Documents in the same row -->
-                        <div class="col-6 col-sm-3">
-                            <div class="text-center">
-                                <i class="ri-file-pdf-2-line fs-24 text-info"></i>
-                                <p class="fs-6 text-muted mt-1 mb-0">Dokument.pdf</p>
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-3">
-                            <div class="text-center">
-                                <i class="ri-file-image-line fs-24 text-info"></i>
-                                <p class="fs-6 text-muted mt-1 mb-0">Slika.jpg</p>
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-3">
-                            <div class="text-center">
-                                <i class="ri-file-image-line fs-24 text-info"></i>
-                                <p class="fs-6 text-muted mt-1 mb-0">Grafika.png</p>
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-3">
-                            <div class="text-center">
-                                <i class="ri-file-excel-2-line fs-24 text-info"></i>
-                                <p class="fs-6 text-muted mt-1 mb-0">Tabela.xlsx</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 d-flex">
-            <div class="card w-100 ">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="card-title mb-0">Moji dokumenti</h5>
-                        <a data-bs-toggle="tab" href="#activities" id="viewAllDocuments" class="text-info fs-13">View all</a>
-                    </div>
-                    <div class="row g-2">
-                        <!-- Documents in the same row -->
-                        <div class="col-6 col-sm-3">
-                            <div class="text-center">
-                                <i class="ri-file-pdf-2-line fs-24 text-info"></i>
-                                <p class="fs-6 text-muted mt-1 mb-0">Dokument.pdf</p>
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-3">
-                            <div class="text-center">
-                                <i class="ri-file-image-line fs-24 text-info"></i>
-                                <p class="fs-6 text-muted mt-1 mb-0">Grafika.png</p>
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-3">
-                            <div class="text-center">
-                                <i class="ri-file-image-line fs-24 text-info"></i>
-                                <p class="fs-6 text-muted mt-1 mb-0">Grafika.png</p>
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-3">
-                            <div class="text-center">
-                                <i class="ri-file-excel-2-line fs-24 text-info"></i>
-                                <p class="fs-6 text-muted mt-1 mb-0">Tabela.xlsx</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+  </div>
 </div>
 
 
-
-    <!-- Right Column (2 cards with lists) -->
-    <div class="col-md-6">
-        <div class="row g-3">
-            <!-- First card for "Zadnje korišteni dobavljači" -->
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header align-items-center d-flex">
-                        <h4 class="card-title mb-0 flex-grow-1">Zadnje korišteni dobavljači</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <div>
-                                <p class="fs-14 mb-0">Hifa</p>
-                                <p class="fs-12 text-muted mb-0">Owner: John Doe</p>
-                            </div>
-                            <div class="fs-14">75%</div>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <div>
-                                <p class="fs-14 mb-0">Orbico</p>
-                                <p class="fs-12 text-muted mb-0">Owner: Jane Smith</p>
-                            </div>
-                            <div class="fs-14">85%</div>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <div>
-                                <p class="fs-14 mb-0">DHL</p>
-                                <p class="fs-12 text-muted mb-0">Owner: Michael Brown</p>
-                            </div>
-                            <div class="fs-14">90%</div>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div>
-                                <p class="fs-14 mb-0">Samsung</p>
-                                <p class="fs-12 text-muted mb-0">Owner: Sarah Lee</p>
-                            </div>
-                            <div class="fs-14">80%</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Second card for "Zadnje korišteni dobavljači" -->
-            <div class="col-md-6">
-                <div class="card ">
-                    <div class="card-header align-items-center d-flex">
-                        <h4 class="card-title mb-0 flex-grow-1">Zadnje korišteni dobavljači</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <div>
-                                <p class="fs-14 mb-0">Hifa</p>
-                                <p class="fs-12 text-muted mb-0">Owner: John Doe</p>
-                            </div>
-                            <div class="fs-14">75%</div>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <div>
-                                <p class="fs-14 mb-0">Orbico</p>
-                                <p class="fs-12 text-muted mb-0">Owner: Jane Smith</p>
-                            </div>
-                            <div class="fs-14">85%</div>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <div>
-                                <p class="fs-14 mb-0">DHL</p>
-                                <p class="fs-12 text-muted mb-0">Owner: Michael Brown</p>
-                            </div>
-                            <div class="fs-14">90%</div>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div>
-                                <p class="fs-14 mb-0">Samsung</p>
-                                <p class="fs-12 text-muted mb-0">Owner: Sarah Lee</p>
-                            </div>
-                            <div class="fs-14">80%</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-</div>
 
 
 
