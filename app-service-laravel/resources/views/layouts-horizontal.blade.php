@@ -109,6 +109,10 @@
             <!-- Right Columns remain unchanged -->
             <div class="col-md-2 border-end">
                 <div class="d-flex flex-column h-100">
+                    <div class="bg-info text-white text-center py-1 rounded-0">
+                        <i class="ri-alert-line me-1"></i>
+                        <span>Testna poruka <b>123</b> test.</span>
+                    </div>
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
                         <h6 class="text-muted text-uppercase fs-11 mb-1">Moji dobavljači</h6>
                         <div class="d-flex align-items-center justify-content-center">
@@ -121,6 +125,10 @@
 
             <div class="col-md-2">
                 <div class="d-flex flex-column h-100">
+                    <div class="bg-info text-white text-center py-1 rounded-0">
+                        <i class="ri-alert-line me-1"></i>
+                        <span>Testna poruka <b>123</b> test.</span>
+                    </div>
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
                         <h6 class="text-muted text-uppercase fs-11 mb-1">Broj carinskih tarifa</h6>
                         <div class="d-flex align-items-center justify-content-center">
