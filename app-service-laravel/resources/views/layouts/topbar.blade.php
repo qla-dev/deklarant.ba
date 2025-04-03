@@ -28,7 +28,7 @@
                 <!-- App Search-->
                 <form class="app-search d-none d-md-block me-4" style="width: 85%;">
                     <div class="position-relative">
-                        <input type="text" class="form-control border border-info " placeholder="Pretraga..." autocomplete="off" id="search-options" value="">
+                        <input type="text" class="form-control border" placeholder="Pretraga..." autocomplete="off" id="search-options" value="">
                         <span class="mdi mdi-magnify search-widget-icon text-info"></span>
                         <span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none" id="search-close-options"></span>
                     </div>
@@ -155,7 +155,7 @@
                         <img src="{{ URL::asset('build/images/flags/ae.svg') }}" class="rounded " alt="Header Language" height="18">
                         @break
                         @default
-                        <img src="{{ URL::asset('build/images/flags/us.svg') }}" class="rounded border border-info " alt="Header Language" height="20">
+                        <img src="{{ URL::asset('build/images/flags/us.svg') }}" class="rounded  " alt="Header Language" height="20">
                         @endswitch
                     </button>
                     <div class="dropdown-menu dropdown-menu-end">

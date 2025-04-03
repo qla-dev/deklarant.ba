@@ -9,6 +9,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        .mySwiper .swiper-slide {
+             margin-right: 3px; /* This is equivalent to Bootstrap's g-1 gap */
+        }
+
+/* Optional: Remove the margin-right for the last slide to avoid overflow */
+        .mySwiper .swiper-slide:last-child {
+             margin-right: 0;
+        }
 
         .my-alert {
             
@@ -41,11 +49,11 @@
 
 <!-- Top part -->
  
-<div class="col-xl-12 ">
-    <div class="card card-animate border-0 shadow-sm h-100">
+<div class="col-xl-12">
+    <div class="card card-animate border-0 rounded-0 shadow-sm h-100">
         <div class="row g-0">
             <!-- Left Columns -->
-            <div class="col-md-2 border-end border-3">
+            <div class="col-md-2 border-end border-0">
                 <div class="d-flex flex-column h-100">
                     <div class="bg-info text-white text-center py-1 rounded-0">
                         <i class="ri-alert-line me-1"></i>
@@ -54,14 +62,14 @@
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
                         <h6 class="text-muted text-uppercase fs-11 mb-1">Broj skeniranih faktura</h6>
                         <div class="d-flex align-items-center justify-content-center">
-                            <i class="ri-file-text-line fs-1 text-info mb-1"></i>
+                            <i class="ri-file-text-line  text-info mb-1" style="font-size: 45px"></i>
                             <h3 class="mb-0 ms-2"><span id="usedScans" class="counter-value">0</span></h3>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-2 border-end border-3">
+            <div class="col-md-2 border-end border-0">
                 <div class="d-flex flex-column h-100">
                     <div class="bg-info text-white text-center py-1 rounded-0">
                         <i class="ri-alert-line me-1"></i>
@@ -70,7 +78,7 @@
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
                         <h6 class="text-muted text-uppercase fs-11 mb-1">Dostupna skeniranja</h6>
                         <div class="d-flex align-items-center justify-content-center">
-                            <i class="ri-scan-2-line fs-1 text-info mb-1"></i>
+                            <i class="ri-scan-2-line text-info mb-1" style="font-size: 45px"></i>
                             <h3 class="mb-0 ms-2"><span class="counter-value" id="remainScans">0</span></h3>
                         </div>
                     </div>
@@ -104,7 +112,7 @@
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
                         <h6 class="text-muted text-uppercase fs-11 mb-1">Moji dobavljači</h6>
                         <div class="d-flex align-items-center justify-content-center">
-                            <i class="ri-truck-line fs-1 text-info"></i>
+                            <i class="ri-truck-line text-info" style="font-size: 45px"></i>
                             <h3 class="mb-0 ms-2"><span class="counter-value" id="totalSuppliers">0</span></h3>
                         </div>
                     </div>
@@ -116,7 +124,7 @@
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
                         <h6 class="text-muted text-uppercase fs-11 mb-1">Broj carinskih tarifa</h6>
                         <div class="d-flex align-items-center justify-content-center">
-                            <i class="ri-barcode-box-line fs-1 text-info"></i>
+                            <i class="ri-barcode-box-line text-info" style="font-size: 45px"></i>
                             <h3 class="mb-0 ms-2"><span class="counter-value" data-target="128">0</span></h3>
                         </div>
                     </div>
@@ -132,7 +140,7 @@
 <div class="row g-1 mt-2">
     <!-- Card 1: Izvršena skeniranja -->
     <div class="col-xl-3 col-md-6">
-        <div class="card card-animate overflow-hidden">
+        <div class="card rounded-0 card-animate overflow-hidden">
             <div class="position-absolute start-0" style="z-index: 0;">
                 <svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="200" height="120">
                     <style>.s0 { opacity: .05; fill: var(--vz-info); }</style>
@@ -157,7 +165,7 @@
 
     <!-- Card 2: Broj faktura -->
     <div class="col-xl-3 col-md-6">
-        <div class="card card-animate overflow-hidden">
+        <div class="card rounded-0 card-animate overflow-hidden">
             <div class="position-absolute start-0" style="z-index: 0;">
                 <svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="200" height="120">
                     <style>.s0 { opacity: .05; fill: var(--vz-info); }</style>
@@ -182,7 +190,7 @@
 
     <!-- Card 3: Ukupan broj dobavljača -->
     <div class="col-xl-3 col-md-6">
-        <div class="card card-animate overflow-hidden">
+        <div class="card rounded-0 card-animate overflow-hidden">
             <div class="position-absolute start-0" style="z-index: 0;">
                 <svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="200" height="120">
                     <style>.s0 { opacity: .05; fill: var(--vz-info); }</style>
@@ -198,7 +206,7 @@
                         </h4>
                     </div>
                     <div style="width: 80px; height: 80px;" class="d-flex align-items-center justify-content-center">
-                        <i class="ri-truck-line fs-1 text-info"></i>
+                        <i class="ri-truck-line text-info" style="font-size: 45px;"></i>
                     </div>
                 </div>
             </div>
@@ -207,7 +215,7 @@
 
     <!-- Card 4: Vrijeme skeniranja -->
     <div class="col-xl-3 col-md-6">
-        <div class="card card-animate overflow-hidden">
+        <div class="card rounded-0 card-animate overflow-hidden">
             <div class="position-absolute start-0" style="z-index: 0;">
                 <svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="200" height="120">
                     <style>.s0 { opacity: .05; fill: var(--vz-info); }</style>
@@ -223,7 +231,7 @@
                         </h4>
                     </div>
                     <div style="width: 80px; height: 80px;" class="d-flex align-items-center justify-content-center">
-                        <i class="ri-timer-flash-line fs-1 text-info"></i>
+                        <i class="ri-timer-flash-line text-info" style="font-size: 45px;"></i>
                     </div>
                 </div>
             </div>
@@ -232,76 +240,93 @@
 </div>
 
 
-<!-- Bottom part of layout -->
+<!-- Bottom  part (last 2 parts) of layout -->
 
-<div class="swiper mySwiper mt-2">
+<div class="swiper g-1 mySwiper mt-2">
     <div class="swiper-wrapper" id="supplierCardsContainer">
         <!-- Dynamic cards will be injected here as .swiper-slide -->
     </div>
-    
-    
 </div>
 
 <div class="row mt-2">
   <div class="col-12 px-1">
-    <div class="row mb-2 g-2 mx-0">
+    <div class="row mb-2 g-0 mx-1">
       <!-- LEFT COLUMN -->
       <div class="col-xl-6">
-        <div class="row g-1 mx-1">
+        <div class="row g-1 mx-0">
           <!-- 4 cards in 2 rows -->
-          <div class="col-md-6 d-flex">
-            <div class="card w-100 h-100 ">
-              <div class="card-body">
-                <h5 class="card-title">Moji dokumenti</h5>
-                <div class="row d-flex text-center">
-                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
-                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
-                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
-                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
-                </div>
-              </div>
-            </div>
+          <div class="col-md-6">
+             <div class="card rounded-0 h-100">
+               <div class="card-header d-flex justify-content-between">
+                <h6 class="card-title mb-0">Moji dokumenti</h6>
+                <a class="text-muted fs-6">Pogledaj sve</a>
+               </div>
+               <div class="card-body d-flex align-items-center justify-content-center">
+                 
+                       <div class="row d-flex text-center text-truncate" >  
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Document 1 </div></div>
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2 </div></div>
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
+                       </div>
+                 
+               </div>
+             </div>
           </div>
-          <div class="col-md-6 d-flex">
-            <div class="card h-100 w-100">
-              <div class="card-body">
-                <h5 class="card-title">Moji dokumenti</h5>
-                <div class="row d-flex text-center">
-                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
-                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
-                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
-                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
-                </div>
-              </div>
-            </div>
+
+          <div class="col-md-6">
+             <div class="card rounded-0 h-100">
+               <div class="card-header d-flex justify-content-between">
+                <h6 class="card-title mb-0">Moji dokumenti</h6>
+                <a class="text-muted fs-6">Pogledaj sve</a>
+               </div>
+               <div class="card-body d-flex justify-content-center align-items-center">
+                 
+                       <div class="row d-flex text-center text-truncate ">
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2</div></div>
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
+                       </div>
+                 
+               </div>
+             </div>
           </div>
-          <div class="col-md-6 d-flex">
-            <div class="card h-100 w-100">
-              <div class="card-body">
-                <h5 class="card-title">Moji dokumenti</h5>
-                <div class="row d-flex text-center">
-                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
-                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
-                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
-                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
-                </div>
-              </div>
-            </div>
+          <div class="col-md-6">
+             <div class="card rounded-0 h-100">
+               <div class="card-header d-flex justify-content-between">
+                <h6 class="card-title mb-0">Moji dokumenti</h6>
+                <a class="text-muted fs-6">Pogledaj sve</a>
+               </div>
+               <div class="card-body d-flex justify-content-center align-items-center">
+                 
+                       <div class="row d-flex text-center text-truncate">
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2</div></div>
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
+                       </div>
+                 
+               </div>
+             </div>
           </div>
-          <div class="col-md-6 d-flex">
-            <div class="card h-100 w-100">
-              <div class="card-body">
-                
-                <h5 class="card-title">Moji dokumenti</h5>
-                
-                <div class="row d-flex text-center">
-                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
-                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
-                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
-                 <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
-                </div>
-              </div>
-            </div>
+          <div class="col-md-6">
+             <div class="card rounded-0 h-100">
+               <div class="card-header d-flex justify-content-between">
+                <h6 class="card-title mb-0">Moji dokumenti</h6>
+                <a class="text-muted fs-6">Pogledaj sve</a>
+               </div>
+               <div class="card-body d-flex justify-content-center align-items-center">
+                 
+                       <div class="row d-flex text-center text-truncate">
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2</div></div>
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
+                       </div>
+                 
+               </div>
+             </div>
           </div>
         </div>
       </div>
@@ -309,13 +334,13 @@
       <!-- RIGHT COLUMN -->
       <div class="col-xl-6 d-flex flex-column">
         <div class="row g-1 flex-fill mx-0">
-          <div class="col-md-6 d-flex">
-            <div class="card w-100 h-100">
+          <div class="col-md-6 ">
+            <div class="card rounded-0 w-100 h-100 ">
               <div class="card-header">
                 <h5 class="mb-0">Zadnje korištene tarife</h5>
               </div>
-              <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-1">
+              <div class="card-body align-items-center text-truncate">
+                <div class="d-flex justify-content-between align-items-center mb-2">
                     <div>
                         <div class="fw-semibold">8471.30</div>
                         <div class="text-muted fs-12">Laptop</div>
@@ -325,7 +350,7 @@
                     </div>
                 </div>
               
-                <div class="d-flex justify-content-between align-items-center mb-1">
+                <div class="d-flex justify-content-between align-items-center mb-2">
                     <div>
                         <div class="fw-semibold">8471.30</div>
                         <div class="text-muted fs-12">Laptop</div>
@@ -334,7 +359,7 @@
                         18% <i class="ri-arrow-up-line ms-1"></i>
                     </div>
                 </div>
-                <div class="d-flex justify-content-between align-items-center mb-1">
+                <div class="d-flex justify-content-between align-items-center mb-2">
                     <div>
                         <div class="fw-semibold">8471.30</div>
                         <div class="text-muted fs-12">Laptop</div>
@@ -343,26 +368,43 @@
                         18% <i class="ri-arrow-up-line ms-1"></i>
                     </div>
                 </div>
-                <div class="d-flex justify-content-between align-items-center mb-1">
+                <div class="d-flex justify-content-between align-items-center mb-2">
                     <div>
                         <div class="fw-semibold">8471.30</div>
-                        <div class="text-muted fs-12">Laptop</div>
+                        <div class="text-muted fs-12">Laptop</div>                       
                   </div>
                     <div class="text-success fs-13">
                         18% <i class="ri-arrow-up-line ms-1"></i>
                     </div>
                 </div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <div class="fw-semibold">8471.30</div>
+                        <div class="text-muted fs-12">Laptop</div>                      
+                  </div>
+                    <div class="text-success fs-13">
+                        18% <i class="ri-arrow-up-line ms-1"></i>
+                    </div> 
+                </div>
+                <div class="card-footer mt-0 pt-0 pb-0 text-truncate">
+                    
+                    
+                    
+                </div>
+                
+                
+                
                 
               </div>
             </div>
           </div>
           <div class="col-md-6 d-flex">
-            <div class="card w-100 h-100">
+            <div class="card rounded-0 w-100 h-100">
               <div class="card-header">
                 <h5 class="mb-0">Zadnje korišteni dobavljači</h5>
               </div>
               <div class="card-body">
-              <div class="d-flex justify-content-between align-items-center mb-1">
+              <div class="d-flex justify-content-between align-items-center mb-2">
                     <div>
                         <div class="fw-semibold">Hifa Petrol</div>
                         <div class="text-muted fs-12">Venan Hadžiselimović</div>
@@ -371,7 +413,7 @@
                         23% <i class="ri-arrow-up-line ms-1"></i>
                     </div>
                 </div>
-                <div class="d-flex justify-content-between align-items-center mb-1">
+                <div class="d-flex justify-content-between align-items-center mb-2">
                     <div>
                         <div class="fw-semibold">Hifa Petrol</div>
                         <div class="text-muted fs-12">Venan Hadžiselimović</div>
@@ -380,7 +422,7 @@
                         23% <i class="ri-arrow-up-line ms-1"></i>
                     </div>
                 </div>
-                <div class="d-flex justify-content-between align-items-center mb-1">
+                <div class="d-flex justify-content-between align-items-center mb-2">
                     <div>
                         <div class="fw-semibold">Hifa Petrol</div>
                         <div class="text-muted fs-12">Venan Hadžiselimović</div>
@@ -389,7 +431,7 @@
                         23% <i class="ri-arrow-up-line ms-1"></i>
                     </div>
                 </div>
-                <div class="d-flex justify-content-between align-items-center mb-1">
+                <div class="d-flex justify-content-between align-items-center mb-2">
                     <div>
                         <div class="fw-semibold">Hifa Petrol</div>
                         <div class="text-muted fs-12">Venan Hadžiselimović</div>
@@ -397,6 +439,18 @@
                     <div class="text-success fs-13">
                         23% <i class="ri-arrow-up-line ms-1"></i>
                     </div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <div class="fw-semibold">Hifa Petrol</div>
+                        <div class="text-muted fs-12">Venan Hadžiselimović</div>
+                  </div>
+                    <div class="text-success fs-13">
+                        23% <i class="ri-arrow-up-line ms-1"></i>
+                    </div>
+                </div>
+                <div class="card-footer mt-1 pt-0 pb-0 d-flex align-items-center">   
+                            
                 </div>
               
               </div>
@@ -413,7 +467,7 @@
 
 
 
-<!-- Test div -->
+
 
 
 
@@ -451,7 +505,7 @@
                           ctx = chart.ctx;
 
                     ctx.restore();
-                    const fontSize = (height / 8).toFixed(2);
+                    const fontSize = ((height / 8) * 2).toFixed(2);
                     ctx.font = fontSize + "px sans-serif";
                     ctx.textBaseline = "middle";
                     ctx.textAlign = "center";
@@ -465,7 +519,7 @@
                     const textX = Math.round(width / 2);
                     const textY = Math.round(height / 2);
 
-                    ctx.fillStyle = "#0dcaf0"; // Info color
+                    ctx.fillStyle = "#299cdb"; // Info color
                     ctx.fillText(text, textX, textY);
                     ctx.save();
                 }
@@ -754,7 +808,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             slide.className = "swiper-slide";
 
             slide.innerHTML = `
-                <div class="card card-animate overflow-hidden">
+                <div class="card rounded-0 card-animate overflow-hidden">
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div class="flex-grow-1 overflow-hidden">
@@ -764,7 +818,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                                      <img id="user-avatar" src="{{ URL::asset('build/images/users/orbico.png') }}" class="rounded-circle shadow-sm mb-1" width="40" height="40" alt="Korisnički avatar">
                                  </div></p>
                                  
-                                <h4 class="fs-10 fw-semibold ff-secondary mb-0">
+                                <h4 class="fs-10 fw-semibold ff-secondary mb-0 text-truncate">
                                     <i class="ri-map-pin-line text-info me-1"></i>${supplier.address}
                                 </h4>
                             </div>
