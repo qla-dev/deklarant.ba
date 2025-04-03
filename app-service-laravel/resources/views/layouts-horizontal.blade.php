@@ -408,62 +408,20 @@
           </div>
           <div class="col-md-6 d-flex">
             <div class="card rounded-0 w-100 h-100">
-              <div class="card-header">
-                <h5 class="mb-0">Zadnje korišteni dobavljači</h5>
-              </div>
-              <div class="card-body">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                    <div>
-                        <div class="fw-semibold">Hifa Petrol</div>
-                        <div class="text-muted fs-12">Venan Hadžiselimović</div>
-                  </div>
-                    <div class="text-success fs-13">
-                        23% <i class="ri-arrow-up-line ms-1"></i>
+                <div class="card-header">
+                    <h5 class="mb-0">Zadnje korišteni dobavljači</h5>
+                </div>
+                <div class="card-body">
+                    <div class="suppliers-list">
+                        <!-- Dynamically populated supplier data goes here -->
                     </div>
                 </div>
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <div>
-                        <div class="fw-semibold">Hifa Petrol</div>
-                        <div class="text-muted fs-12">Venan Hadžiselimović</div>
-                  </div>
-                    <div class="text-success fs-13">
-                        23% <i class="ri-arrow-up-line ms-1"></i>
+                    <div class="card-footer mt-1 pt-0 pb-0 d-flex align-items-center">
+                        <!-- Any footer content if needed -->
                     </div>
-                </div>
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <div>
-                        <div class="fw-semibold">Hifa Petrol</div>
-                        <div class="text-muted fs-12">Venan Hadžiselimović</div>
-                  </div>
-                    <div class="text-success fs-13">
-                        23% <i class="ri-arrow-up-line ms-1"></i>
-                    </div>
-                </div>
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <div>
-                        <div class="fw-semibold">Hifa Petrol</div>
-                        <div class="text-muted fs-12">Venan Hadžiselimović</div>
-                  </div>
-                    <div class="text-success fs-13">
-                        23% <i class="ri-arrow-up-line ms-1"></i>
-                    </div>
-                </div>
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <div>
-                        <div class="fw-semibold">Hifa Petrol</div>
-                        <div class="text-muted fs-12">Venan Hadžiselimović</div>
-                  </div>
-                    <div class="text-success fs-13">
-                        23% <i class="ri-arrow-up-line ms-1"></i>
-                    </div>
-                </div>
-                <div class="card-footer mt-1 pt-0 pb-0 d-flex align-items-center">   
-                            
-                </div>
-              
-              </div>
             </div>
-          </div>
+        </div>
+     </div>
         </div>
       </div>
 
@@ -497,6 +455,60 @@
 
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            const user = JSON.parse(localStorage.getItem("user"));
+            const token = localStorage.getItem("auth_token");
+
+            if (!user || !token) {
+                console.warn("User or token missing in localStorage.");
+                return;
+            }
+
+            const API_URL = `/api/statistics/users/${user.id}`;
+
+            try {
+                const response = await axios.get(API_URL, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                const stats = response.data || {};
+                const suppliers = stats.suppliers || [];  // Fetch suppliers data from API
+
+                // Dynamically populate the suppliers section
+                const suppliersContainer = document.querySelector(".suppliers-list");
+
+                if (suppliersContainer) {
+                    suppliersContainer.innerHTML = ''; // Clear any existing content
+
+                    // Loop through each supplier and create the markup
+                    suppliers.forEach(supplier => {
+                        const supplierElement = document.createElement("div");
+                        supplierElement.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2");
+
+                        supplierElement.innerHTML = `
+                            <div>
+                                <div class="fw-semibold">${supplier.name}</div>
+                                <div class="text-muted fs-12">Venan Hadžiselimović</div> <!-- Hardcoded Owner Name -->
+                            </div>
+                            <div class="text-success fs-13">
+                                ${supplier.annual_profit.toFixed(2)} <i class="ri-arrow-up-line ms-1"></i>
+                            </div>
+                        `;
+
+                        // Append the new supplier data to the container
+                        suppliersContainer.appendChild(supplierElement);
+                    });
+                }
+            } catch (error) {
+                console.error("Error fetching supplier data:", error);
+            }
+        });
+    </script>
+
 
     
 
