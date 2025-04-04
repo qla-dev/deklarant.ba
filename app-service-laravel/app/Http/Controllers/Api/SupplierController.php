@@ -28,6 +28,7 @@ class SupplierController extends Controller
         try {
             $data = $request->validate([
                 'name' => 'required|string',
+                'owner' => 'required|string',
                 'address' => 'required|string',
                 'avatar' => 'nullable|string',
                 'tax_id' => 'required|string|unique:suppliers,tax_id',

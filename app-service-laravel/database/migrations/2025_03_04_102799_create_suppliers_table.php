@@ -10,6 +10,7 @@ return new class extends Migration {
         Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('owner');
             $table->text('address');
             $table->string('avatar')->nullable();
             $table->string('tax_id')->unique();

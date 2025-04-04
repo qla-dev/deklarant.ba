@@ -26,4 +26,10 @@ class TariffRate extends Model
         'head', 
         'english_name'
     ];
+
+    public function invoiceItems()
+{
+    return $this->hasMany(InvoiceItem::class, 'item_code', 'item_code');
+}
+
 }

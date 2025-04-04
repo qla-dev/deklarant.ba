@@ -44,5 +44,39 @@ class Supplier extends Model
         return round($totalProfit / $yearsActive, 2);
     }
 
+    public function getLastYearProfit()
+    {
+        $start = Carbon::now()->subYear()->startOfYear();
+        $end = Carbon::now()->subYear()->endOfYear();
+
+        return $this->invoices()
+                    ->whereBetween('created_at', [$start, $end])
+                    ->sum('total_price');
+    }
+
+    public function getCurrentYearProfit()
+    {
+        $start = Carbon::now()->startOfYear();   // January 1st this year
+        $end = Carbon::now();                    // Today
+
+        return $this->invoices()
+                    ->whereBetween('created_at', [$start, $end])
+                    ->sum('total_price');
+    }
+
+    public function getProfitPercentageChange()
+    {
+        $lastYear = $this->getLastYearProfit();
+        $thisYear = $this->getCurrentYearProfit();
+
+        // Avoid division by zero
+        if ($lastYear == 0) {
+            return $thisYear > 0 ? 100 : 0;
+        }
+
+        return (($thisYear - $lastYear) / $lastYear) * 100;
+    }
+
+
 }
 

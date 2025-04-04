@@ -8,6 +8,7 @@ use App\Models\Supplier;
 use App\Models\Invoice;
 use App\Models\Package;
 use App\Models\User;
+use App\Models\TariffRate;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
@@ -47,54 +48,96 @@ class StatsController extends Controller
      * Get statistics for a specific user by ID.
      */
     public function getUserStatisticsById($id)
-    {
-        try {
-            $user = User::findOrFail($id);
+{
+    try {
+        $user = User::findOrFail($id);
 
-            // Get supplier count via invoices (distinct suppliers associated with the user)
-            $supplierCount = Supplier::whereIn('id', function ($query) use ($user) {
-                $query->select('supplier_id')->from('invoices')->where('user_id', $user->id);
-            })->count();
+        $supplierCount = Supplier::whereIn('id', function ($query) use ($user) {
+            $query->select('supplier_id')->from('invoices')->where('user_id', $user->id);
+        })->count();
 
-            // Count invoices associated with the user
-            $invoiceCount = Invoice::where('user_id', $user->id)->count();
+        $invoiceCount = Invoice::where('user_id', $user->id)->count();
 
-            // Count invoices grouped by country for the user
-            $invoicesByCountry = Invoice::where('user_id', $user->id)
-                                        ->selectRaw('country_of_origin, COUNT(*) as count')
-                                        ->groupBy('country_of_origin')
-                                        ->pluck('count', 'country_of_origin');
+        $invoicesByCountry = Invoice::where('user_id', $user->id)
+            ->selectRaw('country_of_origin, COUNT(*) as count')
+            ->groupBy('country_of_origin')
+            ->pluck('count', 'country_of_origin');
 
+        $usedScans = Invoice::where('user_id', $user->id)
+            ->where('scanned', 1)
+            ->count();
 
-            // Used scans = number of invoices for the user where scanned = 1
-            $usedScans = Invoice::where('user_id', $user->id)
-                                ->where('scanned', 1)
-                                ->count();
+        $totalScans = Package::whereIn('id', function ($query) use ($user) {
+            $query->select('package_id')->from('user_packages')->where('user_id', $user->id);
+        })->sum('available_scans');
 
+        $remainingScans = max($totalScans - $usedScans, 0);
 
-            // Calculate remaining scans for the user via `UserPackage`
-            $totalScans = Package::whereIn('id', function ($query) use ($user) {
-                $query->select('package_id')->from('user_packages')->where('user_id', $user->id);
-            })->sum('available_scans');
+        $topSuppliers = Supplier::select('suppliers.id', 'suppliers.name')
+            ->join('invoices', 'suppliers.id', '=', 'invoices.supplier_id')
+            ->where('invoices.user_id', $user->id)
+            ->groupBy('suppliers.id', 'suppliers.name')
+            ->get()
+            ->map(function ($supplier) {
+                $fullSupplier = Supplier::find($supplier->id);
+                return [
+                    'id' => $supplier->id,
+                    'name' => $supplier->name,
+                    'annual_profit' => $fullSupplier ? $fullSupplier->getAnnualProfitAvg() : 0
+                ];
+            })
+            ->sortByDesc('annual_profit')
+            ->take(5)
+            ->values();
 
-            $remainingScans = max($totalScans - $usedScans, 0);
+        $latestSuppliers = Supplier::select('suppliers.id', 'suppliers.name', 'invoices.created_at')
+            ->join('invoices', 'suppliers.id', '=', 'invoices.supplier_id')
+            ->where('invoices.user_id', $user->id)
+            ->orderByDesc('invoices.created_at')
+            ->groupBy('suppliers.id', 'suppliers.name', 'invoices.created_at')
+            ->get()
+            ->map(function ($supplier) {
+                $fullSupplier = Supplier::find($supplier->id);
+                return [
+                    'id' => $supplier->id,
+                    'name' => $supplier->name,
+                    'latest_invoice_date' => $supplier->created_at,
+                ];
+            })
+            ->take(5)
+            ->values();
 
-            $topSuppliers = Supplier::select('suppliers.id', 'suppliers.name')
-                ->join('invoices', 'suppliers.id', '=', 'invoices.supplier_id')
-                ->where('invoices.user_id', $user->id)
-                ->groupBy('suppliers.id', 'suppliers.name')
-                ->get()
-                ->map(function ($supplier) {
-                    $fullSupplier = Supplier::find($supplier->id); // To get manually changed data from the database
-                    return [
-                        'id' => $supplier->id,
-                        'name' => $supplier->name,
-                        'annual_profit' => $fullSupplier ? $fullSupplier->getAnnualProfitAvg() : 0
-                    ];
-                })
-                ->sortByDesc('annual_profit') // Order by annual profit descending
-                ->take(5) // Limit to top 5
-                ->values();
+        $itemCodes = Invoice::where('user_id', $user->id)
+            ->orderByDesc('created_at')
+            ->take(5)
+            ->with('items')
+            ->get()
+            ->flatMap(fn($invoice) => $invoice->items->pluck('item_code'))
+            ->unique()
+            ->filter()
+            ->values();
+        
+        $latestTariffs = TariffRate::whereIn('item_code', $itemCodes)
+            ->get(['id', 'name', 'tariff_rate']) // select only needed columns
+            ->unique('id')
+            ->values();
+        
+        
+        
+
+        // ✅ Supplier profit change section
+        $supplierProfitChanges = Supplier::whereIn('id', function ($query) use ($user) {
+            $query->select('supplier_id')->from('invoices')->where('user_id', $user->id);
+        })->get()
+        ->map(function ($supplier) {
+            return [
+                'supplier_id' => $supplier->id,
+                'name' => $supplier->name,
+                'last_year_profit' => $supplier->getLastYearProfit(),
+                'current_year_profit' => $supplier->getCurrentYearProfit(),
+                'percentage_change' => round($supplier->getProfitPercentageChange(), 2),
+            ];
+        });
 
         return response()->json([
             'user_id' => $user->id,
@@ -103,21 +146,26 @@ class StatsController extends Controller
             'invoices_by_country' => $invoicesByCountry,
             'used_scans' => $usedScans,
             'remaining_scans' => $remainingScans,
-            'suppliers' => $topSuppliers
+            'top_suppliers' => $topSuppliers,
+            'latest_suppliers' => $latestSuppliers,
+            'latest_tariffs' => $latestTariffs,
+            'supplier_profit_changes' => $supplierProfitChanges,
         ], 200);
 
-        } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'User not found',
-                'message' => $e->getMessage()
-            ], 404);
-        } catch (Exception $e) {
-            return response()->json([
-                'error' => 'Failed to retrieve user statistics',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+    } catch (ModelNotFoundException $e) {
+        return response()->json([
+            'error' => 'User not found',
+            'message' => $e->getMessage()
+        ], 404);
+    } catch (Exception $e) {
+        return response()->json([
+            'error' => 'Failed to retrieve user statistics',
+            'message' => $e->getMessage()
+        ], 500);
     }
+}
+
+
 
     /**
      * Get statistics for a specific supplier by ID.
@@ -165,25 +213,21 @@ class StatsController extends Controller
      * Get annual profit for a specific supplier.
      */
     public function getSupplierLastYearProfit($supplierId)
-    {
-        $supplier = Supplier::find($supplierId);
+{
+    $supplier = Supplier::find($supplierId);
 
-        if (!$supplier) {
-            return response()->json(['error' => 'Supplier not found'], 404);
-        }
-
-        $oneYearAgo = Carbon::now()->subYear(); // Get date one year ago
-
-        // Sum total invoice prices for the past year for this supplier
-        $lastYearProfit = Invoice::where('supplier_id', $supplier->id)
-                            ->where('created_at', '>=', $oneYearAgo)
-                            ->sum('total_price');
-
-        return response()->json([
-            'supplier_id' => $supplier->id,
-            'annual_profit' => $lastYearProfit
-        ]);
+    if (!$supplier) {
+        return response()->json(['error' => 'Supplier not found'], 404);
     }
+
+    $profit = $supplier->getLastYearProfit();
+
+    return response()->json([
+        'supplier_id' => $supplier->id,
+        'last_year_profit' => $profit
+    ]);
+}
+
 
     public function getSupplierAnnualProfit($supplierId)
 {
@@ -209,5 +253,22 @@ class StatsController extends Controller
         'annual_profit_avg' => round($annualProfitAvg, 2)
     ]);
 }
+
+    public function getSupplierProfitChange($supplierId)
+    {
+        $supplier = Supplier::find($supplierId);
+
+        if (!$supplier) {
+            return response()->json(['error' => 'Supplier not found'], 404);
+        }
+
+        return response()->json([
+            'supplier_id' => $supplier->id,
+            'last_year_profit' => $supplier->getLastYearProfit(),
+            'current_year_profit' => $supplier->getCurrentYearProfit(),
+            'percentage_change' => round($supplier->getProfitPercentageChange(), 2)
+        ]);
+    }
+
 
 }

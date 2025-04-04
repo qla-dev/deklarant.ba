@@ -31,4 +31,9 @@ class InvoiceItem extends Model
     {
         return $this->belongsTo(Invoice::class);
     }
+
+    public function tariffRate()
+    {
+        return $this->belongsTo(TariffRate::class, 'item_code', 'item_code');
+    }
 }
