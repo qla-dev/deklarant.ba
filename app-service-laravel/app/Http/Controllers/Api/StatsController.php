@@ -9,6 +9,7 @@ use App\Models\Invoice;
 use App\Models\Package;
 use App\Models\User;
 use App\Models\TariffRate;
+use App\Models\InvoiceItem;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
@@ -117,10 +118,24 @@ class StatsController extends Controller
             ->filter()
             ->values();
         
+        // Count how many times each item_code appears across all invoice_items
+        $itemCodeCounts = InvoiceItem::whereIn('item_code', $itemCodes)
+            ->selectRaw('item_code, COUNT(*) as total')
+            ->groupBy('item_code')
+            ->pluck('total', 'item_code'); // returns ['ABC123' => 7, 'XYZ456' => 12, ...]
+        
         $latestTariffs = TariffRate::whereIn('item_code', $itemCodes)
-            ->get(['id', 'name', 'tariff_rate']) // select only needed columns
-            ->unique('id')
+            ->get(['id', 'item_code', 'name', 'tariff_rate']) // include item_code for matching
+            ->map(function ($tariff) use ($itemCodeCounts) {
+                return [
+                    'id' => $tariff->id,
+                    'name' => $tariff->name,
+                    'tariff_rate' => $tariff->tariff_rate,
+                    'item_usage_count' => $itemCodeCounts[$tariff->item_code] ?? 0
+                ];
+            })
             ->values();
+        
         
         
         
