@@ -31,52 +31,52 @@ class Supplier extends Model
     }
 
     public function getAnnualProfitAvg()
-    {
-        $now = Carbon::now();
-        $created = Carbon::parse($this->created_at);
-        Log::info('Supplier created_at:', ['supplier_id' => $this->id, 'created_at' => $created->toDateTimeString()]);
+{
+    $now = Carbon::now();
+    $created = Carbon::parse($this->created_at);
+    Log::info('Supplier created_at:', ['supplier_id' => $this->id, 'created_at' => $created->toDateTimeString()]);
 
+    $yearsActive = max($created->diffInYears($now), 1);
 
-        $yearsActive = max($created->diffInYears($now), 1);
+    $totalProfit = Invoice::where('supplier_id', $this->id)
+                        ->sum('total_price');
 
-        $totalProfit = Invoice::where('supplier_id', $this->id)
-                                ->sum('total_price');
+    return round($totalProfit / $yearsActive, 2);
+}
 
-        return round($totalProfit / $yearsActive, 2);
+public function getLastYearProfit()
+{
+    $start = Carbon::now()->subYear()->startOfYear();
+    $end = Carbon::now()->subYear()->endOfYear();
+
+    return $this->invoices()
+                ->whereBetween('date_of_issue', [$start, $end])
+                ->sum('total_price');
+}
+
+public function getCurrentYearProfit()
+{
+    $start = Carbon::now()->startOfYear();   // January 1st this year
+    $end = Carbon::now();                    // Today
+
+    return $this->invoices()
+                ->whereBetween('date_of_issue', [$start, $end])
+                ->sum('total_price');
+}
+
+public function getProfitPercentageChange()
+{
+    $lastYear = $this->getLastYearProfit();
+    $thisYear = $this->getCurrentYearProfit();
+
+    // Avoid division by zero
+    if ($lastYear == 0) {
+        return $thisYear > 0 ? 100 : 0;
     }
 
-    public function getLastYearProfit()
-    {
-        $start = Carbon::now()->subYear()->startOfYear();
-        $end = Carbon::now()->subYear()->endOfYear();
+    return (($thisYear - $lastYear) / $lastYear) * 100;
+}
 
-        return $this->invoices()
-                    ->whereBetween('created_at', [$start, $end])
-                    ->sum('total_price');
-    }
-
-    public function getCurrentYearProfit()
-    {
-        $start = Carbon::now()->startOfYear();   // January 1st this year
-        $end = Carbon::now();                    // Today
-
-        return $this->invoices()
-                    ->whereBetween('created_at', [$start, $end])
-                    ->sum('total_price');
-    }
-
-    public function getProfitPercentageChange()
-    {
-        $lastYear = $this->getLastYearProfit();
-        $thisYear = $this->getCurrentYearProfit();
-
-        // Avoid division by zero
-        if ($lastYear == 0) {
-            return $thisYear > 0 ? 100 : 0;
-        }
-
-        return (($thisYear - $lastYear) / $lastYear) * 100;
-    }
 
 
 }
