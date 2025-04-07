@@ -69,6 +69,7 @@ class InvoiceController extends Controller
     {
         try {
             $data = $request->validate([
+                'file_name' => 'string',
                 'total_price' => 'required|numeric',
                 'date_of_issue' => 'required|date',
                 'country_of_origin' => 'required|string',
@@ -79,6 +80,7 @@ class InvoiceController extends Controller
             $invoice = Invoice::create([
                 'user_id' => $userId,
                 'supplier_id' => $supplier->id,
+                'file_name' => $data['file_name'],
                 'total_price' => $data['total_price'],
                 'date_of_issue' => $data['date_of_issue'],
                 'country_of_origin' => $data['country_of_origin'],
