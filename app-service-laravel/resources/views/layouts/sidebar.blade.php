@@ -451,7 +451,10 @@
                             </li>
                         </ul>
                     </div>
-                </li> <!-- end Dashboard Menu -->
+                </li> 
+            
+                
+                <!-- end Dashboard Menu -->
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
@@ -863,6 +866,7 @@
                             </div>
                         </div>
                     </div>
+                    
                 </li>
 
                 
@@ -878,9 +882,22 @@
 
 
             </ul>
+            
+            <div class="col-sm-2 ms-5 me-0 mt-1 d-flex  align-items-center">
+                    <a href="pages-scan" style="width: 208px; height:31px;" class="btn btn-info btn-sm  text-white  py-0 d-flex align-items-center justify-content-center ">
+                    <i class="ri-ai-generate-2 fs-5 me-1"></i>  Skeniraj s AI </i> 
+                    </a>
+                </div>
+        
+            
+            
+                    
+             
         </div>
+        
         <!-- Sidebar -->
     </div>
+    
     <div class="sidebar-background"></div>
 </div>
 <!-- Left Sidebar End -->

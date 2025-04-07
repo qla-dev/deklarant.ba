@@ -55,17 +55,17 @@
             <ul class="nav nav-pills animation-nav profile-nav py-3 flex-grow-1 gap-2 " role="tablist">
 
                 <li class="nav-item">
-                    <a class="nav-link  active" data-bs-toggle="tab" href="#overview-tab">Overview</a>
+                    <a class="nav-link  active" data-bs-toggle="tab" href="#overview-tab">Osnovni podaci</a>
                 </li>
                 
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#activities">Activities</a>
+                    <a class="nav-link" data-bs-toggle="tab" href="#activities">Moje fakture</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#projects">Projects</a>
+                    <a class="nav-link" data-bs-toggle="tab" href="#projects">Paketi</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#documents">Documents</a>
+                    <a class="nav-link" data-bs-toggle="tab" href="#documents">Test</a>
                 </li>
             </ul>
 
@@ -287,10 +287,10 @@
                             <thead class="table-light">
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Document</th>
-                                    <th scope="col">Supplier</th>
-                                    <th scope="col">Type</th>
-                                    <th scope="col">Actions</th>
+                                    <th scope="col">Moje fakture</th>
+                                    <th scope="col">Dobavljači</th>
+                                    <th scope="col">Tip</th>
+                                    <th scope="col">Mogućnosti</th>
                                 </tr>
                             </thead>
                             <tbody class="table-info">

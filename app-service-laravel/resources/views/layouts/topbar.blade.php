@@ -28,7 +28,7 @@
                 <!-- App Search-->
                 <form class="app-search d-none d-md-block me-4" style="width: 85%;">
                     <div class="position-relative">
-                        <input type="text" class="form-control border border-info " placeholder="Pretraga..." autocomplete="off" id="search-options" value="">
+                        <input type="text" class="form-control border" placeholder="Pretraga..." autocomplete="off" id="search-options" value="">
                         <span class="mdi mdi-magnify search-widget-icon text-info"></span>
                         <span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none" id="search-close-options"></span>
                     </div>
@@ -155,7 +155,7 @@
                         <img src="{{ URL::asset('build/images/flags/ae.svg') }}" class="rounded " alt="Header Language" height="18">
                         @break
                         @default
-                        <img src="{{ URL::asset('build/images/flags/us.svg') }}" class="rounded border border-info " alt="Header Language" height="20">
+                        <img src="{{ URL::asset('build/images/flags/us.svg') }}" class="rounded  " alt="Header Language" height="20">
                         @endswitch
                     </button>
                     <div class="dropdown-menu dropdown-menu-end">
@@ -556,7 +556,7 @@
 
                         <img id="topbar-avatar" class="rounded-circle header-profile-user" src="/build/images/users/avatar-1.jpg" alt="Header Avatar" width="32" height="32">
 
-                            <img class="rounded-circle  border border-info border-2 header-profile-user" src="@if (Auth::user()->avatar != ''){{ URL::asset('images/' . Auth::user()->avatar) }}@else{{ URL::asset('build/images/users/avatar-1.jpg') }}@endif" alt="Header Avatar">
+                            
 
                             <span class="text-start ms-xl-2">
                                 <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text" id="topbar-username">Korisnik</span>
@@ -662,6 +662,28 @@
             });
         }
     });
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (user) {
+        const topbarAvatar = document.getElementById("topbar-avatar");
+
+        if (topbarAvatar) {
+            const avatarUrl = `/storage/uploads/avatars/${user.avatar}`;
+
+            const testImg = new Image();
+            testImg.onload = function () {
+                topbarAvatar.src = avatarUrl;
+            };
+            testImg.onerror = function () {
+                topbarAvatar.src = "/build/images/users/avatar-1.jpg";
+            };
+            testImg.src = avatarUrl;
+        }
+    }
+});
 </script>
 
 

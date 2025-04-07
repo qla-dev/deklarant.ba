@@ -6,7 +6,19 @@
 
 @section('css')
     <link href="{{ URL::asset('build/libs/jsvectormap/jsvectormap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
     <style>
+        .mySwiper .swiper-slide {
+             margin-right: 3px; /* This is equivalent to Bootstrap's g-1 gap */
+        }
+
+/* Optional: Remove the margin-right for the last slide to avoid overflow */
+        .mySwiper .swiper-slide:last-child {
+             margin-right: 0;
+        }
 
         .my-alert {
             
@@ -17,6 +29,17 @@
             
             color: white !important;
         }
+
+       
+     
+        /* Ensure the swiper-container behaves as expected */
+        
+
+        
+        
+        
+
+
         
 
 
@@ -28,11 +51,11 @@
 
 <!-- Top part -->
  
-<div class="col-xl-12 ">
-    <div class="card card-animate border-0 shadow-sm h-100">
+<div class="col-xl-12">
+    <div class="card card-animate border-0 rounded-0 shadow-sm h-100">
         <div class="row g-0">
             <!-- Left Columns -->
-            <div class="col-md-2 border-end border-3">
+            <div class="col-md-2 border-end border-0">
                 <div class="d-flex flex-column h-100">
                     <div class="bg-info text-white text-center py-1 rounded-0">
                         <i class="ri-alert-line me-1"></i>
@@ -41,14 +64,14 @@
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
                         <h6 class="text-muted text-uppercase fs-11 mb-1">Broj skeniranih faktura</h6>
                         <div class="d-flex align-items-center justify-content-center">
-                            <i class="ri-file-text-line fs-1 text-info mb-1"></i>
+                            <i class="ri-file-text-line  text-info mb-1" style="font-size: 45px"></i>
                             <h3 class="mb-0 ms-2"><span id="usedScans" class="counter-value">0</span></h3>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-2 border-end border-3">
+            <div class="col-md-2 border-end border-0">
                 <div class="d-flex flex-column h-100">
                     <div class="bg-info text-white text-center py-1 rounded-0">
                         <i class="ri-alert-line me-1"></i>
@@ -57,7 +80,7 @@
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
                         <h6 class="text-muted text-uppercase fs-11 mb-1">Dostupna skeniranja</h6>
                         <div class="d-flex align-items-center justify-content-center">
-                            <i class="ri-scan-2-line fs-1 text-info mb-1"></i>
+                            <i class="ri-scan-2-line text-info mb-1" style="font-size: 45px"></i>
                             <h3 class="mb-0 ms-2"><span class="counter-value" id="remainScans">0</span></h3>
                         </div>
                     </div>
@@ -75,10 +98,10 @@
                     <div class="card-footer bg-transparent border-0 w-100">
                         <div class="d-flex justify-content-center gap-2 w-100">
                             <a href="pages-pricing" class="btn btn-info text-white w-50 btn-sm">
-                                <i class="ri-arrow-up-circle-line fs-14 me-1"></i> Nadogradite paket
+                                <i class="ri-arrow-up-circle-line fs-5 me-1"></i> Nadogradite paket
                             </a>
-                            <a href="pages-scan" class="btn btn-info w-50 animated-btn btn-sm">
-                                <i class="ri-qr-scan-2-line fs-14 me-1"></i> Pokreni skeniranje
+                            <a href="pages-scan" class="btn btn-info w-50 animated-btn btn-sm ">
+                                <i class="ri-ai-generate-2 me-1 fs-5" style="font-size:10px;"></i> Skeniraj s AI
                             </a>
                         </div>
                     </div>
@@ -88,10 +111,14 @@
             <!-- Right Columns remain unchanged -->
             <div class="col-md-2 border-end">
                 <div class="d-flex flex-column h-100">
+                    <div class="bg-info text-white text-center py-1 rounded-0">
+                        <i class="ri-alert-line me-1"></i>
+                        <span>Testna poruka <b>123</b> test.</span>
+                    </div>
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
-                        <h6 class="text-muted text-uppercase fs-11 mb-1">Ukupno dobavljača</h6>
+                        <h6 class="text-muted text-uppercase fs-11 mb-1">Moji dobavljači</h6>
                         <div class="d-flex align-items-center justify-content-center">
-                            <i class="ri-truck-line fs-1 text-info"></i>
+                            <i class="ri-truck-line text-info" style="font-size: 45px"></i>
                             <h3 class="mb-0 ms-2"><span class="counter-value" id="totalSuppliers">0</span></h3>
                         </div>
                     </div>
@@ -100,11 +127,15 @@
 
             <div class="col-md-2">
                 <div class="d-flex flex-column h-100">
+                    <div class="bg-info text-white text-center py-1 rounded-0">
+                        <i class="ri-alert-line me-1"></i>
+                        <span>Testna poruka <b>123</b> test.</span>
+                    </div>
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
                         <h6 class="text-muted text-uppercase fs-11 mb-1">Broj carinskih tarifa</h6>
                         <div class="d-flex align-items-center justify-content-center">
-                            <i class="ri-barcode-box-line fs-1 text-info"></i>
-                            <h3 class="mb-0 ms-2"><span class="counter-value" data-target="128"></span></h3>
+                            <i class="ri-barcode-box-line text-info" style="font-size: 45px"></i>
+                            <h3 class="mb-0 ms-2"><span class="counter-value" data-target="128">0</span></h3>
                         </div>
                     </div>
                 </div>
@@ -116,17 +147,14 @@
 
 <!-- Mid part of layout -->
 
-<div class="row g-1  mt-2">
-    <!-- Card 1 -->
+<div class="row g-1 mt-2">
+    <!-- Card 1: Izvršena skeniranja -->
     <div class="col-xl-3 col-md-6">
-        <div class="card card-animate overflow-hidden">
+        <div class="card rounded-0 card-animate overflow-hidden">
             <div class="position-absolute start-0" style="z-index: 0;">
                 <svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="200" height="120">
-                    <style>
-                        .s0 { opacity: .05; fill: var(--vz-info) }
-                    </style>
-                    <path id="Shape 8" class="s0"
-                        d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z" />
+                    <style>.s0 { opacity: .05; fill: var(--vz-info); }</style>
+                    <path class="s0" d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z" />
                 </svg>
             </div>
             <div class="card-body" style="z-index:1;">
@@ -141,76 +169,67 @@
                         <canvas id="doughnut1" width="80" height="80"></canvas>
                     </div>
                 </div>
-            </div><!-- end card body -->
-        </div><!-- end card -->
+            </div>
+        </div>
     </div>
 
-    <!-- Card 2 -->
+    <!-- Card 2: Broj faktura -->
     <div class="col-xl-3 col-md-6">
-        <div class="card card-animate overflow-hidden">
+        <div class="card rounded-0 card-animate overflow-hidden">
             <div class="position-absolute start-0" style="z-index: 0;">
                 <svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="200" height="120">
-                    <style>
-                        .s0 { opacity: .05; fill: var(--vz-info) }
-                    </style>
-                    <path id="Shape 8" class="s0"
-                        d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z" />
+                    <style>.s0 { opacity: .05; fill: var(--vz-info); }</style>
+                    <path class="s0" d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z" />
                 </svg>
             </div>
             <div class="card-body" style="z-index:1;">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1 overflow-hidden">
-                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3" >Broj faktura</p>
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Broj faktura</p>
                         <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                            <span class="counter-value" data-target="45" id="totalInvoices">0</span>
+                            <span class="counter-value" id="totalInvoices" data-target="45">0</span>
                         </h4>
                     </div>
                     <div class="flex-shrink-0">
                         <canvas id="doughnut2" width="80" height="80"></canvas>
                     </div>
                 </div>
-            </div><!-- end card body -->
-        </div><!-- end card -->
+            </div>
+        </div>
     </div>
 
-    <!-- Card 3 -->
+    <!-- Card 3: Ukupan broj dobavljača -->
     <div class="col-xl-3 col-md-6">
-        <div class="card card-animate overflow-hidden">
+        <div class="card rounded-0 card-animate overflow-hidden">
             <div class="position-absolute start-0" style="z-index: 0;">
                 <svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="200" height="120">
-                    <style>
-                        .s0 { opacity: .05; fill: var(--vz-info) }
-                    </style>
-                    <path id="Shape 8" class="s0"
-                        d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z" />
+                    <style>.s0 { opacity: .05; fill: var(--vz-info); }</style>
+                    <path class="s0" d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z" />
                 </svg>
             </div>
             <div class="card-body" style="z-index:1;">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1 overflow-hidden">
-                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Broj dobavljača</p>
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Ukupan broj dobavljača</p>
                         <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                            <span class="counter-value" data-target="19">0</span>
+                            <span class="counter-value" id="totalNumSup" data-target="19">0</span>
                         </h4>
                     </div>
-                    <div class="flex-shrink-0">
-                        <canvas id="doughnut3" width="80" height="80"></canvas>
+                    <div style="width: 80px; height: 80px;" class="d-flex align-items-center justify-content-center">
+                        <i class="ri-truck-line text-info" style="font-size: 45px;"></i>
                     </div>
                 </div>
-            </div><!-- end card body -->
-        </div><!-- end card -->
+            </div>
+        </div>
     </div>
 
-    <!-- Card 4 -->
+    <!-- Card 4: Vrijeme skeniranja -->
     <div class="col-xl-3 col-md-6">
-        <div class="card card-animate overflow-hidden">
+        <div class="card rounded-0 card-animate overflow-hidden">
             <div class="position-absolute start-0" style="z-index: 0;">
                 <svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="200" height="120">
-                    <style>
-                        .s0 { opacity: .05; fill: var(--vz-info) }
-                    </style>
-                    <path id="Shape 8" class="s0"
-                        d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z" />
+                    <style>.s0 { opacity: .05; fill: var(--vz-info); }</style>
+                    <path class="s0" d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z" />
                 </svg>
             </div>
             <div class="card-body" style="z-index:1;">
@@ -218,156 +237,203 @@
                     <div class="flex-grow-1 overflow-hidden">
                         <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Vrijeme Skeniranja</p>
                         <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                            <span class="counter-value" data-target="10">0</span> sec
+                            <span class="counter-value" id="scanTimeValue">0.00</span>
                         </h4>
                     </div>
-                    <div class="flex-shrink-0">
-                        <canvas id="doughnut4" width="80" height="80"></canvas>
+                    <div style="width: 80px; height: 80px;" class="d-flex align-items-center justify-content-center">
+                        <i class="ri-timer-flash-line text-info" style="font-size: 45px;"></i>
                     </div>
                 </div>
-            </div><!-- end card body -->
-        </div><!-- end card -->
+            </div>
+        </div>
     </div>
 </div>
 
-<!-- Bottom part of layout -->
 
-<div class="row g-1 ">
-    <!-- Card 1 -->
-    <div class="col-xl-2 col-md-6">
-        <div class="card card-animate overflow-hidden">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div class="flex-grow-1 overflow-hidden">
-                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Vrijeme Skeniranja</p>
-                        <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                            <span class="counter-value" data-target="10">0</span> sec
-                        </h4>
-                    </div>
-                    <div class="flex-shrink-0">
-                        <canvas class="scan-chart" width="80" height="80"></canvas>
-                    </div>
-                </div>
-            </div><!-- end card body -->
-        </div><!-- end card -->
-    </div>
+<!-- Bottom  part (last 2 parts) of layout -->
 
-    
-
-    <!-- Card 2 -->
-    <div class="col-xl-2 col-md-6">
-        <div class="card card-animate overflow-hidden">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div class="flex-grow-1 overflow-hidden">
-                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Dostupna Skeniranja</p>
-                        <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                            <span class="counter-value" data-target="28">0</span>
-                        </h4>
-                    </div>
-                    <div class="flex-shrink-0">
-                        <canvas class="scan-chart" width="80" height="80"></canvas>
-                    </div>
-                </div>
-            </div><!-- end card body -->
-        </div><!-- end card -->
-    </div>
-
-
-    <div class="col-xl-2 col-md-6">
-        <div class="card card-animate overflow-hidden">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div class="flex-grow-1 overflow-hidden">
-                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Dostupna Skeniranja</p>
-                        <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                            <span class="counter-value" data-target="28">0</span>
-                        </h4>
-                    </div>
-                    <div class="flex-shrink-0">
-                        <canvas class="scan-chart" width="80" height="80"></canvas>
-                    </div>
-                </div>
-            </div><!-- end card body -->
-        </div><!-- end card -->
-    </div>
-
-
-    <!-- Card 3 -->
-    <div class="col-xl-2 col-md-6">
-        <div class="card card-animate overflow-hidden">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div class="flex-grow-1 overflow-hidden">
-                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Broj Faktura</p>
-                        <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                            <span class="counter-value" data-target="320">0</span>
-                        </h4>
-                    </div>
-                    <div class="flex-shrink-0">
-                        <canvas class="scan-chart" width="80" height="80"></canvas>
-                    </div>
-                </div>
-            </div><!-- end card body -->
-        </div><!-- end card -->
-    </div>
-    <div class="col-xl-2 col-md-6">
-        <div class="card card-animate overflow-hidden">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div class="flex-grow-1 overflow-hidden">
-                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Dostupna Skeniranja</p>
-                        <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                            <span class="counter-value" data-target="28">0</span>
-                        </h4>
-                    </div>
-                    <div class="flex-shrink-0">
-                        <canvas class="scan-chart" width="80" height="80"></canvas>
-                    </div>
-                </div>
-            </div><!-- end card body -->
-        </div><!-- end card -->
-    </div>
-
-
-    <!-- Card 4 -->
-    <div class="col-xl-2 col-md-6">
-        <div class="card card-animate overflow-hidden">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div class="flex-grow-1 overflow-hidden">
-                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Broj Dobavljača</p>
-                        <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                            <span class="counter-value" data-target="56">0</span>
-                        </h4>
-                    </div>
-                    <div class="flex-shrink-0">
-                        <canvas class="scan-chart" width="80" height="80"></canvas>
-                    </div>
-                </div>
-            </div><!-- end card body -->
-        </div><!-- end card -->
+<div class="swiper g-1 mySwiper mt-2">
+    <div class="swiper-wrapper" id="supplierCardsContainer">
+        <!-- Dynamic cards will be injected here as .swiper-slide -->
     </div>
 </div>
 
-<!-- Test div -->
+<div class="row mt-2">
+  <div class="col-12 px-1">
+    <div class="row mb-2 g-0 mx-1">
+      <!-- LEFT COLUMN -->
+      <div class="col-xl-6">
+        <div class="row g-1 mx-0">
+          <!-- 4 cards in 2 rows -->
+          <div class="col-md-6">
+             <div class="card rounded-0 h-100">
+               <div class="card-header d-flex justify-content-between">
+                <h6 class="card-title mb-0">Moji dokumenti</h6>
+                <a class="text-muted fs-6">Pogledaj sve</a>
+               </div>
+               <div class="card-body d-flex align-items-center justify-content-center">
+                 
+                       <div class="row d-flex text-center text-truncate" >  
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Document 1 </div></div>
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2 </div></div>
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
+                       </div>
+                 
+               </div>
+             </div>
+          </div>
+
+          <div class="col-md-6">
+             <div class="card rounded-0 h-100">
+               <div class="card-header d-flex justify-content-between">
+                <h6 class="card-title mb-0">Moji dokumenti</h6>
+                <a class="text-muted fs-6">Pogledaj sve</a>
+               </div>
+               <div class="card-body d-flex justify-content-center align-items-center">
+                 
+                       <div class="row d-flex text-center text-truncate ">
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2</div></div>
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
+                       </div>
+                 
+               </div>
+             </div>
+          </div>
+          <div class="col-md-6">
+             <div class="card rounded-0 h-100">
+               <div class="card-header d-flex justify-content-between">
+                <h6 class="card-title mb-0">Moji dokumenti</h6>
+                <a class="text-muted fs-6">Pogledaj sve</a>
+               </div>
+               <div class="card-body d-flex justify-content-center align-items-center">
+                 
+                       <div class="row d-flex text-center text-truncate">
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2</div></div>
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
+                       </div>
+                 
+               </div>
+             </div>
+          </div>
+          <div class="col-md-6">
+             <div class="card rounded-0 h-100">
+               <div class="card-header d-flex justify-content-between">
+                <h6 class="card-title mb-0">Moji dokumenti</h6>
+                <a class="text-muted fs-6">Pogledaj sve</a>
+               </div>
+               <div class="card-body d-flex justify-content-center align-items-center">
+                 
+                       <div class="row d-flex text-center text-truncate">
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2</div></div>
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
+                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
+                       </div>
+                 
+               </div>
+             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div class="col-xl-6 d-flex flex-column">
+        <div class="row g-1 flex-fill mx-0">
+          <div class="col-md-6 ">
+            <div class="card rounded-0 w-100 h-100 ">
+              <div class="card-header">
+                <h5 class="mb-0">Zadnje korištene tarife</h5>
+              </div>
+              <div class="card-body align-items-center text-truncate">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <div class="fw-semibold">8471.30</div>
+                        <div class="text-muted fs-12">Laptop</div>
+                  </div>
+                    <div class="text-success fs-13">
+                        18% <i class="ri-arrow-up-line ms-1"></i>
+                    </div>
+                </div>
+              
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <div class="fw-semibold">8471.30</div>
+                        <div class="text-muted fs-12">Laptop</div>
+                  </div>
+                    <div class="text-success fs-13">
+                        18% <i class="ri-arrow-up-line ms-1"></i>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <div class="fw-semibold">8471.30</div>
+                        <div class="text-muted fs-12">Laptop</div>
+                  </div>
+                    <div class="text-success fs-13">
+                        18% <i class="ri-arrow-up-line ms-1"></i>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <div class="fw-semibold">8471.30</div>
+                        <div class="text-muted fs-12">Laptop</div>                       
+                  </div>
+                    <div class="text-success fs-13">
+                        18% <i class="ri-arrow-up-line ms-1"></i>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <div class="fw-semibold">8471.30</div>
+                        <div class="text-muted fs-12">Laptop</div>                      
+                  </div>
+                    <div class="text-success fs-13">
+                        18% <i class="ri-arrow-up-line ms-1"></i>
+                    </div> 
+                </div>
+                <div class="card-footer mt-0 pt-0 pb-0 text-truncate">
+                    
+                    
+                    
+                </div>
+                
+                
+                
+                
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 d-flex">
+            <div class="card rounded-0 w-100 h-100">
+                <div class="card-header">
+                    <h5 class="mb-0">Zadnje korišteni dobavljači</h5>
+                </div>
+                <div class="card-body">
+                    <div class="suppliers-list">
+                        <!-- Dynamically populated supplier data goes here -->
+                    </div>
+                    <div class="card-footer mt-1 pt-0 pb-0 d-flex justify-content-center">
+                                
+                            </div>
+                </div>
+                    
+            </div>
+        </div>
+     </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 
 
-
-
-
-
-
-    
-
-
-     
-
-    
-
-    
-    
 
 
 
@@ -384,9 +450,75 @@
     <script src="{{ URL::asset('build/js/pages/chartjs.init.js') }}"></script>
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
-    <script src="{{ URL::asset('build/js/pages/dashboard-nft.init.js') }}"></script>
+  
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Swiper CSS -->
+
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            const user = JSON.parse(localStorage.getItem("user"));
+            const token = localStorage.getItem("auth_token");
+
+            if (!user || !token) {
+                console.warn("User or token missing in localStorage.");
+                return;
+            }
+
+            const API_URL = `/api/statistics/users/${user.id}`;
+
+            try {
+                const response = await axios.get(API_URL, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                const stats = response.data || {};
+                const suppliers = stats.suppliers || []; 
+                suppliers.push({
+                    name: "Demo Supplier",
+                    annual_profit: 123456.78
+                    }); // Fetch suppliers data from API
+
+                // Dynamically populate the suppliers section
+                const suppliersContainer = document.querySelector(".suppliers-list");
+
+                if (suppliersContainer) {
+                    suppliersContainer.innerHTML = ''; // Clear any existing content
+
+                    // Loop through each supplier and create the markup
+                    suppliers.forEach(supplier => {
+                        const supplierElement = document.createElement("div");
+                        supplierElement.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2");
+
+                        supplierElement.innerHTML = `
+                            <div>
+                                <div class="fw-semibold">${supplier.name}</div>
+                                <div class="text-muted fs-12">Venan Hadžiselimović</div> <!-- Hardcoded Owner Name -->
+                            </div>
+                            <div class="text-success fs-13">
+                                ${supplier.annual_profit.toFixed(2)} <i class="ri-arrow-up-line ms-1"></i>
+                            </div>
+                            
+                            
+                        `;
+
+                        // Append the new supplier data to the container
+                        suppliersContainer.appendChild(supplierElement);
+                    });
+                }
+            } catch (error) {
+                console.error("Error fetching supplier data:", error);
+            }
+        });
+    </script>
+
+
     
 
 
@@ -402,7 +534,7 @@
                           ctx = chart.ctx;
 
                     ctx.restore();
-                    const fontSize = (height / 8).toFixed(2);
+                    const fontSize = ((height / 8) * 2).toFixed(2);
                     ctx.font = fontSize + "px sans-serif";
                     ctx.textBaseline = "middle";
                     ctx.textAlign = "center";
@@ -416,7 +548,7 @@
                     const textX = Math.round(width / 2);
                     const textY = Math.round(height / 2);
 
-                    ctx.fillStyle = "#0dcaf0"; // Info color
+                    ctx.fillStyle = "#299cdb"; // Info color
                     ctx.fillText(text, textX, textY);
                     ctx.save();
                 }
@@ -486,38 +618,42 @@
 
         counter(); // Run the counter function
     });
+    </script>
 
-    document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".scan-chart").forEach((canvas, index) => {
-        var ctx = canvas.getContext("2d");
+    <script>
+    function renderScanCharts() {
+        document.querySelectorAll(".scan-chart").forEach((canvas) => {
+            const ctx = canvas.getContext("2d");
 
-        new Chart(ctx, {
-            type: "line",
-            data: {
-                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
-                datasets: [{
-                    data: [30, 50, 80, 40, 70, 20, 50], // Sample data
-                    backgroundColor: "#d6f0fa", // Light green background
-                    borderColor: "#299cdb", // info color
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.4 // Smooth curve
-                    
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: { display: false }, // Hide X axis
-                    y: { display: false }  // Hide Y axis
+            new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+                    datasets: [{
+                        data: [30, 50, 80, 40, 70, 20, 50],
+                        backgroundColor: "#d6f0fa",
+                        borderColor: "#299cdb",
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
                 },
-                plugins: { legend: { display: false } } // Hide legend
-            }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { display: false },
+                        y: { display: false }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
         });
-    });
-});
-</script>
+    }
+    </script>
+
 
 
 <script>
@@ -558,6 +694,35 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 </script>
 
+<script>
+document.addEventListener("DOMContentLoaded", async function () {
+    
+
+    const API_URL = `/api/statistics`;
+
+    try {
+        const response = await axios.get(API_URL, {
+            
+        });
+
+        const stats = response.data || {};
+        const fields = {
+            totalNumSup: stats.total_suppliers ?? 0,
+           
+        };
+
+        Object.entries(fields).forEach(([id, value]) => {
+            const el = document.getElementById(id);
+            if (el) el.innerText = value;
+        });
+
+    } catch (error) {
+        console.error("Error fetching statistics:", error);
+    }
+});
+</script>
+
+
 
 
 <script>
@@ -587,6 +752,148 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", async function () {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = localStorage.getItem("auth_token");
+
+    if (!user || !token) {
+        console.warn("User or token missing in localStorage.");
+        return;
+    }
+
+    const API_URL = `/api/invoices/users/${user.id}`;
+
+    try {
+        const response = await axios.get(API_URL, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        const invoices = response.data || [];
+
+        if (Array.isArray(invoices) && invoices.length > 0) {
+            const validScanTimes = invoices
+                .map(inv => parseFloat(inv.scan_time))
+                .filter(time => !isNaN(time));
+
+            const totalScanTime = validScanTimes.reduce((acc, val) => acc + val, 0);
+            const avgScanTime = validScanTimes.length > 0 ? totalScanTime / validScanTimes.length : 0;
+
+            const scanTimeEl = document.getElementById("scanTimeValue");
+            if (scanTimeEl) {
+                scanTimeEl.innerText = `${avgScanTime.toFixed(2)} sec`;
+            }
+        }
+
+    } catch (error) {
+        console.error("Error fetching average scan time:", error);
+    }
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", async function () {
+    const token = localStorage.getItem("auth_token");
+
+    if (!token) {
+        console.warn("No token found in localStorage.");
+        return;
+    }
+
+    try {
+        const response = await axios.get("/api/suppliers", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        const rawData = response.data;
+        let suppliers = Array.isArray(rawData) ? rawData : rawData.data || [];
+
+        // Fallback if less than 10
+        const defaultSuppliers = [
+            { name: "Generic Co.", address: "Sarajevo", fallback: true },
+            { name: "Example Inc.", address: "Mostar", fallback: true },
+            { name: "Placeholder Ltd.", address: "Tuzla", fallback: true },
+            { name: "Test Supplier", address: "Zenica", fallback: true },
+            { name: "Demo Group", address: "Bihać", fallback: true },
+            { name: "ACME Corp", address: "Travnik", fallback: true }
+        ];
+
+        if (suppliers.length < 10) {
+            suppliers = suppliers.concat(defaultSuppliers.slice(0, 10 - suppliers.length));
+        } else {
+            suppliers = suppliers.slice(-10);
+        }
+
+        const container = document.getElementById("supplierCardsContainer");
+
+        suppliers.forEach(supplier => {
+            const slide = document.createElement("div");
+            slide.className = "swiper-slide";
+
+            slide.innerHTML = `
+                <div class="card rounded-0 card-animate overflow-hidden">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 overflow-hidden">
+                                 
+                                <p class="text-uppercase fw-medium text-muted text-truncate mb-3">${supplier.name}
+                                <div class="flex-shrink-0 d-flex align-items-center ml-2">
+                                     <img id="user-avatar" src="{{ URL::asset('build/images/users/orbico.png') }}" class="rounded-circle shadow-sm mb-1" width="40" height="40" alt="Korisnički avatar">
+                                 </div></p>
+                                 
+                                <h4 class="fs-10 fw-semibold ff-secondary mb-0 text-truncate">
+                                    <i class="ri-map-pin-line text-info me-1"></i>${supplier.address}
+                                </h4>
+                            </div>
+                            <div class="flex-shrink-0 d-flex align-items-center">
+                                <canvas class="scan-chart" width="80" height="80"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            container.appendChild(slide);
+        });
+
+        // Re-initialize scan charts
+        renderScanCharts();
+
+        // Initialize Swiper after DOM is populated
+        const swiper = new Swiper(".mySwiper", {
+            slidesPerView: 6,
+            spaceBetween: 4,
+            autoplay: {
+                delay: 2000, // Slide every 3 seconds
+                disableOnInteraction: false // Keeps autoplay running after manual slide
+            },
+            loop: true,
+        
+            
+            navigation: false,
+            breakpoints: {
+                768: { slidesPerView: 2 },
+                992: { slidesPerView: 4 },
+                1200: { slidesPerView: 6 }
+            }
+        });
+
+      
+    } catch (error) {
+        console.error("Error fetching suppliers:", error);
+    }
+});
+</script>
+
+
+
+
 
 
 
