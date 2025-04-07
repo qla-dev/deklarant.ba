@@ -460,63 +460,70 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", async function () {
-            const user = JSON.parse(localStorage.getItem("user"));
-            const token = localStorage.getItem("auth_token");
-
-            if (!user || !token) {
-                console.warn("User or token missing in localStorage.");
-                return;
-            }
-
-            const API_URL = `/api/statistics/users/${user.id}`;
-
-            try {
-                const response = await axios.get(API_URL, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-
-                const stats = response.data || {};
-                const suppliers = stats.suppliers || []; 
-                suppliers.push({
-                    name: "Demo Supplier",
-                    annual_profit: 123456.78
-                    }); // Fetch suppliers data from API
-
-                // Dynamically populate the suppliers section
-                const suppliersContainer = document.querySelector(".suppliers-list");
-
-                if (suppliersContainer) {
-                    suppliersContainer.innerHTML = ''; // Clear any existing content
-
-                    // Loop through each supplier and create the markup
-                    suppliers.forEach(supplier => {
-                        const supplierElement = document.createElement("div");
-                        supplierElement.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2");
-
-                        supplierElement.innerHTML = `
-                            <div>
-                                <div class="fw-semibold">${supplier.name}</div>
-                                <div class="text-muted fs-12">Venan Hadžiselimović</div> <!-- Hardcoded Owner Name -->
-                            </div>
-                            <div class="text-success fs-13">
-                                ${supplier.annual_profit.toFixed(2)} <i class="ri-arrow-up-line ms-1"></i>
-                            </div>
-                            
-                            
-                        `;
-
-                        // Append the new supplier data to the container
-                        suppliersContainer.appendChild(supplierElement);
-                    });
+    document.addEventListener("DOMContentLoaded", async function () {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const token = localStorage.getItem("auth_token");
+    
+        if (!user || !token) {
+            console.warn("User or token missing in localStorage.");
+            return;
+        }
+    
+        const API_URL = `/api/statistics/users/${user.id}`;
+    
+        try {
+            const response = await axios.get(API_URL, {
+                headers: {
+                    Authorization: `Bearer ${token}`
                 }
-            } catch (error) {
-                console.error("Error fetching supplier data:", error);
+            });
+        
+            const stats = response.data || {};
+            console.log("Fetched stats:", stats);
+        
+            const suppliers = stats.supplier_profit_changes || [];
+        
+            // Optional: add a manual supplier (for testing)
+            suppliers.push({
+                name: "Demo Supplier",
+                owner: "Venan Hadžiselimović",
+                percentage_change: 85.6
+            });
+        
+            const suppliersContainer = document.querySelector(".suppliers-list");
+        
+            if (suppliersContainer) {
+                suppliersContainer.innerHTML = ''; // Clear existing content
+            
+                suppliers.forEach(supplier => {
+                    console.log("Rendering supplier:", supplier);
+                
+                    const isPositive = supplier.percentage_change >= 0;
+                    const growthClass = isPositive ? "text-success" : "text-danger";
+                    const arrowIcon = isPositive ? "ri-arrow-up-line" : "ri-arrow-down-line";
+                
+                    const supplierElement = document.createElement("div");
+                    supplierElement.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2");
+                
+                    supplierElement.innerHTML = `
+                        <div>
+                            <div class="fw-semibold">${supplier.name}</div>
+                            <div class="text-muted fs-12">${supplier.owner ?? 'Nepoznat vlasnik'}</div>
+                        </div>
+                        <div class="${growthClass} fs-13">
+                            ${supplier.percentage_change.toFixed(1)}% <i class="${arrowIcon} ms-1"></i>
+                        </div>
+                    `;
+                
+                    suppliersContainer.appendChild(supplierElement);
+                });
             }
-        });
-    </script>
+        } catch (error) {
+            console.error("Error fetching supplier data:", error);
+        }
+    });
+</script>
+
 
 
     
@@ -699,9 +706,18 @@ document.addEventListener("DOMContentLoaded", async function () {
     
 
     const API_URL = `/api/statistics`;
+    const token = localStorage.getItem("auth_token");
+
+    if (!token) {
+        console.warn("No token found in localStorage.");
+        return;
+    }
 
     try {
         const response = await axios.get(API_URL, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
             
         });
 
