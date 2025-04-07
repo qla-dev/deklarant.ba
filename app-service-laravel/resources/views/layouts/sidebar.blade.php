@@ -884,8 +884,8 @@
             </ul>
             
             <div class="col-sm-2 ms-5 me-0 mt-1 d-flex  align-items-center">
-                    <a href="scan-page-url" style="width: 208px; height:31px;" class="btn btn-info btn-sm  text-white  py-0 d-flex align-items-center justify-content-center ">
-                    <i class="ri-qr-scan-2-line fs-6 me-1"></i>  Pokreni skeniranje </i> 
+                    <a href="pages-scan" style="width: 208px; height:31px;" class="btn btn-info btn-sm  text-white  py-0 d-flex align-items-center justify-content-center ">
+                    <i class="ri-ai-generate-2 fs-5 me-1"></i>  Skeniraj s AI </i> 
                     </a>
                 </div>
         

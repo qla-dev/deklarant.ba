@@ -8,6 +8,8 @@
     <link href="{{ URL::asset('build/libs/jsvectormap/jsvectormap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
     <style>
         .mySwiper .swiper-slide {
              margin-right: 3px; /* This is equivalent to Bootstrap's g-1 gap */
@@ -96,10 +98,10 @@
                     <div class="card-footer bg-transparent border-0 w-100">
                         <div class="d-flex justify-content-center gap-2 w-100">
                             <a href="pages-pricing" class="btn btn-info text-white w-50 btn-sm">
-                                <i class="ri-arrow-up-circle-line fs-14 me-1"></i> Nadogradite paket
+                                <i class="ri-arrow-up-circle-line fs-5 me-1"></i> Nadogradite paket
                             </a>
-                            <a href="pages-scan" class="btn btn-info w-50 animated-btn btn-sm">
-                                <i class="ri-qr-scan-2-line fs-14 me-1"></i> Pokreni skeniranje
+                            <a href="pages-scan" class="btn btn-info w-50 animated-btn btn-sm ">
+                                <i class="ri-ai-generate-2 me-1 fs-5" style="font-size:10px;"></i> Skeniraj s AI
                             </a>
                         </div>
                     </div>
@@ -415,10 +417,11 @@
                     <div class="suppliers-list">
                         <!-- Dynamically populated supplier data goes here -->
                     </div>
+                    <div class="card-footer mt-1 pt-0 pb-0 d-flex justify-content-center">
+                                
+                            </div>
                 </div>
-                    <div class="card-footer mt-1 pt-0 pb-0 d-flex align-items-center">
-                        <!-- Any footer content if needed -->
-                    </div>
+                    
             </div>
         </div>
      </div>
@@ -476,7 +479,11 @@
                 });
 
                 const stats = response.data || {};
-                const suppliers = stats.suppliers || [];  // Fetch suppliers data from API
+                const suppliers = stats.suppliers || []; 
+                suppliers.push({
+                    name: "Demo Supplier",
+                    annual_profit: 123456.78
+                    }); // Fetch suppliers data from API
 
                 // Dynamically populate the suppliers section
                 const suppliersContainer = document.querySelector(".suppliers-list");
@@ -497,6 +504,8 @@
                             <div class="text-success fs-13">
                                 ${supplier.annual_profit.toFixed(2)} <i class="ri-arrow-up-line ms-1"></i>
                             </div>
+                            
+                            
                         `;
 
                         // Append the new supplier data to the container
