@@ -31,6 +31,8 @@ Route::apiResource('tariff-rates', TariffRateController::class);
 
 // Protected Routes (Require Authentication)
 Route::middleware('auth:sanctum')->group(function () {
+
+    // INVOICE ROUTES
     Route::prefix('invoices')->group(function () {
         Route::get('/', [InvoiceController::class, 'index']); // Get all invoices
         Route::get('/{id}', [InvoiceController::class, 'show']); // Get invoice by invoice ID
@@ -41,6 +43,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/{invoiceId}', [InvoiceController::class, 'update']);
         Route::delete('/{invoiceId}', [InvoiceController::class, 'destroy']);
     });
+
+    Route::get('/invoice-info/{invoiceId}', [InvoiceController::class, 'getInvoiceInfoById']);
     
 
     // INVOICE ITEM ROUTES
@@ -95,6 +99,8 @@ Route::prefix('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
     Route::get('/my-token', [AuthController::class, 'myToken']);
 });
+
+
 
 
 

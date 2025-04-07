@@ -74,43 +74,41 @@ class StatsController extends Controller
 
         $remainingScans = max($totalScans - $usedScans, 0);
 
-        $topSuppliers = Supplier::select('suppliers.id', 'suppliers.name')
+        $topSuppliers = Supplier::select('suppliers.id', 'suppliers.name', 'suppliers.owner')
             ->join('invoices', 'suppliers.id', '=', 'invoices.supplier_id')
             ->where('invoices.user_id', $user->id)
-            ->groupBy('suppliers.id', 'suppliers.name')
+            ->groupBy('suppliers.id', 'suppliers.name', 'suppliers.owner')
             ->get()
             ->map(function ($supplier) {
                 $fullSupplier = Supplier::find($supplier->id);
                 return [
                     'id' => $supplier->id,
                     'name' => $supplier->name,
+                    'owner' => $supplier->owner,
                     'annual_profit' => $fullSupplier ? $fullSupplier->getAnnualProfitAvg() : 0
                 ];
             })
             ->sortByDesc('annual_profit')
-            ->take(5)
             ->values();
 
-        $latestSuppliers = Supplier::select('suppliers.id', 'suppliers.name', 'invoices.created_at')
-            ->join('invoices', 'suppliers.id', '=', 'invoices.supplier_id')
-            ->where('invoices.user_id', $user->id)
-            ->orderByDesc('invoices.created_at')
-            ->groupBy('suppliers.id', 'suppliers.name', 'invoices.created_at')
-            ->get()
-            ->map(function ($supplier) {
-                $fullSupplier = Supplier::find($supplier->id);
-                return [
-                    'id' => $supplier->id,
-                    'name' => $supplier->name,
-                    'latest_invoice_date' => $supplier->created_at,
-                ];
+        $latestSuppliers = Supplier::select('suppliers.id', 'suppliers.name', 'suppliers.owner')
+            ->selectSub(function ($query) use ($user) {
+                $query->from('invoices')
+                    ->whereColumn('supplier_id', 'suppliers.id')
+                    ->where('user_id', $user->id)
+                    ->selectRaw('MAX(created_at)');
+            }, 'latest_invoice_date')
+            ->whereIn('id', function ($query) use ($user) {
+                $query->select('supplier_id')
+                        ->from('invoices')
+                        ->where('user_id', $user->id);
             })
-            ->take(5)
-            ->values();
+            ->orderByDesc('latest_invoice_date')
+            ->get();
+            
 
         $itemCodes = Invoice::where('user_id', $user->id)
             ->orderByDesc('created_at')
-            ->take(5)
             ->with('items')
             ->get()
             ->flatMap(fn($invoice) => $invoice->items->pluck('item_code'))
@@ -136,9 +134,6 @@ class StatsController extends Controller
             })
             ->values();
         
-        
-        
-        
 
         // ✅ Supplier profit change section
         $supplierProfitChanges = Supplier::whereIn('id', function ($query) use ($user) {
@@ -148,9 +143,10 @@ class StatsController extends Controller
             return [
                 'supplier_id' => $supplier->id,
                 'name' => $supplier->name,
+                'owner' => $supplier->owner,
                 'last_year_profit' => $supplier->getLastYearProfit(),
                 'current_year_profit' => $supplier->getCurrentYearProfit(),
-                'percentage_change' => round($supplier->getProfitPercentageChange(), 2),
+                'percentage_change' => round($supplier->getProfitPercentageChange(), 2)."%",
             ];
         });
 

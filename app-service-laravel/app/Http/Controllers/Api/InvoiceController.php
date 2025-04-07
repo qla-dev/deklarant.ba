@@ -158,4 +158,27 @@ class InvoiceController extends Controller
     }
 }
 
+    public function getInvoiceInfoById($id)
+{
+    $invoice = Invoice::find($id);
+
+    if (!$invoice) {
+        return response()->json(['error' => 'Invoice not found'], 404);
+    }
+
+    $supplier = Supplier::find($invoice->supplier_id);
+
+    return response()->json([
+        'file_name' => $invoice->file_name,
+        'total_price' => $invoice->total_price,
+        'supplier_id' => $invoice->supplier_id,
+        'supplier_name' => $supplier->name ?? null,
+        'supplier_avatar' => $supplier->avatar ?? null,
+        'owner' => $supplier->owner ?? null, // Make sure this column exists in the DB
+        'user_id' => $invoice->user_id,
+    ]);
+}
+
+
+
 }
