@@ -104,24 +104,15 @@
         form.addEventListener("submit", async function (e) {
             e.preventDefault();
 
-            const formData = new FormData(form);
             const avatarFile = avatarInput.files[0];
-            const macAddress = '11:22:33:44:55'; // optional: make this dynamic later
+            const macAddress = '11:22:33:44:55'; // optional: dynamic later
 
             try {
-                // Step 1: Upload avatar to /api/storage/uploads
-                const avatarUploadForm = new FormData();
-                avatarUploadForm.append("file", avatarFile);
-                avatarUploadForm.append("folder", "avatars");
+                // Step 1: Prepare formData and remove file input from submission
+                const formData = new FormData(form);
+                formData.delete("avatar"); // Remove file to avoid validation error
 
-                const uploadResponse = await axios.post("/api/storage/uploads", avatarUploadForm, {
-                    headers: { "Content-Type": "multipart/form-data" }
-                });
-
-                const avatarFilename = uploadResponse.data.stored_as;
-                formData.set("avatar", avatarFilename); // overwrite file field with stored name
-
-                // Step 2: Register user with uploaded avatar filename
+                // Step 2: Register the user (without avatar)
                 const registerResponse = await axios.post("/api/auth/register", formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
@@ -131,24 +122,44 @@
 
                 const { token, user, message } = registerResponse.data;
 
-                // Step 3: Save auth data
+                // Step 3: Save auth token & user
                 localStorage.setItem("auth_token", token);
                 localStorage.setItem("user", JSON.stringify(user));
-
-                // Step 4: Set default auth header for future Axios requests
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-                // Step 5: Redirect to homepage (or dashboard)
+                // Step 4: Upload avatar (if provided)
+                if (avatarFile) {
+                    const avatarUploadForm = new FormData();
+                    avatarUploadForm.append("file", avatarFile);
+                    avatarUploadForm.append("folder", "avatars");
+
+                    const uploadResponse = await axios.post("/api/storage/uploads", avatarUploadForm, {
+                        headers: {
+                            "Content-Type": "multipart/form-data"
+                        }
+                    });
+
+                    const avatarFilename = uploadResponse.data.stored_as;
+
+                    // Step 5: Update user with avatar filename via PUT
+                    await axios.put(`/api/users/${user.id}`, {
+                        avatar: avatarFilename
+                    });
+                    user.avatar = avatarFilename;
+                    localStorage.setItem("user", JSON.stringify(user));
+                }
+
+                // Step 6: Notify and redirect
                 alert(message || "Registration successful!");
                 window.location.href = "/";
-
             } catch (error) {
-                console.error(error);
-                const msg = error.response?.data?.message || error.response?.data?.error || "Registration failed.";
+                console.error("Registration failed:", error);
+                const msg = error.response?.data?.message || "Registration failed.";
                 alert(msg);
             }
         });
     });
 </script>
+
 
 @endsection
