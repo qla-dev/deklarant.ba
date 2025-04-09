@@ -49,7 +49,7 @@
     </div>
 
     <!-- Main Content -->
-    <div class="row">
+  <div class="row">
         <div class="col-lg-12">
 
             <!-- Navigation Tabs -->
@@ -281,7 +281,7 @@
 
                     </div>
                 </div>
-
+                <!-- Moje fakture tab (activities) -->
                 <div class="tab-pane fade" id="activities">
                     <div class="table-responsive">
                         <table id="invoicesTable" class="table align-middle mb-0 w-100">
@@ -302,6 +302,237 @@
                         </table>
                     </div>
                 </div>
+                <!-- Paketi(Pricing) -->
+                <div class=" tab-pane fade d-flex justify-content-center mt-0 " id="projects">
+                    <div class="col-xl-9">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="card pricing-box border-0 rounded-0">
+                                    <div class="card-body p-4 m-2">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1">
+                                                <h5 class="mb-1 fw-semibold">StartUp</h5>
+                                                <p class="text-muted mb-0">Za manja preduzeća</p>
+                                            </div>
+                                            <div class="avatar-sm">
+                                                <div class="avatar-title bg-light rounded-circle text-primary">
+                                                    <i class="ri-star-s-fill text-info fs-5"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pt-4">
+                                            <h2>500  <small class="fs-5">KM</small><span class="fs-6 text-muted">/Mjesec</span></h2>
+                                        </div>
+                                        <hr class="my-4 text-muted">
+                                        <div>
+                                            <ul class="list-unstyled text-muted vstack gap-3">
+                                                <li>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="flex-shrink-0 text-info me-1">
+                                                            <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                            <b>100</b> Skeniranja
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="flex-shrink-0 text-info me-1">
+                                                            <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                             Prosječna brzina skeniranja:  <b> 20 s </b>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="flex-shrink-0 text-info me-1">
+                                                            <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                            30 dana
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                               
+                                                <li>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="flex-shrink-0 text-info me-1">
+                                                            <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                            <b>24/7</b> Support
+                                                        </div>
+                                                    </div>
+                                                    <hr class="my-4 text-muted">
+                                                </li>
+                                                
+                                                
+                                                
+                                            </ul>
+                                            <div class="mt-4">
+                                                <a href="javascript:void(0);" class="btn btn-soft-info w-100 mt-2 text-white">Započni </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!--end col-->
+                            <div class="col-lg-4">
+                                <div class="card pricing-box border-0 rounded-0 ribbon-box right border-0 rounded-0 ">
+                                    <div class="card-body p-4 m-2">
+                                        <div class="ribbon-two ribbon-two-info"><span>Popularno</span></div>
+                                        <div>
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-grow-1">
+                                                    <h5 class="mb-1 fw-semibold">GoBig</h5>
+                                                    <p class="text-muted mb-0">Idealno za biznise u razvoju</p>
+                                                </div>
+                                                <div class="avatar-sm">
+                                                    <div class="avatar-title bg-light rounded-circle text-primary">
+                                                        <i class="ri-medal-line text-info fs-3 bu"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="pt-4">
+                                             <h2>850  <small class="fs-5">KM</small><span class="fs-6 text-muted">/Mjesec</span></h2>
+                                            </div>
+                                        </div>
+                                        <hr class="my-4 text-muted">
+                                        <div>
+                                            <ul class="list-unstyled vstack gap-3 text-muted">
+                                                <li>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="flex-shrink-0 text-info me-1">
+                                                            <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                             <b>200</b> Skeniranja
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="flex-shrink-0 text-info me-1">
+                                                            <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                            Prosječna brzina skeniranja:  <b> 10 s </b>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="flex-shrink-0 text-info me-1">
+                                                            <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                          120 dana
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                
+                                                <li>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="flex-shrink-0 text-info me-1">
+                                                            <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                            <b>24/7</b> Support
+                                                        </div>
+                                                    </div>
+                                                    <hr class="my-4 text-muted">
+                                                </li>
+                                                
+                                                
+                                            </ul>
+                                            <div class="mt-4">
+                                                <a href="javascript:void(0);" class="btn btn-soft-info w-100 mt-2 text-white">Započni </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!--end col-->
+                            <div class="col-lg-4">
+                                <div class="card pricing-box border-0 rounded-0">
+                                    <div class="card-body p-4 m-2">
+                                        <div>
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-grow-1">
+                                                    <h5 class="mb-1 fw-semibold">Business</h5>
+                                                    <p class="text-muted mb-0">Dodatne mogućnosti za velike biznise</p>
+                                                </div>
+                                                <div class="avatar-sm">
+                                                    <div class="avatar-title bg-light rounded-circle text-primary">
+                                                        <i class="ri-shield-star-line text-info fs-2 "></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="pt-4">
+                                             <h2 class="text-dark">2000 <small class="fs-5">KM</small><span class="fs-6 text-muted">/Mjesec</span></h2>
+                                            </div>
+                                        </div>
+                                        <hr class="my-4 text-muted">
+                                        <div>
+                                            <ul class="list-unstyled vstack gap-3 text-muted">
+                                                <li>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="flex-shrink-0 text-info me-1">
+                                                            <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                            <b>500</b> Skeniranja
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="flex-shrink-0 text-info me-1">
+                                                            <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                             Prosječna brzina skeniranja:  <b> 4 s </b>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="flex-shrink-0 text-info me-1">
+                                                            <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                           365 dana
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                
+                                                <li>
+                                                    <div class="d-flex  align-items-center">
+                                                        <div class="flex-shrink-0 text-info me-1">
+                                                            <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                            <b>24/7</b> Support
+                                                        </div>
+                                                    </div>
+                                                    <hr class="my-4 text-muted">
+                                                </li>
+                                              
+                                                
+                                            </ul>
+                                            <div class="mt-4">
+                                                <a href="javascript:void(0);" class="btn btn-soft-info w-100 mt-2 text-white">Započni </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!--end col-->
+                        </div><!--end row-->
+                    </div><!--end col-->
+                </div><!--end row-->
 
 
             </div>
