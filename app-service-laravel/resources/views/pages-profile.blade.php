@@ -4,6 +4,7 @@
 @endsection
 @section('css')
     <link rel="stylesheet" href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
 @endsection
 @section('content')
 
@@ -281,54 +282,27 @@
                     </div>
                 </div>
 
-                <div class="tab-pane fade " id="activities">
+                <div class="tab-pane fade" id="activities">
                     <div class="table-responsive">
-                        <table class="table align-middle mb-0">
+                        <table id="invoicesTable" class="table align-middle mb-0 w-100">
                             <thead class="table-light">
                                 <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Moje fakture</th>
-                                    <th scope="col">Dobavljači</th>
-                                    <th scope="col">Tip</th>
-                                    <th scope="col">Mogućnosti</th>
+                                    <th>#</th>
+                                    <th>Moje fakture</th>
+                                    <th>Zemlja porijekla</th>
+                                    <th>Tip</th>
+                                    <th>Cijena</th>
+                                    <th>Datum</th>
+                                    <th>Skenirana</th>
                                 </tr>
                             </thead>
                             <tbody class="table-info">
-                                <tr>
-                                    <td>1</td>
-                                    <td class="fw-semibold">Ugovor_o_saradnji.pdf</td>
-                                    <td>
-                                        <img src="{{ URL::asset('build/images/users/orbico.png') }}" class="avatar-xs rounded-circle me-2">
-                                        ORBICO
-                                    </td>
-                                    <td><span class="badge bg bg-info">PDF</span></td>
-                                    <td><a href="#" class="link-primary">View</a></td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td class="fw-semibold">Cjenovnik.xlsx</td>
-                                    <td>
-                                        <img src="{{ URL::asset('build/images/users/hifa.png') }}" class="avatar-xs rounded-circle me-2">
-                                        HIFA
-                                    </td>
-                                    <td><span class="badge bg-success">Excel</span></td>
-                                    <td><a href="#" class="link-primary">View</a></td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td class="fw-semibold">Ponuda_Samsung.jpg</td>
-                                    <td>
-                                        <img src="{{ URL::asset('build/images/users/samsung.png') }}" class="avatar-xs rounded-circle me-2">
-                                        Samsung
-                                    </td>
-                                    <td><span class="badge bg-warning">Image</span></td>
-                                    <td><a href="#" class="link-primary">View</a></td>
-                                </tr>
+                                <!-- AJAX content goes here -->
                             </tbody>
                         </table>
                     </div>
-
                 </div>
+
 
             </div>
 
@@ -344,6 +318,9 @@
     <script src="{{ URL::asset('build/js/pages/profile.init.js') }}"></script>
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const avatarImg = document.getElementById('user-avatar');
@@ -386,4 +363,82 @@
         });
 
     </script>
+    <!-- jQuery (MUST be before DataTables) -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<!-- DataTables Core + Bootstrap 5 -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+<!-- Axios -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<!-- DataTable Initialization -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const token = localStorage.getItem("auth_token");
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (!token || !user) {
+        alert("Niste prijavljeni.");
+        return;
+    }
+
+    $('#invoicesTable').DataTable({
+        ajax: {
+            url: `/api/invoices/users/${user.id}`,
+            dataSrc: "",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", `Bearer ${token}`);
+            }
+        },
+        columns: [
+            {
+                data: 'id',
+                render: function (data, type, row, meta) {
+                    return meta.row + 1;
+                }
+            },
+            {
+                data: 'file_name',
+                render: function (data) {
+                    return `<span class="fw-semibold">${data}</span>`;
+                }
+            },
+            { data: 'country_of_origin' },
+            {
+                data: 'file_name',
+                render: function (data) {
+                    const ext = data.split('.').pop().toLowerCase();
+                    let badgeClass = 'bg-info';
+                    if (ext === 'pdf') badgeClass = 'bg-danger';
+                    else if (['xls', 'xlsx'].includes(ext)) badgeClass = 'bg-success';
+                    else if (['jpg', 'jpeg', 'png'].includes(ext)) badgeClass = 'bg-warning';
+                    return `<span class="badge ${badgeClass} text-uppercase">${ext}</span>`;
+                }
+            },
+            { data: 'total_price' },
+            {
+                data: 'date_of_issue',
+                render: function (data) {
+                    return new Date(data).toLocaleDateString('bs-BA');
+                }
+            },
+            {
+                data: 'scanned',
+                render: function (data) {
+                    return data === 1 ? 'Da' : 'Ne';
+                }
+            }
+        ],
+        language: {
+            url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/hr.json"
+        },
+        order: [[0, 'asc']]
+    });
+});
+</script>
+
+
+
 @endsection
