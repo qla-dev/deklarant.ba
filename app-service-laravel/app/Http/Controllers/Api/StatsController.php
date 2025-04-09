@@ -52,6 +52,14 @@ class StatsController extends Controller
 {
     try {
         $user = User::findOrFail($id);
+        // Fetch all invoices for the given user
+        $invoices = Invoice::where('user_id', $id)->get();
+
+        // Extract unique supplier IDs from invoices
+        $supplierIds = $invoices->pluck('supplier_id')->unique();
+
+        // Fetch suppliers by their IDs
+        $suppliers = Supplier::whereIn('id', $supplierIds)->get(['id', 'name', 'owner', 'avatar']);
 
         $supplierCount = Supplier::whereIn('id', function ($query) use ($user) {
             $query->select('supplier_id')->from('invoices')->where('user_id', $user->id);
@@ -153,6 +161,7 @@ class StatsController extends Controller
         return response()->json([
             'user_id' => $user->id,
             'total_suppliers' => $supplierCount,
+            'suppliers' => $suppliers,
             'total_invoices' => $invoiceCount,
             'invoices_by_country' => $invoicesByCountry,
             'used_scans' => $usedScans,
