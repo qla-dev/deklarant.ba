@@ -1,61 +1,43 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Customs Declaration Processing API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This Laravel API processes customs declaration documents (PDF/XLSX) through a multi-step pipeline to extract and enrich item data.
 
-## About Laravel
+## Architecture Overview
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Core Components
+1. **File Upload Endpoint** - Accepts document uploads and initiates processing
+2. **Task Processing Pipeline** - Background jobs that handle each processing step
+3. **Status Tracking** - Allows users/admins to monitor task progress
+4. **Admin Dashboard** - Horizon-based queue monitoring
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Processing Flow
+1. **Upload** - User submits document via API
+2. **Conversion** - Document converted to markdown via Marker service
+3. **Extraction** - LLM (Ollama) extracts structured item data from markdown
+4. **Enrichment** - Search API matches items with known codes
+5. **Completion** - Final enriched data stored and available via API
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Technical Stack
+- Laravel 12 (API-only)
+- Redis for queue management
+- Optional: Horizon for queue monitoring (requires pcntl extension)
+- External services:
+  - Marker (document conversion)
+  - Ollama (LLM processing)
+  - Custom search API
 
-## Learning Laravel
+## Configuration
+Set these environment variables:
+- `MARKER_URL=http://localhost:9123`
+- `OLLAMA_URL=http://localhost:5000`
+- `OLLAMA_MODEL=qwen2.5-coder:32b-instruct-q3_K_L`
+- `SEARCH_API_URL=http://localhost:9124/search-api`
+- `QUEUE_CONNECTION=redis`
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## API Endpoints
+- `POST /api/upload` - Submit document for processing
+- `GET /api/tasks/{id}` - Check task status
+- `GET /api/tasks/{id}/result` - Get processing results
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development/)**
-- **[Active Logic](https://activelogic.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Admin Interface
+Access Horizon dashboard at `/horizon` to monitor queues and jobs.

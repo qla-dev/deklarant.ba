@@ -1,0 +1,57 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Models\Task;
+use App\Jobs\ProcessUploadedFile;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
+class UploadController extends Controller
+{
+    public function store(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:pdf,xlsx|max:10240'
+        ]);
+
+        $file = $request->file('file');
+        $path = $file->store('uploads');
+
+        $task = Task::create([
+            'original_filename' => $file->getClientOriginalName(),
+            'file_path' => $path,
+            'user_id' => null
+        ]);
+
+        // Dispatch processing job
+        ProcessUploadedFile::dispatch($task);
+
+        return response()->json([
+            'message' => 'File uploaded successfully',
+            'task_id' => $task->id
+        ], 201);
+    }
+
+    public function show(Task $task)
+    {
+        return response()->json([
+            'status' => $task->status,
+            'processing_steps' => $task->processing_steps,
+            'created_at' => $task->created_at,
+            'updated_at' => $task->updated_at
+        ]);
+    }
+
+    public function result(Task $task)
+    {
+        if ($task->status !== Task::STATUS_COMPLETED) {
+            return response()->json([
+                'message' => 'Task not completed yet'
+            ], 400);
+        }
+
+        return response()->json($task->result);
+    }
+}
