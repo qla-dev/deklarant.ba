@@ -40,11 +40,11 @@ class FullFlowIntegrationTest extends TestCase
             ->assertJsonStructure([
                 'items' => [
                     '*' => [
-                        'description',
+                        'item_name',
+                        'original_name',
                         'quantity',
-                        'value',
-                        'origin_country',
-                        'hs_code'
+                        'unit_price',
+                        'currency'
                     ]
                 ]
             ]);
@@ -78,11 +78,11 @@ class FullFlowIntegrationTest extends TestCase
             ->assertJsonStructure([
                 'items' => [
                     '*' => [
-                        'description',
+                        'item_name',
+                        'original_name',
                         'quantity',
-                        'value',
-                        'origin_country',
-                        'hs_code'
+                        'unit_price',
+                        'currency'
                     ]
                 ]
             ]);
