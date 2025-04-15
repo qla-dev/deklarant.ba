@@ -51,27 +51,47 @@ class ProcessUploadedFile implements ShouldQueue
         $client = $client ?? new Client();
         $fileContent = Storage::get($this->task->file_path);
 
-        $response = $client->post(env('MARKER_URL').'/convert', [
+        $response = $client->post(env('MARKER_URL') . '/marker/upload', [
             'multipart' => [
                 [
                     'name' => 'file',
                     'contents' => $fileContent,
                     'filename' => $this->task->original_filename
+                ],
+                [
+                    'name' => 'output_format',
+                    'contents' => 'markdown'
+                ],
+                [
+                    'name' => 'force_ocr',
+                    'contents' => 'false'
+                ],
+                [
+                    'name' => 'paginate_output',
+                    'contents' => 'false'
                 ]
             ]
         ]);
 
-        return $response->getBody()->getContents();
+        $responseData = json_decode($response->getBody()->getContents(), true);
+        return $responseData['output'];
     }
 
     private function extractWithLLM(string $markdown, Client $client = null): array
     {
         $client = $client ?? new Client();
-        
-        $response = $client->post(env('OLLAMA_URL').'/api/generate', [
+
+        $response = $client->post(env('OLLAMA_URL') . '/api/generate', [
             'json' => [
                 'model' => env('OLLAMA_MODEL'),
-                'prompt' => "Convert this customs declaration to JSON format with fields: item_name, original_name, quantity, unit_price, currency. Here's the markdown:\n\n$markdown",
+                'prompt' => "Convert this customs declaration to JSON format. " .
+                    "It should have \"items\" key that contains array. Each object in that array has fields: " .
+                    "item_name (human-readable name), " .
+                    "original_name (including any relevant codes etc.), " .
+                    "quantity, " .
+                    "unit_price, " .
+                    "currency. " .
+                    "Here's the markdown:\n\n$markdown",
                 'format' => 'json',
                 'stream' => false
             ]
@@ -79,12 +99,14 @@ class ProcessUploadedFile implements ShouldQueue
 
         $responseData = json_decode($response->getBody()->getContents(), true);
         $parsedResponse = json_decode($responseData['response'] ?? '', true);
-        
+
         return $parsedResponse['items'] ?? [];
     }
 
     private function enrichWithSearchAPI(array $items, Client $client = null): array
     {
+        // TODO: Finish later
+        // return $items;
         $client = $client ?? new Client();
         $enriched = [];
 

@@ -21,13 +21,14 @@ class ProcessUploadedFileTest extends TestCase
         Storage::disk('local')->put('uploads/test.pdf', 'test content');
 
         $task = Task::factory()->create([
-            'file_path' => 'uploads/test.pdf'
+            'file_path' => 'uploads/test.pdf',
+            'original_filename' => 'test.pdf'
         ]);
 
         // Mock HTTP responses
         $mock = new MockHandler([
-            // Marker response
-            new Response(200, [], '# Markdown content'),
+            // Marker response (multipart form data)
+            new Response(200, [], json_encode($this->generateFakeMarkerResponse('# Markdown content'))),
             // Ollama response
             new Response(200, [], json_encode([
                 'response' => json_encode([
@@ -54,12 +55,12 @@ class ProcessUploadedFileTest extends TestCase
         $job->handle($client);
 
         $task->refresh();
-            $this->assertEquals(Task::STATUS_COMPLETED, $task->status);
-            $this->assertArrayHasKey('items', $task->result);
-            $this->assertIsArray($task->result['items']);
-            $this->assertCount(1, $task->result['items']);
-            $this->assertEquals('Test Item', $task->result['items'][0]['item_name']);
-            $this->assertArrayHasKey('detected_codes', $task->result['items'][0]);
+        $this->assertEquals(Task::STATUS_COMPLETED, $task->status);
+        $this->assertArrayHasKey('items', $task->result);
+        $this->assertIsArray($task->result['items']);
+        $this->assertCount(1, $task->result['items']);
+        $this->assertEquals('Test Item', $task->result['items'][0]['item_name']);
+        $this->assertArrayHasKey('detected_codes', $task->result['items'][0]);
     }
 
     public function test_marker_failure()
@@ -68,23 +69,27 @@ class ProcessUploadedFileTest extends TestCase
         Storage::disk('local')->put('uploads/test.pdf', 'test content');
 
         $task = Task::factory()->create([
-            'file_path' => 'uploads/test.pdf'
+            'file_path' => 'uploads/test.pdf',
+            'original_filename' => 'test.pdf'
         ]);
 
         $mock = new MockHandler([
-            new Response(500)
+            new Response(500, [], json_encode([
+                'success' => false,
+                'error' => 'Marker service error'
+            ]))
         ]);
 
         $client = new \GuzzleHttp\Client(['handler' => HandlerStack::create($mock)]);
         $job = new ProcessUploadedFile($task);
-        
+
         try {
             $job->handle($client);
             $this->fail('Expected exception was not thrown');
         } catch (\Exception $e) {
             $task->refresh();
             $this->assertEquals(Task::STATUS_FAILED, $task->status);
-            $this->assertStringContainsString('Server error', $task->error_message);
+            $this->assertStringContainsString('Marker service error', $task->error_message);
         }
     }
 
@@ -98,20 +103,20 @@ class ProcessUploadedFileTest extends TestCase
         ]);
 
         $mock = new MockHandler([
-            new Response(200, [], '# Markdown content'),
-            new Response(500)
+            new Response(200, [], json_encode($this->generateFakeMarkerResponse('# Markdown content'))),
+            new Response(500, [], 'Ollama service error')
         ]);
 
         $client = new \GuzzleHttp\Client(['handler' => HandlerStack::create($mock)]);
         $job = new ProcessUploadedFile($task);
-        
+
         try {
             $job->handle($client);
             $this->fail('Expected exception was not thrown');
         } catch (\Exception $e) {
             $task->refresh();
             $this->assertEquals(Task::STATUS_FAILED, $task->status);
-            $this->assertStringContainsString('Server error', $task->error_message);
+            $this->assertStringContainsString('Ollama service error', $task->error_message);
         }
     }
 }
