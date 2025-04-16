@@ -66,8 +66,8 @@ class ProcessUploadedFileTest extends TestCase
         $this->assertIsArray($task->result['items']);
         $this->assertCount(1, $task->result['items']);
         $this->assertEquals('Test Item', $task->result['items'][0]['item_name']);
-        // TODO: Re-enable when enrichment is implemented
         $this->assertArrayHasKey('detected_codes', $task->result['items'][0]);
+        $this->assertCount(1, $task->result['items'][0]['detected_codes']);
     }
 
     public function test_marker_failure()

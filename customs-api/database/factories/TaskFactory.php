@@ -12,10 +12,10 @@ class TaskFactory extends Factory
     public function definition()
     {
         return [
-            'original_filename' => $this->faker->word.'.pdf',
-            'file_path' => 'uploads/'.$this->faker->uuid.'.pdf',
+            'original_filename' => $this->faker->word . '.pdf',
+            'file_path' => 'uploads/' . $this->faker->uuid . '.pdf',
             'status' => Task::STATUS_PENDING,
-            'processing_steps' => null,
+            'processing_step' => null,
             'result' => null,
             'error_message' => null
         ];

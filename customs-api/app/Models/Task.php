@@ -13,13 +13,12 @@ class Task extends Model
         'original_filename',
         'file_path',
         'status',
-        'processing_steps',
+        'processing_step',
         'result',
         'error_message'
     ];
 
     protected $casts = [
-        'processing_steps' => 'array',
         'result' => 'array'
     ];
 
@@ -38,6 +37,7 @@ class Task extends Model
         $this->update([
             'status' => self::STATUS_COMPLETED,
             'result' => ['items' => $result],
+            'processing_step' => null,
             'completed_at' => now()
         ]);
     }
@@ -48,12 +48,5 @@ class Task extends Model
             'status' => self::STATUS_FAILED,
             'error_message' => $error
         ]);
-    }
-
-    public function updateStepStatus(string $step, string $status)
-    {
-        $steps = $this->processing_steps ?? [];
-        $steps[$step] = $status;
-        $this->update(['processing_steps' => $steps]);
     }
 }

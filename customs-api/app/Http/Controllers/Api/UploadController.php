@@ -38,7 +38,9 @@ class UploadController extends Controller
     {
         return response()->json([
             'status' => $task->status,
-            'processing_steps' => $task->processing_steps,
+            'processing_step' => $task->processing_step,
+            'completed_at' => $task->completed_at,
+            'error_message' => $task->error_message,
             'created_at' => $task->created_at,
             'updated_at' => $task->updated_at
         ]);

@@ -25,19 +25,16 @@ class ProcessUploadedFile implements ShouldQueue
             $this->task->markAsProcessing();
 
             // Step 1: Convert to markdown
-            $this->task->updateStepStatus('conversion', 'processing');
+            $this->task->update(['processing_step' => 'conversion']);
             $markdown = $this->convertToMarkdown($client);
-            $this->task->updateStepStatus('conversion', 'completed');
 
             // Step 2: Extract data with LLM
-            $this->task->updateStepStatus('extraction', 'processing');
+            $this->task->update(['processing_step' => 'extraction']);
             $items = $this->extractWithLLM($markdown, $client);
-            $this->task->updateStepStatus('extraction', 'completed');
 
             // Step 3: Enrich with search API
-            $this->task->updateStepStatus('enrichment', 'processing');
+            $this->task->update(['processing_step' => 'enrichment']);
             $enrichedItems = $this->enrichWithSearchAPI($items, $client);
-            $this->task->updateStepStatus('enrichment', 'completed');
 
             $this->task->markAsCompleted($enrichedItems);
         } catch (\Exception $e) {
@@ -164,7 +161,6 @@ class ProcessUploadedFile implements ShouldQueue
             throw new \Exception($responseData['error']);
         }
         $ollamaResponse = $responseData['response'] ?? '';
-        print_r($ollamaResponse);
         // Ensure ollamaResponse is a string between ```json and ```
         if (preg_match('/```json(.*?)```/s', $ollamaResponse, $matches)) {
             $ollamaResponse = trim($matches[1]);
@@ -191,18 +187,18 @@ class ProcessUploadedFile implements ShouldQueue
                 continue;
             }
 
-            try {
-                $response = $client->get(getenv('SEARCH_API_URL'), [
-                    'query' => ['query' => $item['item_name']]
-                ]);
+            $response = $client->get(getenv('SEARCH_API_URL'), [
+                'query' => ['query' => $item['item_name']]
+            ]);
 
-                $results = json_decode($response->getBody()->getContents(), true) ?: [];
-                $item['detected_codes'] = $results;
-                $enriched[] = $item;
-            } catch (\Exception $e) {
-                $item['detected_codes'] = [];
-                $enriched[] = $item;
-            }
+            $results = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+
+            if (is_null($results))
+                throw new \Exception("unable to decode response from code search API");
+
+            // Transform API response to expected format
+            $item['detected_codes'] = $results;
+            $enriched[] = $item;
         }
 
         return $enriched;

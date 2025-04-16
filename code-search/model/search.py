@@ -1,3 +1,4 @@
+import json
 import pandas as pd
 from sentence_transformers import SentenceTransformer
 import faiss
@@ -99,7 +100,7 @@ indices = build_faiss_index(all_embeddings)
 def perform_search(query: str):
     results = search_faiss_index(query.lower(), indices, data)
     ret = [{
-        "entry": data.iloc[int(idx)].to_dict(),
+        "entry": json.loads(data.iloc[int(idx)].to_json()),
         "closeness": float(sum_of_distances)
     } for (idx, sum_of_distances) in results]
     return ret
