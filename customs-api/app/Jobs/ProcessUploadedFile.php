@@ -46,12 +46,23 @@ class ProcessUploadedFile implements ShouldQueue
         }
     }
 
-    private function convertToMarkdown(Client $client = null): string
+    public function convertToMarkdown(Client $client = null): string
+    {
+        $markerUrl = getenv('MARKER_URL');
+
+        if (empty($markerUrl)) {
+            return $this->convertToMarkdownViaCli();
+        }
+
+        return $this->convertToMarkdownViaHttp($client);
+    }
+
+    protected function convertToMarkdownViaHttp(Client $client = null): string
     {
         $client = $client ?? new Client();
         $fileContent = Storage::get($this->task->file_path);
 
-        $response = $client->post(env('MARKER_URL') . '/marker/upload', [
+        $response = $client->post(getenv('MARKER_URL') . '/marker/upload', [
             'multipart' => [
                 [
                     'name' => 'file',
@@ -64,7 +75,7 @@ class ProcessUploadedFile implements ShouldQueue
                 ],
                 [
                     'name' => 'force_ocr',
-                    'contents' => 'false'
+                    'contents' => 'true'
                 ],
                 [
                     'name' => 'paginate_output',
@@ -74,39 +85,104 @@ class ProcessUploadedFile implements ShouldQueue
         ]);
 
         $responseData = json_decode($response->getBody()->getContents(), true);
+        if (!isset($responseData['output'])) {
+            throw new \RuntimeException('Invalid marker response format');
+        }
         return $responseData['output'];
+    }
+
+    protected $processFactory;
+
+    public function setProcessFactory(callable $factory): void
+    {
+        $this->processFactory = $factory;
+    }
+
+    protected function getProcessFactory(): callable
+    {
+        return $this->processFactory ?? function (array $command) {
+            return new \Symfony\Component\Process\Process($command);
+        };
+    }
+
+    protected function convertToMarkdownViaCli(): string
+    {
+        $filePath = Storage::path($this->task->file_path);
+        $tempDir = sys_get_temp_dir();
+        $command = [
+            'marker_single',
+            $filePath,
+            '--output_format=markdown',
+            '--output_dir=' . $tempDir,
+            '--force_ocr'
+        ];
+
+        $process = ($this->getProcessFactory())($command);
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new \RuntimeException('Marker CLI failed: ' . $process->getErrorOutput());
+        }
+
+        // Get input filename without extension
+        $inputFilename = pathinfo($filePath, PATHINFO_FILENAME);
+        $outputDir = $tempDir . '/' . $inputFilename;
+        $outputFile = $outputDir . '/' . $inputFilename . '.md';
+
+        if (!file_exists($outputFile)) {
+            throw new \RuntimeException('Marker output file not found: ' . $outputFile);
+        }
+
+        $output = file_get_contents($outputFile);
+
+        // Clean up
+        array_map('unlink', glob("$outputDir/*"));
+        rmdir($outputDir);
+
+        return $output;
     }
 
     private function extractWithLLM(string $markdown, Client $client = null): array
     {
         $client = $client ?? new Client();
 
-        $response = $client->post(env('OLLAMA_URL') . '/api/generate', [
+        $response = $client->post(getenv('OLLAMA_URL') . '/api/generate', [
             'json' => [
-                'model' => env('OLLAMA_MODEL'),
-                'prompt' => "Convert this customs declaration to JSON format. " .
-                    "It should have \"items\" key that contains array. Each object in that array has fields: " .
-                    "item_name (human-readable name), " .
-                    "original_name (including any relevant codes etc.), " .
-                    "quantity, " .
-                    "unit_price, " .
-                    "currency. " .
-                    "Here's the markdown:\n\n$markdown",
-                'format' => 'json',
-                'stream' => false
+                'model' => getenv('OLLAMA_MODEL'),
+                'prompt' => file_get_contents(base_path("app/Jobs/prompt-markdown-to-json.txt")) .
+                    "\n\nHere's the markdown:\n\n$markdown",
+                // 'format' => 'json',
+                'stream' => false,
+                'temperature' => 0.1
             ]
         ]);
 
         $responseData = json_decode($response->getBody()->getContents(), true);
-        $parsedResponse = json_decode($responseData['response'] ?? '', true);
+        // check if response data contains "error" key. If it does then raise exception with "message" key
+        // if "message" key is unavailable then raise exception with generic message text
+        if (isset($responseData['error'])) {
+            throw new \Exception($responseData['error']);
+        }
+        $ollamaResponse = $responseData['response'] ?? '';
+        print_r($ollamaResponse);
+        // Ensure ollamaResponse is a string between ```json and ```
+        if (preg_match('/```json(.*?)```/s', $ollamaResponse, $matches)) {
+            $ollamaResponse = trim($matches[1]);
+        } elseif (preg_match('/```(.*?)```/s', $ollamaResponse, $matches)) {
+            $ollamaResponse = trim($matches[1]);
+        }
+
+        $parsedResponse = json_decode($ollamaResponse, true);
+
+        if ($parsedResponse === null) {
+            throw new \Exception('Unable to parse response. Full response: ' . $ollamaResponse);
+        }
 
         return $parsedResponse['items'] ?? [];
     }
 
     private function enrichWithSearchAPI(array $items, Client $client = null): array
     {
-        // TODO: Finish later
-        // return $items;
         $client = $client ?? new Client();
         $enriched = [];
 
@@ -116,7 +192,7 @@ class ProcessUploadedFile implements ShouldQueue
             }
 
             try {
-                $response = $client->get(env('SEARCH_API_URL'), [
+                $response = $client->get(getenv('SEARCH_API_URL'), [
                     'query' => ['query' => $item['item_name']]
                 ]);
 

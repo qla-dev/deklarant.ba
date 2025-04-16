@@ -1,0 +1,172 @@
+{
+    "items": [
+        {
+            "item_name": "BURNER",
+            "original_name": "BURNER",
+            "quantity": 70,
+            "unit_price": 0.22,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "BURNER CAP",
+            "original_name": "BURNER CAP",
+            "quantity": 60,
+            "unit_price": 0.20,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "FAN OF TURBO MOTOR",
+            "original_name": "FAN OF TURBO MOTOR",
+            "quantity": 2,
+            "unit_price": 0.40,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "GAS VALVE",
+            "original_name": "GAS VALVE",
+            "quantity": 14,
+            "unit_price": 0.30,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "MOTOR TURBO + PROPELLER (FAN)",
+            "original_name": "MOTOR TURBO + PROPELLER (FAN)",
+            "quantity": 2,
+            "unit_price": 0.15,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "SILICON GASKET",
+            "original_name": "SILICON GASKET",
+            "quantity": 18,
+            "unit_price": 0.22,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "SWITCH",
+            "original_name": "SWITCH",
+            "quantity": 10,
+            "unit_price": 0.84,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "HOB",
+            "original_name": "HOB",
+            "quantity": 5,
+            "unit_price": 0.36,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "HOB",
+            "original_name": "HOB",
+            "quantity": 8,
+            "unit_price": 0.88,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "HEATING ELEMENT",
+            "original_name": "HEATING ELEMENT",
+            "quantity": 2,
+            "unit_price": 0.90,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "RADIAL HEATER",
+            "original_name": "RADIAL HEATER",
+            "quantity": 8,
+            "unit_price": 0.15,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "FRONT GLASS",
+            "original_name": "FRONT GLASS",
+            "quantity": 2,
+            "unit_price": 0.80,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "HOB",
+            "original_name": "HOB",
+            "quantity": 46,
+            "unit_price": 0.20,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "HOB",
+            "original_name": "HOB",
+            "quantity": 6,
+            "unit_price": 0.20,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "HOB",
+            "original_name": "HOB",
+            "quantity": 63,
+            "unit_price": 0.20,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "HOB",
+            "original_name": "HOB",
+            "quantity": 150,
+            "unit_price": 0.20,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "HINGE",
+            "original_name": "HINGE",
+            "quantity": 2,
+            "unit_price": 0.30,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "SILICON GASKET",
+            "original_name": "SILICON GASKET",
+            "quantity": 13,
+            "unit_price": 0.16,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "HEATING ELEMENT",
+            "original_name": "HEATING ELEMENT",
+            "quantity": 11,
+            "unit_price": 0.32,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "SWITCH",
+            "original_name": "SWITCH",
+            "quantity": 9,
+            "unit_price": 0.45,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "FRONT DOOR AIR CURTAIN",
+            "original_name": "FRONT DOOR AIR CURTAIN",
+            "quantity": 5,
+            "unit_price": 0.24,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "INNER GLASS",
+            "original_name": "INNER GLASS",
+            "quantity": 3,
+            "unit_price": 0.20,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "THERMOSTAT",
+            "original_name": "THERMOSTAT",
+            "quantity": 40,
+            "unit_price": 0.30,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "VITROCERAN GLASS",
+            "original_name": "VITROCERAN GLASS",
+            "quantity": 2,
+            "unit_price": 0.20,
+            "currency": "EUR"
+        }
+    ]
+}

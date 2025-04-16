@@ -1,0 +1,46 @@
+{
+    "items": [
+        {
+            "item_name": "FUEL FILTER",
+            "original_name": "CFF100257",
+            "quantity": 20,
+            "unit_price": 4.75,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "Dynamic Hydraulic Lifter",
+            "original_name": "FOL200",
+            "quantity": 24,
+            "unit_price": 3.61,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "FUEL FILTER",
+            "original_name": "CFF100257",
+            "quantity": 100,
+            "unit_price": 4.66,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "BIG END BEARINGS",
+            "original_name": "01-4980/3 STD",
+            "quantity": 2,
+            "unit_price": 7.93,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "FUEL FILTER",
+            "original_name": "CFF100257",
+            "quantity": 30,
+            "unit_price": 4.66,
+            "currency": "EUR"
+        },
+        {
+            "item_name": "SHAFT SEALS SINGLE",
+            "original_name": "NB973",
+            "quantity": 5,
+            "unit_price": 1.65,
+            "currency": "EUR"
+        }
+    ]
+}
