@@ -384,4 +384,5 @@ if __name__ == '__main__':
 
     process_hierarchy(single_table)
 
-    single_table.to_csv("assets/extracted_table.csv", index=False)
+    single_table.to_csv("assets/extracted_table.csv", index=False, encoding="utf-8")
+    print("Done. Don't forget to translate!!!")

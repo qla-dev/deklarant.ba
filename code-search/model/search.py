@@ -93,7 +93,7 @@ file_path = "assets/extracted_table.csv"
 # Preprocess the CSV
 data = preprocess_csv(file_path)
 # Generate embeddings for the "Naziv" column
-all_embeddings = generate_embeddings(data, column_name="Naziv - ENG")
+all_embeddings = generate_embeddings(data, column_name="Puni Naziv - ENG")
 # Build FAISS indices
 indices = build_faiss_index(all_embeddings)
 
