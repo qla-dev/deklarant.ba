@@ -13,7 +13,7 @@ class UploadController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|mimes:pdf,xlsx|max:10240'
+            'file' => 'required|file|mimes:pdf,xlsx,jpg,jpeg|max:10240'
         ]);
 
         $file = $request->file('file');
