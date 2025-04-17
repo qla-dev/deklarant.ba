@@ -1,8 +1,12 @@
 import fitz  # PyMuPDF
 import random
 import pandas as pd
-from progressbar import progressbar
 import os
+try:
+    from progressbar import progressbar
+except ImportError:
+    def progressbar(r):
+        return r
 
 def generate_random_color():
     """
@@ -325,32 +329,42 @@ def clean_name(name):
 def process_hierarchy(df: pd.DataFrame):
     hierarchy = []
     result = []
+    parent_tariff_stack = []
+    previous_codes = []
 
-    for _i, row in df.iterrows():
+    for i, row in df.iterrows():
         name = row["Naziv"]
         section = row["Odjeljak"]
         head = row["Glava"]
+        code = row["Tarifna oznaka"]
         assert section, f"{name} is missing section"
         assert head, f"{name} is missing head"
 
         if pd.isna(name):
+            previous_codes.append("")
+            result.append("")
             continue
 
         clean = clean_name(name)
         level = clean.count("–")  # Determine hierarchy level based on dashes
-        
+
         # Remove leading "–" and whitespace
         clean = clean.replace("–", "").strip()
-        
+
         # Update the hierarchy to match the current level
         if level < len(hierarchy):
             hierarchy = hierarchy[:level]
+            parent_tariff_stack = parent_tariff_stack[:level]
         hierarchy.append(clean)
-        
-        # Join the hierarchy into a ">>>"
+        parent_code = parent_tariff_stack[-1] if parent_tariff_stack else ""
+        parent_tariff_stack.append(code if code else parent_code)
+
+        previous_codes.append(parent_code)
         result.append(" >>> ".join([section, head] + hierarchy))
-    
-    return result
+
+    df["Prethodna tarifna oznaka"] = previous_codes
+    df["Puni Naziv"] = result
+    df["Naziv"] = df["Puni Naziv"].apply(lambda x: x.split(" >>> ")[-1] if isinstance(x, str) else x)
 
 if __name__ == '__main__':
     # Specify the path to your PDF
@@ -368,6 +382,6 @@ if __name__ == '__main__':
 
     single_table = pd.concat(dfs, ignore_index=True)
 
-    single_table["Naziv"] = process_hierarchy(single_table)
+    process_hierarchy(single_table)
 
     single_table.to_csv("assets/extracted_table.csv", index=False)
