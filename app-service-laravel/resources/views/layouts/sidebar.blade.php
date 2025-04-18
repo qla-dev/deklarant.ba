@@ -54,7 +54,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarApps">
-                        <i class="ri-bar-chart-line text-info"></i> <span>@lang('translation.statistic')
+                        <i class="ri-calendar-line text-info"></i> <span>@lang('translation.statistic')
                         </span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarApps">
@@ -885,7 +885,7 @@
             
             <div class="col-sm-2 ms-5 me-0 mt-1 d-flex  align-items-center">
                     <a href="pages-scan" style="width: 208px; height:31px;" class="btn btn-info btn-sm  text-white  py-0 d-flex align-items-center justify-content-center ">
-                    <i class="ri-ai-generate-2 fs-5 me-1"></i>  Skeniraj s AI </i> 
+                    <i class="ri-ai-generate-2 fs-5 me-1"></i>  Skeniraj s AI 
                     </a>
                 </div>
         

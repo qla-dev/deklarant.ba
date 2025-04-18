@@ -10,6 +10,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
     <style>
         .mySwiper .swiper-slide {
              margin-right: 3px; /* This is equivalent to Bootstrap's g-1 gap */
@@ -52,10 +54,10 @@
 <!-- Top part -->
  
 <div class="col-xl-12">
-    <div class="card card-animate border-0 rounded-0 shadow-sm h-100">
+    <div class="card border-0 rounded-0 shadow-0 h-100 mt-1">
         <div class="row g-0">
             <!-- Left Columns -->
-            <div class="col-md-2 border-end border-0">
+            <div class="col-md-2 border-end border-0 card-animate">
                 <div class="d-flex flex-column h-100">
                     <div class="bg-info text-white text-center py-1 rounded-0">
                         <i class="ri-alert-line me-1"></i>
@@ -71,7 +73,7 @@
                 </div>
             </div>
 
-            <div class="col-md-2 border-end border-0">
+            <div class="col-md-2 border-end border-0 card-animate">
                 <div class="d-flex flex-column h-100">
                     <div class="bg-info text-white text-center py-1 rounded-0">
                         <i class="ri-alert-line me-1"></i>
@@ -88,7 +90,7 @@
             </div>
 
             <!-- Middle Avatar Section -->
-            <div class="col-md-4 border-end d-flex align-items-center border-0 rounded-0 alert alert-light p-1 m-0">
+            <div class="col-md-4 border-end d-flex align-items-center border-0 rounded-0 alert alert-light p-1 m-0 card-animate">
                 <div class="p-2 text-center d-flex flex-column h-100 w-100 justify-content-center align-items-center">
                     <div class="card-body text-center">
                         <img id="user-avatar" src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" class="rounded-circle shadow-sm mb-1" width="60" height="60" alt="Korisnički avatar">
@@ -97,10 +99,10 @@
                     </div>
                     <div class="card-footer bg-transparent border-0 w-100">
                         <div class="d-flex justify-content-center gap-2 w-100">
-                            <a href="pages-pricing" class="btn btn-info text-white w-50 btn-sm">
+                            <a href="pages-pricing" class="btn btn-info text-white w-50 btn-sm d-flex align-items-center justify-content-center">
                                 <i class="ri-arrow-up-circle-line fs-5 me-1"></i> Nadogradite paket
                             </a>
-                            <a href="pages-scan" class="btn btn-info w-50 animated-btn btn-sm ">
+                            <a href="pages-scan" class="btn btn-info w-50 animated-btn btn-sm d-flex align-items-center justify-content-center">
                                 <i class="ri-ai-generate-2 me-1 fs-5" style="font-size:10px;"></i> Skeniraj s AI
                             </a>
                         </div>
@@ -109,7 +111,7 @@
             </div>
 
             <!-- Right Columns remain unchanged -->
-            <div class="col-md-2 border-end">
+            <div class="col-md-2 border-end card-animate">
                 <div class="d-flex flex-column h-100">
                     <div class="bg-info text-white text-center py-1 rounded-0">
                         <i class="ri-alert-line me-1"></i>
@@ -125,7 +127,7 @@
                 </div>
             </div>
 
-            <div class="col-md-2">
+            <div class="col-md-2 card-animate">
                 <div class="d-flex flex-column h-100">
                     <div class="bg-info text-white text-center py-1 rounded-0">
                         <i class="ri-alert-line me-1"></i>
@@ -260,13 +262,13 @@
 
 <div class="row mt-2">
   <div class="col-12 px-1">
-    <div class="row mb-2 g-0 mx-1">
+    <div class="row mb-4 g-0 mx-1">
       <!-- LEFT COLUMN -->
       <div class="col-xl-6">
         <div class="row g-1 mx-0">
           <!-- 4 cards in 2 rows -->
           <div class="col-md-6">
-             <div class="card rounded-0 h-100">
+             <div class="card rounded-0 h-100 ">
                <div class="card-header d-flex justify-content-between">
                 <h6 class="card-title mb-0">Moji dokumenti</h6>
                 <a class="text-muted fs-6">Pogledaj sve</a>
@@ -274,10 +276,10 @@
                <div class="card-body d-flex align-items-center justify-content-center">
                  
                        <div class="row d-flex text-center text-truncate" >  
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Document 1 </div></div>
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2 </div></div>
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1 </div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2 </div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
                        </div>
                  
                </div>
@@ -292,11 +294,11 @@
                </div>
                <div class="card-body d-flex justify-content-center align-items-center">
                  
-                       <div class="row d-flex text-center text-truncate ">
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2</div></div>
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
+                      <div class="row d-flex text-center text-truncate" >  
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1 </div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2 </div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
                        </div>
                  
                </div>
@@ -310,11 +312,11 @@
                </div>
                <div class="card-body d-flex justify-content-center align-items-center">
                  
-                       <div class="row d-flex text-center text-truncate">
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2</div></div>
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
+                <div class="row d-flex text-center text-truncate" >  
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1 </div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2 </div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
                        </div>
                  
                </div>
@@ -328,11 +330,11 @@
                </div>
                <div class="card-body d-flex justify-content-center align-items-center">
                  
-                       <div class="row d-flex text-center text-truncate">
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2</div></div>
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
+                <div class="row d-flex text-center text-truncate" >  
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1 </div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2 </div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
                        </div>
                  
                </div>
@@ -342,10 +344,10 @@
       </div>
 
       <!-- RIGHT COLUMN -->
-      <div class="col-xl-6 d-flex flex-column">
+      <div class="col-xl-6 d-flex flex-column ">
         <div class="row g-1 flex-fill mx-0">
           <div class="col-md-6 ">
-            <div class="card rounded-0 w-100 h-100 ">
+            <div class="card rounded-0 w-100 h-100 card-animate ">
               <div class="card-header">
                 <h5 class="mb-0">Zadnje korištene tarife</h5>
               </div>
@@ -396,19 +398,15 @@
                         18% <i class="ri-arrow-up-line ms-1"></i>
                     </div> 
                 </div>
-                <div class="card-footer mt-0 pt-0 pb-0 text-truncate">
-                    
-                    
+                <div class="card-footer mt-0 pt-0 pb-0 text-truncate">         
                     
                 </div>
-                
-                
-                
+                        
                 
               </div>
             </div>
           </div>
-          <div class="col-md-6 d-flex">
+          <div class="col-md-6 d-flex card-animate">
             <div class="card rounded-0 w-100 h-100">
                 <div class="card-header">
                     <h5 class="mb-0">Zadnje korišteni dobavljači</h5>
@@ -463,58 +461,59 @@
     document.addEventListener("DOMContentLoaded", async function () {
         const user = JSON.parse(localStorage.getItem("user"));
         const token = localStorage.getItem("auth_token");
-    
+
         if (!user || !token) {
             console.warn("User or token missing in localStorage.");
             return;
         }
-    
+
         const API_URL = `/api/statistics/users/${user.id}`;
-    
+
         try {
             const response = await axios.get(API_URL, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
-        
+
             const stats = response.data || {};
             console.log("Fetched stats:", stats);
-        
+
+            // Get the suppliers data, ensure no demo supplier is added
             const suppliers = stats.supplier_profit_changes || [];
-        
-            // Optional: add a manual supplier (for testing)
-            suppliers.push({
-                name: "Demo Supplier",
-                owner: "Venan Hadžiselimović",
-                percentage_change: 85.6
-            });
-        
+
+            // Limit to 5 suppliers
+            const limitedSuppliers = suppliers.slice(-5);
+
             const suppliersContainer = document.querySelector(".suppliers-list");
-        
+
             if (suppliersContainer) {
                 suppliersContainer.innerHTML = ''; // Clear existing content
-            
-                suppliers.forEach(supplier => {
+
+                limitedSuppliers.forEach(supplier => {
                     console.log("Rendering supplier:", supplier);
-                
-                    const isPositive = supplier.percentage_change >= 0;
+
+                    // Convert percentage_change to a number
+                    const percentageChange = parseFloat(supplier.percentage_change);
+
+                    // Ensure we handle both positive and negative values
+                    const isPositive = percentageChange >= 0;
                     const growthClass = isPositive ? "text-success" : "text-danger";
                     const arrowIcon = isPositive ? "ri-arrow-up-line" : "ri-arrow-down-line";
-                
+
                     const supplierElement = document.createElement("div");
                     supplierElement.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2");
-                
+
                     supplierElement.innerHTML = `
                         <div>
                             <div class="fw-semibold">${supplier.name}</div>
                             <div class="text-muted fs-12">${supplier.owner ?? 'Nepoznat vlasnik'}</div>
                         </div>
                         <div class="${growthClass} fs-13">
-                            ${supplier.percentage_change.toFixed(1)}% <i class="${arrowIcon} ms-1"></i>
+                            ${isNaN(percentageChange) ? 'N/A' : percentageChange.toFixed(1)}% <i class="${arrowIcon} ms-1"></i>
                         </div>
                     `;
-                
+
                     suppliersContainer.appendChild(supplierElement);
                 });
             }
@@ -522,7 +521,8 @@
             console.error("Error fetching supplier data:", error);
         }
     });
-</script>
+    </script>
+
 
 
 
@@ -663,249 +663,249 @@
 
 
 
-<script>
-document.addEventListener("DOMContentLoaded", async function () {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const token = localStorage.getItem("auth_token");
+    <script>
+    document.addEventListener("DOMContentLoaded", async function () {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const token = localStorage.getItem("auth_token");
 
-    if (!user || !token) {
-        console.warn("User or token missing in localStorage.");
-        return;
-    }
+        if (!user || !token) {
+            console.warn("User or token missing in localStorage.");
+            return;
+        }
 
-    const API_URL = `/api/statistics/users/${user.id}`;
+        const API_URL = `/api/statistics/users/${user.id}`;
 
-    try {
-        const response = await axios.get(API_URL, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
+        try {
+            const response = await axios.get(API_URL, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
 
-        const stats = response.data || {};
-        const fields = {
-            totalSuppliers: stats.total_suppliers ?? 0,
-            totalInvoices: stats.total_invoices ?? 0,
-            usedScans: stats.used_scans ?? 0,
-            remainScans: stats.remaining_scans ?? 0
-        };
+            const stats = response.data || {};
+            const fields = {
+                totalSuppliers: stats.total_suppliers ?? 0,
+                totalInvoices: stats.total_invoices ?? 0,
+                usedScans: stats.used_scans ?? 0,
+                remainScans: stats.remaining_scans ?? 0
+            };
 
-        Object.entries(fields).forEach(([id, value]) => {
-            const el = document.getElementById(id);
-            if (el) el.innerText = value;
-        });
+            Object.entries(fields).forEach(([id, value]) => {
+                const el = document.getElementById(id);
+                if (el) el.innerText = value;
+            });
 
-    } catch (error) {
-        console.error("Error fetching statistics:", error);
-    }
-});
-</script>
+        } catch (error) {
+            console.error("Error fetching statistics:", error);
+        }
+    });
+    </script>
 
-<script>
-document.addEventListener("DOMContentLoaded", async function () {
-    
+    <script>
+    document.addEventListener("DOMContentLoaded", async function () {
 
-    const API_URL = `/api/statistics`;
-    const token = localStorage.getItem("auth_token");
 
-    if (!token) {
-        console.warn("No token found in localStorage.");
-        return;
-    }
+        const API_URL = `/api/statistics`;
+        const token = localStorage.getItem("auth_token");
 
-    try {
-        const response = await axios.get(API_URL, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
+        if (!token) {
+            console.warn("No token found in localStorage.");
+            return;
+        }
+
+        try {
+            const response = await axios.get(API_URL, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+
+            });
+
+            const stats = response.data || {};
+            const fields = {
+                totalNumSup: stats.total_suppliers ?? 0,
             
-        });
-
-        const stats = response.data || {};
-        const fields = {
-            totalNumSup: stats.total_suppliers ?? 0,
-           
-        };
-
-        Object.entries(fields).forEach(([id, value]) => {
-            const el = document.getElementById(id);
-            if (el) el.innerText = value;
-        });
-
-    } catch (error) {
-        console.error("Error fetching statistics:", error);
-    }
-});
-</script>
-
-
-
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const user = JSON.parse(localStorage.getItem("user"));
-
-    if (user) {
-        const welcome = document.getElementById("welcome-user");
-        if (welcome) {
-            welcome.innerText = `Dobrodošli na eDeklarant, ${user.username}!`;
-        }
-
-        const avatar = document.getElementById("user-avatar");
-        if (avatar) {
-            const avatarUrl = `/storage/uploads/avatars/${user.avatar}`;
-            // Check if the image loads correctly, fallback if not
-            const testImg = new Image();
-            testImg.onload = function () {
-                avatar.src = avatarUrl;
             };
-            testImg.onerror = function () {
-                avatar.src = "/build/images/users/avatar-1.jpg";
-            };
-            testImg.src = avatarUrl;
+
+            Object.entries(fields).forEach(([id, value]) => {
+                const el = document.getElementById(id);
+                if (el) el.innerText = value;
+            });
+
+        } catch (error) {
+            console.error("Error fetching statistics:", error);
         }
-    }
-});
+    });
+    </script>
 
-</script>
 
-<script>
-document.addEventListener("DOMContentLoaded", async function () {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const token = localStorage.getItem("auth_token");
 
-    if (!user || !token) {
-        console.warn("User or token missing in localStorage.");
-        return;
-    }
 
-    const API_URL = `/api/invoices/users/${user.id}`;
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const user = JSON.parse(localStorage.getItem("user"));
 
-    try {
-        const response = await axios.get(API_URL, {
-            headers: {
-                Authorization: `Bearer ${token}`
+        if (user) {
+            const welcome = document.getElementById("welcome-user");
+            if (welcome) {
+                welcome.innerText = `Dobrodošli na eDeklarant, ${user.username}!`;
             }
-        });
 
-        const invoices = response.data || [];
-
-        if (Array.isArray(invoices) && invoices.length > 0) {
-            const validScanTimes = invoices
-                .map(inv => parseFloat(inv.scan_time))
-                .filter(time => !isNaN(time));
-
-            const totalScanTime = validScanTimes.reduce((acc, val) => acc + val, 0);
-            const avgScanTime = validScanTimes.length > 0 ? totalScanTime / validScanTimes.length : 0;
-
-            const scanTimeEl = document.getElementById("scanTimeValue");
-            if (scanTimeEl) {
-                scanTimeEl.innerText = `${avgScanTime.toFixed(2)} sec`;
+            const avatar = document.getElementById("user-avatar");
+            if (avatar) {
+                const avatarUrl = `/storage/uploads/avatars/${user.avatar}`;
+                // Check if the image loads correctly, fallback if not
+                const testImg = new Image();
+                testImg.onload = function () {
+                    avatar.src = avatarUrl;
+                };
+                testImg.onerror = function () {
+                    avatar.src = "/build/images/users/avatar-1.jpg";
+                };
+                testImg.src = avatarUrl;
             }
         }
+    });
 
-    } catch (error) {
-        console.error("Error fetching average scan time:", error);
-    }
-});
-</script>
+    </script>
 
+    <script>
+    document.addEventListener("DOMContentLoaded", async function () {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const token = localStorage.getItem("auth_token");
 
-<script>
-document.addEventListener("DOMContentLoaded", async function () {
-    const token = localStorage.getItem("auth_token");
-
-    if (!token) {
-        console.warn("No token found in localStorage.");
-        return;
-    }
-
-    try {
-        const response = await axios.get("/api/suppliers", {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-
-        const rawData = response.data;
-        let suppliers = Array.isArray(rawData) ? rawData : rawData.data || [];
-
-        // Fallback if less than 10
-        const defaultSuppliers = [
-            { name: "Generic Co.", address: "Sarajevo", fallback: true },
-            { name: "Example Inc.", address: "Mostar", fallback: true },
-            { name: "Placeholder Ltd.", address: "Tuzla", fallback: true },
-            { name: "Test Supplier", address: "Zenica", fallback: true },
-            { name: "Demo Group", address: "Bihać", fallback: true },
-            { name: "ACME Corp", address: "Travnik", fallback: true }
-        ];
-
-        if (suppliers.length < 10) {
-            suppliers = suppliers.concat(defaultSuppliers.slice(0, 10 - suppliers.length));
-        } else {
-            suppliers = suppliers.slice(-10);
+        if (!user || !token) {
+            console.warn("User or token missing in localStorage.");
+            return;
         }
 
-        const container = document.getElementById("supplierCardsContainer");
+        const API_URL = `/api/invoices/users/${user.id}`;
 
-        suppliers.forEach(supplier => {
-            const slide = document.createElement("div");
-            slide.className = "swiper-slide";
+        try {
+            const response = await axios.get(API_URL, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
 
-            slide.innerHTML = `
-                <div class="card rounded-0 card-animate overflow-hidden">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="flex-grow-1 overflow-hidden">
-                                 
-                                <p class="text-uppercase fw-medium text-muted text-truncate mb-3">${supplier.name}
-                                <div class="flex-shrink-0 d-flex align-items-center ml-2">
-                                     <img id="user-avatar" src="{{ URL::asset('build/images/users/orbico.png') }}" class="rounded-circle shadow-sm mb-1" width="40" height="40" alt="Korisnički avatar">
-                                 </div></p>
-                                 
-                                <h4 class="fs-10 fw-semibold ff-secondary mb-0 text-truncate">
-                                    <i class="ri-map-pin-line text-info me-1"></i>${supplier.address}
-                                </h4>
-                            </div>
-                            <div class="flex-shrink-0 d-flex align-items-center">
-                                <canvas class="scan-chart" width="80" height="80"></canvas>
+            const invoices = response.data || [];
+
+            if (Array.isArray(invoices) && invoices.length > 0) {
+                const validScanTimes = invoices
+                    .map(inv => parseFloat(inv.scan_time))
+                    .filter(time => !isNaN(time));
+
+                const totalScanTime = validScanTimes.reduce((acc, val) => acc + val, 0);
+                const avgScanTime = validScanTimes.length > 0 ? totalScanTime / validScanTimes.length : 0;
+
+                const scanTimeEl = document.getElementById("scanTimeValue");
+                if (scanTimeEl) {
+                    scanTimeEl.innerText = `${avgScanTime.toFixed(2)} sec`;
+                }
+            }
+
+        } catch (error) {
+            console.error("Error fetching average scan time:", error);
+        }
+    });
+    </script>
+
+
+    <script>
+    document.addEventListener("DOMContentLoaded", async function () {
+        const token = localStorage.getItem("auth_token");
+
+        if (!token) {
+            console.warn("No token found in localStorage.");
+            return;
+        }
+
+        try {
+            const response = await axios.get("/api/suppliers", {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            const rawData = response.data;
+            let suppliers = Array.isArray(rawData) ? rawData : rawData.data || [];
+
+            // Fallback if less than 10
+            const defaultSuppliers = [
+                { name: "Generic Co.", address: "Sarajevo", fallback: true },
+                { name: "Example Inc.", address: "Mostar", fallback: true },
+                { name: "Placeholder Ltd.", address: "Tuzla", fallback: true },
+                { name: "Test Supplier", address: "Zenica", fallback: true },
+                { name: "Demo Group", address: "Bihać", fallback: true },
+                { name: "ACME Corp", address: "Travnik", fallback: true }
+            ];
+
+            if (suppliers.length < 10) {
+                suppliers = suppliers.concat(defaultSuppliers.slice(0, 10 - suppliers.length));
+            } else {
+                suppliers = suppliers.slice(-10);
+            }
+
+            const container = document.getElementById("supplierCardsContainer");
+
+            suppliers.forEach(supplier => {
+                const slide = document.createElement("div");
+                slide.className = "swiper-slide";
+
+                slide.innerHTML = `
+                    <div class="card rounded-0 card-animate overflow-hidden">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-3">${supplier.name}
+                                    <div class="flex-shrink-0 d-flex align-items-center ml-2">
+                                         <img id="user-avatar" src="{{ URL::asset('build/images/users/orbico.png') }}" class="rounded-circle shadow-sm mb-1" width="40" height="40" alt="Korisnički avatar">
+                                     </div></p>
+
+                                    <h4 class="fs-10 fw-semibold ff-secondary mb-0 text-truncate">
+                                        <i class="ri-map-pin-line text-info me-1"></i>${supplier.address}
+                                    </h4>
+                                </div>
+                                <div class="flex-shrink-0 d-flex align-items-center">
+                                    <canvas class="scan-chart" width="80" height="80"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            `;
+                `;
 
-            container.appendChild(slide);
-        });
+                container.appendChild(slide);
+            });
 
-        // Re-initialize scan charts
-        renderScanCharts();
+            // Re-initialize scan charts
+            renderScanCharts();
 
-        // Initialize Swiper after DOM is populated
-        const swiper = new Swiper(".mySwiper", {
-            slidesPerView: 6,
-            spaceBetween: 4,
-            autoplay: {
-                delay: 2000, // Slide every 3 seconds
-                disableOnInteraction: false // Keeps autoplay running after manual slide
-            },
-            loop: true,
-        
+            // Initialize Swiper after DOM is populated
+            const swiper = new Swiper(".mySwiper", {
+                slidesPerView: 6,
+                spaceBetween: 4,
+                autoplay: {
+                    delay: 2000, // Slide every 3 seconds
+                    disableOnInteraction: false // Keeps autoplay running after manual slide
+                },
+                loop: true,
             
-            navigation: false,
-            breakpoints: {
-                768: { slidesPerView: 2 },
-                992: { slidesPerView: 4 },
-                1200: { slidesPerView: 6 }
-            }
-        });
 
-      
-    } catch (error) {
-        console.error("Error fetching suppliers:", error);
-    }
-});
-</script>
+                navigation: false,
+                breakpoints: {
+                    768: { slidesPerView: 2 },
+                    992: { slidesPerView: 4 },
+                    1200: { slidesPerView: 6 }
+                }
+            });
+
+        
+        } catch (error) {
+            console.error("Error fetching suppliers:", error);
+        }
+    });
+    </script>
 
 
 

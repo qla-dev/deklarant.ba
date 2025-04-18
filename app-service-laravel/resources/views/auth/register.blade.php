@@ -62,10 +62,7 @@
                                             <label for="input-password" class="text-info">Confirm Password <span class="text-danger">*</span></label>
                                             <input type="password" class="form-control" name="confirm_password" id="input-password" placeholder="Enter Confirm Password" required>
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="input-avatar" class="text-info">Avatar <span class="text-danger">*</span></label>
-                                            <input type="file" class="form-control" name="avatar" id="input-avatar" required>
-                                        </div>
+                                        
                                         <div class="mb-3">
                                             <label for="language" class="text-info">Language</label>
                                             <select class="form-control" name="language" id="language">
@@ -97,69 +94,42 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const form = document.getElementById("registerForm");
-        const avatarInput = document.getElementById("input-avatar");
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("registerForm");
 
-        form.addEventListener("submit", async function (e) {
-            e.preventDefault();
+    form.addEventListener("submit", async function (e) {
+        e.preventDefault();
 
-            const avatarFile = avatarInput.files[0];
-            const macAddress = '11:22:33:44:55'; // optional: dynamic later
+        const macAddress = '11:22:33:44:55'; // optional: make dynamic later
 
-            try {
-                // Step 1: Prepare formData and remove file input from submission
-                const formData = new FormData(form);
-                formData.delete("avatar"); // Remove file to avoid validation error
+        try {
+            const formData = new FormData(form);
 
-                // Step 2: Register the user (without avatar)
-                const registerResponse = await axios.post("/api/auth/register", formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                        "MAC-Address": macAddress
-                    }
-                });
-
-                const { token, user, message } = registerResponse.data;
-
-                // Step 3: Save auth token & user
-                localStorage.setItem("auth_token", token);
-                localStorage.setItem("user", JSON.stringify(user));
-                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-                // Step 4: Upload avatar (if provided)
-                if (avatarFile) {
-                    const avatarUploadForm = new FormData();
-                    avatarUploadForm.append("file", avatarFile);
-                    avatarUploadForm.append("folder", "avatars");
-
-                    const uploadResponse = await axios.post("/api/storage/uploads", avatarUploadForm, {
-                        headers: {
-                            "Content-Type": "multipart/form-data"
-                        }
-                    });
-
-                    const avatarFilename = uploadResponse.data.stored_as;
-
-                    // Step 5: Update user with avatar filename via PUT
-                    await axios.put(`/api/users/${user.id}`, {
-                        avatar: avatarFilename
-                    });
-                    user.avatar = avatarFilename;
-                    localStorage.setItem("user", JSON.stringify(user));
+            const registerResponse = await axios.post("/api/auth/register", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    "MAC-Address": macAddress
                 }
+            });
 
-                // Step 6: Notify and redirect
-                alert(message || "Registration successful!");
-                window.location.href = "/";
-            } catch (error) {
-                console.error("Registration failed:", error);
-                const msg = error.response?.data?.message || "Registration failed.";
-                alert(msg);
-            }
-        });
+            const { token, user, message } = registerResponse.data;
+
+            // Save token & user info
+            localStorage.setItem("auth_token", token);
+            localStorage.setItem("user", JSON.stringify(user));
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+            alert(message || "Registration successful!");
+            window.location.href = "/";
+        } catch (error) {
+            console.error("Registration failed:", error);
+            const msg = error.response?.data?.message || "Registration failed.";
+            alert(msg);
+        }
     });
+});
 </script>
+
 
 
 @endsection
