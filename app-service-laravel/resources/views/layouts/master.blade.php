@@ -1,4 +1,4 @@
-<!doctype html >
+<!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-layout="horizontal" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="enable" >
 
 <head>

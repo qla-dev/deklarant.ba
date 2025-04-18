@@ -54,7 +54,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarApps">
-                        <i class="ri-bar-chart-line text-info"></i> <span>@lang('translation.statistic')
+                        <i class="ri-calendar-line text-info"></i> <span>@lang('translation.statistic')
                         </span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarApps">

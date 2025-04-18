@@ -234,12 +234,12 @@ return [
     "links" => "Links",
     "range-area" => "Range Area",
     "funnel" => "Funnel",
-    "home" => "Home Page",
-    "statistic"=>"Statistics",
-    "exclist" => "Exchange list",
-    "myorder" => "My orders",
-    "clients" => "My Clients",
-    "declarant" => "Declarants database"
+    "home" => "Početna stranica",
+    "statistic"=>"Kalendar",
+    "exclist" => "Kursna lista",
+    "myorder" => "Moje narudžbe",
+    "clients" => "Moji klijenti",
+    "declarant" => "Baza deklaranata"
 
 ];
 ?>

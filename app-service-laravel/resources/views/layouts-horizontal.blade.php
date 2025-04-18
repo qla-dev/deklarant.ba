@@ -268,7 +268,7 @@
         <div class="row g-1 mx-0">
           <!-- 4 cards in 2 rows -->
           <div class="col-md-6">
-             <div class="card rounded-0 h-100 card-animate">
+             <div class="card rounded-0 h-100 ">
                <div class="card-header d-flex justify-content-between">
                 <h6 class="card-title mb-0">Moji dokumenti</h6>
                 <a class="text-muted fs-6">Pogledaj sve</a>
@@ -276,10 +276,10 @@
                <div class="card-body d-flex align-items-center justify-content-center">
                  
                        <div class="row d-flex text-center text-truncate" >  
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1 </div></div>
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2 </div></div>
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1 </div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2 </div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
                        </div>
                  
                </div>
@@ -287,54 +287,54 @@
           </div>
 
           <div class="col-md-6">
-             <div class="card rounded-0 h-100 card-animate">
+             <div class="card rounded-0 h-100">
                <div class="card-header d-flex justify-content-between">
                 <h6 class="card-title mb-0">Moji dokumenti</h6>
                 <a class="text-muted fs-6">Pogledaj sve</a>
                </div>
                <div class="card-body d-flex justify-content-center align-items-center">
                  
-                       <div class="row d-flex text-center text-truncate ">
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2</div></div>
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
+                      <div class="row d-flex text-center text-truncate" >  
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1 </div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2 </div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
                        </div>
                  
                </div>
              </div>
           </div>
           <div class="col-md-6">
-             <div class="card rounded-0 h-100 card-animate">
+             <div class="card rounded-0 h-100">
                <div class="card-header d-flex justify-content-between">
                 <h6 class="card-title mb-0">Moji dokumenti</h6>
                 <a class="text-muted fs-6">Pogledaj sve</a>
                </div>
                <div class="card-body d-flex justify-content-center align-items-center">
                  
-                       <div class="row d-flex text-center text-truncate">
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2</div></div>
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
+                <div class="row d-flex text-center text-truncate" >  
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1 </div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2 </div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
                        </div>
                  
                </div>
              </div>
           </div>
           <div class="col-md-6">
-             <div class="card rounded-0 h-100 card-animate ">
+             <div class="card rounded-0 h-100">
                <div class="card-header d-flex justify-content-between">
                 <h6 class="card-title mb-0">Moji dokumenti</h6>
                 <a class="text-muted fs-6">Pogledaj sve</a>
                </div>
                <div class="card-body d-flex justify-content-center align-items-center">
                  
-                       <div class="row d-flex text-center text-truncate">
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1</div></div>
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2</div></div>
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
-                         <div class="col-3"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
+                <div class="row d-flex text-center text-truncate" >  
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1 </div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2 </div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
+                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
                        </div>
                  
                </div>
