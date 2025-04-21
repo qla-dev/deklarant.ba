@@ -22,7 +22,8 @@ class UploadController extends Controller
         $task = Task::create([
             'original_filename' => $file->getClientOriginalName(),
             'file_path' => $path,
-            'user_id' => null
+            'user_id' => null,
+            'status' => Task::STATUS_PENDING
         ]);
 
         // Dispatch processing job

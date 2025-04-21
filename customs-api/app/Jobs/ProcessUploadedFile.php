@@ -3,6 +3,8 @@
 namespace App\Jobs;
 
 use App\Models\Task;
+use App\Http\Clients\MockableHttpClient;
+use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,35 +17,43 @@ class ProcessUploadedFile implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public function __construct(public Task $task)
+    private ?Client $client = null;
+
+    public function __construct(public Task $task, Client $client = null)
     {
+        if ($client !== null) {
+            $this->client = $client;
+        }
     }
 
-    public function handle(Client $client = null)
+    public function handle()
     {
+        if ($this->client === null) {
+            $this->client = new MockableHttpClient();
+        }
         try {
             $this->task->markAsProcessing();
 
             // Step 1: Convert to markdown
             $this->task->update(['processing_step' => 'conversion']);
-            $markdown = $this->convertToMarkdown($client);
+            $markdown = $this->convertToMarkdown();
 
             // Step 2: Extract data with LLM
             $this->task->update(['processing_step' => 'extraction']);
-            $items = $this->extractWithLLM($markdown, $client);
+            $items = $this->extractWithLLM($markdown);
 
             // Step 3: Enrich with search API
             $this->task->update(['processing_step' => 'enrichment']);
-            $enrichedItems = $this->enrichWithSearchAPI($items, $client);
+            $enrichedItems = $this->enrichWithSearchAPI($items);
 
             $this->task->markAsCompleted($enrichedItems);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->task->markAsFailed($e->getMessage());
             throw $e;
         }
     }
 
-    public function convertToMarkdown(Client $client = null): string
+    public function convertToMarkdown(): string
     {
         $markerUrl = getenv('MARKER_URL');
 
@@ -51,15 +61,14 @@ class ProcessUploadedFile implements ShouldQueue
             return $this->convertToMarkdownViaCli();
         }
 
-        return $this->convertToMarkdownViaHttp($client);
+        return $this->convertToMarkdownViaHttp();
     }
 
-    protected function convertToMarkdownViaHttp(Client $client = null): string
+    protected function convertToMarkdownViaHttp(): string
     {
-        $client = $client ?? new Client();
         $fileContent = Storage::get($this->task->file_path);
 
-        $response = $client->post(getenv('MARKER_URL') . '/marker/upload', [
+        $response = $this->client->post(getenv('MARKER_URL') . '/marker/upload', [
             'multipart' => [
                 [
                     'name' => 'file',
@@ -81,7 +90,8 @@ class ProcessUploadedFile implements ShouldQueue
             ]
         ]);
 
-        $responseData = json_decode($response->getBody()->getContents(), true);
+        $responseBody = $response->getBody()->getContents();
+        $responseData = json_decode($responseBody, true, 512, JSON_THROW_ON_ERROR);
         if (!isset($responseData['output'])) {
             throw new \RuntimeException('Invalid marker response format');
         }
@@ -139,18 +149,18 @@ class ProcessUploadedFile implements ShouldQueue
         return $output;
     }
 
-    private function extractWithLLM(string $markdown, Client $client = null): array
+    private function extractWithLLM(string $markdown): array
     {
-        $client = $client ?? new Client();
-
-        $response = $client->post(getenv('OLLAMA_URL') . '/api/generate', [
+        $response = $this->client->post(getenv('OLLAMA_URL') . '/api/generate', [
             'json' => [
                 'model' => getenv('OLLAMA_MODEL'),
                 'prompt' => file_get_contents(base_path("app/Jobs/prompt-markdown-to-json.txt")) .
                     "\n\nHere's the markdown:\n\n$markdown",
                 // 'format' => 'json',
                 'stream' => false,
-                'temperature' => 0.1
+                'options' => [
+                    'temperature' => 0.1
+                ]
             ]
         ]);
 
@@ -158,7 +168,7 @@ class ProcessUploadedFile implements ShouldQueue
         // check if response data contains "error" key. If it does then raise exception with "message" key
         // if "message" key is unavailable then raise exception with generic message text
         if (isset($responseData['error'])) {
-            throw new \Exception($responseData['error']);
+            throw new Exception($responseData['error']);
         }
         $ollamaResponse = $responseData['response'] ?? '';
         // Ensure ollamaResponse is a string between ```json and ```
@@ -171,15 +181,14 @@ class ProcessUploadedFile implements ShouldQueue
         $parsedResponse = json_decode($ollamaResponse, true);
 
         if ($parsedResponse === null) {
-            throw new \Exception('Unable to parse response. Full response: ' . $ollamaResponse);
+            throw new Exception('Unable to parse response. Full response: ' . $ollamaResponse);
         }
 
         return $parsedResponse['items'] ?? [];
     }
 
-    private function enrichWithSearchAPI(array $items, Client $client = null): array
+    private function enrichWithSearchAPI(array $items): array
     {
-        $client = $client ?? new Client();
         $enriched = [];
 
         foreach ($items as $item) {
@@ -187,14 +196,14 @@ class ProcessUploadedFile implements ShouldQueue
                 continue;
             }
 
-            $response = $client->get(getenv('SEARCH_API_URL'), [
+            $response = $this->client->get(getenv('SEARCH_API_URL'), [
                 'query' => ['query' => $item['item_name']]
             ]);
 
             $results = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
 
             if (is_null($results))
-                throw new \Exception("unable to decode response from code search API");
+                throw new Exception("unable to decode response from code search API");
 
             // Transform API response to expected format
             $item['detected_codes'] = $results;

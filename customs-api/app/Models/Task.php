@@ -15,7 +15,8 @@ class Task extends Model
         'status',
         'processing_step',
         'result',
-        'error_message'
+        'error_message',
+        'completed_at'
     ];
 
     protected $casts = [

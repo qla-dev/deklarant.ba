@@ -57,8 +57,8 @@ class ProcessUploadedFileTest extends TestCase
         ]);
 
         $client = new \GuzzleHttp\Client(['handler' => HandlerStack::create($mock)]);
-        $job = new ProcessUploadedFile($task);
-        $job->handle($client);
+        $job = new ProcessUploadedFile($task, $client);
+        $job->handle();
 
         $task->refresh();
         $this->assertEquals(Task::STATUS_COMPLETED, $task->status);
@@ -88,10 +88,10 @@ class ProcessUploadedFileTest extends TestCase
         ]);
 
         $client = new \GuzzleHttp\Client(['handler' => HandlerStack::create($mock)]);
-        $job = new ProcessUploadedFile($task);
+        $job = new ProcessUploadedFile($task, $client);
 
         try {
-            $job->handle($client);
+            $job->handle();
             $this->fail('Expected exception was not thrown');
         } catch (\Exception $e) {
             $task->refresh();
@@ -115,10 +115,10 @@ class ProcessUploadedFileTest extends TestCase
         ]);
 
         $client = new \GuzzleHttp\Client(['handler' => HandlerStack::create($mock)]);
-        $job = new ProcessUploadedFile($task);
+        $job = new ProcessUploadedFile($task, $client);
 
         try {
-            $job->handle($client);
+            $job->handle();
             $this->fail('Expected exception was not thrown');
         } catch (\Exception $e) {
             $task->refresh();
@@ -200,7 +200,7 @@ class ProcessUploadedFileTest extends TestCase
 
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Marker CLI failed: Marker CLI error');
-        $job->convertToMarkdown(null); // Pass null client to ensure CLI path
+        $job->convertToMarkdown();
     }
 
     public function test_http_path_via_valid_url()
@@ -219,8 +219,8 @@ class ProcessUploadedFileTest extends TestCase
 
         putenv('MARKER_URL=http://example.com');
         $client = new \GuzzleHttp\Client(['handler' => HandlerStack::create($mock)]);
-        $job = new ProcessUploadedFile($task);
-        $markdown = $job->convertToMarkdown($client);
+        $job = new ProcessUploadedFile($task, $client);
+        $markdown = $job->convertToMarkdown();
 
         $this->assertEquals('# HTTP Markdown content', $markdown);
     }

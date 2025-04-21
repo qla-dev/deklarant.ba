@@ -52,16 +52,21 @@ class UploadControllerTest extends TestCase
     public function test_task_status_check()
     {
         $task = Task::factory()->create();
+        $task->markAsCompleted([]);
+        $task->refresh();
 
         $response = $this->getJson("/api/tasks/{$task->id}");
 
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'status',
-                'processing_steps',
+                'processing_step',
+                'completed_at',
+                'error_message',
                 'created_at',
                 'updated_at'
             ]);
+        $this->assertNotNull($response->json('completed_at'));
     }
 
     public function test_result_retrieval()
