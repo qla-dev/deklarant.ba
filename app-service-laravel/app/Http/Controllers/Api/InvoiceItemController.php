@@ -26,6 +26,7 @@ class InvoiceItemController extends Controller
         try {
             $data = $request->validate([
                 'item_code' => 'required|string',
+                'version' => 'required|integer',
                 'item_description_original' => 'required|string',
                 'item_description' => 'required|string',
                 'quantity' => 'required|integer',
@@ -74,6 +75,7 @@ class InvoiceItemController extends Controller
 
             $data = $request->validate([
                 'item_code' => 'required|string',
+                'version' => 'required|integer',
                 'item_description_original' => 'required|string',
                 'item_description' => 'required|string',
                 'quantity' => 'required|integer',

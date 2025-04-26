@@ -30,4 +30,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'ai_server' => [
+    'url' => env('AI_SERVER_URL', 'http://localhost:8080'),
+],
+
+
 ];

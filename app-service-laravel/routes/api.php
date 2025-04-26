@@ -40,6 +40,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/suppliers/{supplierId}', [InvoiceController::class, 'getInvoicesBySupplier']); // Get invoices by supplier ID
 
         Route::post('/users/{userId}/suppliers/{supplierId}', [InvoiceController::class, 'store']);
+        Route::post('/users/{userId}/suppliers/{supplierId}/form', [InvoiceController::class, 'storeInvoicesWithItems']);
         Route::put('/{invoiceId}', [InvoiceController::class, 'update']);
         Route::delete('/{invoiceId}', [InvoiceController::class, 'destroy']);
     });
