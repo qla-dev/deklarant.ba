@@ -12,11 +12,12 @@ return new class extends Migration {
     {
         Schema::create('tariff_rates', function (Blueprint $table) {
             $table->id();
-            $table->string('item_code')->unique();
+            $table->string('item_code');
+            $table->integer('version'); 
             $table->string('name');
             $table->string('tariff_rate');
             $table->string('supplementary_unit')->nullable();
-
+        
             // Tariff rates for different countries/regions
             $table->string('EU')->nullable();
             $table->string('CEFTA')->nullable();
@@ -25,14 +26,18 @@ return new class extends Migration {
             $table->string('CHE_LIE')->nullable(); // Switzerland & Liechtenstein combined
             $table->string('ISL')->nullable();
             $table->string('NOR')->nullable();
-
+        
             // Additional fields
             $table->string('section');
             $table->string('head');
             $table->string('english_name');
-
+        
             $table->timestamps();
+        
+            // Add unique constraint
+            $table->unique(['item_code', 'version']);
         });
+        
     }
 
     /**

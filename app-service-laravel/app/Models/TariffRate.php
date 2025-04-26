@@ -13,6 +13,7 @@ class TariffRate extends Model
     
     protected $fillable = [
         'item_code', 
+        'version',
         'name', 
         'tariff_rate',
         'EU', 
@@ -30,6 +31,13 @@ class TariffRate extends Model
     public function invoiceItems()
 {
     return $this->hasMany(InvoiceItem::class, 'item_code', 'item_code');
+}
+
+public function scopeLatestByName($query, $name)
+{
+    return $query->where('name', $name)
+        ->orderByDesc('version')
+        ->first();
 }
 
 }

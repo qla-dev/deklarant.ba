@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
+
 
 class FileManagerController extends Controller
 {
@@ -23,7 +25,6 @@ class FileManagerController extends Controller
     $extension = $file->getClientOriginalExtension();
 
     $disk = Storage::disk('public');
-
     $directory = $folder ? "uploads/{$folder}" : 'uploads';
     $fullPath = $directory . '/' . $originalName;
     $finalName = $originalName;
@@ -37,6 +38,22 @@ class FileManagerController extends Controller
 
     $storedPath = $file->storeAs($directory, $finalName, 'public');
 
+    // Get the full local path
+    $localPath = storage_path('app/public/' . $storedPath);
+
+    // Send the file to the AI server
+    $aiServerUrl = config('services.ai_server.url', 'http://localhost:8080');
+
+    try {
+        $response = Http::attach(
+            'file', file_get_contents($localPath), $finalName
+        )->post("{$aiServerUrl}/upload");
+
+        $aiResponse = $response->successful() ? $response->json() : null;
+    } catch (\Exception $e) {
+        $aiResponse = ['error' => 'Failed to contact AI server', 'message' => $e->getMessage()];
+    }
+
     $message = ($finalName !== $originalName)
         ? "There is already a file with that name, the new file has been stored as {$finalName}"
         : 'File uploaded successfully!';
@@ -46,9 +63,11 @@ class FileManagerController extends Controller
         'original_name' => $originalName,
         'stored_as' => $finalName,
         'path' => $storedPath,
-        'url' => asset('storage/' . $storedPath)
+        'url' => asset('storage/' . $storedPath),
+        'ai_response' => $aiResponse,
     ]);
 }
+
 
 
 

@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('invoice_id');
             $table->string('item_code');
+            $table->integer('version');
             $table->text('item_description_original');
             $table->string('item_description');
             $table->integer('quantity');

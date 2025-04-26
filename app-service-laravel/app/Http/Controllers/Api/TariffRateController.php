@@ -14,13 +14,13 @@ class TariffRateController extends Controller
     {
         try {
             $tariffRates = TariffRate::all();
-            return response()->json([
-                'message' => 'Tariff rates retrieved successfully.',
-                'data' => $tariffRates
-            ]);
         } catch (Exception $e) {
             return response()->json(['error' => 'Failed to retrieve tariff rates. Please try again later.'], 500);
         }
+        return response()->json([
+            'message' => 'Tariff rates retrieved successfully.',
+            'data' => $tariffRates
+        ]);
     }
 
     public function store(Request $request)
@@ -28,6 +28,7 @@ class TariffRateController extends Controller
         try {
             $data = $request->validate([
                 'item_code' => 'required|string|unique:tariff_rates,item_code',
+                'version' => 'required|integer',
                 'name' => 'required|string',
                 'tariff_rate' => 'required|string',
                 'supplementary_unit' => 'nullable|string',
@@ -75,6 +76,7 @@ class TariffRateController extends Controller
     
             $data = $request->validate([
                 'item_code' => 'sometimes|string|unique:tariff_rates,item_code,' . $tariffRate->id,
+                'version' => 'required|integer',
                 'name' => 'sometimes|string',
                 'tariff_rate' => 'sometimes|string',
                 'supplementary_unit' => 'nullable|string',
