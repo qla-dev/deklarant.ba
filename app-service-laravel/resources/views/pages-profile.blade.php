@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/4.3.0/css/fixedColumns.dataTables.min.css">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 <style>
     .avatar-overlay {
@@ -17,7 +18,7 @@
         width: 100%;
         height: 100%;
         background-color: rgba(0, 0, 0, 0.5);
-        
+
         color: white;
         display: flex;
         align-items: center;
@@ -60,6 +61,132 @@
 
     .dataTables_filter input {
         border-radius: 0 !important;
+    }
+    .dropzone {
+        width: 450px;
+        height: 450px;
+        border: dashed rgb(59, 171, 171);
+        /* Fixed typo */
+
+        background-color: #f8f9fa;
+        text-align: center;
+        padding: 50px;
+        cursor: pointer;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.3s ease-in-out;
+    }
+    
+    @keyframes bounce-in {
+    0% { transform: scale(0); opacity: 0; }
+    60% { transform: scale(1.2); opacity: 1; }
+    80% { transform: scale(0.95); }
+    100% { transform: scale(1); }
+    }
+
+
+    .dropzone:hover {
+        background-color: #e3f2fd;
+    }
+
+    .dropzone input {
+        display: none;
+    }
+
+    .corner {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        border: 7px solid #299cdb;
+    }
+
+    .corner-top-left {
+        top: -4px;
+        left: -4px;
+        border-right: none;
+        border-bottom: none;
+    }
+
+    .corner-top-right {
+        top: -4px;
+        right: -4px;
+        border-left: none;
+        border-bottom: none;
+    }
+
+    .corner-bottom-left {
+        bottom: -4px;
+        left: -4px;
+        border-right: none;
+        border-top: none;
+    }
+
+    .corner-bottom-right {
+        bottom: -4px;
+        right: -4px;
+        border-left: none;
+        border-top: none;
+    }
+
+    .file-list {
+        margin-top: 15px;
+        width: 100%;
+        max-height: 150px;
+        overflow-y: auto;
+        text-align: left;
+        padding: 10px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .file-item {
+        font-size: 14px;
+        padding: 5px;
+        border-bottom: 1px solid #e3e3e3;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .file-item:last-child {
+        border-bottom: none;
+    }
+
+    .remove-file {
+        cursor: pointer;
+        color: red;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .scan-icon {
+        font-size: 150px;
+        color: #299cdb;
+    }
+
+    .checkmark-animation {
+        font-size: 3rem;
+        color: #28a745;
+        animation: pop-in 0.6s ease-out forwards;
+        opacity: 0;
+    }
+
+    @keyframes pop-in {
+        0% {
+            transform: scale(0.3);
+            opacity: 0;
+        }
+        80% {
+            transform: scale(1.2);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(1);
+        }
     }
 
 
@@ -157,6 +284,8 @@
 
             <div class="tab-pane fade" id="documents">
                 <div class="table-responsive">
+                    <select id="tariffSelect" class="form-control" style="width: 100%"></select>
+
                     <table id="tariffTable" class="table table-striped table-bordered w-100">
                         <thead class="table-light">
                             <tr>
@@ -994,19 +1123,65 @@
     </div>
 </div>
 
+<!-- Scan Modal samo za ovaj screen -->
+<div class="modal fade" id="scanModal" tabindex="-1" aria-labelledby="scanModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="scanModalLabel">Skeniraj fakturu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
+      </div>
+      <div class="modal-body d-flex justify-content-center">
+        <div class="dropzone" id="dropzone">
+          <input type="file" id="fileInput" multiple>
+          <div class="corner corner-top-left"></div>
+          <div class="corner corner-top-right"></div>
+          <div class="corner corner-bottom-left"></div>
+          <div class="corner corner-bottom-right"></div>
+          
+          <div class="text-center" id="dropzone-content">
+              <i class="ri-file-2-line text-info fs-1"></i>
+              <p class="mt-3">Prevucite dokument ovdje ili kliknite kako bi uploadali i skenirali vašu fakturu</p>
+          </div>
+          
+          <div class="file-list" id="fileList" style="display: none;"></div>
+          
+          <div class="progress mt-3 w-100" id="uploadProgressContainer" style="display: none;">
+              <div id="uploadProgressBar" class="progress-bar bg-info" role="progressbar" style="width: 0%">0%</div>
+          </div>
+          
+          <div id="scanningLoader" class="mt-4 text-center d-none">
+              <div class="spinner-border text-info" role="status" style="width: 3rem; height: 3rem;"></div>
+              <p class="mt-3 fw-semibold" id="scanningText">Skeniranje fakture...</p>
+              <div id="successCheck" class="d-none mt-3">
+                  <i class="ri-checkbox-circle-fill text-success fs-1 animate__animated animate__zoomIn"></i>
+                  <p class="text-success fw-semibold mt-2">Uspješno skenirano!</p>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 @endsection
 
 
 @section('script')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
 <script src="{{ URL::asset('build/js/pages/profile.init.js') }}"></script>
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 <!--  DataTables Core -->
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
 
 <!--  DataTables Buttons -->
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
@@ -1017,6 +1192,8 @@
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 
 
@@ -1406,11 +1583,11 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        fetch('/storage/data/tariff_data.json')
+        fetch('/storage/data/tariff.json')
             .then(response => response.json())
             .then(data => {
                 const table = $('#tariffTable').DataTable({
-                    data: data, // direct array (not ajax)
+                    data: data,
                     scrollX: true,
                     autoWidth: true,
                     lengthChange: false,
@@ -1487,13 +1664,268 @@
                     }
                 });
 
+                // Append buttons
                 table.buttons().container().appendTo('#tariffTable_wrapper .row .col-md-6:eq(0)');
+
+                // Add row click handler
+                $('#tariffTable tbody').on('click', 'tr', function() {
+                    const rowData = table.row(this).data();
+                    alert("Puni naziv: " + rowData["Puni Naziv"]);
+                });
             })
             .catch(err => {
                 console.error("Greška pri učitavanju tariff podataka:", err);
             });
     });
 </script>
+
+
+<!-- select field -->
+<script>
+    let processed = [];
+
+    fetch('/storage/data/tariff.json')
+        .then(res => res.json())
+        .then(data => {
+            processed = data
+                .filter(item => item["Puni Naziv"] && item["Tarifna oznaka"]) // skip bad rows
+                .map(item => {
+                    const hierarchy = item["Puni Naziv"];
+                    const parts = hierarchy.split(">>>").map(p => p.trim());
+                    const leaf = parts[parts.length - 1];
+                    const depth = parts.length - 1;
+                    const code = item["Tarifna oznaka"];
+                    const isLeaf = code && code.replace(/\s/g, '').length === 10;
+
+                    return {
+                        id: isLeaf ? code : null, // only leafs are selectable
+                        text: leaf,
+                        display: `${code} – ${leaf}`,
+                        depth: depth,
+                        isLeaf: isLeaf,
+                        hierarchy: hierarchy,
+                        search: [item["Naziv"], hierarchy, code].join(" ").toLowerCase(),
+                        full: item
+                    };
+                });
+
+            $('#tariffSelect').select2({
+                placeholder: "Pretraži tarifne stavke...",
+                minimumInputLength: 1,
+                ajax: {
+                    transport: function (params, success, failure) {
+                        const term = params.data.q?.toLowerCase() || "";
+                        const filtered = processed.filter(item =>
+                            item.search.includes(term)
+                        );
+                        success({ results: filtered });
+                    },
+                    delay: 200
+                },
+                templateResult: function (item) {
+                    if (!item.id && !item.text) return null;
+
+                    const icon = item.isLeaf ? "•" : "▶";
+                    const label = item.display || item.text;
+                    return $(`<div style="padding-left:${item.depth * 20}px;">
+                        ${icon} ${label}
+                    </div>`);
+                },
+                templateSelection: function (item) {
+                    return item.id ? `${item.id} – ${item.text}` : "";
+                }
+            });
+
+            $('#tariffSelect').on('select2:select', function (e) {
+                const selectedData = e.params.data.full;
+                alert("Odabrana tarifna stavka:\n" + selectedData["Puni Naziv"]);
+                console.log("Selected full object:", selectedData);
+            });
+        });
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const token = localStorage.getItem("auth_token");
+    if (!token) {
+        alert("Niste prijavljeni. Molimo ulogujte se.");
+        window.location.href = "/auth-login-basic";
+        return;
+    }
+
+    const dropzone = document.getElementById("dropzone");
+    const fileInput = document.getElementById("fileInput");
+    const fileList = document.getElementById("fileList");
+    const dropzoneContent = document.getElementById("dropzone-content");
+    const progressContainer = document.getElementById("uploadProgressContainer");
+    const progressBar = document.getElementById("uploadProgressBar");
+    const scanningLoader = document.getElementById("scanningLoader");
+    const scanningText = document.getElementById("scanningText");
+    const successCheck = document.getElementById("successCheck");
+
+    function updateFileList(files) {
+        fileList.innerHTML = "";
+        if (files.length > 0) {
+            fileList.style.display = "block";
+            dropzoneContent.style.display = "none";
+        } else {
+            fileList.style.display = "none";
+            dropzoneContent.style.display = "block";
+        }
+
+        Array.from(files).forEach((file, index) => {
+            const fileItem = document.createElement("div");
+            fileItem.classList.add("file-item");
+
+            const fileName = document.createElement("span");
+            fileName.textContent = file.name;
+
+            const removeBtn = document.createElement("span");
+            removeBtn.textContent = "×";
+            removeBtn.classList.add("remove-file");
+            removeBtn.dataset.index = index;
+
+            removeBtn.addEventListener("click", function () {
+                let dt = new DataTransfer();
+                let fileArray = Array.from(fileInput.files);
+                fileArray.splice(index, 1);
+                fileArray.forEach(f => dt.items.add(f));
+                fileInput.files = dt.files;
+                updateFileList(fileInput.files);
+            });
+
+            fileItem.appendChild(fileName);
+            fileItem.appendChild(removeBtn);
+            fileList.appendChild(fileItem);
+        });
+    }
+
+    function generateFakeScanData() {
+        return [
+            { "Tarifna oznaka": "0101 21 00 00", "Naziv": "čistokrvne priplodne životinje", "Quantity": 2, "Unit Price": 540.00 },
+            { "Tarifna oznaka": "2710 12 41 00", "Naziv": "kerozin", "Quantity": 120, "Unit Price": 1.25 },
+            { "Tarifna oznaka": "0201 30 00 00", "Naziv": "goveđe meso", "Quantity": 46, "Unit Price": 1.14 }
+        ];
+    }
+
+    function simulateScan() {
+        scanningLoader.classList.remove("d-none");
+        dropzoneContent.style.display = "none";
+        fileList.style.display = "none";
+
+        const spinner = scanningLoader.querySelector(".spinner-border");
+        const stages = [
+            { text: "Skeniranje fakture...", until: 25 },
+            { text: "Prepoznavanje podataka...", until: 60 },
+            { text: "Generisanje fakture...", until: 90 },
+            { text: "Završeno skeniranje...", until: 100 }
+        ];
+
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress++;
+            for (const stage of stages) {
+                if (progress <= stage.until) {
+                    scanningText.innerText = stage.text;
+                    break;
+                }
+            }
+
+            if (progress >= 100) {
+                clearInterval(interval);
+                if (spinner) {
+                    spinner.classList.add("fade-out");
+                    setTimeout(() => {
+                        spinner.remove();
+                        scanningText.classList.add("d-none");
+
+                        successCheck.classList.remove("d-none");
+                        successCheck.classList.add("animate__animated", "animate__fadeIn");
+
+                        const fakeScanResults = generateFakeScanData();
+                        console.log("Saving to localStorage:", fakeScanResults);
+                        localStorage.setItem("ai_scan_result", JSON.stringify(fakeScanResults));
+
+                        setTimeout(() => {
+                            window.location.href = "/apps-invoices-create";
+                        }, 500);
+                    }, 400);
+                }
+            }
+        }, 50);
+    }
+
+    function uploadFiles(files) {
+        const formData = new FormData();
+        Array.from(files).forEach(file => formData.append('file', file));
+
+        progressContainer.style.display = "block";
+        progressBar.style.width = "0%";
+        progressBar.innerText = "0%";
+
+        let fakeProgress = 0;
+        const fakeInterval = setInterval(() => {
+            fakeProgress += 3;
+            if (fakeProgress > 100) fakeProgress = 100;
+
+            progressBar.style.width = fakeProgress + "%";
+            progressBar.innerText = fakeProgress + "%";
+
+            if (fakeProgress === 100) {
+                clearInterval(fakeInterval);
+                Swal.fire({
+                    icon: "success",
+                    title: "Uspješno uploadan dokument",
+                    showConfirmButton: false,
+                    timer: 1600
+                }).then(() => {
+                    progressContainer.style.display = "none";
+                    simulateScan();
+                });
+            }
+        }, 200);
+    }
+
+    dropzone.addEventListener("dragover", e => {
+        e.preventDefault();
+        dropzone.classList.add("bg-light");
+    });
+
+    dropzone.addEventListener("dragleave", () => {
+        dropzone.classList.remove("bg-light");
+    });
+
+    dropzone.addEventListener("drop", e => {
+        e.preventDefault();
+        dropzone.classList.remove("bg-light");
+        let dt = new DataTransfer();
+        Array.from(fileInput.files).forEach(f => dt.items.add(f));
+        Array.from(e.dataTransfer.files).forEach(f => dt.items.add(f));
+        fileInput.files = dt.files;
+        updateFileList(fileInput.files);
+        uploadFiles(fileInput.files);
+    });
+
+    dropzone.addEventListener("click", () => fileInput.click());
+
+    fileInput.addEventListener("change", () => {
+        updateFileList(fileInput.files);
+        uploadFiles(fileInput.files);
+    });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
 
 
 
