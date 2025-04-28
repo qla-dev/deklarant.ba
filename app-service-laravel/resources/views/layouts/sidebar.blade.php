@@ -1,14 +1,14 @@
 <!-- ========== App Menu ========== -->
 <div class="app-menu navbar-menu">
     <!-- LOGO -->
-   
+
 
     <div id="scrollbar" style="height: 50px!important;">
         <div class="container-fluid d-flex justify-content-center  ">
 
-        
+
             <ul class="navbar-nav  " id="navbar-nav">
-                
+
                 <li class="nav-item me-3">
                     <a class="nav-link menu-link me-3" href="#sidebarDashboards" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarDashboards">
@@ -49,7 +49,7 @@
                             </li>
                         </ul>
                     </div>
-                </li> 
+                </li>
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button"
@@ -451,9 +451,9 @@
                             </li>
                         </ul>
                     </div>
-                </li> 
-            
-                
+                </li>
+
+
                 <!-- end Dashboard Menu -->
 
                 <li class="nav-item">
@@ -721,22 +721,18 @@
                             <li class="nav-item">
                                 <a href="#sidebarBlogs" class="nav-link" data-bs-toggle="collapse" role="button"
                                     aria-expanded="false" aria-controls="sidebarBlogs">
-                                    <span>@lang('translation.blogs')</span> <span class="badge badge-pill bg-success"
-                                       >@lang('translation.new')</span>
+                                    <span>@lang('translation.blogs')</span> <span class="badge badge-pill bg-success">@lang('translation.new')</span>
                                 </a>
                                 <div class="collapse menu-dropdown" id="sidebarBlogs">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a href="pages-blog-list" class="nav-link"
-                                               >@lang('translation.list-view')</a>
+                                            <a href="pages-blog-list" class="nav-link">@lang('translation.list-view')</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="pages-blog-grid" class="nav-link"
-                                               >@lang('translation.grid-view')</a>
+                                            <a href="pages-blog-grid" class="nav-link">@lang('translation.grid-view')</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="pages-blog-overview" class="nav-link"
-                                               >@lang('translation.overview')</a>
+                                            <a href="pages-blog-overview" class="nav-link">@lang('translation.overview')</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -744,7 +740,7 @@
                         </ul>
                     </div>
                 </li>
-                
+
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>@lang('translation.components')
                     </span></li>
 
@@ -866,38 +862,44 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </li>
 
-                
 
-                
 
-                
 
-                
 
-                
-              
+
+
+
+
+
+
 
 
             </ul>
-            
-            <div class="col-sm-2 ms-5 me-0 mt-1 d-flex  align-items-center">
-                    <a href="pages-scan" style="width: 208px; height:31px;" class="btn btn-info btn-sm  text-white  py-0 d-flex align-items-center justify-content-center ">
-                    <i class="ri-ai-generate-2 fs-5 me-1"></i>  Skeniraj s AI 
-                    </a>
-                </div>
-        
-            
-            
-                    
-             
+
+            <div class="col-sm-2 ms-5 me-0 mt-1 d-flex align-items-center">
+                <a href="javascript:void(0);"
+                    data-bs-toggle="modal"
+                    data-bs-target="#scanModal"
+                    style="width: 208px; height:31px;"
+                    class="btn btn-info btn-sm text-white py-0 d-flex align-items-center justify-content-center">
+
+                    <i class="fas fa-wand-magic-sparkles fs-6 me-1"></i>
+                    <span class="fs-6"> Skeniraj fakturu</span>
+                </a>
+            </div>
+
+
+
+
+
         </div>
-        
+
         <!-- Sidebar -->
     </div>
-    
+
     <div class="sidebar-background"></div>
 </div>
 <!-- Left Sidebar End -->
