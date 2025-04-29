@@ -80,7 +80,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="text-center">
-                        <script>document.write(new Date().getFullYear())</script> eDeklarant <i class="mdi mdi-heart text-danger"></i> by Themesbrand
+                        <script>document.write(new Date().getFullYear())</script> DEKLARANT.BA <i class="mdi mdi-heart text-danger"></i> by Themesbrand
                     </div>
                 </div>
             </div>

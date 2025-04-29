@@ -39,7 +39,7 @@
                         <div class="card mt-4">
                             <div class="card-body p-4">
                                 <div class="text-center mt-2">
-                                    <h5 class="text-info">Kreiraj novi eDeklarant račun</h5>
+                                    <h5 class="text-info">Kreiraj novi DEKLARANT.BA račun</h5>
                                 </div>
                                 <div class="p-2 mt-4">
                                     <form id="registerForm" enctype="multipart/form-data">
