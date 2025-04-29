@@ -198,12 +198,12 @@
                 <div class="d-flex flex-column h-100">
                     <div class="bg-danger text-white text-center py-1 rounded-0">
                         <i class="ri-alert-line me-1"></i>
-                        <span><b>3</b> dostupna skeniranja.</span>
+                        <span><b>3</b> dostupna. Nadopuni!</span>
                     </div>
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
-                        <h6 class="text-muted text-uppercase fs-11 mb-1">Dostupna skeniranja</h6>
-                        <div class="d-flex align-items-center justify-content-center">
-                            <i class="ri-scan-2-line text-info mb-1" style="font-size: 45px"></i>
+                        <h6 class="text-muted text-uppercase fs-11 mb-1" style="margin-top: -10px;">Dostupna AI skeniranja</h6>
+                        <div class="d-flex align-items-center justify-content-center" style="margin-top: 20px;">
+                            <i class="fas fa-wand-magic-sparkles text-info mb-1" style="font-size: 35px;"></i>
                             <h3 class="mb-0 ms-2"><span class="counter-value" id="remainScans">0</span></h3>
                         </div>
                     </div>
