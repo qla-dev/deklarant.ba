@@ -8,6 +8,9 @@ File: Custom Css File
 
 [data-layout=horizontal] .navbar-nav .nav-item {display: flex!important; align-items: center;}
 
+[data-layout=horizontal] .menu-dropdown {top: 50px!important;}
+
+
 
 #navbar-nav {width: 100%; justify-content: space-between;}
 
@@ -17,14 +20,28 @@ File: Custom Css File
     }
 }
 
-@media (min-width: 1301px) and (max-width: 1338px) {
+@media (min-width: 1301px) and (max-width: 1453px) {
     [data-layout=horizontal] .page-content {
         margin-top: 80px;
+    }
+
+    [data-layout=horizontal] .menu-dropdown {top: 72px!important;}
+
+    .navbar-menu .navbar-nav .nav-link {
+
+        font-size: .68rem!important;
     }
 }
 
 @media (max-width: 1300px) {
     [data-layout=horizontal] .page-content {
-        margin-top: 20px!important;
+        margin-top: 20px!important; 
     }
 }
+
+[data-layout=horizontal] .navbar-menu .navbar-nav>li:nth-of-type(2)>.nav-link.menu-link {
+
+    padding-left: 1.5rem!important ;
+}
+
+

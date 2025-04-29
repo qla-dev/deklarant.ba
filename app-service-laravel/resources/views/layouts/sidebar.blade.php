@@ -55,7 +55,7 @@
                     </div>
                 </li>
 
-                <li class="nav-item">
+                <li class="nav-item me-3">
                     <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarApps">
                         <i class="ri-calendar-line text-info"></i> <span>@lang('translation.statistic')
@@ -427,7 +427,7 @@
                 </li>
 
 
-                <li class="nav-item">
+                <li class="nav-item me-3">
                     <a class="nav-link menu-link" href="#sidebarLayouts" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarLayouts">
                         <i class="ri-file-line text-info "></i> <span>@lang('translation.myorder')</span> <span
@@ -460,7 +460,7 @@
 
                 <!-- end Dashboard Menu -->
 
-                <li class="nav-item">
+                <li class="nav-item me-3">
                     <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarAuth">
                         <i class="mdi mdi-account-circle-outline text-info"></i> <span>@lang('translation.clients')
@@ -650,7 +650,7 @@
                     </div>
                 </li>
 
-                <li class="nav-item">
+                <li class="nav-item me-3">
                     <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarPages">
                         <i class="mdi mdi-sticker-text-outline text-info"></i> <span>@lang('translation.declarant')
@@ -745,10 +745,10 @@
                     </div>
                 </li>
 
-                <li class="menu-title"><i class="ri-more-fill"></i> <span>@lang('translation.components')
+                <li class="menu-title "><i class="ri-more-fill"></i> <span>@lang('translation.components')
                     </span></li>
 
-                <li class="nav-item">
+                <li class="nav-item me-3">
                     <a class="nav-link menu-link" href="#sidebarUI" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarUI">
                         <i class="ri-exchange-dollar-line text-info"></i> <span>@lang('translation.exclist')
