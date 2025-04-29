@@ -1026,7 +1026,7 @@
                                     </div>
                                     <div class="swiper-slide">
                                         <div class="card border border-dashed shadow-none" style="margin-bottom: 0; height: 500px!imporant;">
-                                            <div class="card-body" style="height: 500px!important;">
+                                            <div class="card-body">
                                                 <div class="d-flex">
                                                     <div class="flex-shrink-0">
                                                         <img src="{{ URL::asset('build/images/users/avatar-3.jpg') }}"
