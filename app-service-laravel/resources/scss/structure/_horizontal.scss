@@ -223,9 +223,7 @@
                 .navbar-nav {
                     flex-direction: column;
 
-                    >li:nth-of-type(2)>.nav-link.menu-link {
-                        padding-left: $vertical-menu-item-padding-x;
-                    }
+               
 
                     .nav-sm .nav-link:before {
                         opacity: 1 !important;

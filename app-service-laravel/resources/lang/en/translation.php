@@ -235,7 +235,7 @@ return [
     "links" => "Links",
     "range-area" => "Range Area",
     "funnel" => "Funnel",
-    "home" => "Početna stranica",
+    "home" => "Početna",
     "statistic"=>"Kalendar",
     "exclist" => "Kursna lista",
     "myorder" => "Moje narudžbe",
