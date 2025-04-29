@@ -19,7 +19,7 @@
 
 
                 <div class="row">
-                    <div class="col-xl-8">
+                    <div class="col-xl-7">
                         <div class="card">
                             <div class="card-header border-0 align-items-center d-flex">
                                 <h4 class="card-title mb-0 flex-grow-1">Trend profitabilnosti</h4>
@@ -71,7 +71,7 @@
                         </div><!-- end card -->
                     </div><!-- end col -->
 
-                    <div class="col-xl-4">
+                    <div class="col-xl-5">
                         <!-- card -->
                         <div class="card card-height-100">
                             <div class="card-header align-items-center d-flex">
@@ -666,7 +666,7 @@
                 </div> <!-- end row-->
 
                 <div class="row">
-                    <div class="col-xl-4">
+                    <div class="col-xl-5">
                         <div class="card card-height-100">
                             <div class="card-header align-items-center d-flex">
                                 <h4 class="card-title mb-0 flex-grow-1">Store Visits by Source</h4>
@@ -694,7 +694,7 @@
                         </div> <!-- .card-->
                     </div> <!-- .col-->
 
-                    <div class="col-xl-8">
+                    <div class="col-xl-7">
                         <div class="card">
                             <div class="card-header align-items-center d-flex">
                                 <h4 class="card-title mb-0 flex-grow-1">Recent Orders</h4>
@@ -878,7 +878,7 @@
                 <div class="card h-100 rounded-0">
                     <div class="card-body p-0">
                         <div class="p-3">
-                            <h6 class="text-muted mb-0 text-uppercase fw-semibold">Recent Activity</h6>
+                            <h6 class="text-muted mb-0 text-uppercase fw-semibold">Zadnje aktivnosti</h6>
                         </div>
                         <div data-simplebar style="max-height: 410px;" class="p-3 pt-0">
                             <div class="acitivity-timeline acitivity-main">
@@ -1016,7 +1016,7 @@
                         </div>
 
                         <div class="p-3 mt-2">
-                            <h6 class="text-muted mb-3 text-uppercase fw-semibold">Top 10 Categories
+                            <h6 class="text-muted mb-3 text-uppercase fw-semibold">Top 10 Kateogorija
                             </h6>
 
                             <ol class="ps-3 text-muted">

@@ -9,8 +9,8 @@
 
             <ul class="navbar-nav  " id="navbar-nav">
 
-                <li class="nav-item me-3">
-                    <a class="nav-link menu-link me-3" href="#sidebarDashboards" data-bs-toggle="collapse" role="button"
+                <li class="nav-item me-3 ps-0 pe-0">
+                    <a class="nav-link menu-link me-3 ps-0 pe-0" href="#sidebarDashboards" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarDashboards">
                         <i class="ri-home-line text-info"></i> <span>@lang('translation.home')
                         </span>
@@ -874,7 +874,19 @@
 
 
 
+                <li class="nav-item">
+                <a href="javascript:void(0);"
+                    data-bs-toggle="modal"
+                    data-bs-target="#scanModal"
+                    style="width: 190px; height:28px;"
+                    class="btn btn-info btn-sm ms-5 text-white py-0 d-flex align-items-center justify-content-center">
 
+                    <i class="fas fa-wand-magic-sparkles fs-6 me-1"></i>
+                    <span class="fs-6"> Skeniraj fakturu sa AI</span>
+                </a>
+                 
+
+                </li>
 
 
 
@@ -883,17 +895,7 @@
 
             </ul>
 
-            <div class="col-sm-2 ms-5 me-0 mt-1 d-flex align-items-center">
-                <a href="javascript:void(0);"
-                    data-bs-toggle="modal"
-                    data-bs-target="#scanModal"
-                    style="width: 208px; height:31px;"
-                    class="btn btn-info btn-sm text-white py-0 d-flex align-items-center justify-content-center">
-
-                    <i class="fas fa-wand-magic-sparkles fs-6 me-1"></i>
-                    <span class="fs-6"> Skeniraj fakturu sa AI</span>
-                </a>
-            </div>
+        
 
 
 
