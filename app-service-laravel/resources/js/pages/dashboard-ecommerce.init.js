@@ -242,8 +242,8 @@ function loadCharts() {
     chartDonutBasicColors = getChartColorsArray("store-visits-source");
     if (chartDonutBasicColors) {
         var options = {
-            series: [44, 55, 41, 17, 15],
-            labels: ["Direct", "Social", "Email", "Other", "Referrals"],
+            series: [44, 55, 41],
+            labels: ["Orbico", "Ikea", "Bingo"],
             chart: {
                 height: 333,
                 type: "donut",

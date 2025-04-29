@@ -52,9 +52,6 @@ function loadCharts() {
             }, {
                 name: 'Milkos D.O.O',
                 data: [12]
-            }, {
-                name: 'Kalea D.O.O',
-                data: [18]
             }],
             chart: {
                 type: 'bar',
@@ -85,7 +82,7 @@ function loadCharts() {
                     offsetY: 0
                 },
                 title: {
-                    text: 'Total Forecasted Value',
+                    text: 'Suma u zadnjoj godini dana',
                     offsetX: 0,
                     offsetY: -30,
                     style: {
@@ -203,10 +200,10 @@ function loadCharts() {
     if (revenueExpensesChartsColors) {
         var options = {
             series: [{
-                name: 'Revenue',
+                name: 'Promet',
                 data: [20, 25, 30, 35, 40, 55, 70, 110, 150, 180, 210, 250]
             }, {
-                name: 'Expenses',
+                name: 'Trošak',
                 data: [12, 17, 45, 42, 24, 35, 42, 75, 102, 108, 156, 199]
             }],
             chart: {
@@ -222,12 +219,12 @@ function loadCharts() {
                 width: 2,
             },
             xaxis: {
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec']
             },
             yaxis: {
                 labels: {
                     formatter: function (value) {
-                        return "$" + value + "k";
+                        return value + " KM";
                     }
                 },
                 tickAmount: 5,

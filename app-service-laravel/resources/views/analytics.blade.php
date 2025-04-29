@@ -25,7 +25,7 @@
                                 <h4 class="card-title mb-0 flex-grow-1">Trend profitabilnosti</h4>
                                 <div>
                                 <button type="button" class="btn btn-soft-info btn-sm shadow-none">
-                                        Exportuj izvještaj
+                                         <i class="ri-file-list-3-line align-middle"></i> Exportuj Izvještaj
                                     </button>
                                 </div>
                             </div><!-- end card header -->
@@ -78,7 +78,7 @@
                                 <h4 class="card-title mb-0 flex-grow-1">Geopoložaji sa najviše suradnje</h4>
                                 <div class="flex-shrink-0">
                                     <button type="button" class="btn btn-soft-info btn-sm shadow-none">
-                                        Exportuj izvještaj
+                                         <i class="ri-file-list-3-line align-middle"></i> Exportuj Izvještaj
                                     </button>
                                 </div>
                             </div><!-- end card header -->
@@ -123,72 +123,61 @@
         <div class="col-xxl-3 col-md-6">
             <div class="card">
                 <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Najčešći dobavljači</h4>
-                
+                    <h4 class="card-title mb-0 flex-grow-1">Česti dobavljači</h4>
+                    <div class="flex-shrink-0">
+                               <button type="button" class="btn btn-soft-info btn-sm shadow-none">
+                                         <i class="ri-file-list-3-line align-middle"></i> Export
+                                    </button>
+                                </div>
                 </div><!-- end card header -->
-                <div class="card-body pb-0">
+                <div class="card-body">
                     <div id="sales-forecast-chart" data-colors='["--vz-info", "--vz-success", "--vz-warning"]' class="apex-charts" dir="ltr"></div>
                 </div>
             </div><!-- end card -->
         </div><!-- end col -->
 
-        <div class="col-xxl-3 col-md-6">
-            <div class="card card-height-100">
-                <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Deal Type</h4>
-                    <div class="flex-shrink-0">
-                        <div class="dropdown card-header-dropdown">
-                            <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="fw-semibold text-uppercase fs-12">Sort by: </span><span class="text-muted">Monthly<i class="mdi mdi-chevron-down ms-1"></i></span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" href="#">Today</a>
-                                <a class="dropdown-item" href="#">Weekly</a>
-                                <a class="dropdown-item" href="#">Monthly</a>
-                                <a class="dropdown-item" href="#">Yearly</a>
-                            </div>
-                        </div>
-                    </div>
-                </div><!-- end card header -->
-                <div class="card-body pb-0">
-                    <div id="deal-type-charts" data-colors='["--vz-info", "--vz-warning", "--vz-success"]' class="apex-charts" dir="ltr"></div>
-                </div><!-- end card body -->
-            </div><!-- end card -->
-        </div><!-- end col -->
 
-        <div class="col-xxl-6">
+        <div class="col-xlx-3 col-md-4">
+                        <div class="card card-height-100">
+                            <div class="card-header align-items-center d-flex">
+                                <h4 class="card-title mb-0 flex-grow-1">Omjer dobavljača</h4>
+                                <div class="flex-shrink-0">
+                               <button type="button" class="btn btn-soft-info btn-sm shadow-none">
+                                         <i class="ri-file-list-3-line align-middle"></i> Export
+                                    </button>
+                                </div>
+                            </div><!-- end card header -->
+
+                            <div class="card-body">
+                                <div id="store-visits-source"
+                                    data-colors='["--vz-info", "--vz-success", "--vz-warning"]'
+                                    class="apex-charts" dir="ltr"></div>
+                            </div>
+                        </div> <!-- .card-->
+                    </div> <!-- .col-->
+        <div class="col-xxl-5">
             <div class="card card-height-100">
                 <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Balance Overview</h4>
+                    <h4 class="card-title mb-0 flex-grow-1">Trenutni trend</h4>
                     <div class="flex-shrink-0">
-                        <div class="dropdown card-header-dropdown">
-                            <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="fw-semibold text-uppercase fs-12">Sort by: </span><span class="text-muted">Current Year<i class="mdi mdi-chevron-down ms-1"></i></span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" href="#">Today</a>
-                                <a class="dropdown-item" href="#">Last Week</a>
-                                <a class="dropdown-item" href="#">Last Month</a>
-                                <a class="dropdown-item" href="#">Current Year</a>
-                            </div>
-                        </div>
-                    </div>
+                                <button type="button" class="btn btn-soft-info btn-sm shadow-none">
+                                         <i class="ri-file-list-3-line align-middle"></i> Exportuj Izvještaj
+                                    </button>
+                                </div>
                 </div><!-- end card header -->
                 <div class="card-body px-0">
-                    <ul class="list-inline main-chart text-center mb-0">
+                    <ul class="list-inline main-chart text-center mb-0 mt-3">
                         <li class="list-inline-item chart-border-left me-0 border-0">
-                            <h4 class="text-primary">$584k <span class="text-muted d-inline-block fs-13 align-middle ms-2">Revenue</span></h4>
+                            <h4 class="text-info mb-0">5.848 KM <span class="text-muted d-inline-block fs-13 align-middle ms-2">Prometa</span></h4>
                         </li>
                         <li class="list-inline-item chart-border-left me-0">
-                            <h4>$497k<span class="text-muted d-inline-block fs-13 align-middle ms-2">Expenses</span>
+                            <h4 class="mb-0">1.788 KM <span class="text-muted d-inline-block fs-13 align-middle ms-2">Potrošeno</span>
                             </h4>
                         </li>
-                        <li class="list-inline-item chart-border-left me-0">
-                            <h4><span data-plugin="counterup">3.6</span>%<span class="text-muted d-inline-block fs-13 align-middle ms-2">Profit Ratio</span></h4>
-                        </li>
+
                     </ul>
 
-                    <div id="revenue-expenses-charts" data-colors='["--vz-success", "--vz-warning"]' class="apex-charts" dir="ltr"></div>
+                    <div id="revenue-expenses-charts" data-colors='["--vz-info", "--vz-success"]' class="apex-charts" dir="ltr"></div>
                 </div>
             </div><!-- end card -->
         </div><!-- end col -->
@@ -197,24 +186,11 @@
                     <div class="col-xl-6">
                         <div class="card">
                             <div class="card-header align-items-center d-flex">
-                                <h4 class="card-title mb-0 flex-grow-1">Best Selling Products</h4>
+                                <h4 class="card-title mb-0 flex-grow-1">Najčešći proizvodi</h4>
                                 <div class="flex-shrink-0">
-                                    <div class="dropdown card-header-dropdown">
-                                        <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false">
-                                            <span class="fw-semibold text-uppercase fs-12">Sort by:
-                                            </span><span class="text-muted">Today<i
-                                                    class="mdi mdi-chevron-down ms-1"></i></span>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a class="dropdown-item" href="#">Today</a>
-                                            <a class="dropdown-item" href="#">Yesterday</a>
-                                            <a class="dropdown-item" href="#">Last 7 Days</a>
-                                            <a class="dropdown-item" href="#">Last 30 Days</a>
-                                            <a class="dropdown-item" href="#">This Month</a>
-                                            <a class="dropdown-item" href="#">Last Month</a>
-                                        </div>
-                                    </div>
+                                <button type="button" class="btn btn-soft-info btn-sm shadow-none">
+                                         <i class="ri-file-list-3-line align-middle"></i> Exportuj Izvještaj
+                                    </button>
                                 </div>
                             </div><!-- end card header -->
 
@@ -399,8 +375,8 @@
                                     class="align-items-center mt-4 pt-2 justify-content-between row text-center text-sm-start">
                                     <div class="col-sm">
                                         <div class="text-muted">
-                                            Showing <span class="fw-semibold">5</span> of <span
-                                                class="fw-semibold">25</span> Results
+                                            Prikazuje se <span class="fw-semibold">5</span> od <span
+                                                class="fw-semibold">25</span> Rezultata
                                         </div>
                                     </div>
                                     <div class="col-sm-auto  mt-3 mt-sm-0">
@@ -432,20 +408,11 @@
                     <div class="col-xl-6">
                         <div class="card card-height-100">
                             <div class="card-header align-items-center d-flex">
-                                <h4 class="card-title mb-0 flex-grow-1">Top Sellers</h4>
+                                <h4 class="card-title mb-0 flex-grow-1">Najskuplji proizvodi</h4>
                                 <div class="flex-shrink-0">
-                                    <div class="dropdown card-header-dropdown">
-                                        <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false">
-                                            <span class="text-muted">Report<i
-                                                    class="mdi mdi-chevron-down ms-1"></i></span>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a class="dropdown-item" href="#">Download Report</a>
-                                            <a class="dropdown-item" href="#">Export</a>
-                                            <a class="dropdown-item" href="#">Import</a>
-                                        </div>
-                                    </div>
+                                <button type="button" class="btn btn-soft-info btn-sm shadow-none">
+                                         <i class="ri-file-list-3-line align-middle"></i> Exportuj Izvještaj
+                                    </button>
                                 </div>
                             </div><!-- end card header -->
 
@@ -469,9 +436,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>
-                                                    <span class="text-muted">Bags and Wallets</span>
-                                                </td>
+                                           
                                                 <td>
                                                     <p class="mb-0">8547</p>
                                                     <span class="text-muted">Stock</span>
@@ -501,9 +466,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>
-                                                    <span class="text-muted">Watches</span>
-                                                </td>
+                                            
                                                 <td>
                                                     <p class="mb-0">895</p>
                                                     <span class="text-muted">Stock</span>
@@ -534,9 +497,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>
-                                                    <span class="text-muted">Bike Accessories</span>
-                                                </td>
+                                            
                                                 <td>
                                                     <p class="mb-0">3470</p>
                                                     <span class="text-muted">Stock</span>
@@ -566,9 +527,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>
-                                                    <span class="text-muted">Clothes</span>
-                                                </td>
+                                            
                                                 <td>
                                                     <p class="mb-0">5488</p>
                                                     <span class="text-muted">Stock</span>
@@ -598,9 +557,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>
-                                                    <span class="text-muted">Furniture</span>
-                                                </td>
+                                            
                                                 <td>
                                                     <p class="mb-0">4100</p>
                                                     <span class="text-muted">Stock</span>
@@ -622,8 +579,8 @@
                                     class="align-items-center mt-4 pt-2 justify-content-between row text-center text-sm-start">
                                     <div class="col-sm">
                                         <div class="text-muted">
-                                            Showing <span class="fw-semibold">5</span> of <span
-                                                class="fw-semibold">25</span> Results
+                                            Prikazuje se <span class="fw-semibold">5</span> od <span
+                                                class="fw-semibold">25</span> Rezultata
                                         </div>
                                     </div>
                                     <div class="col-sm-auto  mt-3 mt-sm-0">
@@ -653,208 +610,7 @@
                     </div> <!-- .col-->
                 </div> <!-- end row-->
 
-                <div class="row">
-                    <div class="col-xl-5">
-                        <div class="card card-height-100">
-                            <div class="card-header align-items-center d-flex">
-                                <h4 class="card-title mb-0 flex-grow-1">Store Visits by Source</h4>
-                                <div class="flex-shrink-0">
-                                    <div class="dropdown card-header-dropdown">
-                                        <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false">
-                                            <span class="text-muted">Report<i
-                                                    class="mdi mdi-chevron-down ms-1"></i></span>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a class="dropdown-item" href="#">Download Report</a>
-                                            <a class="dropdown-item" href="#">Export</a>
-                                            <a class="dropdown-item" href="#">Import</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!-- end card header -->
-
-                            <div class="card-body">
-                                <div id="store-visits-source"
-                                    data-colors='["--vz-primary", "--vz-success", "--vz-warning", "--vz-warning", "--vz-info"]'
-                                    class="apex-charts" dir="ltr"></div>
-                            </div>
-                        </div> <!-- .card-->
-                    </div> <!-- .col-->
-
-                    <div class="col-xl-7">
-                        <div class="card">
-                            <div class="card-header align-items-center d-flex">
-                                <h4 class="card-title mb-0 flex-grow-1">Recent Orders</h4>
-                                <div class="flex-shrink-0">
-                                    <button type="button" class="btn btn-soft-info btn-sm shadow-none">
-                                        <i class="ri-file-list-3-line align-middle"></i> Generate Report
-                                    </button>
-                                </div>
-                            </div><!-- end card header -->
-
-                            <div class="card-body">
-                                <div class="table-responsive table-card">
-                                    <table class="table table-borderless table-centered align-middle table-nowrap mb-0">
-                                        <thead class="text-muted table-light">
-                                            <tr>
-                                                <th scope="col">Order ID</th>
-                                                <th scope="col">Customer</th>
-                                                <th scope="col">Product</th>
-                                                <th scope="col">Amount</th>
-                                                <th scope="col">Vendor</th>
-                                                <th scope="col">Status</th>
-                                                <th scope="col">Rating</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <a href="apps-ecommerce-order-details"
-                                                        class="fw-medium link-primary">#VZ2112</a>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="flex-shrink-0 me-2">
-                                                            <img src="{{ URL::asset('build/images/users/avatar-1.jpg') }}"
-                                                                alt="" class="avatar-xs rounded-circle shadow" />
-                                                        </div>
-                                                        <div class="flex-grow-1">Alex Smith</div>
-                                                    </div>
-                                                </td>
-                                                <td>Clothes</td>
-                                                <td>
-                                                    <span class="text-success">$109.00</span>
-                                                </td>
-                                                <td>Zoetic Fashion</td>
-                                                <td>
-                                                    <span class="badge bg-success-subtle text-success">Paid</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 fw-medium mb-0">5.0<span
-                                                            class="text-muted fs-11 ms-1">(61
-                                                            votes)</span></h5>
-                                                </td>
-                                            </tr><!-- end tr -->
-                                            <tr>
-                                                <td>
-                                                    <a href="apps-ecommerce-order-details"
-                                                        class="fw-medium link-primary">#VZ2111</a>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="flex-shrink-0 me-2">
-                                                            <img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}"
-                                                                alt="" class="avatar-xs rounded-circle shadow" />
-                                                        </div>
-                                                        <div class="flex-grow-1">Jansh Brown</div>
-                                                    </div>
-                                                </td>
-                                                <td>Kitchen Storage</td>
-                                                <td>
-                                                    <span class="text-success">$149.00</span>
-                                                </td>
-                                                <td>Micro Design</td>
-                                                <td>
-                                                    <span class="badge bg-warning-subtle text-warning">Pending</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 fw-medium mb-0">4.5<span
-                                                            class="text-muted fs-11 ms-1">(61
-                                                            votes)</span></h5>
-                                                </td>
-                                            </tr><!-- end tr -->
-                                            <tr>
-                                                <td>
-                                                    <a href="apps-ecommerce-order-details"
-                                                        class="fw-medium link-primary">#VZ2109</a>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="flex-shrink-0 me-2">
-                                                            <img src="{{ URL::asset('build/images/users/avatar-3.jpg') }}"
-                                                                alt="" class="avatar-xs rounded-circle shadow" />
-                                                        </div>
-                                                        <div class="flex-grow-1">Ayaan Bowen</div>
-                                                    </div>
-                                                </td>
-                                                <td>Bike Accessories</td>
-                                                <td>
-                                                    <span class="text-success">$215.00</span>
-                                                </td>
-                                                <td>Nesta Technologies</td>
-                                                <td>
-                                                    <span class="badge bg-success-subtle text-success">Paid</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 fw-medium mb-0">4.9<span
-                                                            class="text-muted fs-11 ms-1">(89
-                                                            votes)</span></h5>
-                                                </td>
-                                            </tr><!-- end tr -->
-                                            <tr>
-                                                <td>
-                                                    <a href="apps-ecommerce-order-details"
-                                                        class="fw-medium link-primary">#VZ2108</a>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="flex-shrink-0 me-2">
-                                                            <img src="{{ URL::asset('build/images/users/avatar-4.jpg') }}"
-                                                                alt="" class="avatar-xs rounded-circle shadow" />
-                                                        </div>
-                                                        <div class="flex-grow-1">Prezy Mark</div>
-                                                    </div>
-                                                </td>
-                                                <td>Furniture</td>
-                                                <td>
-                                                    <span class="text-success">$199.00</span>
-                                                </td>
-                                                <td>Syntyce Solutions</td>
-                                                <td>
-                                                    <span class="badge bg-danger-subtle text-danger">Unpaid</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 fw-medium mb-0">4.3<span
-                                                            class="text-muted fs-11 ms-1">(47
-                                                            votes)</span></h5>
-                                                </td>
-                                            </tr><!-- end tr -->
-                                            <tr>
-                                                <td>
-                                                    <a href="apps-ecommerce-order-details"
-                                                        class="fw-medium link-primary">#VZ2107</a>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="flex-shrink-0 me-2">
-                                                            <img src="{{ URL::asset('build/images/users/avatar-6.jpg') }}"
-                                                                alt="" class="avatar-xs rounded-circle shadow" />
-                                                        </div>
-                                                        <div class="flex-grow-1">Vihan Hudda</div>
-                                                    </div>
-                                                </td>
-                                                <td>Bags and Wallets</td>
-                                                <td>
-                                                    <span class="text-success">$330.00</span>
-                                                </td>
-                                                <td>iTest Factory</td>
-                                                <td>
-                                                    <span class="badge bg-success-subtle text-success">Paid</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 fw-medium mb-0">4.7<span
-                                                            class="text-muted fs-11 ms-1">(161
-                                                            votes)</span></h5>
-                                                </td>
-                                            </tr><!-- end tr -->
-                                        </tbody><!-- end tbody -->
-                                    </table><!-- end table -->
-                                </div>
-                            </div>
-                        </div> <!-- .card-->
-                    </div> <!-- .col-->
-                </div> <!-- end row-->
+          
 
             </div> <!-- end .h-100-->
 
@@ -1116,157 +872,17 @@
                             </div>
                         </div>
 
-                        <div class="p-3">
-                            <h6 class="text-muted mb-3 text-uppercase fw-semibold">Customer Reviews</h6>
-                            <div class="bg-light px-3 py-2 rounded-2 mb-2">
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-grow-1">
-                                        <div class="fs-16 align-middle text-warning">
-                                            <i class="ri-star-fill"></i>
-                                            <i class="ri-star-fill"></i>
-                                            <i class="ri-star-fill"></i>
-                                            <i class="ri-star-fill"></i>
-                                            <i class="ri-star-half-fill"></i>
-                                        </div>
-                                    </div>
-                                    <div class="flex-shrink-0">
-                                        <h6 class="mb-0">4.5 out of 5</h6>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-muted">Total <span class="fw-medium">5.50k</span>
-                                    reviews</div>
-                            </div>
+                        
 
-                            <div class="mt-3">
-                                <div class="row align-items-center g-2">
-                                    <div class="col-auto">
-                                        <div class="p-1">
-                                            <h6 class="mb-0">5 star</h6>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="p-1">
-                                            <div class="progress bg-success-subtle animated-progress progress-sm">
-                                                <div class="progress-bar bg-success" role="progressbar"
-                                                    style="width: 50.16%" aria-valuenow="50.16" aria-valuemin="0"
-                                                    aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <div class="p-1">
-                                            <h6 class="mb-0 text-muted">2758</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- end row -->
-
-                                <div class="row align-items-center g-2">
-                                    <div class="col-auto">
-                                        <div class="p-1">
-                                            <h6 class="mb-0">4 star</h6>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="p-1">
-                                            <div class="progress bg-success-subtle animated-progress progress-sm">
-                                                <div class="progress-bar bg-success" role="progressbar"
-                                                    style="width: 29.32%" aria-valuenow="29.32" aria-valuemin="0"
-                                                    aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <div class="p-1">
-                                            <h6 class="mb-0 text-muted">1063</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- end row -->
-
-                                <div class="row align-items-center g-2">
-                                    <div class="col-auto">
-                                        <div class="p-1">
-                                            <h6 class="mb-0">3 star</h6>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="p-1">
-                                            <div class="progress bg-warning-subtle animated-progress progress-sm">
-                                                <div class="progress-bar bg-warning" role="progressbar"
-                                                    style="width: 18.12%" aria-valuenow="18.12" aria-valuemin="0"
-                                                    aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <div class="p-1">
-                                            <h6 class="mb-0 text-muted">997</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- end row -->
-
-                                <div class="row align-items-center g-2">
-                                    <div class="col-auto">
-                                        <div class="p-1">
-                                            <h6 class="mb-0">2 star</h6>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="p-1">
-                                            <div class="progress bg-success-subtle animated-progress progress-sm">
-                                                <div class="progress-bar bg-success" role="progressbar"
-                                                    style="width: 4.98%" aria-valuenow="4.98" aria-valuemin="0"
-                                                    aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-auto">
-                                        <div class="p-1">
-                                            <h6 class="mb-0 text-muted">227</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- end row -->
-
-                                <div class="row align-items-center g-2">
-                                    <div class="col-auto">
-                                        <div class="p-1">
-                                            <h6 class="mb-0">1 star</h6>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="p-1">
-                                            <div class="progress bg-danger-subtle animated-progress progress-sm">
-                                                <div class="progress-bar bg-danger" role="progressbar"
-                                                    style="width: 7.42%" aria-valuenow="7.42" aria-valuemin="0"
-                                                    aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <div class="p-1">
-                                            <h6 class="mb-0 text-muted">408</h6>
-                                        </div>
-                                    </div>
-                                </div><!-- end row -->
-                            </div>
-                        </div>
-
-                        <div class="card sidebar-alert bg-light border-0 text-center mx-4 mb-0 mt-3">
+                        <div class="card sidebar-alert bg-light border-0 text-center mx-4 mb-0 mt-5">
                             <div class="card-body">
                                 <img src="{{ URL::asset('build/images/giftbox.png') }}" alt="">
                                 <div class="mt-4">
-                                    <h5>Invite New Seller</h5>
-                                    <p class="text-muted lh-base">Refer a new seller to us and earn $100
-                                        per refer.</p>
-                                    <button type="button" class="btn btn-primary btn-label rounded-pill"><i
+                                    <h5>Pozovi prijatelja</h5>
+                                    <p class="text-muted lh-base">Preporuči DEKLARANT.BA platformu svom prijatelju i osvoji 50 besplatnih skeniranja.</p>
+                                    <button type="button" class="btn btn-info btn-label rounded-pill"><i
                                             class="ri-mail-fill label-icon align-middle rounded-pill fs-16 me-2"></i>
-                                        Invite Now</button>
+                                        Pozovi sada</button>
                                 </div>
                             </div>
                         </div>
