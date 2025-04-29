@@ -4,7 +4,7 @@
             <div class="d-flex w-100">
                 <!-- LOGO -->
                 <div class="navbar-box horizontal-logo me-5">
-                    <a href="index" class="logo logo-dark">
+                    <a href="/" class="logo logo-dark">
                         <span class="logo-sm">
                             <img src="{{ URL::asset('build/images/logo-sm.png') }}" alt="" height="22">
                         </span>

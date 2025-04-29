@@ -1,4 +1,43 @@
 <!-- ========== App Menu ========== -->
+<div class="modal fade" id="scanModal" tabindex="-1" aria-labelledby="scanModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 class="modal-title w-100" id="scanModalLabel"><i class="fas fa-wand-magic-sparkles fs-6 me-1" style="font-size:10px;"></i>Skeniraj fakturu sa AI</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
+      </div>
+      <div class="modal-body d-flex justify-content-center">
+        <div class="dropzone" id="dropzone">
+          <input type="file" id="fileInput" multiple>
+          <div class="corner corner-top-left"></div>
+          <div class="corner corner-top-right"></div>
+          <div class="corner corner-bottom-left"></div>
+          <div class="corner corner-bottom-right"></div>
+          
+          <div class="text-center" id="dropzone-content">
+              <i class="ri-file-2-line text-info fs-1"></i>
+              <p class="mt-3">Prevucite dokument ovdje ili kliknite kako bi uploadali i skenirali vašu fakturu</p>
+          </div>
+          
+          <div class="file-list" id="fileList" style="display: none;"></div>
+          
+          <div class="progress mt-3 w-100" id="uploadProgressContainer" style="display: none;">
+              <div id="uploadProgressBar" class="progress-bar bg-info" role="progressbar" style="width: 0%">0%</div>
+          </div>
+          
+          <div id="scanningLoader" class="mt-4 text-center d-none">
+              <div class="spinner-border text-info" role="status" style="width: 3rem; height: 3rem;"></div>
+              <p class="mt-3 fw-semibold" id="scanningText">Skeniranje fakture...</p>
+              <div id="successCheck" class="d-none mt-3">
+                  <i class="ri-checkbox-circle-fill text-success fs-1 animate__animated animate__zoomIn"></i>
+                  <p class="text-success fw-semibold mt-2">Uspješno skenirano!</p>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="app-menu navbar-menu">
     <!-- LOGO -->
 

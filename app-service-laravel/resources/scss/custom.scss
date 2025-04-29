@@ -44,4 +44,169 @@ File: Custom Css File
     padding-left: 1.5rem!important ;
 }
 
+.modal-lg, .modal-xl {
+
+    --vz-modal-width: unset!important;
+}
+
+#scanModal .modal-content {width: unset!important;}
+
+.mySwiper .swiper-slide {
+    margin-right: 3px; /* This is equivalent to Bootstrap's g-1 gap */
+}
+
+/* Optional: Remove the margin-right for the last slide to avoid overflow */
+.mySwiper .swiper-slide:last-child {
+    margin-right: 0;
+}
+
+.my-alert {
+   
+   transition: background-color 0.6s ease-in-out, color 0.6s ease-in-out;
+}
+.my-card:hover .my-alert {
+   background-color: #299cdb !important; /* bg-info */
+   
+   color: white !important;
+}
+.dropzone {
+width: 450px;
+height: 450px;
+
+/* Fixed typo */
+
+background-color: #f8f9fa;
+text-align: center;
+padding: 50px;
+cursor: pointer;
+position: relative;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+transition: background-color 0.3s ease-in-out;
+}
+
+@keyframes bounce-in {
+0% { transform: scale(0); opacity: 0; }
+60% { transform: scale(1.2); opacity: 1; }
+80% { transform: scale(0.95); }
+100% { transform: scale(1); }
+}
+
+
+.dropzone:hover {
+background-color: #e3f2fd;
+}
+
+.dropzone input {
+display: none;
+}
+
+.corner {
+position: absolute;
+width: 50px;
+height: 50px;
+border: 7px solid #299cdb;
+}
+
+.corner-top-left {
+top: -4px;
+left: -4px;
+border-right: none;
+border-bottom: none;
+}
+
+.corner-top-right {
+top: -4px;
+right: -4px;
+border-left: none;
+border-bottom: none;
+}
+
+.corner-bottom-left {
+bottom: -4px;
+left: -4px;
+border-right: none;
+border-top: none;
+}
+
+.corner-bottom-right {
+bottom: -4px;
+right: -4px;
+border-left: none;
+border-top: none;
+}
+
+.file-list {
+margin-top: 15px;
+width: 100%;
+max-height: 150px;
+overflow-y: auto;
+text-align: left;
+padding: 10px;
+background-color: #fff;
+border-radius: 8px;
+box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+}
+
+.file-item {
+font-size: 14px;
+padding: 5px;
+border-bottom: 1px solid #e3e3e3;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.file-item:last-child {
+border-bottom: none;
+}
+
+.remove-file {
+cursor: pointer;
+color: red;
+font-size: 16px;
+font-weight: bold;
+}
+
+.scan-icon {
+font-size: 150px;
+color: #299cdb;
+}
+
+.checkmark-animation {
+font-size: 3rem;
+color: #28a745;
+animation: pop-in 0.6s ease-out forwards;
+opacity: 0;
+}
+
+@keyframes pop-in {
+0% {
+   transform: scale(0.3);
+   opacity: 0;
+}
+80% {
+   transform: scale(1.2);
+   opacity: 1;
+}
+100% {
+   transform: scale(1);
+}
+}
+
+
+
+/* Ensure the swiper-container behaves as expected */
+
+
+
+
+
+
+
+
+
+
 

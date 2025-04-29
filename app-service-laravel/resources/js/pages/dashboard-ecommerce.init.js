@@ -97,7 +97,7 @@ function loadCharts() {
     if (linechartcustomerColors) {
         var options = {
             series: [{
-                name: "Skenirane fakture",
+                name: "Prosječna faktura",
                 type: "area",
                 data: [34, 65, 46, 68, 49, 61, 42, 44, 78, 52, 63, 67],
             },
@@ -109,7 +109,7 @@ function loadCharts() {
                 ],
             },
             {
-                name: "Prosječna faktura",
+                name: "Skenirane fakture",
                 type: "line",
                 data: [8, 12, 7, 17, 21, 11, 5, 9, 7, 29, 12, 35],
             },
