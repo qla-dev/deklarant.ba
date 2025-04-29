@@ -3,7 +3,7 @@
     <!-- LOGO -->
 
 
-    <div id="scrollbar" style="height: 50px!important;">
+    <div id="scrollbar" style="height: auto!important;">
         <div class="container-fluid d-flex justify-content-center  ">
 
 

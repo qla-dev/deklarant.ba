@@ -199,6 +199,14 @@
 <!-- Profile Foreground -->
 <div class="profile-foreground position-relative mx-n4 mt-n4">
     <div class="profile-wid-bg">
+    <div class="text-end p-3" style="position: absolute; right: 0;">
+                    <div class="p-0 ms-auto rounded-circle profile-photo-edit">
+                        <input id="profile-foreground-img-file-input" type="file" class="profile-foreground-img-file-input d-none">
+                        <label for="profile-foreground-img-file-input" class="profile-photo-edit btn btn-light">
+                            <i class="ri-image-edit-line align-bottom me-1"></i> Promijeni naslovnu sliku
+                        </label>
+                    </div>
+                </div>
         <img src="{{ URL::asset('build/images/profile-bg.jpg') }}" class="profile-wid-img" alt="Profile Background">
     </div>
 </div>
@@ -769,6 +777,16 @@
                                                         <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
                                                     </div>
                                                     <div class="flex-grow-1">
+                                                        <b>1000</b> Faktura u historiji
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-shrink-0 text-info me-1">
+                                                        <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
+                                                    </div>
+                                                    <div class="flex-grow-1">
                                                         Prosječna brzina skeniranja: <b> 20 s </b>
                                                     </div>
                                                 </div>
@@ -799,10 +817,10 @@
 
 
                                         </ul>
-                                        <div class="mt-4">
+                                        <div class="">
                                             <a href="javascript:void(0);" data-bs-toggle="modal"
                                                 data-bs-target="#paymentChoiceModal"
-                                                class="btn btn-soft-info w-100 mt-2 text-white">Započni </a>
+                                                class="btn btn-info w-100 mt-2 text-white">Započni </a>
                                         </div>
                                     </div>
                                 </div>
@@ -843,6 +861,17 @@
                                                     </div>
                                                 </div>
                                             </li>
+
+                                            <li>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-shrink-0 text-info me-1">
+                                                        <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <b>5000</b> Faktura u historiji
+                                                    </div>
+                                                </div>
+                                            </li>
                                             <li>
                                                 <div class="d-flex align-items-center">
                                                     <div class="flex-shrink-0 text-info me-1">
@@ -878,10 +907,10 @@
 
 
                                         </ul>
-                                        <div class="mt-4">
+                                        <div class="">
                                             <a href="javascript:void(0);" data-bs-toggle="modal"
                                                 data-bs-target="#paymentChoiceModal"
-                                                class="btn btn-soft-info w-100 mt-2 text-white">Započni </a>
+                                                class="btn btn-info w-100 mt-2 text-white">Započni </a>
                                         </div>
                                     </div>
                                 </div>
@@ -894,7 +923,7 @@
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1">
                                                 <h5 class="mb-1 fw-semibold">Business</h5>
-                                                <p class="text-muted mb-0">Dodatne mogućnosti za velike biznise</p>
+                                                <p class="text-muted mb-0">Skrojeno za velike biznise</p>
                                             </div>
                                             <div class="avatar-sm">
                                                 <div class="avatar-title bg-light rounded-circle text-primary">
@@ -918,6 +947,16 @@
                                                     </div>
                                                     <div class="flex-grow-1">
                                                         <b>500</b> Skeniranja
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-shrink-0 text-info me-1">
+                                                        <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <b>Neograničeno</b> faktura u historiji
                                                     </div>
                                                 </div>
                                             </li>
@@ -956,10 +995,10 @@
 
 
                                         </ul>
-                                        <div class="mt-4">
+                                        <div class="">
                                             <a href="javascript:void(0);" data-bs-toggle="modal"
                                                 data-bs-target="#paymentChoiceModal"
-                                                class="btn btn-soft-info w-100 mt-2 text-white">Započni </a>
+                                                class="btn btn-info w-100 mt-2 text-white">Produži </a>
                                         </div>
                                     </div>
                                 </div>
