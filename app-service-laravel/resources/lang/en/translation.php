@@ -2,7 +2,8 @@
 return [
     "menu"=>"Menu",
     "dashboards"=>"Dashboards",
-    "analytics"=>"Analytics",
+    "analytics"=>"Analytics dashboard",
+    "analytics2"=>"Analytics",
     "crm"=>"CRM",
     "ecommerce"=>"Ecommerce",
     "crypto"=>"Crypto",

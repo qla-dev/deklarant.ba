@@ -17,8 +17,12 @@
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarDashboards">
                         <ul class="nav nav-sm flex-column">
+                        <li class="nav-item">
+                                <a href="analytics" class="nav-link">@lang('translation.analytics')
+                                </a>
+                            </li>
                             <li class="nav-item">
-                                <a href="dashboard-analytics" class="nav-link">@lang('translation.analytics')
+                                <a href="dashboard-analytics" class="nav-link">@lang('translation.analytics2')
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -887,7 +891,7 @@
                     class="btn btn-info btn-sm text-white py-0 d-flex align-items-center justify-content-center">
 
                     <i class="fas fa-wand-magic-sparkles fs-6 me-1"></i>
-                    <span class="fs-6"> Skeniraj fakturu</span>
+                    <span class="fs-6"> Skeniraj fakturu sa AI</span>
                 </a>
             </div>
 

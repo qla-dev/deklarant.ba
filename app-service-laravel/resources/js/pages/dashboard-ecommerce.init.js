@@ -60,29 +60,26 @@ function loadCharts() {
                 },
             },
             markersSelectable: true,
-            markers: [{
-                name: "Palestine",
-                coords: [31.9474, 35.2272],
-            },
+            markers: [
             {
-                name: "Russia",
+                name: "Rusija",
                 coords: [61.524, 105.3188],
             },
             {
-                name: "Canada",
+                name: "Kanada",
                 coords: [56.1304, -106.3468],
             },
             {
-                name: "Greenland",
+                name: "SAD",
                 coords: [71.7069, -42.6043],
             },
             ],
             markerStyle: {
                 initial: {
-                    fill: vectorMapWorldMarkersColors[1],
+                    fill: "#299cdb",
                 },
                 selected: {
-                    fill: vectorMapWorldMarkersColors[2],
+                    fill: "#299cdb",
                 },
             },
             labels: {
@@ -100,19 +97,19 @@ function loadCharts() {
     if (linechartcustomerColors) {
         var options = {
             series: [{
-                name: "Orders",
+                name: "Skenirane fakture",
                 type: "area",
                 data: [34, 65, 46, 68, 49, 61, 42, 44, 78, 52, 63, 67],
             },
             {
-                name: "Earnings",
+                name: "Prijavljen promet",
                 type: "bar",
                 data: [
                     89.25, 98.58, 68.74, 108.87, 77.54, 84.03, 51.24, 28.57, 92.57, 42.36, 88.51, 36.57,
                 ],
             },
             {
-                name: "Refunds",
+                name: "Prosječna faktura",
                 type: "line",
                 data: [8, 12, 7, 17, 21, 11, 5, 9, 7, 29, 12, 35],
             },
@@ -123,6 +120,9 @@ function loadCharts() {
                 toolbar: {
                     show: false,
                 },
+            },
+            zoom: {
+                enabled: false, // Disable zoom
             },
             stroke: {
                 curve: "straight",
@@ -145,12 +145,12 @@ function loadCharts() {
                     "Feb",
                     "Mar",
                     "Apr",
-                    "May",
+                    "Maj",
                     "Jun",
                     "Jul",
                     "Aug",
                     "Sep",
-                    "Oct",
+                    "Okt",
                     "Nov",
                     "Dec",
                 ],
