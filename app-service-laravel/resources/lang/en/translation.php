@@ -2,7 +2,7 @@
 return [
     "menu"=>"Menu",
     "dashboards"=>"Dashboards",
-    "analytics"=>"Analytics dashboard",
+    "analytics"=>"Analitički dashboard",
     "analytics2"=>"Analytics",
     "crm"=>"CRM",
     "ecommerce"=>"Ecommerce",
