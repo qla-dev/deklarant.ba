@@ -47,13 +47,13 @@ function loadCharts() {
     if (areachartSalesColors) {
         var options = {
             series: [{
-                name: 'Goal',
+                name: 'ORBICO D.O.O',
                 data: [37]
             }, {
-                name: 'Pending Forcast',
+                name: 'Milkos D.O.O',
                 data: [12]
             }, {
-                name: 'Revenue',
+                name: 'Kalea D.O.O',
                 data: [18]
             }],
             chart: {
@@ -98,7 +98,7 @@ function loadCharts() {
             yaxis: {
                 labels: {
                     formatter: function (value) {
-                        return "$" + value + "k";
+                        return  value + " KM";
                     }
                 },
                 tickAmount: 4,

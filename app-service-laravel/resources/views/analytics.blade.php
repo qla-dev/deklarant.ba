@@ -64,7 +64,7 @@
                             <div class="card-body p-0 pb-2">
                                 <div class="w-100">
                                     <div id="customer_impression_charts"
-                                        data-colors='["--vz-success", "--vz-info", "--vz-danger"]' class="apex-charts"
+                                        data-colors='["--vz-success", "--vz-info", "--vz-warning"]' class="apex-charts"
                                         dir="ltr"></div>
                                 </div>
                             </div><!-- end card body -->
@@ -123,23 +123,11 @@
         <div class="col-xxl-3 col-md-6">
             <div class="card">
                 <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Sales Forecast</h4>
-                    <div class="flex-shrink-0">
-                        <div class="dropdown card-header-dropdown">
-                            <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="fw-semibold text-uppercase fs-12">Sort by: </span><span class="text-muted">Nov 2021<i class="mdi mdi-chevron-down ms-1"></i></span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" href="#">Oct 2021</a>
-                                <a class="dropdown-item" href="#">Nov 2021</a>
-                                <a class="dropdown-item" href="#">Dec 2021</a>
-                                <a class="dropdown-item" href="#">Jan 2022</a>
-                            </div>
-                        </div>
-                    </div>
+                    <h4 class="card-title mb-0 flex-grow-1">Najčešći dobavljači</h4>
+                
                 </div><!-- end card header -->
                 <div class="card-body pb-0">
-                    <div id="sales-forecast-chart" data-colors='["--vz-primary", "--vz-success", "--vz-warning"]' class="apex-charts" dir="ltr"></div>
+                    <div id="sales-forecast-chart" data-colors='["--vz-info", "--vz-success", "--vz-warning"]' class="apex-charts" dir="ltr"></div>
                 </div>
             </div><!-- end card -->
         </div><!-- end col -->
@@ -163,7 +151,7 @@
                     </div>
                 </div><!-- end card header -->
                 <div class="card-body pb-0">
-                    <div id="deal-type-charts" data-colors='["--vz-warning", "--vz-danger", "--vz-success"]' class="apex-charts" dir="ltr"></div>
+                    <div id="deal-type-charts" data-colors='["--vz-info", "--vz-warning", "--vz-success"]' class="apex-charts" dir="ltr"></div>
                 </div><!-- end card body -->
             </div><!-- end card -->
         </div><!-- end col -->
@@ -200,7 +188,7 @@
                         </li>
                     </ul>
 
-                    <div id="revenue-expenses-charts" data-colors='["--vz-success", "--vz-danger"]' class="apex-charts" dir="ltr"></div>
+                    <div id="revenue-expenses-charts" data-colors='["--vz-success", "--vz-warning"]' class="apex-charts" dir="ltr"></div>
                 </div>
             </div><!-- end card -->
         </div><!-- end col -->
@@ -688,7 +676,7 @@
 
                             <div class="card-body">
                                 <div id="store-visits-source"
-                                    data-colors='["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info"]'
+                                    data-colors='["--vz-primary", "--vz-success", "--vz-warning", "--vz-warning", "--vz-info"]'
                                     class="apex-charts" dir="ltr"></div>
                             </div>
                         </div> <!-- .card-->
@@ -1014,40 +1002,17 @@
                                                         <div>
                                                             <p class="text-muted mb-1 fst-italic text-truncate-two-lines">
                                                                 " MILKOS D.O.O "</p>
-                                                     
-                                                        </div>
-                                                        <div class="mb-0 text-muted">
-                                                           <i class="ri-map-pin-line text-info me-1"></i> <cite title="Source Title">Sarajevo</cite>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="card border border-dashed shadow-none" style="margin-bottom: 0; height: 500px!imporant;">
-                                            <div class="card-body">
-                                                <div class="d-flex">
-                                                    <div class="flex-shrink-0">
-                                                        <img src="{{ URL::asset('build/images/users/avatar-3.jpg') }}"
-                                                            alt="" class="avatar-sm rounded shadow">
-                                                    </div>
-                                                    <div class="flex-grow-1 ms-3">
-                                                        <div>
-                                                            <p class="text-muted mb-1 fst-italic text-truncate-two-lines">
-                                                                " Amazing template, very easy to
-                                                                understand and manipulate. "</p>
-                                                            <div class="fs-11 align-middle text-warning">
+                                                                <div class="fs-11 align-middle text-warning">
                                                                 <i class="ri-star-fill"></i>
                                                                 <i class="ri-star-fill"></i>
                                                                 <i class="ri-star-fill"></i>
                                                                 <i class="ri-star-fill"></i>
                                                                 <i class="ri-star-half-fill"></i>
                                                             </div>
+                                                     
                                                         </div>
-                                                        <div class="text-end mb-0 text-muted">
-                                                            - by <cite title="Source Title">Henry
-                                                                Baird</cite>
+                                                        <div class="mb-0 text-muted">
+                                                           <i class="ri-map-pin-line text-info me-1"></i> <cite title="Source Title">Sarajevo</cite>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1060,26 +1025,25 @@
                                                 <div class="d-flex">
                                                     <div class="flex-shrink-0 avatar-sm">
                                                         <div class="avatar-title bg-light rounded shadow">
-                                                            <img src="{{ URL::asset('build/images/companies/img-8.png') }}"
+                                                            <img src="{{ URL::asset('build/images/companies/img-1.png') }}"
                                                                 alt="" height="30">
                                                         </div>
                                                     </div>
                                                     <div class="flex-grow-1 ms-3">
                                                         <div>
                                                             <p class="text-muted mb-1 fst-italic text-truncate-two-lines">
-                                                                "Very beautiful product and Very helpful
-                                                                customer service."</p>
-                                                            <div class="fs-11 align-middle text-warning">
+                                                                " MILKOS D.O.O "</p>
+                                                                <div class="fs-11 align-middle text-warning">
                                                                 <i class="ri-star-fill"></i>
                                                                 <i class="ri-star-fill"></i>
                                                                 <i class="ri-star-fill"></i>
-                                                                <i class="ri-star-line"></i>
-                                                                <i class="ri-star-line"></i>
+                                                                <i class="ri-star-fill"></i>
+                                                                <i class="ri-star-half-fill"></i>
                                                             </div>
+                                                     
                                                         </div>
-                                                        <div class="text-end mb-0 text-muted">
-                                                            - by <cite title="Source Title">Zoetic
-                                                                Fashion</cite>
+                                                        <div class="mb-0 text-muted">
+                                                           <i class="ri-map-pin-line text-info me-1"></i> <cite title="Source Title">Sarajevo</cite>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1090,26 +1054,58 @@
                                         <div class="card border border-dashed shadow-none">
                                             <div class="card-body">
                                                 <div class="d-flex">
-                                                    <div class="flex-shrink-0">
-                                                        <img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}"
-                                                            alt="" class="avatar-sm rounded shadow">
+                                                    <div class="flex-shrink-0 avatar-sm">
+                                                        <div class="avatar-title bg-light rounded shadow">
+                                                            <img src="{{ URL::asset('build/images/companies/img-1.png') }}"
+                                                                alt="" height="30">
+                                                        </div>
                                                     </div>
                                                     <div class="flex-grow-1 ms-3">
                                                         <div>
                                                             <p class="text-muted mb-1 fst-italic text-truncate-two-lines">
-                                                                " The product is very beautiful. I like
-                                                                it. "</p>
-                                                            <div class="fs-11 align-middle text-warning">
+                                                                " MILKOS D.O.O "</p>
+                                                                <div class="fs-11 align-middle text-warning">
+                                                                <i class="ri-star-fill"></i>
                                                                 <i class="ri-star-fill"></i>
                                                                 <i class="ri-star-fill"></i>
                                                                 <i class="ri-star-fill"></i>
                                                                 <i class="ri-star-half-fill"></i>
-                                                                <i class="ri-star-line"></i>
                                                             </div>
+                                                     
                                                         </div>
-                                                        <div class="text-end mb-0 text-muted">
-                                                            - by <cite title="Source Title">Nancy
-                                                                Martino</cite>
+                                                        <div class="mb-0 text-muted">
+                                                           <i class="ri-map-pin-line text-info me-1"></i> <cite title="Source Title">Sarajevo</cite>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="card border border-dashed shadow-none">
+                                            <div class="card-body">
+                                                <div class="d-flex">
+                                                    <div class="flex-shrink-0 avatar-sm">
+                                                        <div class="avatar-title bg-light rounded shadow">
+                                                            <img src="{{ URL::asset('build/images/companies/img-1.png') }}"
+                                                                alt="" height="30">
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex-grow-1 ms-3">
+                                                        <div>
+                                                            <p class="text-muted mb-1 fst-italic text-truncate-two-lines">
+                                                                " MILKOS D.O.O "</p>
+                                                                <div class="fs-11 align-middle text-warning">
+                                                                <i class="ri-star-fill"></i>
+                                                                <i class="ri-star-fill"></i>
+                                                                <i class="ri-star-fill"></i>
+                                                                <i class="ri-star-fill"></i>
+                                                                <i class="ri-star-half-fill"></i>
+                                                            </div>
+                                                     
+                                                        </div>
+                                                        <div class="mb-0 text-muted">
+                                                           <i class="ri-map-pin-line text-info me-1"></i> <cite title="Source Title">Sarajevo</cite>
                                                         </div>
                                                     </div>
                                                 </div>

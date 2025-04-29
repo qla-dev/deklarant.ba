@@ -19,10 +19,10 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center mt-sm-5 mb-4">
-                    <a href="index" class="d-inline-block auth-logo">
-                        <img src="{{ URL::asset('build/images/logo-dark.svg')}}" alt="Logo" height="35">
+                    <a href="/" class="d-inline-block auth-logo">
+                        <img src="{{ URL::asset('build/images/logo-deklarant-white.png')}}" alt="Logo" height="35">
                     </a>
-                    <p class="mt-3 fs-15 fw-medium text-dark">Pristupite svom računu</p>
+                
                 </div>
             </div>
 
