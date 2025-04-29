@@ -9,8 +9,8 @@
 
             <ul class="navbar-nav  " id="navbar-nav">
 
-                <li class="nav-item me-3 ps-0 pe-0">
-                    <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button"
+                <li class="nav-item me-3">
+                    <a class="nav-link menu-link ps-0" href="#sidebarDashboards" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarDashboards">
                         <i class="ri-home-line text-info"></i> <span>@lang('translation.home')
                         </span>
