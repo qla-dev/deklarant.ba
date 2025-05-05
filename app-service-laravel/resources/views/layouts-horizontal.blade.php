@@ -15,13 +15,16 @@
     <style>
 
 
+    /* Optional: Remove the margin-right for the last slide to avoid overflow */
+        .mySwiper .swiper-slide:last-child {
+             margin-right: 0;
+        }
+
+
     </style>
     
 
-    <style>
-       
-
-    </style>
+ 
 @endsection
 
 @section('content')
@@ -892,7 +895,7 @@
     });
     </script>
 
-
+<!-- Upload data -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const token = localStorage.getItem("auth_token");
@@ -908,9 +911,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const dropzoneContent = document.getElementById("dropzone-content");
     const progressContainer = document.getElementById("uploadProgressContainer");
     const progressBar = document.getElementById("uploadProgressBar");
-    const scanningLoader = document.getElementById("scanningLoader");
-    const scanningText = document.getElementById("scanningText");
-    const successCheck = document.getElementById("successCheck");
 
     function updateFileList(files) {
         fileList.innerHTML = "";
@@ -949,61 +949,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    function generateFakeScanData() {
-        return [
-            { "Tarifna oznaka": "0101 21 00 00", "Naziv": "čistokrvne priplodne životinje", "Quantity": 2, "Unit Price": 540.00 },
-            { "Tarifna oznaka": "2710 12 41 00", "Naziv": "kerozin", "Quantity": 120, "Unit Price": 1.25 },
-            { "Tarifna oznaka": "0201 30 00 00", "Naziv": "goveđe meso", "Quantity": 46, "Unit Price": 1.14 }
-        ];
-    }
-
-    function simulateScan() {
-        scanningLoader.classList.remove("d-none");
-        dropzoneContent.style.display = "none";
-        fileList.style.display = "none";
-
-        const spinner = scanningLoader.querySelector(".spinner-border");
-        const stages = [
-            { text: "Skeniranje fakture...", until: 25 },
-            { text: "Prepoznavanje podataka...", until: 60 },
-            { text: "Generisanje fakture...", until: 90 },
-            { text: "Završeno skeniranje...", until: 100 }
-        ];
-
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress++;
-            for (const stage of stages) {
-                if (progress <= stage.until) {
-                    scanningText.innerText = stage.text;
-                    break;
-                }
-            }
-
-            if (progress >= 100) {
-                clearInterval(interval);
-                if (spinner) {
-                    spinner.classList.add("fade-out");
-                    setTimeout(() => {
-                        spinner.remove();
-                        scanningText.classList.add("d-none");
-
-                        successCheck.classList.remove("d-none");
-                        successCheck.classList.add("animate__animated", "animate__fadeIn");
-
-                        const fakeScanResults = generateFakeScanData();
-                        console.log("Saving to localStorage:", fakeScanResults);
-                        localStorage.setItem("ai_scan_result", JSON.stringify(fakeScanResults));
-
-                        setTimeout(() => {
-                            window.location.href = "/apps-invoices-create";
-                        }, 500);
-                    }, 400);
-                }
-            }
-        }, 50);
-    }
-
     function uploadFiles(files) {
         const formData = new FormData();
         Array.from(files).forEach(file => formData.append('file', file));
@@ -1014,7 +959,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let fakeProgress = 0;
         const fakeInterval = setInterval(() => {
-            fakeProgress += 3;
+            fakeProgress += 5;
             if (fakeProgress > 100) fakeProgress = 100;
 
             progressBar.style.width = fakeProgress + "%";
@@ -1022,17 +967,40 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (fakeProgress === 100) {
                 clearInterval(fakeInterval);
-                Swal.fire({
-                    icon: "success",
-                    title: "Uspješno uploadan dokument",
-                    showConfirmButton: false,
-                    timer: 1600
-                }).then(() => {
-                    progressContainer.style.display = "none";
-                    simulateScan();
-                });
             }
-        }, 200);
+        }, 150);
+
+        fetch('http://localhost:8080/api/upload', {
+            method: 'POST',
+            body: formData 
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Upload failed");
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Upload successful:', data);
+
+            Swal.fire({
+                icon: "success",
+                title: "Dokument uspješno uploadan!",
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => {
+                // Save returned task_id to localStorage (important for next steps!)
+                if (data.task_id) {
+                    localStorage.setItem("scan_task_id", data.task_id);
+                }
+                window.location.href = "/apps-invoices-create"; 
+            });
+        })
+        .catch(error => {
+            console.error('Upload error:', error);
+            alert('Greška prilikom uploada.');
+            progressContainer.style.display = "none";
+        });
     }
 
     dropzone.addEventListener("dragover", e => {
@@ -1063,6 +1031,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 </script>
+
 
 
 
