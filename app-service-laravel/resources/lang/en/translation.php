@@ -2,7 +2,8 @@
 return [
     "menu"=>"Menu",
     "dashboards"=>"Dashboards",
-    "analytics"=>"Analytics",
+    "analytics"=>"Analitički dashboard",
+    "analytics2"=>"Analytics",
     "crm"=>"CRM",
     "ecommerce"=>"Ecommerce",
     "crypto"=>"Crypto",
@@ -234,7 +235,7 @@ return [
     "links" => "Links",
     "range-area" => "Range Area",
     "funnel" => "Funnel",
-    "home" => "Početna stranica",
+    "home" => "Početna",
     "statistic"=>"Kalendar",
     "exclist" => "Kursna lista",
     "myorder" => "Moje narudžbe",

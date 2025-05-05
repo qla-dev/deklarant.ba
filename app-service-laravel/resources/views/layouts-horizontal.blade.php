@@ -11,168 +11,20 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    
 
     <style>
-        .mySwiper .swiper-slide {
-             margin-right: 3px; /* This is equivalent to Bootstrap's g-1 gap */
-        }
+
 
     /* Optional: Remove the margin-right for the last slide to avoid overflow */
         .mySwiper .swiper-slide:last-child {
              margin-right: 0;
         }
 
-        .my-alert {
-            
-            transition: background-color 0.6s ease-in-out, color 0.6s ease-in-out;
-        }
-        .my-card:hover .my-alert {
-            background-color: #299cdb !important; /* bg-info */
-            
-            color: white !important;
-        }
-        .dropzone {
-        width: 450px;
-        height: 450px;
-        border: dashed rgb(59, 171, 171);
-        /* Fixed typo */
-
-        background-color: #f8f9fa;
-        text-align: center;
-        padding: 50px;
-        cursor: pointer;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        transition: background-color 0.3s ease-in-out;
-    }
-    
-    @keyframes bounce-in {
-    0% { transform: scale(0); opacity: 0; }
-    60% { transform: scale(1.2); opacity: 1; }
-    80% { transform: scale(0.95); }
-    100% { transform: scale(1); }
-    }
-
-
-    .dropzone:hover {
-        background-color: #e3f2fd;
-    }
-
-    .dropzone input {
-        display: none;
-    }
-
-    .corner {
-        position: absolute;
-        width: 50px;
-        height: 50px;
-        border: 7px solid #299cdb;
-    }
-
-    .corner-top-left {
-        top: -4px;
-        left: -4px;
-        border-right: none;
-        border-bottom: none;
-    }
-
-    .corner-top-right {
-        top: -4px;
-        right: -4px;
-        border-left: none;
-        border-bottom: none;
-    }
-
-    .corner-bottom-left {
-        bottom: -4px;
-        left: -4px;
-        border-right: none;
-        border-top: none;
-    }
-
-    .corner-bottom-right {
-        bottom: -4px;
-        right: -4px;
-        border-left: none;
-        border-top: none;
-    }
-
-    .file-list {
-        margin-top: 15px;
-        width: 100%;
-        max-height: 150px;
-        overflow-y: auto;
-        text-align: left;
-        padding: 10px;
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .file-item {
-        font-size: 14px;
-        padding: 5px;
-        border-bottom: 1px solid #e3e3e3;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .file-item:last-child {
-        border-bottom: none;
-    }
-
-    .remove-file {
-        cursor: pointer;
-        color: red;
-        font-size: 16px;
-        font-weight: bold;
-    }
-
-    .scan-icon {
-        font-size: 150px;
-        color: #299cdb;
-    }
-
-    .checkmark-animation {
-        font-size: 3rem;
-        color: #28a745;
-        animation: pop-in 0.6s ease-out forwards;
-        opacity: 0;
-    }
-
-    @keyframes pop-in {
-        0% {
-            transform: scale(0.3);
-            opacity: 0;
-        }
-        80% {
-            transform: scale(1.2);
-            opacity: 1;
-        }
-        100% {
-            transform: scale(1);
-        }
-    }
-
-       
-     
-        /* Ensure the swiper-container behaves as expected */
-        
-
-        
-        
-        
-
-
-        
-
 
     </style>
+    
+
+ 
 @endsection
 
 @section('content')
@@ -186,15 +38,15 @@
             <!-- Left Columns -->
             <div class="col-md-2 border-end border-0 card-animate">
                 <div class="d-flex flex-column h-100">
-                    <div class="bg-info text-white text-center py-1 rounded-0">
+                    <div class="bg-danger text-white text-center py-1 rounded-0">
                         <i class="ri-alert-line me-1"></i>
-                        <span>Testna poruka <b>123</b> test.</span>
+                        <span><b>3</b> dostupna. Nadopuni!</span>
                     </div>
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
-                        <h6 class="text-muted text-uppercase fs-11 mb-1">Broj skeniranih faktura</h6>
-                        <div class="d-flex align-items-center justify-content-center">
-                            <i class="ri-file-text-line  text-info mb-1" style="font-size: 45px"></i>
-                            <h3 class="mb-0 ms-2"><span id="usedScans" class="counter-value">0</span></h3>
+                        <h6 class="text-muted text-uppercase fs-11 mb-1" style="margin-top: -10px;">Dostupna AI skeniranja</h6>
+                        <div class="d-flex align-items-center justify-content-center" style="margin-top: 20px;">
+                            <i class="fas fa-wand-magic-sparkles text-info mb-1" style="font-size: 35px;"></i>
+                            <h3 class="mb-0 ms-2"><span class="counter-value" id="remainScans">0</span></h3>
                         </div>
                     </div>
                 </div>
@@ -203,25 +55,26 @@
             <div class="col-md-2 border-end border-0 card-animate">
                 <div class="d-flex flex-column h-100">
                     <div class="bg-info text-white text-center py-1 rounded-0">
-                        <i class="ri-alert-line me-1"></i>
-                        <span>Testna poruka <b>123</b> test.</span>
+                        <i class=" ri-arrow-up-s-line me-1"></i>
+                        <span>Pregledaj sve</span>
                     </div>
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
-                        <h6 class="text-muted text-uppercase fs-11 mb-1">Dostupna skeniranja</h6>
+                        <h6 class="text-muted text-uppercase fs-11 mb-1">Broj skeniranih faktura</h6>
                         <div class="d-flex align-items-center justify-content-center">
-                            <i class="ri-scan-2-line text-info mb-1" style="font-size: 45px"></i>
-                            <h3 class="mb-0 ms-2"><span class="counter-value" id="remainScans">0</span></h3>
+                            <i class="ri-file-text-line  text-info mb-1" style="font-size: 45px"></i>
+                            <h3 class="mb-0 ms-2"><span id="usedScans" class="counter-value">0</span></h3>
                         </div>
                     </div>
+                 
                 </div>
             </div>
 
             <!-- Middle Avatar Section -->
-            <div class="col-md-4 border-end d-flex align-items-center border-0 rounded-0 alert alert-light p-1 m-0 card-animate">
+            <div class="col-md-4 border-end d-flex align-items-center border-0 rounded-0 alert alert-light p-1 m-0">
                 <div class="p-2 text-center d-flex flex-column h-100 w-100 justify-content-center align-items-center">
                     <div class="card-body text-center">
                         <img id="user-avatar" src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" class="rounded-circle shadow-sm mb-1" width="60" height="60" alt="Korisnički avatar">
-                        <h6 class="fw-bold text-dark mb-1" id="welcome-user">Dobrodošli na eDeklarant!</h6>
+                        <h6 class="fw-bold text-dark mb-1" id="welcome-user">Dobrodošli na DEKLARANT.BA!</h6>
                         <p class="fw-semibold fs-7 mb-1 text-dark">Vaš trenutni paket je <b>Starter</b></p>
                     </div>
                     <div class="card-footer bg-transparent border-0 w-100">
@@ -230,7 +83,7 @@
                                 <i class="fas fa-circle-chevron-up fs-6 me-1"></i> <span class="fs-6">Nadogradi paket</span>
                             </a>
                             <a href="pages-scan" class="btn btn-info w-50 animated-btn btn-sm d-flex align-items-center justify-content-center">
-                                <i class="fas fa-wand-magic-sparkles fs-6 me-1" style="font-size:10px;"></i><span class="fs-6"> Skeniraj fakturu</span>
+                                <i class="fas fa-wand-magic-sparkles fs-6 me-1" style="font-size:10px;"></i><span class="fs-6"> Skeniraj fakturu sa AI</span>
                             </a>
                         </div>
                     </div>
@@ -241,8 +94,8 @@
             <div class="col-md-2 border-end card-animate">
                 <div class="d-flex flex-column h-100">
                     <div class="bg-info text-white text-center py-1 rounded-0">
-                        <i class="ri-alert-line me-1"></i>
-                        <span>Testna poruka <b>123</b> test.</span>
+                        <i class=" ri-arrow-up-s-line me-1"></i>
+                        <span>Pregledaj sve</span>
                     </div>
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
                         <h6 class="text-muted text-uppercase fs-11 mb-1">Moji dobavljači</h6>
@@ -257,8 +110,8 @@
             <div class="col-md-2 card-animate">
                 <div class="d-flex flex-column h-100">
                     <div class="bg-info text-white text-center py-1 rounded-0">
-                        <i class="ri-alert-line me-1"></i>
-                        <span>Testna poruka <b>123</b> test.</span>
+                        <i class="ri-arrow-up-s-line me-1"></i>
+                        <span>Pregledaj sve</span>
                     </div>
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
                         <h6 class="text-muted text-uppercase fs-11 mb-1">Broj carinskih tarifa</h6>
@@ -291,7 +144,7 @@
                     <div class="flex-grow-1 overflow-hidden">
                         <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Izvršena skeniranja</p>
                         <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                            <span class="counter-value" data-target="28">0</span>
+                            <span class="counter-value" data-target="28">0</span><span class="counter-value">/100</span>
                         </h4>
                     </div>
                     <div class="flex-shrink-0">
@@ -314,9 +167,9 @@
             <div class="card-body" style="z-index:1;">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1 overflow-hidden">
-                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Broj faktura</p>
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Broj spašenih faktura</p>
                         <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                            <span class="counter-value" id="totalInvoices" data-target="45">0</span>
+                            <span class="counter-value" id="totalInvoices" data-target="45">0</span><span class="counter-value">/500</span>
                         </h4>
                     </div>
                     <div class="flex-shrink-0">
@@ -339,13 +192,13 @@
             <div class="card-body" style="z-index:1;">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1 overflow-hidden">
-                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Ukupan broj dobavljača</p>
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Zakonskih dokumenata</p>
                         <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                            <span class="counter-value" id="totalNumSup" data-target="19">0</span>
+                            <span class="counter-value" data-target="19">19</span>
                         </h4>
                     </div>
                     <div style="width: 80px; height: 80px;" class="d-flex align-items-center justify-content-center">
-                        <i class="ri-truck-line text-info" style="font-size: 45px;"></i>
+                        <i class="ri-scales-line text-info" style="font-size: 45px;"></i>
                     </div>
                 </div>
             </div>
@@ -364,7 +217,7 @@
             <div class="card-body" style="z-index:1;">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1 overflow-hidden">
-                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Vrijeme Skeniranja</p>
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Prosječno skeniranja</p>
                         <h4 class="fs-22 fw-semibold ff-secondary mb-0">
                             <span class="counter-value" id="scanTimeValue">0.00</span>
                         </h4>
@@ -557,45 +410,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="scanModal" tabindex="-1" aria-labelledby="scanModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="scanModalLabel">Skeniraj fakturu</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
-      </div>
-      <div class="modal-body d-flex justify-content-center">
-        <div class="dropzone" id="dropzone">
-          <input type="file" id="fileInput" multiple>
-          <div class="corner corner-top-left"></div>
-          <div class="corner corner-top-right"></div>
-          <div class="corner corner-bottom-left"></div>
-          <div class="corner corner-bottom-right"></div>
-          
-          <div class="text-center" id="dropzone-content">
-              <i class="ri-file-2-line text-info fs-1"></i>
-              <p class="mt-3">Prevucite dokument ovdje ili kliknite kako bi uploadali i skenirali vašu fakturu</p>
-          </div>
-          
-          <div class="file-list" id="fileList" style="display: none;"></div>
-          
-          <div class="progress mt-3 w-100" id="uploadProgressContainer" style="display: none;">
-              <div id="uploadProgressBar" class="progress-bar bg-info" role="progressbar" style="width: 0%">0%</div>
-          </div>
-          
-          <div id="scanningLoader" class="mt-4 text-center d-none">
-              <div class="spinner-border text-info" role="status" style="width: 3rem; height: 3rem;"></div>
-              <p class="mt-3 fw-semibold" id="scanningText">Skeniranje fakture...</p>
-              <div id="successCheck" class="d-none mt-3">
-                  <i class="ri-checkbox-circle-fill text-success fs-1 animate__animated animate__zoomIn"></i>
-                  <p class="text-success fw-semibold mt-2">Uspješno skenirano!</p>
-              </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+
 
 
 
@@ -921,7 +736,7 @@
         if (user) {
             const welcome = document.getElementById("welcome-user");
             if (welcome) {
-                welcome.innerText = `Dobrodošli na eDeklarant, ${user.username}!`;
+                welcome.innerText = `Dobrodošli na DEKLARANT.BA, ${user.username}!`;
             }
 
             const avatar = document.getElementById("user-avatar");

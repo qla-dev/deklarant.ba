@@ -167,36 +167,7 @@ code {
     height: calc(100% + #{$grid-gutter-width} * 1.1);
 }
 
-.layout-rightside-col {
 
-    @media (max-width: 1699.98px) { 
-        display: none;
-        position: fixed !important;
-        height: 100vh;
-        right: 0px;
-        top: 0px;
-        bottom: 0px;
-        z-index: 1004;
-        .overlay{
-            position: fixed;
-            top: 0;
-            right: 0px;
-            bottom: 0px;
-            left: 0px;
-            background-color: rgba($dark, 0.2);
-           
-        }
-        .layout-rightside {
-            margin-top: 0px;
-            height: 100%;
-            margin-left: auto;
-        }
-        .card-body {
-            overflow-y: auto;
-            padding-bottom: 1rem !important;
-        }
-    }
-}
 
 :is([data-layout="horizontal"], [data-layout-style=detached]) {
     @media (min-width: 1700px) {

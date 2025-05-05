@@ -3,13 +3,13 @@
         <div class="navbar-header ">
             <div class="d-flex w-100">
                 <!-- LOGO -->
-                <div class="navbar-box horizontal-logo me-4">
-                    <a href="index" class="logo logo-dark">
+                <div class="navbar-box horizontal-logo me-5">
+                    <a href="/" class="logo logo-dark">
                         <span class="logo-sm">
                             <img src="{{ URL::asset('build/images/logo-sm.png') }}" alt="" height="22">
                         </span>
                         <span class="logo-lg">
-                            <img src="{{ URL::asset('build/images/logo.svg') }}" alt="" height="35">
+                            <img src="{{ URL::asset('build/images/logo-deklarant.png') }}" alt="" height="17">
                         </span>
                     </a>
 
@@ -26,7 +26,7 @@
                 
 
                 <!-- App Search-->
-                <form class="app-search d-none d-md-block me-4" style="width: 85%;">
+                <form class="app-search d-none d-md-block me-5" style="width: 70%;">
                     <div class="position-relative">
                         <input type="text" class="form-control border" placeholder="Pretraga..." autocomplete="off" id="search-options" value="">
                         <span class="mdi mdi-magnify search-widget-icon text-info"></span>
@@ -130,7 +130,7 @@
                     </div>
                 </div>
 
-                
+
 
                 <div class="dropdown topbar-head-dropdown ms-1 header-item">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

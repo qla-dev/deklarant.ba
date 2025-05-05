@@ -36,6 +36,7 @@
 
     &:hover{
         transform: translateY(calc(#{-$grid-gutter-width} / 7));
+        cursor: pointer;
         
     }
 }

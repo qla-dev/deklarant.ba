@@ -19,10 +19,10 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center mt-sm-5 mb-4">
-                    <a href="index" class="d-inline-block auth-logo">
-                        <img src="{{ URL::asset('build/images/logo-dark.svg')}}" alt="Logo" height="35">
+                    <a href="/" class="d-inline-block auth-logo">
+                        <img src="{{ URL::asset('build/images/logo-deklarant-white.png')}}" alt="Logo" height="35">
                     </a>
-                    <p class="mt-3 fs-15 fw-medium text-dark">Pristupite svom računu</p>
+                
                 </div>
             </div>
 
@@ -80,7 +80,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="text-center">
-                        <script>document.write(new Date().getFullYear())</script> eDeklarant <i class="mdi mdi-heart text-danger"></i> by Themesbrand
+                        <script>document.write(new Date().getFullYear())</script> DEKLARANT.BA <i class="mdi mdi-heart text-danger"></i> by Themesbrand
                     </div>
                 </div>
             </div>

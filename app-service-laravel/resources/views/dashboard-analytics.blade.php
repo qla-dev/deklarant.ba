@@ -31,7 +31,7 @@
                                     <div class="flex-shrink-0">
                                         <a href="pages-pricing"
                                             class="text-reset text-decoration-underline"><b>Upgrade</b></a>
-                                    </div>
+                                    </div> 
                                 </div>
 
                                 <div class="row align-items-end">

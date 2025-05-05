@@ -1,24 +1,67 @@
 <!-- ========== App Menu ========== -->
+<div class="modal fade" id="scanModal" tabindex="-1" aria-labelledby="scanModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 class="modal-title w-100" id="scanModalLabel"><i class="fas fa-wand-magic-sparkles fs-6 me-1" style="font-size:10px;"></i>Skeniraj fakturu sa AI</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
+      </div>
+      <div class="modal-body d-flex justify-content-center">
+        <div class="dropzone" id="dropzone">
+          <input type="file" id="fileInput" multiple>
+          <div class="corner corner-top-left"></div>
+          <div class="corner corner-top-right"></div>
+          <div class="corner corner-bottom-left"></div>
+          <div class="corner corner-bottom-right"></div>
+          
+          <div class="text-center" id="dropzone-content">
+              <i class="ri-file-2-line text-info fs-1"></i>
+              <p class="mt-3">Prevucite dokument ovdje ili kliknite kako bi uploadali i skenirali vašu fakturu</p>
+          </div>
+          
+          <div class="file-list" id="fileList" style="display: none;"></div>
+          
+          <div class="progress mt-3 w-100" id="uploadProgressContainer" style="display: none;">
+              <div id="uploadProgressBar" class="progress-bar bg-info" role="progressbar" style="width: 0%">0%</div>
+          </div>
+          
+          <div id="scanningLoader" class="mt-4 text-center d-none">
+              <div class="spinner-border text-info" role="status" style="width: 3rem; height: 3rem;"></div>
+              <p class="mt-3 fw-semibold" id="scanningText">Skeniranje fakture...</p>
+              <div id="successCheck" class="d-none mt-3">
+                  <i class="ri-checkbox-circle-fill text-success fs-1 animate__animated animate__zoomIn"></i>
+                  <p class="text-success fw-semibold mt-2">Uspješno skenirano!</p>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="app-menu navbar-menu">
     <!-- LOGO -->
 
 
-    <div id="scrollbar" style="height: 50px!important;">
+    <div id="scrollbar" style="height: auto!important;">
         <div class="container-fluid d-flex justify-content-center  ">
 
 
             <ul class="navbar-nav  " id="navbar-nav">
 
                 <li class="nav-item me-3">
-                    <a class="nav-link menu-link me-3" href="#sidebarDashboards" data-bs-toggle="collapse" role="button"
+                    <a class="nav-link menu-link ps-0" href="#sidebarDashboards" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarDashboards">
                         <i class="ri-home-line text-info"></i> <span>@lang('translation.home')
                         </span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarDashboards">
                         <ul class="nav nav-sm flex-column">
+                        <li class="nav-item">
+                                <a href="analytics" class="nav-link">@lang('translation.analytics')
+                                </a>
+                            </li>
                             <li class="nav-item">
-                                <a href="dashboard-analytics" class="nav-link">@lang('translation.analytics')
+                                <a href="dashboard-analytics" class="nav-link">@lang('translation.analytics2')
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -51,7 +94,7 @@
                     </div>
                 </li>
 
-                <li class="nav-item">
+                <li class="nav-item me-3">
                     <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarApps">
                         <i class="ri-calendar-line text-info"></i> <span>@lang('translation.statistic')
@@ -423,7 +466,7 @@
                 </li>
 
 
-                <li class="nav-item">
+                <li class="nav-item me-3">
                     <a class="nav-link menu-link" href="#sidebarLayouts" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarLayouts">
                         <i class="ri-file-line text-info "></i> <span>@lang('translation.myorder')</span> <span
@@ -456,7 +499,7 @@
 
                 <!-- end Dashboard Menu -->
 
-                <li class="nav-item">
+                <li class="nav-item me-3">
                     <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarAuth">
                         <i class="mdi mdi-account-circle-outline text-info"></i> <span>@lang('translation.clients')
@@ -646,7 +689,7 @@
                     </div>
                 </li>
 
-                <li class="nav-item">
+                <li class="nav-item me-3">
                     <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarPages">
                         <i class="mdi mdi-sticker-text-outline text-info"></i> <span>@lang('translation.declarant')
@@ -741,10 +784,10 @@
                     </div>
                 </li>
 
-                <li class="menu-title"><i class="ri-more-fill"></i> <span>@lang('translation.components')
+                <li class="menu-title "><i class="ri-more-fill"></i> <span>@lang('translation.components')
                     </span></li>
 
-                <li class="nav-item">
+                <li class="nav-item me-3">
                     <a class="nav-link menu-link" href="#sidebarUI" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarUI">
                         <i class="ri-exchange-dollar-line text-info"></i> <span>@lang('translation.exclist')
@@ -870,7 +913,19 @@
 
 
 
+                <li class="nav-item">
+                <a href="javascript:void(0);"
+                    data-bs-toggle="modal"
+                    data-bs-target="#scanModal"
+                    style="width: 190px; height:28px;"
+                    class="btn btn-info btn-sm ms-5 text-white py-0 d-flex align-items-center justify-content-center">
 
+                    <i class="fas fa-wand-magic-sparkles fs-6 me-1"></i>
+                    <span class="fs-6"> Skeniraj fakturu sa AI</span>
+                </a>
+                 
+
+                </li>
 
 
 
@@ -879,17 +934,7 @@
 
             </ul>
 
-            <div class="col-sm-2 ms-5 me-0 mt-1 d-flex align-items-center">
-                <a href="javascript:void(0);"
-                    data-bs-toggle="modal"
-                    data-bs-target="#scanModal"
-                    style="width: 208px; height:31px;"
-                    class="btn btn-info btn-sm text-white py-0 d-flex align-items-center justify-content-center">
-
-                    <i class="fas fa-wand-magic-sparkles fs-6 me-1"></i>
-                    <span class="fs-6"> Skeniraj fakturu</span>
-                </a>
-            </div>
+        
 
 
 
