@@ -29,6 +29,20 @@
         z-index: 2;
 
     }
+    .text-custom {
+        color: #fff !important;
+        background-color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        opacity: 0.9;
+       
+    }
+
+    .text-custom:hover {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        color: white !important;
+    }
+
 
     #avatar-wrapper {
         overflow: visible;
@@ -227,7 +241,7 @@
             <div class="p-2">
                 <!-- Username filled dynamically -->
                 <div class="d-flex align-items-center  flex-wrap">
-                    <h3 class="text-white mb-1 me-2" id="profile-username">Učitavanje imena i prezimena...</h3>
+                    <h3 class="text-white mb-1 me-2" id="profile-username">Učitavanje...</h3>
                     <h3 class="text-white mb-1" id="profile-lastname"></h3>
                     <!-- <p class="text-white-50">Owner & Founder</p> -->
                 </div>
@@ -613,7 +627,7 @@
                                                         <div class="col-lg-3 col-6">
                                                             <p class="text-muted mb-2 text-uppercase fw-semibold">Ukupan
                                                                 iznos</p>
-                                                            <h5 class="fs-14 mb-0"><span id="total-amount">--</span> KM
+                                                            <h5 class="fs-14 mb-0"><span id="total-amount">--</span> 
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -1557,8 +1571,8 @@
                                 itemsHTML += `
                                         <tr>
                                             <th scope="row">${index + 1}</th>
-                                            <td class="text-start fw-medium">${item.item_description}</td> <!-- Artikal -->
-                                            <td class="text-muted">${item.item_description_original}</td> <!-- Opis -->
+                                            <td class="text-start fw-medium">${item.item_description_original}</td> <!-- Artikal -->
+                                            <td class="text-muted">${item.item_description}</td> <!-- Opis -->
                                             <td>${item.base_price} ${item.currency}</td> <!-- Cijena -->
                                             <td>${item.quantity}</td> <!-- Količina -->
                                             <td class="text-end">${item.total_price} ${item.currency}</td> <!-- Ukupno -->
@@ -1915,6 +1929,20 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const hash = window.location.hash;
+    if (hash) {
+        const tabLink = document.querySelector(`a[href="${hash}"]`);
+        if (tabLink) {
+            const tab = new bootstrap.Tab(tabLink);
+            tab.show();
+        }
+    }
+});
+</script>
+
 
 
 

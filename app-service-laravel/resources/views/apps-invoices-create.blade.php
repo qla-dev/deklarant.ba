@@ -8,6 +8,21 @@
 <link href="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet">
 
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+/* Ensures the selected text is truncated with ellipsis and tooltip works */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 270px; /* match width - 10px */
+}
+
+/* Optional: make button and input align cleaner if needed */
+.select2-tariff {
+    max-width: 280px !important;
+}
+</style>
+
 
 @endsection
 @section('content')
@@ -167,7 +182,7 @@
                                     </div>
                                 </div>
                                 <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-                                    <button type="submit" class="btn btn-success">
+                                    <button type="button" id="save-invoice-btn" class="btn btn-success">
                                         <i class="ri-printer-line align-bottom me-1"></i> Save
                                     </button>
                                     <a href="javascript:void(0);" id="export-pdf" class="btn btn-primary">
@@ -226,265 +241,266 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 
+<!-- AI scan api implementation -->
 
 <script>
-    let processedTariffData = [];
-    let disableAIPills = false;
+let processedTariffData = [];
+let disableAIPills = false;
+let globalAISuggestions = [];
 
-    const select2Options = {
-        placeholder: "Pretraži tarifne stavke...",
-        width: '100%',
-        minimumInputLength: 1,
-        ajax: {
-            transport: function(params, success, failure) {
-                const term = params.data.q?.toLowerCase() || "";
-                const filtered = processedTariffData.filter(item =>
-                    item.search.includes(term)
-                );
-                success({ results: filtered });
-            },
-            delay: 200
+const select2Options = {
+    placeholder: "Pretraži tarifne stavke...",
+    width: '280px',
+    minimumInputLength: 1,
+    ajax: {
+        transport: function(params, success, failure) {
+            const term = params.data.q?.toLowerCase() || "";
+            const filtered = processedTariffData.filter(item => item.search.includes(term));
+            success({ results: filtered });
         },
-        templateResult: function(item) {
-            if (!item.id && !item.text) return null;
-            const icon = item.isLeaf ? "•" : "▶";
-            const label = item.display || item.text;
-            return $(`<div style="padding-left:${item.depth * 20}px;">${icon} ${label}</div>`);
-        },
-        templateSelection: function(item) {
-            return item.id ? `${item.id} – ${item.text}` : "";
-        }
-    };
+        delay: 200
+    },
+    templateResult: function(item) {
+        if (!item.id && !item.text) return null;
+        const icon = item.isLeaf ? "•" : "▶";
+        return $(`<div style="padding-left:${item.depth * 20}px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${item.display}">${icon} ${item.display}</div>`);
+    },
+    templateSelection: function(item) {
+        return item.id ? `${item.id} – ${item.text}` : "";
+    }
+};
 
-    function initializeTariffSelects() {
-        $('.select2-tariff').select2(select2Options);
+function initializeTariffSelects() {
+    $('.select2-tariff').select2(select2Options);
+    $('.select2-tariff').on('select2:select', function(e) {
+        const fullLabel = e.params.data.display || e.params.data.text;
+        $(this).next('.select2-container').find('.select2-selection__rendered')
+            .attr('title', fullLabel);
+    });
+}
+
+function showAISuggestionsSwal(rowIndex, onSelect) {
+    const suggestions = globalAISuggestions[rowIndex] || [];
+    if (!Array.isArray(suggestions) || suggestions.length === 0) {
+        Swal.fire("Nema prijedloga", "Za ovaj red nisu dostupni AI prijedlozi.", "info");
+        return;
     }
 
-    function showAISuggestionsSwal(onSelect) {
-        const aiItemsRaw = localStorage.getItem("ai_scan_result");
-        if (!aiItemsRaw) {
-            Swal.fire("Nema prijedloga", "Nema dostupnih AI prijedloga u lokalnoj memoriji.", "info");
-            return;
-        }
+    let html = `<div class='d-flex flex-column'>`;
+    suggestions.slice(0, 10).forEach((s, i) => {
+        html += `<button type='button' class='btn btn-outline-info mb-2 ai-pill' data-index='${i}'>
+            ${s.entry["Tarifna oznaka"]} – ${s.entry["Naziv"]}
+        </button>`;
+    });
+    html += `</div>`;
 
-        const aiItems = JSON.parse(aiItemsRaw);
-        if (!Array.isArray(aiItems) || aiItems.length === 0) {
-            Swal.fire("Nema prijedloga", "Lista prijedloga je prazna.", "info");
-            return;
-        }
-
-        let html = `<div class='d-flex flex-column'>`;
-        aiItems.slice(0, 10).forEach((item, index) => {
-            html += `<button type='button' data-index='${index}' class='btn btn-outline-info mb-2 ai-pill'>
-                    ${item["Tarifna oznaka"]} – ${item["Naziv"]}
-                </button>`;
-        });
-        html += `</div>`;
-
-        Swal.fire({
-            title: "AI prijedlozi",
-            html: html,
-            showConfirmButton: false,
-            didOpen: () => {
-                document.querySelectorAll('.ai-pill').forEach(btn => {
-                    btn.addEventListener('click', e => {
-                        const index = parseInt(e.target.getAttribute('data-index'));
-                        onSelect(aiItems[index]);
-                        Swal.close();
-                    });
+    Swal.fire({
+        title: "AI prijedlozi",
+        html,
+        showConfirmButton: false,
+        didOpen: () => {
+            document.querySelectorAll(".ai-pill").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    const index = btn.getAttribute("data-index");
+                    onSelect(suggestions[index]);
+                    Swal.close();
                 });
-            }
-        });
-    }
+            });
+        }
+    });
+}
 
-    function calculateInvoiceTotals() {
-        const productRows = document.querySelectorAll("#newlink tr.product");
-        let subtotal = 0;
-        productRows.forEach(row => {
-            const price = parseFloat(row.querySelector(".product-price")?.value || 0);
-            const qty = parseInt(row.querySelector(".product-quantity")?.value || 0);
-            subtotal += price * qty;
-        });
+function calculateInvoiceTotals() {
+    let subtotal = 0;
+    document.querySelectorAll("#newlink tr.product").forEach(row => {
+        const price = parseFloat(row.querySelector(".product-price")?.value || 0);
+        const qty = parseInt(row.querySelector(".product-quantity")?.value || 0);
+        subtotal += price * qty;
+    });
+    const tax = subtotal * 0.125;
+    const total = subtotal + tax;
+    document.getElementById("cart-subtotal").value = `${subtotal.toFixed(2)} KM`;
+    document.getElementById("cart-tax").value = `${tax.toFixed(2)} KM`;
+    document.getElementById("cart-total").value = `${total.toFixed(2)} KM`;
+    document.getElementById("cart-discount").value = "0.00 KM";
+    document.getElementById("cart-shipping").value = "0.00 KM";
+}
 
-        const taxRate = 0.125;
-        const tax = subtotal * taxRate;
-        const discount = 0;
-        const shipping = 0;
-        const total = subtotal + tax + shipping - discount;
+function createInvoiceRow(id, item = {}, aiSuggestions = []) {
+    const row = document.createElement("tr");
+    row.classList.add("product");
 
-        document.getElementById("cart-subtotal").value = `${subtotal.toFixed(2)} KM`;
-        document.getElementById("cart-tax").value = `${tax.toFixed(2)} KM`;
-        document.getElementById("cart-discount").value = `${discount.toFixed(2)} KM`;
-        document.getElementById("cart-shipping").value = `${shipping.toFixed(2)} KM`;
-        document.getElementById("cart-total").value = `${total.toFixed(2)} KM`;
-    }
+    const quantity = item.quantity || 0;
+    const unitPrice = item.unit_price || 0;
+    const total = (quantity * unitPrice).toFixed(2);
+    const itemName = item.item_name || "";
 
-    function createInvoiceRow(id, item = {}) {
-        const quantity = item.Quantity || 0;
-        const unitPrice = item["Unit Price"] || 0;
-        const total = (quantity * unitPrice).toFixed(2);
-
-        const row = document.createElement("tr");
-        row.classList.add("product");
-
-        row.innerHTML = `
+    row.innerHTML = `
         <th scope="row" class="product-id align-middle">${id}</th>
         <td class="align-middle">
-            <div class="d-flex align-items-center gap-2">
-                <select class="form-control select2-tariff"></select>
-                <button type="button" class="btn btn-info toggle-ai border-0 rounded-0" style="height:38px;">
-                    <i class="fas fa-wand-magic-sparkles fs-6 me-2 text-white"></i> <span class="fs-6">Prijedlozi</span>
-                </button>
+            <div class="d-flex flex-column">
+                <input type="text" class="form-control mb-2 item-name bg-light border-0" value="${itemName}" placeholder="Ime artikla" readonly>
+                <div class="d-flex align-items-center gap-2">
+                    <select class="form-control select2-tariff"></select>
+                    <button type="button" class="btn btn-info toggle-ai border-0 rounded-0" style="height:38px;">
+                        <i class="fas fa-wand-magic-sparkles text-white me-2"></i><span>Prijedlozi</span>
+                    </button>
+                </div>
             </div>
         </td>
         <td class="align-middle">
-            <input type="number" class="form-control product-price text-end bg-light border-0 rounded-0 fs-6" value="${unitPrice}" step="0.01" style="height:38px;" required />
+            <input type="number" class="form-control product-price text-end bg-light border-0" value="${unitPrice}" step="0.01" />
         </td>
         <td class="align-middle">
             <div class="input-step d-flex align-items-center justify-content-center">
-                <button type="button" class="btn btn-light border minus" style="height:24px; width:24px;">–</button>
-                <input type="number" class="product-quantity form-control fs-6 text-center mx-1 border-0 rounded-0" value="${quantity}" readonly style="height:38px; width:50px;">
-                <button type="button" class="btn btn-light border plus" style="height:24px; width:24px;">+</button>
+                <button type="button" class="btn btn-light border minus">–</button>
+                <input type="number" class="product-quantity form-control text-center mx-1 border-0 rounded-0" value="${quantity}" readonly>
+                <button type="button" class="btn btn-light border plus">+</button>
             </div>
         </td>
         <td class="align-middle text-end">
-            <input type="text" class="form-control product-line-price text-end bg-light border-0 rounded-0 fs-6" value="${total} KM" readonly style="height:38px;" />
+            <input type="text" class="form-control product-line-price text-end bg-light border-0" value="${total} KM" readonly />
         </td>
         <td class="align-middle text-center">
-            <button type="button" class="btn btn-outline-danger remove-row" style="height:38px;">X</button>
+            <button type="button" class="btn btn-outline-danger remove-row">X</button>
         </td>
     `;
 
-        const select = row.querySelector(".select2-tariff");
-        const toggleButton = row.querySelector(".toggle-ai");
-        const priceInput = row.querySelector(".product-price");
-        const quantityInput = row.querySelector(".product-quantity");
-        const totalInput = row.querySelector(".product-line-price");
+    const select = row.querySelector(".select2-tariff");
+    const toggleBtn = row.querySelector(".toggle-ai");
+    const priceInput = row.querySelector(".product-price");
+    const quantityInput = row.querySelector(".product-quantity");
+    const totalInput = row.querySelector(".product-line-price");
 
-        if (disableAIPills && toggleButton) {
-            toggleButton.disabled = true;
-            toggleButton.setAttribute("title", "AI prijedlozi su dostupni samo kod automatskog popunjavanja.");
-            toggleButton.setAttribute("data-bs-toggle", "tooltip");
-            toggleButton.classList.add("disabled");
-            bootstrap.Tooltip.getOrCreateInstance(toggleButton);
+    if (aiSuggestions.length > 0) {
+        const best = aiSuggestions.sort((a, b) => a.closeness - b.closeness)[0];
+        const code = best.entry?.["Tarifna oznaka"];
+        const match = processedTariffData.find(p => p.id === code);
+        if (match) {
+            const option = new Option(match.text, match.id, true, true);
+            $(select).append(option).trigger("change");
         }
+    }
 
-        row.querySelector(".plus").addEventListener("click", () => {
-            quantityInput.value = parseInt(quantityInput.value) + 1;
-            totalInput.value = `${(parseFloat(priceInput.value) * parseInt(quantityInput.value)).toFixed(2)} KM`;
-            calculateInvoiceTotals();
-        });
-
-        row.querySelector(".minus").addEventListener("click", () => {
-            const currentQty = parseInt(quantityInput.value);
-            if (currentQty > 0) {
-                quantityInput.value = currentQty - 1;
-                totalInput.value = `${(parseFloat(priceInput.value) * parseInt(quantityInput.value)).toFixed(2)} KM`;
-                calculateInvoiceTotals();
-            }
-        });
-
-        priceInput.addEventListener("input", () => {
-            totalInput.value = `${(parseFloat(priceInput.value) * parseInt(quantityInput.value)).toFixed(2)} KM`;
-            calculateInvoiceTotals();
-        });
-
-        if (item["Tarifna oznaka"]) {
-            const match = processedTariffData.find(p => p.id === item["Tarifna oznaka"]);
+    toggleBtn?.addEventListener("click", () => {
+        showAISuggestionsSwal(id - 1, (selected) => {
+            const code = selected.entry?.["Tarifna oznaka"];
+            const match = processedTariffData.find(p => p.id === code);
             if (match) {
                 const option = new Option(match.text, match.id, true, true);
                 $(select).append(option).trigger("change");
             }
-        }
-
-        toggleButton?.addEventListener("click", () => {
-            showAISuggestionsSwal((aiItem) => {
-                const match = processedTariffData.find(p => p.id === aiItem["Tarifna oznaka"]);
-                if (match) {
-                    const option = new Option(match.text, match.id, true, true);
-                    $(select).append(option).trigger("change");
-                    quantityInput.value = aiItem.Quantity || 0;
-                    priceInput.value = aiItem["Unit Price"] || 0;
-                    totalInput.value = `${(priceInput.value * quantityInput.value).toFixed(2)} KM`;
-                    calculateInvoiceTotals();
-                }
-            });
-        });
-
-        row.querySelector(".remove-row").addEventListener("click", () => {
-            row.remove();
-            calculateInvoiceTotals();
-        });
-
-        return row;
-    }
-
-    function addRowToInvoice(item = {}) {
-        const tbody = document.getElementById("newlink");
-        const newId = tbody.children.length + 1;
-        const row = createInvoiceRow(newId, item);
-        tbody.appendChild(row);
-        initializeTariffSelects();
-        calculateInvoiceTotals();
-    }
-
-    document.addEventListener("DOMContentLoaded", function() {
-        fetch('/storage/data/tariff.json')
-            .then(res => res.json())
-            .then(data => {
-                processedTariffData = data
-                    .filter(item => item["Puni Naziv"] && item["Tarifna oznaka"])
-                    .map(item => {
-                        const hierarchy = item["Puni Naziv"];
-                        const parts = hierarchy.split(">>>").map(p => p.trim());
-                        const leaf = parts[parts.length - 1];
-                        const depth = parts.length - 1;
-                        const code = item["Tarifna oznaka"];
-                        const isLeaf = code && code.replace(/\s/g, '').length === 10;
-                        return {
-                            id: isLeaf ? code : null,
-                            text: leaf,
-                            display: `${code} – ${leaf}`,
-                            depth: depth,
-                            isLeaf: isLeaf,
-                            hierarchy: hierarchy,
-                            search: [item["Naziv"], hierarchy, code].join(" ").toLowerCase(),
-                            full: item
-                        };
-                    });
-
-                initializeTariffSelects();
-
-                const aiResultRaw = localStorage.getItem("ai_scan_result");
-                if (!aiResultRaw) return;
-
-                const aiItems = JSON.parse(aiResultRaw);
-                if (!Array.isArray(aiItems) || aiItems.length === 0) return;
-
-                Swal.fire({
-                    title: 'Automatski popuniti?',
-                    text: 'Podaci o dobavljaču i fakturi će biti popunjeni automatski. Tarifne oznake i pripadajuće elemente možete unijeti ručno.',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonText: 'Koristi AI podatke',
-                    cancelButtonText: 'Unos ručno'
-                }).then((result) => {
-                    document.getElementById("newlink").innerHTML = "";
-                    if (result.isConfirmed) {
-                        disableAIPills = false;
-                        aiItems.forEach((item, i) => addRowToInvoice(item));
-                    } else {
-                        disableAIPills = true;
-                        addRowToInvoice();
-                    }
-                });
-            });
-
-        document.getElementById("add-item").addEventListener("click", () => {
-            addRowToInvoice();
         });
     });
+
+    row.querySelector(".plus").addEventListener("click", () => {
+        quantityInput.value = parseInt(quantityInput.value) + 1;
+        totalInput.value = `${(parseFloat(priceInput.value) * parseInt(quantityInput.value)).toFixed(2)} KM`;
+        calculateInvoiceTotals();
+    });
+
+    row.querySelector(".minus").addEventListener("click", () => {
+        const current = parseInt(quantityInput.value);
+        if (current > 0) quantityInput.value = current - 1;
+        totalInput.value = `${(parseFloat(priceInput.value) * parseInt(quantityInput.value)).toFixed(2)} KM`;
+        calculateInvoiceTotals();
+    });
+
+    priceInput.addEventListener("input", () => {
+        totalInput.value = `${(parseFloat(priceInput.value) * parseInt(quantityInput.value)).toFixed(2)} KM`;
+        calculateInvoiceTotals();
+    });
+
+    row.querySelector(".remove-row").addEventListener("click", () => {
+        row.remove();
+        calculateInvoiceTotals();
+    });
+
+    return row;
+}
+
+function addRowToInvoice(item = {}, suggestions = []) {
+    const tbody = document.getElementById("newlink");
+    const newId = tbody.children.length + 1;
+    const row = createInvoiceRow(newId, item, suggestions);
+    tbody.appendChild(row);
+    initializeTariffSelects();
+    calculateInvoiceTotals();
+}
+
+async function waitForAIResult() {
+    const taskId = localStorage.getItem("scan_task_id");
+    if (!taskId) {
+        Swal.fire("Greška", "Task ID nije pronađen.", "error");
+        return;
+    }
+
+    Swal.fire({ title: 'Skeniranje...', html: 'Obrađujemo dokument...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
+
+    for (let i = 0; i < 20; i++) {
+        try {
+            const statusRes = await fetch(`http://localhost:8080/api/tasks/${taskId}`);
+            const status = await statusRes.json();
+            if (status.status === "completed") {
+                const resultRes = await fetch(`http://localhost:8080/api/tasks/${taskId}/result`);
+                const result = await resultRes.json();
+                Swal.close();
+                return result;
+            }
+        } catch (e) {
+            console.error("Greška u čekanju AI odgovora:", e);
+        }
+        await new Promise(r => setTimeout(r, 2000));
+    }
+
+    Swal.close();
+    Swal.fire("Greška", "AI obrada nije završena u predviđenom vremenu.", "error");
+}
+
+document.addEventListener("DOMContentLoaded", async function () {
+    const tariffRes = await fetch('/storage/data/tariff.json');
+    const tariffData = await tariffRes.json();
+
+    processedTariffData = tariffData
+    .filter(item => item["Tarifna oznaka"] && item["Naziv"] && item["Puni Naziv"])
+    .map(item => ({
+        id: item["Tarifna oznaka"],
+        text: item["Puni Naziv"].split(">>>").pop().trim(),
+        display: `${item["Tarifna oznaka"]} – ${item["Naziv"]}`,
+        depth: item["Puni Naziv"].split(">>>").length - 1,
+        isLeaf: item["Tarifna oznaka"].replace(/\s/g, '').length === 10,
+        search: [item["Naziv"], item["Puni Naziv"], item["Tarifna oznaka"]].join(" ").toLowerCase()
+    }));
+
+
+    Swal.fire({
+        title: 'Automatski popuniti?',
+        text: 'Podaci o dobavljaču i fakturi će biti popunjeni automatski. Tarifne oznake i pripadajuće elemente možete unijeti ručno.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Koristi AI podatke',
+        cancelButtonText: 'Unos ručno'
+    }).then(async (result) => {
+        document.getElementById("newlink").innerHTML = "";
+        if (result.isConfirmed) {
+            disableAIPills = false;
+            const resultData = await waitForAIResult();
+            const aiItems = resultData?.items || [];
+            aiItems.forEach((item, idx) => {
+                globalAISuggestions[idx] = item.detected_codes?.sort((a, b) => a.closeness - b.closeness) || [];
+                addRowToInvoice(item, globalAISuggestions[idx]);
+            });
+        } else {
+            disableAIPills = true;
+            addRowToInvoice();
+        }
+    });
+
+    document.getElementById("add-item")?.addEventListener("click", () => addRowToInvoice());
+});
 </script>
+
+
 
 
 
@@ -569,6 +585,119 @@
         html2pdf().set(opt).from(element).save();
     });
 </script>
+
+
+<!-- Save invoice test -->
+
+<script>
+document.getElementById("save-invoice-btn").addEventListener("click", async function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const userId = 3; // Replace with dynamic value if needed
+    const supplierId = 2; // Replace with dynamic value if needed
+    const button = this;
+
+    button.disabled = true;
+    button.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Spašavanje...`;
+
+    try {
+        const items = [];
+        document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
+            const rawItemCode = row.querySelector(".select2-tariff")?.value || "";
+            const rawTariffLabel = row.querySelector(".select2-tariff option:checked")?.textContent?.trim() || "";
+            const rawItemName = row.querySelector(".item-name")?.value?.trim() || "";
+
+            const item_code = rawItemCode.slice(0, 190);
+            const item_description_original = rawItemName.slice(0, 190); // ✅ save item_name as original
+            const item_description = rawTariffLabel.slice(0, 190);       // ✅ use tariff label for description
+            const item_name = rawItemName.slice(0, 190);
+
+            const quantity = parseInt(row.querySelector(".product-quantity")?.value || "0");
+            const base_price = parseFloat(row.querySelector(".product-price")?.value || "0");
+            const total_price = parseFloat((base_price * quantity).toFixed(2));
+            const currency = "EUR";
+            const version = new Date().getFullYear();
+
+            console.log(`🔎 Row ${index + 1}`, {
+                item_name,
+                item_code,
+                item_description_original,
+                item_description,
+                quantity,
+                base_price,
+                total_price
+            });
+
+            items.push({
+                item_code,
+                item_description_original,
+                item_description,
+                quantity,
+                base_price,
+                total_price,
+                currency,
+                version,
+                best_customs_code_matches: globalAISuggestions[index]?.map(s => s.entry?.["Tarifna oznaka"])?.slice(0, 10) || ["000000"],
+                item_name
+            });
+        });
+
+        const payload = {
+            file_name: "invoice_" + Date.now() + ".pdf",
+            total_price: parseFloat(document.getElementById("cart-total").value.replace(" KM", "").trim()),
+            date_of_issue: new Date().toISOString().split("T")[0],
+            country_of_origin: document.getElementById("shipping-country")?.textContent?.trim().slice(0, 190) || "Unknown",
+            items
+        };
+
+        console.log("📦 Sending payload to backend:", payload);
+
+        const token = localStorage.getItem("auth_token");
+
+        const response = await fetch(`http://localhost:8000/api/invoices/users/${userId}/suppliers/${supplierId}/form`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+        });
+
+        console.log("📡 Response status:", response.status);
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error("❌ Error response from server:", errorText);
+            throw new Error("Greška pri slanju fakture: " + (errorText || "Nepoznata greška"));
+        }
+
+        const responseData = await response.json();
+        console.log("✅ Response data:", responseData);
+
+        Swal.fire({
+            icon: "success",
+            title: "Faktura spašena!",
+            text: "Uspješno ste kreirali fakturu.",
+            confirmButtonText: "U redu"
+        });
+
+    } catch (err) {
+        console.error("🚨 Catch block error:", err);
+        Swal.fire("Greška", err.message || "Došlo je do greške.", "error");
+    } finally {
+        button.disabled = false;
+        button.innerHTML = `<i class="ri-printer-line align-bottom me-1"></i> Save`;
+    }
+});
+</script>
+
+
+
+
+
+
+
 
 
 
