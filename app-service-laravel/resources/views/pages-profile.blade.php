@@ -692,7 +692,7 @@
                                                                 <tr class="border-top border-top-dashed fs-15">
                                                                     <th scope="row">Ukupno</th>
                                                                     <th class="text-end"><span id="modal-total-amount">
-                                                                        </span> USD</th>
+                                                                        </span> EUR </th>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
@@ -1572,7 +1572,7 @@
                                         <tr>
                                             <th scope="row">${index + 1}</th>
                                             <td class="text-start fw-medium">${item.item_description_original}</td> <!-- Artikal -->
-                                            <td class="text-muted">${item.item_description}</td> <!-- Opis -->
+                                            <td class="text-muted text-wrap" style="white-space: normal; word-break: break-word; max-width: 200px;">${item.item_description}</td> <!-- Opis -->
                                             <td>${item.base_price} ${item.currency}</td> <!-- Cijena -->
                                             <td>${item.quantity}</td> <!-- Količina -->
                                             <td class="text-end">${item.total_price} ${item.currency}</td> <!-- Ukupno -->
