@@ -52,22 +52,26 @@ class InvoiceController extends Controller
         }
     }
 
-    public function getInvoicesByUser($userId)
-    {
-        try {
-            $invoices = Invoice::where('user_id', $userId)
-                ->with(['items'])
-                ->get();
-            
-            if ($invoices->isEmpty()) {
-                return response()->json(['error' => 'No invoices found for the specified user.'], 404);
-            }
+    
+public function getInvoicesByUser($userId)
+{
+    try {
+        $invoices = Invoice::where('user_id', $userId)
+            ->with([
+                'items',
+                'supplier:id,name,owner,avatar' // Make sure this line is correct
+            ])
+            ->get();
 
-            return response()->json($invoices);
-        } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to retrieve invoices. Please check the user ID and try again.'], 500);
+        if ($invoices->isEmpty()) {
+            return response()->json(['error' => 'No invoices found for the specified user.'], 404);
         }
+
+        return response()->json($invoices);
+    } catch (Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500); // for debugging
     }
+}
 
     public function store(Request $request, $userId, $supplierId)
     {
