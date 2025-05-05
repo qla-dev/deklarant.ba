@@ -76,6 +76,7 @@
     .dataTables_filter input {
         border-radius: 0 !important;
     }
+
     .dropzone {
         width: 450px;
         height: 450px;
@@ -93,12 +94,25 @@
         justify-content: center;
         transition: background-color 0.3s ease-in-out;
     }
-    
+
     @keyframes bounce-in {
-    0% { transform: scale(0); opacity: 0; }
-    60% { transform: scale(1.2); opacity: 1; }
-    80% { transform: scale(0.95); }
-    100% { transform: scale(1); }
+        0% {
+            transform: scale(0);
+            opacity: 0;
+        }
+
+        60% {
+            transform: scale(1.2);
+            opacity: 1;
+        }
+
+        80% {
+            transform: scale(0.95);
+        }
+
+        100% {
+            transform: scale(1);
+        }
     }
 
 
@@ -194,10 +208,12 @@
             transform: scale(0.3);
             opacity: 0;
         }
+
         80% {
             transform: scale(1.2);
             opacity: 1;
         }
+
         100% {
             transform: scale(1);
         }
@@ -213,14 +229,14 @@
 <!-- Profile Foreground -->
 <div class="profile-foreground position-relative mx-n4 mt-n4">
     <div class="profile-wid-bg">
-    <div class="text-end p-3" style="position: absolute; right: 0;">
-                    <div class="p-0 ms-auto rounded-circle profile-photo-edit">
-                        <input id="profile-foreground-img-file-input" type="file" class="profile-foreground-img-file-input d-none">
-                        <label for="profile-foreground-img-file-input" class="profile-photo-edit btn btn-light">
-                            <i class="ri-image-edit-line align-bottom me-1"></i> Promijeni naslovnu sliku
-                        </label>
-                    </div>
-                </div>
+        <div class="text-end p-3" style="position: absolute; right: 0;">
+            <div class="p-0 ms-auto rounded-circle profile-photo-edit">
+                <input id="profile-foreground-img-file-input" type="file" class="profile-foreground-img-file-input d-none">
+                <label for="profile-foreground-img-file-input" class="profile-photo-edit btn btn-light w-100">
+                    <i class="ri-image-edit-line align-bottom me-1"></i> Promijeni naslovnu sliku
+                </label>
+            </div>
+        </div>
         <img src="{{ URL::asset('build/images/profile-bg.jpg') }}" class="profile-wid-img" alt="Profile Background">
     </div>
 </div>
@@ -258,7 +274,7 @@
                 <div class="hstack text-white-50 gap-2">
                     <span id="profile-location"><i class="ri-map-pin-user-line align-middle"></i> Učitavanje
                         lokacije...</span>
-                    <span><i class="ri-building-line align-middle"></i> Themesbrand</span>
+
                 </div>
             </div>
         </div>
@@ -331,222 +347,178 @@
 
 
             <!-- Overview Tab -->
-            <div class="tab-pane fade show active" id="overview-tab">
-                <div class="row">
-
+            <div class="tab-pane fade show active mb-0" id="overview-tab">
+                <div class="row h-100 align-items-stretch">
                     <!-- Left Side Cards -->
-                    <div class="col-xxl-3">
-                        <!-- Current Plan Card -->
-                        <div class="card">
+                    <div class="col-xxl-3 d-flex flex-column justify-content-between rounded-0">
+                        <div class="card mb-3 d-flex flex-column align-items-center justify-content-center rounded-0">
                             <div class="card-body text-center">
-                                <p class="fw-semibold">Vaš trenutni paket je <b>Starter</b></p>
-                                <a href="pages-pricing" class="btn btn-info text-white btn-sm">
+                                <p class="fw-semibold" id="user-package-text">
+                                    Učitavanje paketa...
+                                </p>
+                                <a href="pages-pricing" class="btn btn-info text-white btn-sm mt-auto">
                                     <i class="ri-arrow-up-circle-line"></i> Nadogradite paket
                                 </a>
                             </div>
                         </div>
 
-                        <!-- Info Card -->
-
-                        <!-- Suppliers Card -->
-                        <div class="card">
+                        <div class="card mb-3 d-flex flex-column justify-content-center rounded-0">
                             <div class="card-body">
                                 <h5 class="card-title">Moji dobavljači</h5>
-                                <div class="d-flex align-items-center py-2">
-                                    <img src="{{ URL::asset('build/images/users/orbico.png') }}"
-                                        class="avatar-xs rounded-circle me-3">
-                                    <div class="flex-grow-1">
-                                        <h6 class="mb-0">ORBICO</h6>
-                                        <small class="text-muted">Bosna i Hercegovina</small>
-                                    </div>
+                                <div class="suppliers-list">
+                                    <!-- Dynamic suppliers will be injected here by JS -->
+                                    <div class="text-muted">Učitavanje dobavljača...</div>
                                 </div>
-                                <div class="d-flex align-items-center py-2">
-                                    <img src="{{ URL::asset('build/images/users/hifa.png') }}"
-                                        class="avatar-xs rounded-circle me-3">
-                                    <div class="flex-grow-1">
-                                        <h6 class="mb-0">HIFA</h6>
-                                        <small class="text-muted">Bosna i Hercegovina</small>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center py-2">
-                                    <img src="{{ URL::asset('build/images/users/samsung.png') }}"
-                                        class="avatar-xs rounded-circle me-3">
-                                    <div class="flex-grow-1">
-                                        <h6 class="mb-0">Samsung</h6>
-                                        <small class="text-muted">Južna Koreja</small>
-                                    </div>
-                                </div>
+                                <hr>
                             </div>
                         </div>
-                        <div class="card">
-                            <div class="card-body">
+
+
+                        <div class="card d-flex flex-column justify-content-between rounded-0">
+                            <div class="card-body d-flex flex-column justify-content-between">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <h5 class="card-title mb-0">Moji dokumenti</h5>
-                                    <a data-bs-toggle="tab" href="#activities" id="viewAllDocuments"
-                                        class="text-info fs-13">View all</a>
+                                    <a data-bs-toggle="tab" href="#activities" id="viewAllDocuments" class="text-info fs-13">View all</a>
                                 </div>
-
-                                <div class="row g-3">
-                                    <div class="col-6 col-sm-3">
-                                        <div class="text-center">
-                                            <i class="ri-file-pdf-2-line fs-24 text-info"></i>
-                                            <p class="fs-13 text-muted mt-1 mb-0">Dokument.pdf</p>
-                                        </div>
+                                <div class="row g-3 mt-auto">
+                                    <div class="col-6 col-sm-3 text-center">
+                                        <i class="ri-file-pdf-2-line fs-24 text-info"></i>
+                                        <p class="fs-13 text-muted mt-1 mb-0">Dokument.pdf</p>
                                     </div>
-                                    <div class="col-6 col-sm-3">
-                                        <div class="text-center">
-                                            <i class="ri-file-image-line fs-24 text-info"></i>
-                                            <p class="fs-13 text-muted mt-1 mb-0">Slika.jpg</p>
-                                        </div>
+                                    <div class="col-6 col-sm-3 text-center">
+                                        <i class="ri-file-image-line fs-24 text-info"></i>
+                                        <p class="fs-13 text-muted mt-1 mb-0">Slika.jpg</p>
                                     </div>
-                                    <div class="col-6 col-sm-3">
-                                        <div class="text-center">
-                                            <i class="ri-file-excel-2-line fs-24 text-info"></i>
-                                            <p class="fs-13 text-muted mt-1 mb-0">Tabela.xlsx</p>
-                                        </div>
+                                    <div class="col-6 col-sm-3 text-center">
+                                        <i class="ri-file-excel-2-line fs-24 text-info"></i>
+                                        <p class="fs-13 text-muted mt-1 mb-0">Tabela.xlsx</p>
                                     </div>
-                                    <div class="col-6 col-sm-3">
-                                        <div class="text-center">
-                                            <i class="ri-file-image-line fs-24 text-info"></i>
-                                            <p class="fs-13 text-muted mt-1 mb-0">Grafika.png</p>
-                                        </div>
+                                    <div class="col-6 col-sm-3 text-center">
+                                        <i class="ri-file-image-line fs-24 text-info"></i>
+                                        <p class="fs-13 text-muted mt-1 mb-0">Grafika.png</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
 
-                    <!-- Personal Details Form -->
-                    <div class="col-xxl-9">
-                        <div class="card">
+                    <!-- Right Form with Tabs -->
+                    <div class="col-xxl-9 d-flex flex-column h-100">
+                        <div class="card flex-grow-1 d-flex flex-column rounded-0">
+                            <!-- Nav Tabs -->
+                            <div class="card-header" style="margin-bottom: 0;">
+                                <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active text-info" data-bs-toggle="tab" href="#personalDetails" role="tab">
+                                            <i class="fas fa-user"></i>
+                                            Osobni podaci
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-info" data-bs-toggle="tab" href="#changePassword" role="tab">
+                                            <i class="fas fa-key"></i>
+                                            Promjena lozinke
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Tab Content -->
                             <div class="card-body">
-                                <div class="tab-pane" role="tabpanel">
-                                    <form action="javascript:void(0);">
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label for="firstnameInput" class="form-label text-info">
-                                                        Ime</label>
-                                                    <input type="text" class="form-control" id="firstnameInput"
-                                                        placeholder="Unesite vaše ime">
+                                <div class="tab-content">
+                                    <!-- Personal Details Tab -->
+                                    <div class="tab-pane fade show active" id="personalDetails" role="tabpanel">
+                                        <form action="javascript:void(0);">
+                                            <div class="row">
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="firstnameInput" class="form-label text-info">Ime</label>
+                                                    <input type="text" class="form-control rounded-0" id="firstnameInput" placeholder="Učitavanje..." />
+                                                </div>
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="lastnameInput" class="form-label text-info">Prezime</label>
+                                                    <input type="text" class="form-control rounded-0" id="lastnameInput" placeholder="Učitavanje..." />
+                                                </div>
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="phonenumberInput" class="form-label text-info">Broj mobitela</label>
+                                                    <input type="text" class="form-control rounded-0" id="phonenumberInput" placeholder="Učitavanje..." />
+                                                </div>
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="emailInput" class="form-label text-info">Email adresa</label>
+                                                    <input type="email" class="form-control rounded-0" id="emailInput" placeholder="Učitavanje..." />
+                                                </div>
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="JoiningdatInput" class="form-label text-info">Datum pridruženja</label>
+                                                    <input type="text" class="form-control rounded-0" id="JoiningdatInput" placeholder="Učitavanje..." />
+                                                </div>
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="designationInput" class="form-label text-info">Pozicija</label>
+                                                    <input type="text" class="form-control rounded-0" id="designationInput" placeholder="Učitavanje..." />
+                                                </div>
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="websiteInput1" class="form-label text-info">Web stranica</label>
+                                                    <input type="text" class="form-control rounded-0" id="websiteInput1" placeholder="Učitavanje..." />
+                                                </div>
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="cityInput" class="form-label text-info">Grad</label>
+                                                    <input type="text" class="form-control rounded-0" id="cityInput" placeholder="Učitavanje..." />
+                                                </div>
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="countryInput" class="form-label text-info">Država</label>
+                                                    <input type="text" class="form-control rounded-0" id="countryInput" placeholder="Učitavanje..." />
+                                                </div>
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="zipcodeInput" class="form-label text-info">Poštanski broj</label>
+                                                    <input type="text" class="form-control rounded-0" id="zipcodeInput" placeholder="Učitavanje..." />
+                                                </div>
+                                                <div class="col-lg-12 mb-3">
+                                                    <label for="exampleFormControlTextarea" class="form-label text-info">Opis</label>
+                                                    <textarea class="form-control rounded-0" id="exampleFormControlTextarea" placeholder="Učitavanje..." rows="3"></textarea>
+                                                </div>
+                                                <div class="col-lg-12 mt-auto">
+                                                    <div class="hstack gap-2 justify-content-center">
+                                                        <button type="submit" id="update-user-btn" class="btn btn-info">Ažuriraj podatke</button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <!--end col-->
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label for="lastnameInput"
-                                                        class="form-label text-info">Prezime</label>
-                                                    <input type="text" class="form-control" id="lastnameInput"
-                                                        placeholder="Enter your lastname" value="Surname">
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label for="phonenumberInput" class="form-label text-info">Broj
-                                                        mobitela</label>
-                                                    <input type="text" class="form-control" id="phonenumberInput"
-                                                        placeholder="Unesite Vaš broj mobitela">
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label for="emailInput" class="form-label text-info">Email
-                                                        adresa</label>
-                                                    <input type="email" class="form-control" id="emailInput"
-                                                        placeholder="Enter your email">
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label for="JoiningdatInput" class="form-label text-info">Joining
-                                                        Date</label>
-                                                    <input type="text" class="form-control" data-provider="flatpickr"
-                                                        id="JoiningdatInput" data-date-format="d M, Y"
-                                                        data-deafult-date="24 Nov, 2021" placeholder="Select date" />
-                                                </div>
-                                            </div>
-                                            <!--end col-->
+                                        </form>
+                                    </div>
 
-                                            <!--end col-->
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label for="designationInput"
-                                                        class="form-label text-info">Designation</label>
-                                                    <input type="text" class="form-control" id="designationInput"
-                                                        placeholder="Designation" value="Lead Designer / Developer">
+                                    <!-- Change Password Tab -->
+                                    <div class="tab-pane fade" id="changePassword" role="tabpanel">
+                                        <form action="javascript:void(0);">
+                                            <div class="row">
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="oldPassword" class="form-label text-info">Stara lozinka</label>
+                                                    <input type="password" class="form-control rounded-0" id="oldPassword" placeholder="Unesite staru lozinku" />
+                                                </div>
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="newPassword" class="form-label text-info">Nova lozinka</label>
+                                                    <input type="password" class="form-control rounded-0" id="newPassword" placeholder="Unesite novu lozinku" />
+                                                </div>
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="confirmPassword" class="form-label text-info">Potvrdite lozinku</label>
+                                                    <input type="password" class="form-control rounded-0" id="confirmPassword" placeholder="Potvrdite novu lozinku" />
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="hstack gap-2 justify-content-center">
+                                                        <button type="submit" id="change-password-btn" class="btn btn-info">Promijeni lozinku</button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <!--end col-->
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label for="websiteInput1"
-                                                        class="form-label text-info">Website</label>
-                                                    <input type="text" class="form-control" id="websiteInput1"
-                                                        placeholder="www.example.com" value="www.velzon.com" />
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label for="cityInput" class="form-label text-info">City</label>
-                                                    <input type="text" class="form-control" id="cityInput"
-                                                        placeholder="City" value="California" />
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label for="countryInput"
-                                                        class="form-label text-info">Country</label>
-                                                    <input type="text" class="form-control" id="countryInput"
-                                                        placeholder="Country" value="United States" />
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label for="zipcodeInput" class="form-label text-info">Zip
-                                                        Code</label>
-                                                    <input type="text" class="form-control" minlength="5" maxlength="6"
-                                                        id="zipcodeInput" placeholder="Enter zipcode" value="90011">
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-12">
-                                                <div class="mb-3 pb-2">
-                                                    <label for="exampleFormControlTextarea"
-                                                        class="form-label text-info">Description</label>
-                                                    <textarea class="form-control" id="exampleFormControlTextarea"
-                                                        placeholder="Enter your description"
-                                                        rows="3">Hi I'm Anna Adame,It will be as simple as Occidental; in fact, it will be Occidental. To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental is European languages are members of the same family.</textarea>
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-12">
-                                                <div class="hstack gap-2 justify-content-center">
-                                                    <button type="submit" class="btn btn-info">Ažuriraj podatke</button>
-
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                        </div>
-                                        <!--end row-->
-                                    </form>
+                                        </form>
+                                    </div>
 
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
+
+
+
+
+
             <!-- Moje fakture tab (activities) -->
             <div class="tab-pane fade" id="activities">
                 <div class="table-responsive">
@@ -751,15 +723,16 @@
 
 
             <!-- Paketi(Pricing) -->
-            <div class=" tab-pane fade d-flex justify-content-center mt-0 " id="projects">
-                <div class="col-xl-9">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <div class="card pricing-box border-0 rounded-0">
-                                <div class="card-body p-4 m-2">
-                                    <div class="d-flex align-items-center">
+            <div class="tab-pane fade mt-0" id="projects">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <!-- StartUp Plan -->
+                        <div class="col-lg-4 mb-4">
+                            <div class="card pricing-box border-0 rounded-0 h-100">
+                                <div class="card-body p-4 m-2 d-flex flex-column">
+                                    <div class="d-flex align-items-center mb-3">
                                         <div class="flex-grow-1">
-                                            <h5 class="mb-1 fw-semibold">StartUp</h5>
+                                            <h5 class="fw-semibold mb-1">StartUp</h5>
                                             <p class="text-muted mb-0">Za manja preduzeća</p>
                                         </div>
                                         <div class="avatar-sm">
@@ -768,259 +741,91 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="pt-4">
-                                        <h2>500 <small class="fs-5">KM</small><span
-                                                class="fs-6 text-muted">/Mjesec</span></h2>
+                                    <div class="pt-2 pb-3">
+                                        <h2>500 <small class="fs-5">KM</small><span class="fs-6 text-muted">/Mjesec</span></h2>
                                     </div>
-                                    <hr class="my-4 text-muted">
-                                    <div>
-                                        <ul class="list-unstyled text-muted vstack gap-3">
-                                            <li>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0 text-info me-1">
-                                                        <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1">
-                                                        <b>100</b> Skeniranja
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0 text-info me-1">
-                                                        <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1">
-                                                        <b>1000</b> Faktura u historiji
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0 text-info me-1">
-                                                        <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1">
-                                                        Prosječna brzina skeniranja: <b> 20 s </b>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0 text-info me-1">
-                                                        <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1">
-                                                        30 dana
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                            <li>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0 text-info me-1">
-                                                        <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1">
-                                                        <b>24/7</b> Support
-                                                    </div>
-                                                </div>
-                                                <hr class="my-4 text-muted">
-                                            </li>
-
-
-
-                                        </ul>
-                                        <div class="">
-                                            <a href="javascript:void(0);" data-bs-toggle="modal"
-                                                data-bs-target="#paymentChoiceModal"
-                                                class="btn btn-info w-100 mt-2 text-white">Započni </a>
-                                        </div>
-                                    </div>
+                                    <hr class="my-3 text-muted">
+                                    <ul class="list-unstyled text-muted vstack gap-3 mb-3">
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>100</b> Skeniranja</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>1000</b> Faktura u historiji</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: <b>20 s</b></li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>30 dana</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
+                                    </ul>
+                                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal"
+                                        class="btn btn-info w-100 mt-auto text-white">Započni</a>
                                 </div>
                             </div>
-                        </div><!--end col-->
-                        <div class="col-lg-4">
-                            <div class="card pricing-box border-0 rounded-0 ribbon-box right border-0 rounded-0 ">
-                                <div class="card-body p-4 m-2">
+                        </div>
+
+                        <!-- GoBig Plan -->
+                        <div class="col-lg-4 mb-4">
+                            <div class="card pricing-box border-0 rounded-0 ribbon-box right h-100">
+                                <div class="card-body p-4 m-2 d-flex flex-column">
                                     <div class="ribbon-two ribbon-two-info"><span>Popularno</span></div>
-                                    <div>
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-grow-1">
-                                                <h5 class="mb-1 fw-semibold">GoBig</h5>
-                                                <p class="text-muted mb-0">Idealno za biznise u razvoju</p>
-                                            </div>
-                                            <div class="avatar-sm">
-                                                <div class="avatar-title bg-light rounded-circle text-primary">
-                                                    <i class="ri-medal-line text-info fs-3 bu"></i>
-                                                </div>
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="flex-grow-1">
+                                            <h5 class="fw-semibold mb-1">GoBig</h5>
+                                            <p class="text-muted mb-0">Idealno za biznise u razvoju</p>
+                                        </div>
+                                        <div class="avatar-sm">
+                                            <div class="avatar-title bg-light rounded-circle text-primary">
+                                                <i class="ri-medal-line text-info fs-3"></i>
                                             </div>
                                         </div>
-
-                                        <div class="pt-4">
-                                            <h2>850 <small class="fs-5">KM</small><span
-                                                    class="fs-6 text-muted">/Mjesec</span></h2>
-                                        </div>
                                     </div>
-                                    <hr class="my-4 text-muted">
-                                    <div>
-                                        <ul class="list-unstyled vstack gap-3 text-muted">
-                                            <li>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0 text-info me-1">
-                                                        <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1">
-                                                        <b>200</b> Skeniranja
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                            <li>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0 text-info me-1">
-                                                        <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1">
-                                                        <b>5000</b> Faktura u historiji
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0 text-info me-1">
-                                                        <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1">
-                                                        Prosječna brzina skeniranja: <b> 10 s </b>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0 text-info me-1">
-                                                        <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1">
-                                                        120 dana
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                            <li>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0 text-info me-1">
-                                                        <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1">
-                                                        <b>24/7</b> Support
-                                                    </div>
-                                                </div>
-                                                <hr class="my-4 text-muted">
-                                            </li>
-
-
-                                        </ul>
-                                        <div class="">
-                                            <a href="javascript:void(0);" data-bs-toggle="modal"
-                                                data-bs-target="#paymentChoiceModal"
-                                                class="btn btn-info w-100 mt-2 text-white">Započni </a>
-                                        </div>
+                                    <div class="pt-2 pb-3">
+                                        <h2>850 <small class="fs-5">KM</small><span class="fs-6 text-muted">/Mjesec</span></h2>
                                     </div>
+                                    <hr class="my-3 text-muted">
+                                    <ul class="list-unstyled text-muted vstack gap-3 mb-3">
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>200</b> Skeniranja</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>5000</b> Faktura u historiji</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: <b>10 s</b></li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>120 dana</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
+                                    </ul>
+                                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal"
+                                        class="btn btn-info w-100 mt-auto text-white">Započni</a>
                                 </div>
                             </div>
-                        </div><!--end col-->
-                        <div class="col-lg-4">
-                            <div class="card pricing-box border-0 rounded-0">
-                                <div class="card-body p-4 m-2">
-                                    <div>
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-grow-1">
-                                                <h5 class="mb-1 fw-semibold">Business</h5>
-                                                <p class="text-muted mb-0">Skrojeno za velike biznise</p>
-                                            </div>
-                                            <div class="avatar-sm">
-                                                <div class="avatar-title bg-light rounded-circle text-primary">
-                                                    <i class="ri-shield-star-line text-info fs-2 "></i>
-                                                </div>
-                                            </div>
-                                        </div>
+                        </div>
 
-                                        <div class="pt-4">
-                                            <h2 class="text-dark">2000 <small class="fs-5">KM</small><span
-                                                    class="fs-6 text-muted">/Mjesec</span></h2>
+                        <!-- Business Plan -->
+                        <div class="col-lg-4 mb-4">
+                            <div class="card pricing-box border-0 rounded-0 h-100">
+                                <div class="card-body p-4 m-2 d-flex flex-column">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="flex-grow-1">
+                                            <h5 class="fw-semibold mb-1">Business</h5>
+                                            <p class="text-muted mb-0">Skrojeno za velike biznise</p>
+                                        </div>
+                                        <div class="avatar-sm">
+                                            <div class="avatar-title bg-light rounded-circle text-primary">
+                                                <i class="ri-shield-star-line text-info fs-2"></i>
+                                            </div>
                                         </div>
                                     </div>
-                                    <hr class="my-4 text-muted">
-                                    <div>
-                                        <ul class="list-unstyled vstack gap-3 text-muted">
-                                            <li>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0 text-info me-1">
-                                                        <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1">
-                                                        <b>500</b> Skeniranja
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0 text-info me-1">
-                                                        <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1">
-                                                        <b>Neograničeno</b> faktura u historiji
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0 text-info me-1">
-                                                        <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1">
-                                                        Prosječna brzina skeniranja: <b> 4 s </b>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0 text-info me-1">
-                                                        <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1">
-                                                        365 dana
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                            <li>
-                                                <div class="d-flex  align-items-center">
-                                                    <div class="flex-shrink-0 text-info me-1">
-                                                        <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1">
-                                                        <b>24/7</b> Support
-                                                    </div>
-                                                </div>
-                                                <hr class="my-4 text-muted">
-                                            </li>
-
-
-                                        </ul>
-                                        <div class="">
-                                            <a href="javascript:void(0);" data-bs-toggle="modal"
-                                                data-bs-target="#paymentChoiceModal"
-                                                class="btn btn-info w-100 mt-2 text-white">Produži </a>
-                                        </div>
+                                    <div class="pt-2 pb-3">
+                                        <h2>2000 <small class="fs-5">KM</small><span class="fs-6 text-muted">/Mjesec</span></h2>
                                     </div>
+                                    <hr class="my-3 text-muted">
+                                    <ul class="list-unstyled text-muted vstack gap-3 mb-3">
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>500</b> Skeniranja</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>Neograničeno</b> faktura u historiji</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: <b>4 s</b></li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>365 dana</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
+                                    </ul>
+                                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal"
+                                        class="btn btn-info w-100 mt-auto text-white">Produži</a>
                                 </div>
                             </div>
-                        </div><!--end col-->
-                    </div><!--end row-->
-                </div><!--end col-->
-            </div><!--end row-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end row-->
 
             <!-- Payment Method Modal -->
             <!-- Modal za plaćanje karticom -->
@@ -1178,43 +983,43 @@
 
 <!-- Scan Modal samo za ovaj screen -->
 <div class="modal fade" id="scanModal" tabindex="-1" aria-labelledby="scanModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="scanModalLabel">Skeniraj fakturu</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
-      </div>
-      <div class="modal-body d-flex justify-content-center">
-        <div class="dropzone" id="dropzone">
-          <input type="file" id="fileInput" multiple>
-          <div class="corner corner-top-left"></div>
-          <div class="corner corner-top-right"></div>
-          <div class="corner corner-bottom-left"></div>
-          <div class="corner corner-bottom-right"></div>
-          
-          <div class="text-center" id="dropzone-content">
-              <i class="ri-file-2-line text-info fs-1"></i>
-              <p class="mt-3">Prevucite dokument ovdje ili kliknite kako bi uploadali i skenirali vašu fakturu</p>
-          </div>
-          
-          <div class="file-list" id="fileList" style="display: none;"></div>
-          
-          <div class="progress mt-3 w-100" id="uploadProgressContainer" style="display: none;">
-              <div id="uploadProgressBar" class="progress-bar bg-info" role="progressbar" style="width: 0%">0%</div>
-          </div>
-          
-          <div id="scanningLoader" class="mt-4 text-center d-none">
-              <div class="spinner-border text-info" role="status" style="width: 3rem; height: 3rem;"></div>
-              <p class="mt-3 fw-semibold" id="scanningText">Skeniranje fakture...</p>
-              <div id="successCheck" class="d-none mt-3">
-                  <i class="ri-checkbox-circle-fill text-success fs-1 animate__animated animate__zoomIn"></i>
-                  <p class="text-success fw-semibold mt-2">Uspješno skenirano!</p>
-              </div>
-          </div>
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="scanModalLabel">Skeniraj fakturu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
+            </div>
+            <div class="modal-body d-flex justify-content-center">
+                <div class="dropzone" id="dropzone">
+                    <input type="file" id="fileInput" multiple>
+                    <div class="corner corner-top-left"></div>
+                    <div class="corner corner-top-right"></div>
+                    <div class="corner corner-bottom-left"></div>
+                    <div class="corner corner-bottom-right"></div>
+
+                    <div class="text-center" id="dropzone-content">
+                        <i class="ri-file-2-line text-info fs-1"></i>
+                        <p class="mt-3">Prevucite dokument ovdje ili kliknite kako bi uploadali i skenirali vašu fakturu</p>
+                    </div>
+
+                    <div class="file-list" id="fileList" style="display: none;"></div>
+
+                    <div class="progress mt-3 w-100" id="uploadProgressContainer" style="display: none;">
+                        <div id="uploadProgressBar" class="progress-bar bg-info" role="progressbar" style="width: 0%">0%</div>
+                    </div>
+
+                    <div id="scanningLoader" class="mt-4 text-center d-none">
+                        <div class="spinner-border text-info" role="status" style="width: 3rem; height: 3rem;"></div>
+                        <p class="mt-3 fw-semibold" id="scanningText">Skeniranje fakture...</p>
+                        <div id="successCheck" class="d-none mt-3">
+                            <i class="ri-checkbox-circle-fill text-success fs-1 animate__animated animate__zoomIn"></i>
+                            <p class="text-success fw-semibold mt-2">Uspješno skenirano!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 
 
@@ -1766,16 +1571,18 @@
                 placeholder: "Pretraži tarifne stavke...",
                 minimumInputLength: 1,
                 ajax: {
-                    transport: function (params, success, failure) {
+                    transport: function(params, success, failure) {
                         const term = params.data.q?.toLowerCase() || "";
                         const filtered = processed.filter(item =>
                             item.search.includes(term)
                         );
-                        success({ results: filtered });
+                        success({
+                            results: filtered
+                        });
                     },
                     delay: 200
                 },
-                templateResult: function (item) {
+                templateResult: function(item) {
                     if (!item.id && !item.text) return null;
 
                     const icon = item.isLeaf ? "•" : "▶";
@@ -1784,12 +1591,12 @@
                         ${icon} ${label}
                     </div>`);
                 },
-                templateSelection: function (item) {
+                templateSelection: function(item) {
                     return item.id ? `${item.id} – ${item.text}` : "";
                 }
             });
 
-            $('#tariffSelect').on('select2:select', function (e) {
+            $('#tariffSelect').on('select2:select', function(e) {
                 const selectedData = e.params.data.full;
                 alert("Odabrana tarifna stavka:\n" + selectedData["Puni Naziv"]);
                 console.log("Selected full object:", selectedData);
@@ -1799,174 +1606,382 @@
 
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const token = localStorage.getItem("auth_token");
-    if (!token) {
-        alert("Niste prijavljeni. Molimo ulogujte se.");
-        window.location.href = "/auth-login-basic";
-        return;
-    }
-
-    const dropzone = document.getElementById("dropzone");
-    const fileInput = document.getElementById("fileInput");
-    const fileList = document.getElementById("fileList");
-    const dropzoneContent = document.getElementById("dropzone-content");
-    const progressContainer = document.getElementById("uploadProgressContainer");
-    const progressBar = document.getElementById("uploadProgressBar");
-    const scanningLoader = document.getElementById("scanningLoader");
-    const scanningText = document.getElementById("scanningText");
-    const successCheck = document.getElementById("successCheck");
-
-    function updateFileList(files) {
-        fileList.innerHTML = "";
-        if (files.length > 0) {
-            fileList.style.display = "block";
-            dropzoneContent.style.display = "none";
-        } else {
-            fileList.style.display = "none";
-            dropzoneContent.style.display = "block";
+    document.addEventListener("DOMContentLoaded", function() {
+        const token = localStorage.getItem("auth_token");
+        if (!token) {
+            alert("Niste prijavljeni. Molimo ulogujte se.");
+            window.location.href = "/auth-login-basic";
+            return;
         }
 
-        Array.from(files).forEach((file, index) => {
-            const fileItem = document.createElement("div");
-            fileItem.classList.add("file-item");
+        const dropzone = document.getElementById("dropzone");
+        const fileInput = document.getElementById("fileInput");
+        const fileList = document.getElementById("fileList");
+        const dropzoneContent = document.getElementById("dropzone-content");
+        const progressContainer = document.getElementById("uploadProgressContainer");
+        const progressBar = document.getElementById("uploadProgressBar");
+        const scanningLoader = document.getElementById("scanningLoader");
+        const scanningText = document.getElementById("scanningText");
+        const successCheck = document.getElementById("successCheck");
 
-            const fileName = document.createElement("span");
-            fileName.textContent = file.name;
+        function updateFileList(files) {
+            fileList.innerHTML = "";
+            if (files.length > 0) {
+                fileList.style.display = "block";
+                dropzoneContent.style.display = "none";
+            } else {
+                fileList.style.display = "none";
+                dropzoneContent.style.display = "block";
+            }
 
-            const removeBtn = document.createElement("span");
-            removeBtn.textContent = "×";
-            removeBtn.classList.add("remove-file");
-            removeBtn.dataset.index = index;
+            Array.from(files).forEach((file, index) => {
+                const fileItem = document.createElement("div");
+                fileItem.classList.add("file-item");
 
-            removeBtn.addEventListener("click", function () {
-                let dt = new DataTransfer();
-                let fileArray = Array.from(fileInput.files);
-                fileArray.splice(index, 1);
-                fileArray.forEach(f => dt.items.add(f));
-                fileInput.files = dt.files;
-                updateFileList(fileInput.files);
+                const fileName = document.createElement("span");
+                fileName.textContent = file.name;
+
+                const removeBtn = document.createElement("span");
+                removeBtn.textContent = "×";
+                removeBtn.classList.add("remove-file");
+                removeBtn.dataset.index = index;
+
+                removeBtn.addEventListener("click", function() {
+                    let dt = new DataTransfer();
+                    let fileArray = Array.from(fileInput.files);
+                    fileArray.splice(index, 1);
+                    fileArray.forEach(f => dt.items.add(f));
+                    fileInput.files = dt.files;
+                    updateFileList(fileInput.files);
+                });
+
+                fileItem.appendChild(fileName);
+                fileItem.appendChild(removeBtn);
+                fileList.appendChild(fileItem);
+            });
+        }
+
+        function generateFakeScanData() {
+            return [{
+                    "Tarifna oznaka": "0101 21 00 00",
+                    "Naziv": "čistokrvne priplodne životinje",
+                    "Quantity": 2,
+                    "Unit Price": 540.00
+                },
+                {
+                    "Tarifna oznaka": "2710 12 41 00",
+                    "Naziv": "kerozin",
+                    "Quantity": 120,
+                    "Unit Price": 1.25
+                },
+                {
+                    "Tarifna oznaka": "0201 30 00 00",
+                    "Naziv": "goveđe meso",
+                    "Quantity": 46,
+                    "Unit Price": 1.14
+                }
+            ];
+        }
+
+        function simulateScan() {
+            scanningLoader.classList.remove("d-none");
+            dropzoneContent.style.display = "none";
+            fileList.style.display = "none";
+
+            const spinner = scanningLoader.querySelector(".spinner-border");
+            const stages = [{
+                    text: "Skeniranje fakture...",
+                    until: 25
+                },
+                {
+                    text: "Prepoznavanje podataka...",
+                    until: 60
+                },
+                {
+                    text: "Generisanje fakture...",
+                    until: 90
+                },
+                {
+                    text: "Završeno skeniranje...",
+                    until: 100
+                }
+            ];
+
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress++;
+                for (const stage of stages) {
+                    if (progress <= stage.until) {
+                        scanningText.innerText = stage.text;
+                        break;
+                    }
+                }
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    if (spinner) {
+                        spinner.classList.add("fade-out");
+                        setTimeout(() => {
+                            spinner.remove();
+                            scanningText.classList.add("d-none");
+
+                            successCheck.classList.remove("d-none");
+                            successCheck.classList.add("animate__animated", "animate__fadeIn");
+
+                            const fakeScanResults = generateFakeScanData();
+                            console.log("Saving to localStorage:", fakeScanResults);
+                            localStorage.setItem("ai_scan_result", JSON.stringify(fakeScanResults));
+
+                            setTimeout(() => {
+                                window.location.href = "/apps-invoices-create";
+                            }, 500);
+                        }, 400);
+                    }
+                }
+            }, 50);
+        }
+
+        function uploadFiles(files) {
+            const formData = new FormData();
+            Array.from(files).forEach(file => formData.append('file', file));
+
+            progressContainer.style.display = "block";
+            progressBar.style.width = "0%";
+            progressBar.innerText = "0%";
+
+            let fakeProgress = 0;
+            const fakeInterval = setInterval(() => {
+                fakeProgress += 3;
+                if (fakeProgress > 100) fakeProgress = 100;
+
+                progressBar.style.width = fakeProgress + "%";
+                progressBar.innerText = fakeProgress + "%";
+
+                if (fakeProgress === 100) {
+                    clearInterval(fakeInterval);
+                    Swal.fire({
+                        icon: "success",
+                        title: "Uspješno uploadan dokument",
+                        showConfirmButton: false,
+                        timer: 1600
+                    }).then(() => {
+                        progressContainer.style.display = "none";
+                        simulateScan();
+                    });
+                }
+            }, 200);
+        }
+
+        dropzone.addEventListener("dragover", e => {
+            e.preventDefault();
+            dropzone.classList.add("bg-light");
+        });
+
+        dropzone.addEventListener("dragleave", () => {
+            dropzone.classList.remove("bg-light");
+        });
+
+        dropzone.addEventListener("drop", e => {
+            e.preventDefault();
+            dropzone.classList.remove("bg-light");
+            let dt = new DataTransfer();
+            Array.from(fileInput.files).forEach(f => dt.items.add(f));
+            Array.from(e.dataTransfer.files).forEach(f => dt.items.add(f));
+            fileInput.files = dt.files;
+            updateFileList(fileInput.files);
+            uploadFiles(fileInput.files);
+        });
+
+        dropzone.addEventListener("click", () => fileInput.click());
+
+        fileInput.addEventListener("change", () => {
+            updateFileList(fileInput.files);
+            uploadFiles(fileInput.files);
+        });
+    });
+</script>
+
+
+<!-- UserProfile data -->
+
+<script>
+    document.addEventListener("DOMContentLoaded", async function() {
+        try {
+            const user = JSON.parse(localStorage.getItem("user"));
+            const token = localStorage.getItem("auth_token");
+
+            if (!user || !token) {
+                console.warn("User or token not found in localStorage");
+                return;
+            }
+
+            const response = await fetch(`http://localhost:8000/api/users/${user.id}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
             });
 
-            fileItem.appendChild(fileName);
-            fileItem.appendChild(removeBtn);
-            fileList.appendChild(fileItem);
-        });
-    }
-
-    function generateFakeScanData() {
-        return [
-            { "Tarifna oznaka": "0101 21 00 00", "Naziv": "čistokrvne priplodne životinje", "Quantity": 2, "Unit Price": 540.00 },
-            { "Tarifna oznaka": "2710 12 41 00", "Naziv": "kerozin", "Quantity": 120, "Unit Price": 1.25 },
-            { "Tarifna oznaka": "0201 30 00 00", "Naziv": "goveđe meso", "Quantity": 46, "Unit Price": 1.14 }
-        ];
-    }
-
-    function simulateScan() {
-        scanningLoader.classList.remove("d-none");
-        dropzoneContent.style.display = "none";
-        fileList.style.display = "none";
-
-        const spinner = scanningLoader.querySelector(".spinner-border");
-        const stages = [
-            { text: "Skeniranje fakture...", until: 25 },
-            { text: "Prepoznavanje podataka...", until: 60 },
-            { text: "Generisanje fakture...", until: 90 },
-            { text: "Završeno skeniranje...", until: 100 }
-        ];
-
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress++;
-            for (const stage of stages) {
-                if (progress <= stage.until) {
-                    scanningText.innerText = stage.text;
-                    break;
-                }
+            if (!response.ok) {
+                console.error("Failed to fetch user data");
+                return;
             }
 
-            if (progress >= 100) {
-                clearInterval(interval);
-                if (spinner) {
-                    spinner.classList.add("fade-out");
-                    setTimeout(() => {
-                        spinner.remove();
-                        scanningText.classList.add("d-none");
+            const data = await response.json();
+            const u = data.user;
 
-                        successCheck.classList.remove("d-none");
-                        successCheck.classList.add("animate__animated", "animate__fadeIn");
+            const safeSet = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) el.value = value || "";
+            };
 
-                        const fakeScanResults = generateFakeScanData();
-                        console.log("Saving to localStorage:", fakeScanResults);
-                        localStorage.setItem("ai_scan_result", JSON.stringify(fakeScanResults));
+            // Safely fill form fields
+            safeSet("firstnameInput", u.first_name);
+            safeSet("lastnameInput", u.last_name);
+            safeSet("phonenumberInput", u.phone_number);
+            safeSet("emailInput", u.email);
+            safeSet("JoiningdatInput", u.joining_date);
+            safeSet("designationInput", u.designation);
+            safeSet("websiteInput1", u.website);
+            safeSet("cityInput", u.city);
+            safeSet("countryInput", u.country);
+            safeSet("zipcodeInput", u.zip_code);
+            safeSet("exampleFormControlTextarea", u.description);
 
-                        setTimeout(() => {
-                            window.location.href = "/apps-invoices-create";
-                        }, 500);
-                    }, 400);
-                }
+        } catch (err) {
+            console.error("Error loading user data:", err);
+        }
+    });
+</script>
+
+<!-- Update User data -->
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("update-user-btn").addEventListener("click", async function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const user = JSON.parse(localStorage.getItem("user"));
+            const token = localStorage.getItem("auth_token");
+
+            if (!user || !token) {
+                console.error(" User or token not found in localStorage.");
+                return;
             }
-        }, 50);
-    }
 
-    function uploadFiles(files) {
-        const formData = new FormData();
-        Array.from(files).forEach(file => formData.append('file', file));
+            const payload = {
+                first_name: document.getElementById("firstnameInput").value.trim(),
+                last_name: document.getElementById("lastnameInput").value.trim(),
+                phone_number: document.getElementById("phonenumberInput").value.trim(),
+                email: document.getElementById("emailInput").value.trim(),
+                joining_date: document.getElementById("JoiningdatInput").value.trim(),
+                designation: document.getElementById("designationInput").value.trim(),
+                website: document.getElementById("websiteInput1").value.trim(),
+                city: document.getElementById("cityInput").value.trim(),
+                country: document.getElementById("countryInput").value.trim(),
+                zip_code: document.getElementById("zipcodeInput").value.trim(),
+                description: document.getElementById("exampleFormControlTextarea").value.trim(),
+            };
 
-        progressContainer.style.display = "block";
-        progressBar.style.width = "0%";
-        progressBar.innerText = "0%";
+            try {
+                const response = await fetch(`http://localhost:8000/api/users/${user.id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify(payload)
+                });
 
-        let fakeProgress = 0;
-        const fakeInterval = setInterval(() => {
-            fakeProgress += 3;
-            if (fakeProgress > 100) fakeProgress = 100;
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(" Greška pri ažuriranju podataka: " + errorText);
+                }
 
-            progressBar.style.width = fakeProgress + "%";
-            progressBar.innerText = fakeProgress + "%";
+                const responseData = await response.json();
+                console.log(" Podaci ažurirani:", responseData);
 
-            if (fakeProgress === 100) {
-                clearInterval(fakeInterval);
                 Swal.fire({
                     icon: "success",
-                    title: "Uspješno uploadan dokument",
-                    showConfirmButton: false,
-                    timer: 1600
-                }).then(() => {
-                    progressContainer.style.display = "none";
-                    simulateScan();
+                    title: "Uspješno!",
+                    text: "Vaši podaci su ažurirani.",
+                    confirmButtonText: "U redu"
+                });
+
+            } catch (err) {
+                console.error(" Error:", err);
+                Swal.fire("Greška", err.message || "Nešto je pošlo po zlu.", "error");
+            }
+        });
+    });
+</script>
+
+
+<!-- Moji dobavljači dynamic fetch-->
+<script>
+    document.addEventListener("DOMContentLoaded", async function() {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const token = localStorage.getItem("auth_token");
+
+        if (!user || !token) {
+            console.warn("User or token missing in localStorage.");
+            return;
+        }
+
+        const API_URL = `/api/statistics/users/${user.id}`;
+
+        try {
+            const response = await axios.get(API_URL, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            const stats = response.data || {};
+            const suppliers = stats.supplier_profit_changes || [];
+
+            const limitedSuppliers = suppliers.slice(-5); // Last 5 suppliers
+            const suppliersContainer = document.querySelector(".suppliers-list");
+
+            if (suppliersContainer) {
+                suppliersContainer.innerHTML = ''; // Clear placeholder
+
+                limitedSuppliers.forEach(supplier => {
+                    const percentageChange = parseFloat(supplier.percentage_change);
+                    const isPositive = percentageChange >= 0;
+                    const growthClass = isPositive ? "text-success" : "text-danger";
+                    const arrowIcon = isPositive ? "ri-arrow-up-line" : "ri-arrow-down-line";
+
+                    const supplierElement = document.createElement("div");
+
+                    supplierElement.classList.add("d-flex", "justify-content-between", "mb-3")
+
+                    supplierElement.innerHTML = `
+                    <img src="/images/orbico.png" class="avatar-xs rounded-circle me-3" />
+                    <div class="d-flex justify-content-between align-items-center flex-grow-1">
+                        <div>
+                            <h6 class="mb-0">${supplier.name || 'Nepoznat dobavljač'}</h6>
+                            <small class="text-muted">${supplier.owner || 'Nepoznat vlasnik'}</small>
+                        </div>
+                        <div class="${growthClass} text-end fs-13 ms-3">
+                            ${!isNaN(percentageChange) ? percentageChange.toFixed(1) + '%' : ''}
+                            <i class="${arrowIcon} ms-1"></i>
+                        </div>
+                    </div>
+                    `;
+
+
+                    suppliersContainer.appendChild(supplierElement);
                 });
             }
-        }, 200);
-    }
-
-    dropzone.addEventListener("dragover", e => {
-        e.preventDefault();
-        dropzone.classList.add("bg-light");
+        } catch (error) {
+            console.error("Error fetching supplier data:", error);
+            const fallback = document.querySelector(".suppliers-list");
+            if (fallback) {
+                fallback.innerHTML = '<div class="text-danger">Greška pri učitavanju dobavljača.</div>';
+            }
+        }
     });
-
-    dropzone.addEventListener("dragleave", () => {
-        dropzone.classList.remove("bg-light");
-    });
-
-    dropzone.addEventListener("drop", e => {
-        e.preventDefault();
-        dropzone.classList.remove("bg-light");
-        let dt = new DataTransfer();
-        Array.from(fileInput.files).forEach(f => dt.items.add(f));
-        Array.from(e.dataTransfer.files).forEach(f => dt.items.add(f));
-        fileInput.files = dt.files;
-        updateFileList(fileInput.files);
-        uploadFiles(fileInput.files);
-    });
-
-    dropzone.addEventListener("click", () => fileInput.click());
-
-    fileInput.addEventListener("change", () => {
-        updateFileList(fileInput.files);
-        uploadFiles(fileInput.files);
-    });
-});
 </script>
 
 <script>
@@ -1981,6 +1996,70 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 </script>
+
+
+
+<!-- Dynamical Package update -->
+<script>
+    document.addEventListener("DOMContentLoaded", async function() {
+        const token = localStorage.getItem("auth_token");
+        if (!token) return console.warn("Missing auth token");
+
+        try {
+            const res = await axios.get("/api/user-packages", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
+
+            const userPackages = res.data?.data || [];
+
+            if (userPackages.length > 0) {
+                const userPackage = userPackages.find(p => p.active) || userPackages[0];
+                const packageName = userPackage?.package?.name;
+                const packageText = document.getElementById("user-package-text");
+
+                if (packageText && packageName) {
+                    let iconHTML = "";
+
+                    switch (packageName.toLowerCase()) {
+                        case "gobig":
+                            iconHTML = `<i class="ri-medal-line text-info fs-3 bu me-2"></i>`;
+                            break;
+                        case "startup":
+                            iconHTML = `<i class="ri-star-s-fill text-info fs-5 me-2"></i>`;
+                            break;
+                        case "business":
+                            iconHTML = `<i class="ri-shield-star-line text-info fs-2 me-2"></i>`;
+                            break;
+                        default:
+                            iconHTML = "";
+                    }
+
+                    packageText.innerHTML = `
+                        <span class="d-inline-flex align-items-center gap-2">
+                            Vaš trenutni paket je 
+                            <b class="d-inline-flex align-items-center gap-1 text-info">
+                                ${packageName}
+                                ${iconHTML}
+                                
+                            </b>
+                        </span>`;
+
+                }
+            }
+
+        } catch (err) {
+            console.error("Greška pri dohvaćanju paketa korisnika:", err);
+        }
+    });
+</script>
+
+
+
+
+
+
 
 
 
