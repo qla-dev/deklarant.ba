@@ -218,6 +218,9 @@
             transform: scale(1);
         }
     }
+    .modal-dialog.modal-xl {
+    max-width: 75vw; /* or set fixed px: 1200px, 1400px */
+    }
 
 
 
@@ -532,6 +535,8 @@
                                 <th>Cijena</th>
                                 <th>Datum</th>
                                 <th>Skenirana</th>
+                                <th>Dobavljač</th>
+                                <th>Vlasnik</th>
                             </tr>
                         </thead>
                         <tbody class="table-light">
@@ -1093,7 +1098,8 @@
                 leftColumns: 1,
                 rightColumns: 0
             },
-            columns: [{
+            columns: [
+                {
                     data: null,
                     title: 'ID',
                     render: function(data, type, row, meta) {
@@ -1105,7 +1111,6 @@
                     title: 'Moje fakture',
                     render: function(data, type, row) {
                         return `<a href="#" class="text-info view-invoice" data-id="${row.id}">${data}</a>`;
-
                     }
                 },
                 {
@@ -1148,10 +1153,21 @@
                     render: function(data) {
                         return data === 1 ? 'Da' : 'Ne';
                     }
+                },
+                {
+                    data: 'supplier.name',
+                    title: 'Dobavljač',
+                    defaultContent: '<span class="text-muted">N/A</span>'
+                },
+                {
+                    data: 'supplier.owner',
+                    title: 'Vlasnik',
+                    defaultContent: '<span class="text-muted">N/A</span>'
                 }
             ],
             dom: 'Bfrtip',
-            buttons: [{
+            buttons: [
+                {
                     text: '<i class="ri-ai-generate-2 fs-5 me-1"></i> Skeniraj s AI',
                     className: 'nav-link px-3 py-2 text-custom',
                     action: function() {
@@ -1213,13 +1229,10 @@
             }
         });
 
-        // Append buttons to header
         table.buttons().container().appendTo('#invoicesTable_wrapper .row .col-md-6:eq(0)');
-
-        // Customize search filter with icon
-
     });
 </script>
+
 
 
 
@@ -1416,7 +1429,7 @@
                                         <tr>
                                             <th scope="row">${index + 1}</th>
                                             <td class="text-start fw-medium">${item.item_description_original}</td> <!-- Artikal -->
-                                            <td class="text-muted text-wrap" style="white-space: normal; word-break: break-word; max-width: 200px;">${item.item_description}</td> <!-- Opis -->
+                                            <td class="text-muted text-wrap" style="white-space: normal; word-break: break-word; max-width: 500px;">${item.item_description}</td> <!-- Opis -->
                                             <td>${item.base_price} ${item.currency}</td> <!-- Cijena -->
                                             <td>${item.quantity}</td> <!-- Količina -->
                                             <td class="text-end">${item.total_price} ${item.currency}</td> <!-- Ukupno -->

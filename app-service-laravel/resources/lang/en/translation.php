@@ -238,7 +238,7 @@ return [
     "home" => "Početna",
     "statistic"=>"Kalendar",
     "exclist" => "Kursna lista",
-    "myorder" => "Moje narudžbe",
+    "myorder" => "Moje fakture",
     "clients" => "Moji klijenti",
     "declarant" => "Baza deklaranata"
 
