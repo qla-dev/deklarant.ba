@@ -231,6 +231,13 @@ opacity: 0;
     list-style: none;
 }
 
+.form-control {
+
+    background-color: var(--vz-topbar-search-bg)!important;
+    border-radius: 4px!important;
+
+}
+
 .form-control:focus {
 
     border-color: rgba(41, 156, 219, 1)!important;

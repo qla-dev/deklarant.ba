@@ -240,7 +240,7 @@
                 </label>
             </div>
         </div>
-        <img src="{{ URL::asset('build/images/profile-bg.jpg') }}" class="profile-wid-img" alt="Profile Background">
+        <img src="{{ URL::asset('build/icons/businessman.jpg') }}" class="profile-wid-img" alt="Profile Background">
     </div>
 </div>
 
@@ -353,12 +353,12 @@
                     <!-- Left Side Cards -->
                     <div class="col-xxl-3 d-flex flex-column justify-content-between rounded-0">
                         <div class="card mb-3 d-flex flex-column align-items-center justify-content-center rounded-0">
-                            <div class="card-body text-center">
-                                <p class="fw-semibold" id="user-package-text">
-                                    Učitavanje paketa...
+                            <div class="card-body text-center d-flex">
+                                <p class="fw-semibold mb-0" id="user-package-text" style="padding-top:4px; padding-right: 5px;">
+                                    Učitavanje...
                                 </p>
                                 <a href="pages-pricing" class="btn btn-info text-white btn-sm mt-auto">
-                                    <i class="ri-arrow-up-circle-line"></i> Nadogradite paket
+                                    <i class="ri-arrow-up-circle-line"></i> Nadogradi paket
                                 </a>
                             </div>
                         </div>
@@ -475,9 +475,9 @@
                                                     <label for="exampleFormControlTextarea" class="form-label text-info">Opis</label>
                                                     <textarea class="form-control rounded-0" id="exampleFormControlTextarea" placeholder="Učitavanje..." rows="3"></textarea>
                                                 </div>
-                                                <div class="col-lg-12 mt-auto">
-                                                    <div class="hstack gap-2 justify-content-center">
-                                                        <button type="submit" id="update-user-btn" class="btn btn-info">Ažuriraj podatke</button>
+                                                <div class="col-lg-12 mt-4 mb-4">
+                                                    <div class="hstack gap-2 justify-content-end">
+                                                        <button type="submit" id="update-user-btn" class="btn btn-info"><i class="fas fa-save fs-6 me-1"></i> Ažuriraj podatke</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -500,9 +500,9 @@
                                                     <label for="confirmPassword" class="form-label text-info">Potvrdite novu lozinku</label>
                                                     <input type="password" class="form-control rounded-0" id="confirmPassword" placeholder="Potvrdite novu lozinku" />
                                                 </div>
-                                                <div class="col-lg-12">
-                                                    <div class="hstack gap-2 justify-content-center">
-                                                        <button type="submit" id="change-password-btn" class="btn btn-info">Promijeni lozinku</button>
+                                                <div class="col-lg-12 mt-4 mb-4">
+                                                    <div class="hstack gap-2 justify-content-end">
+                                                        <button type="submit" id="change-password-btn" class="btn btn-info"><i class="fas fa-save fs-6 me-1"></i> Promijeni lozinku</button>
                                                     </div>
                                                 </div>
                                             </div>
