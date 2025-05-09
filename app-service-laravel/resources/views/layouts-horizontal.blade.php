@@ -74,7 +74,7 @@
                 <div class="p-2 text-center d-flex flex-column h-100 w-100 justify-content-center align-items-center">
                     <div class="card-body text-center">
                         <img id="user-avatar" src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" class="rounded-circle shadow-sm mb-1" width="60" height="60" alt="Korisnički avatar">
-                        <h6 class="fw-bold text-dark mb-1" id="welcome-user">Dobrodošli na DEKLARANT.BA!</h6>
+                        <h6 class="fw-bold text-dark mb-1" id="welcome-user">Dobrodošli na deklarant.ba!</h6>
                         <p class="fw-semibold fs-7 mb-1 text-dark">Vaš trenutni paket je <b>Starter</b></p>
                     </div>
                     <div class="card-footer bg-transparent border-0 w-100">
@@ -736,7 +736,7 @@
         if (user) {
             const welcome = document.getElementById("welcome-user");
             if (welcome) {
-                welcome.innerText = `Dobrodošli na DEKLARANT.BA, ${user.username}!`;
+                welcome.innerText = `Dobrodošli na deklarant.ba, ${user.username}!`;
             }
 
             const avatar = document.getElementById("user-avatar");

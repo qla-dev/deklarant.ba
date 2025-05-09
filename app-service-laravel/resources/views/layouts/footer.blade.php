@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row ">
             <div class="col-sm-6">
-                <script>document.write(new Date().getFullYear())</script> © DEKLARANT.BA.
+                <script>document.write(new Date().getFullYear())</script> © deklarant.ba.
             </div>
             <div class="col-sm-6">
                 <div class="text-sm-end d-none d-sm-block text-dark fs-6 opacity-50">
