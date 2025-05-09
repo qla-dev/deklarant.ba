@@ -3,7 +3,7 @@
         <div class="navbar-header ">
             <div class="d-flex w-100">
                 <!-- LOGO -->
-                <div class="navbar-box horizontal-logo me-5">
+                <div class="navbar-box horizontal-logo me-5 d-flex align-items-center">
                     <a href="/" class="logo logo-dark">
                         <span class="logo-sm">
                             <img src="{{ URL::asset('build/images/logo-sm.png') }}" alt="" height="22">
