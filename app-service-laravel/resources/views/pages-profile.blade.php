@@ -488,7 +488,7 @@
                                     <div class="tab-pane fade" id="changePassword" role="tabpanel">
                                         <form action="javascript:void(0);">
                                             <div class="row">
-                                                <div class="col-lg-6 mb-3">
+                                                <div class="col-lg-12 mb-3">
                                                     <label for="oldPassword" class="form-label text-info">Stara lozinka</label>
                                                     <input type="password" class="form-control rounded-0" id="oldPassword" placeholder="Unesite staru lozinku" />
                                                 </div>
@@ -497,7 +497,7 @@
                                                     <input type="password" class="form-control rounded-0" id="newPassword" placeholder="Unesite novu lozinku" />
                                                 </div>
                                                 <div class="col-lg-6 mb-3">
-                                                    <label for="confirmPassword" class="form-label text-info">Potvrdite lozinku</label>
+                                                    <label for="confirmPassword" class="form-label text-info">Potvrdite novu lozinku</label>
                                                     <input type="password" class="form-control rounded-0" id="confirmPassword" placeholder="Potvrdite novu lozinku" />
                                                 </div>
                                                 <div class="col-lg-12">

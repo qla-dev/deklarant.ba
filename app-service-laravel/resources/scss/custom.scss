@@ -231,6 +231,21 @@ opacity: 0;
     list-style: none;
 }
 
+.form-control:focus {
+
+    border-color: rgba(41, 156, 219, 1)!important;
+}
+
+.nav-tabs-custom .nav-item .nav-link.active {
+    
+
+    color:  rgba(41, 156, 219, 1)!important;
+}
+
+.nav-tabs-custom .nav-item .nav-link:after {
+
+    background:  rgba(41, 156, 219, 1)!important;
+}
 
 
 
