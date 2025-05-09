@@ -1,889 +1,291 @@
 
+<?php $__env->startSection('css'); ?>
+<style>
+    .card.pricing-box {
+        box-shadow: 0 15px 35px rgba(0, 123, 255, 0.15), 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 0.75rem;
+    }
+
+    .card.pricing-box:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 45px rgba(0, 123, 255, 0.2), 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card.pricing-box.ribbon-box {
+        box-shadow: 0 25px 55px rgba(13, 110, 253, 0.35), 0 10px 30px rgba(0, 0, 0, 0.1);
+        transform: scale(1.02);
+        z-index: 1;
+    }
+    .card.pricing-box.ribbon-box:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 45px rgba(0, 123, 255, 0.2), 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+</style>
+<?php $__env->stopSection(); ?>
 <?php $__env->startSection('title'); ?> <?php echo app('translator')->get('translation.pricing'); ?> <?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
-    <?php $__env->startComponent('components.breadcrumb'); ?>
-        <?php $__env->slot('li_1'); ?> Pages <?php $__env->endSlot(); ?>
-        <?php $__env->slot('title'); ?> Pricing <?php $__env->endSlot(); ?>
-    <?php echo $__env->renderComponent(); ?>
-    <div class="row justify-content-center mt-4">
-        <div class="col-lg-5">
-            <div class="text-center mb-4">
-                <h4 class="fw-semibold fs-22">Plans & Pricing</h4>
-                <p class="text-muted mb-4 fs-15">Simple pricing. No hidden fees. Advanced features for you business.</p>
 
-                <div class="d-inline-flex">
-                    <ul class="nav nav-pills arrow-navtabs plan-nav rounded mb-3 p-1" id="pills-tab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link fw-semibold active" id="month-tab" data-bs-toggle="pill" data-bs-target="#month" type="button" role="tab" aria-selected="true">Monthly</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link fw-semibold" id="annual-tab" data-bs-toggle="pill" data-bs-target="#annual" type="button" role="tab" aria-selected="false">Annually <span class="badge bg-success">25% Off</span></button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div><!--end col-->
-    </div><!--end row-->
 
-    <div class="row">
-        <div class="col-xxl-3 col-lg-6">
-            <div class="card pricing-box">
-                <div class="card-body bg-light m-2 p-4">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="flex-grow-1">
-                            <h5 class="mb-0 fw-semibold">Starter</h5>
-                        </div>
-                        <div class="ms-auto">
-                            <h2 class="month mb-0">$19 <small class="fs-13 text-muted">/Month</small></h2>
-                            <h2 class="annual mb-0"><small class="fs-16"><del>$228</del></small> $171 <small class="fs-13 text-muted">/Year</small></h2>
-                        </div>
-                    </div>
 
-                    <p class="text-muted">The perfect way to get started and get used to our tools.</p>
-                    <ul class="list-unstyled vstack gap-3">
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>3</b> Projects
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>299</b> Customers
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    Scalable Bandwidth
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>5</b> FTP Login
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-danger me-1">
-                                    <i class="ri-close-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>24/7</b> Support
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-danger me-1">
-                                    <i class="ri-close-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>Unlimited</b> Storage
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-danger me-1">
-                                    <i class="ri-close-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    Domain
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="mt-3 pt-2">
-                        <a href="javascript:void(0);" class="btn btn-danger disabled w-100">Your Current Plan</a>
-                    </div>
-                </div>
-            </div>
-        </div><!--end col-->
 
-        <div class="col-xxl-3 col-lg-6">
-            <div class="card pricing-box">
-                <div class="card-body bg-light m-2 p-4">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="flex-grow-1">
-                            <h5 class="mb-0 fw-semibold">Professional</h5>
-                        </div>
-                        <div class="ms-auto">
-                            <h2 class="month mb-0">$29 <small class="fs-13 text-muted">/Month</small></h2>
-                            <h2 class="annual mb-0"><small class="fs-16"><del>$348</del></small> $261 <small class="fs-13 text-muted">/Year</small></h2>
-                        </div>
-                    </div>
-                    <p class="text-muted">Excellent for scalling teams to build culture. Special plan for professional business.</p>
-                    <ul class="list-unstyled vstack gap-3">
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>8</b> Projects
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>449</b> Customers
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                   Scalable Bandwidth
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>7</b> FTP Login
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>24/7</b> Support
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-danger me-1">
-                                    <i class="ri-close-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>Unlimited</b> Storage
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-danger me-1">
-                                    <i class="ri-close-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    Domain
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="mt-3 pt-2">
-                        <a href="javascript:void(0);" class="btn btn-info w-100">Change Plan</a>
-                    </div>
-                </div>
-            </div>
-        </div><!--end col-->
+<div class="row justify-content-center mt-5">
+    <div class="col-lg-5">
+        <div class="text-center mb-4 pb-2">
+            <h4 class="fw-semibold fs-22">Odaberite paket koji odgovara Vašim potrebama</h4>
+            <p class="text-muted mb-4 fs-15">Jednostavno platite, odaberite željenu opciju i odustanite kad god želite(bez dodatnih naknada).</p>
+        </div>
+    </div><!--end col-->
+</div><!--end row-->
 
-        <div class="col-xxl-3 col-lg-6">
-            <div class="card pricing-box ribbon-box right">
-                <div class="card-body bg-light m-2 p-4">
-                    <div class="ribbon-two ribbon-two-danger"><span>Popular</span></div>
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="flex-grow-1">
-                            <h5 class="mb-0 fw-semibold">Enterprise</h5>
-                        </div>
-                        <div class="ms-auto">
-                            <h2 class="month mb-0">$39 <small class="fs-13 text-muted">/Month</small></h2>
-                            <h2 class="annual mb-0"><small class="fs-16"><del>$468</del></small> $351 <small class="fs-13 text-muted">/Year</small></h2>
-                        </div>
-                    </div>
-                    <p class="text-muted">This plan is for those who have a team alredy and running a large business.</p>
-                    <ul class="list-unstyled vstack gap-3">
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>15</b> Projects
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>Unlimited</b> Customers
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                   Scalable Bandwidth
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>12</b> FTP Login
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>24/7</b> Support
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>35GB</b> Storage
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-danger me-1">
-                                    <i class="ri-close-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    Domain
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="mt-3 pt-2">
-                        <a href="javascript:void(0);" class="btn btn-info w-100">Change Plan</a>
-                    </div>
-                </div>
-            </div>
-        </div><!--end col-->
-
-        <div class="col-xxl-3 col-lg-6">
-            <div class="card pricing-box">
-                <div class="card-body bg-light m-2 p-4">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="flex-grow-1">
-                            <h5 class="mb-0 fw-semibold">Unlimited</h5>
-                        </div>
-                        <div class="ms-auto">
-                            <h2 class="month mb-0">$49 <small class="fs-13 text-muted">/Month</small></h2>
-                            <h2 class="annual mb-0"><small class="fs-16"><del>$588</del></small> $441 <small class="fs-13 text-muted">/Year</small></h2>
-                        </div>
-                    </div>
-                    <p class="text-muted">For most businesses that want to optimize web queries.</p>
-                    <ul class="list-unstyled vstack gap-3">
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>Unlimited</b> Projects
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>Unlimited</b> Customers
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                   Scalable Bandwidth
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>Unlimited</b> FTP Login
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>24/7</b> Support
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>Unlimited</b> Storage
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    Domain
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="mt-3 pt-2">
-                        <a href="javascript:void(0);" class="btn btn-info w-100">Change Plan</a>
-                    </div>
-                </div>
-            </div>
-        </div><!--end col-->
-    </div><!--end row-->
-
-    <div class="row justify-content-center mt-5">
-        <div class="col-lg-5">
-            <div class="text-center mb-4 pb-2">
-                <h4 class="fw-semibold fs-22">Choose the plan that's right for you</h4>
-                <p class="text-muted mb-4 fs-15">Simple pricing. No hidden fees. Advanced features for you business.</p>
-            </div>
-        </div><!--end col-->
-    </div><!--end row-->
+<div class="container">
 
     <div class="row justify-content-center">
-        <div class="col-xl-9">
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="card pricing-box">
-                        <div class="card-body p-4 m-2">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-grow-1">
-                                    <h5 class="mb-1 fw-semibold">Basic Plan</h5>
-                                    <p class="text-muted mb-0">For Startup</p>
-                                </div>
-                                <div class="avatar-sm">
-                                    <div class="avatar-title bg-light rounded-circle text-primary">
-                                        <i class="ri-book-mark-line fs-20"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="pt-4">
-                                <h2><sup><small>$</small></sup>19 <span class="fs-13 text-muted">/Month</span></h2>
-                            </div>
-                            <hr class="my-4 text-muted">
-                            <div>
-                                <ul class="list-unstyled text-muted vstack gap-3">
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                Upto <b>3</b> Projects
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                Upto <b>299</b> Customers
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                Scalable Bandwidth
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <b>5</b> FTP Login
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-danger me-1">
-                                                <i class="ri-close-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <b>24/7</b> Support
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-danger me-1">
-                                                <i class="ri-close-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <b>Unlimited</b> Storage
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-danger me-1">
-                                                <i class="ri-close-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                Domain
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <div class="mt-4">
-                                    <a href="javascript:void(0);" class="btn btn-soft-success w-100 waves-effect waves-light">Sign up free</a>
-                                </div>
+        <!-- StartUp Plan -->
+        <div class="col-lg-4 mb-4">
+            <div class="card pricing-box border-0 rounded-0 h-100">
+                <div class="card-body p-4 m-2 d-flex flex-column">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-grow-1">
+                            <h5 class="fw-semibold mb-1">StartUp</h5>
+                            <p class="text-muted mb-0">Za manja preduzeća</p>
+                        </div>
+                        <div class="avatar-sm">
+                            <div class="avatar-title bg-light rounded-circle text-primary">
+                                <i class="ri-star-s-fill text-info fs-5"></i>
                             </div>
                         </div>
                     </div>
-                </div><!--end col-->
-                <div class="col-lg-4">
-                    <div class="card pricing-box ribbon-box right">
-                        <div class="card-body p-4 m-2">
-                            <div class="ribbon-two ribbon-two-danger"><span>Popular</span></div>
-                            <div>
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-grow-1">
-                                        <h5 class="mb-1 fw-semibold">Pro Business</h5>
-                                        <p class="text-muted mb-0">Professional plans</p>
-                                    </div>
-                                    <div class="avatar-sm">
-                                        <div class="avatar-title bg-light rounded-circle text-primary">
-                                            <i class="ri-medal-line fs-20"></i>
-                                        </div>
-                                    </div>
-                                </div>
+                    <div class="pt-2 pb-3">
+                        <h2>500 <small class="fs-5">KM</small><span class="fs-6 text-muted">/Mjesec</span></h2>
+                    </div>
+                    <hr class="my-3 text-muted">
+                    <ul class="list-unstyled text-muted vstack gap-3 mb-3">
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>100</b> Skeniranja</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>1000</b> Faktura u historiji</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: <b>20 s</b></li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>30 dana</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
+                    </ul>
+                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal"
+                        class="btn btn-info w-100 mt-auto text-white">Započni</a>
+                </div>
+            </div>
+        </div>
 
-                                <div class="pt-4">
-                                    <h2><sup><small>$</small></sup> 29<span class="fs-13 text-muted">/Month</span></h2>
-                                </div>
-                            </div>
-                            <hr class="my-4 text-muted">
-                            <div>
-                                <ul class="list-unstyled vstack gap-3 text-muted">
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                Upto <b>15</b> Projects
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <b>Unlimited</b> Customers
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                               Scalable Bandwidth
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <b>12</b> FTP Login
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <b>24/7</b> Support
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-danger me-1">
-                                                <i class="ri-close-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <b>Unlimited</b> Storage
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-danger me-1">
-                                                <i class="ri-close-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                Domain
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <div class="mt-4">
-                                    <a href="javascript:void(0);" class="btn btn-success w-100 waves-effect waves-light">Get started</a>
-                                </div>
+        <!-- GoBig Plan -->
+        <div class="col-lg-4 mb-4">
+            <div class="card pricing-box border-0 rounded-0 ribbon-box right h-100">
+                <div class="card-body p-4 m-2 d-flex flex-column">
+                    <div class="ribbon-two ribbon-two-info"><span>Popularno</span></div>
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-grow-1">
+                            <h5 class="fw-semibold mb-1">GoBig</h5>
+                            <p class="text-muted mb-0">Idealno za biznise u razvoju</p>
+                        </div>
+                        <div class="avatar-sm">
+                            <div class="avatar-title bg-light rounded-circle text-primary">
+                                <i class="ri-medal-line text-info fs-3"></i>
                             </div>
                         </div>
                     </div>
-                </div><!--end col-->
-                <div class="col-lg-4">
-                    <div class="card pricing-box">
-                        <div class="card-body p-4 m-2">
-                            <div>
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-grow-1">
-                                        <h5 class="mb-1 fw-semibold">Platinum Plan</h5>
-                                        <p class="text-muted mb-0">Enterprise Businesses</p>
-                                    </div>
-                                    <div class="avatar-sm">
-                                        <div class="avatar-title bg-light rounded-circle text-primary">
-                                            <i class="ri-stack-line fs-20"></i>
-                                        </div>
-                                    </div>
-                                </div>
+                    <div class="pt-2 pb-3">
+                        <h2>850 <small class="fs-5">KM</small><span class="fs-6 text-muted">/Mjesec</span></h2>
+                    </div>
+                    <hr class="my-3 text-muted">
+                    <ul class="list-unstyled text-muted vstack gap-3 mb-3">
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>200</b> Skeniranja</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>5000</b> Faktura u historiji</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: <b>10 s</b></li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>120 dana</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
+                    </ul>
+                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal"
+                        class="btn btn-info w-100 mt-auto text-white">Započni</a>
+                </div>
+            </div>
+        </div>
 
-                                <div class="pt-4">
-                                    <h2><sup><small>$</small></sup> 39<span class="fs-13 text-muted">/Month</span></h2>
-                                </div>
-                            </div>
-                            <hr class="my-4 text-muted">
-                            <div>
-                                <ul class="list-unstyled vstack gap-3 text-muted">
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <b>Unlimited</b> Projects
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <b>Unlimited</b> Customers
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                               Scalable Bandwidth
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <b>Unlimited</b> FTP Login
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <b>24/7</b> Support
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <b>Unlimited</b> Storage
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 text-success me-1">
-                                                <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                Domain
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <div class="mt-4">
-                                    <a href="javascript:void(0);" class="btn btn-soft-success w-100 waves-effect waves-light">Get started</a>
-                                </div>
+        <!-- Business Plan -->
+        <div class="col-lg-4 mb-4">
+            <div class="card pricing-box border-0 rounded-0 h-100">
+                <div class="card-body p-4 m-2 d-flex flex-column">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-grow-1">
+                            <h5 class="fw-semibold mb-1">Business</h5>
+                            <p class="text-muted mb-0">Skrojeno za velike biznise</p>
+                        </div>
+                        <div class="avatar-sm">
+                            <div class="avatar-title bg-light rounded-circle text-primary">
+                                <i class="ri-shield-star-line text-info fs-2"></i>
                             </div>
                         </div>
                     </div>
-                </div><!--end col-->
-            </div><!--end row-->
-        </div><!--end col-->
-    </div><!--end row-->
-
-    <div class="row justify-content-center mt-5">
-        <div class="col-lg-4">
-            <div class="text-center mb-4 pb-2">
-                <h4 class="fw-semibold fs-22">Simple Pricing Plan</h4>
-                <p class="text-muted mb-4 fs-15">Simple pricing. No hidden fees. Advanced features for you business.</p>
-
+                    <div class="pt-2 pb-3">
+                        <h2>2000 <small class="fs-5">KM</small><span class="fs-6 text-muted">/Mjesec</span></h2>
+                    </div>
+                    <hr class="my-3 text-muted">
+                    <ul class="list-unstyled text-muted vstack gap-3 mb-3">
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>500</b> Skeniranja</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>Neograničeno</b> faktura u historiji</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: <b>4 s</b></li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>365 dana</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
+                    </ul>
+                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal"
+                        class="btn btn-info w-100 mt-auto text-white">Produži</a>
+                </div>
             </div>
-        </div><!--end col-->
-    </div><!--end row-->
+        </div>
+    </div>
+</div>
 
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="card pricing-box text-center">
-                <div class="row g-0">
-                    <div class="col-lg-6">
-                        <div class="card-body h-100">
-                            <div>
-                                <h5 class="mb-1">Starter</h5>
-                                <p class="text-muted">Starter plans</p>
-                            </div>
-
-                            <div class="py-4">
-                                <h2><sup><small>$</small></sup>22 <span class="fs-13 text-muted"> /Per month</span></h2>
-                            </div>
-
-                            <div class="text-center plan-btn mt-2">
-                                <a href="javascript:void(0);" class="btn btn-success w-sm waves-effect waves-light">Sign up</a>
-                            </div>
-                        </div>
-                    </div><!--end col-->
-                    <div class="col-lg-6">
-                        <div class="card-body border-start mt-4 mt-lg-0">
-                            <div class="card-header bg-light">
-                                <h5 class="fs-15 mb-0">Plan Features:</h5>
-                            </div>
-                            <div class="card-body pb-0">
-                                <ul class="list-unstyled vstack gap-3 mb-0">
-                                    <li>Users: <span class="text-success fw-semibold">1</span></li>
-                                    <li>Storage: <span class="text-success fw-semibold">01 GB</span></li>
-                                    <li>Domain: <span class="text-success fw-semibold">No</span></li>
-                                    <li>Support: <span class="text-success fw-semibold">No</span></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div><!--end col-->
-                </div><!--end row-->
+<!-- Payment Method Modal -->
+<!-- Modal za plaćanje karticom -->
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-info  rounded-0 shadow">
+            <div class=" d-flex align-items-center justify-content-between bg-info text-white py-1">
+                <h5 class="modal-title d-flex align-items-center  ms-1 me-1 text-white"
+                    id="paymentModalLabel">Unesite vaše podatke</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Zatvori"></button>
             </div>
-        </div><!--end row-->
-
-        <div class="col-lg-6">
-            <div class="card pricing-box ribbon-box ribbon-fill text-center">
-                <div class="ribbon ribbon-primary">New</div>
-                <div class="row g-0">
-                    <div class="col-lg-6">
-                        <div class="card-body h-100">
-                            <div>
-                                <h5 class="mb-1">Professional</h5>
-                                <p class="text-muted">Professional plans</p>
-                            </div>
-
-                            <div class="py-4">
-                                <h2><sup><small>$</small></sup>29 <span class="fs-13 text-muted">/Per month</span></h2>
-                            </div>
-
-                            <div class="text-center plan-btn mt-2">
-                                <a href="javascript:void(0);" class="btn btn-success w-sm waves-effect waves-light">Sign up</a>
-                            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="cardName" class="form-label">Ime i prezime vlasnika kartice</label>
+                        <input type="text" class="form-control border-info rounded-0" id="cardName"
+                            placeholder="Ime i Prezime">
+                    </div>
+                    <div class="mb-3">
+                        <label for="cardNumber" class="form-label">Broj kartice</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control border-info rounded-0" id="cardNumber"
+                                placeholder="0000 0000 0000 0000">
+                            <span class="input-group-text bg-white border-info rounded-0">
+                                <img src="https://img.icons8.com/color/32/000000/mastercard-logo.png"
+                                    id="cardLogo" alt="Mastercard" height="20">
+                            </span>
                         </div>
-                    </div><!--end col-->
-                    <div class="col-lg-6">
-                        <div class="card-body border-start mt-4 mt-lg-0">
-                            <div class="card-header bg-light">
-                                <h5 class="fs-15 mb-0">Plan Features:</h5>
-                            </div>
-                            <div class="card-body pb-0">
-                                <ul class="list-unstyled vstack gap-3 mb-0">
-                                    <li>Users: <span class="text-success fw-semibold">3</span></li>
-                                    <li>Storage: <span class="text-success fw-semibold">10 GB</span></li>
-                                    <li>Domain: <span class="text-success fw-semibold">Yes</span></li>
-                                    <li>Support: <span class="text-success fw-semibold">No</span></li>
-                                </ul>
-                            </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="expiry" class="form-label">Datum isteka</label>
+                            <input type="text" class="form-control border-info rounded-0" id="expiry"
+                                placeholder="MM/GG">
                         </div>
-                    </div><!--end col-->
-                </div><!--end row-->
+                        <div class="col-md-6 mb-3">
+                            <label for="cvc" class="form-label">CVC kod</label>
+                            <input type="text" class="form-control border-info rounded-0" id="cvc"
+                                placeholder="123">
+                        </div>
+                    </div>
+
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input border-info rounded-0" type="checkbox" id="saveCard">
+                        <label class="form-check-label" for="saveCard">
+                            Sačuvaj podatke o kartici za naredna plaćanja
+                        </label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input border-info rounded-0" type="checkbox"
+                            id="termsCheck">
+                        <label class="form-check-label" for="termsCheck">
+                            Prihvatam <a href="#">uslove korištenja</a> i <a href="#">politiku
+                                privatnosti</a>
+                        </label>
+                    </div>
+                </form>
             </div>
-        </div><!--end row-->
-
-        <div class="col-lg-6">
-            <div class="card pricing-box ribbon-box ribbon-fill text-center">
-                <div class="ribbon ribbon-primary">New</div>
-                <div class="row g-0">
-                    <div class="col-lg-6">
-                        <div class="card-body h-100">
-                            <div>
-                                <h5 class="mb-1">Enterprise</h5>
-                                <p class="text-muted">Enterprise plans</p>
-                            </div>
-
-                            <div class="py-4">
-                                <h2><sup><small>$</small></sup>39 <span class="fs-13 text-muted">/Per month</span></h2>
-                            </div>
-
-                            <div class="text-center plan-btn mt-2">
-                                <a href="javascript:void(0);" class="btn btn-success w-sm waves-effect waves-light">Sign up</a>
-                            </div>
-                        </div>
-                    </div><!--end col-->
-                    <div class="col-lg-6">
-                        <div class="card-body border-start mt-4 mt-lg-0">
-                            <div class="card-header bg-light">
-                                <h5 class="fs-15 mb-0">Plan Features:</h5>
-                            </div>
-                            <div class="card-body pb-0">
-                                <ul class="list-unstyled vstack gap-3 mb-0">
-                                    <li>Users: <span class="text-success fw-semibold">3</span></li>
-                                    <li>Storage: <span class="text-success fw-semibold">20 GB</span></li>
-                                    <li>Domain: <span class="text-success fw-semibold">Yes</span></li>
-                                    <li>Support: <span class="text-success fw-semibold">Yes</span></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div><!--end col-->
-                </div><!--end row-->
+            <div class="modal-footer d-flex justify-content-center align-items center ">
+                <button type="button" class="btn btn-outline-info w-50"
+                    data-bs-dismiss="modal">Otkaži</button>
+                <button type="submit" class="btn btn-info text-white w-50">Plati</button>
             </div>
-        </div><!--end col-->
+        </div>
+    </div>
+</div>
 
-        <div class="col-lg-6">
-            <div class="card pricing-box text-center">
-                <div class="row g-0">
-                    <div class="col-lg-6">
-                        <div class="card-body h-100">
-                            <div>
-                                <h5 class="mb-1">Unlimited</h5>
-                                <p class="text-muted">Unlimited plans</p>
-                            </div>
-                            <div class="py-4">
-                                <h2><sup><small>$</small></sup>49 <span class="fs-13 text-muted">/Per month</span></h2>
-                            </div>
+<!-- Modal za izbor načina plaćanja -->
+<div class="modal fade" id="paymentChoiceModal" tabindex="-1" aria-labelledby="paymentChoiceModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-info  shadow">
+            <div class="d-flex justify-content-between bg-info py-1 px-1 text-white">
 
-                            <div class="text-center plan-btn mt-2">
-                                <a href="javascript:void(0);" class="btn btn-success w-sm waves-effect waves-light">Sign up</a>
-                            </div>
-                        </div>
-                    </div><!--end col-->
-                    <div class="col-lg-6">
-                        <div class="card-body border-start mt-4 mt-lg-0">
-                            <div class="card-header bg-light">
-                                <h5 class="fs-15 mb-0">Plan Features:</h5>
-                            </div>
-                            <div class="card-body pb-0">
-                                <ul class="list-unstyled vstack gap-3 mb-0">
-                                    <li>Users: <span class="text-success fw-semibold">5</span></li>
-                                    <li>Storage: <span class="text-success fw-semibold">40 GB</span></li>
-                                    <li>Domain: <span class="text-success fw-semibold">Yes</span></li>
-                                    <li>Support: <span class="text-success fw-semibold">Yes</span></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div><!--end col-->
-                </div><!--end row-->
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Zatvori"></button>
             </div>
-        </div><!--end col-->
-    </div><!--end row-->
+            <div class="modal-body text-center">
+                <p class="mb-4">Molimo odaberite način na koji želite izvršiti uplatu:</p>
+                <div class="d-grid gap-3">
+                    <button class="btn btn-info text-white" data-bs-dismiss="modal" data-bs-toggle="modal"
+                        data-bs-target="#paymentModal">
+                        💳 Kartično plaćanje
+                    </button>
+                    <button class="btn btn-outline-info" data-bs-dismiss="modal" data-bs-toggle="modal"
+                        data-bs-target="#virmanModal">
+                        🧾 Plaćanje virmanom
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal za plaćanje virmanom -->
+<div class="modal fade" id="virmanModal" tabindex="-1" aria-labelledby="virmanModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-info ">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title" id="virmanModalLabel">Upute za plaćanje virmanom</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Zatvori"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Naziv primaoca:</label>
+                    <p class="mb-0">Qla Dev d.o.o. Sarajevo</p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Broj računa (IBAN):</label>
+                    <p class="mb-0">BA39 1542 0512 3456 7890</p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Svrha uplate:</label>
+                    <p class="mb-0">Uplata paketa usluga – <span class="text-info fw-semibold">[StartUp /
+                            GoBig / Business]</span></p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Iznos:</label>
+                    <p class="mb-0 text-info fs-5">[unesi iznos u KM]</p>
+                </div>
+                <hr>
+                <p class="text-muted small">
+                    Nakon izvršene uplate, molimo pošaljite dokaz o uplati na email:
+                    <strong>uplate@qla.dev</strong> radi brže obrade.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Zatvori</button>
+                <button type="button" class="btn btn-info text-white">Uredu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('script'); ?>
-    <script src="<?php echo e(URL::asset('build/js/pages/pricing.init.js')); ?>"></script>
+<script src="<?php echo e(URL::asset('build/js/pages/pricing.init.js')); ?>"></script>
 
-    <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
+<script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
 <?php $__env->stopSection(); ?>
-
 <?php echo $__env->make('layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\edeklarant\app-service-laravel\resources\views/pages-pricing.blade.php ENDPATH**/ ?>

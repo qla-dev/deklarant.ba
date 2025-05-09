@@ -234,15 +234,15 @@
                         </span>
                     </button>
                     
-                    <div class="dropdown-menu dropdown-menu-end border border-info">
+                    <div class="dropdown-menu dropdown-menu-end border">
                         <!-- item-->
                         <h6 class="dropdown-header">Dobrodošli !</h6>
-                        <a class="dropdown-item" href="pages-profile"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profile</span></a>   
-                        <a class="dropdown-item" href="pages-faqs"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Help</span></a>
+                        <a class="dropdown-item" href="pages-profile"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Moj nalog</span></a>   
+                        <a class="dropdown-item" href="pages-faqs"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Pomoć</span></a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="pages-profile"><i class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Dostupna skeniranja : <b>123</b></span></a>
-                        <a class="dropdown-item" href="pages-profile-settings"><i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Settings</span></a>
-                        <a class="dropdown-item" href="auth-lockscreen-basic"><i class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Lock screen</span></a>
+                       
+                        <a class="dropdown-item" href="auth-lockscreen-basic"><i class="mdi mdi-sleep text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Sleep</span></a>
 
                         <a class="dropdown-item" href="javascript:void(0);" id="logout-link">
                             <i class="bx bx-power-off font-size-16 align-middle me-1"></i> 

@@ -502,7 +502,7 @@
                 <li class="nav-item me-3">
                     <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarAuth">
-                        <i class="mdi mdi-account-circle-outline text-info"></i> <span>@lang('translation.clients')
+                        <i class="ri-truck-line text-info"></i> <span>@lang('translation.clients')
                         </span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarAuth">

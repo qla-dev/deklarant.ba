@@ -307,9 +307,7 @@
                 <a class="nav-link  active" data-bs-toggle="tab" href="#overview-tab">Osnovni podaci</a>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" href="#activities">Moje fakture</a>
-            </li>
+            
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="tab" href="#projects">Paketi</a>
             </li>
@@ -523,28 +521,7 @@
 
 
             <!-- Moje fakture tab (activities) -->
-            <div class="tab-pane fade" id="activities">
-                <div class="table-responsive">
-                    <table id="invoicesTable" class="table table-striped table-bordered align-middle mb-0 w-100">
-                        <thead class="table-light">
-                            <tr>
-                                <th>ID</th>
-                                <th>Moje fakture</th>
-                                <th>Zemlja porijekla</th>
-                                <th>Tip datoteke</th>
-                                <th>Cijena</th>
-                                <th>Datum</th>
-                                <th>Skenirana</th>
-                                <th>Dobavljač</th>
-                                <th>Vlasnik</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-light">
-                            <!-- AJAX content goes here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+        
 
             <!-- Modal -->
             <div class="modal fade" id="invoiceDetailsModal" tabindex="-1" aria-labelledby="invoiceDetailsModalLabel"
