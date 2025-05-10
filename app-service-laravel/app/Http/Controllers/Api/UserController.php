@@ -79,10 +79,22 @@ class UserController extends Controller
                 'country' => 'nullable|string',
                 'zip_code' => 'nullable|string',
                 'description' => 'nullable|string',
+                'company' => 'nullable|array',
+                'company.name' => 'nullable|string',
+                'company.address' => 'nullable|string',
+                'company.id' => 'nullable|string',
+                'company.pdv' => 'nullable|string',
+                'company.owner' => 'nullable|string',
+                'company.contact_person' => 'nullable|string',
+                'company.contact_number' => 'nullable|string',
             ]);
 
             if ($request->filled('password')) {
                 $validatedData['password'] = Hash::make($request->password);
+            }
+
+            if ($request->has('company')) {
+                $validatedData['company'] = $request->input('company');
             }
 
             $user->update($validatedData);

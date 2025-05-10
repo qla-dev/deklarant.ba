@@ -29,6 +29,7 @@ class User extends Authenticatable
         'country',
         'zip_code',
         'description',
+        'company'
     ];
 
     protected $hidden = [
@@ -39,6 +40,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'skills' => 'array',
+        'company' => 'array'
     ];
 
     /**
