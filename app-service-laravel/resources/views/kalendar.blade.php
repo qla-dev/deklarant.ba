@@ -435,11 +435,28 @@ Kalendarni prikaz mojih faktura
             const calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 themeSystem: 'bootstrap5',
+                firstDay: 1,
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
                     right: 'multiMonthYear,dayGridMonth,listMonth'
                 },
+                buttonText: {
+                    today: 'Danas',
+                    month: 'Mjesec',
+                    list: 'Lista',
+                    week: 'Sedmica',
+                    day: 'Dan',
+                    year: 'Godina'
+                },
+    dayMaxEvents: 1, // limit number of events shown per day
+    moreLinkContent: function(args) {
+        return 'Prikaži još ' + args.num;
+    },
+moreLinkDidMount: function(info) {
+    info.el.setAttribute('title', `Prikaži još ${info.num}`);
+    info.el.style.cursor = 'pointer';
+},
                 events: events,
                 eventDidMount: function (info) {
                     const invoice = info.event.extendedProps.invoiceData;
@@ -450,10 +467,24 @@ Kalendarni prikaz mojih faktura
                 },
                 eventClick: function (info) {
                     openInvoiceModal(info.event.id);
-                }
+                },
+                dayHeaderContent: function(arg) {
+                    const days = ['NED', 'PON', 'UTO', 'SRI', 'ČET', 'PET', 'SUB'];
+                    return days[arg.date.getDay()];
+                },
+                titleFormat: function(date) {
+                    const months = ['Januar', 'Februar', 'Mart', 'April', 'Maj', 'Juni', 'Juli', 'August', 'Septembar', 'Oktobar', 'Novembar', 'Decembar'];
+                    return `${months[date.date.month]} ${date.date.year}`;
+                },
+                datesSet: function() {
+    setTimeout(translateTooltips, 0);
+}
+
+                
             });
 
             calendar.render();
+
             latestInvoicesList(invoices);
         })
         .catch(error => {
@@ -499,7 +530,6 @@ Kalendarni prikaz mojih faktura
             });
         }
 
-        // Delegated event for view-invoice cards (latest scanned invoices)
         $(document).on('click', '.view-invoice', function () {
             const invoiceId = $(this).data('id');
             openInvoiceModal(invoiceId);
@@ -559,12 +589,10 @@ Kalendarni prikaz mojih faktura
                 $('#products-list').html(itemsHTML);
                 $('#modal-total-amount').text(totalSum.toFixed(2));
 
-                // Fix backdrop issue if modal previously failed
                 $('.modal-backdrop').remove();
                 $('body').removeClass('modal-open');
                 $('body').css('padding-right', '');
 
-                // Show modal
                 const existingModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('invoiceDetailsModal'));
                 existingModal.show();
 
@@ -576,6 +604,7 @@ Kalendarni prikaz mojih faktura
         }
     });
 </script>
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -716,6 +745,121 @@ Kalendarni prikaz mojih faktura
         });
     });
 </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const monthMap = {
+            "January": "Januar",
+            "February": "Februar",
+            "March": "Mart",
+            "April": "April",
+            "May": "Maj",
+            "June": "Juni",
+            "July": "Juli",
+            "August": "August",
+            "September": "Septembar",
+            "October": "Oktobar",
+            "November": "Novembar",
+            "December": "Decembar"
+        };
+
+        function translateMonthTitles(selector) {
+            document.querySelectorAll(selector).forEach(el => {
+                const original = el.textContent.trim();
+                const words = original.split(" ");
+                const translatedWords = words.map(word => monthMap[word] || word);
+                const translated = translatedWords.join(" ");
+                if (translated !== original) {
+                    el.textContent = translated;
+                }
+            });
+        }
+
+        function translateAll() {
+            translateMonthTitles('.fc .fc-multimonth-title');
+            translateMonthTitles('.fc .fc-popover-title');
+        }
+
+        const calendarEl = document.getElementById('calendar');
+        if (calendarEl) {
+            const observer = new MutationObserver(() => {
+                translateAll();
+            });
+            observer.observe(calendarEl, { childList: true, subtree: true });
+        }
+    });
+</script>
+
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+    const observer = new MutationObserver(() => {
+        const noEventsEl = document.querySelector(".fc-list-empty-cushion"); 
+        if (noEventsEl && noEventsEl.textContent.includes("No events to display")) {
+            noEventsEl.textContent = "Nema skeniranih faktura za ovaj dan";
+        }
+    });
+
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+    });
+});
+
+
+
+</script>
+
+<script>
+    function translateTooltips() {
+        const prevBtn = document.querySelector('.fc-prev-button');
+        const nextBtn = document.querySelector('.fc-next-button');
+        const todayBtn = document.querySelector('.fc-today-button');
+
+        if (prevBtn?.title.includes("Godina")) {
+            prevBtn.setAttribute('title', 'Prethodna godina');
+        } else {
+            prevBtn.setAttribute('title', 'Prethodni mjesec');
+        }
+
+        if (nextBtn?.title.includes("Godina")) {
+            nextBtn.setAttribute('title', 'Sljedeća godina');
+        } else {
+            nextBtn.setAttribute('title', 'Sljedeći mjesec');
+        }
+
+        todayBtn?.setAttribute('title', 'Danas');
+
+        document.querySelector('.fc-multiMonthYear-button')?.setAttribute('title', 'Godišnji pregled');
+        document.querySelector('.fc-dayGridMonth-button')?.setAttribute('title', 'Mjesečni pregled');
+        document.querySelector('.fc-listMonth-button')?.setAttribute('title', 'Pregled kroz listu');
+
+        document.querySelectorAll('.fc-popover-close').forEach(el => {
+            if (el.getAttribute('title') === 'Close') {
+                el.setAttribute('title', 'Zatvori');
+            }
+        });
+
+        document.querySelectorAll('.fc-list-empty-cushion').forEach(el => {
+            if (el.textContent.includes('No events to display')) {
+                el.textContent = 'Nema skeniranih faktura za ovaj dan';
+            }
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const observer = new MutationObserver(() => {
+            translateTooltips();
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true,
+        });
+    });
+</script>
+
 
 
 

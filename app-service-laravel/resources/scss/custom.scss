@@ -285,7 +285,7 @@ opacity: 0;
 
 .nav-tabs-custom .nav-item .nav-link:after {
 
-    background:  rgba(41, 156, 219, 1)!important;
+    background:rgba(41, 156, 219, 1)!important;  
 }
 
 #latest-invoices-list {
@@ -293,6 +293,40 @@ opacity: 0;
     max-height: 400px!important;
 }
 
+.fc .fc-button-primary:not(:disabled).fc-button-active, .fc .fc-button-primary:not(:disabled):active  {
+    background-color: #299cdb !important;
+    border-color: #299cdb !important;
+    color: #fff !important;
+}
+
+.fc-toolbar-chunk .fc-button-group .fc-button {
+    color: #299cdb!important;
+}
+
+.fc-toolbar-chunk .fc-button-group .fc-button:hover, .fc-toolbar-chunk .fc-button-group .fc-button.active {
+    color: #fff !important;
+    background-color: rgba(41, 156, 219, 1)!important;
+}
 
 
+.fc-toolbar-chunk .fc-today-button { color: #fff !important;
+    background-color: rgba(41, 156, 219, 1)!important;}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active:focus, .fc .fc-button-primary:not(:disabled):active:focus {
+    box-shadow:unset!important;
+}
+
+.fc-list-event-time, .fc-list-event-graphic {display: none!important;}
+
+.fc .fc-multimonth-multicol .fc-daygrid-more-link {border-color: #299cdb!important; color: #299cdb ;}
+
+.fc-direction-ltr .fc-daygrid-more-link {
+
+color: #299cdb ;
+
+}
+
+.fc .fc-multimonth-multicol .fc-daygrid-more-link {padding: 2px;}
+
+.fc-direction-ltr .fc-daygrid-more-link  {padding: 5px!important; border:1px solid #299cdb!important; width: 100%; text-align: center;}
 

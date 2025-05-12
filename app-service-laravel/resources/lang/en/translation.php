@@ -9,7 +9,7 @@ return [
     "crypto"=>"Crypto",
     "projects"=>"Projects",
     "apps" =>"Apps",
-    "calendar"=>"Calendar",
+    "calendar"=>"Kalendarni prikaz faktura",
     "main-calender" => "Main Calender",
     "month-grid" => "Month Grid",
     "chat"=>"Chat",

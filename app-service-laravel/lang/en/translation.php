@@ -8,7 +8,7 @@ return [
     "crypto"=>"Crypto",
     "projects"=>"Projects",
     "apps" =>"Apps",
-    "calendar"=>"Calendar",
+    "calendar"=>"Kalendar",
     "chat"=>"Chat",
     "mailbox"=>"Mailbox",
     "products"=>"Products",
