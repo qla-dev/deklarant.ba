@@ -29,13 +29,14 @@
         z-index: 2;
 
     }
+
     .text-custom {
         color: #fff !important;
         background-color: transparent !important;
         border: none !important;
         box-shadow: none !important;
         opacity: 0.9;
-       
+
     }
 
     .text-custom:hover {
@@ -218,8 +219,10 @@
             transform: scale(1);
         }
     }
+
     .modal-dialog.modal-xl {
-    max-width: 75vw; /* or set fixed px: 1200px, 1400px */
+        max-width: 75vw;
+        /* or set fixed px: 1200px, 1400px */
     }
 
 
@@ -307,13 +310,11 @@
                 <a class="nav-link  active" data-bs-toggle="tab" href="#overview-tab">Osnovni podaci</a>
             </li>
 
-            
+
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="tab" href="#projects">Paketi</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" href="#documents">Test</a>
-            </li>
+           
         </ul>
 
         <!-- Tab Content -->
@@ -321,30 +322,7 @@
 
 
 
-            <div class="tab-pane fade" id="documents">
-                <div class="table-responsive">
-                    <select id="tariffSelect" class="form-control" style="width: 100%"></select>
-
-                    <table id="tariffTable" class="table table-striped table-bordered w-100">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Tarifna oznaka</th>
-                                <th>Naziv</th>
-                                <th>Jedinica</th>
-                                <th>Stopa (%)</th>
-                                <th>EU</th>
-                                <th>CEFTA</th>
-                                <th>IRN</th>
-                                <th>TUR</th>
-                                <th>CHE, LIE</th>
-                                <th>ISL</th>
-                                <th>NOR</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
+            
 
 
             <!-- Overview Tab -->
@@ -357,7 +335,7 @@
                                 <p class="fw-semibold mb-0" id="user-package-text" style="padding-top:4px; padding-right: 5px;">
                                     Učitavanje...
                                 </p>
-                                <a href="pages-pricing" class="btn btn-info text-white btn-sm mt-auto">
+                                <a href="cijene-paketa" class="btn btn-info text-white btn-sm mt-auto">
                                     <i class="ri-arrow-up-circle-line"></i> Nadogradi paket
                                 </a>
                             </div>
@@ -419,6 +397,11 @@
                                         <a class="nav-link text-info" data-bs-toggle="tab" href="#changePassword" role="tab">
                                             <i class="fas fa-key"></i>
                                             Promjena lozinke
+                                        </a>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-info" data-bs-toggle="tab" href="#companyDetails" role="tab">
+                                            <i class="fa-solid fa-building"></i>
+                                            Podaci o kompaniji
                                         </a>
                                     </li>
                                 </ul>
@@ -508,6 +491,55 @@
                                             </div>
                                         </form>
                                     </div>
+                                    <div class="tab-pane fade" id="companyDetails" role="tabpanel">
+                                        <form action="javascript:void(0);">
+                                            <div class="row">
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="companyNameInput" class="form-label text-info">Ime kompanije</label>
+                                                    <input type="text" class="form-control rounded-0" id="companyNameInput" placeholder="Učitavanje..." />
+                                                </div>
+
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="addressInput" class="form-label text-info">Adresa</label>
+                                                    <input type="text" class="form-control rounded-0" id="addressInput" placeholder="Učitavanje..." />
+                                                </div>
+
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="documentIdInput" class="form-label text-info">ID dokumenta</label>
+                                                    <input type="text" class="form-control rounded-0" id="documentIdInput" placeholder="Učitavanje..." />
+                                                </div>
+
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="vatInput" class="form-label text-info">PDV broj</label>
+                                                    <input type="text" class="form-control rounded-0" id="vatInput" placeholder="Učitavanje..." />
+                                                </div>
+
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="ownerInput" class="form-label text-info">Vlasnik</label>
+                                                    <input type="text" class="form-control rounded-0" id="ownerInput" placeholder="Učitavanje..." />
+                                                </div>
+
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="contactPersonInput" class="form-label text-info">Kontakt osoba</label>
+                                                    <input type="text" class="form-control rounded-0" id="contactPersonInput" placeholder="Učitavanje..." />
+                                                </div>
+
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="contactNumberInput" class="form-label text-info">Kontakt broj</label>
+                                                    <input type="text" class="form-control rounded-0" id="contactNumberInput" placeholder="Učitavanje..." />
+                                                </div>
+
+                                                <div class="col-lg-12 mt-4 mb-4">
+                                                    <div class="hstack gap-2 justify-content-end">
+                                                        <button type="submit" id="update-company-btn" class="btn btn-info">
+                                                            <i class="fas fa-save fs-6 me-1"></i> Ažuriraj podatke
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
 
                                 </div>
                             </div>
@@ -521,7 +553,7 @@
 
 
             <!-- Moje fakture tab (activities) -->
-        
+
 
             <!-- Modal -->
             <div class="modal fade" id="invoiceDetailsModal" tabindex="-1" aria-labelledby="invoiceDetailsModalLabel"
@@ -589,7 +621,7 @@
                                                         <div class="col-lg-3 col-6">
                                                             <p class="text-muted mb-2 text-uppercase fw-semibold">Ukupan
                                                                 iznos</p>
-                                                            <h5 class="fs-14 mb-0"><span id="total-amount">--</span> 
+                                                            <h5 class="fs-14 mb-0"><span id="total-amount">--</span>
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -1075,8 +1107,7 @@
                 leftColumns: 1,
                 rightColumns: 0
             },
-            columns: [
-                {
+            columns: [{
                     data: null,
                     title: 'ID',
                     render: function(data, type, row, meta) {
@@ -1143,8 +1174,7 @@
                 }
             ],
             dom: 'Bfrtip',
-            buttons: [
-                {
+            buttons: [{
                     text: '<i class="ri-ai-generate-2 fs-5 me-1"></i> Skeniraj s AI',
                     className: 'nav-link px-3 py-2 text-custom',
                     action: function() {
@@ -1216,7 +1246,7 @@
 
 
 
-
+<!-- Card payment script test -->
 <script>
     const cardNumberInput = document.getElementById("cardNumber");
     const cardLogo = document.getElementById("cardLogo");
@@ -1251,6 +1281,8 @@
     });
 </script>
 
+
+<!-- User Avatar photo upload-->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const token = localStorage.getItem("auth_token");
@@ -1355,7 +1387,7 @@
     });
 </script>
 
-
+<!-- View invoice logic -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         $(document).on('click', '.view-invoice', function(e) {
@@ -1429,170 +1461,9 @@
     });
 </script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        fetch('/storage/data/tariff.json')
-            .then(response => response.json())
-            .then(data => {
-                const table = $('#tariffTable').DataTable({
-                    data: data,
-                    scrollX: true,
-                    autoWidth: true,
-                    lengthChange: false,
-                    fixedColumns: {
-                        leftColumns: 1,
-                        rightColumns: 0
-                    },
-                    columns: [{
-                            data: 'Tarifna oznaka',
-                            title: 'Tarifna oznaka'
-                        },
-                        {
-                            data: 'Naziv',
-                            title: 'Naziv'
-                        },
-                        {
-                            data: 'Dopunska jedinica',
-                            title: 'Jedinica'
-                        },
-                        {
-                            data: 'Carinska stopa (%)',
-                            title: 'Stopa (%)'
-                        },
-                        {
-                            data: 'EU',
-                            title: 'EU'
-                        },
-                        {
-                            data: 'CEFTA',
-                            title: 'CEFTA'
-                        },
-                        {
-                            data: 'IRN',
-                            title: 'IRN'
-                        },
-                        {
-                            data: 'TUR',
-                            title: 'TUR'
-                        },
-                        {
-                            data: 'CHE, LIE',
-                            title: 'CHE, LIE'
-                        },
-                        {
-                            data: 'ISL',
-                            title: 'ISL'
-                        },
-                        {
-                            data: 'NOR',
-                            title: 'NOR'
-                        }
-                    ],
-                    dom: 'Bfrtip',
-                    buttons: [
-                        'csv',
-                        'excelHtml5',
-                        'pdf',
-                        'print',
-                        'colvis',
-                        'pageLength'
-                    ],
-                    language: {
-                        paginate: {
-                            first: "Prva",
-                            last: "Posljednja",
-                            next: "Sljedeća",
-                            previous: "Prethodna"
-                        },
-                        info: "",
-                        infoEmpty: "Prikazivanje 0 do 0 od 0 stavki",
-                        infoFiltered: "(filtrirano iz _MAX_ ukupnih stavki)",
-                        search: "Pretraga:",
-                        zeroRecords: "Nema pronađenih stavki"
-                    }
-                });
-
-                // Append buttons
-                table.buttons().container().appendTo('#tariffTable_wrapper .row .col-md-6:eq(0)');
-
-                // Add row click handler
-                $('#tariffTable tbody').on('click', 'tr', function() {
-                    const rowData = table.row(this).data();
-                    alert("Puni naziv: " + rowData["Puni Naziv"]);
-                });
-            })
-            .catch(err => {
-                console.error("Greška pri učitavanju tariff podataka:", err);
-            });
-    });
-</script>
 
 
-<!-- select field -->
-<script>
-    let processed = [];
 
-    fetch('/storage/data/tariff.json')
-        .then(res => res.json())
-        .then(data => {
-            processed = data
-                .filter(item => item["Puni Naziv"] && item["Tarifna oznaka"]) // skip bad rows
-                .map(item => {
-                    const hierarchy = item["Puni Naziv"];
-                    const parts = hierarchy.split(">>>").map(p => p.trim());
-                    const leaf = parts[parts.length - 1];
-                    const depth = parts.length - 1;
-                    const code = item["Tarifna oznaka"];
-                    const isLeaf = code && code.replace(/\s/g, '').length === 10;
-
-                    return {
-                        id: isLeaf ? code : null, // only leafs are selectable
-                        text: leaf,
-                        display: `${code} – ${leaf}`,
-                        depth: depth,
-                        isLeaf: isLeaf,
-                        hierarchy: hierarchy,
-                        search: [item["Naziv"], hierarchy, code].join(" ").toLowerCase(),
-                        full: item
-                    };
-                });
-
-            $('#tariffSelect').select2({
-                placeholder: "Pretraži tarifne stavke...",
-                minimumInputLength: 1,
-                ajax: {
-                    transport: function(params, success, failure) {
-                        const term = params.data.q?.toLowerCase() || "";
-                        const filtered = processed.filter(item =>
-                            item.search.includes(term)
-                        );
-                        success({
-                            results: filtered
-                        });
-                    },
-                    delay: 200
-                },
-                templateResult: function(item) {
-                    if (!item.id && !item.text) return null;
-
-                    const icon = item.isLeaf ? "•" : "▶";
-                    const label = item.display || item.text;
-                    return $(`<div style="padding-left:${item.depth * 20}px;">
-                        ${icon} ${label}
-                    </div>`);
-                },
-                templateSelection: function(item) {
-                    return item.id ? `${item.id} – ${item.text}` : "";
-                }
-            });
-
-            $('#tariffSelect').on('select2:select', function(e) {
-                const selectedData = e.params.data.full;
-                alert("Odabrana tarifna stavka:\n" + selectedData["Puni Naziv"]);
-                console.log("Selected full object:", selectedData);
-            });
-        });
-</script>
 
 
 <script>
@@ -1846,8 +1717,8 @@
 <!-- Update User data -->
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById("update-user-btn").addEventListener("click", async function(e) {
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("update-user-btn").addEventListener("click", async function (e) {
             e.preventDefault();
             e.stopPropagation();
 
@@ -1855,7 +1726,7 @@
             const token = localStorage.getItem("auth_token");
 
             if (!user || !token) {
-                console.error(" User or token not found in localStorage.");
+                console.error("User or token not found in localStorage.");
                 return;
             }
 
@@ -1885,11 +1756,20 @@
 
                 if (!response.ok) {
                     const errorText = await response.text();
-                    throw new Error(" Greška pri ažuriranju podataka: " + errorText);
+                    throw new Error("Greška pri ažuriranju podataka: " + errorText);
                 }
 
                 const responseData = await response.json();
-                console.log(" Podaci ažurirani:", responseData);
+                const updatedUser = responseData.user;
+
+                // 🔄 Live update UI
+                document.getElementById("profile-username").textContent = updatedUser.first_name;
+                document.getElementById("profile-lastname").textContent = updatedUser.last_name;
+                document.getElementById("profile-location").innerHTML =
+                    `<i class="ri-map-pin-user-line align-middle"></i> ${updatedUser.city || 'Nepoznat grad'}, ${updatedUser.country || 'Nepoznata država'}`;
+
+                // 🔄 Update localStorage
+                localStorage.setItem("user", JSON.stringify(updatedUser));
 
                 Swal.fire({
                     icon: "success",
@@ -1899,7 +1779,7 @@
                 });
 
             } catch (err) {
-                console.error(" Error:", err);
+                console.error("Error:", err);
                 Swal.fire("Greška", err.message || "Nešto je pošlo po zlu.", "error");
             }
         });
@@ -1975,16 +1855,16 @@
 </script>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const hash = window.location.hash;
-    if (hash) {
-        const tabLink = document.querySelector(`a[href="${hash}"]`);
-        if (tabLink) {
-            const tab = new bootstrap.Tab(tabLink);
-            tab.show();
+    document.addEventListener("DOMContentLoaded", function() {
+        const hash = window.location.hash;
+        if (hash) {
+            const tabLink = document.querySelector(`a[href="${hash}"]`);
+            if (tabLink) {
+                const tab = new bootstrap.Tab(tabLink);
+                tab.show();
+            }
         }
-    }
-});
+    });
 </script>
 
 

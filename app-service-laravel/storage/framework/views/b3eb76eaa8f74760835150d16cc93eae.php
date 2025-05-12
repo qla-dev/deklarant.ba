@@ -8,20 +8,33 @@
 Apps
 <?php $__env->endSlot(); ?>
 <?php $__env->slot('title'); ?>
-Kalendar faktura
+Kalendarni prikaz mojih faktura
 <?php $__env->endSlot(); ?>
 <?php echo $__env->renderComponent(); ?>
 <div class="row">
     <div class="col-12">
         <div class="row align-items-stretch">
             <div class="col-xl-3 d-flex flex-column ">
+            <div class="card shadow-none mb-4">
+                    <div class="card-body bg-info-subtle rounded">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <i data-feather="calendar" class="text-info icon-dual-info"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-2">
+                                <h6 class="fs-15">Dobrodošli u interaktivni kalendar</h6>
+                                <p class="text-muted mb-0">Ovdje imate pristup svim skeniranim fakturama i njihovim detaljima</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="card card-h-100 mb-3">
                     <div class="card-body">
                         <button class="btn btn-info w-100" id="btn-new-event">
                             <i class="fas fa-wand-magic-sparkles fs-6 me-1"></i><span class="fs-6">Skeniraj fakturu s AI</span>
                         </button>
                         <div id="external-events d-flex justify-content-center" class="mt-3">
-                            <p class="text-muted">Klikni za skeniranje nove fakture!</p>
+                            <p class="text-muted w-100 text-center mb-0">Klikni za skeniranje nove fakture!</p>
                         </div>
                     </div>
                 </div>
@@ -31,25 +44,13 @@ Kalendar faktura
                             <i class="fa fa-file fs-6"></i> <span class="fs-6">Sve fakture</span>
                         </a>
                         <div id="external-events" class="mt-3">
-                            <p class="text-muted">Klikni da pogledaš sve fakture!</p>
+                            <p class="text-muted w-100 text-center mb-0">Klikni da pogledaš sve fakture!</p>
                         </div>
                     </div>
                 </div>
 
 
-                <div class="card shadow-none mb-4">
-                    <div class="card-body bg-info-subtle rounded">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0">
-                                <i data-feather="calendar" class="text-info icon-dual-info"></i>
-                            </div>
-                            <div class="flex-grow-1 ms-2">
-                                <h6 class="fs-15">Dobrodošli u kalendar!</h6>
-                                <p class="text-muted mb-0">Ovdje imate pristup svim skeniranim fakturama i njihovim detaljima</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+               
 
 
 
@@ -442,7 +443,7 @@ Kalendar faktura
                             <div class='d-flex mb-4'>
                                 <div class='flex-grow-1'>
                                     <i class='mdi mdi-file-document-outline me-2 text-info'></i>
-                                    <span class='fw-medium'>${date}</span>
+                                    <span class='fw-medium text-info'>${date}</span>
                                 </div>
                                 <div class='flex-shrink-0'>
                                     <small class='badge bg-info-subtle text-info ms-auto'>${totalPrice} KM</small>

@@ -1,37 +1,33 @@
 @extends('layouts.layouts-horizontal')
 
 @section('title')
-    @lang('translation.horizontal')
+@lang('translation.horizontal')
 @endsection
 
 @section('css')
-    <link href="{{ URL::asset('build/libs/jsvectormap/jsvectormap.min.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<link href="{{ URL::asset('build/libs/jsvectormap/jsvectormap.min.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
-    <style>
-
-
+<style>
     /* Optional: Remove the margin-right for the last slide to avoid overflow */
-        .mySwiper .swiper-slide:last-child {
-             margin-right: 0;
-        }
+    .mySwiper .swiper-slide:last-child {
+        margin-right: 0;
+    }
+</style>
 
 
-    </style>
-    
 
- 
 @endsection
 
 @section('content')
 
 
 <!-- Top part -->
- 
+
 <div class="col-xl-12">
     <div class="card border-0 rounded-0 shadow-0 h-100 mt-1">
         <div class="row g-0">
@@ -65,7 +61,7 @@
                             <h3 class="mb-0 ms-2"><span id="usedScans" class="counter-value">0</span></h3>
                         </div>
                     </div>
-                 
+
                 </div>
             </div>
 
@@ -75,16 +71,18 @@
                     <div class="card-body text-center">
                         <img id="user-avatar" src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" class="rounded-circle shadow-sm mb-1" width="60" height="60" alt="Korisnički avatar">
                         <h6 class="fw-bold text-dark mb-1" id="welcome-user">Dobrodošli na deklarant.ba!</h6>
-                        <p class="fw-semibold fs-7 mb-1 text-dark">Vaš trenutni paket je <b>Starter</b></p>
+                        <p class="fw-semibold fs-7 mb-1 text-dark">Tvoj trenutni paket je <b>Starter</b></p>
                     </div>
                     <div class="card-footer bg-transparent border-0 w-100">
                         <div class="d-flex justify-content-center gap-2 w-100">
                             <a href="pages-pricing" class="btn btn-info text-white w-50 btn-sm d-flex align-items-center justify-content-center">
                                 <i class="fas fa-circle-chevron-up fs-6 me-1"></i> <span class="fs-6">Nadogradi paket</span>
                             </a>
-                            <a href="pages-scan" class="btn btn-info w-50 animated-btn btn-sm d-flex align-items-center justify-content-center">
-                                <i class="fas fa-wand-magic-sparkles fs-6 me-1" style="font-size:10px;"></i><span class="fs-6"> Skeniraj fakturu sa AI</span>
-                            </a>
+                            <button type="button" data-bs-toggle="modal"
+                                data-bs-target="#scanModal" class="btn btn-info w-50 animated-btn btn-sm d-flex align-items-center justify-content-center">
+                                <i class="fas fa-wand-magic-sparkles fs-6 me-1" style="font-size:10px;"></i>
+                                <span class="fs-6"> Skeniraj fakturu sa AI</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -135,7 +133,12 @@
         <div class="card rounded-0 card-animate overflow-hidden">
             <div class="position-absolute start-0" style="z-index: 0;">
                 <svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="200" height="120">
-                    <style>.s0 { opacity: .05; fill: var(--vz-info); }</style>
+                    <style>
+                        .s0 {
+                            opacity: .05;
+                            fill: var(--vz-info);
+                        }
+                    </style>
                     <path class="s0" d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z" />
                 </svg>
             </div>
@@ -160,7 +163,12 @@
         <div class="card rounded-0 card-animate overflow-hidden">
             <div class="position-absolute start-0" style="z-index: 0;">
                 <svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="200" height="120">
-                    <style>.s0 { opacity: .05; fill: var(--vz-info); }</style>
+                    <style>
+                        .s0 {
+                            opacity: .05;
+                            fill: var(--vz-info);
+                        }
+                    </style>
                     <path class="s0" d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z" />
                 </svg>
             </div>
@@ -185,7 +193,12 @@
         <div class="card rounded-0 card-animate overflow-hidden">
             <div class="position-absolute start-0" style="z-index: 0;">
                 <svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="200" height="120">
-                    <style>.s0 { opacity: .05; fill: var(--vz-info); }</style>
+                    <style>
+                        .s0 {
+                            opacity: .05;
+                            fill: var(--vz-info);
+                        }
+                    </style>
                     <path class="s0" d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z" />
                 </svg>
             </div>
@@ -210,7 +223,12 @@
         <div class="card rounded-0 card-animate overflow-hidden">
             <div class="position-absolute start-0" style="z-index: 0;">
                 <svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="200" height="120">
-                    <style>.s0 { opacity: .05; fill: var(--vz-info); }</style>
+                    <style>
+                        .s0 {
+                            opacity: .05;
+                            fill: var(--vz-info);
+                        }
+                    </style>
                     <path class="s0" d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z" />
                 </svg>
             </div>
@@ -241,173 +259,244 @@
 </div>
 
 <div class="row mt-2">
-  <div class="col-12 px-1">
-    <div class="row mb-4 g-0 mx-1">
-      <!-- LEFT COLUMN -->
-      <div class="col-xl-6">
-        <div class="row g-1 mx-0">
-          <!-- 4 cards in 2 rows -->
-          <div class="col-md-6">
-             <div class="card rounded-0 h-100 ">
-               <div class="card-header d-flex justify-content-between">
-                <h6 class="card-title mb-0">Moji dokumenti</h6>
-                <a class="text-muted fs-6">Pogledaj sve</a>
-               </div>
-               <div class="card-body d-flex align-items-center justify-content-center">
-                 
-                       <div class="row d-flex text-center text-truncate" >  
-                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1 </div></div>
-                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2 </div></div>
-                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
-                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
-                       </div>
-                 
-               </div>
-             </div>
-          </div>
-
-          <div class="col-md-6">
-             <div class="card rounded-0 h-100">
-               <div class="card-header d-flex justify-content-between">
-                <h6 class="card-title mb-0">Moji dokumenti</h6>
-                <a class="text-muted fs-6">Pogledaj sve</a>
-               </div>
-               <div class="card-body d-flex justify-content-center align-items-center">
-                 
-                      <div class="row d-flex text-center text-truncate" >  
-                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1 </div></div>
-                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2 </div></div>
-                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
-                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
-                       </div>
-                 
-               </div>
-             </div>
-          </div>
-          <div class="col-md-6">
-             <div class="card rounded-0 h-100">
-               <div class="card-header d-flex justify-content-between">
-                <h6 class="card-title mb-0">Moji dokumenti</h6>
-                <a class="text-muted fs-6">Pogledaj sve</a>
-               </div>
-               <div class="card-body d-flex justify-content-center align-items-center">
-                 
-                <div class="row d-flex text-center text-truncate" >  
-                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1 </div></div>
-                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2 </div></div>
-                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
-                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
-                       </div>
-                 
-               </div>
-             </div>
-          </div>
-          <div class="col-md-6">
-             <div class="card rounded-0 h-100">
-               <div class="card-header d-flex justify-content-between">
-                <h6 class="card-title mb-0">Moji dokumenti</h6>
-                <a class="text-muted fs-6">Pogledaj sve</a>
-               </div>
-               <div class="card-body d-flex justify-content-center align-items-center">
-                 
-                <div class="row d-flex text-center text-truncate" >  
-                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 1 </div></div>
-                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 2 </div></div>
-                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 3</div></div>
-                         <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i><div>Dokument 4</div></div>
-                       </div>
-                 
-               </div>
-             </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- RIGHT COLUMN -->
-      <div class="col-xl-6 d-flex flex-column ">
-        <div class="row g-1 flex-fill mx-0">
-          <div class="col-md-6 ">
-            <div class="card rounded-0 w-100 h-100 card-animate ">
-              <div class="card-header">
-                <h5 class="mb-0">Zadnje korištene tarife</h5>
-              </div>
-              <div class="card-body align-items-center text-truncate">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <div>
-                        <div class="fw-semibold">8471.30</div>
-                        <div class="text-muted fs-12">Laptop</div>
-                  </div>
-                    <div class="text-success fs-13">
-                        18% <i class="ri-arrow-up-line ms-1"></i>
-                    </div>
-                </div>
-              
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <div>
-                        <div class="fw-semibold">8471.30</div>
-                        <div class="text-muted fs-12">Laptop</div>
-                  </div>
-                    <div class="text-success fs-13">
-                        18% <i class="ri-arrow-up-line ms-1"></i>
-                    </div>
-                </div>
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <div>
-                        <div class="fw-semibold">8471.30</div>
-                        <div class="text-muted fs-12">Laptop</div>
-                  </div>
-                    <div class="text-success fs-13">
-                        18% <i class="ri-arrow-up-line ms-1"></i>
-                    </div>
-                </div>
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <div>
-                        <div class="fw-semibold">8471.30</div>
-                        <div class="text-muted fs-12">Laptop</div>                       
-                  </div>
-                    <div class="text-success fs-13">
-                        18% <i class="ri-arrow-up-line ms-1"></i>
-                    </div>
-                </div>
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <div>
-                        <div class="fw-semibold">8471.30</div>
-                        <div class="text-muted fs-12">Laptop</div>                      
-                  </div>
-                    <div class="text-success fs-13">
-                        18% <i class="ri-arrow-up-line ms-1"></i>
-                    </div> 
-                </div>
-                <div class="card-footer mt-0 pt-0 pb-0 text-truncate">         
-                    
-                </div>
-                        
-                
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 d-flex card-animate">
-            <div class="card rounded-0 w-100 h-100">
-                <div class="card-header">
-                    <h5 class="mb-0">Zadnje korišteni dobavljači</h5>
-                </div>
-                <div class="card-body">
-                    <div class="suppliers-list">
-                        <!-- Dynamically populated supplier data goes here -->
-                    </div>
-                    <div class="card-footer mt-1 pt-0 pb-0 d-flex justify-content-center">
-                                
+    <div class="col-12 px-1">
+        <div class="row mb-4 g-0 mx-1">
+            <!-- LEFT COLUMN -->
+            <div class="col-xl-6">
+                <div class="row g-1 mx-0">
+                    <!-- 4 cards in 2 rows -->
+                    <div class="col-md-6">
+                        <div class="card rounded-0 h-100 ">
+                            <div class="card-header d-flex justify-content-between">
+                                <h6 class="card-title mb-0">Moji dokumenti</h6>
+                                <a class="text-muted fs-6">Pogledaj sve</a>
                             </div>
+                            <div class="card-body d-flex align-items-center justify-content-center">
+
+                                <div class="row d-flex text-center text-truncate">
+                                    <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i>
+                                        <div>Dokument 1 </div>
+                                    </div>
+                                    <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i>
+                                        <div>Dokument 2 </div>
+                                    </div>
+                                    <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i>
+                                        <div>Dokument 3</div>
+                                    </div>
+                                    <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i>
+                                        <div>Dokument 4</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card rounded-0 h-100">
+                            <div class="card-header d-flex justify-content-between">
+                                <h6 class="card-title mb-0">Moji dokumenti</h6>
+                                <a class="text-muted fs-6">Pogledaj sve</a>
+                            </div>
+                            <div class="card-body d-flex justify-content-center align-items-center">
+
+                                <div class="row d-flex text-center text-truncate">
+                                    <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i>
+                                        <div>Dokument 1 </div>
+                                    </div>
+                                    <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i>
+                                        <div>Dokument 2 </div>
+                                    </div>
+                                    <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i>
+                                        <div>Dokument 3</div>
+                                    </div>
+                                    <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i>
+                                        <div>Dokument 4</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card rounded-0 h-100">
+                            <div class="card-header d-flex justify-content-between">
+                                <h6 class="card-title mb-0">Moji dokumenti</h6>
+                                <a class="text-muted fs-6">Pogledaj sve</a>
+                            </div>
+                            <div class="card-body d-flex justify-content-center align-items-center">
+
+                                <div class="row d-flex text-center text-truncate">
+                                    <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i>
+                                        <div>Dokument 1 </div>
+                                    </div>
+                                    <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i>
+                                        <div>Dokument 2 </div>
+                                    </div>
+                                    <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i>
+                                        <div>Dokument 3</div>
+                                    </div>
+                                    <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i>
+                                        <div>Dokument 4</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card rounded-0 h-100">
+                            <div class="card-header d-flex justify-content-between">
+                                <h6 class="card-title mb-0">Moji dokumenti</h6>
+                                <a class="text-muted fs-6">Pogledaj sve</a>
+                            </div>
+                            <div class="card-body d-flex justify-content-center align-items-center">
+
+                                <div class="row d-flex text-center text-truncate">
+                                    <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i>
+                                        <div>Dokument 1 </div>
+                                    </div>
+                                    <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i>
+                                        <div>Dokument 2 </div>
+                                    </div>
+                                    <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i>
+                                        <div>Dokument 3</div>
+                                    </div>
+                                    <div class="col-3 card-animate"><i class="ri-file-line fs-2 text-info"></i>
+                                        <div>Dokument 4</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                    
+            </div>
+
+            <!-- RIGHT COLUMN -->
+            <div class="col-xl-6 d-flex flex-column ">
+                <div class="row g-1 flex-fill mx-0">
+                    <div class="col-md-6 ">
+                        <div class="card rounded-0 w-100 h-100 card-animate ">
+                            <div class="card-header">
+                                <h5 class="mb-0">Zadnje korištene tarife</h5>
+                            </div>
+                            <div class="card-body align-items-center text-truncate">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <div>
+                                        <div class="fw-semibold">8471.30</div>
+                                        <div class="text-muted fs-12">Laptop</div>
+                                    </div>
+                                    <div class="text-success fs-13">
+                                        18% <i class="ri-arrow-up-line ms-1"></i>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <div>
+                                        <div class="fw-semibold">8471.30</div>
+                                        <div class="text-muted fs-12">Laptop</div>
+                                    </div>
+                                    <div class="text-success fs-13">
+                                        18% <i class="ri-arrow-up-line ms-1"></i>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <div>
+                                        <div class="fw-semibold">8471.30</div>
+                                        <div class="text-muted fs-12">Laptop</div>
+                                    </div>
+                                    <div class="text-success fs-13">
+                                        18% <i class="ri-arrow-up-line ms-1"></i>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <div>
+                                        <div class="fw-semibold">8471.30</div>
+                                        <div class="text-muted fs-12">Laptop</div>
+                                    </div>
+                                    <div class="text-success fs-13">
+                                        18% <i class="ri-arrow-up-line ms-1"></i>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <div>
+                                        <div class="fw-semibold">8471.30</div>
+                                        <div class="text-muted fs-12">Laptop</div>
+                                    </div>
+                                    <div class="text-success fs-13">
+                                        18% <i class="ri-arrow-up-line ms-1"></i>
+                                    </div>
+                                </div>
+                                <div class="card-footer mt-0 pt-0 pb-0 text-truncate">
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 d-flex card-animate">
+                        <div class="card rounded-0 w-100 h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Zadnje korišteni dobavljači</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="suppliers-list">
+                                    <!-- Dynamically populated supplier data goes here -->
+                                </div>
+                                <div class="card-footer mt-1 pt-0 pb-0 d-flex justify-content-center">
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-     </div>
-        </div>
-      </div>
 
     </div>
-  </div>
+</div>
+</div>
+<div class="modal fade" id="scanModal" tabindex="-1" aria-labelledby="scanModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title w-100" id="scanModalLabel"><i class="fas fa-wand-magic-sparkles fs-6 me-1" style="font-size:10px;"></i>Skeniraj fakturu sa AI</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
+            </div>
+            <div class="modal-body d-flex justify-content-center">
+                <div class="dropzone" id="dropzone">
+                    <input type="file" id="fileInput" multiple>
+                    <div class="corner corner-top-left"></div>
+                    <div class="corner corner-top-right"></div>
+                    <div class="corner corner-bottom-left"></div>
+                    <div class="corner corner-bottom-right"></div>
+
+                    <div class="text-center" id="dropzone-content">
+                        <i class="ri-file-2-line text-info fs-1"></i>
+                        <p class="mt-3">Prevucite dokument ovdje ili kliknite kako bi uploadali i skenirali vašu fakturu</p>
+                    </div>
+
+                    <div class="file-list" id="fileList" style="display: none;"></div>
+
+                    <div class="progress mt-3 w-100" id="uploadProgressContainer" style="display: none;">
+                        <div id="uploadProgressBar" class="progress-bar bg-info" role="progressbar" style="width: 0%">0%</div>
+                    </div>
+
+                    <div id="scanningLoader" class="mt-4 text-center d-none">
+                        <div class="spinner-border text-info" role="status" style="width: 3rem; height: 3rem;"></div>
+                        <p class="mt-3 fw-semibold" id="scanningText">Skeniranje fakture...</p>
+                        <div id="successCheck" class="d-none mt-3">
+                            <i class="ri-checkbox-circle-fill text-success fs-1 animate__animated animate__zoomIn"></i>
+                            <p class="text-success fw-semibold mt-2">Uspješno skenirano!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -423,30 +512,30 @@
 @endsection
 
 @section('script')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
-    <script src="{{ URL::asset('build/js/pages/dashboard-analytics.init.js') }}"></script>
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
-    <script src="{{ URL::asset('build/libs/chart.js/chart.umd.js') }}"></script>
-    <script src="{{ URL::asset('build/js/pages/chartjs.init.js') }}"></script>
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/dashboard-analytics.init.js') }}"></script>
+<script src="{{ URL::asset('build/js/app.js') }}"></script>
+<script src="{{ URL::asset('build/libs/chart.js/chart.umd.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/chartjs.init.js') }}"></script>
+<script src="{{ URL::asset('build/js/app.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
 
 
-  
-
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <!-- Swiper CSS -->
 
 
-    <!-- Swiper JS -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<!-- Swiper CSS -->
 
-    <script>
-    document.addEventListener("DOMContentLoaded", async function () {
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async function() {
         const user = JSON.parse(localStorage.getItem("user"));
         const token = localStorage.getItem("auth_token");
 
@@ -509,81 +598,85 @@
             console.error("Error fetching supplier data:", error);
         }
     });
-    </script>
+</script>
 
 
 
 
-    
 
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
 
-            // Custom plugin to render text inside the chart
-            const centerTextPlugin = {
-                id: "centerText",
-                beforeDraw: function (chart) {
-                    const width = chart.width,
-                          height = chart.height,
-                          ctx = chart.ctx;
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
 
-                    ctx.restore();
-                    const fontSize = ((height / 8) * 2).toFixed(2);
-                    ctx.font = fontSize + "px sans-serif";
-                    ctx.textBaseline = "middle";
-                    ctx.textAlign = "center";
+        // Custom plugin to render text inside the chart
+        const centerTextPlugin = {
+            id: "centerText",
+            beforeDraw: function(chart) {
+                const width = chart.width,
+                    height = chart.height,
+                    ctx = chart.ctx;
 
-                    // Get the percentage from dataset
-                    const dataset = chart.data.datasets[0];
-                    const total = dataset.data.reduce((acc, val) => acc + val, 0);
-                    const percentage = Math.round((dataset.data[0] / total) * 100);
+                ctx.restore();
+                const fontSize = ((height / 8) * 2).toFixed(2);
+                ctx.font = fontSize + "px sans-serif";
+                ctx.textBaseline = "middle";
+                ctx.textAlign = "center";
 
-                    const text = percentage + "%";
-                    const textX = Math.round(width / 2);
-                    const textY = Math.round(height / 2);
+                // Get the percentage from dataset
+                const dataset = chart.data.datasets[0];
+                const total = dataset.data.reduce((acc, val) => acc + val, 0);
+                const percentage = Math.round((dataset.data[0] / total) * 100);
 
-                    ctx.fillStyle = "#299cdb"; // Info color
-                    ctx.fillText(text, textX, textY);
-                    ctx.save();
-                }
-            };
+                const text = percentage + "%";
+                const textX = Math.round(width / 2);
+                const textY = Math.round(height / 2);
 
-            function createDoughnutChart(canvasId, usedPercentage) {
-                var ctx = document.getElementById(canvasId).getContext("2d");
-                var remaining = 100 - usedPercentage;
-
-                new Chart(ctx, {
-                    type: "doughnut",
-                    data: {
-                        labels: ["Used", "Remaining"],
-                        datasets: [{
-                            data: [usedPercentage, remaining],
-                            backgroundColor: ["#299cdb", "#d6f0fa"],
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        cutout: "70%", // Makes the doughnut shape
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: { enabled: false },
-                        }
-                    },
-                    plugins: [centerTextPlugin] // Add the custom plugin
-                });
+                ctx.fillStyle = "#299cdb"; // Info color
+                ctx.fillText(text, textX, textY);
+                ctx.save();
             }
+        };
 
-            createDoughnutChart("doughnut1", 16.24);
-            createDoughnutChart("doughnut2", 3.96);
-            createDoughnutChart("doughnut3", 9.32);
-            createDoughnutChart("doughnut4", 4.21);
-        });
-    </script>
+        function createDoughnutChart(canvasId, usedPercentage) {
+            var ctx = document.getElementById(canvasId).getContext("2d");
+            var remaining = 100 - usedPercentage;
 
-    <script>
-    document.addEventListener("DOMContentLoaded", function () {
+            new Chart(ctx, {
+                type: "doughnut",
+                data: {
+                    labels: ["Used", "Remaining"],
+                    datasets: [{
+                        data: [usedPercentage, remaining],
+                        backgroundColor: ["#299cdb", "#d6f0fa"],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: "70%", // Makes the doughnut shape
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: false
+                        },
+                    }
+                },
+                plugins: [centerTextPlugin] // Add the custom plugin
+            });
+        }
+
+        createDoughnutChart("doughnut1", 16.24);
+        createDoughnutChart("doughnut2", 3.96);
+        createDoughnutChart("doughnut3", 9.32);
+        createDoughnutChart("doughnut4", 4.21);
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
         function counter() {
             var counterElements = document.querySelectorAll(".counter-num");
             var speed = 10000000; // Adjust the speed (higher = slower animation)
@@ -613,9 +706,9 @@
 
         counter(); // Run the counter function
     });
-    </script>
+</script>
 
-    <script>
+<script>
     function renderScanCharts() {
         document.querySelectorAll(".scan-chart").forEach((canvas) => {
             const ctx = canvas.getContext("2d");
@@ -637,22 +730,28 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        x: { display: false },
-                        y: { display: false }
+                        x: {
+                            display: false
+                        },
+                        y: {
+                            display: false
+                        }
                     },
                     plugins: {
-                        legend: { display: false }
+                        legend: {
+                            display: false
+                        }
                     }
                 }
             });
         });
     }
-    </script>
+</script>
 
 
 
-    <script>
-    document.addEventListener("DOMContentLoaded", async function () {
+<script>
+    document.addEventListener("DOMContentLoaded", async function() {
         const user = JSON.parse(localStorage.getItem("user"));
         const token = localStorage.getItem("auth_token");
 
@@ -687,10 +786,10 @@
             console.error("Error fetching statistics:", error);
         }
     });
-    </script>
+</script>
 
-    <script>
-    document.addEventListener("DOMContentLoaded", async function () {
+<script>
+    document.addEventListener("DOMContentLoaded", async function() {
 
 
         const API_URL = `/api/statistics`;
@@ -712,7 +811,7 @@
             const stats = response.data || {};
             const fields = {
                 totalNumSup: stats.total_suppliers ?? 0,
-            
+
             };
 
             Object.entries(fields).forEach(([id, value]) => {
@@ -724,19 +823,19 @@
             console.error("Error fetching statistics:", error);
         }
     });
-    </script>
+</script>
 
 
 
 
-    <script>
-    document.addEventListener("DOMContentLoaded", function () {
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
         const user = JSON.parse(localStorage.getItem("user"));
 
         if (user) {
             const welcome = document.getElementById("welcome-user");
             if (welcome) {
-                welcome.innerText = `Dobrodošli na deklarant.ba, ${user.username}!`;
+                welcome.innerText = `Dobrodošao/la na deklarant.ba, ${user.username}!`;
             }
 
             const avatar = document.getElementById("user-avatar");
@@ -744,21 +843,20 @@
                 const avatarUrl = `/storage/uploads/avatars/${user.avatar}`;
                 // Check if the image loads correctly, fallback if not
                 const testImg = new Image();
-                testImg.onload = function () {
+                testImg.onload = function() {
                     avatar.src = avatarUrl;
                 };
-                testImg.onerror = function () {
+                testImg.onerror = function() {
                     avatar.src = "/build/images/users/avatar-1.jpg";
                 };
                 testImg.src = avatarUrl;
             }
         }
     });
+</script>
 
-    </script>
-
-    <script>
-    document.addEventListener("DOMContentLoaded", async function () {
+<script>
+    document.addEventListener("DOMContentLoaded", async function() {
         const user = JSON.parse(localStorage.getItem("user"));
         const token = localStorage.getItem("auth_token");
 
@@ -796,11 +894,11 @@
             console.error("Error fetching average scan time:", error);
         }
     });
-    </script>
+</script>
 
 
-    <script>
-    document.addEventListener("DOMContentLoaded", async function () {
+<script>
+    document.addEventListener("DOMContentLoaded", async function() {
         const token = localStorage.getItem("auth_token");
 
         if (!token) {
@@ -819,13 +917,36 @@
             let suppliers = Array.isArray(rawData) ? rawData : rawData.data || [];
 
             // Fallback if less than 10
-            const defaultSuppliers = [
-                { name: "Generic Co.", address: "Sarajevo", fallback: true },
-                { name: "Example Inc.", address: "Mostar", fallback: true },
-                { name: "Placeholder Ltd.", address: "Tuzla", fallback: true },
-                { name: "Test Supplier", address: "Zenica", fallback: true },
-                { name: "Demo Group", address: "Bihać", fallback: true },
-                { name: "ACME Corp", address: "Travnik", fallback: true }
+            const defaultSuppliers = [{
+                    name: "Generic Co.",
+                    address: "Sarajevo",
+                    fallback: true
+                },
+                {
+                    name: "Example Inc.",
+                    address: "Mostar",
+                    fallback: true
+                },
+                {
+                    name: "Placeholder Ltd.",
+                    address: "Tuzla",
+                    fallback: true
+                },
+                {
+                    name: "Test Supplier",
+                    address: "Zenica",
+                    fallback: true
+                },
+                {
+                    name: "Demo Group",
+                    address: "Bihać",
+                    fallback: true
+                },
+                {
+                    name: "ACME Corp",
+                    address: "Travnik",
+                    fallback: true
+                }
             ];
 
             if (suppliers.length < 10) {
@@ -878,160 +999,169 @@
                     disableOnInteraction: false // Keeps autoplay running after manual slide
                 },
                 loop: true,
-            
+
 
                 navigation: false,
                 breakpoints: {
-                    768: { slidesPerView: 2 },
-                    992: { slidesPerView: 4 },
-                    1200: { slidesPerView: 6 }
+                    768: {
+                        slidesPerView: 2
+                    },
+                    992: {
+                        slidesPerView: 4
+                    },
+                    1200: {
+                        slidesPerView: 6
+                    }
                 }
             });
 
-        
+
         } catch (error) {
             console.error("Error fetching suppliers:", error);
         }
     });
-    </script>
+</script>
 
 <!-- Upload data -->
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const token = localStorage.getItem("auth_token");
-    if (!token) {
-        alert("Niste prijavljeni. Molimo ulogujte se.");
-        window.location.href = "/auth-login-basic";
-        return;
-    }
-
-    const dropzone = document.getElementById("dropzone");
-    const fileInput = document.getElementById("fileInput");
-    const fileList = document.getElementById("fileList");
-    const dropzoneContent = document.getElementById("dropzone-content");
-    const progressContainer = document.getElementById("uploadProgressContainer");
-    const progressBar = document.getElementById("uploadProgressBar");
-
-    function updateFileList(files) {
-        fileList.innerHTML = "";
-        if (files.length > 0) {
-            fileList.style.display = "block";
-            dropzoneContent.style.display = "none";
-        } else {
-            fileList.style.display = "none";
-            dropzoneContent.style.display = "block";
+    document.addEventListener("DOMContentLoaded", function() {
+        const token = localStorage.getItem("auth_token");
+        if (!token) {
+            alert("Niste prijavljeni. Molimo ulogujte se.");
+            window.location.href = "/auth-login-basic";
+            return;
         }
 
-        Array.from(files).forEach((file, index) => {
-            const fileItem = document.createElement("div");
-            fileItem.classList.add("file-item");
+        const dropzone = document.getElementById("dropzone");
+        const fileInput = document.getElementById("fileInput");
+        const fileList = document.getElementById("fileList");
+        const dropzoneContent = document.getElementById("dropzone-content");
+        const progressContainer = document.getElementById("uploadProgressContainer");
+        const progressBar = document.getElementById("uploadProgressBar");
+        const scanButton = document.getElementById("startScanBtn"); // new
 
-            const fileName = document.createElement("span");
-            fileName.textContent = file.name;
-
-            const removeBtn = document.createElement("span");
-            removeBtn.textContent = "×";
-            removeBtn.classList.add("remove-file");
-            removeBtn.dataset.index = index;
-
-            removeBtn.addEventListener("click", function () {
-                let dt = new DataTransfer();
-                let fileArray = Array.from(fileInput.files);
-                fileArray.splice(index, 1);
-                fileArray.forEach(f => dt.items.add(f));
-                fileInput.files = dt.files;
-                updateFileList(fileInput.files);
+        if (scanButton) {
+            scanButton.addEventListener("click", function() {
+                fileInput.click(); // trigger the file input
             });
+        }
 
-            fileItem.appendChild(fileName);
-            fileItem.appendChild(removeBtn);
-            fileList.appendChild(fileItem);
-        });
-    }
-
-    function uploadFiles(files) {
-        const formData = new FormData();
-        Array.from(files).forEach(file => formData.append('file', file));
-
-        progressContainer.style.display = "block";
-        progressBar.style.width = "0%";
-        progressBar.innerText = "0%";
-
-        let fakeProgress = 0;
-        const fakeInterval = setInterval(() => {
-            fakeProgress += 5;
-            if (fakeProgress > 100) fakeProgress = 100;
-
-            progressBar.style.width = fakeProgress + "%";
-            progressBar.innerText = fakeProgress + "%";
-
-            if (fakeProgress === 100) {
-                clearInterval(fakeInterval);
+        function updateFileList(files) {
+            fileList.innerHTML = "";
+            if (files.length > 0) {
+                fileList.style.display = "block";
+                dropzoneContent.style.display = "none";
+            } else {
+                fileList.style.display = "none";
+                dropzoneContent.style.display = "block";
             }
-        }, 150);
 
-        fetch('http://localhost:8080/api/upload', {
-            method: 'POST',
-            body: formData 
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Upload failed");
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Upload successful:', data);
+            Array.from(files).forEach((file, index) => {
+                const fileItem = document.createElement("div");
+                fileItem.classList.add("file-item");
 
-            Swal.fire({
-                icon: "success",
-                title: "Dokument uspješno uploadan!",
-                showConfirmButton: false,
-                timer: 1500
-            }).then(() => {
-                // Save returned task_id to localStorage (important for next steps!)
-                if (data.task_id) {
-                    localStorage.setItem("scan_task_id", data.task_id);
+                const fileName = document.createElement("span");
+                fileName.textContent = file.name;
+
+                const removeBtn = document.createElement("span");
+                removeBtn.textContent = "×";
+                removeBtn.classList.add("remove-file");
+                removeBtn.dataset.index = index;
+
+                removeBtn.addEventListener("click", function() {
+                    let dt = new DataTransfer();
+                    let fileArray = Array.from(fileInput.files);
+                    fileArray.splice(index, 1);
+                    fileArray.forEach(f => dt.items.add(f));
+                    fileInput.files = dt.files;
+                    updateFileList(fileInput.files);
+                });
+
+                fileItem.appendChild(fileName);
+                fileItem.appendChild(removeBtn);
+                fileList.appendChild(fileItem);
+            });
+        }
+
+        function uploadFiles(files) {
+            const formData = new FormData();
+            Array.from(files).forEach(file => formData.append('file', file));
+
+            progressContainer.style.display = "block";
+            progressBar.style.width = "0%";
+            progressBar.innerText = "0%";
+
+            let fakeProgress = 0;
+            const fakeInterval = setInterval(() => {
+                fakeProgress += 5;
+                if (fakeProgress > 100) fakeProgress = 100;
+
+                progressBar.style.width = fakeProgress + "%";
+                progressBar.innerText = fakeProgress + "%";
+
+                if (fakeProgress === 100) {
+                    clearInterval(fakeInterval);
                 }
-                window.location.href = "/apps-invoices-create"; 
-            });
-        })
-        .catch(error => {
-            console.error('Upload error:', error);
-            alert('Greška prilikom uploada.');
-            progressContainer.style.display = "none";
+            }, 150);
+
+            fetch('http://localhost:8080/api/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error("Upload failed");
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Upload successful:', data);
+                    Swal.fire({
+                        icon: "success",
+                        title: "Dokument uspješno uploadan!",
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        if (data.task_id) {
+                            localStorage.setItem("scan_task_id", data.task_id);
+                        }
+                        window.location.href = "/apps-invoices-create";
+                    });
+                })
+                .catch(error => {
+                    console.error('Upload error:', error);
+                    alert('Greška prilikom uploada.');
+                    progressContainer.style.display = "none";
+                });
+        }
+
+        dropzone.addEventListener("dragover", e => {
+            e.preventDefault();
+            dropzone.classList.add("bg-light");
         });
-    }
 
-    dropzone.addEventListener("dragover", e => {
-        e.preventDefault();
-        dropzone.classList.add("bg-light");
+        dropzone.addEventListener("dragleave", () => {
+            dropzone.classList.remove("bg-light");
+        });
+
+        dropzone.addEventListener("drop", e => {
+            e.preventDefault();
+            dropzone.classList.remove("bg-light");
+            let dt = new DataTransfer();
+            Array.from(fileInput.files).forEach(f => dt.items.add(f));
+            Array.from(e.dataTransfer.files).forEach(f => dt.items.add(f));
+            fileInput.files = dt.files;
+            updateFileList(fileInput.files);
+            uploadFiles(fileInput.files);
+        });
+
+        
+
+
+        fileInput.addEventListener("change", () => {
+            updateFileList(fileInput.files);
+            uploadFiles(fileInput.files);
+        });
     });
-
-    dropzone.addEventListener("dragleave", () => {
-        dropzone.classList.remove("bg-light");
-    });
-
-    dropzone.addEventListener("drop", e => {
-        e.preventDefault();
-        dropzone.classList.remove("bg-light");
-        let dt = new DataTransfer();
-        Array.from(fileInput.files).forEach(f => dt.items.add(f));
-        Array.from(e.dataTransfer.files).forEach(f => dt.items.add(f));
-        fileInput.files = dt.files;
-        updateFileList(fileInput.files);
-        uploadFiles(fileInput.files);
-    });
-
-    dropzone.addEventListener("click", () => fileInput.click());
-
-    fileInput.addEventListener("change", () => {
-        updateFileList(fileInput.files);
-        uploadFiles(fileInput.files);
-    });
-});
 </script>
-
 
 
 

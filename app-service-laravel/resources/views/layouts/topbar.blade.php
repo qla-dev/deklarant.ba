@@ -18,7 +18,7 @@
                             <img src="{{ URL::asset('build/images/logo-sm.png') }}" alt="" height="22">
                         </span>
                         <span class="logo-lg">
-                            <img src="{{ URL::asset('build/images/logo-light.png') }}" alt="" height="17">
+                            <img src="{{ URL::asset('build/images/logo-dek-white.png') }}" alt="" height="17">
                         </span>
                     </a>
                 </div>
@@ -198,7 +198,7 @@
                 
 
                 <div class="ms-1 header-item d-none d-sm-flex">
-                    <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" data-toggle="fullscreen">
+                    <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" data-toggle-custom="fullscreen">
                         <i class='bx bx-fullscreen fs-2'></i>
                     </button>
                 </div>
@@ -210,7 +210,7 @@
                 </div>
 
                 <div class="topbar-head-dropdown ms-1 header-item me-5" id="notificationDropdown">
-                    <a href="/pages-profile#projects" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none">
+                    <a href="/pages-pricing" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none">
                         <i class='bx bx-box fs-2'></i>
                     </a>
                 </div>
@@ -294,7 +294,30 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
+    <script src="{{ URL::asset('build/js/pages/dashboard-analytics.init.js') }}"></script>
+    <script src="{{ URL::asset('build/js/app.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/chart.js/chart.umd.js') }}"></script>
+    <script src="{{ URL::asset('build/js/pages/chartjs.init.js') }}"></script>
+    <script src="{{ URL::asset('build/js/app.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
+
+
+  
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Swiper CSS -->
+
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const logoutLink = document.getElementById("logout-link");
@@ -346,6 +369,236 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const fullscreenBtn = document.querySelector('[data-toggle-custom="fullscreen"]');
+
+    if (!fullscreenBtn) return;
+
+    fullscreenBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        document.body.classList.toggle("fullscreen-enable");
+
+        if (!document.fullscreenElement &&
+            !document.mozFullScreenElement &&
+            !document.webkitFullscreenElement &&
+            !document.msFullscreenElement) {
+
+            const docEl = document.documentElement;
+
+            if (docEl.requestFullscreen) {
+                docEl.requestFullscreen();
+            } else if (docEl.mozRequestFullScreen) {
+                docEl.mozRequestFullScreen();
+            } else if (docEl.webkitRequestFullscreen) {
+                docEl.webkitRequestFullscreen();
+            } else if (docEl.msRequestFullscreen) {
+                docEl.msRequestFullscreen();
+            }
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        }
+    });
+
+    // Exit handler
+    function exitHandler() {
+        if (!document.fullscreenElement &&
+            !document.mozFullScreenElement &&
+            !document.webkitFullscreenElement &&
+            !document.msFullscreenElement) {
+            document.body.classList.remove("fullscreen-enable");
+        }
+    }
+
+    document.addEventListener("fullscreenchange", exitHandler);
+    document.addEventListener("webkitfullscreenchange", exitHandler);
+    document.addEventListener("mozfullscreenchange", exitHandler);
+    document.addEventListener("MSFullscreenChange", exitHandler);
+});
+</script>
+
+<script>
+    function setLayoutMode(attribute, mode, bodyClass, htmlEl) {
+        htmlEl.setAttribute(attribute, mode);
+        document.body.classList.remove("layout-mode-light", "layout-mode-dark");
+        document.body.classList.add(bodyClass);
+
+        // Save preference (optional)
+        localStorage.setItem("theme", mode);
+
+        // Optional: force window resize if needed
+        window.dispatchEvent(new Event("resize"));
+    }
+
+    function initDarkModeToggle() {
+        const html = document.documentElement;
+        const toggleBtn = document.querySelector(".light-dark-mode");
+
+        // Load saved preference
+        const saved = localStorage.getItem("theme");
+        if (saved) {
+            setLayoutMode("data-bs-theme", saved, `layout-mode-${saved}`, html);
+        }
+
+        if (toggleBtn) {
+            toggleBtn.addEventListener("click", function () {
+                const currentMode = html.getAttribute("data-bs-theme");
+                const newMode = currentMode === "dark" ? "light" : "dark";
+                setLayoutMode("data-bs-theme", newMode, `layout-mode-${newMode}`, html);
+            });
+        }
+    }
+
+    // Initialize on page load
+    document.addEventListener("DOMContentLoaded", initDarkModeToggle);
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const token = localStorage.getItem("auth_token");
+    if (!token) {
+        alert("Niste prijavljeni. Molimo ulogujte se.");
+        window.location.href = "/auth-login-basic";
+        return;
+    }
+
+    const dropzone = document.getElementById("dropzone");
+    const fileInput = document.getElementById("fileInput");
+    const fileList = document.getElementById("fileList");
+    const dropzoneContent = document.getElementById("dropzone-content");
+    const progressContainer = document.getElementById("uploadProgressContainer");
+    const progressBar = document.getElementById("uploadProgressBar");
+
+    function updateFileList(files) {
+        fileList.innerHTML = "";
+        if (files.length > 0) {
+            fileList.style.display = "block";
+            dropzoneContent.style.display = "none";
+        } else {
+            fileList.style.display = "none";
+            dropzoneContent.style.display = "block";
+        }
+
+        Array.from(files).forEach((file, index) => {
+            const fileItem = document.createElement("div");
+            fileItem.classList.add("file-item");
+
+            const fileName = document.createElement("span");
+            fileName.textContent = file.name;
+
+            const removeBtn = document.createElement("span");
+            removeBtn.textContent = "×";
+            removeBtn.classList.add("remove-file");
+            removeBtn.dataset.index = index;
+
+            removeBtn.addEventListener("click", function () {
+                let dt = new DataTransfer();
+                let fileArray = Array.from(fileInput.files);
+                fileArray.splice(index, 1);
+                fileArray.forEach(f => dt.items.add(f));
+                fileInput.files = dt.files;
+                updateFileList(fileInput.files);
+            });
+
+            fileItem.appendChild(fileName);
+            fileItem.appendChild(removeBtn);
+            fileList.appendChild(fileItem);
+        });
+    }
+
+    function uploadFiles(files) {
+        const formData = new FormData();
+        Array.from(files).forEach(file => formData.append('file', file));
+
+        progressContainer.style.display = "block";
+        progressBar.style.width = "0%";
+        progressBar.innerText = "0%";
+
+        let fakeProgress = 0;
+        const fakeInterval = setInterval(() => {
+            fakeProgress += 5;
+            if (fakeProgress > 100) fakeProgress = 100;
+
+            progressBar.style.width = fakeProgress + "%";
+            progressBar.innerText = fakeProgress + "%";
+
+            if (fakeProgress === 100) {
+                clearInterval(fakeInterval);
+            }
+        }, 150);
+
+        fetch('http://localhost:8080/api/upload', {
+            method: 'POST',
+            body: formData 
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Upload failed");
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Upload successful:', data);
+
+            Swal.fire({
+                icon: "success",
+                title: "Dokument uspješno uploadan!",
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => {
+                // Save returned task_id to localStorage (important for next steps!)
+                if (data.task_id) {
+                    localStorage.setItem("scan_task_id", data.task_id);
+                }
+                window.location.href = "/apps-invoices-create"; 
+            });
+        })
+        .catch(error => {
+            console.error('Upload error:', error);
+            alert('Greška prilikom uploada.');
+            progressContainer.style.display = "none";
+        });
+    }
+
+    dropzone.addEventListener("dragover", e => {
+        e.preventDefault();
+        dropzone.classList.add("bg-light");
+    });
+
+    dropzone.addEventListener("dragleave", () => {
+        dropzone.classList.remove("bg-light");
+    });
+
+    dropzone.addEventListener("drop", e => {
+        e.preventDefault();
+        dropzone.classList.remove("bg-light");
+        let dt = new DataTransfer();
+        Array.from(fileInput.files).forEach(f => dt.items.add(f));
+        Array.from(e.dataTransfer.files).forEach(f => dt.items.add(f));
+        fileInput.files = dt.files;
+        updateFileList(fileInput.files);
+        uploadFiles(fileInput.files);
+    });
+
+    dropzone.addEventListener("click", () => fileInput.click());
+
+    fileInput.addEventListener("change", () => {
+        updateFileList(fileInput.files);
+        uploadFiles(fileInput.files);
+    });
+});
+</script>
+
+
+
 
 
 

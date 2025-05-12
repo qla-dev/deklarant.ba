@@ -30,7 +30,8 @@ Kalendarni prikaz mojih faktura
                 </div>
                 <div class="card card-h-100 mb-3">
                     <div class="card-body">
-                        <button class="btn btn-info w-100" id="btn-new-event">
+                        <button class="btn btn-info w-100" id="btn-new-event" data-bs-toggle="modal"
+                        data-bs-target="#scanModal">
                             <i class="fas fa-wand-magic-sparkles fs-6 me-1"></i><span class="fs-6">Skeniraj fakturu s AI</span>
                         </button>
                         <div id="external-events d-flex justify-content-center" class="mt-3">
@@ -254,6 +255,45 @@ Kalendarni prikaz mojih faktura
 
                             </div> <!-- row -->
                         </div> <!-- card -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="scanModal" tabindex="-1" aria-labelledby="scanModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title w-100" id="scanModalLabel"><i class="fas fa-wand-magic-sparkles fs-6 me-1" style="font-size:10px;"></i>Skeniraj fakturu sa AI</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
+            </div>
+            <div class="modal-body d-flex justify-content-center">
+                <div class="dropzone" id="dropzone">
+                    <input type="file" id="fileInput" multiple>
+                    <div class="corner corner-top-left"></div>
+                    <div class="corner corner-top-right"></div>
+                    <div class="corner corner-bottom-left"></div>
+                    <div class="corner corner-bottom-right"></div>
+
+                    <div class="text-center" id="dropzone-content">
+                        <i class="ri-file-2-line text-info fs-1"></i>
+                        <p class="mt-3">Prevucite dokument ovdje ili kliknite kako bi uploadali i skenirali vašu fakturu</p>
+                    </div>
+
+                    <div class="file-list" id="fileList" style="display: none;"></div>
+
+                    <div class="progress mt-3 w-100" id="uploadProgressContainer" style="display: none;">
+                        <div id="uploadProgressBar" class="progress-bar bg-info" role="progressbar" style="width: 0%">0%</div>
+                    </div>
+
+                    <div id="scanningLoader" class="mt-4 text-center d-none">
+                        <div class="spinner-border text-info" role="status" style="width: 3rem; height: 3rem;"></div>
+                        <p class="mt-3 fw-semibold" id="scanningText">Skeniranje fakture...</p>
+                        <div id="successCheck" class="d-none mt-3">
+                            <i class="ri-checkbox-circle-fill text-success fs-1 animate__animated animate__zoomIn"></i>
+                            <p class="text-success fw-semibold mt-2">Uspješno skenirano!</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -537,6 +577,145 @@ Kalendarni prikaz mojih faktura
     });
 </script>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const token = localStorage.getItem("auth_token");
+        if (!token) {
+            alert("Niste prijavljeni. Molimo ulogujte se.");
+            window.location.href = "/auth-login-basic";
+            return;
+        }
+
+        const dropzone = document.getElementById("dropzone");
+        const fileInput = document.getElementById("fileInput");
+        const fileList = document.getElementById("fileList");
+        const dropzoneContent = document.getElementById("dropzone-content");
+        const progressContainer = document.getElementById("uploadProgressContainer");
+        const progressBar = document.getElementById("uploadProgressBar");
+        const scanButton = document.getElementById("startScanBtn"); // new
+
+        if (scanButton) {
+            scanButton.addEventListener("click", function() {
+                fileInput.click(); // trigger the file input
+            });
+        }
+
+        function updateFileList(files) {
+            fileList.innerHTML = "";
+            if (files.length > 0) {
+                fileList.style.display = "block";
+                dropzoneContent.style.display = "none";
+            } else {
+                fileList.style.display = "none";
+                dropzoneContent.style.display = "block";
+            }
+
+            Array.from(files).forEach((file, index) => {
+                const fileItem = document.createElement("div");
+                fileItem.classList.add("file-item");
+
+                const fileName = document.createElement("span");
+                fileName.textContent = file.name;
+
+                const removeBtn = document.createElement("span");
+                removeBtn.textContent = "×";
+                removeBtn.classList.add("remove-file");
+                removeBtn.dataset.index = index;
+
+                removeBtn.addEventListener("click", function() {
+                    let dt = new DataTransfer();
+                    let fileArray = Array.from(fileInput.files);
+                    fileArray.splice(index, 1);
+                    fileArray.forEach(f => dt.items.add(f));
+                    fileInput.files = dt.files;
+                    updateFileList(fileInput.files);
+                });
+
+                fileItem.appendChild(fileName);
+                fileItem.appendChild(removeBtn);
+                fileList.appendChild(fileItem);
+            });
+        }
+
+        function uploadFiles(files) {
+            const formData = new FormData();
+            Array.from(files).forEach(file => formData.append('file', file));
+
+            progressContainer.style.display = "block";
+            progressBar.style.width = "0%";
+            progressBar.innerText = "0%";
+
+            let fakeProgress = 0;
+            const fakeInterval = setInterval(() => {
+                fakeProgress += 5;
+                if (fakeProgress > 100) fakeProgress = 100;
+
+                progressBar.style.width = fakeProgress + "%";
+                progressBar.innerText = fakeProgress + "%";
+
+                if (fakeProgress === 100) {
+                    clearInterval(fakeInterval);
+                }
+            }, 150);
+
+            fetch('http://localhost:8080/api/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error("Upload failed");
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Upload successful:', data);
+                    Swal.fire({
+                        icon: "success",
+                        title: "Dokument uspješno uploadan!",
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        if (data.task_id) {
+                            localStorage.setItem("scan_task_id", data.task_id);
+                        }
+                        window.location.href = "/apps-invoices-create";
+                    });
+                })
+                .catch(error => {
+                    console.error('Upload error:', error);
+                    alert('Greška prilikom uploada.');
+                    progressContainer.style.display = "none";
+                });
+        }
+
+        dropzone.addEventListener("dragover", e => {
+            e.preventDefault();
+            dropzone.classList.add("bg-light");
+        });
+
+        dropzone.addEventListener("dragleave", () => {
+            dropzone.classList.remove("bg-light");
+        });
+
+        dropzone.addEventListener("drop", e => {
+            e.preventDefault();
+            dropzone.classList.remove("bg-light");
+            let dt = new DataTransfer();
+            Array.from(fileInput.files).forEach(f => dt.items.add(f));
+            Array.from(e.dataTransfer.files).forEach(f => dt.items.add(f));
+            fileInput.files = dt.files;
+            updateFileList(fileInput.files);
+            uploadFiles(fileInput.files);
+        });
+
+        
+
+
+        fileInput.addEventListener("change", () => {
+            updateFileList(fileInput.files);
+            uploadFiles(fileInput.files);
+        });
+    });
+</script>
 
 
 

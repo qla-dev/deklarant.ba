@@ -7,55 +7,144 @@
 <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css" rel="stylesheet">
 <style>
-    /* Style all pagination buttons */
-    #invoiceTable_wrapper .dataTables_paginate .paginate_button {
-        background-color: #2793ce;
-        /* info background */
-        color: #fff !important;
-        /* info text */
-        border-radius: 0.375rem;
-        padding: 5px 12px;
-        margin: 2px;
-        transition: background-color 0.2s;
+    #invoiceTable_wrapper .dataTables_paginate {
+        overflow-x: hidden;
+        /* enable scrolling only if needed */
+        flex-wrap: nowrap;
+        /* prevent wrapping */
+        white-space: nowrap;
+        display: flex;
+        /* enable flex layout */
+        justify-content: end;
+        align-items: center;
+        margin-top: 4px !important;
+        padding-top: 0 !important;
+        padding-right: 0px;
+        /* option
+        
+        /* Optional: space between buttons */
+
+
 
     }
 
-    /* Hover state */
+    #invoiceTable_wrapper .dataTables_paginate .paginate_button {
+        background-color: #fff;
+        color: #299cdb !important;
+        border: 1px solid #dee2e6;
+        border-radius: 0.375rem;
+        margin: 0 2px;
+        font-size: 0.8125rem;
+        width: 38px;
+        height: 38px;
+
+        display: inline-flex;
+        /* ← fixes stacking + centers content */
+        align-items: center;
+        justify-content: center;
+
+        padding: 0;
+        transition: all 0.2s ease-in-out;
+        margin-top: 4px !important;
+        /* reduce top gap */
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+
+    }
+
+    #invoiceTable_wrapper .table {
+        margin-bottom: 0 !important;
+    }
+
+
     #invoiceTable_wrapper .dataTables_paginate .paginate_button:hover {
-        color: #fff;
-        background-color: #2385ba;
-        border-color: #2385ba;
+        background-color: #eff2f7;
+
+        color: #299cdb !important;
         cursor: pointer;
     }
 
-    /* Active page button */
     #invoiceTable_wrapper .dataTables_paginate .paginate_button.current {
-        background-color: #2385ba !important;
-        color: white !important;
-        font-weight: bold;
-        border-color: #2385ba;
+        background-color: #299cdb !important;
+        color: #fff !important;
+        border-color: #299cdb;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+
     }
 
-    .ribbon {
-        position: absolute;
-        top: 12px;
-        left: -12px;
-        transform: rotate(-45deg);
-        background-color: #0dcaf0;
-        /* Bootstrap 'info' color */
-        color: white;
-        font-weight: bold;
-        padding: 4px 40px;
-        font-size: 12px;
-        z-index: 10;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    #invoiceTable_wrapper .dataTables_paginate .paginate_button:focus {
+        outline: none;
+        box-shadow: none;
     }
+
+    #invoiceTable_wrapper .dataTables_paginate .paginate_button.disabled {
+        background-color: #eff2f7;
+        color: #adb5bd !important;
+        /* light gray text */
+        border-color: #dee2e6;
+        cursor: not-allowed;
+        pointer-events: none;
+        font-weight: bold;
+
+        cursor: pointer;
+    }
+
+    #invoiceTable_wrapper .dataTables_paginate .paginate_button.previous,
+    #invoiceTable_wrapper .dataTables_paginate .paginate_button.next,
+    #invoiceTable_wrapper .dataTables_paginate .paginate_button.first,
+    #invoiceTable_wrapper .dataTables_paginate .paginate_button.last {
+        width: 50px;
+        /* or whatever width you want */
+    }
+
+    #invoiceTable_wrapper .dataTables_info {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+
+    #invoiceTable_wrapper .dataTables_paginate {
+        margin-top: 4px !important;
+        /* reduce from default ~16px */
+        padding-top: 0 !important;
+    }
+
+    #invoiceTable_wrapper .dataTables_length,
+    #invoiceTable_wrapper .dataTables_filter {
+        margin-bottom: 4px !important;
+        padding-bottom: 0 !important;
+
+    }
+
+    .table-card .dataTables_filter {
+        padding: 0 !important;
+        margin: 0 !important;
+        /* optional for tighter alignment */
+    }
+
+    #invoiceTable_wrapper .dataTables_filter input {
+        margin-left: 0 !important;
+    }
+
+
+
+
+
+
     .modal-dialog.modal-xl {
-    max-width: 75vw; /* or set fixed px: 1200px, 1400px */
+        max-width: 75vw;
+        /* or set fixed px: 1200px, 1400px */
     }
 </style>
 @endsection
 @section('content')
+@component('components.breadcrumb')
+@slot('li_1')
+deklarant.ba
+@endslot
+@slot('title')
+Lista faktura
+@endslot
+@endcomponent
 
 
 
@@ -65,7 +154,7 @@
     <div class="col-lg-12">
         <div class=" card ribbon-box border mb-lg-4 position-relative rounded-0" id="invoiceList">
             <!-- Ribbon -->
-            <span class="ribbon-three ribbon-three-info  "><span>Fakture</span></span>
+
 
             <div class="card-header border-0">
                 <div class="d-flex align-items-center">
@@ -74,8 +163,8 @@
             </div>
 
             <div class="card-body">
-                <div class="table-responsive table-card ms-1 me-1 mb-2">
-                    <table id="invoiceTable" class="table mb-2 w-100">
+                <div class="table-responsive table-card ms-1 me-1 mb-0">
+                    <table id="invoiceTable" class="table  w-100">
                         <thead class="table-info">
                             <tr>
                                 <th>ID</th>
@@ -90,7 +179,7 @@
                                 <th>Akcija</th>
                             </tr>
                         </thead>
-                        <tbody class="table-light">
+                        <tbody class="table-light mb-1">
                             <!-- Loaded via DataTables -->
                         </tbody>
                     </table>
@@ -308,7 +397,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         const token = localStorage.getItem("auth_token");
         const user = JSON.parse(localStorage.getItem("user"));
 
@@ -317,11 +406,16 @@
             return;
         }
 
+        console.log("Initializing DataTable for user:", user);
+
         const table = $('#invoiceTable').DataTable({
             ajax: {
                 url: `/api/invoices/users/${user.id}`,
-                dataSrc: "",
-                beforeSend: function(xhr) {
+                dataSrc: function (json) {
+                    console.log("Fetched invoice data:", json);
+                    return json;
+                },
+                beforeSend: function (xhr) {
                     xhr.setRequestHeader("Authorization", `Bearer ${token}`);
                 }
             },
@@ -331,167 +425,102 @@
             fixedColumns: {
                 leftColumns: 1
             },
-            columns: [{
-                    data: null,
-                    title: 'ID',
-                    render: function(data, type, row, meta) {
-                        return meta.row + 1;
-                    }
-                },
+            columns: [
+                { data: null, title: 'ID', render: (data, type, row, meta) => meta.row + 1 },
                 {
                     data: 'file_name',
                     title: 'Moje fakture',
-                    render: function(data, type, row) {
-                        return `<a href="#" class="text-info view-invoice" data-id="${row.id}">${data}</a>`;
-                    }
+                    render: (data, type, row) => `<a href="#" class="text-info view-invoice" data-id="${row.id}">${data}</a>`
                 },
-                {
-                    data: 'country_of_origin',
-                    title: 'Zemlja porijekla'
-                },
+                { data: 'country_of_origin', title: 'Zemlja porijekla' },
                 {
                     data: 'file_name',
                     title: 'Tip datoteke',
-                    render: function(data) {
+                    render: function (data) {
                         if (!data) return '<span class="badge bg-secondary">N/A</span>';
                         const ext = data.split('.').pop().toLowerCase();
                         const badgeMap = {
-                            pdf: 'bg-danger',
-                            xls: 'bg-success',
-                            xlsx: 'bg-success',
-                            jpg: 'bg-warning',
-                            jpeg: 'bg-warning',
-                            png: 'bg-warning',
-                            txt: 'bg-dark'
+                            pdf: 'bg-danger', xls: 'bg-success', xlsx: 'bg-success',
+                            jpg: 'bg-warning', jpeg: 'bg-warning', png: 'bg-warning', txt: 'bg-dark'
                         };
-                        const badge = badgeMap[ext] || 'bg-secondary';
-                        return `<span class="badge ${badge} text-uppercase">${ext}</span>`;
+                        return `<span class="badge ${badgeMap[ext] || 'bg-secondary'} text-uppercase">${ext}</span>`;
                     }
                 },
+                { data: 'total_price', title: 'Cijena fakture', render: data => `${parseFloat(data).toFixed(2)} KM` },
+                { data: 'date_of_issue', title: 'Datum', render: data => new Date(data).toLocaleDateString('hr') },
+                { data: 'scanned', title: 'Skenirana', render: data => data === 1 ? 'Da' : 'Ne' },
+                { data: 'supplier.name', title: 'Dobavljač', defaultContent: '<span class="text-muted">N/A</span>' },
+                { data: 'supplier.owner', title: 'Vlasnik', defaultContent: '<span class="text-muted">N/A</span>' },
                 {
-                    data: 'total_price',
-                    title: 'Cijena fakture',
-                    render: function(data) {
-                        return `${parseFloat(data).toFixed(2)} KM`;
-                    }
-                },
-                {
-                    data: 'date_of_issue',
-                    title: 'Datum',
-                    render: function(data) {
-                        return new Date(data).toLocaleDateString('hr');
-                    }
-                },
-                {
-                    data: 'scanned',
-                    title: 'Skenirana',
-                    render: function(data) {
-                        return data === 1 ? 'Da' : 'Ne';
-                    }
-                },
-                {
-                    data: 'supplier.name',
-                    title: 'Dobavljač',
-                    defaultContent: '<span class="text-muted">N/A</span>'
-                },
-                {
-                    data: 'supplier.owner',
-                    title: 'Vlasnik',
-                    defaultContent: '<span class="text-muted">N/A</span>'
-                },
-                {
-                    data: null,
-                    title: 'Akcija',
-                    orderable: false,
-                    searchable: false,
-                    className: 'text-center',
-                    render: function(data, type, row) {
-                        return `
-                             <button class="btn btn-sm btn-soft-info me-1 edit-invoice" data-id="${row.id}">
-                                 <i class="ri-edit-line"></i>
-                             </button>
-                             <button class="btn btn-sm btn-soft-danger delete-invoice" data-id="${row.id}">
-                                 <i class="ri-delete-bin-line"></i>
-                             </button>
-                         `;
-                    }
+                    data: null, title: 'Akcija', orderable: false, searchable: false, className: 'text-center',
+                    render: row => `
+                        <button class="btn btn-sm btn-soft-info me-1 edit-invoice" data-id="${row.id}">
+                            <i class="ri-edit-line"></i>
+                        </button>
+                        <button class="btn btn-sm btn-soft-danger delete-invoice" data-id="${row.id}">
+                            <i class="ri-delete-bin-line"></i>
+                        </button>`
                 }
-
             ],
-            dom: '<"datatable-topbar d-flex flex-wrap justify-content-between align-items-center ms-0 mb-3"Bf>rt<"row mt-2"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+            dom: '<"datatable-topbar d-flex justify-content-between align-items-center py-3"Bf>rt<"row mt-2"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
             buttons: [
-
                 {
                     text: '<i class="fas fa-wand-magic-sparkles fs-6 me-1" style="font-size:10px;"></i> Skeniraj fakturu s AI',
                     className: 'btn btn-info me-1 ms-1 rounded-1',
-                    action: function() {
-                        window.location.href = '/pages-scan';
-                    }
+                    action: () => window.location.href = '/pages-scan'
                 },
-                {
-
-                    extend: 'csv',
-                    text: 'Export u CSV',
-                    className: 'btn btn-info me-1 ms-1 rounded-1',
-                },
-                {
-                    extend: 'excelHtml5',
-                    text: 'Export u Excel',
-                    className: 'btn btn-info me-1 ms-1 rounded-1',
-                    exportOptions: {
-                        columns: ':visible'
-                    }
-                },
-                {
-                    extend: 'pdf',
-                    text: 'Export u PDF',
-                    className: 'btn btn-info me-1 ms-1 rounded-1',
-                    exportOptions: {
-                        columns: ':visible'
-                    }
-                },
-                {
-                    extend: 'print',
-                    text: 'Štampa',
-                    className: 'btn btn-info me-1 ms-1 rounded-1',
-                    exportOptions: {
-                        columns: ':visible'
-                    }
-                },
-                {
-                    extend: 'colvis',
-                    text: 'Kolone',
-                    className: 'btn btn-info me-1 ms-1 rounded-1',
-                },
-                {
-                    extend: 'pageLength',
-                    text: 'Prikaži redova',
-                    className: 'btn-info me-1 ms-1 rounded-1'
-                }
+                { extend: 'csv', text: 'Export u CSV', className: 'btn btn-info me-1 ms-1 rounded-1' },
+                { extend: 'excelHtml5', text: 'Export u Excel', className: 'btn btn-info me-1 ms-1 rounded-1', exportOptions: { columns: ':visible' } },
+                { extend: 'pdf', text: 'Export u PDF', className: 'btn btn-info me-1 ms-1 rounded-1', exportOptions: { columns: ':visible' } },
+                { extend: 'print', text: 'Štampa', className: 'btn btn-info me-1 ms-1 rounded-1', exportOptions: { columns: ':visible' } },
+                { extend: 'colvis', text: 'Kolone', className: 'btn btn-info me-1 ms-1 rounded-1' },
+                { extend: 'pageLength', text: 'Prikaži redova', className: 'btn-info me-1 ms-1 rounded-1' }
             ],
             language: {
-                paginate: {
-                    first: "Prva",
-                    last: "Posljednja",
-                    next: "Sljedeća",
-                    previous: "Prethodna"
-                },
-                info: "",
-                infoEmpty: "Prikazivanje 0 do 0 od 0 stavki",
+                paginate: { first: "←", last: "→", next: "→", previous: "←" },
+                info: "", infoEmpty: "Prikazivanje 0 do 0 od 0 stavki",
                 infoFiltered: "(filtrirano iz _MAX_ ukupnih stavki)",
-                search: '<i class="ri-search-eye-line fs-5 me-1"></i>',
-                zeroRecords: "Nema pronađenih stavki"
+                search: "", zeroRecords: "Nema pronađenih stavki"
+            },
+            initComplete: function () {
+                const api = this.api();
+
+                $('#invoiceTable_filter')
+                    .addClass('flex-grow-1 me-0')
+                    .css('max-width', '400px')
+                    .html(`
+                        <div class="position-relative w-100">
+                            <input type="text" class="form-control" placeholder="Pretraga..." autocomplete="off"
+                                id="invoice-search-input" style="width: 100%; padding-left: 2rem;">
+                            <span class="mdi mdi-magnify text-info fs-5 ps-2 position-absolute top-50 start-0 translate-middle-y"></span>
+                            <span class="mdi mdi-close-circle position-absolute top-50 end-0 translate-middle-y me-2 d-none"
+                                id="invoice-search-clear" style="cursor:pointer;"></span>
+                        </div>
+                    `);
+
+                const searchInput = $('#invoice-search-input');
+                const searchClear = $('#invoice-search-clear');
+
+                searchInput.on('input', function () {
+                    const val = $(this).val();
+                    console.log("🔍 Searching for:", val);
+                    api.search(val).draw();
+                    searchClear.toggleClass('d-none', val.length === 0);
+                });
+
+                searchClear.on('click', function () {
+                    searchInput.val('');
+                    api.search('').draw();
+                    $(this).addClass('d-none');
+                });
+
+                console.log("✅ Search input initialized.");
             }
         });
-
-        // Style the search input
-        $('#invoiceTable_filter')
-            .addClass('d-flex justify-content-end ms-1 me-3 mb-2') // match table container
-            .find('input')
-            .addClass('form-control bg-light border-1 rounded-0 w-100') // control input style
-            .attr('placeholder', 'Pretraga...');
     });
 </script>
+
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
