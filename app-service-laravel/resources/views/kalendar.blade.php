@@ -5,7 +5,7 @@
 @section('content')
 @component('components.breadcrumb')
 @slot('li_1')
-Apps
+deklarant.ba
 @endslot
 @slot('title')
 Kalendarni prikaz mojih faktura
