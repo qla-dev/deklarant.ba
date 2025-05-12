@@ -112,9 +112,9 @@
                 
 
                 <li class="nav-item me-3">
-                    <a class="nav-link menu-link" href="kursna-lista"  role="button"
+                    <a class="nav-link menu-link" href="cijene-paketa"  role="button"
                         aria-expanded="false" aria-controls="sidebarUI">
-                        <i class="ri-exchange-dollar-line text-info"></i> <span>@lang('translation.exclist')
+                        <i class="ri-price-tag-3-line text-info"></i> <span>@lang('translation.pricing')
                         </span>
                     </a>
               

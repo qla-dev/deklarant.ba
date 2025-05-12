@@ -76,7 +76,7 @@ return [
     "team"=>"Team",
     "timeline"=>"Timeline",
     "faqs"=>"FAQs",
-    "pricing"=>"Pricing",
+    "pricing"=>"Cjenovnik",
     "gallery"=>"Gallery",
     "maintenance"=>"Maintenance",
     "coming-soon"=>"Coming Soon",

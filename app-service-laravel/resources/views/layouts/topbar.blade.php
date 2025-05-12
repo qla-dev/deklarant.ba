@@ -114,6 +114,12 @@
 
             <div class="d-flex align-items-center">
 
+              <div class="topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
+                    <a href="/kursna-lista" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none">
+                        <i class="ri-exchange-dollar-line" style="font-size:27px"></i>
+                        
+                    </a>
+                </div>
                 <div class="dropdown d-md-none topbar-head-dropdown header-item">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="bx bx-search fs-22"></i>
@@ -195,7 +201,7 @@
                     </div>
                 </div>
 
-                
+                 
 
                 <div class="ms-1 header-item d-none d-sm-flex">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" data-toggle-custom="fullscreen">
@@ -203,17 +209,13 @@
                     </button>
                 </div>
 
-                <div class="ms-1 header-item d-none d-sm-flex">
+                <div class="ms-1 header-item d-none d-sm-flex  me-5">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle light-dark-mode shadow-none">
                         <i class='bx bx-moon fs-2'></i>
                     </button>
                 </div>
 
-                <div class="topbar-head-dropdown ms-1 header-item me-5" id="notificationDropdown">
-                    <a href="/cijene-paketa" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none">
-                        <i class='bx bx-box fs-2'></i>
-                    </a>
-                </div>
+             
 
 
                 <div class="dropdown ms-sm header-item topbar-user">
