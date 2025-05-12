@@ -182,6 +182,9 @@
     @media (min-width: 768px) {
         background-color: white;
     }
+    [data-bs-theme="dark"] & {
+        background-color: #262a2f !important;
+    }
 
     .dropdown-menu {
         top: 6px !important;

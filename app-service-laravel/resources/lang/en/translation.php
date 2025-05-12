@@ -59,7 +59,7 @@ return [
     "password-reset"=>"Password Reset",
     "password-create"=>"Password Create",
     "lock-screen"=>"Lock Screen",
-    "logout"=>"Logout",
+    "logout"=>"Odjava",
     "success-message"=>"Success Message",
     "two-step-verification"=>"Two Step Verification",
     "errors"=>"Errors",
@@ -238,9 +238,9 @@ return [
     "home" => "Početna",
     "statistic"=>"Kalendar",
     "exclist" => "Kursna lista",
-    "myorder" => "Moje narudžbe",
-    "clients" => "Moji klijenti",
-    "declarant" => "Baza deklaranata"
+    "myorder" => "Moje fakture",
+    "clients" => "Moji dobavljači",
+    "declarant" => "Baza tarifnih oznaka"
 
 ];
 ?>

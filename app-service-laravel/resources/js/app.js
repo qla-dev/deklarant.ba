@@ -2026,20 +2026,18 @@ File: Main Js File
             fullscreenBtn.addEventListener("click", function (e) {
                 e.preventDefault();
                 document.body.classList.toggle("fullscreen-enable");
-                if (!document.fullscreenElement &&
-                    /* alternative standard method */
+    
+                if (
+                    !document.fullscreenElement &&
                     !document.mozFullScreenElement &&
                     !document.webkitFullscreenElement
                 ) {
-                    // current working methods
                     if (document.documentElement.requestFullscreen) {
                         document.documentElement.requestFullscreen();
                     } else if (document.documentElement.mozRequestFullScreen) {
                         document.documentElement.mozRequestFullScreen();
                     } else if (document.documentElement.webkitRequestFullscreen) {
-                        document.documentElement.webkitRequestFullscreen(
-                            Element.ALLOW_KEYBOARD_INPUT
-                        );
+                        document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
                     }
                 } else {
                     if (document.cancelFullScreen) {
@@ -2051,17 +2049,25 @@ File: Main Js File
                     }
                 }
             });
-
+    
         document.addEventListener("fullscreenchange", exitHandler);
         document.addEventListener("webkitfullscreenchange", exitHandler);
         document.addEventListener("mozfullscreenchange", exitHandler);
-
+    
         function exitHandler() {
-            if (!document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
+            if (
+                !document.webkitIsFullScreen &&
+                !document.mozFullScreen &&
+                !document.msFullscreenElement
+            ) {
                 document.body.classList.remove("fullscreen-enable");
             }
         }
     }
+    
+    //  Call the function immediately to attach the event listener
+    initFullScreen();
+    
 
     function setLayoutMode(mode, modeType, modeTypeId, html) {
         var isModeTypeId = document.getElementById(modeTypeId);

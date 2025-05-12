@@ -7,7 +7,7 @@
 @section('content')
 <div class="auth-page-wrapper pt-5">
     <div class="auth-one-bg-position auth-one-bg" id="auth-particles">
-        <div class="bg-overlay"></div>
+        <div class="bg-overlay" style="opacity:.3!important"></div>
         <div class="shape">
             <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1440 120">
                 <path d="M 0,36 C 144,53.6 432,123.2 720,124 C 1008,124.8 1296,56.8 1440,40L1440 140L0 140z"></path>
@@ -20,7 +20,7 @@
             <div class="row">
                 <div class="col-lg-12 text-center mt-sm-5 mb-4">
                     <a href="/" class="d-inline-block auth-logo">
-                        <img src="{{ URL::asset('build/images/logo-deklarant-white.png')}}" alt="Logo" height="35">
+                        <img src="{{ URL::asset('build/images/logo-dek-white.png')}}" alt="Logo" height="35">
                     </a>
                 
                 </div>
@@ -32,7 +32,7 @@
                         <div class="card-body p-4">
                             <div class="text-center">
                                 <h5 class="text-info fw-bold">Dobrodošli natrag!</h5>
-                                <p class="text-muted">Prijavite se kako biste nastavili.</p>
+                                <p class="text-muted">Prijavite se kako biste nastavili</p>
                             </div>
 
                             <div class="p-2 mt-4">
@@ -40,7 +40,7 @@
                                     @csrf
                                     <div class="mb-3">
                                         <label for="username" class="form-label text-info">Korisničko ime <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control border-info" id="username" placeholder="Unesite korisničko ime">
+                                        <input type="text" class="form-control" id="username" placeholder="Unesite korisničko ime">
                                     </div>
 
                                     <div class="mb-3">
@@ -49,13 +49,13 @@
                                             <a href="{{ route('password.update') }}" class="text-muted">Zaboravili ste lozinku?</a>
                                         </div>
                                         <div class="position-relative">
-                                            <input type="password" class="form-control border-info pe-5" placeholder="Unesite lozinku" id="password-input">
+                                            <input type="password" class="form-control pe-5" placeholder="Unesite lozinku" id="password-input">
                                             <button class="btn btn-link position-absolute end-0 top-0 text-muted password-addon" type="button"><i class="ri-eye-fill align-middle"></i></button>
                                         </div>
                                     </div>
 
                                     <div class="form-check">
-                                        <input class="form-check-input border-info" type="checkbox" id="auth-remember-check">
+                                        <input class="form-check-input" type="checkbox" id="auth-remember-check">
                                         <label class="form-check-label text-muted" for="auth-remember-check">Zapamti me</label>
                                     </div>
 
@@ -80,7 +80,9 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="text-center">
-                        <script>document.write(new Date().getFullYear())</script> DEKLARANT.BA <i class="mdi mdi-heart text-danger"></i> by Themesbrand
+                        <script>document.write(new Date().getFullYear())</script> deklarant.ba <i class="mdi mdi-heart text-info"></i> Razvijeno od strane <span class="logo-lg">
+                            <img src="{{ URL::asset('build/images/logo-qla.png') }}" alt="" height="17" style="margin-top:-3px">
+                        </span>
                     </div>
                 </div>
             </div>
