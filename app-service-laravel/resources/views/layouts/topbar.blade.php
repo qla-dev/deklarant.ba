@@ -6,7 +6,7 @@
                 <div class="navbar-box horizontal-logo me-5 d-flex align-items-center">
                     <a href="/" class="logo logo-dark">
                         <span class="logo-sm">
-                            <img src="{{ URL::asset('build/images/logo-sm.png') }}" alt="" height="22">
+                            <img src="{{ URL::asset('build/images/logo-dek.png') }}" alt="" height="22">
                         </span>
                         <span class="logo-lg">
                             <img src="{{ URL::asset('build/images/logo-dek.png') }}" alt="" height="17">
@@ -15,7 +15,7 @@
 
                     <a href="/" class="logo logo-light">
                         <span class="logo-sm">
-                            <img src="{{ URL::asset('build/images/logo-sm.png') }}" alt="" height="22">
+                            <img src="{{ URL::asset('build/images/logo-dek-white.png') }}" alt="" height="22">
                         </span>
                         <span class="logo-lg">
                             <img src="{{ URL::asset('build/images/logo-dek-white.png') }}" alt="" height="17">
@@ -26,7 +26,7 @@
                 
 
                 <!-- App Search-->
-                <form class="app-search d-none d-md-block me-5" style="width: 70%;">
+                <form class="app-search d-none d-md-block me-5" style="width: 77%;">
                     <div class="position-relative">
                         <input type="text" class="form-control border" placeholder="Pretraga..." autocomplete="off" id="search-options" value="">
                         <span class="mdi mdi-magnify search-widget-icon text-info"></span>
@@ -217,19 +217,21 @@
 
 
                 <div class="dropdown ms-sm header-item topbar-user">
-                    <button type="button" class="btn shadow-none" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                    <button type="button" class="btn shadow-none pe-0" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
                         <span class="d-flex align-items-center">
 
-                        <img id="topbar-avatar" class="rounded-circle header-profile-user" src="/build/images/users/avatar-1.jpg" alt="Header Avatar" width="32" height="32">
-
-                            
-
-                            <span class="text-start ms-xl-2">
+                         <span class="text-start me-xl-2">
                                 <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text" id="topbar-username"><script>document.write(JSON.parse(localStorage.getItem("user"))?.username || "Korisnik");</script>!</span>
                                 <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Founder</span>
                                 
                                 
                             </span>
+
+                        <img id="topbar-avatar" class="rounded-circle header-profile-user" src="/build/images/users/avatar-1.jpg" alt="Header Avatar" width="32" height="32">
+
+                            
+
+                           
                             
                         </span>
                     </button>
