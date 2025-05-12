@@ -69,7 +69,7 @@ return [
     "500"=>"500",
     "offline-page"=>"Offline Page",
     "starter"=>"Starter",
-    "profile"=>"Profile",
+    "profile"=>"Moj nalog",
     "simple-page"=>"Simple Page",
     "settings"=>"Settings",
     "team"=>"Team",
