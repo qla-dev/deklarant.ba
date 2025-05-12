@@ -225,7 +225,7 @@
                             
 
                             <span class="text-start ms-xl-2">
-                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text" id="topbar-username">Korisnik</span>
+                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text" id="topbar-username"><script>document.write(JSON.parse(localStorage.getItem("user"))?.username || "Korisnik");</script>!</span>
                                 <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Founder</span>
                                 
                                 
@@ -236,7 +236,8 @@
                     
                     <div class="dropdown-menu dropdown-menu-end border">
                         <!-- item-->
-                        <h6 class="dropdown-header">Dobrodošli !</h6>
+                        <h6 class="dropdown-header">
+  Dobrodošli <script>document.write(JSON.parse(localStorage.getItem("user"))?.email);</script>!</h6>
                         <a class="dropdown-item" href="pages-profile"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Moj nalog</span></a>   
                         <a class="dropdown-item" href="pages-faqs"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Pomoć</span></a>
                         <div class="dropdown-divider"></div>
