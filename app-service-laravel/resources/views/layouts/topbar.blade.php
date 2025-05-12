@@ -210,7 +210,7 @@
                 </div>
 
                 <div class="topbar-head-dropdown ms-1 header-item me-5" id="notificationDropdown">
-                    <a href="/pages-pricing" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none">
+                    <a href="/cijene-paketa" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none">
                         <i class='bx bx-box fs-2'></i>
                     </a>
                 </div>
