@@ -20,7 +20,7 @@ File: Custom Css File
     }
 }
 
-@media (min-width: 1301px) and (max-width: 1453px) {
+@media (min-width: 1301px) and (max-width: 1533px) {
     [data-layout=horizontal] .page-content {
         margin-top: 65px;
     }
@@ -33,10 +33,44 @@ File: Custom Css File
     }
 }
 
+@media (min-width: 1301px) and (max-width: 1373px) {
+  [data-layout=horizontal] .navbar-menu .navbar-nav .nav-link  {    padding: 0.75rem 0.5rem!important;}
+
+    [data-layout=horizontal] .navbar-menu .navbar-nav>li:nth-of-type(1)>.nav-link {
+
+    padding-left: 0!important ;
+}
+
+[data-layout=horizontal] .navbar-menu .navbar-nav>li:nth-of-type(2)>.nav-link.menu-link {
+
+    padding-left: 0.5rem!important ;
+}
+}
+
 @media (max-width: 1300px) {
     [data-layout=horizontal] .page-content {
         margin-top: 20px!important; 
     }
+}
+
+
+@media (min-width: 1534px) {
+    [data-layout=horizontal] .page-content {
+        margin-top: 65px;
+    }
+
+
+    .navbar-menu .navbar-nav .nav-link {
+
+        font-size: .88rem!important;
+    }
+
+    [data-layout=horizontal] .navbar-menu .navbar-nav .nav-link  {    padding: 0.75rem 1rem!important;}
+
+    [data-layout=horizontal] .navbar-menu .navbar-nav>li:nth-of-type(1)>.nav-link {
+
+    padding-left: 0!important ;
+}
 }
 
 [data-layout=horizontal] .navbar-menu .navbar-nav>li:nth-of-type(2)>.nav-link.menu-link {
