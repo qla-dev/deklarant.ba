@@ -3,6 +3,7 @@ return [
     "menu"=>"Menu",
     "dashboards"=>"Dashboards",
     "analytics"=>"Analitički dashboard",
+    "information_dashboard"=>"Informacioni dashboard",
     "analytics2"=>"Analytics",
     "crm"=>"CRM",
     "ecommerce"=>"Ecommerce",
