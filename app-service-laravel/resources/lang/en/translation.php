@@ -40,7 +40,7 @@ return [
     "my-wallet"=>"My Wallet",
     "ico-list"=>"ICO List",
     "kyc-application"=>"KYC Application",
-    "invoices"=>"Invoices",
+    "invoices"=>"Moje fakture",
     "details"=>"Invoice Details",
     "create-invoice"=>"Create Invoice",
     "supprt-tickets"=>"Support Tickets",
@@ -240,7 +240,8 @@ return [
     "exclist" => "Kursna lista",
     "myorder" => "Moje fakture",
     "clients" => "Moji dobavljači",
-    "declarant" => "Baza tarifnih oznaka"
+    "declarant" => "Baza tarifnih oznaka",
+
 
 ];
 ?>
