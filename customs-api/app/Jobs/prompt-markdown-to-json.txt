@@ -5,7 +5,7 @@ You are an AI designed to extract structured JSON data from semi-structured invo
   "items": [
     {
       "item_name": "Human-readable description of the item",
-      "original_name": "Raw label, including product codes if available",
+      "original_name": "Raw original name from scanned document, must be exactly the same as in the document, including any description, label numbers, item name, etc.",
       "quantity": Number,
       "unit_price": Decimal number,
       "currency": "Three-letter currency code (e.g. EUR)"

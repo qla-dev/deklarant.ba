@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Invoice;
 use App\Models\Supplier;
 use App\Models\User;
+use App\Services\AiService;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Exception;
@@ -137,34 +138,48 @@ public function getInvoicesByUser($userId)
     }
 
     public function scan($invoiceId)
-{
-    $start = microtime(true); // Start time
+    {
+        try {
+            $invoice = Invoice::findOrFail($invoiceId);
 
-    try {
-        $invoice = Invoice::findOrFail($invoiceId);
+            if ($invoice->scanned == 1) {
+                return response()->json([
+                    'message' => 'This invoice has already been scanned.'
+                ], 409); // 409 = Conflict
+            }
 
-        if ($invoice->scanned == 1) {
+            if (empty($invoice->file_name)) {
+                return response()->json([
+                    'error' => 'Invoice has no file attached for scanning'
+                ], 400);
+            }
+
+            $filePath = storage_path('app/invoices/' . $invoice->file_name);
+            $aiService = app(AiService::class);
+            
+            $response = $aiService->uploadDocument($filePath, $invoice->file_name);
+            $taskId = $response['task_id'] ?? null;
+
+            if (!$taskId) {
+                throw new Exception('AI server did not return task ID');
+            }
+
+            $invoice->task_id = $taskId;
+            $invoice->scanned = 1;
+            $invoice->save();
+
             return response()->json([
-                'message' => 'This invoice has already been scanned.'
-            ], 409); // 409 = Conflict
+                'message' => 'Invoice submitted for AI processing',
+                'task_id' => $taskId,
+                'data' => $invoice
+            ]);
+
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Invoice not found with the given ID.'], 404);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Failed to scan invoice: ' . $e->getMessage()], 500);
         }
-
-        $invoice->scanned = 1;
-
-        $duration = microtime(true) - $start; // Duration in seconds (float)
-        $invoice->scan_time = round($duration, 3); // Rounded to 3 decimal places
-        $invoice->save();
-
-        return response()->json([
-            'message' => 'Invoice scanned successfully.',
-            'data' => $invoice
-        ]);
-    } catch (ModelNotFoundException $e) {
-        return response()->json(['error' => 'Invoice not found with the given ID.'], 404);
-    } catch (Exception $e) {
-        return response()->json(['error' => 'Failed to scan invoice. Please try again later.'], 500);
     }
-}
 
     public function getInvoiceInfoById($id)
 {
