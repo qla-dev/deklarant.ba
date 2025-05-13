@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\StatsController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\FileManagerController;
+use App\Http\Controllers\Api\ExchangeRateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -104,3 +105,5 @@ Route::prefix('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
     Route::get('/my-token', [AuthController::class, 'myToken']);
 });
+
+Route::get('/exchange-rates', [ExchangeRateController::class, 'getRates']);

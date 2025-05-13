@@ -1,98 +1,153 @@
 @extends('layouts.master-without-nav')
+
 @section('title')
-    @lang('translation.lock-screen')
+Prijava
 @endsection
+
 @section('content')
-
 <div class="auth-page-wrapper pt-5">
-    <!-- auth page bg -->
-    <div class="auth-one-bg-position auth-one-bg"  id="auth-particles">
-        <div class="bg-overlay"></div>
-
+    <div class="auth-one-bg-position auth-one-bg" id="auth-particles">
+        <div class="bg-overlay" style="opacity:.3!important"></div>
         <div class="shape">
-            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 120">
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1440 120">
                 <path d="M 0,36 C 144,53.6 432,123.2 720,124 C 1008,124.8 1296,56.8 1440,40L1440 140L0 140z"></path>
             </svg>
         </div>
     </div>
 
-    <!-- auth page content -->
     <div class="auth-page-content">
         <div class="container">
             <div class="row">
-                <div class="col-lg-12">
-                    <div class="text-center mt-sm-5 mb-4 text-white-50">
-                        <div>
-                            <a href="index" class="d-inline-block auth-logo">
-                                <img src="{{ URL::asset('build/images/logo-light.png') }}" alt="" height="20">
-                            </a>
-                        </div>
-                        <p class="mt-3 fs-15 fw-medium">Premium Admin & Dashboard Template</p>
-                    </div>
+                <div class="col-lg-12 text-center mt-sm-5 mb-4">
+                    <a href="/" class="d-inline-block auth-logo">
+                        <img src="{{ URL::asset('build/images/logo-dek-white.png')}}" alt="Logo" height="35">
+                    </a>
+
                 </div>
             </div>
-            <!-- end row -->
 
             <div class="row justify-content-center">
                 <div class="col-md-8 col-lg-6 col-xl-5">
-                    <div class="card mt-4">
-
+                    <div class="card mt-4 border-0 shadow-lg rounded-2">
                         <div class="card-body p-4">
-                            <div class="text-center mt-2">
-                                <h5 class="text-primary">Lock Screen</h5>
-                                <p class="text-muted">Enter your password to unlock the screen!</p>
+                            <div class="text-center">
+                                <h5 class="text-info fw-bold"><i class="fas fa-lock me-2"> </i>Aplikacija je zaključana!</h5>
+                                <p class="text-muted">Unesi lozinku ako želiš nastaviti s radom!</p>
                             </div>
-                            <div class="user-thumb text-center">
-                                <img src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" class="rounded-circle img-thumbnail avatar-lg" alt="thumbnail">
-                                <h5 class="font-size-15 mt-3">Anna Adame</h5>
-                            </div>
-                            <div class="p-2 mt-4">
-                                <form>
-                                    <div class="mb-3">
-                                        <label class="form-label" for="userpassword">Password</label>
-                                        <input type="password" class="form-control" id="userpassword" placeholder="Enter password" required>
-                                    </div>
-                                    <div class="mb-2 mt-4">
-                                        <button class="btn btn-success w-100" type="submit">Unlock</button>
-                                    </div>
-                                </form><!-- end form -->
 
+                            <div class="p-2 mt-4">
+                                <form id="login-form">
+                                    @csrf
+                                    
+
+                                    <div class="user-thumb text-center mb-3">
+                                    <img src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" class="rounded-circle img-thumbnail avatar-lg" alt="thumbnail">
+                                    <h5 class="font-size-15 mt-3">Tin Tomić</h5>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between">
+                                            <label class="form-label text-info" for="password-input">Lozinka <span class="text-danger">*</span></label>
+                                            <a href="{{ route('password.update') }}" class="text-muted">Zaboravili ste lozinku?</a>
+                                        </div>
+                                        <div class="position-relative">
+                                            <input type="password" class="form-control pe-5" placeholder="Unesite lozinku" id="password-input">
+                                            <button class="btn btn-link position-absolute end-0 top-0 text-muted password-addon" type="button"><i class="ri-eye-fill align-middle"></i></button>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="auth-remember-check">
+                                        <label class="form-check-label text-muted" for="auth-remember-check">Zapamti me</label>
+                                    </div>
+
+                                    <div class="mt-4">
+                                        <button class="btn btn-info w-100 fw-bold" type="button" id="login-btn">Prijava</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
-                        <!-- end card body -->
                     </div>
-                    <!-- end card -->
 
                     <div class="mt-4 text-center">
-                        <p class="mb-0">Not you ? return <a href="auth-signin-basic" class="fw-semibold text-primary text-decoration-underline"> Signin </a> </p>
+                        <p class="mb-0 text-muted">Nisi ti ? <a href="/login" class="fw-semibold text-info">Ulogiraj se s drugim računom</a></p>
                     </div>
-
                 </div>
             </div>
-            <!-- end row -->
         </div>
-        <!-- end container -->
     </div>
-    <!-- end auth page content -->
 
-    <!-- footer -->
     <footer class="footer">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="text-center">
-                        <p class="mb-0 text-muted">&copy; <script>document.write(new Date().getFullYear())</script> Velzon. Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesbrand</p>
+                        <script>
+                            document.write(new Date().getFullYear())
+                        </script> deklarant.ba <i class="mdi mdi-heart text-info"></i> Razvijeno od strane <span class="logo-lg">
+                            <img src="{{ URL::asset('build/images/logo-qla.png') }}" alt="" height="17" style="margin-top:-3px">
+                        </span>
                     </div>
                 </div>
             </div>
         </div>
     </footer>
-    <!-- end Footer -->
 </div>
-<!-- end auth-page-wrapper -->
-@section('script')
-    <script src="{{ URL::asset('build/libs/particles.js/particles.js') }}"></script>
-    <script src="{{ URL::asset('build/js/pages/particles.app.js') }}"></script>
 @endsection
 
-</html>
+@section('script')
+<script src="{{ URL::asset('build/libs/particles.js/particles.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/particles.app.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+    // Dummy MAC generator (for local dev)
+    function getMACAddress() {
+        return '00:11:22:33:44:55';
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("login-btn").addEventListener("click", async function(event) {
+            event.preventDefault();
+            console.log("Login button clicked");
+
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password-input").value;
+
+            if (!username || !password) {
+                alert("Molimo unesite korisničko ime i lozinku.");
+                return;
+            }
+
+            const mac = getMACAddress(); // No more error here 
+
+            try {
+                const response = await axios.post("/api/auth/login", {
+                    username,
+                    password,
+                }, {
+                    headers: {
+                        'MAC-Address': mac
+                    }
+                });
+
+                const {
+                    token,
+                    user
+                } = response.data;
+
+                localStorage.setItem("auth_token", token);
+                localStorage.setItem("user", JSON.stringify(user));
+
+                console.log("Login successful, redirecting...");
+                window.location.href = "/";
+            } catch (error) {
+                console.error("Login error:", error);
+                alert(error.response?.data?.message || "Greška prilikom prijave.");
+            }
+        });
+    });
+</script>
+
+
+@endsection
