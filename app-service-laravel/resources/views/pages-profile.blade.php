@@ -744,7 +744,7 @@
                      <div class="row justify-content-center">
         <!-- StartUp Plan -->
         <div class="col-lg-4 mb-4">
-            <div class="card ribbon-box pricing-box border-0 rounded-0 h-100">
+            <div class="card pricing-box border-0 rounded-0 h-100">
                 <div class="card-body p-4 m-2 d-flex flex-column">
                     <div class="d-flex align-items-center mb-3">
                         <div class="flex-grow-1">
