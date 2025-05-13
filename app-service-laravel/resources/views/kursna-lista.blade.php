@@ -330,6 +330,8 @@ Kursna lista
                     scrollX: true,
                     autoWidth: true,
                     lengthChange: false,
+                    pageLength: 16,
+                    paging: false,
                     columns: [{
                             data: null,
                             title: '#',
@@ -413,7 +415,7 @@ Kursna lista
                             next: "→",
                             previous: "←"
                         },
-                        info: "Prikazivanje _START_ do _END_ od _TOTAL_ stavki",
+                        info: "",
                         infoEmpty: "Prikazivanje 0 do 0 od 0 stavki",
                         infoFiltered: "(filtrirano iz _MAX_ ukupnih stavki)",
                         search: "",
@@ -453,7 +455,7 @@ Kursna lista
                 });
             })
             .catch(err => {
-                console.error("❌ Greška pri učitavanju kursne liste:", err);
+                console.error("Greška pri učitavanju kursne liste:", err);
             });
     });
 </script>
