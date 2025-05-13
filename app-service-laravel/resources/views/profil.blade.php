@@ -334,7 +334,7 @@
             <div class="tab-pane fade show active mb-0" id="overview-tab">
                 <div class="row h-100 align-items-stretch">
                     <!-- Left Side Cards -->
-                    <div class="col-xxl-3 d-flex flex-column justify-content-between rounded-0">
+                    <div class="col-xxl-4 d-flex flex-column justify-content-between rounded-0">
                         <div class="card mb-3 d-flex flex-column align-items-center justify-content-center rounded-0">
                             <div class="card-body text-center d-flex">
                                 <p class="fw-semibold mb-0" id="user-package-text" style="padding-top:4px; padding-right: 5px;">
@@ -372,7 +372,7 @@
                     </div>
 
                     <!-- Right Form with Tabs -->
-                    <div class="col-xxl-9 d-flex flex-column h-100">
+                    <div class="col-xxl-8 d-flex flex-column h-100">
                         <div class="card flex-grow-1 d-flex flex-column rounded-0">
                             <!-- Nav Tabs -->
                             <div class="card-header" style="margin-bottom: 0;">
