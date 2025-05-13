@@ -1,7 +1,7 @@
 @extends('layouts.master-without-nav')
 
 @section('title')
-    Prijava
+Prijava
 @endsection
 
 @section('content')
@@ -22,7 +22,7 @@
                     <a href="/" class="d-inline-block auth-logo">
                         <img src="{{ URL::asset('build/images/logo-dek-white.png')}}" alt="Logo" height="35">
                     </a>
-                
+
                 </div>
             </div>
 
@@ -80,7 +80,9 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="text-center">
-                        <script>document.write(new Date().getFullYear())</script> deklarant.ba <i class="mdi mdi-heart text-info"></i> Razvijeno od strane <span class="logo-lg">
+                        <script>
+                            document.write(new Date().getFullYear())
+                        </script> deklarant.ba <i class="mdi mdi-heart text-info"></i> Razvijeno od strane <span class="logo-lg">
                             <img src="{{ URL::asset('build/images/logo-qla.png') }}" alt="" height="17" style="margin-top:-3px">
                         </span>
                     </div>
@@ -95,6 +97,8 @@
 <script src="{{ URL::asset('build/libs/particles.js/particles.js') }}"></script>
 <script src="{{ URL::asset('build/js/pages/particles.app.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 <script>
     // Dummy MAC generator (for local dev)
@@ -102,8 +106,8 @@
         return '00:11:22:33:44:55';
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("login-btn").addEventListener("click", async function (event) {
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("login-btn").addEventListener("click", async function(event) {
             event.preventDefault();
             console.log("Login button clicked");
 
@@ -111,7 +115,11 @@
             const password = document.getElementById("password-input").value;
 
             if (!username || !password) {
-                alert("Molimo unesite korisničko ime i lozinku.");
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Nedostaju podaci',
+                    text: 'Molimo unesite korisničko ime i lozinku.'
+                });
                 return;
             }
 
@@ -127,20 +135,34 @@
                     }
                 });
 
-                const { token, user } = response.data;
+                const {
+                    token,
+                    user
+                } = response.data;
 
                 localStorage.setItem("auth_token", token);
                 localStorage.setItem("user", JSON.stringify(user));
 
-                console.log("Login successful, redirecting...");
-                window.location.href = "/";
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Prijava uspješna!',
+                    text: 'Uspješno ste prijavljeni.',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    window.location.href = "/";
+                });
             } catch (error) {
-                console.error("Login error:", error);
-                alert(error.response?.data?.message || "Greška prilikom prijave.");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Greška',
+                    text: error.response?.data?.message || "Greška prilikom prijave."
+                });
             }
         });
     });
 </script>
+
 
 
 @endsection
