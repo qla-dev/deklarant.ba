@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Http;
 
 class FileManagerController extends Controller
 {
-    protected function handleFileUpload(Request $request): array
+    protected function handleFileUpload(Request $request, string $disk = 'public'): array
     {
         $request->validate([
             'file' => 'required|file|max:5120|mimes:png,jpg,jpeg,pdf,webp,xlsx',
@@ -24,7 +24,7 @@ class FileManagerController extends Controller
         $fileName = pathinfo($originalName, PATHINFO_FILENAME);
         $extension = $file->getClientOriginalExtension();
 
-        $disk = Storage::disk('public');
+        $disk = Storage::disk($disk);
         $directory = $folder ? "uploads/{$folder}" : 'uploads';
         $fullPath = $directory . '/' . $originalName;
         $finalName = $originalName;
@@ -36,10 +36,7 @@ class FileManagerController extends Controller
             $counter++;
         }
 
-        $storedPath = $file->storeAs($directory, $finalName, 'public');
-
-        // Get the full local path
-        $localPath = storage_path('app/public/' . $storedPath);
+        $storedPath = $disk->putFileAs($file, $fullPath);
 
         return [
             'message' => "File uploaded successfully!",
@@ -60,10 +57,10 @@ class FileManagerController extends Controller
     public function uploadInvoiceFile(Request $request)
     {
         // Handle file upload and get file data
-        $fileData = $this->handleFileUpload($request);
+        $fileData = $this->handleFileUpload($request, "local");
 
         // Extract file information from the response
-        $originalName = $fileData['original_name'];
+        $originalName = $fileData['stored_as'];
 
         // Create a new invoice record in the database
         $invoice = new \App\Models\Invoice();

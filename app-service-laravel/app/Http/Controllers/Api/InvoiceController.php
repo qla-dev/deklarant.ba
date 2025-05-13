@@ -154,7 +154,7 @@ class InvoiceController extends Controller
                 ], 400);
             }
 
-            $filePath = storage_path('app/invoices/' . $invoice->file_name);
+            $filePath = storage_path('app/uploads/' . $invoice->file_name);
             $aiService = app(AiService::class);
 
             $response = $aiService->uploadDocument($filePath, $invoice->file_name);
@@ -233,6 +233,41 @@ class InvoiceController extends Controller
             return response()->json(['error' => 'Invoice not found'], 404);
         } catch (Exception $e) {
             return response()->json(['error' => 'Failed to get scan status: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function getScanResult($id)
+    {
+        try {
+            $invoice = Invoice::findOrFail($id);
+
+            // Verify invoice belongs to current user
+            if ($invoice->user_id !== auth()->id()) {
+                return response()->json(['error' => 'Unauthorized access to invoice'], 403);
+            }
+
+            // Check if invoice has task_id
+            if (!$invoice->task_id) {
+                return response()->json(['error' => 'No scan task associated with this invoice'], 404);
+            }
+
+            // Get task result from AI service
+            $result = app(AiService::class)->getTaskResult($invoice->task_id);
+
+            if (!$result) {
+                return response()->json(['error' => 'Scan result not found'], 404);
+            }
+
+            return response()->json([
+                'result' => $result,
+                'invoice_id' => $invoice->id,
+                'task_id' => $invoice->task_id
+            ]);
+
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Invoice not found'], 404);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Failed to get scan result: ' . $e->getMessage()], 500);
         }
     }
 

@@ -95,6 +95,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // SCAN ROUTES
     Route::post('/invoices/{invoiceId}/scan', [InvoiceController::class, 'scan']);
     Route::get('/invoices/{id}/scan', [InvoiceController::class, 'getScanStatus']);
+    Route::get('/invoices/{id}/scan/result', [InvoiceController::class, 'getScanResult']);
 });
 
 
