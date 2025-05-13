@@ -30,10 +30,10 @@
 
     <div class="col-xl-12">
         <div class="card border-0 rounded-0 shadow-0 h-100 mt-1">
-            <div class="row g-0 home-card">
+            <div class="row g-0">
                 <!-- Left Columns -->
                 <div class="col-md-2 col-6 border-end border-0 order-2 order-md-0 bg-white card-animate mt-lg-0 mt-md-0 mt-3">
-                    <div class="d-flex flex-column h-100">
+                    <div class="d-flex card  rounded-0 m-0 flex-column h-100">
                         <div class="bg-danger text-white text-center py-1 rounded-0">
                             <i class="ri-alert-line me-1"></i>
                             <span><b>3</b> dostupna. Nadopuni!</span>
@@ -51,7 +51,7 @@
 
                 <div class="col-md-2 col-6 border-0 order-3 order-md-0 bg-white card-animate mt-lg-0 mt-md-0 mt-3">
                       <a href="moje-fakture">
-                    <div class="d-flex flex-column h-100">
+                    <div class="d-flex card m-0  rounded-0 flex-column h-100">
                         <div class="bg-info text-white text-center py-1 rounded-0">
                             <i class=" ri-arrow-up-s-line me-1"></i>
                             <span>Pregledaj sve</span>
@@ -98,7 +98,7 @@
                 
                 <div class="col-md-2 col-6 border-end border-0 order-4 order-md-0 bg-white card-animate mt-lg-0 mt-md-0 mt-4">
                      <a href="moji-dobavljaci">
-                    <div class="d-flex flex-column h-100">
+                    <div class="d-flex card  rounded-0 m-0 flex-column h-100">
                         <div class="bg-info text-white text-center py-1 rounded-0">
                             <i class=" ri-arrow-up-s-line me-1"></i>
                             <span>Pregledaj sve</span>
@@ -117,7 +117,7 @@
 
                 <div class="col-md-2 col-6 border-0 order-5 order-md-0 bg-white card-animate mt-lg-0 mt-md-0 mt-4">
                     <a href="kursna-lista">
-                    <div class="d-flex flex-column h-100">
+                    <div class="d-flex  card m-0 rounded-0 flex-column h-100">
                         <div class="bg-info text-white text-center py-1 rounded-0">
                             <i class="ri-arrow-up-s-line me-1"></i>
                             <span>Pregledaj sve</span>
