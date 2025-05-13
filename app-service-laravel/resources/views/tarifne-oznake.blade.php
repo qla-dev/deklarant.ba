@@ -124,6 +124,15 @@
     #tariffTable_wrapper .dataTables_filter input {
         margin-left: 0 !important;
     }
+    .table-card .dataTables_info{
+        padding-left: 0 !important;
+    }
+
+
+    #invoiceList {
+        --vz-card-spacer-y: 10px;
+        /* or any smaller value you want */
+    }
 
 
 
@@ -154,7 +163,7 @@ Baza tarifnih oznaka
     <div class="col-lg-12">
         <div class=" card ribbon-box border mb-lg-4 position-relative rounded-0" id="invoiceList">
             <!-- Ribbon -->
-            
+
 
             <div class="card-header border-0">
                 <div class="d-flex align-items-center">
@@ -399,7 +408,7 @@ Baza tarifnih oznaka
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         fetch('/storage/data/tariff.json')
             .then(response => response.json())
             .then(data => {
@@ -408,47 +417,106 @@ Baza tarifnih oznaka
                     scrollX: true,
                     autoWidth: true,
                     lengthChange: false,
-                    fixedColumns: { leftColumns: 1 },
-                    columns: [
-                        { data: null, title: 'ID', render: (data, type, row, meta) => meta.row + 1 },
-                        { data: 'Tarifna oznaka', title: 'Tarifna oznaka' },
-                        { data: 'Naziv', title: 'Naziv' },
-                        { data: 'Dopunska jedinica', title: 'Jedinica' },
-                        { data: 'Carinska stopa (%)', title: 'Stopa (%)' },
-                        { data: 'EU', title: 'EU' },
-                        { data: 'CEFTA', title: 'CEFTA' },
-                        { data: 'IRN', title: 'IRN' },
-                        { data: 'TUR', title: 'TUR' },
-                        { data: 'CHE, LIE', title: 'CHE, LIE' },
-                        { data: 'ISL', title: 'ISL' },
-                        { data: 'NOR', title: 'NOR' }
+                    fixedColumns: {
+                        leftColumns: 1
+                    },
+                    columns: [{
+                            data: null,
+                            title: 'ID',
+                            render: (data, type, row, meta) => meta.row + 1
+                        },
+                        {
+                            data: 'Tarifna oznaka',
+                            title: 'Tarifna oznaka'
+                        },
+                        {
+                            data: 'Naziv',
+                            title: 'Naziv'
+                        },
+                        {
+                            data: 'Dopunska jedinica',
+                            title: 'Jedinica'
+                        },
+                        {
+                            data: 'Carinska stopa (%)',
+                            title: 'Stopa (%)'
+                        },
+                        {
+                            data: 'EU',
+                            title: 'EU'
+                        },
+                        {
+                            data: 'CEFTA',
+                            title: 'CEFTA'
+                        },
+                        {
+                            data: 'IRN',
+                            title: 'IRN'
+                        },
+                        {
+                            data: 'TUR',
+                            title: 'TUR'
+                        },
+                        {
+                            data: 'CHE, LIE',
+                            title: 'CHE, LIE'
+                        },
+                        {
+                            data: 'ISL',
+                            title: 'ISL'
+                        },
+                        {
+                            data: 'NOR',
+                            title: 'NOR'
+                        }
                     ],
-                    dom: '<"datatable-topbar d-flex flex-wrap justify-content-between align-items-center ms-0 mb-3"Bf>rt<"row mt-2"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
-                    buttons: [
-                        { extend: 'csv', text: 'Export u CSV', className: 'btn btn-info me-1 ms-1 rounded-1' },
-                        {
-                            extend: 'excelHtml5', text: 'Export u Excel', className: 'btn btn-info me-1 ms-1 rounded-1',
-                            exportOptions: { columns: ':visible' }
+                    dom: '<"datatable-topbar d-flex justify-content-between align-items-center mb-3"Bf>rt<"d-flex justify-content-between align-items-center mt-4 px-0"i p>',
+
+                    buttons: [{
+                            extend: 'csv',
+                            text: 'Export u CSV',
+                            className: 'btn btn-info me-1 ms-1 rounded-1'
                         },
                         {
-                            extend: 'pdf', text: 'Export u PDF', className: 'btn btn-info me-1 ms-1 rounded-1',
-                            exportOptions: { columns: ':visible' }
+                            extend: 'excelHtml5',
+                            text: 'Export u Excel',
+                            className: 'btn btn-info me-1 ms-1 rounded-1'
                         },
                         {
-                            extend: 'print', text: 'Štampa', className: 'btn btn-info me-1 ms-1 rounded-1',
-                            exportOptions: { columns: ':visible' }
+                            extend: 'pdf',
+                            text: 'Export u PDF',
+                            className: 'btn btn-info me-1 ms-1 rounded-1'
                         },
-                        { extend: 'colvis', text: 'Kolone', className: 'btn btn-info me-1 ms-1 rounded-1' },
-                        { extend: 'pageLength', text: 'Prikaži redova', className: 'btn-info me-1 ms-1 rounded-1' }
+                        {
+                            extend: 'print',
+                            text: 'Štampa',
+                            className: 'btn btn-info me-1 ms-1 rounded-1'
+                        },
+                        {
+                            extend: 'colvis',
+                            text: 'Kolone',
+                            className: 'btn btn-info me-1 ms-1 rounded-1'
+                        },
+                        {
+                            extend: 'pageLength',
+                            text: 'Prikaži redova',
+                            className: 'btn-info me-1 ms-1 rounded-1'
+                        }
                     ],
                     language: {
-                        paginate: { first: "←", last: "→", next: "→", previous: "←" },
-                        info: "", infoEmpty: "Prikazivanje 0 do 0 od 0 stavki",
+                        paginate: {
+                            first: "←",
+                            last: "→",
+                            next: "→",
+                            previous: "←"
+                        },
+                        info: "Prikazivanje _START_ do _END_ od _TOTAL_ stavki",
+                        infoEmpty: "Prikazivanje 0 do 0 od 0 stavki",
                         infoFiltered: "(filtrirano iz _MAX_ ukupnih stavki)",
-                        search: "", // We'll inject a custom input
+                        search: "",
                         zeroRecords: "Nema pronađenih stavki"
                     },
-                    initComplete: function () {
+                    initComplete: function() {
                         const api = this.api();
 
                         // Inject custom styled search field
@@ -468,13 +536,13 @@ Baza tarifnih oznaka
                         const input = $('#tariff-search-input');
                         const clear = $('#tariff-search-clear');
 
-                        input.on('input', function () {
+                        input.on('input', function() {
                             const val = $(this).val();
                             api.search(val).draw();
                             clear.toggleClass('d-none', val.length === 0);
                         });
 
-                        clear.on('click', function () {
+                        clear.on('click', function() {
                             input.val('');
                             api.search('').draw();
                             $(this).addClass('d-none');

@@ -115,7 +115,7 @@
                 return;
             }
 
-            const mac = getMACAddress(); // No more error here ✅
+            const mac = getMACAddress(); // No more error here 
 
             try {
                 const response = await axios.post("/api/auth/login", {

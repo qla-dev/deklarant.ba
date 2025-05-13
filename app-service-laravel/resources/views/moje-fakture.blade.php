@@ -125,6 +125,13 @@
         margin-left: 0 !important;
     }
 
+    #invoiceList {
+    --vz-card-spacer-y: 10px; /* or any smaller value you want */
+    }
+    .table-card .dataTables_info{
+        padding-left: 0 !important;
+    }
+
 
 
 
@@ -460,26 +467,52 @@ Lista faktura
                         </button>`
                 }
             ],
-            dom: '<"datatable-topbar d-flex justify-content-between align-items-center py-3"Bf>rt<"row mt-2"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
-            buttons: [
-                {
-                    text: '<i class="fas fa-wand-magic-sparkles fs-6 me-1" style="font-size:10px;"></i> Skeniraj fakturu s AI',
-                    className: 'btn btn-info me-1 ms-1 rounded-1',
-                    action: () => window.location.href = '/pages-scan'
-                },
-                { extend: 'csv', text: 'Export u CSV', className: 'btn btn-info me-1 ms-1 rounded-1' },
-                { extend: 'excelHtml5', text: 'Export u Excel', className: 'btn btn-info me-1 ms-1 rounded-1', exportOptions: { columns: ':visible' } },
-                { extend: 'pdf', text: 'Export u PDF', className: 'btn btn-info me-1 ms-1 rounded-1', exportOptions: { columns: ':visible' } },
-                { extend: 'print', text: 'Štampa', className: 'btn btn-info me-1 ms-1 rounded-1', exportOptions: { columns: ':visible' } },
-                { extend: 'colvis', text: 'Kolone', className: 'btn btn-info me-1 ms-1 rounded-1' },
-                { extend: 'pageLength', text: 'Prikaži redova', className: 'btn-info me-1 ms-1 rounded-1' }
-            ],
-            language: {
-                paginate: { first: "←", last: "→", next: "→", previous: "←" },
-                info: "", infoEmpty: "Prikazivanje 0 do 0 od 0 stavki",
-                infoFiltered: "(filtrirano iz _MAX_ ukupnih stavki)",
-                search: "", zeroRecords: "Nema pronađenih stavki"
-            },
+            dom: '<"datatable-topbar d-flex justify-content-between align-items-center mb-3"Bf>rt<"d-flex justify-content-between align-items-center mt-4 px-0"i p>',
+
+                    buttons: [{
+                            extend: 'csv',
+                            text: 'Export u CSV',
+                            className: 'btn btn-info me-1 ms-1 rounded-1'
+                        },
+                        {
+                            extend: 'excelHtml5',
+                            text: 'Export u Excel',
+                            className: 'btn btn-info me-1 ms-1 rounded-1'
+                        },
+                        {
+                            extend: 'pdf',
+                            text: 'Export u PDF',
+                            className: 'btn btn-info me-1 ms-1 rounded-1'
+                        },
+                        {
+                            extend: 'print',
+                            text: 'Štampa',
+                            className: 'btn btn-info me-1 ms-1 rounded-1'
+                        },
+                        {
+                            extend: 'colvis',
+                            text: 'Kolone',
+                            className: 'btn btn-info me-1 ms-1 rounded-1'
+                        },
+                        {
+                            extend: 'pageLength',
+                            text: 'Prikaži redova',
+                            className: 'btn-info me-1 ms-1 rounded-1'
+                        }
+                    ],
+                    language: {
+                        paginate: {
+                            first: "←",
+                            last: "→",
+                            next: "→",
+                            previous: "←"
+                        },
+                        info: "Prikazivanje _START_ do _END_ od _TOTAL_ stavki",
+                        infoEmpty: "Prikazivanje 0 do 0 od 0 stavki",
+                        infoFiltered: "(filtrirano iz _MAX_ ukupnih stavki)",
+                        search: "",
+                        zeroRecords: "Nema pronađenih stavki"
+                    },
             initComplete: function () {
                 const api = this.api();
 

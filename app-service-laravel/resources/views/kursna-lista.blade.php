@@ -6,10 +6,8 @@
 <link href="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
 <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css" rel="stylesheet">
-<link href="{{ URL::asset('build/libs/jsvectormap/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
-<link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
 <style>
-    #suppliersTable_wrapper .dataTables_paginate {
+    #exchangeTable_wrapper .dataTables_paginate {
         overflow-x: hidden;
         /* enable scrolling only if needed */
         flex-wrap: nowrap;
@@ -30,7 +28,7 @@
 
     }
 
-    #suppliersTable_wrapper .dataTables_paginate .paginate_button {
+    #exchangeTable_wrapper .dataTables_paginate .paginate_button {
         background-color: #fff;
         color: #299cdb !important;
         border: 1px solid #dee2e6;
@@ -54,19 +52,19 @@
 
     }
 
-    #suppliersTable_wrapper .table {
+    #exchangeTable_wrapper .table {
         margin-bottom: 0 !important;
     }
 
 
-    #suppliersTable_wrapper .dataTables_paginate .paginate_button:hover {
+    #exchangeTable_wrapper .dataTables_paginate .paginate_button:hover {
         background-color: #eff2f7;
 
         color: #299cdb !important;
         cursor: pointer;
     }
 
-    #suppliersTable_wrapper .dataTables_paginate .paginate_button.current {
+    #exchangeTable_wrapper .dataTables_paginate .paginate_button.current {
         background-color: #299cdb !important;
         color: #fff !important;
         border-color: #299cdb;
@@ -74,12 +72,12 @@
 
     }
 
-    #suppliersTable_wrapper .dataTables_paginate .paginate_button:focus {
+    #exchangeTable_wrapper .dataTables_paginate .paginate_button:focus {
         outline: none;
         box-shadow: none;
     }
 
-    #suppliersTable_wrapper .dataTables_paginate .paginate_button.disabled {
+    #exchangeTable_wrapper .dataTables_paginate .paginate_button.disabled {
         background-color: #eff2f7;
         color: #adb5bd !important;
         /* light gray text */
@@ -91,27 +89,27 @@
         cursor: pointer;
     }
 
-    #suppliersTable_wrapper .dataTables_paginate .paginate_button.previous,
-    #suppliersTable_wrapper .dataTables_paginate .paginate_button.next,
-    #suppliersTable_wrapper .dataTables_paginate .paginate_button.first,
-    #suppliersTable_wrapper .dataTables_paginate .paginate_button.last {
+    #exchangeTable_wrapper .dataTables_paginate .paginate_button.previous,
+    #exchangeTable_wrapper .dataTables_paginate .paginate_button.next,
+    #exchangeTable_wrapper .dataTables_paginate .paginate_button.first,
+    #exchangeTable_wrapper .dataTables_paginate .paginate_button.last {
         width: 50px;
         /* or whatever width you want */
     }
 
-    #suppliersTable_wrapper .dataTables_info {
+    #exchangeTable_wrapper .dataTables_info {
         margin-top: 0 !important;
         padding-top: 0 !important;
     }
 
-    #suppliersTable_wrapper .dataTables_paginate {
+    #exchangeTable_wrapper .dataTables_paginate {
         margin-top: 4px !important;
         /* reduce from default ~16px */
         padding-top: 0 !important;
     }
 
-    #suppliersTable_wrapper .dataTables_length,
-    #suppliersTable_wrapper .dataTables_filter {
+    #exchangeTable_wrapper .dataTables_length,
+    #exchangeTable_wrapper .dataTables_filter {
         margin-bottom: 4px !important;
         padding-bottom: 0 !important;
 
@@ -123,24 +121,25 @@
         /* optional for tighter alignment */
     }
 
-    #suppliersTable_wrapper .dataTables_filter input {
+    #exchangeTable_wrapper .dataTables_filter input {
         margin-left: 0 !important;
-    }
-
-    #invoiceList {
-        --vz-card-spacer-y: 10px;
-        /* or any smaller value you want */
     }
     .table-card .dataTables_info{
         padding-left: 0 !important;
     }
+    #invoiceList {
+    --vz-card-spacer-y: 10px; /* or any smaller value you want */
+    }
 
 
 
 
 
 
-    
+    .modal-dialog.modal-xl {
+        max-width: 75vw;
+        /* or set fixed px: 1200px, 1400px */
+    }
 </style>
 @endsection
 @section('content')
@@ -149,7 +148,7 @@
 deklarant.ba
 @endslot
 @slot('title')
-Lista dobavljača
+Kursna lista
 @endslot
 @endcomponent
 
@@ -171,17 +170,17 @@ Lista dobavljača
 
             <div class="card-body">
                 <div class="table-responsive table-card ms-1 me-1 mb-2">
-                    <table id="suppliersTable" class="table mb-2 w-100">
+                    <table id="exchangeTable" class="table mb-2 w-100">
                         <thead class="table-info">
                             <tr>
-                                <th>ID</th>
-                                <th>Naziv firme</th>
-                                <th>Vlasnik</th>
-                                <th>Profit prošle godine</th>
-                                <th>Profit ove godine</th>
-                                <th>Promjena(%)</th>
-                                <th>Akcija</th>
-
+                                <th>#</th>
+                                <th>Šifra</th>
+                                <th>Valuta</th>
+                                <th>Država</th>
+                                <th>Jedinica</th>
+                                <th>Kupovni kurs</th>
+                                <th>Srednji kurs</th>
+                                <th>Prodajni kurs</th>
                             </tr>
                         </thead>
                         <tbody class="table-light">
@@ -233,91 +232,145 @@ Lista dobavljača
             return;
         }
 
-        fetch(`/api/statistics/users/${user.id}`, {
+        const currencyCodebook = {
+            280: 'DEM',
+            724: 'ESP',
+            40: 'ATS',
+            56: 'BEF',
+            246: 'FIM',
+            250: 'FRF',
+            300: 'GRD',
+            372: 'IEP',
+            380: 'ITL',
+            620: 'PTE',
+            442: 'LUF',
+            978: 'EUR',
+            36: 'AUD',
+            124: 'CAD',
+            203: 'CZK',
+            208: 'DKK',
+            348: 'HUF',
+            392: 'JPY',
+            578: 'NOK',
+            752: 'SEK',
+            756: 'CHF',
+            949: 'TRY',
+            826: 'GBP',
+            840: 'USD',
+            643: 'RUB',
+            156: 'CNY',
+            941: 'RSD'
+        };
+
+        const countryFlagMap = {
+            'emu': 'eu',
+            'australia': 'au',
+            'canada': 'ca',
+            'czech r': 'cz',
+            'denmark': 'dk',
+            'hungary': 'hu',
+            'japan': 'jp',
+            'norway': 'no',
+            'sweden': 'se',
+            'switzerland': 'ch',
+            'turkey': 'tr',
+            'g.britain': 'gb',
+            'usa': 'us',
+            'russia': 'ru',
+            'china': 'cn',
+            'serbia': 'rs'
+        };
+
+        const countryNameBS = {
+            'emu': 'EMU',
+            'australia': 'Australija',
+            'canada': 'Kanada',
+            'czech r': 'Češka',
+            'denmark': 'Danska',
+            'hungary': 'Mađarska',
+            'japan': 'Japan',
+            'norway': 'Norveška',
+            'sweden': 'Švedska',
+            'switzerland': 'Švicarska',
+            'turkey': 'Turska',
+            'g.britain': 'Velika Britanija',
+            'usa': 'SAD',
+            'russia': 'Rusija',
+            'china': 'Kina',
+            'serbia': 'Srbija'
+        };
+
+        fetch("/api/exchange-rates", {
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    Authorization: `Bearer ${token}`
                 }
             })
             .then(res => res.json())
             .then(data => {
-                const profitMap = {};
-                data.supplier_profit_changes.forEach(p => {
-                    profitMap[p.supplier_id] = p;
-                });
+                const items = (data.CurrencyExchangeItems || [])
+                    .filter(item => item.AlphaCode !== 'XDR') //  filter out IMF
+                    .map(item => {
+                        const original = item.Country;
+                        const normalized = original.trim().toLowerCase().replace(/\s+/g, ' ').replace(/\.$/, '');
+                        const flagCode = countryFlagMap[normalized] || 'un';
+                        const displayName = countryNameBS[normalized] || original;
 
-                const enrichedSuppliers = data.suppliers.map(supplier => ({
-                    ...supplier,
-                    ...profitMap[supplier.id]
-                }));
+                       
 
-                const table = $('#suppliersTable').DataTable({
-                    data: enrichedSuppliers,
+                        return {
+                            ...item,
+                            Code: item.NumCode,
+                            FlagCode: flagCode,
+                            CountryBS: displayName
+                        };
+                    });
+
+                $('#exchangeTable').DataTable({
+                    data: items,
                     scrollX: true,
                     autoWidth: true,
                     lengthChange: false,
-                    fixedColumns: {
-                        leftColumns: 1
-                    },
-                    drawCallback: function() {
-                        $('.dataTables_paginate ul.pagination')
-                            .addClass('pagination-separated pagination-sm justify-content-center mb-0');
-                        $('.dataTables_paginate ul.pagination li.page-item a.page-link')
-                            .addClass('rounded');
-                    },
                     columns: [{
                             data: null,
-                            title: 'ID',
+                            title: '#',
                             render: (data, type, row, meta) => meta.row + 1
                         },
                         {
-                            data: 'name',
-                            title: 'Naziv firme',
-                            render: (data, type, row) => {
-                                const avatar = row.avatar ? `/storage/uploads/suppliers/${row.avatar}` : '/build/images/users/avatar-1.jpg';
+                            data: 'Code',
+                            title: 'Šifra'
+                        },
+                        {
+                            data: 'AlphaCode',
+                            title: 'Valuta'
+                        },
+                        {
+                            data: 'CountryBS',
+                            title: 'Zemlja',
+                            render: function(countryBS, type, row) {
                                 return `
-                                    <div class="d-flex align-items-center">
-                                        <img src="${avatar}" alt="avatar" class="rounded-circle me-2" width="30" height="30" style="object-fit: cover;">
-                                        <span>${data}</span>
-                                    </div>`;
+                            <img src="https://flagcdn.com/${row.FlagCode}.svg"
+                                 class="rounded-circle me-2"
+                                 style="height: 24px; width: 24px; object-fit: cover;"
+                                 alt="${countryBS}" />
+                            <span>${countryBS}</span>
+                        `;
                             }
                         },
                         {
-                            data: 'owner',
-                            title: 'Vlasnik'
+                            data: 'Units',
+                            title: 'Jedinica'
                         },
                         {
-                            data: 'last_year_profit',
-                            title: 'Profit prošle godine',
-                            render: data => data ? `${parseFloat(data).toFixed(2)} KM` : '-'
+                            data: 'Buy',
+                            title: 'Kupovni kurs'
                         },
                         {
-                            data: 'current_year_profit',
-                            title: 'Profit ove godine',
-                            render: data => data ? `${parseFloat(data).toFixed(2)} KM` : '-'
+                            data: 'Middle',
+                            title: 'Srednji kurs'
                         },
                         {
-                            data: 'percentage_change',
-                            title: 'Promjena (%)',
-                            render: data => {
-                                if (!data) return '-';
-                                const num = parseFloat(data);
-                                const badge = num > 0 ? 'success' : num < 0 ? 'danger' : 'secondary';
-                                return `<span class="badge bg-${badge}">${data}</span>`;
-                            }
-                        },
-                        {
-                            data: null,
-                            title: 'Akcija',
-                            orderable: false,
-                            searchable: false,
-                            className: 'text-center',
-                            render: row => `
-                                <button class="btn btn-sm btn-soft-info me-1 edit-supplier" data-id="${row.id}">
-                                    <i class="ri-edit-line"></i>
-                                </button>
-                                <button class="btn btn-sm btn-soft-danger delete-supplier" data-id="${row.id}">
-                                    <i class="ri-delete-bin-line"></i>
-                                </button>`
+                            data: 'Sell',
+                            title: 'Prodajni kurs'
                         }
                     ],
                     dom: '<"datatable-topbar d-flex justify-content-between align-items-center mb-3"Bf>rt<"d-flex justify-content-between align-items-center mt-4 px-0"i p>',
@@ -369,21 +422,21 @@ Lista dobavljača
                     initComplete: function() {
                         const api = this.api();
 
-                        $('#suppliersTable_filter')
+                        $('#exchangeTable_filter')
                             .addClass('flex-grow-1 me-0')
                             .css('max-width', '400px')
                             .html(`
-                                <div class="position-relative w-100">
-                                    <input type="text" class="form-control" placeholder="Pretraga..." autocomplete="off"
-                                        id="supplier-search-input" style="width: 100%; padding-left: 2rem;">
-                                    <span class="mdi mdi-magnify text-info fs-5 ps-2 position-absolute top-50 start-0 translate-middle-y"></span>
-                                    <span class="mdi mdi-close-circle position-absolute top-50 end-0 translate-middle-y me-2 d-none"
-                                        id="supplier-search-clear" style="cursor:pointer;"></span>
-                                </div>
-                            `);
+                        <div class="position-relative w-100">
+                            <input type="text" class="form-control" placeholder="Pretraga..." autocomplete="off"
+                                   id="exchange-search-input" style="width: 100%; padding-left: 2rem;">
+                            <span class="mdi mdi-magnify text-info fs-5 ps-2 position-absolute top-50 start-0 translate-middle-y"></span>
+                            <span class="mdi mdi-close-circle position-absolute top-50 end-0 translate-middle-y me-2 d-none"
+                                  id="exchange-search-clear" style="cursor:pointer;"></span>
+                        </div>
+                    `);
 
-                        const input = $('#supplier-search-input');
-                        const clear = $('#supplier-search-clear');
+                        const input = $('#exchange-search-input');
+                        const clear = $('#exchange-search-clear');
 
                         input.on('input', function() {
                             const val = $(this).val();
@@ -396,16 +449,15 @@ Lista dobavljača
                             api.search('').draw();
                             $(this).addClass('d-none');
                         });
-
-                        console.log(" Supplier search input initialized.");
                     }
                 });
             })
             .catch(err => {
-                console.error(" Greška pri učitavanju podataka:", err);
+                console.error("❌ Greška pri učitavanju kursne liste:", err);
             });
     });
 </script>
+
 
 
 
