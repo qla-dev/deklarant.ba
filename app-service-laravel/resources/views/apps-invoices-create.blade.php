@@ -303,6 +303,107 @@
             }
         };
 
+    row.querySelector(".plus").addEventListener("click", () => {
+        quantityInput.value = parseInt(quantityInput.value) + 1;
+        totalInput.value = `${(parseFloat(priceInput.value) * parseInt(quantityInput.value)).toFixed(2)} KM`;
+        calculateInvoiceTotals();
+    });
+
+    row.querySelector(".minus").addEventListener("click", () => {
+        const current = parseInt(quantityInput.value);
+        if (current > 0) quantityInput.value = current - 1;
+        totalInput.value = `${(parseFloat(priceInput.value) * parseInt(quantityInput.value)).toFixed(2)} KM`;
+        calculateInvoiceTotals();
+    });
+
+    priceInput.addEventListener("input", () => {
+        totalInput.value = `${(parseFloat(priceInput.value) * parseInt(quantityInput.value)).toFixed(2)} KM`;
+        calculateInvoiceTotals();
+    });
+
+    row.querySelector(".remove-row").addEventListener("click", () => {
+        row.remove();
+        calculateInvoiceTotals();
+    });
+
+    return row;
+}
+
+function addRowToInvoice(item = {}, suggestions = []) {
+    const tbody = document.getElementById("newlink");
+    const newId = tbody.children.length + 1;
+    const row = createInvoiceRow(newId, item, suggestions);
+    tbody.appendChild(row);
+    initializeTariffSelects();
+    calculateInvoiceTotals();
+}
+
+async function waitForAIResult() {
+    const taskId = localStorage.getItem("scan_task_id");
+    if (!taskId) {
+        Swal.fire("Greška", "Task ID nije pronađen.", "error");
+        return;
+    }
+
+    Swal.fire({ title: 'Skeniranje...', html: 'Obrađujemo dokument...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
+
+    for (let i = 0; i < 20; i++) {
+        try {
+            const statusRes = await fetch(`http://localhost:8080/api/tasks/${taskId}`);
+            const status = await statusRes.json();
+            if (status.status === "completed") {
+                const resultRes = await fetch(`http://localhost:8080/api/tasks/${taskId}/result`);
+                const result = await resultRes.json();
+                Swal.close();
+                return result;
+            }
+        } catch (e) {
+            console.error("Greška u čekanju AI odgovora:", e);
+        }
+        await new Promise(r => setTimeout(r, 2000));
+    }
+
+    Swal.close();
+    Swal.fire("Greška", "AI obrada nije završena u predviđenom vremenu.", "error");
+}
+
+document.addEventListener("DOMContentLoaded", async function () {
+    const tariffRes = await fetch('/storage/data/tariff.json');
+    const tariffData = await tariffRes.json();
+
+    processedTariffData = tariffData
+    .filter(item => item["Tarifna oznaka"] && item["Naziv"] && item["Puni Naziv"])
+    .map(item => ({
+        id: item["Tarifna oznaka"],
+        text: item["Puni Naziv"].split(">>>").pop().trim(),
+        display: `${item["Tarifna oznaka"]} – ${item["Naziv"]}`,
+        depth: item["Puni Naziv"].split(">>>").length - 1,
+        isLeaf: item["Tarifna oznaka"].replace(/\s/g, '').length === 10,
+        search: [item["Naziv"], item["Puni Naziv"], item["Tarifna oznaka"]].join(" ").toLowerCase()
+    }));
+
+
+    Swal.fire({
+        title: 'Automatski popuniti?',
+        text: 'Podaci o dobavljaču i fakturi će biti popunjeni automatski. Tarifne oznake i pripadajuće elemente možete unijeti ručno.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: '<i class="fas fa-wand-magic-sparkles fs-6 me-1"></i> Koristi AI podatke',
+        customClass: {
+                        confirmButton: 'btn btn-info',
+                        cancelButton: 'btn btn-info ',
+
+            },
+        cancelButtonText: 'Unos ručno'
+    }).then(async (result) => {
+        document.getElementById("newlink").innerHTML = "";
+        if (result.isConfirmed) {
+            disableAIPills = false;
+            const resultData = await waitForAIResult();
+            const aiItems = resultData?.items || [];
+            aiItems.forEach((item, idx) => {
+                globalAISuggestions[idx] = item.detected_codes?.sort((a, b) => a.closeness - b.closeness) || [];
+                addRowToInvoice(item, globalAISuggestions[idx]);
         function initializeTariffSelects() {
             $('.select2-tariff').select2(select2Options);
             $('.select2-tariff').on('select2:select', function (e) {
@@ -449,6 +550,36 @@
                 calculateInvoiceTotals();
             });
 
+        const token = localStorage.getItem("auth_token");
+
+        const response = await fetch(`http://localhost:8000/api/invoices/users/${userId}/suppliers/${supplierId}/form`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+        });
+
+        console.log("📡 Response status:", response.status);
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error("Error response from server:", errorText);
+            throw new Error("Greška pri slanju fakture: " + (errorText || "Nepoznata greška"));
+        }
+
+        const responseData = await response.json();
+        console.log(" Response data:", responseData);
+
+        Swal.fire({
+            icon: "success",
+            title: "Faktura spašena!",
+            text: "Uspješno ste kreirali fakturu.",
+            confirmButtonText: "U redu",
+            customClass: {
+                        confirmButton: 'btn btn-info w-xs mt-2',
+            },
             return row;
         }
 
@@ -534,6 +665,15 @@
         });
     </script>
 
+    } catch (err) {
+        console.error(" Catch block error:", err);
+        Swal.fire("Greška", err.message || "Došlo je do greške.", "error");
+    } finally {
+        button.disabled = false;
+        button.innerHTML = `<i class="ri-printer-line align-bottom me-1"></i> Save`;
+    }
+});
+</script>
 
 
 

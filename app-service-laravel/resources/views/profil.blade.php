@@ -237,13 +237,13 @@
     <div class="profile-wid-bg">
         <div class="text-end p-3" style="position: absolute; right: 0;">
             <div class="p-0 ms-auto rounded-circle profile-photo-edit">
-                <input id="profile-foreground-img-file-input" type="file" class="profile-foreground-img-file-input d-none">
-                <label for="profile-foreground-img-file-input" class="profile-photo-edit btn btn-light w-100">
+                <input id="background-img-input" type="file" class="profile-foreground-img-file-input d-none">
+                <label for="background-img-input" class="profile-photo-edit btn btn-light w-100">
                     <i class="ri-image-edit-line align-bottom me-1"></i> Promijeni naslovnu sliku
                 </label>
             </div>
         </div>
-        <img src="{{ URL::asset('build/icons/businessman.jpg') }}" class="profile-wid-img" alt="Profile Background">
+        <img id="profile-background" src="/images/profile-bg.jpg" class="profile-wid-img" alt="Profile Background">
     </div>
 </div>
 
@@ -253,8 +253,13 @@
         <div class="col-auto">
             <div class="avatar-lg position-relative" id="avatar-wrapper">
                 <!-- Avatar image -->
-                <img id="user-avatar" src="/build/images/users/avatar-1.jpg" class="img-thumbnail rounded-circle"
+                <img id="user-avatar" class="img-thumbnail rounded-circle"
                     alt="User Avatar">
+
+                <div id="avatar-fallback" class="rounded-circle d-flex justify-content-center align-items-center text-white fw-bold bg-info d-none"
+                    style="width: 100%; height: 100%; font-size: 1.5rem;">
+                    <!-- initial goes here -->
+                </div>
 
                 <!-- Hover overlay with edit icon -->
                 <div class="avatar-overlay position-absolute top-0 start-0 w-100 h-100   text-white bg-dark bg-opacity-50 rounded-circle"
@@ -314,7 +319,7 @@
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="tab" href="#projects">Paketi</a>
             </li>
-           
+
         </ul>
 
         <!-- Tab Content -->
@@ -322,7 +327,7 @@
 
 
 
-            
+
 
 
             <!-- Overview Tab -->
@@ -357,25 +362,10 @@
                             <div class="card-body d-flex flex-column justify-content-between">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <h5 class="card-title mb-0">Moji dokumenti</h5>
-                                    <a data-bs-toggle="tab" href="#activities" id="viewAllDocuments" class="text-info fs-13">View all</a>
+                                    <a href="moje-fakture" class="text-info fs-13">View all</a>
                                 </div>
-                                <div class="row g-3 mt-auto">
-                                    <div class="col-6 col-sm-3 text-center">
-                                        <i class="ri-file-pdf-2-line fs-24 text-info"></i>
-                                        <p class="fs-13 text-muted mt-1 mb-0">Dokument.pdf</p>
-                                    </div>
-                                    <div class="col-6 col-sm-3 text-center">
-                                        <i class="ri-file-image-line fs-24 text-info"></i>
-                                        <p class="fs-13 text-muted mt-1 mb-0">Slika.jpg</p>
-                                    </div>
-                                    <div class="col-6 col-sm-3 text-center">
-                                        <i class="ri-file-excel-2-line fs-24 text-info"></i>
-                                        <p class="fs-13 text-muted mt-1 mb-0">Tabela.xlsx</p>
-                                    </div>
-                                    <div class="col-6 col-sm-3 text-center">
-                                        <i class="ri-file-image-line fs-24 text-info"></i>
-                                        <p class="fs-13 text-muted mt-1 mb-0">Grafika.png</p>
-                                    </div>
+                                <div class="row g-3 mt-auto" id="user-documents">
+                                    <!-- JS will inject 4 document tiles here -->
                                 </div>
                             </div>
                         </div>
@@ -393,15 +383,17 @@
                                             Osobni podaci
                                         </a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link text-info" data-bs-toggle="tab" href="#changePassword" role="tab">
-                                            <i class="fas fa-key"></i>
-                                            Promjena lozinke
-                                        </a>
+
                                     <li class="nav-item">
                                         <a class="nav-link text-info" data-bs-toggle="tab" href="#companyDetails" role="tab">
                                             <i class="fa-solid fa-building"></i>
                                             Podaci o kompaniji
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-info" data-bs-toggle="tab" href="#changePassword" role="tab">
+                                            <i class="fas fa-key"></i>
+                                            Promjena lozinke
                                         </a>
                                     </li>
                                 </ul>
@@ -760,8 +752,9 @@
                                     </div>
                                     <hr class="my-3 text-muted">
                                     <ul class="list-unstyled text-muted vstack gap-3 mb-3">
-                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>100</b> Skeniranja</li>
-                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>1000</b> Faktura u historiji</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>100</b>AI Skeniranja Fakture</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>50 strana</b> po Fakturi</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>200</b> Faktura u historiji</li>
                                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: <b>20 s</b></li>
                                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i>30 dana</li>
                                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
@@ -793,8 +786,9 @@
                                     </div>
                                     <hr class="my-3 text-muted">
                                     <ul class="list-unstyled text-muted vstack gap-3 mb-3">
-                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>200</b> Skeniranja</li>
-                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>5000</b> Faktura u historiji</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>200</b> AI Skeniranja Fakture</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>150 strana</b> po Fakturi</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>500</b> Faktura u historiji</li>
                                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: <b>10 s</b></li>
                                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i>120 dana</li>
                                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
@@ -825,7 +819,8 @@
                                     </div>
                                     <hr class="my-3 text-muted">
                                     <ul class="list-unstyled text-muted vstack gap-3 mb-3">
-                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>500</b> Skeniranja</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>500</b> AI Skeniranja Fakture</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>Neograničeno strana </b> po Fakturi</li>
                                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>Neograničeno</b> faktura u historiji</li>
                                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: <b>4 s</b></li>
                                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i>365 dana</li>
@@ -995,46 +990,7 @@
     </div>
 </div>
 
-<!-- Scan Modal samo za ovaj screen -->
-<div class="modal fade" id="scanModal" tabindex="-1" aria-labelledby="scanModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="scanModalLabel">Skeniraj fakturu</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
-            </div>
-            <div class="modal-body d-flex justify-content-center">
-                <div class="dropzone" id="dropzone">
-                    <input type="file" id="fileInput" multiple>
-                    <div class="corner corner-top-left"></div>
-                    <div class="corner corner-top-right"></div>
-                    <div class="corner corner-bottom-left"></div>
-                    <div class="corner corner-bottom-right"></div>
 
-                    <div class="text-center" id="dropzone-content">
-                        <i class="ri-file-2-line text-info fs-1"></i>
-                        <p class="mt-3">Prevucite dokument ovdje ili kliknite kako bi uploadali i skenirali vašu fakturu</p>
-                    </div>
-
-                    <div class="file-list" id="fileList" style="display: none;"></div>
-
-                    <div class="progress mt-3 w-100" id="uploadProgressContainer" style="display: none;">
-                        <div id="uploadProgressBar" class="progress-bar bg-info" role="progressbar" style="width: 0%">0%</div>
-                    </div>
-
-                    <div id="scanningLoader" class="mt-4 text-center d-none">
-                        <div class="spinner-border text-info" role="status" style="width: 3rem; height: 3rem;"></div>
-                        <p class="mt-3 fw-semibold" id="scanningText">Skeniranje fakture...</p>
-                        <div id="successCheck" class="d-none mt-3">
-                            <i class="ri-checkbox-circle-fill text-success fs-1 animate__animated animate__zoomIn"></i>
-                            <p class="text-success fw-semibold mt-2">Uspješno skenirano!</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 
@@ -1069,176 +1025,12 @@
 
 
 
-<script>
-    document.getElementById('viewAllDocuments').addEventListener('click', function(event) {
-        event.preventDefault();
 
-        // Manually trigger the Bootstrap tab
-        const triggerTab = new bootstrap.Tab(document.querySelector('a[href="#activities"]'));
-        triggerTab.show();
-    });
-</script>
 <!-- jQuery (MUST be before DataTables) -->
 
 
-<!-- DataTable Initialization -->
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const token = localStorage.getItem("auth_token");
-        const user = JSON.parse(localStorage.getItem("user"));
 
-        if (!token || !user) {
-            alert("Niste prijavljeni.");
-            return;
-        }
 
-        const table = $('#invoicesTable').DataTable({
-            ajax: {
-                url: `/api/invoices/users/${user.id}`,
-                dataSrc: "",
-                beforeSend: function(xhr) {
-                    xhr.setRequestHeader("Authorization", `Bearer ${token}`);
-                }
-            },
-            scrollX: true,
-            autoWidth: true,
-            lengthChange: false,
-            fixedColumns: {
-                leftColumns: 1,
-                rightColumns: 0
-            },
-            columns: [{
-                    data: null,
-                    title: 'ID',
-                    render: function(data, type, row, meta) {
-                        return meta.row + 1;
-                    }
-                },
-                {
-                    data: 'file_name',
-                    title: 'Moje fakture',
-                    render: function(data, type, row) {
-                        return `<a href="#" class="text-info view-invoice" data-id="${row.id}">${data}</a>`;
-                    }
-                },
-                {
-                    data: 'country_of_origin',
-                    title: 'Zemlja porijekla'
-                },
-                {
-                    data: 'file_name',
-                    title: 'Tip datoteke',
-                    render: function(data) {
-                        if (!data) return '<span class="badge bg-secondary">N/A</span>';
-                        const ext = data.split('.').pop().toLowerCase();
-
-                        let badgeClass = 'bg-secondary';
-                        if (ext === 'pdf') badgeClass = 'bg-danger';
-                        else if (['xls', 'xlsx'].includes(ext)) badgeClass = 'bg-success';
-                        else if (['jpg', 'jpeg', 'png'].includes(ext)) badgeClass = 'bg-warning';
-                        else if (ext === 'txt') badgeClass = 'bg-dark';
-
-                        return `<span class="badge ${badgeClass} text-uppercase">${ext}</span>`;
-                    }
-                },
-                {
-                    data: 'total_price',
-                    title: 'Cijena fakture',
-                    render: function(data) {
-                        return `${parseFloat(data).toFixed(2)} KM`;
-                    }
-                },
-                {
-                    data: 'date_of_issue',
-                    title: 'Datum',
-                    render: function(data) {
-                        return new Date(data).toLocaleDateString('hr');
-                    }
-                },
-                {
-                    data: 'scanned',
-                    title: 'Skenirana',
-                    render: function(data) {
-                        return data === 1 ? 'Da' : 'Ne';
-                    }
-                },
-                {
-                    data: 'supplier.name',
-                    title: 'Dobavljač',
-                    defaultContent: '<span class="text-muted">N/A</span>'
-                },
-                {
-                    data: 'supplier.owner',
-                    title: 'Vlasnik',
-                    defaultContent: '<span class="text-muted">N/A</span>'
-                }
-            ],
-            dom: 'Bfrtip',
-            buttons: [{
-                    text: '<i class="ri-ai-generate-2 fs-5 me-1"></i> Skeniraj s AI',
-                    className: 'nav-link px-3 py-2 text-custom',
-                    action: function() {
-                        window.location = '/pages-scan';
-                    }
-                },
-                {
-                    extend: 'csv',
-                    text: 'Export u CSV',
-                    className: 'nav-link px-3 py-2 text-custom'
-                },
-                {
-                    extend: 'excelHtml5',
-                    text: 'Export u Excel',
-                    className: 'nav-link px-3 py-2 text-custom',
-                    exportOptions: {
-                        columns: ':visible'
-                    }
-                },
-                {
-                    extend: 'pdf',
-                    text: 'Export u PDF',
-                    className: 'nav-link px-3 py-2 text-custom',
-                    exportOptions: {
-                        columns: ':visible'
-                    }
-                },
-                {
-                    extend: 'print',
-                    text: 'Štampa',
-                    className: 'nav-link px-3 py-2 text-custom',
-                    exportOptions: {
-                        columns: ':visible'
-                    }
-                },
-                {
-                    extend: 'colvis',
-                    text: 'Kolone',
-                    className: 'nav-link px-3 py-2 text-custom'
-                },
-                {
-                    extend: 'pageLength',
-                    text: 'Prikaži redova',
-                    className: 'nav-link px-3 py-2 text-custom'
-                }
-            ],
-            language: {
-                paginate: {
-                    first: "Prva",
-                    last: "Posljednja",
-                    next: "Sljedeća",
-                    previous: "Prethodna"
-                },
-                info: "",
-                infoEmpty: "Prikazivanje 0 do 0 od 0 stavki",
-                infoFiltered: "(filtrirano iz _MAX_ ukupnih stavki)",
-                search: '<i class="ri-search-eye-line fs-4"></i>  ',
-                zeroRecords: "Nema pronađenih stavki"
-            }
-        });
-
-        table.buttons().container().appendTo('#invoicesTable_wrapper .row .col-md-6:eq(0)');
-    });
-</script>
 
 
 
@@ -1286,15 +1078,16 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const token = localStorage.getItem("auth_token");
-        const user = JSON.parse(localStorage.getItem("user")); // contains ID
+        const user = JSON.parse(localStorage.getItem("user"));
         const avatarBasePath = "/storage/uploads/avatars/";
+
+        const avatarImg = document.getElementById("user-avatar");
+        const avatarFallback = document.getElementById("avatar-fallback");
 
         if (!token || !user) {
             alert("Niste prijavljeni.");
             return;
         }
-
-
 
         // 1. Fetch user and update UI
         fetch(`/api/users/${user.id}`, {
@@ -1304,31 +1097,48 @@
             })
             .then(res => res.json())
             .then(data => {
-                console.log(" Fetched user data:", data);
                 const userData = data.user;
-                document.getElementById("user-avatar").src = avatarBasePath + userData.avatar;
+                const avatar = userData.avatar;
+                const firstLetter = (userData.first_name || userData.username || "U")[0].toUpperCase();
+
+                // Profile data
                 document.getElementById("profile-username").textContent = userData.first_name;
                 document.getElementById("profile-lastname").textContent = userData.last_name;
-
                 document.getElementById("profile-location").innerHTML =
                     `<i class="ri-map-pin-user-line align-middle"></i> ${userData.city || 'Nepoznat grad'}, ${userData.country || 'Nepoznata država'}`;
+
+                if (avatar) {
+                    const testImage = new Image();
+                    testImage.onload = function() {
+                        // Avatar exists on disk — show image
+                        avatarImg.src = avatarBasePath + avatar;
+                        avatarImg.classList.remove("d-none");
+                        avatarFallback.classList.add("d-none");
+                    };
+                    testImage.onerror = function() {
+                        // Avatar not found on disk — fallback to initial
+                        avatarFallback.textContent = firstLetter;
+                        avatarFallback.classList.remove("d-none");
+                        avatarImg.classList.add("d-none");
+                    };
+                    testImage.src = avatarBasePath + avatar;
+                } else {
+                    avatarFallback.textContent = firstLetter;
+                    avatarFallback.classList.remove("d-none");
+                    avatarImg.classList.add("d-none");
+                }
+
             });
 
-        // 2. Overlay click → open file input
+        // 2. Avatar overlay → trigger file input
         document.querySelector(".avatar-overlay").addEventListener("click", function() {
-            console.log(" Overlay clicked – opening file input");
             document.getElementById("avatar-input").click();
         });
 
-        // 3. On file selected → upload and update avatar
+        // 3. On avatar file select → upload → update user
         document.getElementById("avatar-input").addEventListener("change", function() {
             const file = this.files[0];
-            if (!file) {
-                console.warn(" No file selected.");
-                return;
-            }
-
-            console.log(" Selected file:", file.name);
+            if (!file) return;
 
             const formData = new FormData();
             formData.append("file", file);
@@ -1343,26 +1153,16 @@
                 })
                 .then(async res => {
                     const text = await res.text();
-                    console.log(" Raw response from upload:", text);
-
                     try {
                         return JSON.parse(text);
                     } catch (e) {
                         throw new Error("Invalid JSON: " + text);
                     }
                 })
-                .then(uploadResponse => {
-                    console.log("Upload response:", uploadResponse);
+                .then(upload => {
+                    const avatarFileName = upload.stored_as;
+                    if (!avatarFileName) throw new Error("No avatar returned");
 
-                    const avatarFileName = uploadResponse.stored_as; // <-- confirm this key
-                    if (!avatarFileName) {
-                        console.error("avatarFileName not found in upload response.");
-                        return;
-                    }
-
-                    console.log(" New avatar file name:", avatarFileName);
-
-                    // Update user with new avatar
                     return fetch(`/api/users/${user.id}`, {
                         method: "PUT",
                         headers: {
@@ -1375,93 +1175,20 @@
                     });
                 })
                 .then(res => res.json())
-                .then(updateResponse => {
-                    console.log("Update response:", updateResponse);
-                    const updatedAvatar = updateResponse.user.avatar;
-                    document.getElementById("user-avatar").src = `${avatarBasePath}${updatedAvatar}?t=${Date.now()}`;
+                .then(update => {
+                    const updatedAvatar = update.user.avatar;
+                    avatarImg.src = `${avatarBasePath}${updatedAvatar}?t=${Date.now()}`;
+                    avatarImg.classList.remove("d-none");
+                    avatarFallback.classList.add("d-none");
                 })
                 .catch(err => {
-                    console.error("Error during avatar upload or update:", err);
+                    console.error("Error uploading avatar:", err);
                 });
         });
     });
 </script>
 
 <!-- View invoice logic -->
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        $(document).on('click', '.view-invoice', function(e) {
-            e.preventDefault();
-            const invoiceId = $(this).data('id');
-            const token = localStorage.getItem("auth_token");
-
-            fetch(`/api/invoices/${invoiceId}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                })
-                .then(response => response.json())
-                .then(invoice => {
-                    // Fetch supplier details
-                    fetch(`/api/suppliers/${invoice.supplier_id}`, {
-                            headers: {
-                                'Authorization': `Bearer ${token}`
-                            }
-                        })
-                        .then(res => res.json())
-                        .then(supplier => {
-                            // Fill invoice data
-                            $('#invoice-no').text(invoice.id);
-                            $('#invoice-date').text(new Date(invoice.date_of_issue).toLocaleDateString('hr'));
-                            $('#total-amount').text(`${parseFloat(invoice.total_price).toFixed(2)} KM`);
-                            $('#card-total-amount').text(`${parseFloat(invoice.total_price).toFixed(2)}`);
-                            $('#address-details').text(invoice.country_of_origin || '-');
-                            $('#payment-status').text(invoice.scanned === 1 ? 'Skenirano' : 'Nije skenirano');
-                            $('#shipping-country').text(invoice.country_of_origin || '--');
-
-                            // Supplier info
-                            $('#billing-name').text(supplier.name || '--');
-                            $('#billing-address-line-1').text(supplier.address || '--');
-                            $('#billing-phone-no').text(supplier.contact_phone || '--');
-                            $('#billing-tax-no').text(supplier.tax_id || '--');
-                            $('#email').text(supplier.contact_email || '--');
-
-                            // Fill invoice items and calculate total
-                            let itemsHTML = '';
-                            let totalSum = 0;
-
-                            invoice.items.forEach((item, index) => {
-                                const price = parseFloat(item.total_price || 0);
-                                totalSum += price;
-
-                                itemsHTML += `
-                                        <tr>
-                                            <th scope="row">${index + 1}</th>
-                                            <td class="text-start fw-medium">${item.item_description_original}</td> <!-- Artikal -->
-                                            <td class="text-muted text-wrap" style="white-space: normal; word-break: break-word; max-width: 500px;">${item.item_description}</td> <!-- Opis -->
-                                            <td>${item.base_price} ${item.currency}</td> <!-- Cijena -->
-                                            <td>${item.quantity}</td> <!-- Količina -->
-                                            <td class="text-end">${item.total_price} ${item.currency}</td> <!-- Ukupno -->
-                                        </tr>`;
-                            });
-
-                            $('#products-list').html(itemsHTML);
-                            $('#modal-total-amount').text(totalSum.toFixed(2));
-
-                            // Show modal
-                            const modal = new bootstrap.Modal(document.getElementById('invoiceDetailsModal'));
-                            modal.show();
-                        });
-                })
-                .catch(err => {
-                    console.error('Greška pri učitavanju fakture:', err);
-                    alert('Greška pri učitavanju fakture.');
-                });
-        });
-    });
-</script>
-
-
 
 
 
@@ -1717,8 +1444,8 @@
 <!-- Update User data -->
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("update-user-btn").addEventListener("click", async function (e) {
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("update-user-btn").addEventListener("click", async function(e) {
             e.preventDefault();
             e.stopPropagation();
 
@@ -1762,20 +1489,23 @@
                 const responseData = await response.json();
                 const updatedUser = responseData.user;
 
-                // 🔄 Live update UI
+                //  Live update UI
                 document.getElementById("profile-username").textContent = updatedUser.first_name;
                 document.getElementById("profile-lastname").textContent = updatedUser.last_name;
                 document.getElementById("profile-location").innerHTML =
                     `<i class="ri-map-pin-user-line align-middle"></i> ${updatedUser.city || 'Nepoznat grad'}, ${updatedUser.country || 'Nepoznata država'}`;
 
-                // 🔄 Update localStorage
+                //  Update localStorage
                 localStorage.setItem("user", JSON.stringify(updatedUser));
 
                 Swal.fire({
                     icon: "success",
                     title: "Uspješno!",
                     text: "Vaši podaci su ažurirani.",
-                    confirmButtonText: "U redu"
+                    confirmButtonText: "U redu",
+                    customClass: {
+                        confirmButton: 'btn btn-info w-xs mt-2',
+                    },
                 });
 
             } catch (err) {
@@ -1785,6 +1515,125 @@
         });
     });
 </script>
+
+<!-- Fetch User Company data -->
+
+<script>
+    document.addEventListener("DOMContentLoaded", async function() {
+        try {
+            const user = JSON.parse(localStorage.getItem("user"));
+            const token = localStorage.getItem("auth_token");
+
+            if (!user || !token) {
+                console.warn("User or token not found in localStorage");
+                return;
+            }
+
+            const response = await fetch(`http://localhost:8000/api/users/${user.id}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                console.error("Failed to fetch user data");
+                return;
+            }
+
+            const data = await response.json();
+            const company = data.user?.company;
+
+            if (!company) {
+                console.warn("No company data found for user");
+                return;
+            }
+
+            const safeSet = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) el.value = value || "";
+            };
+
+            // Fill company form fields
+            safeSet("companyNameInput", company.name);
+            safeSet("addressInput", company.address);
+            safeSet("documentIdInput", company.id);
+            safeSet("vatInput", company.pdv);
+            safeSet("ownerInput", company.owner);
+            safeSet("contactPersonInput", company.contact_person);
+            safeSet("contactNumberInput", company.contact_number);
+
+        } catch (err) {
+            console.error("Error loading company data:", err);
+        }
+    });
+</script>
+<!-- Update user company data -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("update-company-btn").addEventListener("click", async function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const user = JSON.parse(localStorage.getItem("user"));
+            const token = localStorage.getItem("auth_token");
+
+            if (!user || !token) {
+                console.error("User or token not found in localStorage.");
+                return;
+            }
+
+            const companyPayload = {
+                company: {
+                    name: document.getElementById("companyNameInput").value.trim(),
+                    address: document.getElementById("addressInput").value.trim(),
+                    id: document.getElementById("documentIdInput").value.trim(),
+                    pdv: document.getElementById("vatInput").value.trim(),
+                    owner: document.getElementById("ownerInput").value.trim(),
+                    contact_person: document.getElementById("contactPersonInput").value.trim(),
+                    contact_number: document.getElementById("contactNumberInput").value.trim(),
+                }
+            };
+
+            try {
+                const response = await fetch(`http://localhost:8000/api/users/${user.id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify(companyPayload)
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error("Greška pri ažuriranju podataka: " + errorText);
+                }
+
+                const responseData = await response.json();
+                const updatedUser = responseData.user;
+
+                //  Update localStorage
+                localStorage.setItem("user", JSON.stringify(updatedUser));
+
+                Swal.fire({
+                    icon: "success",
+                    title: "Uspješno!",
+                    text: "Podaci o kompaniji su ažurirani.",
+                    confirmButtonText: "U redu",
+                    customClass: {
+                        confirmButton: 'btn btn-info w-xs mt-2',
+                    },
+                });
+
+            } catch (err) {
+                console.error("Error:", err);
+                Swal.fire("Greška", err.message || "Nešto je pošlo po zlu.", "error");
+            }
+        });
+    });
+</script>
+
+
 
 
 <!-- Moji dobavljači dynamic fetch-->
@@ -1924,6 +1773,215 @@
         }
     });
 </script>
+
+<!-- Profile bg-img static upload logic temporary -->
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const token = localStorage.getItem("auth_token");
+        const user = JSON.parse(localStorage.getItem("user"));
+        const backgroundImage = document.getElementById("profile-background");
+        const input = document.getElementById("background-img-input");
+
+        const backgroundUploadPath = "/storage/uploads/profile_backgrounds/";
+        const defaultImagePath = "/images/profile-bg.jpg";
+
+        if (!token || !user) {
+            console.warn("User not authenticated.");
+            return;
+        }
+
+        // Load background from localStorage or fallback
+        const savedBackground = localStorage.getItem(`user-bg-${user.id}`);
+        if (savedBackground) {
+            backgroundImage.src = `${backgroundUploadPath}${savedBackground}?t=${Date.now()}`;
+        } else {
+            backgroundImage.src = defaultImagePath;
+        }
+
+        // Upload logic
+        input.addEventListener("change", function() {
+            const file = this.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("folder", "profile_backgrounds");
+
+            fetch(`/api/storage/uploads`, {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(upload => {
+                    const filename = upload.stored_as;
+                    if (!filename) throw new Error("No file name returned.");
+
+                    // Save + display
+                    localStorage.setItem(`user-bg-${user.id}`, filename);
+                    backgroundImage.src = `${backgroundUploadPath}${filename}?t=${Date.now()}`;
+                })
+                .catch(err => {
+                    console.error("Upload failed:", err);
+                });
+        });
+    });
+</script>
+
+<!-- Invoice fetch dynamic -->
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const token = localStorage.getItem("auth_token");
+        const user = JSON.parse(localStorage.getItem("user"));
+        const docsContainer = document.getElementById("user-documents");
+
+        if (!token || !user || !docsContainer) return;
+
+        fetch(`/api/invoices/users/${user.id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                const invoices = Array.isArray(data) ? data : [];
+
+                const lastFour = invoices
+                    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+                    .slice(0, 4);
+
+                const iconMap = {
+                    pdf: "ri-file-pdf-2-line",
+                    xls: "ri-file-excel-2-line",
+                    xlsx: "ri-file-excel-2-line",
+                    jpg: "ri-file-image-line",
+                    jpeg: "ri-file-image-line",
+                    png: "ri-file-image-line",
+                    txt: "ri-file-text-line",
+                    doc: "ri-file-word-2-line",
+                    docx: "ri-file-word-2-line",
+                    default: "ri-file-line"
+                };
+
+                docsContainer.innerHTML = lastFour
+                    .map(inv => {
+                        const ext = inv.file_name.split(".").pop().toLowerCase();
+                        const icon = iconMap[ext] || iconMap.default;
+                        const file = inv.file_name;
+
+                        return `
+                        <div class="col-6 col-sm-3 text-center">
+                            <a href="#" class="text-decoration-none view-invoice" data-id="${inv.id}" title="Pregled fakture">
+                                <i class="${icon} fs-24 text-info"></i>
+                                <p class="fs-13 text-muted mt-1 mb-0">${file}</p>
+                            </a>
+                        </div>
+                    `;
+                    })
+                    .join("");
+            })
+            .catch(err => {
+                console.error("Failed to fetch user invoices:", err);
+            });
+    });
+</script>
+
+
+
+<!-- view last 4 invoices modal logic -->
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Bind click event to all current and future .view-invoice elements
+        $(document).on('click', '.view-invoice', function(e) {
+            e.preventDefault();
+            const invoiceId = $(this).data('id');
+            if (invoiceId) openInvoiceModal(invoiceId);
+        });
+
+        function openInvoiceModal(invoiceId) {
+            const token = localStorage.getItem("auth_token");
+
+            // Fetch invoice details
+            fetch(`/api/invoices/${invoiceId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                .then(res => res.json())
+                .then(invoice => {
+                    // Fetch supplier details after invoice
+                    return fetch(`/api/suppliers/${invoice.supplier_id}`, {
+                            headers: {
+                                'Authorization': `Bearer ${token}`
+                            }
+                        })
+                        .then(res => res.json())
+                        .then(supplier => ({
+                            invoice,
+                            supplier
+                        }));
+                })
+                .then(({
+                    invoice,
+                    supplier
+                }) => {
+                    // Fill static invoice fields
+                    $('#invoice-no').text(invoice.id);
+                    $('#invoice-date').text(new Date(invoice.date_of_issue).toLocaleDateString('hr'));
+                    $('#total-amount').text(`${parseFloat(invoice.total_price).toFixed(2)} KM`);
+                    $('#modal-total-amount').text(`${parseFloat(invoice.total_price).toFixed(2)} KM`);
+                    $('#payment-status').text(invoice.scanned ? 'Skenirana' : 'Nije skenirana');
+                    $('#shipping-country').text(invoice.country_of_origin || '--');
+
+                    // Supplier info
+                    $('#billing-name').text(supplier.name || '--');
+                    $('#billing-address-line-1').text(supplier.address || '--');
+                    $('#billing-phone-no').text(supplier.contact_phone || '--');
+                    $('#billing-tax-no').text(supplier.tax_id || '--');
+                    $('#email').text(supplier.contact_email || '--');
+
+                    // Invoice items
+                    let itemsHTML = '';
+                    let totalSum = 0;
+
+                    (invoice.items || []).forEach((item, index) => {
+                        const price = parseFloat(item.total_price || 0);
+                        totalSum += price;
+
+                        itemsHTML += `
+                    <tr>
+                        <th scope="row">${index + 1}</th>
+                        <td class="text-start fw-medium">${item.item_description_original}</td>
+                        <td class="text-muted text-wrap" style="white-space: normal; word-break: break-word; max-width: 500px;">${item.item_description}</td>
+                        <td>${item.base_price} ${item.currency}</td>
+                        <td>${item.quantity}</td>
+                        <td class="text-end">${item.total_price} ${item.currency}</td>
+                    </tr>`;
+                    });
+
+                    $('#products-list').html(itemsHTML);
+                    $('#modal-total-amount').text(totalSum.toFixed(2));
+
+                    // Reset any old backdrop and show modal
+                    $('.modal-backdrop').remove();
+                    $('body').removeClass('modal-open').css('padding-right', '');
+                    bootstrap.Modal.getOrCreateInstance(document.getElementById('invoiceDetailsModal')).show();
+                })
+                .catch(err => {
+                    console.error('Greška pri učitavanju fakture:', err);
+                    alert('Greška pri učitavanju fakture.');
+                });
+        }
+    });
+</script>
+
+
+
 
 
 
