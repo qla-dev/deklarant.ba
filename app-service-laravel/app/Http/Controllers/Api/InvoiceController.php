@@ -30,6 +30,7 @@ class InvoiceController extends Controller
     {
         try {
             $invoice = Invoice::with('items')->findOrFail($id);
+            $this->fillWithAiDataIfNecessary($invoice);
             return response()->json($invoice);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Invoice not found with the given ID.'], 404);
@@ -39,6 +40,7 @@ class InvoiceController extends Controller
     public function getInvoicesBySupplier($supplierId)
     {
         try {
+            /** @var \App\Models\Invoice $invoice */
             $invoices = Invoice::where('supplier_id', $supplierId)
                 ->with(['items'])
                 ->get();
@@ -268,6 +270,50 @@ class InvoiceController extends Controller
             return response()->json(['error' => 'Invoice not found'], 404);
         } catch (Exception $e) {
             return response()->json(['error' => 'Failed to get scan result: ' . $e->getMessage()], 500);
+        }
+    }
+
+    private function fillWithAiDataIfNecessary(Invoice $invoice)
+    {
+        // Skip if invoice has no task_id or already has items
+        if (!$invoice->task_id || $invoice->items->isNotEmpty()) {
+            return;
+        }
+
+        try {
+            $aiService = app(AiService::class);
+            $result = $aiService->getTaskResult($invoice->task_id);
+            
+            if (empty($result['items'])) {
+                return;
+            }
+
+            // Create invoice items from AI data
+            $items = array_map(function ($item) {
+                $quantity = $item['quantity'] ?? 0;
+                $base_price = $item['unit_price'] ?? 0;
+                return [
+                    'version' => 1,
+                    'item_code' => '',
+                    'item_description_original' => $item['original_name'],
+                    'item_description' => $item['item_name'],
+                    'quantity' => $quantity,
+                    'base_price' => $base_price,
+                    'total_price' => $base_price * $quantity,
+                    'currency' => $item['currency'],
+                    'best_customs_code_matches' => $item['detected_codes'] ?? [],
+                ];
+            }, $result['items']);
+
+            // Save items
+            $invoice->items()->createMany($items);
+
+            // Reload invoice with fresh items
+            $invoice->load('items');
+            
+        } catch (Exception $e) {
+            // Log error but don't fail the request
+            \Log::error("Failed to fill invoice with AI data: " . $e->getMessage());
         }
     }
 

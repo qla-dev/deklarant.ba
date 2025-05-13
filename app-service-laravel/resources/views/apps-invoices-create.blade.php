@@ -331,9 +331,9 @@ function createInvoiceRow(id, item = {}, aiSuggestions = []) {
     row.classList.add("product");
 
     const quantity = item.quantity || 0;
-    const unitPrice = item.unit_price || 0;
-    const total = (quantity * unitPrice).toFixed(2);
-    const itemName = item.item_name || "";
+    const unitPrice = item.base_price || 0;
+    const total = item.total_price || (quantity * unitPrice).toFixed(2);
+    const itemName = item.item_description_original || "";
 
     row.innerHTML = `
         <th scope="row" class="product-id align-middle">${id}</th>
@@ -428,8 +428,12 @@ function addRowToInvoice(item = {}, suggestions = []) {
     calculateInvoiceTotals();
 }
 
+async function fillInvoiceData() {
+    const invoice = await getInvoice();
+    invoice.items.forEach(item => addRowToInvoice(item, item.best_customs_code_matches))
+}
 
-
+let _invoice_data = null;
 async function waitForAIResult() {
     invoice_id = getInvoiceId();
     if (!invoice_id) {
@@ -449,15 +453,15 @@ async function waitForAIResult() {
             const resJson = await res.json();
             // TODO
             if (resJson?.status?.status === "completed") {
+                // force refresh next time we want to get invoice data
                 _invoice_data = null;
-                const ret = getInvoice();
                 Swal.close();
-                return ret;
+                break;
             }
             if (resJson?.status?.status === "error") {
                 Swal.close();
                 Swal.fire("Greška", status.error_message, "error");
-                return null;
+                break;
             }
         } catch (e) {
             console.error("Greška u čekanju AI odgovora:", e);
@@ -470,7 +474,6 @@ function getInvoiceId() {
     return localStorage.getItem("scan_invoice_id");
 }
 
-let _invoice_data = null;
 async function getInvoice() {
     if (!_invoice_data) {
         _invoice_data = (await fetch(`/api/invoices/${getInvoiceId()}`, {
@@ -515,10 +518,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         search: [item["Naziv"], item["Puni Naziv"], item["Tarifna oznaka"]].join(" ").toLowerCase()
     }));
 
-
+    const invoice = await getInvoice();
     // only ask to ai-fill if invoice doesn't have task ID.
-    if ((await getInvoice()).task_id == null)
-        Swal.fire({
+    if (invoice.task_id == null)
+        await Swal.fire({
             title: 'Automatski popuniti?',
             text: 'Podaci o dobavljaču i fakturi će biti popunjeni automatski. Tarifne oznake i pripadajuće elemente možete unijeti ručno.',
             icon: 'question',
@@ -530,17 +533,18 @@ document.addEventListener("DOMContentLoaded", async function () {
             if (result.isConfirmed) {
                 disableAIPills = false;
                 if (await startAiScan()) {
-                    const resultData = await waitForAIResult();
-                    const aiItems = resultData?.items || [];
-                    fillInvoiceData(aiItems)
+                    await waitForAIResult();
                 };
             } else {
                 disableAIPills = true;
                 addRowToInvoice();
             }
         });
-    else
+    // if task is there but there are no items, it means we are pending for AI result
+    else if (!invoice.items?.length) {
         await waitForAIResult();
+    }
+    await fillInvoiceData();
 
     document.getElementById("add-item")?.addEventListener("click", () => addRowToInvoice());
 });
