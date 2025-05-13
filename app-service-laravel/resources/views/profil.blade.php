@@ -1107,7 +1107,7 @@
         .then(data => {
             const userData = data.user;
             const avatar = userData.avatar;
-            const firstLetter = (userData.first_name || userData.username || "U")[0].toUpperCase();
+            const firstLetter = (userData.username || userData.email || "U")[0].toUpperCase();
 
             // Profile data
             document.getElementById("profile-username").textContent = userData.first_name;

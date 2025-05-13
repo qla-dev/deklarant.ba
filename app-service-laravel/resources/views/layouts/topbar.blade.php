@@ -251,14 +251,75 @@
                                     id="topbar-username">
                                     <script>document.write(JSON.parse(localStorage.getItem("user"))?.username || "Korisnik");</script>
                                 </span>
-                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Bussines</span>
+                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Business</span>
 
 
                             </span>
 
-                            <img id="topbar-avatar" class="rounded-circle header-profile-user"
-                                src="/build/images/users/avatar-1.jpg" alt="Header Avatar" width="32" height="32">
+<img id="topbar-avatar" class="rounded-circle header-profile-user d-none"
+     width="32" height="32" />
+<div id="topbar-avatar-fallback"
+     class="rounded-circle bg-info text-white d-flex justify-content-center align-items-center"
+     style="width: 32px; height: 32px; font-size: 14px;">
+</div>
 
+<script>
+document.addEventListener("DOMContentLoaded", async function () {
+    const token = localStorage.getItem("auth_token");
+    const user = JSON.parse(localStorage.getItem("user"));
+    const avatarBasePath = "/storage/uploads/avatars/";
+
+    if (!token || !user || !user.id) {
+        alert("Niste prijavljeni.");
+        return;
+    }
+
+    const avatarImg = document.getElementById("user-avatar");
+    const avatarFallback = document.getElementById("avatar-fallback");
+
+    const topbarImg = document.getElementById("topbar-avatar");
+    const topbarFallback = document.getElementById("topbar-avatar-fallback");
+
+    // Show initials immediately
+    const firstLetter = (user.first_name || user.username || "U")[0].toUpperCase();
+    if (avatarFallback) avatarFallback.textContent = firstLetter;
+    if (topbarFallback) topbarFallback.textContent = firstLetter;
+
+    try {
+        const res = await fetch(`/api/users/${user.id}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        const avatar = data.user?.avatar;
+
+        if (avatar) {
+            const imgPath = `${avatarBasePath}${avatar}`;
+
+            const img = new Image();
+            img.onload = () => {
+                // Profile image
+                if (avatarImg) {
+                    avatarImg.src = imgPath;
+                    avatarImg.classList.remove("d-none");
+                    avatarFallback.classList.add("d-none");
+                }
+                // Topbar image
+                if (topbarImg) {
+                    topbarImg.src = imgPath;
+                    topbarImg.style.display = "block";
+                    topbarFallback.style.display = "none";
+                }
+            };
+            img.onerror = () => {
+                console.warn("Avatar image failed to load.");
+            };
+            img.src = imgPath;
+        }
+    } catch (err) {
+        console.error("Failed to fetch user or avatar:", err);
+    }
+});
+</script>
 
 
 
