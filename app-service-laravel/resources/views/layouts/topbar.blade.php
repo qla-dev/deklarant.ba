@@ -3,25 +3,26 @@
         <div class="navbar-header ">
             <div class="d-flex w-100">
                 <!-- LOGO -->
-                <div class="navbar-box horizontal-logo me-5 d-flex align-items-center">
+                <div class="navbar-box horizontal-logo me-lg-5 d-flex align-items-center">
                     <a href="/" class="logo logo-dark">
                         <span class="logo-sm">
-                            <img src="{{ URL::asset('build/images/logo-dek.png') }}" alt="" height="22">
+                            <img src="{{ URL::asset('build/images/logo-dek.png') }}" alt="" height="17">
                         </span>
                         <span class="logo-lg">
-                            <img src="{{ URL::asset('build/images/logo-dek.png') }}" alt="" height="17">
+                            <img src="{{ URL::asset('build/images/logo-dek.png') }}" alt="" height="22">
                         </span>
                     </a>
 
                     <a href="/" class="logo logo-light">
                         <span class="logo-sm">
-                            <img src="{{ URL::asset('build/images/logo-dek-white.png') }}" alt="" height="22">
+                            <img src="{{ URL::asset('build/images/logo-dek-white.png') }}" alt="" height="17">
                         </span>
                         <span class="logo-lg">
-                            <img src="{{ URL::asset('build/images/logo-dek-white.png') }}" alt="" height="17">
+                            <img src="{{ URL::asset('build/images/logo-dek-white.png') }}" alt="" height="22">
                         </span>
                     </a>
                 </div>
+
 
 
 
@@ -113,7 +114,7 @@
                         </div>
 
                         <div class="text-center pt-3 pb-1">
-                            <a href="pages-search-results" class="btn btn-primary btn-sm">View All Results <i
+                            <a href="pages-search-results" class="btn btn-info btn-sm">View All Results <i
                                     class="ri-arrow-right-line ms-1"></i></a>
                         </div>
                     </div>
@@ -122,13 +123,13 @@
 
             <div class="d-flex align-items-center">
 
-                <div class="topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
-                    <a href="/kursna-lista"
-                        class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none">
-                        <i class="ri-exchange-dollar-line" style="font-size:27px"></i>
+               <div class="topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
+    <a href="/kursna-lista"
+       class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none">
+        <i class="ri-exchange-dollar-line konverzija" style="font-size:27px"></i>
+    </a>
+</div>
 
-                    </a>
-                </div>
                 <div class="dropdown d-md-none topbar-head-dropdown header-item">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none"
                         id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
@@ -140,9 +141,9 @@
                         <form class="p-3">
                             <div class="form-group m-0">
                                 <div class="input-group">
-                                    <input type="text" class="form-control border border-2" placeholder="Search ..."
+                                    <input type="text" class="form-control border border-2" placeholder="Pretraga ..."
                                         aria-label="Recipient's username">
-                                    <button class="btn btn-primary" type="submit"><i
+                                    <button class="btn btn-info" type="submit"><i
                                             class="mdi mdi-magnify"></i></button>
                                 </div>
                             </div>
@@ -152,71 +153,74 @@
 
 
 
-                <div class="dropdown topbar-head-dropdown ms-1 header-item">
-                    <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none"
-                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class='bx bx-category-alt fs-2'></i>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-lg p-0 dropdown-menu-end">
-                        <div class="p-3 border-top-0 border-start-0 border-end-0 border-dashed border">
-                            <div class="row align-items-center">
-                                <div class="col">
-                                    <h6 class="m-0 fw-semibold fs-15"> Web Apps </h6>
-                                </div>
-                                <div class="col-auto">
-                                    <a href="#!" class="btn btn-sm btn-soft-info shadow-none"> View All Apps
-                                        <i class="ri-arrow-right-s-line align-middle"></i></a>
-                                </div>
-                            </div>
-                        </div>
+               <div class="dropdown topbar-head-dropdown header-item" id="menuDropdown">
+    <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none"
+        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class='bx bx-category-alt fs-2'></i>
+    </button>
 
-                        <div class="p-2">
-                            <div class="row g-0">
-                                <div class="col">
-                                    <a class="dropdown-icon-item" href="#!">
-                                        <img src="{{ URL::asset('build/images/brands/github.png') }}" alt="Github">
-                                        <span>GitHub</span>
-                                    </a>
-                                </div>
-                                <div class="col">
-                                    <a class="dropdown-icon-item" href="#!">
-                                        <img src="{{ URL::asset('build/images/brands/bitbucket.png') }}"
-                                            alt="bitbucket">
-                                        <span>Bitbucket</span>
-                                    </a>
-                                </div>
-                                <div class="col">
-                                    <a class="dropdown-icon-item" href="#!">
-                                        <img src="{{ URL::asset('build/images/brands/dribbble.png') }}" alt="dribbble">
-                                        <span>Dribbble</span>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="row g-0">
-                                <div class="col">
-                                    <a class="dropdown-icon-item" href="#!">
-                                        <img src="{{ URL::asset('build/images/brands/dropbox.png') }}" alt="dropbox">
-                                        <span>Dropbox</span>
-                                    </a>
-                                </div>
-                                <div class="col">
-                                    <a class="dropdown-icon-item" href="#!">
-                                        <img src="{{ URL::asset('build/images/brands/mail_chimp.png') }}"
-                                            alt="mail_chimp">
-                                        <span>Mail Chimp</span>
-                                    </a>
-                                </div>
-                                <div class="col">
-                                    <a class="dropdown-icon-item" href="#!">
-                                        <img src="{{ URL::asset('build/images/brands/slack.png') }}" alt="slack">
-                                        <span>Slack</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <div class="dropdown-menu dropdown-menu-lg p-0 dropdown-menu-end">
+        <div class="p-3 border-top-0 border-start-0 border-end-0 border-dashed border">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h6 class="m-0 fw-semibold fs-15"> Navigacija </h6>
                 </div>
+            </div>
+        </div>
+
+        <div class="p-2">
+            <div class="row g-0">
+                <div class="col-6">
+                    <a class="dropdown-icon-item" href="/">
+                        <i class="ri-home-line text-info fs-4 d-block mb-1"></i>
+                        <span>@lang('translation.home')</span>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a class="dropdown-icon-item" href="kalendar">
+                        <i class="ri-calendar-line text-info fs-4 d-block mb-1"></i>
+                        <span>@lang('translation.statistic')</span>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a class="dropdown-icon-item" href="moje-fakture">
+                        <i class="ri-file-line text-info fs-4 d-block mb-1"></i>
+                        <span>@lang('translation.myorder')</span>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a class="dropdown-icon-item" href="moji-dobavljaci">
+                        <i class="ri-truck-line text-info fs-4 d-block mb-1"></i>
+                        <span>@lang('translation.clients')</span>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a class="dropdown-icon-item" href="tarifne-oznake">
+                        <i class="mdi mdi-sticker-text-outline text-info fs-4 d-block mb-1"></i>
+                        <span>@lang('translation.declarant')</span>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a class="dropdown-icon-item" href="cijene-paketa">
+                        <i class="ri-price-tag-3-line text-info fs-4 d-block mb-1"></i>
+                        <span>@lang('translation.pricing')</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-12 text-center">
+                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#scanModal"
+                        class="btn btn-info btn-sm text-white w-100 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-wand-magic-sparkles fs-6 me-1"></i>
+                        <span>Skeniraj fakturu sa AI</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 

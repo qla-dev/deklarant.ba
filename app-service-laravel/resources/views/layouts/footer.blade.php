@@ -1,3 +1,12 @@
+<div class="mobile-footer-scan d-sm-none">
+    <button type="button"
+        class="btn btn-info btn-sm text-white w-100 d-flex align-items-center justify-content-center"
+        data-bs-toggle="modal" data-bs-target="#scanModal">
+        <i class="fas fa-wand-magic-sparkles fs-6 me-1"></i>
+        <span class="fs-6">Skeniraj fakturu sa AI</span>
+    </button>
+</div>
+
 <footer class="footer">
     <div class="container-fluid">
         <div class="row ">
