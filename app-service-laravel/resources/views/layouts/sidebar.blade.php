@@ -49,7 +49,7 @@
             <ul class="navbar-nav  " id="navbar-nav">
 
                 <li class="nav-item me-3">
-                    <a class="nav-link menu-link ps-0 d-flex align-items-center justify-content-between" href="{{ route('root') }}" id="homeLink">
+                    <a class="nav-link menu-link ps-0 d-flex align-items-center justify-content-between" href="#" id="homeLink">
                         <span>
                             <i class="ri-home-line text-info"></i>
                             <span>@lang('translation.home')</span>
@@ -59,6 +59,9 @@
 
                     <div class="collapse menu-dropdown" id="sidebarDashboards">
                         <ul class="nav nav-sm flex-column">
+                               <li class="nav-item">
+                                <a href="/" class="nav-link">@lang('translation.information_dashboard')</a>
+                            </li>
                             <li class="nav-item">
                                 <a href="analytics" class="nav-link">@lang('translation.analytics')</a>
                             </li>
@@ -109,123 +112,12 @@
                 
 
                 <li class="nav-item me-3">
-                    <a class="nav-link menu-link" href="kursna-lista"  role="button"
+                    <a class="nav-link menu-link" href="cijene-paketa"  role="button"
                         aria-expanded="false" aria-controls="sidebarUI">
-                        <i class="ri-exchange-dollar-line text-info"></i> <span>@lang('translation.exclist')
+                        <i class="ri-price-tag-3-line text-info"></i> <span>@lang('translation.pricing')
                         </span>
                     </a>
-                    <div class="collapse menu-dropdown mega-dropdown-menu" id="sidebarUI">
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a href="ui-alerts" class="nav-link">@lang('translation.alerts')
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="ui-badges" class="nav-link">@lang('translation.badges')
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="ui-buttons" class="nav-link">@lang('translation.buttons')
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="ui-colors" class="nav-link">@lang('translation.colors')
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="ui-cards" class="nav-link">@lang('translation.cards')
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="ui-carousel" class="nav-link">@lang('translation.carousel')
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="ui-dropdowns" class="nav-link">@lang('translation.dropdowns')
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="ui-grid" class="nav-link">@lang('translation.grid')
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-lg-4">
-                                <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a href="ui-images" class="nav-link">@lang('translation.images')
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="ui-tabs" class="nav-link">@lang('translation.tabs')
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="ui-accordions" class="nav-link">@lang('translation.accordion-collapse')
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="ui-modals" class="nav-link">@lang('translation.modals')
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="ui-offcanvas" class="nav-link">@lang('translation.offcanvas')
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="ui-placeholders" class="nav-link">@lang('translation.placeholders')
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="ui-progress" class="nav-link">@lang('translation.progress')
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="ui-notifications" class="nav-link">@lang('translation.notifications')
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-lg-4">
-                                <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a href="ui-media" class="nav-link">@lang('translation.media-object')
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="ui-embed-video" class="nav-link">@lang('translation.embed-video')
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="ui-typography" class="nav-link">@lang('translation.typography')
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="ui-lists" class="nav-link">@lang('translation.lists')
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="ui-links" class="nav-link"><span>@lang('translation.links')</span> <span
-                                                class="badge badge-pill bg-success">@lang('translation.new')</span></a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="ui-general" class="nav-link">@lang('translation.general')
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="ui-ribbons" class="nav-link">@lang('translation.ribbons')
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="ui-utilities" class="nav-link">@lang('translation.utilities')
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+              
 
                 </li>
 

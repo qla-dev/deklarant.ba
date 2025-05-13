@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-
+@lang('translation.invoices')
 @endsection
 @section('css')
 <link href="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
@@ -199,23 +199,22 @@ Lista faktura
 
 <div class="modal fade" id="invoiceDetailsModal" tabindex="-1" aria-labelledby="invoiceDetailsModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Pregled fakture</h5>
+                <h5 class="modal-title text-center w-100"><i class="fas fa-file-alt" style="font-size:14px;margin-top:-7px!important"></i>  Pregled fakture</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                     aria-label="Zatvori"></button>
             </div>
             <div class="modal-body p-0">
                 <div class="row justify-content-center">
-                    <div class="col-xxl-9">
-                        <div class="card" id="demo">
+                   <div class="card" id="demo">
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div
                                         class="card-header border-bottom-dashed p-4 d-flex justify-content-between">
                                         <div>
-                                            <img src="{{ URL::asset('build/images/logo.svg') }}"
+                                            <img src="{{ URL::asset('build/images/logo-dek.png') }}"
                                                 class="card-logo" alt="logo" height="30">
                                             <div class="mt-4">
                                                 <h6 class="text-muted text-uppercase fw-semibold">Adresa
@@ -369,7 +368,6 @@ Lista faktura
 
                             </div> <!-- row -->
                         </div> <!-- card -->
-                    </div>
                 </div>
             </div>
         </div>

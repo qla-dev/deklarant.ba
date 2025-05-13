@@ -159,7 +159,8 @@ class ProcessUploadedFile implements ShouldQueue
                 // 'format' => 'json',
                 'stream' => false,
                 'options' => [
-                    'temperature' => 0.1
+                    'temperature' => 0.1,
+                    'top_p' => 0.8,
                 ]
             ]
         ]);

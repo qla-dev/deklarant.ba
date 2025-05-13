@@ -3,6 +3,7 @@ return [
     "menu"=>"Menu",
     "dashboards"=>"Dashboards",
     "analytics"=>"Analitički dashboard",
+    "information_dashboard"=>"Informacioni dashboard",
     "analytics2"=>"Analytics",
     "crm"=>"CRM",
     "ecommerce"=>"Ecommerce",
@@ -40,7 +41,7 @@ return [
     "my-wallet"=>"My Wallet",
     "ico-list"=>"ICO List",
     "kyc-application"=>"KYC Application",
-    "invoices"=>"Invoices",
+    "invoices"=>"Moje fakture",
     "details"=>"Invoice Details",
     "create-invoice"=>"Create Invoice",
     "supprt-tickets"=>"Support Tickets",
@@ -69,13 +70,13 @@ return [
     "500"=>"500",
     "offline-page"=>"Offline Page",
     "starter"=>"Starter",
-    "profile"=>"Profile",
+    "profile"=>"Moj nalog",
     "simple-page"=>"Simple Page",
     "settings"=>"Settings",
     "team"=>"Team",
     "timeline"=>"Timeline",
     "faqs"=>"FAQs",
-    "pricing"=>"Pricing",
+    "pricing"=>"Cjenovnik",
     "gallery"=>"Gallery",
     "maintenance"=>"Maintenance",
     "coming-soon"=>"Coming Soon",
@@ -240,7 +241,8 @@ return [
     "exclist" => "Kursna lista",
     "myorder" => "Moje fakture",
     "clients" => "Moji dobavljači",
-    "declarant" => "Baza tarifnih oznaka"
+    "declarant" => "Baza tarifnih oznaka",
+
 
 ];
 ?>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Invoice;
 use App\Models\Supplier;
 use App\Models\User;
+use App\Services\AiService;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Exception;
@@ -41,7 +42,7 @@ class InvoiceController extends Controller
             $invoices = Invoice::where('supplier_id', $supplierId)
                 ->with(['items'])
                 ->get();
-            
+
             if ($invoices->isEmpty()) {
                 return response()->json(['error' => 'No invoices found for the specified supplier.'], 404);
             }
@@ -52,26 +53,26 @@ class InvoiceController extends Controller
         }
     }
 
-    
-public function getInvoicesByUser($userId)
-{
-    try {
-        $invoices = Invoice::where('user_id', $userId)
-            ->with([
-                'items',
-                'supplier:id,name,owner,avatar' // Make sure this line is correct
-            ])
-            ->get();
 
-        if ($invoices->isEmpty()) {
-            return response()->json(['error' => 'No invoices found for the specified user.'], 404);
+    public function getInvoicesByUser($userId)
+    {
+        try {
+            $invoices = Invoice::where('user_id', $userId)
+                ->with([
+                    'items',
+                    'supplier:id,name,owner,avatar' // Make sure this line is correct
+                ])
+                ->get();
+
+            if ($invoices->isEmpty()) {
+                return response()->json(['error' => 'No invoices found for the specified user.'], 404);
+            }
+
+            return response()->json($invoices);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500); // for debugging
         }
-
-        return response()->json($invoices);
-    } catch (Exception $e) {
-        return response()->json(['error' => $e->getMessage()], 500); // for debugging
     }
-}
 
     public function store(Request $request, $userId, $supplierId)
     {
@@ -137,122 +138,170 @@ public function getInvoicesByUser($userId)
     }
 
     public function scan($invoiceId)
-{
-    $start = microtime(true); // Start time
+    {
+        try {
+            $invoice = Invoice::findOrFail($invoiceId);
 
-    try {
-        $invoice = Invoice::findOrFail($invoiceId);
+            if ($invoice->task_id !== null) {
+                return response()->json([
+                    'message' => 'This invoice has already been scanned.'
+                ], 409); // 409 = Conflict
+            }
 
-        if ($invoice->scanned == 1) {
+            if (empty($invoice->file_name)) {
+                return response()->json([
+                    'error' => 'Invoice has no file attached for scanning'
+                ], 400);
+            }
+
+            $filePath = storage_path('app/invoices/' . $invoice->file_name);
+            $aiService = app(AiService::class);
+
+            $response = $aiService->uploadDocument($filePath, $invoice->file_name);
+            $taskId = $response['task_id'] ?? null;
+
+            if (!$taskId) {
+                throw new Exception('AI server did not return task ID');
+            }
+
+            $invoice->task_id = $taskId;
+            $invoice->save();
+
             return response()->json([
-                'message' => 'This invoice has already been scanned.'
-            ], 409); // 409 = Conflict
+                'message' => 'Invoice submitted for AI processing',
+                'task_id' => $taskId,
+                'data' => $invoice
+            ]);
+
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Invoice not found with the given ID.'], 404);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Failed to scan invoice: ' . $e->getMessage()], 500);
         }
-
-        $invoice->scanned = 1;
-
-        $duration = microtime(true) - $start; // Duration in seconds (float)
-        $invoice->scan_time = round($duration, 3); // Rounded to 3 decimal places
-        $invoice->save();
-
-        return response()->json([
-            'message' => 'Invoice scanned successfully.',
-            'data' => $invoice
-        ]);
-    } catch (ModelNotFoundException $e) {
-        return response()->json(['error' => 'Invoice not found with the given ID.'], 404);
-    } catch (Exception $e) {
-        return response()->json(['error' => 'Failed to scan invoice. Please try again later.'], 500);
     }
-}
 
     public function getInvoiceInfoById($id)
-{
-    $invoice = Invoice::find($id);
+    {
+        $invoice = Invoice::find($id);
 
-    if (!$invoice) {
-        return response()->json(['error' => 'Invoice not found'], 404);
-    }
+        if (!$invoice) {
+            return response()->json(['error' => 'Invoice not found'], 404);
+        }
 
-    $supplier = Supplier::find($invoice->supplier_id);
-
-    return response()->json([
-        'file_name' => $invoice->file_name,
-        'total_price' => $invoice->total_price,
-        'supplier_id' => $invoice->supplier_id,
-        'supplier_name' => $supplier->name ?? null,
-        'supplier_avatar' => $supplier->avatar ?? null,
-        'owner' => $supplier->owner ?? null, // Make sure this column exists in the DB
-        'user_id' => $invoice->user_id,
-    ]);
-}
-
-public function storeInvoicesWithItems(Request $request, $userId, $supplierId)
-{
-    try {
-        $data = $request->validate([
-            'file_name' => 'nullable|string',
-            'total_price' => 'required|numeric',
-            'date_of_issue' => 'required|date',
-            'country_of_origin' => 'required|string',
-            'items' => 'required|array',
-            'items.*.item_code' => 'required|string',
-            'items.*.item_description_original' => 'required|string',
-            'items.*.item_description' => 'required|string',
-            'items.*.quantity' => 'required|integer',
-            'items.*.base_price' => 'required|numeric',
-            'items.*.total_price' => 'required|numeric',
-            'items.*.currency' => 'required|string',
-            'items.*.version' => 'required|integer',
-            'items.*.best_customs_code_matches' => 'required|array',
-        ]);
-
-        $supplier = Supplier::findOrFail($supplierId);
-        $user = User::findOrFail($userId);
-
-        // Save the invoice first
-        $invoice = Invoice::create([
-            'user_id' => $userId,
-            'supplier_id' => $supplier->id,
-            'file_name' => $data['file_name'] ?? null,
-            'total_price' => $data['total_price'],
-            'date_of_issue' => $data['date_of_issue'],
-            'country_of_origin' => $data['country_of_origin'],
-        ]);
-
-        // Dispatch job to store invoice items
-        StoreInvoiceItemsJob::dispatch($invoice->id, $data['items']);
+        $supplier = Supplier::find($invoice->supplier_id);
 
         return response()->json([
-            'message' => 'Invoice created successfully. Invoice items are being processed.',
-            'data' => [
-                'invoice_id' => $invoice->id,
-                'file_name' => $invoice->file_name,
-                'total_price' => $invoice->total_price,
-                'date_of_issue' => $invoice->date_of_issue,
-                'country_of_origin' => $invoice->country_of_origin,
-                'scanned' => $invoice->scanned, // Include scanned field
-                'supplier' => [
-                    'name' => $supplier->name,
-                    'contact_phone' => $supplier->contact_phone,
-                    'tax_id' => $supplier->tax_id,
-                ],
-                'user' => [
-                    'city' => $user->city,
-                    'zip_code' => $user->zip_code,
-                    'email' => $user->email,
-                    'website' => $user->website,
-                    'phone_number' => $user->phone_number,
-                ],
-            ],
-        ], 201);
-
-    } catch (ModelNotFoundException $e) {
-        return response()->json(['error' => 'Supplier or user not found. Please check IDs and try again.'], 404);
-    } catch (Exception $e) {
-        return response()->json(['error' => 'Failed to create invoice. ' . $e->getMessage()], 500);
+            'file_name' => $invoice->file_name,
+            'total_price' => $invoice->total_price,
+            'supplier_id' => $invoice->supplier_id,
+            'supplier_name' => $supplier->name ?? null,
+            'supplier_avatar' => $supplier->avatar ?? null,
+            'owner' => $supplier->owner ?? null, // Make sure this column exists in the DB
+            'user_id' => $invoice->user_id,
+        ]);
     }
-}
+
+    public function getScanStatus($id)
+    {
+        try {
+            $invoice = Invoice::findOrFail($id);
+
+            // Verify invoice belongs to current user
+            if ($invoice->user_id !== auth()->id()) {
+                return response()->json(['error' => 'Unauthorized access to invoice'], 403);
+            }
+
+            // Check if invoice has task_id
+            if (!$invoice->task_id) {
+                return response()->json(['error' => 'No scan task associated with this invoice'], 404);
+            }
+
+            // Get task status from AI service
+            $status = app(AiService::class)->getTaskStatus($invoice->task_id);
+
+            if (!$status) {
+                return response()->json(['error' => 'Scan task not found'], 404);
+            }
+
+            return response()->json([
+                'status' => $status,
+                'invoice_id' => $invoice->id,
+                'task_id' => $invoice->task_id
+            ]);
+
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Invoice not found'], 404);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Failed to get scan status: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function storeInvoicesWithItems(Request $request, $userId, $supplierId)
+    {
+        try {
+            $data = $request->validate([
+                'file_name' => 'nullable|string',
+                'total_price' => 'required|numeric',
+                'date_of_issue' => 'required|date',
+                'country_of_origin' => 'required|string',
+                'items' => 'required|array',
+                'items.*.item_code' => 'required|string',
+                'items.*.item_description_original' => 'required|string',
+                'items.*.item_description' => 'required|string',
+                'items.*.quantity' => 'required|integer',
+                'items.*.base_price' => 'required|numeric',
+                'items.*.total_price' => 'required|numeric',
+                'items.*.currency' => 'required|string',
+                'items.*.version' => 'required|integer',
+                'items.*.best_customs_code_matches' => 'required|array',
+            ]);
+
+            $supplier = Supplier::findOrFail($supplierId);
+            $user = User::findOrFail($userId);
+
+            // Save the invoice first
+            $invoice = Invoice::create([
+                'user_id' => $userId,
+                'supplier_id' => $supplier->id,
+                'file_name' => $data['file_name'] ?? null,
+                'total_price' => $data['total_price'],
+                'date_of_issue' => $data['date_of_issue'],
+                'country_of_origin' => $data['country_of_origin'],
+            ]);
+
+            // Dispatch job to store invoice items
+            StoreInvoiceItemsJob::dispatch($invoice->id, $data['items']);
+
+            return response()->json([
+                'message' => 'Invoice created successfully. Invoice items are being processed.',
+                'data' => [
+                    'invoice_id' => $invoice->id,
+                    'file_name' => $invoice->file_name,
+                    'total_price' => $invoice->total_price,
+                    'date_of_issue' => $invoice->date_of_issue,
+                    'country_of_origin' => $invoice->country_of_origin,
+                    'scanned' => $invoice->task_id != null ? 1 : 0, // Include scanned field
+                    'supplier' => [
+                        'name' => $supplier->name,
+                        'contact_phone' => $supplier->contact_phone,
+                        'tax_id' => $supplier->tax_id,
+                    ],
+                    'user' => [
+                        'city' => $user->city,
+                        'zip_code' => $user->zip_code,
+                        'email' => $user->email,
+                        'website' => $user->website,
+                        'phone_number' => $user->phone_number,
+                    ],
+                ],
+            ], 201);
+
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Supplier or user not found. Please check IDs and try again.'], 404);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Failed to create invoice. ' . $e->getMessage()], 500);
+        }
+    }
 
 
 
