@@ -226,7 +226,7 @@
 
                             <span class="text-start ms-xl-2">
                                 <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text" id="topbar-username">Korisnik</span>
-                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Founder</span>
+                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text" id="topbar-position">Founder</span>
                                 
                                 
                             </span>
@@ -236,8 +236,8 @@
                     
                     <div class="dropdown-menu dropdown-menu-end border">
                         <!-- item-->
-                        <h6 class="dropdown-header">Dobrodošli !</h6>
-                        <a class="dropdown-item" href="pages-profile"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Moj nalog</span></a>   
+                        <h6 class="dropdown-header" id="dropdownWelcome">Dobrodošli, <span id="dropdownUser">Korisnik</span>!</h6>
+                        <a class="dropdown-item" href="profil"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Moj nalog</span></a>   
                         <a class="dropdown-item" href="pages-faqs"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Pomoć</span></a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="pages-profile"><i class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Dostupna skeniranja : <b>123</b></span></a>
@@ -347,6 +347,25 @@
         }
     });
 </script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = localStorage.getItem("auth_token");
+    const el = document.getElementById("dropdownUser");
+    const el1 = document.getElementById("topbar-username");
+    const el2 = document.getElementById("topbar-position");
+
+
+    if (user && token && el) {
+      el.textContent = user.username || "Korisnik";
+      el1.textContent = user.username || "Korisnik";
+      el2.textContent = user.designation || "Gost";
+
+    }
+  });
+</script>
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const user = JSON.parse(localStorage.getItem("user"));

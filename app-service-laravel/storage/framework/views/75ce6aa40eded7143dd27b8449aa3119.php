@@ -478,7 +478,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         text: 'Podaci o dobavljaču i fakturi će biti popunjeni automatski. Tarifne oznake i pripadajuće elemente možete unijeti ručno.',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonText: 'Koristi AI podatke',
+        confirmButtonText: '<i class="fas fa-wand-magic-sparkles fs-6 me-1"></i> Koristi AI podatke',
+        customClass: {
+                        confirmButton: 'btn btn-info',
+                        cancelButton: 'btn btn-info ',
+
+            },
         cancelButtonText: 'Unos ručno'
     }).then(async (result) => {
         document.getElementById("newlink").innerHTML = "";
@@ -668,22 +673,25 @@ document.getElementById("save-invoice-btn").addEventListener("click", async func
 
         if (!response.ok) {
             const errorText = await response.text();
-            console.error("❌ Error response from server:", errorText);
+            console.error("Error response from server:", errorText);
             throw new Error("Greška pri slanju fakture: " + (errorText || "Nepoznata greška"));
         }
 
         const responseData = await response.json();
-        console.log("✅ Response data:", responseData);
+        console.log(" Response data:", responseData);
 
         Swal.fire({
             icon: "success",
             title: "Faktura spašena!",
             text: "Uspješno ste kreirali fakturu.",
-            confirmButtonText: "U redu"
+            confirmButtonText: "U redu",
+            customClass: {
+                        confirmButton: 'btn btn-info w-xs mt-2',
+            },
         });
 
     } catch (err) {
-        console.error("🚨 Catch block error:", err);
+        console.error(" Catch block error:", err);
         Swal.fire("Greška", err.message || "Došlo je do greške.", "error");
     } finally {
         button.disabled = false;
