@@ -43,7 +43,7 @@ class AiService
         if ($response->status() == 404) {
             return null;
         }
-        if ($response->status() !== 200) {
+        if ($response->status() < 200 || $response->status() >= 300) {
             throw new RuntimeException("API request failed with status: {$response->status()}");
         }
 

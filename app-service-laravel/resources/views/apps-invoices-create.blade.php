@@ -423,8 +423,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             let html = `<div class='d-flex flex-column'>`;
             suggestions.slice(0, 10).forEach((s, i) => {
                 html += `<button type='button' class='btn btn-outline-info mb-2 ai-pill' data-index='${i}'>
-                                    ${s.entry["Tarifna oznaka"]} – ${s.entry["Naziv"]}
-                                </button>`;
+                    ${s.entry["Tarifna oznaka"]} – ${s.entry["Naziv"]}
+                </button>`;
             });
             html += `</div>`;
 
@@ -470,35 +470,34 @@ document.addEventListener("DOMContentLoaded", async function () {
             const itemName = item.item_name || "";
 
             row.innerHTML = `
-                                <th scope="row" class="product-id align-middle">${id}</th>
-                                <td class="align-middle">
-                                    <div class="d-flex flex-column">
-                                        <input type="text" class="form-control mb-2 item-name bg-light border-0" value="${itemName}" placeholder="Ime artikla" readonly>
-                                        <div class="d-flex align-items-center gap-2">
-                                            <select class="form-control select2-tariff"></select>
-                                            <button type="button" class="btn btn-info toggle-ai border-0 rounded-0" style="height:38px;">
-                                                <i class="fas fa-wand-magic-sparkles text-white me-2"></i><span>Prijedlozi</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="align-middle">
-                                    <input type="number" class="form-control product-price text-end bg-light border-0" value="${unitPrice}" step="0.01" />
-                                </td>
-                                <td class="align-middle">
-                                    <div class="input-step d-flex align-items-center justify-content-center">
-                                        <button type="button" class="btn btn-light border minus">–</button>
-                                        <input type="number" class="product-quantity form-control text-center mx-1 border-0 rounded-0" value="${quantity}" readonly>
-                                        <button type="button" class="btn btn-light border plus">+</button>
-                                    </div>
-                                </td>
-                                <td class="align-middle text-end">
-                                    <input type="text" class="form-control product-line-price text-end bg-light border-0" value="${total} KM" readonly />
-                                </td>
-                                <td class="align-middle text-center">
-                                    <button type="button" class="btn btn-outline-danger remove-row">X</button>
-                                </td>
-                            `;
+                <th scope="row" class="product-id align-middle">${id}</th>
+                <td class="align-middle">
+                    <div class="d-flex flex-column">
+                        <input type="text" class="form-control mb-2 item-name bg-light border-0" value="${itemName}" placeholder="Ime artikla" readonly>
+                        <div class="d-flex align-items-center gap-2">
+                            <select class="form-control select2-tariff"></select>
+                            <button type="button" class="btn btn-info toggle-ai border-0 rounded-0" style="height:38px;">
+                                <i class="fas fa-wand-magic-sparkles text-white me-2"></i><span>Prijedlozi</span>
+                            </button>
+                        </div>
+                    </div>
+                </td>
+                <td class="align-middle">
+                    <input type="number" class="form-control product-price text-end bg-light border-0" value="${unitPrice}" step="0.01" />
+                </td>
+                <td class="align-middle">
+                    <div class="input-step d-flex align-items-center justify-content-center">
+                        <button type="button" class="btn btn-light border minus">–</button>
+                        <input type="number" class="product-quantity form-control text-center mx-1 border-0 rounded-0" value="${quantity}" readonly>
+                        <button type="button" class="btn btn-light border plus">+</button>
+                    </div>
+                </td>
+                <td class="align-middle text-end">
+                    <input type="text" class="form-control product-line-price text-end bg-light border-0" value="${total} KM" readonly />
+                </td>
+                <td class="align-middle text-center">
+                    <button type="button" class="btn btn-outline-danger remove-row">X</button>
+                </td>`;
 
             const select = row.querySelector(".select2-tariff");
             const toggleBtn = row.querySelector(".toggle-ai");
@@ -583,6 +582,10 @@ document.addEventListener("DOMContentLoaded", async function () {
             return row;
         }
 
+        function getInvoiceId() {
+            return localStorage.getItem("scan_invoice_id");
+        }
+
         function addRowToInvoice(item = {}, suggestions = []) {
             const tbody = document.getElementById("newlink");
             const newId = tbody.children.length + 1;
@@ -592,8 +595,20 @@ document.addEventListener("DOMContentLoaded", async function () {
             calculateInvoiceTotals();
         }
 
+        let _invoice_data = null;
+        async function getInvoice() {
+            if (!_invoice_data) {
+                _invoice_data = (await fetch(`/api/invoices/${getInvoiceId()}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('auth_token')}`
+                    },
+                })).json()
+            }
+            return _invoice_data;
+        }
+
         async function waitForAIResult() {
-            const invoice_id = localStorage.getItem("scan_invoice_id");
+            invoice_id = getInvoiceId();
             if (!invoice_id) {
                 Swal.fire("Greška", "Task ID nije pronađen.", "error");
                 return;
@@ -601,25 +616,56 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             Swal.fire({ title: 'Skeniranje...', html: 'Obrađujemo dokument...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
 
-            for (let i = 0; i < 20; i++) {
+            while (true) {
                 try {
-                    const statusRes = await fetch(`/api/invoices/${invoice_id}/scan`);
-                    const status = await statusRes.json();
+                    const res = await fetch(`/api/invoices/${invoice_id}/scan`, {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('auth_token')}`
+                        },
+                    });
+                    const resJson = await res.json();
                     // TODO
-                    if (status.status === "completed") {
-                        const resultRes = await fetch(`/api/invoices/${invoice_id}/scan/result`);
-                        const result = await resultRes.json();
+                    if (resJson?.status?.status === "completed") {
+                        _invoice_data = null;
+                        const ret = getInvoice();
                         Swal.close();
-                        return result;
+                        return ret;
+                    }
+                    if (resJson?.status?.status === "error") {
+                        Swal.close();
+                        Swal.fire("Greška", status.error_message, "error");
+                        return null;
                     }
                 } catch (e) {
                     console.error("Greška u čekanju AI odgovora:", e);
                 }
                 await new Promise(r => setTimeout(r, 2000));
             }
+        }
 
-            Swal.close();
-            Swal.fire("Greška", "AI obrada nije završena u predviđenom vremenu.", "error");
+        function fillInvoiceData(aiItems) {
+            aiItems.forEach((item, idx) => {
+                globalAISuggestions[idx] = item.detected_codes?.sort((a, b) => a.closeness - b.closeness) || [];
+                addRowToInvoice(item, globalAISuggestions[idx]);
+            });
+        }
+
+        async function startAiScan() {
+            const ret = await fetch(`/api/invoices/${getInvoiceId()}/scan`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('auth_token')}`
+                },
+                method: 'POST'
+            });
+            if (!ret.ok) {
+                Swal.close();
+                Swal.fire({
+                    title: "Greška pri skeniranju",
+                    text: (await ret.json())?.error || "Nepoznata greška",
+                    icon: 'error',
+                })
+            }
+            return ret.ok;
         }
 
         document.addEventListener("DOMContentLoaded", async function () {
@@ -637,7 +683,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                     search: [item["Naziv"], item["Puni Naziv"], item["Tarifna oznaka"]].join(" ").toLowerCase()
                 }));
 
-            if (invoiceData)
+            // only ask to ai-fill if invoice doesn't have task ID.
+            if ((await getInvoice()).task_id == null)
                 Swal.fire({
                     title: 'Automatski popuniti?',
                     text: 'Podaci o dobavljaču i fakturi će biti popunjeni automatski. Tarifne oznake i pripadajuće elemente možete unijeti ručno.',
@@ -649,17 +696,18 @@ document.addEventListener("DOMContentLoaded", async function () {
                     document.getElementById("newlink").innerHTML = "";
                     if (result.isConfirmed) {
                         disableAIPills = false;
-                        const resultData = await waitForAIResult();
-                        const aiItems = resultData?.items || [];
-                        aiItems.forEach((item, idx) => {
-                            globalAISuggestions[idx] = item.detected_codes?.sort((a, b) => a.closeness - b.closeness) || [];
-                            addRowToInvoice(item, globalAISuggestions[idx]);
-                        });
+                        if (await startAiScan()) {
+                            const resultData = await waitForAIResult();
+                            const aiItems = resultData?.items || [];
+                            fillInvoiceData(aiItems)
+                        };
                     } else {
                         disableAIPills = true;
                         addRowToInvoice();
                     }
                 });
+            else
+                await waitForAIResult();
 
             document.getElementById("add-item")?.addEventListener("click", () => addRowToInvoice());
         });
@@ -708,20 +756,20 @@ document.addEventListener("DOMContentLoaded", async function () {
                 let xml = `<invoice>`;
                 invoiceData.items.forEach(item => {
                     xml += `
-                            <item>
-                                <tarif>${item.tarif}</tarif>
-                                <price>${item.price}</price>
-                                <quantity>${item.quantity}</quantity>
-                                <amount>${item.amount}</amount>
-                            </item>`;
+                        <item>
+                            <tarif>${item.tarif}</tarif>
+                            <price>${item.price}</price>
+                            <quantity>${item.quantity}</quantity>
+                            <amount>${item.amount}</amount>
+                        </item>`;
                 });
                 xml += `
-                            <subtotal>${invoiceData.subtotal}</subtotal>
-                            <tax>${invoiceData.tax}</tax>
-                            <discount>${invoiceData.discount}</discount>
-                            <shipping>${invoiceData.shipping}</shipping>
-                            <total>${invoiceData.total}</total>
-                        </invoice>`;
+                    <subtotal>${invoiceData.subtotal}</subtotal>
+                        <tax>${invoiceData.tax}</tax>
+                        <discount>${invoiceData.discount}</discount>
+                        <shipping>${invoiceData.shipping}</shipping>
+                        <total>${invoiceData.total}</total>
+                    </invoice>`;
 
                 const blob = new Blob([xml.trim()], {
                     type: 'application/xml'
