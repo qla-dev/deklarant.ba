@@ -47,11 +47,7 @@ File: Custom Css File
 }
 }
 
-@media (max-width: 1300px) {
-    [data-layout=horizontal] .page-content {
-        margin-top: 20px!important; 
-    }
-}
+
 
 
 @media (min-width: 1534px) {
@@ -401,5 +397,10 @@ color: #299cdb ;
     padding-right: 5px!important;
     text-align: end!important;
     width: 100%!important;
+}
+
+.home-card {
+
+    background-color: #f2f2f7!important;
 }
 

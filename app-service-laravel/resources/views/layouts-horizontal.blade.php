@@ -30,9 +30,9 @@
 
     <div class="col-xl-12">
         <div class="card border-0 rounded-0 shadow-0 h-100 mt-1">
-            <div class="row g-0">
+            <div class="row g-0 home-card">
                 <!-- Left Columns -->
-                <div class="col-md-2 border-end border-0 card-animate">
+                <div class="col-md-2 col-6 border-end border-0 order-2 order-md-0 bg-white card-animate mt-lg-0 mt-md-0 mt-3">
                     <div class="d-flex flex-column h-100">
                         <div class="bg-danger text-white text-center py-1 rounded-0">
                             <i class="ri-alert-line me-1"></i>
@@ -49,7 +49,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-2 border-end border-0 card-animate">
+                <div class="col-md-2 col-6 border-0 order-3 order-md-0 bg-white card-animate mt-lg-0 mt-md-0 mt-3">
                       <a href="moje-fakture">
                     <div class="d-flex flex-column h-100">
                         <div class="bg-info text-white text-center py-1 rounded-0">
@@ -69,7 +69,7 @@
                 </div>
 
                 <!-- Middle Avatar Section -->
-                <div class="col-md-4 border-end d-flex align-items-center border-0 rounded-0 alert alert-light p-1 m-0">
+                <div class="col-md-4 border-end order-1 order-md-0 d-flex align-items-center border-0 rounded-0 alert alert-light p-1 mb-2 m-lg-0">
                     <div class="p-2 text-center d-flex flex-column h-100 w-100 justify-content-center align-items-center">
                         <div class="card-body text-center p-2">
                             <img id="user-avatar" src="{{ URL::asset('build/images/users/avatar-1.jpg') }}"
@@ -77,7 +77,7 @@
                             <h6 class="fw-bold mb-1 mt-1" id="welcome-user">Dobrodošli na deklarant.ba!</h6>
                             <p class="fw-semibold fs-7 mb-1 text-info">Tvoj trenutni paket je <b>Starter</b></p>
                         </div>
-                        <div class="card-footer bg-transparent border-0 w-100">
+                        <div class="card-footer bg-transparent border-0 w-100 p-0 p-lg-1">
                             <div class="d-flex justify-content-center gap-2 w-100">
                                 <a href="pages-pricing"
                                     class="btn btn-info text-white w-50 btn-sm d-flex align-items-center justify-content-center">
@@ -96,7 +96,7 @@
 
                 <!-- Right Columns remain unchanged -->
                 
-                <div class="col-md-2 border-end card-animate">
+                <div class="col-md-2 col-6 border-end border-0 order-4 order-md-0 bg-white card-animate mt-lg-0 mt-md-0 mt-4">
                      <a href="moji-dobavljaci">
                     <div class="d-flex flex-column h-100">
                         <div class="bg-info text-white text-center py-1 rounded-0">
@@ -115,7 +115,7 @@
                 </div>
                
 
-                <div class="col-md-2 card-animate">
+                <div class="col-md-2 col-6 border-0 order-5 order-md-0 bg-white card-animate mt-lg-0 mt-md-0 mt-4">
                     <a href="kursna-lista">
                     <div class="d-flex flex-column h-100">
                         <div class="bg-info text-white text-center py-1 rounded-0">
