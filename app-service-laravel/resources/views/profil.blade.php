@@ -317,7 +317,7 @@
 
 
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" href="#projects">Paketi</a>
+                <a class="nav-link" data-bs-toggle="tab" href="#projects">Moja pretplata</a>
             </li>
 
         </ul>
@@ -516,7 +516,7 @@
                                                     <input type="text" class="form-control rounded-0" id="contactPersonInput" placeholder="Učitavanje..." />
                                                 </div>
 
-                                                <div class="col-lg-6 mb-3">
+                                                <div class="col-lg-12 mb-3">
                                                     <label for="contactNumberInput" class="form-label text-info">Kontakt broj</label>
                                                     <input type="text" class="form-control rounded-0" id="contactNumberInput" placeholder="Učitavanje..." />
                                                 </div>
@@ -832,6 +832,94 @@
                             </div>
                         </div>
                     </div>
+                    <div class="pt-2 pb-3">
+                        <h2>500 <small class="fs-5">KM</small><span class="fs-6 text-muted"></span></h2>
+                    </div>
+                    <hr class="my-3 text-muted">
+                    <ul class="list-unstyled text-muted vstack gap-3 mb-3">
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>100</b> AI Skeniranja Fakture</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>50 strana</b> po Fakturi</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>200</b> Faktura u historiji</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: <b>20 s</b></li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>30 dana</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
+                    </ul>
+                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal"
+                        class="btn btn-info w-100 mt-auto text-white">Započni</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- GoBig Plan -->
+        <div class="col-lg-4 mb-4">
+            <div class="card pricing-box border-0 rounded-0 ribbon-box right h-100">
+                <div class="card-body p-4 m-2 d-flex flex-column">
+                    <div class="ribbon-two ribbon-two-info"><span>Popularno</span></div>
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-grow-1">
+                            <h5 class="fw-semibold mb-1">GoBig</h5>
+                            <p class="text-muted mb-0">Idealno za biznise u razvoju</p>
+                        </div>
+                        <div class="avatar-sm">
+                            <div class="avatar-title bg-light rounded-circle text-primary">
+                                <i class="ri-medal-line text-info fs-3"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-2 pb-3">
+                        <h2>850 <small class="fs-5">KM</small><span class="fs-6 text-muted"></span></h2>
+                    </div>
+                    <hr class="my-3 text-muted">
+                    <ul class="list-unstyled text-muted vstack gap-3 mb-3">
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>200</b> AI Skeniranja Fakture</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>150 strana</b> po Fakturi</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>500</b> Faktura u historiji</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: <b>10 s</b></li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>120 dana</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
+                    </ul>
+                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal"
+                        class="btn btn-info w-100 mt-auto text-white">Započni</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Business Plan -->
+        <div class="col-lg-4 mb-4">
+            <div class="card pricing-box border-0 rounded-0 h-100">
+                <button type="button" class="btn btn-soft-info btn-sm shadow-none w-100" style="position: absolute; border-bottom-left-radius: 0; border-bottom-right-radius:0">
+                                         <i class="ri-file-list-3-line align-middle"></i> Aktivan do: 25.08.2025. godine
+                                    </button>
+                <div class="card-body p-4 m-2 d-flex flex-column">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-grow-1">
+                            <h5 class="fw-semibold mb-1">Business</h5>
+                            <p class="text-muted mb-0">Skrojeno za velike biznise</p>
+                        </div>
+                        <div class="avatar-sm">
+                            <div class="avatar-title bg-light rounded-circle text-primary">
+                                <i class="ri-shield-star-line text-info fs-2"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-2 pb-3">
+                        <h2>2000 <small class="fs-5">KM</small><span class="fs-6 text-muted"></span></h2>
+                    </div>
+                    <hr class="my-3 text-muted">
+                    <ul class="list-unstyled text-muted vstack gap-3 mb-3">
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>500</b> AI Skeniranja Fakture</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>Neograničeno strana </b> po Fakturi</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>Neograničeno</b> faktura u historiji</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: <b>4 s</b></li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>365 dana</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
+                    </ul>
+                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal"
+                        class="btn btn-info w-100 mt-auto text-white">Produži</a>
+                </div>
+            </div>
+        </div>
+    </div>
                 </div>
             </div>
             <!--end row-->

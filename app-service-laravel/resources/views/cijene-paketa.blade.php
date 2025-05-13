@@ -33,7 +33,7 @@
     <div class="col-lg-5">
         <div class="text-center mb-4 pb-2">
             <h4 class="fw-semibold fs-22">Odaberi paket koji odgovara tvojim potrebama</h4>
-            <p class="text-muted mb-4 fs-15">Jednostavno plati, odaberi željenu opciju i odustani kad god želiš(bez dodatnih naknada).</p>
+            <p class="text-muted mb-4 fs-15">Jednostavno plati, odaberi željenu opciju i odustani kad god želiš <br>(bez dodatnih naknada)</p>
         </div>
     </div><!--end col-->
 </div><!--end row-->
@@ -51,7 +51,7 @@
                             <p class="text-muted mb-0">Za manja preduzeća</p>
                         </div>
                         <div class="avatar-sm">
-                            <div class="avatar-title bg-light rounded-circle text-primary">
+                            <div class="avatar-title bg-light rounded-circle text-ifno">
                                 <i class="ri-star-s-fill text-info fs-5"></i>
                             </div>
                         </div>
@@ -61,7 +61,7 @@
                     </div>
                     <hr class="my-3 text-muted">
                     <ul class="list-unstyled text-muted vstack gap-3 mb-3">
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>100</b>AI Skeniranja Fakture</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>100</b> AI Skeniranja Fakture</li>
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>50 strana</b> po Fakturi</li>
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>200</b> Faktura u historiji</li>
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: <b>20 s</b></li>
@@ -111,6 +111,9 @@
         <!-- Business Plan -->
         <div class="col-lg-4 mb-4">
             <div class="card pricing-box border-0 rounded-0 h-100">
+                <button type="button" class="btn btn-soft-info btn-sm shadow-none w-100" style="position: absolute; border-bottom-left-radius: 0; border-bottom-right-radius:0">
+                                         <i class="ri-file-list-3-line align-middle"></i> Aktivan do: 25.08.2025. godine
+                                    </button>
                 <div class="card-body p-4 m-2 d-flex flex-column">
                     <div class="d-flex align-items-center mb-3">
                         <div class="flex-grow-1">

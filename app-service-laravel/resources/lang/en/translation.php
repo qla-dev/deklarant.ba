@@ -241,7 +241,7 @@ return [
     "exclist" => "Kursna lista",
     "myorder" => "Moje fakture",
     "clients" => "Moji dobavljači",
-    "declarant" => "Baza tarifnih oznaka",
+    "declarant" => "Tarifne oznake",
 
 
 ];

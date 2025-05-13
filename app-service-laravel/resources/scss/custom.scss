@@ -47,11 +47,7 @@ File: Custom Css File
 }
 }
 
-@media (max-width: 1300px) {
-    [data-layout=horizontal] .page-content {
-        margin-top: 20px!important; 
-    }
-}
+
 
 
 @media (min-width: 1534px) {
@@ -346,3 +342,71 @@ color: #299cdb ;
 
     overflow-x: hidden!important;
 }
+
+
+.mobile-dropdown-menu {
+
+    position: absolute;
+    width: 100%;
+    background: white;
+    left: 0;
+    top: 71px;
+}
+
+
+@media (min-width: 768px) {
+    #menuDropdown {
+        display: none !important;
+    }
+}
+
+@media (max-width: 1024.98px) {
+    [data-layout=horizontal] .horizontal-logo {
+        padding-left: 0!important;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .navbar-header {
+        padding: 0 1.2rem;
+    }
+
+    .konverzija {font-size: 23px!important;}
+}
+
+.mobile-footer-scan {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 12px 16px;
+    background: #fff;
+    z-index: 1030; /* above modal backdrop */
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* Optional: Smooth transition */
+.mobile-footer-scan button {
+    transition: all 0.3s ease;
+}
+
+
+#topbar-username
+
+{
+    padding-right: 5px!important;
+    text-align: end!important;
+    width: 100%!important;
+}
+
+.home-card {
+
+    background-color: #f2f2f7!important;
+}
+
+@media (min-width: 1024px) and (max-width:1300px) {
+    [data-layout=horizontal] .page-content {
+        margin-top: 20px!important; 
+    }
+}
+
