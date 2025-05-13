@@ -254,10 +254,10 @@
             <div class="avatar-lg position-relative" id="avatar-wrapper">
                 <!-- Avatar image -->
                 <img id="user-avatar" class="img-thumbnail rounded-circle"
-                    alt="User Avatar">
+                    >
 
-                <div id="avatar-fallback" class="rounded-circle d-flex justify-content-center align-items-center text-white fw-bold bg-info d-none"
-                    style="width: 100%; height: 100%; font-size: 1.5rem;">
+                <div id="avatar-fallback" class="rounded-circle d-flex justify-content-center align-items-center text-white fw-bold d-none"
+                    style="width: 100%; height: 100%; font-size: 2.5rem;">
                     <!-- initial goes here -->
                 </div>
 
@@ -1164,7 +1164,7 @@
 
 <!-- User Avatar photo upload-->
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         const token = localStorage.getItem("auth_token");
         const user = JSON.parse(localStorage.getItem("user"));
         const avatarBasePath = "/storage/uploads/avatars/";
@@ -1179,52 +1179,49 @@
 
         // 1. Fetch user and update UI
         fetch(`/api/users/${user.id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            .then(res => res.json())
-            .then(data => {
-                const userData = data.user;
-                const avatar = userData.avatar;
-                const firstLetter = (userData.first_name || userData.username || "U")[0].toUpperCase();
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            const userData = data.user;
+            const avatar = userData.avatar;
+            const firstLetter = (userData.first_name || userData.username || "U")[0].toUpperCase();
 
-                // Profile data
-                document.getElementById("profile-username").textContent = userData.first_name;
-                document.getElementById("profile-lastname").textContent = userData.last_name;
-                document.getElementById("profile-location").innerHTML =
-                    `<i class="ri-map-pin-user-line align-middle"></i> ${userData.city || 'Nepoznat grad'}, ${userData.country || 'Nepoznata država'}`;
+            // Profile data
+            document.getElementById("profile-username").textContent = userData.first_name;
+            document.getElementById("profile-lastname").textContent = userData.last_name;
+            document.getElementById("profile-location").innerHTML =
+                `<i class="ri-map-pin-user-line align-middle"></i> ${userData.city || 'Nepoznat grad'}, ${userData.country || 'Nepoznata država'}`;
 
-                if (avatar) {
-                    const testImage = new Image();
-                    testImage.onload = function() {
-                        // Avatar exists on disk — show image
-                        avatarImg.src = avatarBasePath + avatar;
-                        avatarImg.classList.remove("d-none");
-                        avatarFallback.classList.add("d-none");
-                    };
-                    testImage.onerror = function() {
-                        // Avatar not found on disk — fallback to initial
-                        avatarFallback.textContent = firstLetter;
-                        avatarFallback.classList.remove("d-none");
-                        avatarImg.classList.add("d-none");
-                    };
-                    testImage.src = avatarBasePath + avatar;
-                } else {
-                    avatarFallback.textContent = firstLetter;
-                    avatarFallback.classList.remove("d-none");
-                    avatarImg.classList.add("d-none");
-                }
+            // Always show initials immediately
+            avatarFallback.textContent = firstLetter;
+            avatarFallback.classList.remove("d-none");
+            avatarImg.classList.add("d-none");
 
-            });
+            // Then attempt to load avatar
+            if (avatar) {
+                const testImage = new Image();
+                testImage.onload = function () {
+                    avatarImg.src = avatarBasePath + avatar;
+                    avatarImg.classList.remove("d-none");
+                    avatarFallback.classList.add("d-none");
+                };
+                testImage.onerror = function () {
+                    // Avatar failed to load, keep initials visible
+                };
+                testImage.src = avatarBasePath + avatar;
+            }
+        });
 
         // 2. Avatar overlay → trigger file input
-        document.querySelector(".avatar-overlay").addEventListener("click", function() {
+        document.querySelector(".avatar-overlay").addEventListener("click", function () {
             document.getElementById("avatar-input").click();
         });
 
         // 3. On avatar file select → upload → update user
-        document.getElementById("avatar-input").addEventListener("change", function() {
+        document.getElementById("avatar-input").addEventListener("change", function () {
             const file = this.files[0];
             if (!file) return;
 
@@ -1233,48 +1230,62 @@
             formData.append("folder", "avatars");
 
             fetch(`/api/storage/uploads`, {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    },
-                    body: formData
-                })
-                .then(async res => {
-                    const text = await res.text();
-                    try {
-                        return JSON.parse(text);
-                    } catch (e) {
-                        throw new Error("Invalid JSON: " + text);
-                    }
-                })
-                .then(upload => {
-                    const avatarFileName = upload.stored_as;
-                    if (!avatarFileName) throw new Error("No avatar returned");
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+                body: formData
+            })
+            .then(async res => {
+                const text = await res.text();
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    throw new Error("Invalid JSON: " + text);
+                }
+            })
+            .then(upload => {
+                const avatarFileName = upload.stored_as;
+                if (!avatarFileName) throw new Error("No avatar returned");
 
-                    return fetch(`/api/users/${user.id}`, {
-                        method: "PUT",
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            avatar: avatarFileName
-                        })
-                    });
-                })
-                .then(res => res.json())
-                .then(update => {
-                    const updatedAvatar = update.user.avatar;
-                    avatarImg.src = `${avatarBasePath}${updatedAvatar}?t=${Date.now()}`;
+                return fetch(`/api/users/${user.id}`, {
+                    method: "PUT",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        avatar: avatarFileName
+                    })
+                });
+            })
+            .then(res => res.json())
+            .then(update => {
+                const updatedAvatar = update.user.avatar;
+                const imgPath = `${avatarBasePath}${updatedAvatar}?t=${Date.now()}`;
+
+                // Show initials while image loads
+                avatarFallback.classList.remove("d-none");
+                avatarImg.classList.add("d-none");
+
+                const img = new Image();
+                img.onload = function () {
+                    avatarImg.src = imgPath;
                     avatarImg.classList.remove("d-none");
                     avatarFallback.classList.add("d-none");
-                })
-                .catch(err => {
-                    console.error("Error uploading avatar:", err);
-                });
+                };
+                img.onerror = function () {
+                    // Image failed to load, initials stay
+                };
+                img.src = imgPath;
+            })
+            .catch(err => {
+                console.error("Error uploading avatar:", err);
+            });
         });
     });
 </script>
+
 
 <!-- View invoice logic -->
 
