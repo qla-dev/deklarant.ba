@@ -185,6 +185,19 @@ class ProcessUploadedFile implements ShouldQueue
             throw new Exception('Unable to parse response. Full response: ' . $ollamaResponse);
         }
 
+        // Process all string values in ['items'] and replace "\n" with "-"
+        if (isset($parsedResponse['items']) && is_array($parsedResponse['items'])) {
+            foreach ($parsedResponse['items'] as &$item) {
+                if (is_array($item)) {
+                    foreach ($item as $key => $value) {
+                        if (is_string($value)) {
+                            $item[$key] = str_replace("\n", " - ", $value);
+                        }
+                    }
+                }
+            }
+        }
+
         return $parsedResponse['items'] ?? [];
     }
 
