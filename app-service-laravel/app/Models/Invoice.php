@@ -19,7 +19,7 @@ class Invoice extends Model
         'date_of_issue',
         'country_of_origin',
         'scan_time',
-        'scanned'
+        'task_id' // When this is null it means this file wasn't processed by AI
     ];
 
     public function items()

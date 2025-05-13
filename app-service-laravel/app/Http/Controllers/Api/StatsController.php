@@ -73,7 +73,7 @@ class StatsController extends Controller
             ->pluck('count', 'country_of_origin');
 
         $usedScans = Invoice::where('user_id', $user->id)
-            ->where('scanned', 1)
+            ->whereNotNull('task_id')
             ->count();
 
         $totalScans = Package::whereIn('id', function ($query) use ($user) {

@@ -187,7 +187,7 @@
         const token = localStorage.getItem("auth_token");
         if (!token) {
             alert("Niste prijavljeni. Molimo ulogujte se.");
-            window.location.href = "/auth-login-basic";
+            window.location.href = "/login";
             return;
         }
 

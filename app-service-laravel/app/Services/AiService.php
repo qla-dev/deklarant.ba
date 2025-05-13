@@ -12,13 +12,13 @@ class AiService
 
     public function __construct()
     {
-        $this->baseUrl = rtrim(env('AI_SERVER_URL'), '/');
+        $this->baseUrl = config('services.ai_server.url');
     }
 
-    public function uploadDocument(string $filePath, string $originalName): array
+    public function uploadDocument(string $filePath, string $originalName): array|null
     {
         $response = Http::attach(
-            'file', 
+            'file',
             file_get_contents($filePath),
             $originalName
         )->post("{$this->baseUrl}/api/upload");
@@ -26,20 +26,23 @@ class AiService
         return $this->handleResponse($response);
     }
 
-    public function getTaskStatus(string $taskId): array
+    public function getTaskStatus(string $taskId): array|null
     {
         $response = Http::get("{$this->baseUrl}/api/tasks/{$taskId}");
         return $this->handleResponse($response);
     }
 
-    public function getTaskResult(string $taskId): array
+    public function getTaskResult(string $taskId): array|null
     {
         $response = Http::get("{$this->baseUrl}/api/tasks/{$taskId}/result");
         return $this->handleResponse($response);
     }
 
-    protected function handleResponse(Response $response): array
+    protected function handleResponse(Response $response): array|null
     {
+        if ($response->status() == 404) {
+            return null;
+        }
         if ($response->status() !== 200) {
             throw new RuntimeException("API request failed with status: {$response->status()}");
         }
