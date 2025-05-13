@@ -50,6 +50,7 @@
                 </div>
 
                 <div class="col-md-2 border-end border-0 card-animate">
+                      <a href="moje-fakture">
                     <div class="d-flex flex-column h-100">
                         <div class="bg-info text-white text-center py-1 rounded-0">
                             <i class=" ri-arrow-up-s-line me-1"></i>
@@ -64,16 +65,17 @@
                         </div>
 
                     </div>
+                    </a>
                 </div>
 
                 <!-- Middle Avatar Section -->
                 <div class="col-md-4 border-end d-flex align-items-center border-0 rounded-0 alert alert-light p-1 m-0">
                     <div class="p-2 text-center d-flex flex-column h-100 w-100 justify-content-center align-items-center">
-                        <div class="card-body text-center">
+                        <div class="card-body text-center p-2">
                             <img id="user-avatar" src="{{ URL::asset('build/images/users/avatar-1.jpg') }}"
-                                class="rounded-circle shadow-sm mb-1" width="60" height="60" alt="Korisnički avatar">
-                            <h6 class="fw-bold text-dark mb-1" id="welcome-user">Dobrodošli na deklarant.ba!</h6>
-                            <p class="fw-semibold fs-7 mb-1 text-dark">Tvoj trenutni paket je <b>Starter</b></p>
+                                class="rounded-circle shadow-sm mb-2" width="60" height="60" alt="Korisnički avatar">
+                            <h6 class="fw-bold mb-1 mt-1" id="welcome-user">Dobrodošli na deklarant.ba!</h6>
+                            <p class="fw-semibold fs-7 mb-1 text-info">Tvoj trenutni paket je <b>Starter</b></p>
                         </div>
                         <div class="card-footer bg-transparent border-0 w-100">
                             <div class="d-flex justify-content-center gap-2 w-100">
@@ -93,7 +95,9 @@
                 </div>
 
                 <!-- Right Columns remain unchanged -->
+                
                 <div class="col-md-2 border-end card-animate">
+                     <a href="moji-dobavljaci">
                     <div class="d-flex flex-column h-100">
                         <div class="bg-info text-white text-center py-1 rounded-0">
                             <i class=" ri-arrow-up-s-line me-1"></i>
@@ -107,9 +111,12 @@
                             </div>
                         </div>
                     </div>
+                     </a>
                 </div>
+               
 
                 <div class="col-md-2 card-animate">
+                    <a href="kursna-lista">
                     <div class="d-flex flex-column h-100">
                         <div class="bg-info text-white text-center py-1 rounded-0">
                             <i class="ri-arrow-up-s-line me-1"></i>
@@ -123,6 +130,7 @@
                             </div>
                         </div>
                     </div>
+                    </a>
                 </div>
 
             </div>

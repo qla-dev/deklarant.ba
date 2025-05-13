@@ -247,12 +247,11 @@
                         <span class="d-flex align-items-center">
 
                             <span class="text-start me-xl-2">
-                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text"
+                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text text-end"
                                     id="topbar-username">
                                     <script>document.write(JSON.parse(localStorage.getItem("user"))?.username || "Korisnik");</script>
-                                    !
                                 </span>
-                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Founder</span>
+                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Bussines</span>
 
 
                             </span>
