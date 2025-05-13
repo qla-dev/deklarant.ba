@@ -5,7 +5,7 @@ REM  Purpose: Pull latest commits every 60 seconds.
 REM ───────────────────────────────────────────────
 
 :LOOP
-    echo [%DATE% %TIME%] Running git pull…
+    echo [%DATE% %TIME%] Running git pull...
     git pull
     echo.
     REM Wait 60 seconds before next pull
