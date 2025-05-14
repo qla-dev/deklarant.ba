@@ -42,8 +42,14 @@ return [
     "ico-list"=>"ICO List",
     "kyc-application"=>"KYC Application",
     "invoices"=>"Moje fakture",
+    "basic-auth"=>"Sleep",
+
     "details"=>"Invoice Details",
-    "create-invoice"=>"Create Invoice",
+    "create-invoice"=>"Kreiraj fakturu",
+    "dobavljaci"=>"Moji dobavljaci",
+    "tarife"=>"Tarifne oznake",
+    "kurs"=>"Kursna lista",
+
     "supprt-tickets"=>"Support Tickets",
     "ticket-details"=>"Ticket Details",
     "layouts"=>"Layouts",

@@ -43,7 +43,7 @@
                     </div>
                     <div class="card card-h-100">
                         <div class="card-body">
-                            <a href="{{ url('apps-invoices-list') }}" class="btn btn-info w-100" id="btn-new-event">
+                            <a href="{{ url('moje-fakture') }}" class="btn btn-info w-100" id="btn-new-event">
                                 <i class="fa fa-file fs-6"></i> <span class="fs-6">Sve fakture</span>
                             </a>
                             <div id="external-events" class="mt-3">

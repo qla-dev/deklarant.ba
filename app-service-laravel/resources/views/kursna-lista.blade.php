@@ -1,5 +1,6 @@
 @extends('layouts.master')
 @section('title')
+@lang('translation.kurs')
 
 @endsection
 @section('css')
@@ -148,7 +149,7 @@
 deklarant.ba
 @endslot
 @slot('title')
-Kursna lista
+
 @endslot
 @endcomponent
 
@@ -223,7 +224,7 @@ Kursna lista
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         const token = localStorage.getItem("auth_token");
         const user = JSON.parse(localStorage.getItem("user"));
 
@@ -233,33 +234,11 @@ Kursna lista
         }
 
         const currencyCodebook = {
-            280: 'DEM',
-            724: 'ESP',
-            40: 'ATS',
-            56: 'BEF',
-            246: 'FIM',
-            250: 'FRF',
-            300: 'GRD',
-            372: 'IEP',
-            380: 'ITL',
-            620: 'PTE',
-            442: 'LUF',
-            978: 'EUR',
-            36: 'AUD',
-            124: 'CAD',
-            203: 'CZK',
-            208: 'DKK',
-            348: 'HUF',
-            392: 'JPY',
-            578: 'NOK',
-            752: 'SEK',
-            756: 'CHF',
-            949: 'TRY',
-            826: 'GBP',
-            840: 'USD',
-            643: 'RUB',
-            156: 'CNY',
-            941: 'RSD'
+            280: 'DEM', 724: 'ESP', 40: 'ATS', 56: 'BEF', 246: 'FIM', 250: 'FRF',
+            300: 'GRD', 372: 'IEP', 380: 'ITL', 620: 'PTE', 442: 'LUF', 978: 'EUR',
+            36: 'AUD', 124: 'CAD', 203: 'CZK', 208: 'DKK', 348: 'HUF', 392: 'JPY',
+            578: 'NOR', 752: 'SEK', 756: 'CHF', 949: 'TRY', 826: 'GBP', 840: 'USD',
+            643: 'RUB', 156: 'CNY', 941: 'RSD'
         };
 
         const countryFlagMap = {
@@ -300,22 +279,31 @@ Kursna lista
             'serbia': 'Srbija'
         };
 
+        // ✅ Correction map for known misspellings
+        const countryCorrections = {
+            'dennmark': 'denmark'
+            // Add more corrections as needed
+        };
+
         fetch("/api/exchange-rates", {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
             .then(res => res.json())
             .then(data => {
                 const items = (data.CurrencyExchangeItems || [])
-                    .filter(item => item.AlphaCode !== 'XDR') //  filter out IMF
+                    .filter(item => item.AlphaCode !== 'XDR')
                     .map(item => {
                         const original = item.Country;
                         const normalized = original.trim().toLowerCase().replace(/\s+/g, ' ').replace(/\.$/, '');
-                        const flagCode = countryFlagMap[normalized] || 'un';
-                        const displayName = countryNameBS[normalized] || original;
+                        const corrected = countryCorrections[normalized] || normalized;
+                        const flagCode = countryFlagMap[corrected] || 'un';
+                        const displayName = countryNameBS[corrected] || original;
 
-                       
+                        if (flagCode === 'un') {
+                            console.warn("⚠️ Country not mapped:", original);
+                        }
 
                         return {
                             ...item,
@@ -332,52 +320,35 @@ Kursna lista
                     lengthChange: false,
                     pageLength: 16,
                     paging: false,
-                    columns: [{
+                    columns: [
+                        {
                             data: null,
                             title: '#',
                             render: (data, type, row, meta) => meta.row + 1
                         },
-                        {
-                            data: 'Code',
-                            title: 'Šifra'
-                        },
-                        {
-                            data: 'AlphaCode',
-                            title: 'Valuta'
-                        },
+                        { data: 'Code', title: 'Šifra' },
+                        { data: 'AlphaCode', title: 'Valuta' },
                         {
                             data: 'CountryBS',
                             title: 'Zemlja',
-                            render: function(countryBS, type, row) {
+                            render: function (countryBS, type, row) {
                                 return `
-                            <img src="https://flagcdn.com/${row.FlagCode}.svg"
-                                 class="rounded-circle me-2"
-                                 style="height: 24px; width: 24px; object-fit: cover;"
-                                 alt="${countryBS}" />
-                            <span>${countryBS}</span>
-                        `;
+                                    <img src="https://flagcdn.com/${row.FlagCode}.svg"
+                                         class="rounded-circle me-2"
+                                         style="height: 24px; width: 24px; object-fit: cover;"
+                                         alt="${countryBS}" />
+                                    <span>${countryBS}</span>
+                                `;
                             }
                         },
-                        {
-                            data: 'Units',
-                            title: 'Jedinica'
-                        },
-                        {
-                            data: 'Buy',
-                            title: 'Kupovni kurs'
-                        },
-                        {
-                            data: 'Middle',
-                            title: 'Srednji kurs'
-                        },
-                        {
-                            data: 'Sell',
-                            title: 'Prodajni kurs'
-                        }
+                        { data: 'Units', title: 'Jedinica' },
+                        { data: 'Buy', title: 'Kupovni kurs' },
+                        { data: 'Middle', title: 'Srednji kurs' },
+                        { data: 'Sell', title: 'Prodajni kurs' }
                     ],
                     dom: '<"datatable-topbar d-flex justify-content-between align-items-center mb-3"Bf>rt<"d-flex justify-content-between align-items-center mt-4 px-0"i p>',
-
-                    buttons: [{
+                    buttons: [
+                        {
                             extend: 'csv',
                             text: 'Export u CSV',
                             className: 'btn btn-info me-1 ms-1 rounded-1'
@@ -421,32 +392,32 @@ Kursna lista
                         search: "",
                         zeroRecords: "Nema pronađenih stavki"
                     },
-                    initComplete: function() {
+                    initComplete: function () {
                         const api = this.api();
 
                         $('#exchangeTable_filter')
                             .addClass('flex-grow-1 me-0')
                             .css('max-width', '400px')
                             .html(`
-                        <div class="position-relative w-100">
-                            <input type="text" class="form-control" placeholder="Pretraga..." autocomplete="off"
-                                   id="exchange-search-input" style="width: 100%; padding-left: 2rem;">
-                            <span class="mdi mdi-magnify text-info fs-5 ps-2 position-absolute top-50 start-0 translate-middle-y"></span>
-                            <span class="mdi mdi-close-circle position-absolute top-50 end-0 translate-middle-y me-2 d-none"
-                                  id="exchange-search-clear" style="cursor:pointer;"></span>
-                        </div>
-                    `);
+                                <div class="position-relative w-100">
+                                    <input type="text" class="form-control" placeholder="Pretraga..." autocomplete="off"
+                                           id="exchange-search-input" style="width: 100%; padding-left: 2rem;">
+                                    <span class="mdi mdi-magnify text-info fs-5 ps-2 position-absolute top-50 start-0 translate-middle-y"></span>
+                                    <span class="mdi mdi-close-circle position-absolute top-50 end-0 translate-middle-y me-2 d-none"
+                                          id="exchange-search-clear" style="cursor:pointer;"></span>
+                                </div>
+                            `);
 
                         const input = $('#exchange-search-input');
                         const clear = $('#exchange-search-clear');
 
-                        input.on('input', function() {
+                        input.on('input', function () {
                             const val = $(this).val();
                             api.search(val).draw();
                             clear.toggleClass('d-none', val.length === 0);
                         });
 
-                        clear.on('click', function() {
+                        clear.on('click', function () {
                             input.val('');
                             api.search('').draw();
                             $(this).addClass('d-none');
@@ -459,6 +430,7 @@ Kursna lista
             });
     });
 </script>
+
 
 
 

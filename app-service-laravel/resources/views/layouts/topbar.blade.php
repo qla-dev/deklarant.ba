@@ -123,12 +123,12 @@
 
             <div class="d-flex align-items-center">
 
-               <div class="topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
-    <a href="/kursna-lista"
-       class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none">
-        <i class="ri-exchange-dollar-line konverzija" style="font-size:27px"></i>
-    </a>
-</div>
+                <div class="topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
+                    <a href="/kursna-lista"
+                        class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none">
+                        <i class="ri-exchange-dollar-line konverzija" style="font-size:27px"></i>
+                    </a>
+                </div>
 
                 <div class="dropdown d-md-none topbar-head-dropdown header-item">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none"
@@ -153,73 +153,74 @@
 
 
 
-               <div class="dropdown topbar-head-dropdown header-item" id="menuDropdown">
-    <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none"
-        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class='bx bx-category-alt fs-2'></i>
-    </button>
+                <div class="dropdown topbar-head-dropdown header-item" id="menuDropdown">
+                    <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none"
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class='bx bx-category-alt fs-2'></i>
+                    </button>
 
-    <div class="dropdown-menu dropdown-menu-lg p-0 dropdown-menu-end">
-        <div class="p-3 border-top-0 border-start-0 border-end-0 border-dashed border">
-            <div class="row align-items-center">
-                <div class="col">
-                    <h6 class="m-0 fw-semibold fs-15"> Navigacija </h6>
-                </div>
-            </div>
-        </div>
+                    <div class="dropdown-menu dropdown-menu-lg p-0 dropdown-menu-end">
+                        <div class="p-3 border-top-0 border-start-0 border-end-0 border-dashed border">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h6 class="m-0 fw-semibold fs-15"> Navigacija </h6>
+                                </div>
+                            </div>
+                        </div>
 
-        <div class="p-2">
-            <div class="row g-0">
-                <div class="col-6">
-                    <a class="dropdown-icon-item" href="/">
-                        <i class="ri-home-line text-info fs-4 d-block mb-1"></i>
-                        <span>@lang('translation.home')</span>
-                    </a>
-                </div>
-                <div class="col-6">
-                    <a class="dropdown-icon-item" href="kalendar">
-                        <i class="ri-calendar-line text-info fs-4 d-block mb-1"></i>
-                        <span>@lang('translation.statistic')</span>
-                    </a>
-                </div>
-                <div class="col-6">
-                    <a class="dropdown-icon-item" href="moje-fakture">
-                        <i class="ri-file-line text-info fs-4 d-block mb-1"></i>
-                        <span>@lang('translation.myorder')</span>
-                    </a>
-                </div>
-                <div class="col-6">
-                    <a class="dropdown-icon-item" href="moji-dobavljaci">
-                        <i class="ri-truck-line text-info fs-4 d-block mb-1"></i>
-                        <span>@lang('translation.clients')</span>
-                    </a>
-                </div>
-                <div class="col-6">
-                    <a class="dropdown-icon-item" href="tarifne-oznake">
-                        <i class="mdi mdi-sticker-text-outline text-info fs-4 d-block mb-1"></i>
-                        <span>@lang('translation.declarant')</span>
-                    </a>
-                </div>
-                <div class="col-6">
-                    <a class="dropdown-icon-item" href="cijene-paketa">
-                        <i class="ri-price-tag-3-line text-info fs-4 d-block mb-1"></i>
-                        <span>@lang('translation.pricing')</span>
-                    </a>
-                </div>
-            </div>
+                        <div class="p-2">
+                            <div class="row g-0">
+                                <div class="col-6">
+                                    <a class="dropdown-icon-item" href="/">
+                                        <i class="ri-home-line text-info fs-4 d-block mb-1"></i>
+                                        <span>@lang('translation.home')</span>
+                                    </a>
+                                </div>
+                                <div class="col-6">
+                                    <a class="dropdown-icon-item" href="kalendar">
+                                        <i class="ri-calendar-line text-info fs-4 d-block mb-1"></i>
+                                        <span>@lang('translation.statistic')</span>
+                                    </a>
+                                </div>
+                                <div class="col-6">
+                                    <a class="dropdown-icon-item" href="moje-fakture">
+                                        <i class="ri-file-line text-info fs-4 d-block mb-1"></i>
+                                        <span>@lang('translation.myorder')</span>
+                                    </a>
+                                </div>
+                                <div class="col-6">
+                                    <a class="dropdown-icon-item" href="moji-dobavljaci">
+                                        <i class="ri-truck-line text-info fs-4 d-block mb-1"></i>
+                                        <span>@lang('translation.clients')</span>
+                                    </a>
+                                </div>
+                                <div class="col-6">
+                                    <a class="dropdown-icon-item" href="tarifne-oznake">
+                                        <i class="mdi mdi-sticker-text-outline text-info fs-4 d-block mb-1"></i>
+                                        <span>@lang('translation.declarant')</span>
+                                    </a>
+                                </div>
+                                <div class="col-6">
+                                    <a class="dropdown-icon-item" href="cijene-paketa">
+                                        <i class="ri-price-tag-3-line text-info fs-4 d-block mb-1"></i>
+                                        <span>@lang('translation.pricing')</span>
+                                    </a>
+                                </div>
+                            </div>
 
-            <div class="row mt-2">
-                <div class="col-12 text-center">
-                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#scanModal"
-                        class="btn btn-info btn-sm text-white w-100 d-flex align-items-center justify-content-center">
-                        <i class="fas fa-wand-magic-sparkles fs-6 me-1"></i>
-                        <span>Skeniraj fakturu sa AI</span>
-                    </a>
+                            <div class="row mt-2">
+                                <div class="col-12 text-center">
+                                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#scanModal"
+                                        class="btn btn-info btn-sm text-white w-100 d-flex align-items-center justify-content-center">
+                                        <i class="fas fa-wand-magic-sparkles fs-6 me-1"></i>
+                                        <span>Skeniraj fakturu sa AI</span>
+                                    </a>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 
@@ -249,77 +250,22 @@
                             <span class="text-start me-xl-2">
                                 <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text text-end"
                                     id="topbar-username">
-                                    <script>document.write(JSON.parse(localStorage.getItem("user"))?.username || "Korisnik");</script>
+                                    <script>
+                                        document.write(JSON.parse(localStorage.getItem("user"))?.username || "Korisnik");
+                                    </script>
                                 </span>
                                 <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Business</span>
 
 
                             </span>
 
-<img id="topbar-avatar" class="rounded-circle header-profile-user d-none"
-     width="32" height="32" />
-<div id="topbar-avatar-fallback"
-     class="rounded-circle bg-info text-white d-flex justify-content-center align-items-center"
-     style="width: 32px; height: 32px; font-size: 14px;">
-</div>
+                            <img id="topbar-avatar" class="rounded-circle header-profile-user d-none"
+                                width="32" height="32" />
+                            <div id="topbar-avatar-fallback"
+                                class="rounded-circle bg-info text-white d-flex justify-content-center align-items-center"
+                                style="width: 32px; height: 32px; font-size: 14px;">
+                            </div>
 
-<script>
-document.addEventListener("DOMContentLoaded", async function () {
-    const token = localStorage.getItem("auth_token");
-    const user = JSON.parse(localStorage.getItem("user"));
-    const avatarBasePath = "/storage/uploads/avatars/";
-
-    if (!token || !user || !user.id) {
-        alert("Niste prijavljeni.");
-        return;
-    }
-
-    const avatarImg = document.getElementById("user-avatar");
-    const avatarFallback = document.getElementById("avatar-fallback");
-
-    const topbarImg = document.getElementById("topbar-avatar");
-    const topbarFallback = document.getElementById("topbar-avatar-fallback");
-
-    // Show initials immediately
-    const firstLetter = (user.first_name || user.username || "U")[0].toUpperCase();
-    if (avatarFallback) avatarFallback.textContent = firstLetter;
-    if (topbarFallback) topbarFallback.textContent = firstLetter;
-
-    try {
-        const res = await fetch(`/api/users/${user.id}`, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        const data = await res.json();
-        const avatar = data.user?.avatar;
-
-        if (avatar) {
-            const imgPath = `${avatarBasePath}${avatar}`;
-
-            const img = new Image();
-            img.onload = () => {
-                // Profile image
-                if (avatarImg) {
-                    avatarImg.src = imgPath;
-                    avatarImg.classList.remove("d-none");
-                    avatarFallback.classList.add("d-none");
-                }
-                // Topbar image
-                if (topbarImg) {
-                    topbarImg.src = imgPath;
-                    topbarImg.style.display = "block";
-                    topbarFallback.style.display = "none";
-                }
-            };
-            img.onerror = () => {
-                console.warn("Avatar image failed to load.");
-            };
-            img.src = imgPath;
-        }
-    } catch (err) {
-        console.error("Failed to fetch user or avatar:", err);
-    }
-});
-</script>
 
 
 
@@ -330,7 +276,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     <div class="dropdown-menu dropdown-menu-end border">
                         <!-- item-->
                         <h6 class="dropdown-header" id="dropdownWelcome">Dobrodošli, <span id="dropdownUser">Korisnik</span>!</h6>
-                        <a class="dropdown-item" href="profil"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Moj nalog</span></a>   
+                        <a class="dropdown-item" href="profil"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Moj nalog</span></a>
                         <a class="dropdown-item" href="pages-faqs"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Pomoć</span></a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="pages-profile"><i
@@ -351,6 +297,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                         <!-- Buttons Group -->
 
+                        
 
 
                     </div>
@@ -418,11 +365,71 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", async function() {
+        const token = localStorage.getItem("auth_token");
+        const user = JSON.parse(localStorage.getItem("user"));
+        const avatarBasePath = "/storage/uploads/avatars/";
+
+        if (!token || !user || !user.id) {
+            alert("Niste prijavljeni.");
+            return;
+        }
+
+        const avatarImg = document.getElementById("user-avatar");
+        const avatarFallback = document.getElementById("avatar-fallback");
+
+        const topbarImg = document.getElementById("topbar-avatar");
+        const topbarFallback = document.getElementById("topbar-avatar-fallback");
+
+        // Show initials immediately
+        const firstLetter = (user.first_name || user.username || "U")[0].toUpperCase();
+        if (avatarFallback) avatarFallback.textContent = firstLetter;
+        if (topbarFallback) topbarFallback.textContent = firstLetter;
+
+        try {
+            const res = await fetch(`/api/users/${user.id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const data = await res.json();
+            const avatar = data.user?.avatar;
+
+            if (avatar) {
+                const imgPath = `${avatarBasePath}${avatar}`;
+
+                const img = new Image();
+                img.onload = () => {
+                    // Profile image
+                    if (avatarImg) {
+                        avatarImg.src = imgPath;
+                        avatarImg.classList.remove("d-none");
+                        avatarFallback.classList.add("d-none");
+                    }
+                    // Topbar image
+                    if (topbarImg) {
+                        topbarImg.src = imgPath;
+                        topbarImg.style.display = "block";
+                        topbarFallback.style.display = "none";
+                    }
+                };
+                img.onerror = () => {
+                    console.warn("Avatar image failed to load.");
+                };
+                img.src = imgPath;
+            }
+        } catch (err) {
+            console.error("Failed to fetch user or avatar:", err);
+        }
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
         const logoutLink = document.getElementById("logout-link");
 
         if (logoutLink) {
-            logoutLink.addEventListener("click", async function () {
+            logoutLink.addEventListener("click", async function() {
                 const token = localStorage.getItem("auth_token");
 
                 if (!token) {
@@ -448,25 +455,25 @@ document.addEventListener("DOMContentLoaded", async function () {
 </script>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const token = localStorage.getItem("auth_token");
-    const el = document.getElementById("dropdownUser");
-    const el1 = document.getElementById("topbar-username");
-    const el2 = document.getElementById("topbar-position");
+    document.addEventListener("DOMContentLoaded", function() {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const token = localStorage.getItem("auth_token");
+        const el = document.getElementById("dropdownUser");
+        const el1 = document.getElementById("topbar-username");
+        const el2 = document.getElementById("topbar-position");
 
 
-    if (user && token && el) {
-      el.textContent = user.username || "Korisnik";
-      el1.textContent = user.username || "Korisnik";
-      el2.textContent = user.designation || "Gost";
+        if (user && token && el) {
+            el.textContent = user.username || "Korisnik";
+            el1.textContent = user.username || "Korisnik";
+            el2.textContent = user.designation || "Gost";
 
-    }
-  });
+        }
+    });
 </script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         const user = JSON.parse(localStorage.getItem("user"));
 
         if (user) {
@@ -476,10 +483,10 @@ document.addEventListener("DOMContentLoaded", async function () {
                 const avatarUrl = `/storage/uploads/avatars/${user.avatar}`;
 
                 const testImg = new Image();
-                testImg.onload = function () {
+                testImg.onload = function() {
                     topbarAvatar.src = avatarUrl;
                 };
-                testImg.onerror = function () {
+                testImg.onerror = function() {
                     topbarAvatar.src = "/build/images/users/avatar-1.jpg";
                 };
                 testImg.src = avatarUrl;
@@ -488,12 +495,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 </script>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         const fullscreenBtn = document.querySelector('[data-toggle-custom="fullscreen"]');
 
         if (!fullscreenBtn) return;
 
-        fullscreenBtn.addEventListener("click", function (e) {
+        fullscreenBtn.addEventListener("click", function(e) {
             e.preventDefault();
             document.body.classList.toggle("fullscreen-enable");
 
@@ -567,7 +574,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
         if (toggleBtn) {
-            toggleBtn.addEventListener("click", function () {
+            toggleBtn.addEventListener("click", function() {
                 const currentMode = html.getAttribute("data-bs-theme");
                 const newMode = currentMode === "dark" ? "light" : "dark";
                 setLayoutMode("data-bs-theme", newMode, `layout-mode-${newMode}`, html);
@@ -580,7 +587,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 </script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         const token = localStorage.getItem("auth_token");
         if (!token) {
             alert("Niste prijavljeni. Molimo ulogujte se.");
@@ -617,7 +624,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 removeBtn.classList.add("remove-file");
                 removeBtn.dataset.index = index;
 
-                removeBtn.addEventListener("click", function () {
+                removeBtn.addEventListener("click", function() {
                     let dt = new DataTransfer();
                     let fileArray = Array.from(fileInput.files);
                     fileArray.splice(index, 1);
@@ -654,12 +661,12 @@ document.addEventListener("DOMContentLoaded", async function () {
             }, 150);
 
             fetch('/api/storage/invoice-uploads', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
                 .then(response => {
                     if (!response.ok) {
                         throw new Error("Upload failed");
@@ -669,18 +676,12 @@ document.addEventListener("DOMContentLoaded", async function () {
                 .then(data => {
                     console.log('Upload successful:', data);
 
-                    Swal.fire({
-                        icon: "success",
-                        title: "Dokument uspješno uploadan!",
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(() => {
-                        // Save returned invoice_id to localStorage (important for next steps!)
-                        if (data.invoice_id) {
-                            localStorage.setItem("scan_invoice_id", data.invoice_id);
-                        }
-                        window.location.href = "/apps-invoices-create";
-                    });
+                    if (data.invoice_id) {
+                        localStorage.setItem("scan_invoice_id", data.invoice_id);
+                    }
+
+                    // No SweetAlert here — just proceed
+                    window.location.href = "/apps-invoices-create";
                 })
                 .catch(error => {
                     console.error('Upload error:', error);

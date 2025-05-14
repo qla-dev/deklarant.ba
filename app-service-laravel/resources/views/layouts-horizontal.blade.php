@@ -162,7 +162,7 @@
                     <div class="flex-grow-1 overflow-hidden">
                         <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Izvršena skeniranja</p>
                         <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                            <span class="counter-value" data-target="28">0</span><span class="counter-value">/100</span>
+                            <span id="usedScansValue">0</span>/<span id="totalScansValue">0</span>
                         </h4>
                     </div>
                     <div class="flex-shrink-0">
@@ -254,9 +254,9 @@
             <div class="card-body" style="z-index:1;">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1 overflow-hidden">
-                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Prosječno skeniranja</p>
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Prosječna brzina skeniranja</p>
                         <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                            <span class="counter-value" id="scanTimeValue">0.00</span>
+                            <span class="counter-value" id="scanSpeedValue">0.00</span>
                         </h4>
                     </div>
                     <div style="width: 80px; height: 80px;" class="d-flex align-items-center justify-content-center">
@@ -287,7 +287,7 @@
                     <div class="col-md-6">
                         <div class="card rounded-0 h-100 ">
                             <div class="card-header d-flex justify-content-between">
-                                <h6 class="card-title mb-0">Moji dokumenti</h6>
+                                <h5 class="card-title mb-0 fs-6">Zahtjevi za inspekcijski nadzor</h5>
                                 <a class="text-muted fs-6">Pogledaj sve</a>
                             </div>
                             <div class="card-body d-flex align-items-center justify-content-center">
@@ -314,7 +314,7 @@
                     <div class="col-md-6">
                         <div class="card rounded-0 h-100">
                             <div class="card-header d-flex justify-content-between">
-                                <h6 class="card-title mb-0">Moji dokumenti</h6>
+                                <h5 class="card-title mb-0 fs-6">Carinjenje po nepotpunoj izjavi</h5>
                                 <a class="text-muted fs-6">Pogledaj sve</a>
                             </div>
                             <div class="card-body d-flex justify-content-center align-items-center">
@@ -340,7 +340,7 @@
                     <div class="col-md-6">
                         <div class="card rounded-0 h-100">
                             <div class="card-header d-flex justify-content-between">
-                                <h6 class="card-title mb-0">Moji dokumenti</h6>
+                                <h5 class="card-title mb-0 fs-6">Izjave za carinjenje pošiljki</h5>
                                 <a class="text-muted fs-6">Pogledaj sve</a>
                             </div>
                             <div class="card-body d-flex justify-content-center align-items-center">
@@ -366,7 +366,7 @@
                     <div class="col-md-6">
                         <div class="card rounded-0 h-100">
                             <div class="card-header d-flex justify-content-between">
-                                <h6 class="card-title mb-0">Moji dokumenti</h6>
+                                <h5 class="card-title mb-0 fs-6">Obrasci</h5>
                                 <a class="text-muted fs-6">Pogledaj sve</a>
                             </div>
                             <div class="card-body d-flex justify-content-center align-items-center">
@@ -401,53 +401,11 @@
                                 <h5 class="mb-0">Zadnje korištene tarife</h5>
                             </div>
                             <div class="card-body align-items-center text-truncate">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <div>
-                                        <div class="fw-semibold">8471.30</div>
-                                        <div class="text-muted fs-12">Laptop</div>
-                                    </div>
-                                    <div class="text-success fs-13">
-                                        18% <i class="ri-arrow-up-line ms-1"></i>
-                                    </div>
+                                <div class="tariff-list">
+                                    <!-- Dynamically populated supplier data goes here -->
                                 </div>
 
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <div>
-                                        <div class="fw-semibold">8471.30</div>
-                                        <div class="text-muted fs-12">Laptop</div>
-                                    </div>
-                                    <div class="text-success fs-13">
-                                        18% <i class="ri-arrow-up-line ms-1"></i>
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <div>
-                                        <div class="fw-semibold">8471.30</div>
-                                        <div class="text-muted fs-12">Laptop</div>
-                                    </div>
-                                    <div class="text-success fs-13">
-                                        18% <i class="ri-arrow-up-line ms-1"></i>
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <div>
-                                        <div class="fw-semibold">8471.30</div>
-                                        <div class="text-muted fs-12">Laptop</div>
-                                    </div>
-                                    <div class="text-success fs-13">
-                                        18% <i class="ri-arrow-up-line ms-1"></i>
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <div>
-                                        <div class="fw-semibold">8471.30</div>
-                                        <div class="text-muted fs-12">Laptop</div>
-                                    </div>
-                                    <div class="text-success fs-13">
-                                        18% <i class="ri-arrow-up-line ms-1"></i>
-                                    </div>
-                                </div>
-                                <div class="card-footer mt-0 pt-0 pb-0 text-truncate">
+                                <div class="card-footer mt-1 pt-0 pb-0 d-flex justify-content-center">
 
                                 </div>
 
@@ -624,15 +582,65 @@
 </script>
 
 
+<script>
+    document.addEventListener("DOMContentLoaded", async function() {
+        const token = localStorage.getItem("auth_token");
+        const user = JSON.parse(localStorage.getItem("user"));
+
+        if (!token || !user?.id) {
+            console.warn("User or token missing.");
+            return;
+        }
+
+        try {
+            const res = await axios.get(`/api/invoices/users/${user.id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            const invoices = res.data || [];
+
+            // Filter invoices with non-empty items and take up to 5
+            const validItems = invoices
+                .filter(inv => Array.isArray(inv.items) && inv.items.length > 0)
+                .flatMap(inv => inv.items.map(item => ({
+                    code: item.best_customs_code_matches?.[0] || "Nepoznat kod",
+                    name: item.item_description_original || item.item_description || "Nepoznat naziv",
+                    vat: "",
+                })))
+                .slice(0, 5);
+
+            const container = document.querySelector(".tariff-list");
+            container.innerHTML = "";
+
+            validItems.forEach(item => {
+                container.innerHTML += `
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div>
+                            <div class="fw-semibold">${item.code}</div>
+                            <div class="text-muted fs-12">${item.name}</div>
+                        </div>
+                        <div class="text-success fs-13">
+                             
+                        </div>
+                    </div>
+                `;
+            });
+
+        } catch (err) {
+            console.error("Greška pri dohvaćanju faktura:", err);
+        }
+    });
+</script>
 
 
 
 
+<!-- new doughnut logic -->
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-
-        // Custom plugin to render text inside the chart
+    document.addEventListener("DOMContentLoaded", async function() {
         const centerTextPlugin = {
             id: "centerText",
             beforeDraw: function(chart) {
@@ -646,7 +654,6 @@
                 ctx.textBaseline = "middle";
                 ctx.textAlign = "center";
 
-                // Get the percentage from dataset
                 const dataset = chart.data.datasets[0];
                 const total = dataset.data.reduce((acc, val) => acc + val, 0);
                 const percentage = Math.round((dataset.data[0] / total) * 100);
@@ -655,7 +662,7 @@
                 const textX = Math.round(width / 2);
                 const textY = Math.round(height / 2);
 
-                ctx.fillStyle = "#299cdb"; // Info color
+                ctx.fillStyle = "#299cdb";
                 ctx.fillText(text, textX, textY);
                 ctx.save();
             }
@@ -668,7 +675,7 @@
             new Chart(ctx, {
                 type: "doughnut",
                 data: {
-                    labels: ["Used", "Remaining"],
+                    labels: ["Iskorišteno", "Preostalo"],
                     datasets: [{
                         data: [usedPercentage, remaining],
                         backgroundColor: ["#299cdb", "#d6f0fa"],
@@ -677,118 +684,29 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    cutout: "70%", // Makes the doughnut shape
+                    cutout: "70%",
                     plugins: {
                         legend: {
                             display: false
                         },
                         tooltip: {
                             enabled: false
-                        },
-                    }
-                },
-                plugins: [centerTextPlugin] // Add the custom plugin
-            });
-        }
-
-        createDoughnutChart("doughnut1", 16.24);
-        createDoughnutChart("doughnut2", 3.96);
-        createDoughnutChart("doughnut3", 9.32);
-        createDoughnutChart("doughnut4", 4.21);
-    });
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        function counter() {
-            var counterElements = document.querySelectorAll(".counter-num");
-            var speed = 10000000; // Adjust the speed (higher = slower animation)
-
-            counterElements.forEach((counter) => {
-                function updateCount() {
-                    var target = +counter.getAttribute("data-target");
-                    var count = +counter.innerText || 0;
-                    var increment = target / speed;
-
-                    if (increment < 1) increment = 1;
-
-                    if (count < target) {
-                        counter.innerText = (count + increment).toFixed(0);
-                        setTimeout(updateCount, 15); // Delay for a smoother effect
-                    } else {
-                        counter.innerText = numberWithCommas(target);
-                    }
-                }
-                updateCount();
-            });
-        }
-
-        function numberWithCommas(x) {
-            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
-
-        counter(); // Run the counter function
-    });
-</script>
-
-<script>
-    function renderScanCharts() {
-        document.querySelectorAll(".scan-chart").forEach((canvas) => {
-            const ctx = canvas.getContext("2d");
-
-            new Chart(ctx, {
-                type: "line",
-                data: {
-                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
-                    datasets: [{
-                        data: [30, 50, 80, 40, 70, 20, 50],
-                        backgroundColor: "#d6f0fa",
-                        borderColor: "#299cdb",
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            display: false
-                        },
-                        y: {
-                            display: false
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
                         }
                     }
-                }
+                },
+                plugins: [centerTextPlugin]
             });
-        });
-    }
-</script>
+        }
 
-
-
-<script>
-    document.addEventListener("DOMContentLoaded", async function() {
         const user = JSON.parse(localStorage.getItem("user"));
         const token = localStorage.getItem("auth_token");
 
-        console.log("[INIT] Provjera lokalne pohrane...");
-        console.log("🧾 Korisnik:", user);
-        console.log("🔐 Token:", token?.substring(0, 25) + "..."); // da ne ispiše cijeli token
-
         if (!user || !token) {
-            console.warn("⚠️ User ili token nedostaje u localStorage.");
+            console.warn("Token ili korisnik nije pronađen.");
             return;
         }
 
         const API_URL = `/api/statistics/users/${user.id}`;
-        console.log(`🌐 Pozivam API: ${API_URL}`);
 
         try {
             const response = await axios.get(API_URL, {
@@ -797,10 +715,242 @@
                 }
             });
 
-            console.log("✅ API response:", response);
+            const stats = response.data || {};
+            const usedScans = stats.used_scans ?? 0;
+            const remainingScans = stats.remaining_scans ?? 0;
+            const totalScans = usedScans + remainingScans;
+
+            document.getElementById("usedScansValue").innerText = usedScans;
+            document.getElementById("totalScansValue").innerText = totalScans;
+
+            const usedPercentage = totalScans > 0 ? (usedScans / totalScans) * 100 : 0;
+
+            createDoughnutChart("doughnut1", usedPercentage);
+
+        } catch (err) {
+            console.error("Greška prilikom dohvaćanja statistike:", err);
+        }
+    });
+</script>
+
+
+<!-- doughnut2 -->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async function() {
+            const user = JSON.parse(localStorage.getItem("user"));
+            const token = localStorage.getItem("auth_token");
+        
+            if (!user || !token) {
+                console.warn("User or token missing in localStorage.");
+                return;
+            }
+        
+            const invoicesUrl = `/api/invoices/users/${user.id}`;
+            const packagesUrl = `/api/user-packages`;
+        
+            try {
+                const packageRes = await axios.get(packagesUrl, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+            
+                const userPackages = packageRes.data?.data || [];
+                const userPackage = userPackages.find(p => p.active);
+                let invoiceLimit = 0;
+            
+                if (userPackage?.package?.name?.toLowerCase() === 'gobig') invoiceLimit = 500;
+                else if (userPackage?.package?.name?.toLowerCase() === 'startup') invoiceLimit = 200;
+                else if (userPackage?.package?.name?.toLowerCase() === 'business') invoiceLimit = Infinity;
+            
+                const invoiceRes = await axios.get(invoicesUrl, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+            
+                const invoices = invoiceRes.data || [];
+                const invoiceCount = invoices.length;
+            
+                const invoiceEl = document.getElementById("totalInvoices");
+                if (invoiceEl) invoiceEl.innerText = invoiceCount;
+            
+                const denominatorEl = invoiceEl.nextElementSibling;
+                if (denominatorEl && invoiceLimit !== Infinity) {
+                    denominatorEl.innerText = `/${invoiceLimit}`;
+                } else if (denominatorEl) {
+                    denominatorEl.innerText = "/∞";
+                }
+            
+                const usedPercentage = invoiceLimit === Infinity ? 100 : Math.min((invoiceCount / invoiceLimit) * 100, 100);
+                createDoughnutChart("doughnut2", usedPercentage);
+            
+            } catch (err) {
+                console.error("Greška prilikom dohvaćanja faktura ili paketa:", err);
+            }
+        
+            function createDoughnutChart(canvasId, usedPercentage) {
+                const ctx = document.getElementById(canvasId).getContext("2d");
+                const remaining = 100 - usedPercentage;
+            
+                new Chart(ctx, {
+                    type: "doughnut",
+                    data: {
+                        labels: ["Iskorišteno", "Preostalo"],
+                        datasets: [{
+                            data: [usedPercentage, remaining],
+                            backgroundColor: ["#299cdb", "#d6f0fa"],
+                        }, ],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: "70%",
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                enabled: false
+                            },
+                        },
+                    },
+                    plugins: [{
+                        id: "centerText",
+                        beforeDraw: function(chart) {
+                            const width = chart.width,
+                                height = chart.height,
+                                ctx = chart.ctx;
+                        
+                            ctx.restore();
+                            const fontSize = ((height / 8) * 2).toFixed(2);
+                            ctx.font = fontSize + "px sans-serif";
+                            ctx.textBaseline = "middle";
+                            ctx.textAlign = "center";
+                        
+                            const dataset = chart.data.datasets[0];
+                            const total = dataset.data.reduce((acc, val) => acc + val, 0);
+                            const percentage = Math.round((dataset.data[0] / total) * 100);
+                        
+                            const text = percentage + "%";
+                            const textX = Math.round(width / 2);
+                            const textY = Math.round(height / 2);
+                        
+                            ctx.fillStyle = "#299cdb";
+                            ctx.fillText(text, textX, textY);
+                            ctx.save();
+                        },
+                    }, ],
+                });
+            }
+        });
+    </script>
+
+
+<!-- carinske tarife -->
+<script>
+    document.addEventListener("DOMContentLoaded", async function() {
+        try {
+            const response = await fetch("/storage/data/tariff.json");
+            const tariffData = await response.json();
+
+            // Broji samo one koji imaju ključ "Tarifna oznaka"
+            const totalTariffs = tariffData.filter(item => item["Tarifna oznaka"]).length;
+
+            const tariffCounterEl = document.querySelector(".counter-value[data-target]");
+            if (tariffCounterEl) {
+                tariffCounterEl.setAttribute("data-target", totalTariffs);
+                tariffCounterEl.innerText = totalTariffs;
+            }
+
+
+        } catch (error) {
+            console.error("❌ Greška pri učitavanju tarifa:", error);
+        }
+    });
+</script>
+
+<!-- brzina skeniranja -->
+
+<script>
+    document.addEventListener("DOMContentLoaded", async function() {
+        const token = localStorage.getItem("auth_token");
+        if (!token) return console.warn("Missing auth token");
+
+        try {
+            const packageRes = await axios.get("/api/user-packages", {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            const userPackages = packageRes.data?.data || [];
+            const userPackage = userPackages.find(p => p.active);
+            const packageName = userPackage?.package?.name?.toLowerCase();
+
+            const scanSpeedEl = document.getElementById("scanSpeedValue");
+
+            if (scanSpeedEl) {
+                let speed = "N/A";
+                switch (packageName) {
+                    case "startup":
+                        speed = "20 sekundi";
+                        break;
+                    case "gobig":
+                        speed = "10 sekundi";
+                        break;
+                    case "business":
+                        speed = "4 sekunde";
+                        break;
+                }
+                scanSpeedEl.innerText = speed;
+            }
+
+        } catch (err) {
+            console.error("Greška prilikom dohvaćanja paketa:", err);
+        }
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+<!-- Used scans | remainining scans -->
+<script>
+    document.addEventListener("DOMContentLoaded", async function() {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const token = localStorage.getItem("auth_token");
+
+        console.log("[INIT] Provjera lokalne pohrane...");
+        console.log(" Korisnik:", user);
+        console.log(" Token:", token?.substring(0, 25) + "..."); // da ne ispiše cijeli token
+
+        if (!user || !token) {
+            console.warn(" User ili token nedostaje u localStorage.");
+            return;
+        }
+
+        const API_URL = `/api/statistics/users/${user.id}`;
+        console.log(` Pozivam API: ${API_URL}`);
+
+        try {
+            const response = await axios.get(API_URL, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            console.log(" API response:", response);
             const stats = response.data || {};
 
-            console.log("📊 Parsed statistike:", stats);
+            console.log(" Parsed statistike:", stats);
 
             const fields = {
                 totalSuppliers: stats.total_suppliers ?? 0,
@@ -827,6 +977,8 @@
     });
 </script>
 
+
+<!-- statistics -->
 <script>
     document.addEventListener("DOMContentLoaded", async function() {
 
@@ -866,7 +1018,7 @@
 
 
 
-
+<!-- avatar upload -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const user = JSON.parse(localStorage.getItem("user"));
@@ -894,152 +1046,158 @@
     });
 </script>
 
+
+<!-- suppliers -->
 <script>
-    document.addEventListener("DOMContentLoaded", async function() {
-        const user = JSON.parse(localStorage.getItem("user"));
-        const token = localStorage.getItem("auth_token");
+    function renderScanCharts() {
+        const canvases = document.querySelectorAll(".scan-chart");
 
-        if (!user || !token) {
-            console.warn("User or token missing in localStorage.");
-            return;
-        }
+        const staticLabels = ["Jan", "Feb", "Mar", "Apr", "Maj", "Jun", "Jul", "Avg", "Sep", "Okt", "Nov", "Dec"];
+        const staticData = [1200, 1300, 1250, 1450, 1600, 1400, 1700, 1800, 1750, 1900, 2000, 2100];
 
-        const API_URL = `/api/invoices/users/${user.id}`;
+        canvases.forEach((canvas) => {
+            const ctx = canvas.getContext("2d");
 
-        try {
-            const response = await axios.get(API_URL, {
-                headers: {
-                    Authorization: `Bearer ${token}`
+            new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: staticLabels,
+                    datasets: [{
+                        data: staticData,
+                        backgroundColor: "rgba(41, 156, 219, 0.15)",
+                        borderColor: "#299cdb",
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            display: false
+                        },
+                        y: {
+                            display: false
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: false
+                        }
+                    }
                 }
             });
+        });
+    }
 
-            const invoices = response.data || [];
-
-            if (Array.isArray(invoices) && invoices.length > 0) {
-                const validScanTimes = invoices
-                    .map(inv => parseFloat(inv.scan_time))
-                    .filter(time => !isNaN(time));
-
-                const totalScanTime = validScanTimes.reduce((acc, val) => acc + val, 0);
-                const avgScanTime = validScanTimes.length > 0 ? totalScanTime / validScanTimes.length : 0;
-
-                const scanTimeEl = document.getElementById("scanTimeValue");
-                if (scanTimeEl) {
-                    scanTimeEl.innerText = `${avgScanTime.toFixed(2)} sec`;
-                }
-            }
-
-        } catch (error) {
-            console.error("Error fetching average scan time:", error);
-        }
-    });
-</script>
-
-
-<script>
     document.addEventListener("DOMContentLoaded", async function() {
         const token = localStorage.getItem("auth_token");
 
         if (!token) {
-            console.warn("No token found in localStorage.");
+            console.warn("Missing auth token.");
             return;
         }
 
         try {
-            const response = await axios.get("/api/suppliers", {
+            const response = await axios.get(`/api/suppliers`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
 
-            const rawData = response.data;
-            let suppliers = Array.isArray(rawData) ? rawData : rawData.data || [];
+            let suppliers = Array.isArray(response.data) ? response.data : response.data.data || [];
 
-            // Fallback if less than 10
-            const defaultSuppliers = [{
+            const fallbackSuppliers = [{
                     name: "Generic Co.",
-                    address: "Sarajevo",
-                    fallback: true
+                    owner: "N/A",
+                    address: "Sarajevo"
                 },
                 {
                     name: "Example Inc.",
-                    address: "Mostar",
-                    fallback: true
+                    owner: "N/A",
+                    address: "Mostar"
                 },
                 {
                     name: "Placeholder Ltd.",
-                    address: "Tuzla",
-                    fallback: true
+                    owner: "N/A",
+                    address: "Tuzla"
                 },
                 {
                     name: "Test Supplier",
-                    address: "Zenica",
-                    fallback: true
+                    owner: "N/A",
+                    address: "Zenica"
                 },
                 {
                     name: "Demo Group",
-                    address: "Bihać",
-                    fallback: true
+                    owner: "N/A",
+                    address: "Bihać"
                 },
                 {
                     name: "ACME Corp",
-                    address: "Travnik",
-                    fallback: true
+                    owner: "N/A",
+                    address: "Travnik"
                 }
             ];
 
-            if (suppliers.length < 10) {
-                suppliers = suppliers.concat(defaultSuppliers.slice(0, 10 - suppliers.length));
-            } else {
-                suppliers = suppliers.slice(-10);
-            }
+            suppliers = suppliers.length < 10 ?
+                suppliers.concat(fallbackSuppliers.slice(0, 10 - suppliers.length)) :
+                suppliers.slice(-10);
 
             const container = document.getElementById("supplierCardsContainer");
+            container.innerHTML = "";
 
-            suppliers.forEach(supplier => {
+            suppliers.forEach((supplier) => {
+                const firstLetter = supplier.name?.[0]?.toUpperCase() || "?";
+
+                const avatarHTML = `
+                    <div class="rounded-circle d-flex align-items-center justify-content-center text-white shadow-sm"
+                         style="width: 40px; height: 40px; background-color: #299cdb; font-size: 16px;">
+                         ${firstLetter}
+                    </div>`;
+
                 const slide = document.createElement("div");
                 slide.className = "swiper-slide";
 
                 slide.innerHTML = `
-                            <div class="card rounded-0 card-animate overflow-hidden">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-grow-1 overflow-hidden">
-
-                                            <p class="text-uppercase fw-medium text-muted text-truncate mb-3">${supplier.name}
-                                            <div class="flex-shrink-0 d-flex align-items-center ml-2">
-                                                 <img id="user-avatar" src="{{ URL::asset('build/images/users/orbico.png') }}" class="rounded-circle shadow-sm mb-1" width="40" height="40" alt="Korisnički avatar">
-                                             </div></p>
-
-                                            <h4 class="fs-10 fw-semibold ff-secondary mb-0 text-truncate">
-                                                <i class="ri-map-pin-line text-info me-1"></i>${supplier.address}
-                                            </h4>
-                                        </div>
-                                        <div class="flex-shrink-0 d-flex align-items-center">
-                                            <canvas class="scan-chart" width="80" height="80"></canvas>
-                                        </div>
-                                    </div>
+                    <div class="card rounded-0 card-animate overflow-hidden">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-3 d-flex align-items-center">
+                                        ${supplier.name}
+                                        <span class="ms-2">${avatarHTML}</span>
+                                    </p>
+                                    <h4 class="fs-10 fw-semibold ff-secondary mb-0 text-truncate">
+                                        <i class="ri-map-pin-line text-info me-1"></i>${supplier.address} 
+                                    </h4>
+                                </div>
+                                <div class="flex-shrink-0 d-flex align-items-center">
+                                    <canvas class="scan-chart" width="80" height="80"></canvas>
                                 </div>
                             </div>
-                        `;
+                        </div>
+                    </div>
+                `;
 
                 container.appendChild(slide);
             });
 
-            // Re-initialize scan charts
             renderScanCharts();
 
-            // Initialize Swiper after DOM is populated
-            const swiper = new Swiper(".mySwiper", {
+            new Swiper(".mySwiper", {
                 slidesPerView: 6,
                 spaceBetween: 4,
                 autoplay: {
-                    delay: 2000, // Slide every 3 seconds
-                    disableOnInteraction: false // Keeps autoplay running after manual slide
+                    delay: 2000,
+                    disableOnInteraction: false
                 },
                 loop: true,
-
-
                 navigation: false,
                 breakpoints: {
                     768: {
@@ -1054,16 +1212,15 @@
                 }
             });
 
-
         } catch (error) {
             console.error("Error fetching suppliers:", error);
         }
     });
 </script>
 
+
+
 <!-- Upload data -->
-
-
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const token = localStorage.getItem("auth_token");
@@ -1214,6 +1371,8 @@
     });
 </script>
 
+
+<!-- user package -->
 <script>
     document.addEventListener("DOMContentLoaded", async function() {
         const token = localStorage.getItem("auth_token");
