@@ -141,6 +141,40 @@
         max-width: 75vw;
         /* or set fixed px: 1200px, 1400px */
     }
+
+    @media print {
+    body * {
+        visibility: hidden;
+    }
+
+    #invoiceDetailsModal,
+    #invoiceDetailsModal * {
+        visibility: visible;
+    }
+
+    #invoiceDetailsModal {
+        
+        z-index: 9999;
+    }
+
+    .modal-content {
+        border: none !important;
+        box-shadow: none !important;
+    }EU
+
+    .d-print-none {
+        display: none !important;
+    }
+
+    .table {
+        width: 100% !important;
+    }
+
+    .card {
+        border: none !important;
+        box-shadow: none !important;
+    }
+}
 </style>
 @endsection
 @section('content')
@@ -333,7 +367,7 @@ Lista faktura
                                                     <tr class="border-top border-top-dashed fs-15">
                                                         <th scope="row">Ukupno</th>
                                                         <th class="text-end"><span id="modal-total-amount">
-                                                            </span> EUR </th>
+                                                            </span> KM </th>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -362,7 +396,7 @@ Lista faktura
                                             </div>
                                         </div>
                                         <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-                                            <a href="javascript:window.print()" class="btn btn-success">
+                                            <a href="javascript:void(0);" class="btn btn-success" onclick="printInvoiceModal()">
                                                 <i class="ri-printer-line align-bottom me-1"></i> Print
                                             </a>
                                             <a href="javascript:void(0);" class="btn btn-primary">
@@ -551,6 +585,36 @@ Lista faktura
     });
 </script>
 
+<script>
+    function printInvoiceModal() {
+        const printContents = document.querySelector('#invoiceDetailsModal .modal-body').innerHTML;
+        const originalContents = document.body.innerHTML;
+
+        // Create new window for printing
+        const printWindow = window.open('', '', 'height=700,width=900');
+        printWindow.document.write(`
+            <html>
+                <head>
+                    <title>Pregled fakture</title>
+                    <link rel="stylesheet" href="/build/css/bootstrap.min.css" />
+                    <style>
+                        body { font-family: sans-serif; padding: 20px; }
+                        table { width: 100%; border-collapse: collapse; }
+                        th, td { border: 1px solid #ccc; padding: 8px; }
+                        h5, h6 { margin-bottom: 5px; }
+                    </style>
+                </head>
+                <body>
+                    ${printContents}
+                </body>
+            </html>
+        `);
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+    }
+</script>
 
 
 <script>

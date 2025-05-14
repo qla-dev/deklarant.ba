@@ -9,18 +9,41 @@
 
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
-/* Ensures the selected text is truncated with ellipsis and tooltip works */
-.select2-container--default .select2-selection--single .select2-selection__rendered {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 270px; /* match width - 10px */
-}
+    /* Ensures the selected text is truncated with ellipsis and tooltip works */
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 270px;
+        /* match width - 10px */
+    }
 
-/* Optional: make button and input align cleaner if needed */
-.select2-tariff {
-    max-width: 280px !important;
-}
+    /* Optional: make button and input align cleaner if needed */
+    .select2-tariff {
+        max-width: 280px !important;
+    }
+
+    .custom-swal-popup {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+
+    .custom-swal-spinner {
+        margin: 0 auto;
+        width: 32px;
+        height: 32px;
+        border: 3px solid #0dcaf0;
+        /* Bootstrap info color */
+        border-top-color: transparent;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
 </style>
 
 
@@ -40,9 +63,9 @@
                 <form class="needs-validation" novalidate id="invoice_form">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="card-header border-bottom-dashed p-4 d-flex justify-content-between">
+                            <div class="card-header border-bottom-dashed p-4 d-flex justify-content-between align-items-start">
                                 <div>
-                                    <img src="{{ URL::asset('build/images/logo.svg') }}" class="card-logo" alt="logo" height="30">
+                                    <img src="{{ URL::asset('build/images/logo-dek.png') }}" class="card-logo" alt="logo" height="30">
                                     <div class="mt-4">
                                         <h6 class="text-muted text-uppercase fw-semibold">Adresa</h6>
                                         <p class="text-muted mb-1" id="address-details">--</p>
@@ -51,8 +74,8 @@
                                 </div>
                                 <div class="text-end">
                                     <h6><span class="text-muted fw-normal">Email:</span> <span id="email">--</span></h6>
-                                    <h6><span class="text-muted fw-normal">Web:</span> <a href="#" class="link-primary" target="_blank" id="website">--</a></h6>
-                                    <h6 class="mb-0"><span class="text-muted fw-normal">Telefon:</span> <span id="contact-no">--</span></h6>
+
+
                                 </div>
                             </div>
                         </div>
@@ -60,9 +83,9 @@
                         <div class="col-lg-12">
                             <div class="card-body p-4">
                                 <div class="row g-3">
-                                    <div class="col-lg-3 col-6">
+                                    <div class="col-lg-3 col-6 d-flex justify-content-between">
                                         <p class="text-muted mb-2 text-uppercase fw-semibold">Faktura #</p>
-                                        <h5 class="fs-14 mb-0">#<span id="invoice-no">--</span></h5>
+                                        <h5 class="fs-14 mb-0">#<span id="invoice-no1">--</span></h5>
                                     </div>
                                     <div class="col-lg-3 col-6">
                                         <p class="text-muted mb-2 text-uppercase fw-semibold">Datum</p>
@@ -70,7 +93,7 @@
                                     </div>
                                     <div class="col-lg-3 col-6">
                                         <p class="text-muted mb-2 text-uppercase fw-semibold">Skenirana</p>
-                                        <span class="badge bg-light text-dark fs-11" id="payment-status">--</span>
+                                        <span class="badge bg-light text-dark fs-11" id="payment-status"> Da</span>
                                     </div>
                                     <div class="col-lg-3 col-6">
                                         <p class="text-muted mb-2 text-uppercase fw-semibold">Ukupan iznos</p>
@@ -92,7 +115,7 @@
                                     </div>
                                     <div class="col-6">
                                         <h6 class="text-muted text-uppercase fw-semibold mb-3">Zemlja porijekla</h6>
-                                        <p class="fw-medium mb-2" id="shipping-country">--</p>
+                                        <p class="fw-medium mb-2" id="shipping-country">Germany</p>
                                     </div>
                                 </div>
                             </div>
@@ -123,8 +146,8 @@
                                             </tr>
                                             <tr class="border-top border-top-dashed mt-2">
                                                 <td colspan="3"></td>
-                                                <td colspan="2" class="p-0">
-                                                    <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
+                                                <td colspan="3" class="p-0">
+                                                    <table class="table table-borderless table-sm table-nowrap align-right mb-0" style="padding-right:0;">
                                                         <tbody>
                                                             <tr>
                                                                 <th scope="row">Cijena bez dodatnih troškova</th>
@@ -163,7 +186,7 @@
                                         <tbody>
                                             <tr class="border-top border-top-dashed fs-15">
                                                 <th scope="row">Ukupno</th>
-                                                <th class="text-end"><span id="modal-total-amount"></span> USD</th>
+                                                <th class="text-end"><span id="modal-total-amount"></span> KM</th>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -242,313 +265,410 @@
 
 
 <!-- AI scan api implementation -->
-
 <script>
-let processedTariffData = [];
-let disableAIPills = false;
-let globalAISuggestions = [];
+    let processedTariffData = [];
+    let disableAIPills = false;
+    let globalAISuggestions = [];
+    let _invoice_data = null;
 
-const select2Options = {
-    placeholder: "Pretraži tarifne stavke...",
-    width: '280px',
-    minimumInputLength: 1,
-    ajax: {
-        transport: function(params, success, failure) {
-            const term = params.data.q?.toLowerCase() || "";
-            const filtered = processedTariffData.filter(item => item.search.includes(term));
-            success({ results: filtered });
-        },
-        delay: 200
-    },
-    templateResult: function(item) {
-        if (!item.id && !item.text) return null;
-        const icon = item.isLeaf ? "•" : "▶";
-        return $(`<div style="padding-left:${item.depth * 20}px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${item.display}">${icon} ${item.display}</div>`);
-    },
-    templateSelection: function(item) {
-        return item.id ? `${item.id} – ${item.text}` : "";
-    }
-};
-
-function initializeTariffSelects() {
-    $('.select2-tariff').select2(select2Options);
-    $('.select2-tariff').on('select2:select', function(e) {
-        const fullLabel = e.params.data.display || e.params.data.text;
-        $(this).next('.select2-container').find('.select2-selection__rendered')
-            .attr('title', fullLabel);
-    });
-}
-
-function showAISuggestionsSwal(rowIndex, onSelect) {
-    const suggestions = globalAISuggestions[rowIndex] || [];
-    if (!Array.isArray(suggestions) || suggestions.length === 0) {
-        Swal.fire("Nema prijedloga", "Za ovaj red nisu dostupni AI prijedlozi.", "info");
-        return;
-    }
-
-    let html = `<div class='d-flex flex-column'>`;
-    suggestions.slice(0, 10).forEach((s, i) => {
-        html += `<button type='button' class='btn btn-outline-info mb-2 ai-pill' data-index='${i}'>
-            ${s.entry["Tarifna oznaka"]} – ${s.entry["Naziv"]}
-        </button>`;
-    });
-    html += `</div>`;
-
-    Swal.fire({
-        title: "AI prijedlozi",
-        html,
-        showConfirmButton: false,
-        didOpen: () => {
-            document.querySelectorAll(".ai-pill").forEach(btn => {
-                btn.addEventListener("click", () => {
-                    const index = btn.getAttribute("data-index");
-                    onSelect(suggestions[index]);
-                    Swal.close();
+    const select2Options = {
+        placeholder: "Pretraži tarifne stavke...",
+        width: '280px',
+        minimumInputLength: 1,
+        ajax: {
+            transport: function(params, success, failure) {
+                const term = params.data.q?.toLowerCase() || "";
+                const filtered = processedTariffData.filter(item => item.search.includes(term));
+                success({
+                    results: filtered
                 });
-            });
+            },
+            delay: 200
+        },
+        templateResult: function(item) {
+            if (!item.id && !item.text) return null;
+            const icon = item.isLeaf ? "•" : "▶";
+            return $(`<div style="padding-left:${item.depth * 20}px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${item.display}">${icon} ${item.display}</div>`);
+        },
+        templateSelection: function(item) {
+            return item.id ? `${item.id} – ${item.text}` : "";
         }
-    });
-}
+    };
 
-function calculateInvoiceTotals() {
-    let subtotal = 0;
-    document.querySelectorAll("#newlink tr.product").forEach(row => {
-        const price = parseFloat(row.querySelector(".product-price")?.value || 0);
-        const qty = parseInt(row.querySelector(".product-quantity")?.value || 0);
-        subtotal += price * qty;
-    });
-    const tax = subtotal * 0.125;
-    const total = subtotal + tax;
-    document.getElementById("cart-subtotal").value = `${subtotal.toFixed(2)} KM`;
-    document.getElementById("cart-tax").value = `${tax.toFixed(2)} KM`;
-    document.getElementById("cart-total").value = `${total.toFixed(2)} KM`;
-    document.getElementById("cart-discount").value = "0.00 KM";
-    document.getElementById("cart-shipping").value = "0.00 KM";
-}
-
-function createInvoiceRow(id, item = {}, aiSuggestions = []) {
-    const row = document.createElement("tr");
-    row.classList.add("product");
-
-    const quantity = item.quantity || 0;
-    const unitPrice = item.base_price || 0;
-    const total = item.total_price || (quantity * unitPrice).toFixed(2);
-    const itemName = item.item_description_original || "";
-
-    row.innerHTML = `
-        <th scope="row" class="product-id align-middle">${id}</th>
-        <td class="align-middle">
-            <div class="d-flex flex-column">
-                <input type="text" class="form-control mb-2 item-name bg-light border-0" value="${itemName}" placeholder="Ime artikla" readonly>
-                <div class="d-flex align-items-center gap-2">
-                    <select class="form-control select2-tariff"></select>
-                    <button type="button" class="btn btn-info toggle-ai border-0 rounded-0" style="height:38px;">
-                        <i class="fas fa-wand-magic-sparkles text-white me-2"></i><span>Prijedlozi</span>
-                    </button>
-                </div>
-            </div>
-        </td>
-        <td class="align-middle">
-            <input type="number" class="form-control product-price text-end bg-light border-0" value="${unitPrice}" step="0.01" />
-        </td>
-        <td class="align-middle">
-            <div class="input-step d-flex align-items-center justify-content-center">
-                <button type="button" class="btn btn-light border minus">–</button>
-                <input type="number" class="product-quantity form-control text-center mx-1 border-0 rounded-0" value="${quantity}" readonly>
-                <button type="button" class="btn btn-light border plus">+</button>
-            </div>
-        </td>
-        <td class="align-middle text-end">
-            <input type="text" class="form-control product-line-price text-end bg-light border-0" value="${total} KM" readonly />
-        </td>
-        <td class="align-middle text-center">
-            <button type="button" class="btn btn-outline-danger remove-row">X</button>
-        </td>
-    `;
-
-    const select = row.querySelector(".select2-tariff");
-    const toggleBtn = row.querySelector(".toggle-ai");
-    const priceInput = row.querySelector(".product-price");
-    const quantityInput = row.querySelector(".product-quantity");
-    const totalInput = row.querySelector(".product-line-price");
-
-    if (aiSuggestions.length > 0) {
-        const best = aiSuggestions.sort((a, b) => a.closeness - b.closeness)[0];
-        const code = best.entry?.["Tarifna oznaka"];
-        const match = processedTariffData.find(p => p.id === code);
-        if (match) {
-            const option = new Option(match.text, match.id, true, true);
-            $(select).append(option).trigger("change");
-        }
+    function initializeTariffSelects() {
+        $('.select2-tariff').select2(select2Options);
+        $('.select2-tariff').on('select2:select', function(e) {
+            const fullLabel = e.params.data.display || e.params.data.text;
+            $(this).next('.select2-container').find('.select2-selection__rendered')
+                .attr('title', fullLabel);
+        });
     }
 
-    toggleBtn?.addEventListener("click", () => {
-        showAISuggestionsSwal(id - 1, (selected) => {
-            const code = selected.entry?.["Tarifna oznaka"];
+    function showAISuggestionsSwal(rowIndex, onSelect) {
+        const suggestions = globalAISuggestions[rowIndex] || [];
+        if (!Array.isArray(suggestions) || suggestions.length === 0) {
+            Swal.fire("Nema prijedloga", "Za ovaj red nisu dostupni AI prijedlozi.", "info");
+            return;
+        }
+
+        let html = `<div class='d-flex flex-column'>`;
+        suggestions.slice(0, 10).forEach((s, i) => {
+            html += `<button type='button' class='btn btn-outline-info mb-2 ai-pill' data-index='${i}'>
+                ${s.entry["Tarifna oznaka"]} – ${s.entry["Naziv"]}
+            </button>`;
+        });
+        html += `</div>`;
+
+        Swal.fire({
+            title: "AI prijedlozi",
+            html,
+            showConfirmButton: false,
+            didOpen: () => {
+                document.querySelectorAll(".ai-pill").forEach(btn => {
+                    btn.addEventListener("click", () => {
+                        const index = btn.getAttribute("data-index");
+                        onSelect(suggestions[index]);
+                        Swal.close();
+                    });
+                });
+            }
+        });
+    }
+
+    function calculateInvoiceTotals() {
+        let subtotal = 0;
+        document.querySelectorAll("#newlink tr.product").forEach(row => {
+            const price = parseFloat(row.querySelector(".product-price")?.value || 0);
+            const qty = parseInt(row.querySelector(".product-quantity")?.value || 0);
+            subtotal += price * qty;
+        });
+        const tax = subtotal * 0.125;
+        const total = subtotal + tax;
+        document.getElementById("cart-subtotal").value = `${subtotal.toFixed(2)} KM`;
+        document.getElementById("cart-tax").value = `${tax.toFixed(2)} KM`;
+        document.getElementById("cart-total").value = `${total.toFixed(2)} KM`;
+        document.getElementById("cart-discount").value = "0.00 KM";
+        document.getElementById("cart-shipping").value = "0.00 KM";
+
+        // Auto fill total into top fields
+        document.getElementById("total-amount").textContent = total.toFixed(2);
+        document.getElementById("payment-method-amount").textContent = total.toFixed(2);
+    }
+
+    function createInvoiceRow(id, item = {}, aiSuggestions = []) {
+        const row = document.createElement("tr");
+        row.classList.add("product");
+
+        const quantity = item.quantity || 0;
+        const unitPrice = item.base_price || 0;
+        const total = item.total_price || (quantity * unitPrice).toFixed(2);
+        const itemName = item.item_description_original || "";
+
+        row.innerHTML = `
+            <th scope="row" class="product-id align-middle">${id}</th>
+            <td class="align-middle">
+                <div class="d-flex flex-column">
+                    <input type="text" class="form-control mb-2 item-name bg-light border-0" value="${itemName}" placeholder="Ime artikla" readonly>
+                    <div class="d-flex align-items-center gap-2">
+                        <select class="form-control select2-tariff"></select>
+                        <button type="button" class="btn btn-info toggle-ai border-0 rounded-0" style="height:38px;">
+                            <i class="fas fa-wand-magic-sparkles text-white me-2"></i><span>Prijedlozi</span>
+                        </button>
+                    </div>
+                </div>
+            </td>
+            <td class="align-middle">
+                <input type="number" class="form-control product-price text-end bg-light border-0" value="${unitPrice}" step="0.01" />
+            </td>
+            <td class="align-middle">
+                <div class="input-step d-flex align-items-center justify-content-center">
+                    <button type="button" class="btn btn-light border minus">–</button>
+                    <input type="number" class="product-quantity form-control text-center mx-1 border-0 rounded-0" value="${quantity}" readonly>
+                    <button type="button" class="btn btn-light border plus">+</button>
+                </div>
+            </td>
+            <td class="align-middle text-end">
+                <input type="text" class="form-control product-line-price text-end bg-light border-0" value="${total} KM" readonly />
+            </td>
+            <td class="align-middle text-center">
+                <button type="button" class="btn btn-outline-danger remove-row">X</button>
+            </td>
+        `;
+
+        const select = row.querySelector(".select2-tariff");
+        const toggleBtn = row.querySelector(".toggle-ai");
+        const priceInput = row.querySelector(".product-price");
+        const quantityInput = row.querySelector(".product-quantity");
+        const totalInput = row.querySelector(".product-line-price");
+
+        if (aiSuggestions.length > 0) {
+            const best = aiSuggestions.sort((a, b) => a.closeness - b.closeness)[0];
+            const code = best.entry?.["Tarifna oznaka"];
             const match = processedTariffData.find(p => p.id === code);
             if (match) {
                 const option = new Option(match.text, match.id, true, true);
                 $(select).append(option).trigger("change");
             }
+        }
+
+        toggleBtn?.addEventListener("click", () => {
+            showAISuggestionsSwal(id - 1, (selected) => {
+                const code = selected.entry?.["Tarifna oznaka"];
+                const match = processedTariffData.find(p => p.id === code);
+                if (match) {
+                    const option = new Option(match.text, match.id, true, true);
+                    $(select).append(option).trigger("change");
+                }
+            });
         });
-    });
 
-    row.querySelector(".plus").addEventListener("click", () => {
-        quantityInput.value = parseInt(quantityInput.value) + 1;
-        totalInput.value = `${(parseFloat(priceInput.value) * parseInt(quantityInput.value)).toFixed(2)} KM`;
-        calculateInvoiceTotals();
-    });
+        row.querySelector(".plus").addEventListener("click", () => {
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+            totalInput.value = `${(parseFloat(priceInput.value) * parseInt(quantityInput.value)).toFixed(2)} KM`;
+            calculateInvoiceTotals();
+        });
 
-    row.querySelector(".minus").addEventListener("click", () => {
-        const current = parseInt(quantityInput.value);
-        if (current > 0) quantityInput.value = current - 1;
-        totalInput.value = `${(parseFloat(priceInput.value) * parseInt(quantityInput.value)).toFixed(2)} KM`;
-        calculateInvoiceTotals();
-    });
+        row.querySelector(".minus").addEventListener("click", () => {
+            const current = parseInt(quantityInput.value);
+            if (current > 0) quantityInput.value = current - 1;
+            totalInput.value = `${(parseFloat(priceInput.value) * parseInt(quantityInput.value)).toFixed(2)} KM`;
+            calculateInvoiceTotals();
+        });
 
-    priceInput.addEventListener("input", () => {
-        totalInput.value = `${(parseFloat(priceInput.value) * parseInt(quantityInput.value)).toFixed(2)} KM`;
-        calculateInvoiceTotals();
-    });
+        priceInput.addEventListener("input", () => {
+            totalInput.value = `${(parseFloat(priceInput.value) * parseInt(quantityInput.value)).toFixed(2)} KM`;
+            calculateInvoiceTotals();
+        });
 
-    row.querySelector(".remove-row").addEventListener("click", () => {
-        row.remove();
-        calculateInvoiceTotals();
-    });
+        row.querySelector(".remove-row").addEventListener("click", () => {
+            row.remove();
+            calculateInvoiceTotals();
+        });
 
-    return row;
-}
-
-function addRowToInvoice(item = {}, suggestions = []) {
-    const tbody = document.getElementById("newlink");
-    const newId = tbody.children.length + 1;
-    const row = createInvoiceRow(newId, item, suggestions);
-    tbody.appendChild(row);
-    initializeTariffSelects();
-    calculateInvoiceTotals();
-}
-
-async function fillInvoiceData() {
-    const invoice = await getInvoice();
-    invoice.items.forEach(item => addRowToInvoice(item, item.best_customs_code_matches))
-}
-
-let _invoice_data = null;
-async function waitForAIResult() {
-    invoice_id = getInvoiceId();
-    if (!invoice_id) {
-        Swal.fire("Greška", "Task ID nije pronađen.", "error");
-        return;
+        return row;
     }
 
-    Swal.fire({ title: 'Skeniranje...', html: 'Obrađujemo dokument...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
+    function addRowToInvoice(item = {}, suggestions = []) {
+        const tbody = document.getElementById("newlink");
+        const newId = tbody.children.length + 1;
+        globalAISuggestions.push(suggestions);
+        const row = createInvoiceRow(newId, item, suggestions);
+        tbody.appendChild(row);
+        initializeTariffSelects();
+        calculateInvoiceTotals();
+    }
 
-    while (true) {
+    async function fillInvoiceData() {
+        const invoice = await getInvoice();
+        invoice.items.forEach(item => addRowToInvoice(item, item.best_customs_code_matches));
+    }
+
+    async function promptForSupplierAfterScan() {
         try {
-            const res = await fetch(`/api/invoices/${invoice_id}/scan`, {
+            const token = localStorage.getItem("auth_token");
+            const res = await fetch("/api/suppliers", {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            const json = await res.json();
+            const suppliers = json.data || [];
+
+            if (!suppliers.length) {
+                Swal.fire("Greška", "Nema dostupnih dobavljača.", "error");
+                return;
+            }
+
+            let html = `<select id="supplierSelect" class="form-control">`;
+            suppliers.forEach(s => {
+                html += `<option value="${s.id}" 
+                    data-name="${s.name}" 
+                    data-address="${s.address}" 
+                    data-tax="${s.tax_id}" 
+                    data-phone="${s.contact_phone}" 
+                    data-email="${s.contact_email}">
+                    ${s.name} (${s.owner})
+                </option>`;
+            });
+            html += `</select>`;
+
+            const {
+                value: selectedId
+            } = await Swal.fire({
+                title: "Odaberite dobavljača",
+                html,
+                confirmButtonText: "Potvrdi",
+                focusConfirm: false,
+                preConfirm: () => document.getElementById("supplierSelect").value
+            });
+
+            const selectedOption = document.querySelector(`#supplierSelect option[value="${selectedId}"]`);
+            if (selectedOption) {
+                document.getElementById("billing-name").textContent = selectedOption.dataset.name || "--";
+                document.getElementById("billing-address-line-1").textContent = selectedOption.dataset.address || "--";
+                document.getElementById("billing-tax-no").textContent = selectedOption.dataset.tax || "--";
+                document.getElementById("billing-phone-no").textContent = selectedOption.dataset.phone || "--";
+                document.getElementById("email").textContent = selectedOption.dataset.email || "--";
+            }
+
+            localStorage.setItem("selected_supplier_id", selectedId);
+        } catch (e) {
+            console.error("Greška pri dohvaćanju dobavljača:", e);
+            Swal.fire("Greška", "Nije moguće dohvatiti dobavljače.", "error");
+        }
+    }
+
+    async function waitForAIResult() {
+        const invoice_id = getInvoiceId();
+        if (!invoice_id) {
+            Swal.fire("Greška", "Task ID nije pronađen.", "error");
+            return;
+        }
+
+        Swal.fire({
+            title: 'Skeniranje...',
+            html: `
+    <div class="custom-swal-spinner mb-3"></div>
+     <div id="swal-status-message">Čeka na obradu...</div>
+    `,
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            customClass: {
+                popup: 'custom-swal-popup'
+            }
+        });
+
+
+        const statusTextMap = {
+            null: "Obrađujemo podatke...",
+            conversion: "Konvertovanje dokumenta...",
+            extraction: "Ekstrakcija podataka...",
+            enrichment: "Obogaćivanje podataka..."
+        };
+
+        while (true) {
+            try {
+                const res = await fetch(`/api/invoices/${invoice_id}/scan`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('auth_token')}`
+                    },
+                });
+                const resJson = await res.json();
+
+                //  Update the status message
+                const statusEl = document.getElementById("swal-status-message");
+                const currentStatus = resJson?.status?.status;
+                if (statusEl && currentStatus in statusTextMap) {
+                    statusEl.textContent = statusTextMap[currentStatus];
+                }
+
+                if (currentStatus === "completed") {
+                    _invoice_data = null;
+                    Swal.close();
+                    break;
+                }
+
+                if (currentStatus === "error") {
+                    Swal.close();
+                    Swal.fire("Greška", resJson?.status?.error_message || "Greška pri skeniranju.", "error");
+                    break;
+                }
+            } catch (e) {
+                console.error("Greška u čekanju AI odgovora:", e);
+            }
+            await new Promise(r => setTimeout(r, 2000));
+        }
+    }
+
+    function getInvoiceId() {
+        return localStorage.getItem("scan_invoice_id");
+    }
+
+    async function getInvoice() {
+        if (!_invoice_data) {
+            _invoice_data = await (await fetch(`/api/invoices/${getInvoiceId()}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('auth_token')}`
-                },
-            });
-            const resJson = await res.json();
-            // TODO
-            if (resJson?.status?.status === "completed") {
-                // force refresh next time we want to get invoice data
-                _invoice_data = null;
-                Swal.close();
-                break;
-            }
-            if (resJson?.status?.status === "error") {
-                Swal.close();
-                Swal.fire("Greška", status.error_message, "error");
-                break;
-            }
-        } catch (e) {
-            console.error("Greška u čekanju AI odgovora:", e);
+                }
+            })).json();
         }
-        await new Promise(r => setTimeout(r, 2000));
+        return _invoice_data;
     }
-}
 
-function getInvoiceId() {
-    return localStorage.getItem("scan_invoice_id");
-}
-
-async function getInvoice() {
-    if (!_invoice_data) {
-        _invoice_data = (await fetch(`/api/invoices/${getInvoiceId()}`, {
+    async function startAiScan() {
+        const ret = await fetch(`/api/invoices/${getInvoiceId()}/scan`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('auth_token')}`
             },
-        })).json()
-    }
-    return _invoice_data;
-}
-
-async function startAiScan() {
-    const ret = await fetch(`/api/invoices/${getInvoiceId()}/scan`, {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem('auth_token')}`
-        },
-        method: 'POST'
-    });
-    if (!ret.ok) {
-        Swal.close();
-        Swal.fire({
-            title: "Greška pri skeniranju",
-            text: (await ret.json())?.error || "Nepoznata greška",
-            icon: 'error',
-        })
-    }
-    return ret.ok;
-}
-
-document.addEventListener("DOMContentLoaded", async function () {
-    const tariffRes = await fetch("{{ URL::asset('build/json/tariff.json') }}");
-    const tariffData = await tariffRes.json();
-
-    processedTariffData = tariffData
-    .filter(item => item["Tarifna oznaka"] && item["Naziv"] && item["Puni Naziv"])
-    .map(item => ({
-        id: item["Tarifna oznaka"],
-        text: item["Puni Naziv"].split(">>>").pop().trim(),
-        display: `${item["Tarifna oznaka"]} – ${item["Naziv"]}`,
-        depth: item["Puni Naziv"].split(">>>").length - 1,
-        isLeaf: item["Tarifna oznaka"].replace(/\s/g, '').length === 10,
-        search: [item["Naziv"], item["Puni Naziv"], item["Tarifna oznaka"]].join(" ").toLowerCase()
-    }));
-
-    const invoice = await getInvoice();
-    // only ask to ai-fill if invoice doesn't have task ID.
-    if (invoice.task_id == null)
-        await Swal.fire({
-            title: 'Automatski popuniti?',
-            text: 'Podaci o dobavljaču i fakturi će biti popunjeni automatski. Tarifne oznake i pripadajuće elemente možete unijeti ručno.',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Koristi AI podatke',
-            cancelButtonText: 'Unos ručno'
-        }).then(async (result) => {
-            document.getElementById("newlink").innerHTML = "";
-            if (result.isConfirmed) {
-                disableAIPills = false;
-                if (await startAiScan()) {
-                    await waitForAIResult();
-                };
-            } else {
-                disableAIPills = true;
-                addRowToInvoice();
-            }
+            method: 'POST'
         });
-    // if task is there but there are no items, it means we are pending for AI result
-    else if (!invoice.items?.length) {
-        await waitForAIResult();
+        if (!ret.ok) {
+            Swal.close();
+            Swal.fire({
+                title: "Greška pri skeniranju",
+                text: (await ret.json())?.error || "Nepoznata greška",
+                icon: 'error',
+            });
+        }
+        return ret.ok;
     }
-    await fillInvoiceData();
 
-    document.getElementById("add-item")?.addEventListener("click", () => addRowToInvoice());
-});
+    document.addEventListener("DOMContentLoaded", async function() {
+        const tariffRes = await fetch("{{ URL::asset('build/json/tariff.json') }}");
+        const tariffData = await tariffRes.json();
+
+        processedTariffData = tariffData
+            .filter(item => item["Tarifna oznaka"] && item["Naziv"] && item["Puni Naziv"])
+            .map(item => ({
+                id: item["Tarifna oznaka"],
+                text: item["Puni Naziv"].split(">>>").pop().trim(),
+                display: `${item["Tarifna oznaka"]} – ${item["Naziv"]}`,
+                depth: item["Puni Naziv"].split(">>>").length - 1,
+                isLeaf: item["Tarifna oznaka"].replace(/\s/g, '').length === 10,
+                search: [item["Naziv"], item["Puni Naziv"], item["Tarifna oznaka"]].join(" ").toLowerCase()
+            }));
+
+        const invoice = await getInvoice();
+        document.getElementById("newlink").innerHTML = "";
+
+        globalAISuggestions = invoice.items.map(item => {
+            return (item.best_customs_code_matches || []).map(code => ({
+                entry: {
+                    "Tarifna oznaka": code,
+                    "Naziv": processedTariffData.find(p => p.id === code)?.text || ""
+                },
+                closeness: 1
+            }));
+        });
+
+        if (invoice.task_id == null) {
+            if (await startAiScan()) {
+                await waitForAIResult();
+            }
+        } else if (!invoice.items?.length) {
+            await waitForAIResult();
+        }
+
+        await fillInvoiceData();
+        await promptForSupplierAfterScan();
+
+        // Fill invoice number
+        const invNo = localStorage.getItem('invoice-no');
+        if (invNo) {
+            document.getElementById("invoice-no1").textContent = invNo;
+        }
+
+        // Fill today's date
+        const today = new Date().toLocaleDateString('bs-BA');
+        document.getElementById("invoice-date").textContent = today;
+
+        // Init add item
+        document.getElementById("add-item")?.addEventListener("click", () => addRowToInvoice());
+    });
 </script>
+
+
 
 
 
@@ -640,108 +760,129 @@ document.addEventListener("DOMContentLoaded", async function () {
 <!-- Save invoice test -->
 
 <script>
-document.getElementById("save-invoice-btn").addEventListener("click", async function (e) {
-    e.preventDefault();
-    e.stopPropagation();
+    const originalSaveBtn = document.getElementById("save-invoice-btn");
+    const newSaveBtn = originalSaveBtn.cloneNode(true);
+    originalSaveBtn.replaceWith(newSaveBtn);
 
-    const userId = 3; // Replace with dynamic value if needed
-    const supplierId = 2; // Replace with dynamic value if needed
-    const button = this;
+    newSaveBtn.addEventListener("click", async function(e) {
+        console.log("🟢 Save button clicked");
 
-    button.disabled = true;
-    button.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Spašavanje...`;
+        e.preventDefault();
+        e.stopPropagation();
 
-    try {
-        const items = [];
-        document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
-            const rawItemCode = row.querySelector(".select2-tariff")?.value || "";
-            const rawTariffLabel = row.querySelector(".select2-tariff option:checked")?.textContent?.trim() || "";
-            const rawItemName = row.querySelector(".item-name")?.value?.trim() || "";
+        const userId = 3; // TODO: Replace with dynamic user ID when available
+        const supplierId = parseInt(localStorage.getItem("selected_supplier_id"));
 
-            const item_code = rawItemCode.slice(0, 190);
-            const item_description_original = rawItemName.slice(0, 190); // ✅ save item_name as original
-            const item_description = rawTariffLabel.slice(0, 190);       // ✅ use tariff label for description
-            const item_name = rawItemName.slice(0, 190);
+        const button = this;
+        button.disabled = true;
+        button.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Spašavanje...`;
 
-            const quantity = parseInt(row.querySelector(".product-quantity")?.value || "0");
-            const base_price = parseFloat(row.querySelector(".product-price")?.value || "0");
-            const total_price = parseFloat((base_price * quantity).toFixed(2));
-            const currency = "EUR";
-            const version = new Date().getFullYear();
-
-            console.log(`🔎 Row ${index + 1}`, {
-                item_name,
-                item_code,
-                item_description_original,
-                item_description,
-                quantity,
-                base_price,
-                total_price
-            });
-
-            items.push({
-                item_code,
-                item_description_original,
-                item_description,
-                quantity,
-                base_price,
-                total_price,
-                currency,
-                version,
-                best_customs_code_matches: globalAISuggestions[index]?.map(s => s.entry?.["Tarifna oznaka"])?.slice(0, 10) || ["000000"],
-                item_name
-            });
-        });
-
-        const payload = {
-            file_name: "invoice_" + Date.now() + ".pdf",
-            total_price: parseFloat(document.getElementById("cart-total").value.replace(" KM", "").trim()),
-            date_of_issue: new Date().toISOString().split("T")[0],
-            country_of_origin: document.getElementById("shipping-country")?.textContent?.trim().slice(0, 190) || "Unknown",
-            items
-        };
-
-        console.log("📦 Sending payload to backend:", payload);
-
-        const token = localStorage.getItem("auth_token");
-
-        const response = await fetch(`http://localhost:8000/api/invoices/users/${userId}/suppliers/${supplierId}/form`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify(payload)
-        });
-
-        console.log("📡 Response status:", response.status);
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error("Error response from server:", errorText);
-            throw new Error("Greška pri slanju fakture: " + (errorText || "Nepoznata greška"));
+        if (!supplierId || isNaN(supplierId)) {
+            Swal.fire("Greška", "Nije odabran dobavljač. Molimo prvo odaberite dobavljača.", "error");
+            button.disabled = false;
+            button.innerHTML = `<i class="ri-printer-line align-bottom me-1"></i> Save`;
+            return;
         }
 
-        const responseData = await response.json();
-        console.log(" Response data:", responseData);
+        try {
+            const items = [];
+            document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
+                const rawItemCode = row.querySelector(".select2-tariff")?.value || "";
+                const rawTariffLabel = row.querySelector(".select2-tariff option:checked")?.textContent?.trim() || "";
+                const rawItemName = row.querySelector(".item-name")?.value?.trim() || "";
 
-        Swal.fire({
-            icon: "success",
-            title: "Faktura spašena!",
-            text: "Uspješno ste kreirali fakturu.",
-            confirmButtonText: "U redu",
-            customClass: {
-                        confirmButton: 'btn btn-info w-xs mt-2',
-            },
-        });
+                const item_code = rawItemCode.slice(0, 190);
+                const item_description_original = rawItemName.slice(0, 190);
+                const item_description = rawTariffLabel.slice(0, 190);
+                const item_name = rawItemName.slice(0, 190);
 
-    } catch (err) {
-        console.error(" Catch block error:", err);
-        Swal.fire("Greška", err.message || "Došlo je do greške.", "error");
-    } finally {
-        button.disabled = false;
-        button.innerHTML = `<i class="ri-printer-line align-bottom me-1"></i> Save`;
-    }
-});
+                const quantity = parseInt(row.querySelector(".product-quantity")?.value || "0");
+                const base_price = parseFloat(row.querySelector(".product-price")?.value || "0");
+                const total_price = parseFloat((base_price * quantity).toFixed(2));
+                const currency = "EUR";
+                const version = new Date().getFullYear();
+
+                items.push({
+                    item_code,
+                    item_description_original,
+                    item_description,
+                    quantity,
+                    base_price,
+                    total_price,
+                    currency,
+                    version,
+                    best_customs_code_matches: globalAISuggestions[index]?.map(s => s.entry?.["Tarifna oznaka"])?.slice(0, 10) || ["000000"],
+                    item_name
+                });
+            });
+
+            let totalPrice = parseFloat(document.getElementById("cart-total")?.value.replace(" KM", "").trim());
+            if (isNaN(totalPrice)) {
+                totalPrice = parseFloat(document.getElementById("total-amount")?.textContent.trim());
+            }
+
+            const payload = {
+                file_name: "invoice_" + Date.now() + ".pdf",
+                total_price: totalPrice,
+                date_of_issue: new Date().toISOString().split("T")[0],
+                country_of_origin: document.getElementById("shipping-country")?.textContent?.trim().slice(0, 190) || "Unknown",
+                items
+            };
+
+            // Debug logs
+            console.log("📌 supplierId =", supplierId);
+            console.log("📌 total_price =", totalPrice);
+            console.log("📌 invoice date =", payload.date_of_issue);
+            console.log("📌 country =", payload.country_of_origin);
+            console.log("📌 Number of items =", items.length);
+            console.log("📤 Final payload:", JSON.stringify(payload, null, 2));
+
+            const token = localStorage.getItem("auth_token");
+
+            const response = await fetch(`http://localhost:8000/api/invoices/users/${userId}/suppliers/${supplierId}/form`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(payload)
+            });
+
+            console.log("📡 Response status:", response.status);
+            const responseText = await response.text();
+            console.log("📥 Raw response text:", responseText);
+
+            let responseData;
+            try {
+                responseData = JSON.parse(responseText);
+                console.log("✅ Parsed response JSON:", responseData);
+            } catch (jsonErr) {
+                console.warn("⚠️ Could not parse JSON from response.");
+            }
+
+            if (!response.ok) {
+                throw new Error("Greška pri slanju fakture: " + (responseData?.error || "Nepoznata greška"));
+            }
+
+            Swal.fire({
+                icon: "success",
+                title: "Faktura spašena!",
+                text: "Uspješno ste kreirali fakturu.",
+                confirmButtonText: "U redu",
+                customClass: {
+                    confirmButton: 'btn btn-info w-xs mt-2',
+                },
+            });
+
+        } catch (err) {
+            console.error("❌ Catch block error:", err);
+            Swal.fire("Greška", err.message || "Došlo je do greške.", "error");
+        } finally {
+            button.disabled = false;
+            button.innerHTML = `<i class="ri-printer-line align-bottom me-1"></i> Save`;
+        }
+    });
 </script>
+
+
 @endsection

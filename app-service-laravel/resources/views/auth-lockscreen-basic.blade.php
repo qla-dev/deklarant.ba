@@ -1,8 +1,10 @@
 @extends('layouts.master-without-nav')
 
 @section('title')
-Prijava
+@lang('translation.basic-auth')
+
 @endsection
+
 
 @section('content')
 <div class="auth-page-wrapper pt-5">
@@ -62,7 +64,7 @@ Prijava
                                     </div>
 
                                     <div class="mt-4">
-                                        <button class="btn btn-info w-100 fw-bold" type="button" id="login-btn">Prijava</button>
+                                        <button class="btn btn-info w-100 fw-bold" type="button"  onclick="window.location.href='/'" >Otključaj</button>
                                     </div>
                                 </form>
                             </div>
@@ -148,6 +150,8 @@ Prijava
         });
     });
 </script>
+
+
 
 
 @endsection
