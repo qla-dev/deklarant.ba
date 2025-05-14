@@ -41,7 +41,7 @@ return [
     "my-wallet"=>"My Wallet",
     "ico-list"=>"ICO List",
     "kyc-application"=>"KYC Application",
-    "invoices"=>"Moje fakture",
+    "invoices"=>"Moje deklaracije",
     "basic-auth"=>"Sleep",
 
     "details"=>"Invoice Details",
@@ -245,7 +245,7 @@ return [
     "home" => "Početna",
     "statistic"=>"Kalendar",
     "exclist" => "Kursna lista",
-    "myorder" => "Moje fakture",
+    "myorder" => "Moje deklaracije",
     "clients" => "Moji dobavljači",
     "declarant" => "Tarifne oznake",
 

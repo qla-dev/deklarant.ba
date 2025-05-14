@@ -183,7 +183,7 @@
 deklarant.ba
 @endslot
 @slot('title')
-Lista faktura
+Moje spašene deklaracije
 @endslot
 @endcomponent
 

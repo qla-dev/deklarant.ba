@@ -57,7 +57,7 @@
                             <span>Pregledaj sve</span>
                         </div>
                         <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
-                            <h6 class="text-muted text-uppercase fs-11 mb-1">Broj skeniranih faktura</h6>
+                            <h6 class="text-muted text-uppercase fs-11 mb-1">Broj skeniranih deklaracija</h6>
                             <div class="d-flex align-items-center justify-content-center">
                                 <i class="ri-file-text-line  text-info mb-1" style="font-size: 45px"></i>
                                 <h3 class="mb-0 ms-2"><span id="usedScans" class="counter-value">0</span></h3>
@@ -91,7 +91,7 @@
                             <button type="button" data-bs-toggle="modal" data-bs-target="#scanModal"
                                 class="btn btn-info w-50 animated-btn btn-sm d-flex align-items-center justify-content-center">
                                 <i class="fas fa-wand-magic-sparkles fs-6 me-1" style="font-size:10px;"></i>
-                                <span class="fs-6"> Skeniraj fakturu sa AI</span>
+                                <span class="fs-6"> Skeniraj deklaraciju sa AI</span>
                             </button>
                         </div>
                     </div>
@@ -193,7 +193,7 @@
             <div class="card-body" style="z-index:1;">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1 overflow-hidden">
-                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Broj spašenih faktura</p>
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Broj spašenih deklaracija</p>
                         <h4 class="fs-22 fw-semibold ff-secondary mb-0">
                             <span class="counter-value" id="totalInvoices" data-target="45">0</span><span
                                 class="counter-value">/500</span>
@@ -435,7 +435,7 @@
         <div class="modal-content">
             <div class="modal-header text-center">
                 <h5 class="modal-title w-100" id="scanModalLabel"><i class="fas fa-wand-magic-sparkles fs-6 me-1"
-                        style="font-size:10px;"></i>Skeniraj fakturu sa AI</h5>
+                        style="font-size:10px;"></i>Skeniraj deklaraciju sa AI</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
             </div>
             <div class="modal-body d-flex justify-content-center">
@@ -448,7 +448,7 @@
 
                     <div class="text-center" id="dropzone-content">
                         <i class="ri-file-2-line text-info fs-1"></i>
-                        <p class="mt-3">Prevucite dokument ovdje ili kliknite kako bi uploadali i skenirali vašu fakturu
+                        <p class="mt-3">Prevucite dokument ovdje ili kliknite kako bi uploadali i skenirali vašu deklaraciju
                         </p>
                     </div>
 
@@ -461,7 +461,7 @@
 
                     <div id="scanningLoader" class="mt-4 text-center d-none">
                         <div class="spinner-border text-info" role="status" style="width: 3rem; height: 3rem;"></div>
-                        <p class="mt-3 fw-semibold" id="scanningText">Skeniranje fakture...</p>
+                        <p class="mt-3 fw-semibold" id="scanningText">Skeniranje deklaracije...</p>
                         <div id="successCheck" class="d-none mt-3">
                             <i class="ri-checkbox-circle-fill text-success fs-1 animate__animated animate__zoomIn"></i>
                             <p class="text-success fw-semibold mt-2">Uspješno skenirano!</p>
@@ -794,7 +794,7 @@
                 createDoughnutChart("doughnut2", usedPercentage);
             
             } catch (err) {
-                console.error("Greška prilikom dohvaćanja faktura ili paketa:", err);
+                console.error("Greška prilikom dohvaćanja deklaracija ili paketa:", err);
             }
         
             function createDoughnutChart(canvasId, usedPercentage) {

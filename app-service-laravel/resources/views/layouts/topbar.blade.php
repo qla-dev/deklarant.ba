@@ -213,7 +213,7 @@
                                     <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#scanModal"
                                         class="btn btn-info btn-sm text-white w-100 d-flex align-items-center justify-content-center">
                                         <i class="fas fa-wand-magic-sparkles fs-6 me-1"></i>
-                                        <span>Skeniraj fakturu sa AI</span>
+                                        <span>Skeniraj deklaraciju sa AI</span>
                                     </a>
                                 </div>
                                 

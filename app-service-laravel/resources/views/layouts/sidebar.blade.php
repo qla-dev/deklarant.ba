@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header text-center">
-                <h5 class="modal-title w-100" id="scanModalLabel"><i class="fas fa-wand-magic-sparkles fs-6 me-1" style="font-size:10px;"></i>Skeniraj fakturu sa AI</h5>
+                <h5 class="modal-title w-100" id="scanModalLabel"><i class="fas fa-wand-magic-sparkles fs-6 me-1" style="font-size:10px;"></i>Skeniraj deklaraciju sa AI</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
             </div>
             <div class="modal-body d-flex justify-content-center">
@@ -16,7 +16,7 @@
 
                     <div class="text-center" id="dropzone-content">
                         <i class="ri-file-2-line text-info fs-1"></i>
-                        <p class="mt-3">Prevucite dokument ovdje ili kliknite kako bi uploadali i skenirali vašu fakturu</p>
+                        <p class="mt-3">Prevucite dokument ovdje ili kliknite kako bi uploadali i skenirali vašu deklaraciju</p>
                     </div>
 
                     <div class="file-list" id="fileList" style="display: none;"></div>
@@ -27,7 +27,7 @@
 
                     <div id="scanningLoader" class="mt-4 text-center d-none">
                         <div class="spinner-border text-info" role="status" style="width: 3rem; height: 3rem;"></div>
-                        <p class="mt-3 fw-semibold" id="scanningText">Skeniranje fakture...</p>
+                        <p class="mt-3 fw-semibold" id="scanningText">Skeniranje deklracije...</p>
                         <div id="successCheck" class="d-none mt-3">
                             <i class="ri-checkbox-circle-fill text-success fs-1 animate__animated animate__zoomIn"></i>
                             <p class="text-success fw-semibold mt-2">Uspješno skenirano!</p>
@@ -134,7 +134,7 @@
                         class="btn btn-info btn-sm ms-5 text-white py-0 d-flex align-items-center justify-content-center">
 
                         <i class="fas fa-wand-magic-sparkles fs-6 me-1"></i>
-                        <span class="fs-6"> Skeniraj fakturu sa AI</span>
+                        <span class="fs-6"> Skeniraj deklaraciju sa AI</span>
                     </a>
 
 

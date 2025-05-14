@@ -61,9 +61,9 @@
                     </div>
                     <hr class="my-3 text-muted">
                     <ul class="list-unstyled text-muted vstack gap-3 mb-3">
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>100</b> AI Skeniranja Fakture</li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>50 strana</b> po Fakturi</li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>200</b> Faktura u historiji</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>100</b> AI Skeniranih Deklaracija</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>50 strana</b> po Deklaraciji</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>200</b> Deklaracija u historiji</li>
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: <b>20 s</b></li>
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i>30 dana</li>
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
@@ -95,9 +95,9 @@
                     </div>
                     <hr class="my-3 text-muted">
                     <ul class="list-unstyled text-muted vstack gap-3 mb-3">
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>200</b> AI Skeniranja Fakture</li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>150 strana</b> po Fakturi</li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>500</b> Faktura u historiji</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>200</b> AI Skeniranih Deklaracije</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>150 strana</b> po Deklaraciji</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>500</b> Deklaracija u historiji</li>
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: <b>10 s</b></li>
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i>120 dana</li>
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
@@ -131,9 +131,9 @@
                     </div>
                     <hr class="my-3 text-muted">
                     <ul class="list-unstyled text-muted vstack gap-3 mb-3">
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>500</b> AI Skeniranja Fakture</li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>Neograničeno strana </b> po Fakturi</li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>Neograničeno</b> faktura u historiji</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>500</b> AI Skeniranih Deklaracije</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>Neograničeno strana </b> po Deklaraciji</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>Neograničeno</b> Deklaracija u historiji</li>
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: <b>4 s</b></li>
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i>365 dana</li>
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
