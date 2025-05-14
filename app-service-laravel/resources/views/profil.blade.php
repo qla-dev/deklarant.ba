@@ -458,31 +458,6 @@
                                             </div>
                                         </form>
                                     </div>
-
-                                    <!-- Change Password Tab -->
-                                    <div class="tab-pane fade" id="changePassword" role="tabpanel">
-                                        <form action="javascript:void(0);">
-                                            <div class="row">
-                                                <div class="col-lg-12 mb-3">
-                                                    <label for="oldPassword" class="form-label text-info">Stara lozinka</label>
-                                                    <input type="password" class="form-control rounded-0" id="oldPassword" placeholder="Unesite staru lozinku" />
-                                                </div>
-                                                <div class="col-lg-6 mb-3">
-                                                    <label for="newPassword" class="form-label text-info">Nova lozinka</label>
-                                                    <input type="password" class="form-control rounded-0" id="newPassword" placeholder="Unesite novu lozinku" />
-                                                </div>
-                                                <div class="col-lg-6 mb-3">
-                                                    <label for="confirmPassword" class="form-label text-info">Potvrdite novu lozinku</label>
-                                                    <input type="password" class="form-control rounded-0" id="confirmPassword" placeholder="Potvrdite novu lozinku" />
-                                                </div>
-                                                <div class="col-lg-12 mt-4 mb-4">
-                                                    <div class="hstack gap-2 justify-content-end">
-                                                        <button type="submit" id="change-password-btn" class="btn btn-info"><i class="fas fa-save fs-6 me-1"></i> Promijeni lozinku</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
                                     <div class="tab-pane fade" id="companyDetails" role="tabpanel">
                                         <form action="javascript:void(0);">
                                             <div class="row">
@@ -497,7 +472,7 @@
                                                 </div>
 
                                                 <div class="col-lg-6 mb-3">
-                                                    <label for="documentIdInput" class="form-label text-info">ID dokumenta</label>
+                                                    <label for="documentIdInput" class="form-label text-info">ID broj</label>
                                                     <input type="text" class="form-control rounded-0" id="documentIdInput" placeholder="Učitavanje..." />
                                                 </div>
 
@@ -531,6 +506,31 @@
                                             </div>
                                         </form>
                                     </div>
+                                    <!-- Change Password Tab -->
+                                    <div class="tab-pane fade" id="changePassword" role="tabpanel">
+                                        <form action="javascript:void(0);">
+                                            <div class="row">
+                                                <div class="col-lg-12 mb-3">
+                                                    <label for="oldPassword" class="form-label text-info">Stara lozinka</label>
+                                                    <input type="password" class="form-control rounded-0" id="oldPassword" placeholder="Unesite staru lozinku" />
+                                                </div>
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="newPassword" class="form-label text-info">Nova lozinka</label>
+                                                    <input type="password" class="form-control rounded-0" id="newPassword" placeholder="Unesite novu lozinku" />
+                                                </div>
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="confirmPassword" class="form-label text-info">Potvrdite novu lozinku</label>
+                                                    <input type="password" class="form-control rounded-0" id="confirmPassword" placeholder="Potvrdite novu lozinku" />
+                                                </div>
+                                                <div class="col-lg-12 mt-4 mb-4">
+                                                    <div class="hstack gap-2 justify-content-end">
+                                                        <button type="submit" id="change-password-btn" class="btn btn-info"><i class="fas fa-save fs-6 me-1"></i> Promijeni lozinku</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                   
 
 
                                 </div>
@@ -1409,56 +1409,98 @@
 </script>
 
 
-<!-- UserProfile data -->
+<!-- Fetch UserProfile and Business data -->
 
 <script>
-    document.addEventListener("DOMContentLoaded", async function() {
-        try {
-            const user = JSON.parse(localStorage.getItem("user"));
-            const token = localStorage.getItem("auth_token");
+document.addEventListener("DOMContentLoaded", async function () {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = localStorage.getItem("auth_token");
 
-            if (!user || !token) {
-                console.warn("User or token not found in localStorage");
-                return;
-            }
+    if (!user || !token) {
+        console.warn("User or token not found in localStorage");
+        return;
+    }
 
-            const response = await fetch(`http://localhost:8000/api/users/${user.id}`, {
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            });
+    try {
+        const response = await fetch(`http://localhost:8000/api/users/${user.id}`, {
+            headers: { "Authorization": `Bearer ${token}` }
+        });
 
-            if (!response.ok) {
-                console.error("Failed to fetch user data");
-                return;
-            }
-
-            const data = await response.json();
-            const u = data.user;
-
-            const safeSet = (id, value) => {
-                const el = document.getElementById(id);
-                if (el) el.value = value || "";
-            };
-
-            // Safely fill form fields
-            safeSet("firstnameInput", u.first_name);
-            safeSet("lastnameInput", u.last_name);
-            safeSet("phonenumberInput", u.phone_number);
-            safeSet("emailInput", u.email);
-            safeSet("JoiningdatInput", u.joining_date);
-            safeSet("designationInput", u.designation);
-            safeSet("websiteInput1", u.website);
-            safeSet("cityInput", u.city);
-            safeSet("countryInput", u.country);
-            safeSet("zipcodeInput", u.zip_code);
-            safeSet("exampleFormControlTextarea", u.description);
-
-        } catch (err) {
-            console.error("Error loading user data:", err);
+        if (!response.ok) {
+            console.error("Failed to fetch user data");
+            return;
         }
-    });
+
+        const data = await response.json();
+        const u = data.user;
+        const company = u?.company;
+
+        window.userData = u;
+        window.companyDataFilled = false;
+
+        const updateInput = (id, value, fallbackPlaceholder) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (value && value.trim()) {
+                el.value = value;
+            } else {
+                el.value = "";
+                el.placeholder = fallbackPlaceholder;
+            }
+        };
+
+        // === Fill PERSONAL DETAILS immediately ===
+        updateInput("firstnameInput", u.first_name, "Unesite ime");
+        updateInput("lastnameInput", u.last_name, "Unesite prezime");
+        updateInput("phonenumberInput", u.phone_number, "Unesite broj mobitela");
+        updateInput("emailInput", u.email, "Unesite email adresu");
+        updateInput("JoiningdatInput", u.joining_date, "Unesite datum pridruženja");
+        updateInput("designationInput", u.designation, "Unesite poziciju");
+        updateInput("websiteInput1", u.website, "Unesite web stranicu");
+        updateInput("cityInput", u.city, "Unesite grad");
+        updateInput("countryInput", u.country, "Unesite državu");
+        updateInput("zipcodeInput", u.zip_code, "Unesite poštanski broj");
+
+        const desc = document.getElementById("exampleFormControlTextarea");
+        if (desc) {
+            if (u.description && u.description.trim()) {
+                desc.value = u.description;
+            } else {
+                desc.value = "";
+                desc.placeholder = "Unesite opis";
+            }
+        }
+
+        // === Fill COMPANY DETAILS when tab is shown ===
+        const tabLink = document.querySelector('a[href="#companyDetails"]');
+        if (tabLink) {
+            tabLink.addEventListener("shown.bs.tab", function () {
+                if (window.companyDataFilled) return;
+
+                const c = window.userData?.company || {};
+
+                updateInput("companyNameInput", c.name, "Unesite ime kompanije");
+                updateInput("addressInput", c.address, "Unesite adresu");
+                updateInput("documentIdInput", c.document_id || c.id, "Unesite ID broj");
+                updateInput("vatInput", c.pdv, "Unesite PDV broj");
+                updateInput("ownerInput", c.owner, "Unesite vlasnika");
+                updateInput("contactPersonInput", c.contact_person, "Unesite kontakt osobu");
+                updateInput("contactNumberInput", c.contact_number, "Unesite kontakt broj");
+
+                window.companyDataFilled = true;
+            });
+        }
+
+    } catch (err) {
+        console.error("Error fetching user/company data:", err);
+    }
+});
 </script>
+
+
+
+
+
 
 <!-- Update User data -->
 
@@ -1535,57 +1577,8 @@
     });
 </script>
 
-<!-- Fetch User Company data -->
 
-<script>
-    document.addEventListener("DOMContentLoaded", async function() {
-        try {
-            const user = JSON.parse(localStorage.getItem("user"));
-            const token = localStorage.getItem("auth_token");
 
-            if (!user || !token) {
-                console.warn("User or token not found in localStorage");
-                return;
-            }
-
-            const response = await fetch(`http://localhost:8000/api/users/${user.id}`, {
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            });
-
-            if (!response.ok) {
-                console.error("Failed to fetch user data");
-                return;
-            }
-
-            const data = await response.json();
-            const company = data.user?.company;
-
-            if (!company) {
-                console.warn("No company data found for user");
-                return;
-            }
-
-            const safeSet = (id, value) => {
-                const el = document.getElementById(id);
-                if (el) el.value = value || "";
-            };
-
-            // Fill company form fields
-            safeSet("companyNameInput", company.name);
-            safeSet("addressInput", company.address);
-            safeSet("documentIdInput", company.id);
-            safeSet("vatInput", company.pdv);
-            safeSet("ownerInput", company.owner);
-            safeSet("contactPersonInput", company.contact_person);
-            safeSet("contactNumberInput", company.contact_number);
-
-        } catch (err) {
-            console.error("Error loading company data:", err);
-        }
-    });
-</script>
 <!-- Update user company data -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
