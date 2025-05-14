@@ -287,6 +287,13 @@
                         lokacije...</span>
 
                 </div>
+
+              
+                <div class="hstack text-white-50 gap-1">
+                    Član od:<span id="joining-date" style="ms-0 p-0">Učitavanje
+                        datuma pridruživanja...</span>
+
+                </div>
             </div>
         </div>
 
@@ -423,10 +430,6 @@
                                                     <input type="email" class="form-control rounded-0" id="emailInput" placeholder="Učitavanje..." />
                                                 </div>
                                                 <div class="col-lg-6 mb-3">
-                                                    <label for="JoiningdatInput" class="form-label text-info">Datum pridruženja</label>
-                                                    <input type="text" class="form-control rounded-0" id="JoiningdatInput" placeholder="Učitavanje..." />
-                                                </div>
-                                                <div class="col-lg-6 mb-3">
                                                     <label for="designationInput" class="form-label text-info">Pozicija</label>
                                                     <input type="text" class="form-control rounded-0" id="designationInput" placeholder="Učitavanje..." />
                                                 </div>
@@ -434,23 +437,24 @@
                                                     <label for="websiteInput1" class="form-label text-info">Web stranica</label>
                                                     <input type="text" class="form-control rounded-0" id="websiteInput1" placeholder="Učitavanje..." />
                                                 </div>
+                                                    <div class="col-lg-6 mb-3">
+                                                    <label for="zipcodeInput" class="form-label text-info">Poštanski broj</label>
+                                                    <input type="text" class="form-control rounded-0" id="zipcodeInput" placeholder="Učitavanje..." />
+                                                </div>
                                                 <div class="col-lg-6 mb-3">
                                                     <label for="cityInput" class="form-label text-info">Grad</label>
                                                     <input type="text" class="form-control rounded-0" id="cityInput" placeholder="Učitavanje..." />
                                                 </div>
-                                                <div class="col-lg-6 mb-3">
+                                                <div class="col-lg-12 mb-3">
                                                     <label for="countryInput" class="form-label text-info">Država</label>
                                                     <input type="text" class="form-control rounded-0" id="countryInput" placeholder="Učitavanje..." />
                                                 </div>
-                                                <div class="col-lg-6 mb-3">
-                                                    <label for="zipcodeInput" class="form-label text-info">Poštanski broj</label>
-                                                    <input type="text" class="form-control rounded-0" id="zipcodeInput" placeholder="Učitavanje..." />
-                                                </div>
+                                            
                                                 <div class="col-lg-12 mb-3">
                                                     <label for="exampleFormControlTextarea" class="form-label text-info">Opis</label>
                                                     <textarea class="form-control rounded-0" id="exampleFormControlTextarea" placeholder="Učitavanje..." rows="3"></textarea>
                                                 </div>
-                                                <div class="col-lg-12 mt-4 mb-4">
+                                                <div class="col-lg-6 mt-4 mb-4">
                                                     <div class="hstack gap-2 justify-content-end">
                                                         <button type="submit" id="update-user-btn" class="btn btn-info"><i class="fas fa-save fs-6 me-1"></i> Ažuriraj podatke</button>
                                                     </div>
@@ -1109,11 +1113,16 @@
             const avatar = userData.avatar;
             const firstLetter = (userData.username || userData.email || "U")[0].toUpperCase();
 
-            // Profile data
+          // Profile data
             document.getElementById("profile-username").textContent = userData.first_name;
             document.getElementById("profile-lastname").textContent = userData.last_name;
+
+            // Format date to dd.mm.yyyy manually
+            const createdAt = new Date(userData.created_at);
+            const formattedDate = `${String(createdAt.getDate()).padStart(2, '0')}.${String(createdAt.getMonth() + 1).padStart(2, '0')}.${createdAt.getFullYear()}`;
+            document.getElementById("joining-date").textContent = formattedDate;
             document.getElementById("profile-location").innerHTML =
-                `<i class="ri-map-pin-user-line align-middle"></i> ${userData.city || 'Nepoznat grad'}, ${userData.country || 'Nepoznata država'}`;
+            `<i class="ri-map-pin-user-line align-middle"></i> ${userData.city || 'Nepoznat grad'}, ${userData.country || 'Nepoznata država'}`;
 
             // Always show initials immediately
             avatarFallback.textContent = firstLetter;
