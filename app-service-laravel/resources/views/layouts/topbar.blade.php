@@ -382,7 +382,7 @@
         const topbarFallback = document.getElementById("topbar-avatar-fallback");
 
         // Show initials immediately
-        const firstLetter = (user.first_name || user.username || "U")[0].toUpperCase();
+        const firstLetter = (user.username || "U")[0].toUpperCase();
         if (avatarFallback) avatarFallback.textContent = firstLetter;
         if (topbarFallback) topbarFallback.textContent = firstLetter;
 

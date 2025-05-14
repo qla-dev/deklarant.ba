@@ -355,7 +355,10 @@
 
                         <div class="card mb-3 d-flex flex-column justify-content-center rounded-0">
                             <div class="card-body">
-                                <h5 class="card-title">Moji dobavljači</h5>
+                                 <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="card-title mb-0">Moji dobavljači</h5>
+                                    <a href="moji-doavljaci" class="text-info fs-13">Pregledaj sve</a>
+                                </div>
                                 <div class="suppliers-list">
                                     <!-- Dynamic suppliers will be injected here by JS -->
                                     <div class="text-muted">Učitavanje dobavljača...</div>
@@ -369,7 +372,7 @@
                             <div class="card-body d-flex flex-column justify-content-between">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <h5 class="card-title mb-0">Moji dokumenti</h5>
-                                    <a href="moje-fakture" class="text-info fs-13">View all</a>
+                                    <a href="moje-fakture" class="text-info fs-13">Pregledaj sve</a>
                                 </div>
                                 <div class="row g-3 mt-auto" id="user-documents">
                                     <!-- JS will inject 4 document tiles here -->

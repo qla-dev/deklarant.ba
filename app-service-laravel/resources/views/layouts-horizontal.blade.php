@@ -72,8 +72,10 @@
             <div class="col-md-4 border-end order-1 order-md-0 d-flex align-items-center border-0 rounded-0 alert alert-light p-1 mb-2 m-lg-0">
                 <div class="p-2 text-center d-flex flex-column h-100 w-100 justify-content-center align-items-center">
                     <div class="card-body text-center p-2">
-                        <img id="user-avatar" src="{{ URL::asset('build/images/users/avatar-1.jpg') }}"
-                            class="rounded-circle shadow-sm mb-2" width="60" height="60" alt="Korisnički avatar">
+                        <div class="row d-flex text-center mb-3 fs-4" style="justify-content: center!important;">
+                        <img id="user-avatar-middle" class="rounded-circle d-none" width="40" height="40">
+<div id="avatar-middle-fallback" class="rounded-circle bg-info d-flex justify-content-center align-items-center text-white" style="width: 50px; height: 50px;"></div>
+</div>
                         <h6 class="fw-bold mb-1 mt-1" id="welcome-user">Dobrodošli na deklarant.ba!</h6>
                         <p class="fw-semibold fs-7 mb-1 text-info" id="user-package-display">
                             Učitavanje paketa...
@@ -1020,7 +1022,7 @@
 
 <!-- avatar upload -->
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         const user = JSON.parse(localStorage.getItem("user"));
 
         if (user) {
@@ -1029,22 +1031,33 @@
                 welcome.innerText = `Dobrodošao/la na deklarant.ba, ${user.username}!`;
             }
 
-            const avatar = document.getElementById("user-avatar");
-            if (avatar) {
-                const avatarUrl = `/storage/uploads/avatars/${user.avatar}`;
-                // Check if the image loads correctly, fallback if not
+            const avatarImg = document.getElementById("user-avatar-middle");
+            const avatarFallback = document.getElementById("avatar-middle-fallback");
+
+            const avatarUrl = `/storage/uploads/avatars/${user.avatar}`;
+            const firstLetter = (user.username || "U")[0].toUpperCase();
+
+            if (avatarFallback) {
+                avatarFallback.textContent = firstLetter;
+            }
+
+            if (avatarImg) {
                 const testImg = new Image();
-                testImg.onload = function() {
-                    avatar.src = avatarUrl;
+                testImg.onload = function () {
+                    avatarImg.src = avatarUrl;
+                    avatarImg.classList.remove("d-none");
+                    if (avatarFallback) avatarFallback.classList.add("d-none");
                 };
-                testImg.onerror = function() {
-                    avatar.src = "/build/images/users/avatar-1.jpg";
+                testImg.onerror = function () {
+                    avatarImg.classList.add("d-none");
+                    if (avatarFallback) avatarFallback.classList.remove("d-none");
                 };
                 testImg.src = avatarUrl;
             }
         }
     });
 </script>
+
 
 
 <!-- suppliers -->
