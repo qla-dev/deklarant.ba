@@ -363,7 +363,7 @@
                                     <!-- Dynamic suppliers will be injected here by JS -->
                                     <div class="text-muted">Učitavanje dobavljača...</div>
                                 </div>
-                                <hr>
+                        
                             </div>
                         </div>
 

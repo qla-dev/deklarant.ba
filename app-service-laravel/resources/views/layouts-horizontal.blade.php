@@ -76,7 +76,7 @@
                         <img id="user-avatar-middle" class="rounded-circle d-none" width="40" height="40">
 <div id="avatar-middle-fallback" class="rounded-circle bg-info d-flex justify-content-center align-items-center text-white" style="width: 50px; height: 50px;"></div>
 </div>
-                        <h6 class="fw-bold mb-1 mt-1" id="welcome-user">Dobrodošli na deklarant.ba!</h6>
+                        <h6 class="fw-bold mb-1 mt-1" id="welcome-user">Dobrodošli na deklarant.ba</h6>
                         <p class="fw-semibold fs-7 mb-1 text-info" id="user-package-display">
                             Učitavanje paketa...
                         </p>
@@ -1028,7 +1028,7 @@
         if (user) {
             const welcome = document.getElementById("welcome-user");
             if (welcome) {
-                welcome.innerText = `Dobrodošao/la na deklarant.ba, ${user.username}!`;
+                welcome.innerText = `Dobrodošli na deklarant.ba ${user.username}`;
             }
 
             const avatarImg = document.getElementById("user-avatar-middle");
