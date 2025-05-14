@@ -454,7 +454,7 @@
                                                     <label for="exampleFormControlTextarea" class="form-label text-info">Opis</label>
                                                     <textarea class="form-control rounded-0" id="exampleFormControlTextarea" placeholder="Učitavanje..." rows="3"></textarea>
                                                 </div>
-                                                <div class="col-lg-6 mt-4 mb-4">
+                                                <div class="col-lg-12 mt-4 mb-4">
                                                     <div class="hstack gap-2 justify-content-end">
                                                         <button type="submit" id="update-user-btn" class="btn btn-info"><i class="fas fa-save fs-6 me-1"></i> Ažuriraj podatke</button>
                                                     </div>
