@@ -97,7 +97,7 @@
       <p class="text-success mb-0"><i class="ri-file-line align-middle me-1 fs-15" style="margin-top:-4px; font-size:15px!important"></i>${invoice.file_name || 'Nepoznato ime fajla'}</p>
       <p class="text-success mb-0"><i class="ri-truck-line align-middle me-1 fs-15" style="margin-top:-4px; font-size:15px!important"></i>${invoice.supplier?.name || 'Nepoznati dobavljač'}</p>
       <p class="text-success mb-0"><i class="ri-globe-line align-middle me-1 fs-15" style="margin-top:-4px; font-size:15px!important"></i>${invoice.country_of_origin || 'Nepoznata zemlja projekta'}</p>
-      <ul class="list-inline d-flex align-items-center g-3 text-muted fs-14 mb-0 mt-3">
+      <ul class="list-inline d-flex align-items-center g-3 text-muted fs-14 mb-0 mt-3 mb-3">
         <li class="list-inline-item me-3 d-flex" style="align-items:center!important">
           <i class="ri-calendar-2-line align-middle me-1 fs-15" style="font-size:15px!important"></i>${
             (() => {
