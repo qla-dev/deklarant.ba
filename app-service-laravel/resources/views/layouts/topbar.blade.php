@@ -220,9 +220,63 @@ document.addEventListener("DOMContentLoaded", function () {
                         <a class="dropdown-item" href="profil"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Moj nalog</span></a>
                         <a class="dropdown-item" href="pages-faqs"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Pomoć</span></a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="pages-profile"><i
-                                class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span
-                                class="align-middle">Dostupna skeniranja : <b>123</b></span></a>
+                        <a class="dropdown-item" href="cijene-paketa"><i class="fas fa-wand-magic-sparkles fs-12 text-muted me-1" ></i> <span
+                                class="align-middle">Dostupna skeniranja : <b id="remainScansTopbar"></b></span></a>
+
+
+                                <script>
+    document.addEventListener("DOMContentLoaded", async function() {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const token = localStorage.getItem("auth_token");
+
+        console.log("[INIT] Provjera lokalne pohrane...");
+        console.log(" Korisnik:", user);
+        console.log(" Token:", token?.substring(0, 25) + "..."); // da ne ispiše cijeli token
+
+        if (!user || !token) {
+            console.warn(" User ili token nedostaje u localStorage.");
+            return;
+        }
+
+        const API_URL = `/api/statistics/users/${user.id}`;
+        console.log(` Pozivam API: ${API_URL}`);
+
+        try {
+            const response = await axios.get(API_URL, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            console.log(" API response:", response);
+            const stats = response.data || {};
+
+            console.log(" Parsed statistike:", stats);
+
+            const fields = {
+                totalSuppliers: stats.total_suppliers ?? 0,
+                totalInvoices: stats.total_invoices ?? 0,
+                usedScans: stats.used_scans ?? 0,
+                remainScansTopbar: stats.remaining_scans ?? 0
+            };
+
+            console.log("📌 Vrijednosti za prikaz u DOM-u:", fields);
+
+            Object.entries(fields).forEach(([id, value]) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    console.log(`➡️ Ažuriram #${id} na:`, value);
+                    el.innerText = value;
+                } else {
+                    console.warn(`⚠️ Element s ID '${id}' nije pronađen u DOM-u.`);
+                }
+            });
+
+        } catch (error) {
+            console.error("❌ Greška pri dohvaćanju statistike:", error);
+        }
+    });
+</script>
 
                         <a class="dropdown-item" href="auth-lockscreen-basic"><i
                                 class="mdi mdi-sleep text-muted fs-16 align-middle me-1"></i> <span
