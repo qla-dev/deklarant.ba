@@ -69,7 +69,7 @@
             </div>
 
             <!-- Middle Avatar Section -->
-            <div class="col-md-4 border-end order-1 order-md-0 d-flex align-items-center border-0 rounded-0 alert alert-light p-1 mb-2 m-lg-0">
+            <div class="col-md-4 border-start border-end order-1 order-md-0 d-flex align-items-center border-0 rounded-0 alert alert-light p-1 mb-2 m-lg-0">
                 <div class="p-2 text-center d-flex flex-column h-100 w-100 justify-content-center align-items-center">
                     <div class="card-body text-center p-2">
                         <div class="row d-flex text-center mb-3 fs-4" style="justify-content: center!important;">
