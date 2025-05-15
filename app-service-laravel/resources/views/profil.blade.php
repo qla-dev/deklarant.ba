@@ -375,6 +375,7 @@
     <div class="col-12 text-muted"></div>
 </div>
 
+
 </div>
 
 
@@ -767,6 +768,9 @@
         <!-- StartUp Plan -->
         <div class="col-lg-4 mb-4">
             <div class="card pricing-box border-0 rounded-0 h-100">
+          <button type="button" id="btn-StartUp" class=" d-none btn btn-soft-info btn-sm  rounded-0 shadow-none w-100" style="position: absolute; border-bottom-left-radius: 0; border-bottom-right-radius:0">
+                                          Aktivan do: <span class="date-valid"></span>. godine
+                                    </button>
                 <div class="card-body p-4 m-2 d-flex flex-column">
                     <div class="d-flex align-items-center mb-3">
                         <div class="flex-grow-1">
@@ -791,8 +795,8 @@
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i>30 dana</li>
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
                     </ul>
-                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal"
-                        class="btn btn-info w-100 mt-auto text-white">Započni</a>
+
+                        <a id="btnAction-StartUp" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal" href="javascript:void(0);" class="btn btn-info w-100 mt-auto text-white">Započni</a>
                 </div>
             </div>
         </div>
@@ -800,6 +804,10 @@
         <!-- GoBig Plan -->
         <div class="col-lg-4 mb-4">
             <div class="card pricing-box border-0 rounded-0 ribbon-box right h-100">
+      
+        <button type="button" id="btn-GoBig" class=" d-none btn btn-soft-info btn-sm shadow-none w-100 rounded-0" style="position: absolute; border-bottom-left-radius: 0; border-bottom-right-radius:0">
+                                          Aktivan do: <span class="date-valid"></span>. godine
+                                    </button>
                 <div class="card-body p-4 m-2 d-flex flex-column">
                     <div class="ribbon-two ribbon-two-info"><span>Popularno</span></div>
                     <div class="d-flex align-items-center mb-3">
@@ -825,8 +833,7 @@
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i>120 dana</li>
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
                     </ul>
-                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal"
-                        class="btn btn-info w-100 mt-auto text-white">Započni</a>
+                        <a id="btnAction-GoBig" href="javascript:void(0);" class="btn btn-info w-100 mt-auto text-white" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal">Započni</a>
                 </div>
             </div>
         </div>
@@ -834,8 +841,8 @@
         <!-- Business Plan -->
         <div class="col-lg-4 mb-4">
             <div class="card pricing-box border-0 rounded-0 h-100">
-                <button type="button" class="btn btn-soft-info btn-sm shadow-none w-100" style="position: absolute; border-bottom-left-radius: 0; border-bottom-right-radius:0">
-                                         <i class="ri-file-list-3-line align-middle"></i> Aktivan do: 25.08.2025. godine
+               <button type="button" id="btn-Business" class=" d-none btn btn-soft-info btn-sm shadow-none w-100 rounded-0" style="position: absolute; border-bottom-left-radius: 0; border-bottom-right-radius:0">
+                                         Aktivan do:  <span class="date-valid"></span>.godine
                                     </button>
                 <div class="card-body p-4 m-2 d-flex flex-column">
                     <div class="d-flex align-items-center mb-3">
@@ -861,8 +868,8 @@
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i>365 dana</li>
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
                     </ul>
-                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal"
-                        class="btn btn-info w-100 mt-auto text-white">Produži</a>
+
+                        <a id="btnAction-Business" href="javascript:void(0);" class="btn btn-info w-100 mt-auto text-white" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal">Započni</a>
                 </div>
             </div>
         </div>
@@ -1800,67 +1807,113 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 <!-- Dynamical Package update -->
 <script>
-    document.addEventListener("DOMContentLoaded", async function () {
-        const token = localStorage.getItem("auth_token");
-        if (!token) return console.warn("Missing auth token");
+document.addEventListener("DOMContentLoaded", async function () {
+    const token = localStorage.getItem("auth_token");
+    if (!token) return console.warn("Missing auth token");
 
-        const loader = document.getElementById("user-package-loader");
-        const packageText = document.getElementById("user-package-text");
-        const upgradeBtn = document.getElementById("upgrade-btn");
+    const loader = document.getElementById("user-package-loader");
+    const packageText = document.getElementById("user-package-text");
+    const upgradeBtn = document.getElementById("upgrade-btn");
 
-        try {
-            const res = await axios.get("/api/user-packages", {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                }
-            });
+    // Declare packageName here so it is visible after try/catch
+    let packageName = null;
 
-            const userPackages = res.data?.data || [];
-
-            if (userPackages.length > 0) {
-                const userPackage = userPackages.find(p => p.active) || userPackages[0];
-                const packageName = userPackage?.package?.name;
-
-                if (packageText && packageName) {
-                    let iconHTML = "";
-
-                    switch (packageName.toLowerCase()) {
-                        case "gobig":
-                            iconHTML = `<i class="ri-medal-line text-info fs-3 bu me-2" style="margin-top:-2px!important"></i>`;
-                            break;
-                        case "startup":
-                            iconHTML = `<i class="ri-star-s-fill text-info fs-5 me-2" style="margin-top:-2px!important"></i>`;
-                            break;
-                        case "business":
-                            iconHTML = `<i class="ri-shield-star-line text-info fs-2 me-2" style="margin-top:-2px!important"></i>`;
-                            break;
-                        default:
-                            iconHTML = "";
-                    }
-
-                    packageText.innerHTML = `
-                        <span class="d-inline-flex align-items-center gap-1 fs-15">
-                            <h5 class="card-title mb-0">Tvoj aktivni paket je</h5>
-                            <b class="d-inline-flex gap-1 text-info mb-0 me-4" style="margin-bottom:-1px!important">
-                                ${packageName}
-                                ${iconHTML}
-                            </b>
-                        </span>`;
-                }
-            } else {
-                packageText.textContent = "Nema aktivnog paketa.";
+    try {
+        const res = await axios.get("/api/user-packages", {
+            headers: {
+                Authorization: `Bearer ${token}`,
             }
+        });
 
-        } catch (err) {
-            console.error("Greška pri dohvaćanju paketa korisnika:", err);
-            packageText.textContent = "Greška pri učitavanju paketa.";
+        const userPackages = res.data?.data || [];
+
+   if (userPackages.length > 0) {
+    const userPackage = userPackages.find(p => p.active) || userPackages[0];
+    packageName = userPackage?.package?.name || null;
+    packageValid = userPackage?.expiration_date || null;
+
+    // Format packageValid date from yyyy-mm-dd to dd.mm.yyyy
+    let formattedDate = packageValid;
+    if (packageValid) {
+        const parts = packageValid.split("-");
+        formattedDate = `${parts[2]}.${parts[1]}.${parts[0]}`;
+    }
+
+    if (packageText && packageName) {
+        let iconHTML = "";
+
+        switch (packageName.toLowerCase()) {
+            case "gobig":
+                iconHTML = `<i class="ri-medal-line text-info fs-3 bu me-2" style="margin-top:-2px!important"></i>`;
+                break;
+            case "startup":
+                iconHTML = `<i class="ri-star-s-fill text-info fs-5 me-2" style="margin-top:-2px!important"></i>`;
+                break;
+            case "business":
+                iconHTML = `<i class="ri-shield-star-line text-info fs-2 me-2" style="margin-top:-2px!important"></i>`;
+                break;
+            default:
+                iconHTML = "";
         }
 
-        // In all cases: hide loader, show text and button
-        loader.classList.add("d-none");
-        packageText.classList.remove("d-none");
-        upgradeBtn.classList.remove("d-none");
-    });
+        packageText.innerHTML = `
+            <span class="d-inline-flex align-items-center gap-1 fs-15">
+                <h5 class="card-title mb-0">Tvoj aktivni paket je</h5>
+                <b class="d-inline-flex gap-1 text-info mb-0 me-4" style="margin-bottom:-1px!important">
+                    ${packageName}
+                    ${iconHTML}
+                </b>
+            </span>`;
+
+        // Replace all .date-valid elements with the formatted date
+        document.querySelectorAll('.date-valid').forEach(el => {
+            el.textContent = formattedDate;
+        });
+    }
+} else {
+    packageText.textContent = "Nema aktivnog paketa.";
+}
+
+
+
+    } catch (err) {
+        console.error("Greška pri dohvaćanju paketa korisnika:", err);
+        packageText.textContent = "Greška pri učitavanju paketa.";
+    }
+
+    // Hide loader, show text and button
+    loader.classList.add("d-none");
+    packageText.classList.remove("d-none");
+    upgradeBtn.classList.remove("d-none");
+
+    // Normalize packageName to lowercase for comparison
+    const normalizedPackage = packageName?.toLowerCase();
+
+    // Show the "Aktivan do" button for the active package only
+    normalizedPackage === 'gobig' && document.getElementById('btn-GoBig')?.classList.remove('d-none');
+    normalizedPackage === 'startup' && document.getElementById('btn-StartUp')?.classList.remove('d-none');
+    normalizedPackage === 'business' && document.getElementById('btn-Business')?.classList.remove('d-none');
+
+    // Update action buttons text individually without loop
+    const btnActionGoBig = document.getElementById('btnAction-GoBig');
+    const btnActionStartUp = document.getElementById('btnAction-StartUp');
+    const btnActionBusiness = document.getElementById('btnAction-Business');
+
+    if (btnActionGoBig) {
+        btnActionGoBig.textContent = (normalizedPackage === 'gobig') ? 'Produži' : 'Započni';
+    }
+    if (btnActionStartUp) {
+        btnActionStartUp.textContent = (normalizedPackage === 'startup') ? 'Produži' : 'Započni';
+    }
+    if (btnActionBusiness) {
+        btnActionBusiness.textContent = (normalizedPackage === 'business') ? 'Produži' : 'Započni';
+    }
+
+    // Debug logs (optional)
+    console.log('Active package:', packageName);
+    console.log('btn-GoBig element:', document.getElementById('btn-GoBig'));
+});
+
 </script>
 
 
