@@ -1542,33 +1542,55 @@ document.addEventListener("DOMContentLoaded", async function () {
 <!-- Update User data -->
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById("update-user-btn").addEventListener("click", async function(e) {
-            e.preventDefault();
-            e.stopPropagation();
+    document.addEventListener("DOMContentLoaded", function () {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const token = localStorage.getItem("auth_token");
 
-            const user = JSON.parse(localStorage.getItem("user"));
-            const token = localStorage.getItem("auth_token");
+        if (!user || !token) {
+            console.error("User or token not found in localStorage.");
+            return;
+        }
 
-            if (!user || !token) {
-                console.error("User or token not found in localStorage.");
-                return;
+        const showSuccess = (text) => {
+            Swal.fire({
+                icon: "success",
+                title: "Uspješno!",
+                text,
+                confirmButtonText: "U redu",
+                customClass: {
+                    confirmButton: 'btn btn-info w-xs mt-2',
+                },
+            });
+        };
+
+        const showError = (err) => {
+            Swal.fire("Greška", err.message || "Nešto je pošlo po zlu.", "error");
+        };
+
+        const getPayload = () => ({
+            first_name: document.getElementById("firstnameInput").value.trim(),
+            last_name: document.getElementById("lastnameInput").value.trim(),
+            phone_number: document.getElementById("phonenumberInput").value.trim(),
+            email: document.getElementById("emailInput").value.trim(),
+            joining_date: document.getElementById("JoiningdatInput")?.value.trim() || null,
+            designation: document.getElementById("designationInput").value.trim(),
+            website: document.getElementById("websiteInput1").value.trim(),
+            city: document.getElementById("cityInput").value.trim(),
+            country: document.getElementById("countryInput").value.trim(),
+            zip_code: document.getElementById("zipcodeInput").value.trim(),
+            description: document.getElementById("exampleFormControlTextarea").value.trim(),
+            company: {
+                name: document.getElementById("companyNameInput").value.trim(),
+                address: document.getElementById("addressInput").value.trim(),
+                id: document.getElementById("documentIdInput").value.trim(),
+                pdv: document.getElementById("vatInput").value.trim(),
+                owner: document.getElementById("ownerInput").value.trim(),
+                contact_person: document.getElementById("contactPersonInput").value.trim(),
+                contact_number: document.getElementById("contactNumberInput").value.trim()
             }
+        });
 
-            const payload = {
-                first_name: document.getElementById("firstnameInput").value.trim(),
-                last_name: document.getElementById("lastnameInput").value.trim(),
-                phone_number: document.getElementById("phonenumberInput").value.trim(),
-                email: document.getElementById("emailInput").value.trim(),
-                joining_date: document.getElementById("JoiningdatInput").value.trim(),
-                designation: document.getElementById("designationInput").value.trim(),
-                website: document.getElementById("websiteInput1").value.trim(),
-                city: document.getElementById("cityInput").value.trim(),
-                country: document.getElementById("countryInput").value.trim(),
-                zip_code: document.getElementById("zipcodeInput").value.trim(),
-                description: document.getElementById("exampleFormControlTextarea").value.trim(),
-            };
-
+        const handleSubmit = async () => {
             try {
                 const response = await fetch(`/api/users/${user.id}`, {
                     method: "PUT",
@@ -1576,111 +1598,41 @@ document.addEventListener("DOMContentLoaded", async function () {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
                     },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify(getPayload())
                 });
 
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error("Greška pri ažuriranju podataka: " + errorText);
-                }
+                if (!response.ok) throw new Error(await response.text());
 
-                const responseData = await response.json();
-                const updatedUser = responseData.user;
+                const { user: updatedUser } = await response.json();
 
-                //  Live update UI
+                // Update UI
                 document.getElementById("profile-username").textContent = updatedUser.first_name;
                 document.getElementById("profile-lastname").textContent = updatedUser.last_name;
                 document.getElementById("profile-location").innerHTML =
                     `<i class="ri-map-pin-user-line align-middle"></i> ${updatedUser.city || 'Nepoznat grad'}, ${updatedUser.country || 'Nepoznata država'}`;
 
-                //  Update localStorage
+                // Save to localStorage
                 localStorage.setItem("user", JSON.stringify(updatedUser));
 
-                Swal.fire({
-                    icon: "success",
-                    title: "Uspješno!",
-                    text: "Vaši podaci su ažurirani.",
-                    confirmButtonText: "U redu",
-                    customClass: {
-                        confirmButton: 'btn btn-info w-xs mt-2',
-                    },
-                });
-
+                showSuccess("Podaci su uspješno ažurirani.");
             } catch (err) {
-                console.error("Error:", err);
-                Swal.fire("Greška", err.message || "Nešto je pošlo po zlu.", "error");
+                console.error("Greška:", err);
+                showError(err);
             }
-        });
-    });
-</script>
+        };
 
-
-
-<!-- Update user company data -->
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById("update-company-btn").addEventListener("click", async function(e) {
+        document.getElementById("update-user-btn").addEventListener("click", function (e) {
             e.preventDefault();
-            e.stopPropagation();
+            handleSubmit();
+        });
 
-            const user = JSON.parse(localStorage.getItem("user"));
-            const token = localStorage.getItem("auth_token");
-
-            if (!user || !token) {
-                console.error("User or token not found in localStorage.");
-                return;
-            }
-
-            const companyPayload = {
-                company: {
-                    name: document.getElementById("companyNameInput").value.trim(),
-                    address: document.getElementById("addressInput").value.trim(),
-                    id: document.getElementById("documentIdInput").value.trim(),
-                    pdv: document.getElementById("vatInput").value.trim(),
-                    owner: document.getElementById("ownerInput").value.trim(),
-                    contact_person: document.getElementById("contactPersonInput").value.trim(),
-                    contact_number: document.getElementById("contactNumberInput").value.trim(),
-                }
-            };
-
-            try {
-                const response = await fetch(`/api/users/${user.id}`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    },
-                    body: JSON.stringify(companyPayload)
-                });
-
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error("Greška pri ažuriranju podataka: " + errorText);
-                }
-
-                const responseData = await response.json();
-                const updatedUser = responseData.user;
-
-                //  Update localStorage
-                localStorage.setItem("user", JSON.stringify(updatedUser));
-
-                Swal.fire({
-                    icon: "success",
-                    title: "Uspješno!",
-                    text: "Podaci o kompaniji su ažurirani.",
-                    confirmButtonText: "U redu",
-                    customClass: {
-                        confirmButton: 'btn btn-info w-xs mt-2',
-                    },
-                });
-
-            } catch (err) {
-                console.error("Error:", err);
-                Swal.fire("Greška", err.message || "Nešto je pošlo po zlu.", "error");
-            }
+        document.getElementById("update-company-btn").addEventListener("click", function (e) {
+            e.preventDefault();
+            handleSubmit();
         });
     });
 </script>
+
 
 
 
