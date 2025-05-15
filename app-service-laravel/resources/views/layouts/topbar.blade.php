@@ -283,7 +283,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 class="align-middle">Sleep</span></a>
 
                         <a class="dropdown-item" href="javascript:void(0);" id="logout-link">
-                            <i class="bx bx-power-off font-size-16 align-middle me-1"></i>
+                            <i class="bx bx-power-off text-muted fs-16 align-middle me-1" style="margin-top: -3px!important;"></i>
                             <span key="t-logout">@lang('translation.logout')</span>
                         </a>
 
