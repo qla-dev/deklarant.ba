@@ -46,7 +46,7 @@ return [
 
     "details"=>"Invoice Details",
     "create-invoice"=>"Kreiraj fakturu",
-    "dobavljaci"=>"Moji dobavljaci",
+    "dobavljaci"=>"Moji dobavljači",
     "tarife"=>"Tarifne oznake",
     "kurs"=>"Kursna lista",
 
@@ -87,7 +87,7 @@ return [
     "maintenance"=>"Maintenance",
     "coming-soon"=>"Coming Soon",
     "sitemap"=>"Sitemap",
-    "search-results"=>"Search Results",
+    "search-results"=>"Rezultati pretrage",
     "components"=>"Components",
     "base-ui"=>"Base UI",
     "alerts"=>"Alerts",

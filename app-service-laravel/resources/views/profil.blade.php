@@ -369,7 +369,12 @@
     </div>
 
     <!-- Hidden initially -->
-    <div class="row g-3 mt-auto d-none" id="user-documents" style="min-height: 120px;"></div>
+    <div class="row g-3 mt-auto d-flex align-items-center justify-content-center text-center" 
+     id="user-documents" 
+     style="min-height: 120px;">
+    <div class="col-12 text-muted"></div>
+</div>
+
 </div>
 
 
@@ -1454,7 +1459,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     try {
-        const response = await fetch(`http://localhost:8000/api/users/${user.id}`, {
+        const response = await fetch(`/api/users/${user.id}`, {
             headers: { "Authorization": `Bearer ${token}` }
         });
 
@@ -1565,7 +1570,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             };
 
             try {
-                const response = await fetch(`http://localhost:8000/api/users/${user.id}`, {
+                const response = await fetch(`/api/users/${user.id}`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
@@ -1639,7 +1644,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             };
 
             try {
-                const response = await fetch(`http://localhost:8000/api/users/${user.id}`, {
+                const response = await fetch(`/api/users/${user.id}`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
