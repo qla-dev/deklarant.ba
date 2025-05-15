@@ -144,14 +144,15 @@
 </style>
 @endsection
 @section('content')
-@component('components.breadcrumb')
-@slot('li_1')
-deklarant.ba
-@endslot
-@slot('title')
-
-@endslot
+    @component('components.breadcrumb')
+    @slot('li_1')
+        deklarant.ba
+    @endslot
+    @slot('title')
+        Kursna lista za dan {{ date('d.m.Y') }}
+    @endslot
 @endcomponent
+
 
 
 
