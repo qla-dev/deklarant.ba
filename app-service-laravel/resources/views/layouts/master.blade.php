@@ -37,7 +37,6 @@
     
     <!-- END layout-wrapper -->
 
-    @include('layouts.customizer')
 
     <!-- JAVASCRIPT -->
     @include('layouts.vendor-scripts')

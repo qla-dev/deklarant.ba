@@ -10,61 +10,31 @@
 @section('content')
     @component('components.breadcrumb')
         @slot('li_1')
-            Pages
+            deklarant.ba
         @endslot
         @slot('title')
-            Rezultati pretrage
+            Rezultati pretrage za "<span class="text-info fw-medium ml-0 pl-0">{{ request('keyword') }}</span>"
         @endslot
     @endcomponent
   <div class="row">
     <div class="col-lg-12">
         <div class="card">
-            <div class="card-header border-0">
-                <h5 class="fs-16 fw-semibold text-start mb-0">
-                    Prikazivanje rezultata za "<span class="text-info fw-medium fst-italic">{{ request('keyword') }}</span>"
-                </h5>
-            </div>
-
-            <div>
-                <ul class="nav nav-tabs nav-tabs-custom" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" data-bs-toggle="tab" href="#all" role="tab">
-                            <i class="ri-file-line text-muted align-bottom me-1"></i> Moje deklaracije
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#images" role="tab">
-                            <i class="ri-truck-line text-muted align-bottom me-1"></i> Moji dobavljači
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#news" role="tab">
-                            <i class="ri-list-unordered text-muted align-bottom me-1"></i> Tarife
-                        </a>
-                    </li>
-                </ul>
-            </div>
+        
 
             <div class="card-body p-4">
                 <div class="tab-content text-muted">
                     <!-- Moje deklaracije -->
                     <div class="tab-pane active" id="all" role="tabpanel">
-                        <div id="invoice-results" class="pt-3">
-                            <div id="invoice-loading" class="text-center my-5">
-                                <div class="spinner-border text-info" role="status"></div>
-                            </div>
-                        </div>
+                       <div id="invoice-loading">
+    <div class="text-center my-4">
+        <i class="mdi mdi-loading mdi-spin fs-24 text-info"></i>
+        <p class="text-muted">Učitavanje rezultata</p>
+    </div>
+</div>
+<div id="invoice-results"></div>
                     </div>
 
-                    <!-- Dobavljači -->
-                    <div class="tab-pane" id="images" role="tabpanel">
-                        <p class="text-muted">Nema rezultata za dobavljače.</p>
-                    </div>
-
-                    <!-- Tarife -->
-                    <div class="tab-pane" id="news" role="tabpanel">
-                        <p class="text-muted">Nema rezultata za tarifne stavke.</p>
-                    </div>
+              
                 </div>
             </div>
         </div>
@@ -73,56 +43,292 @@
 
 <!-- JS script for fetching invoices -->
 <script>
-    document.addEventListener("DOMContentLoaded", async function () {
-        const container = document.getElementById("invoice-results");
-        const loading = document.getElementById("invoice-loading");
-        const keyword = "{{ request('keyword') }}";
+ document.addEventListener("DOMContentLoaded", async function () {
+  const container = document.getElementById("invoice-results");
+  const loading = document.getElementById("invoice-loading");
+  const token = localStorage.getItem("auth_token");
+  const user = JSON.parse(localStorage.getItem("user"));
+  const keyword = "{{ request('keyword') }}";
 
-        try {
-            const res = await fetch(`/api/invoices/search?keyword=${encodeURIComponent(keyword)}`);
-            const data = await res.json();
+  if (!user || !token) {
+    loading.remove();
+    container.innerHTML = `<p class="text-danger">Niste prijavljeni.</p>`;
+    return;
+  }
 
-            loading.remove(); // remove spinner
-
-            if (!data || !Array.isArray(data) || data.length === 0) {
-                container.innerHTML = `<p class="text-muted">Nema pronađenih faktura za "<strong>${keyword}</strong>".</p>`;
-                return;
-            }
-
-            let html = '';
-
-            data.forEach(invoice => {
-                html += `
-                    <div class="pb-3">
-                        <h5 class="mb-1">
-                            <a href="/invoices/${invoice.id}" class="text-body">
-                                ${invoice.invoice_number}
-                            </a>
-                        </h5>
-                        <p class="text-success mb-2">${invoice.supplier?.name || 'Nepoznat dobavljač'}</p>
-                        <p class="text-muted mb-2">${invoice.description || 'Nema opisa'}</p>
-                        <ul class="list-inline d-flex align-items-center g-3 text-muted fs-14 mb-0">
-                            <li class="list-inline-item me-3">
-                                <i class="ri-calendar-2-line align-middle me-1"></i>${invoice.date}
-                            </li>
-                            <li class="list-inline-item me-3">
-                                <i class="ri-money-dollar-circle-line align-middle me-1"></i>${invoice.total} KM
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="border border-dashed mb-3"></div>
-                `;
-            });
-
-            container.innerHTML = html;
-
-        } catch (err) {
-            console.error("Greška prilikom dohvata faktura:", err);
-            loading.remove();
-            container.innerHTML = `<p class="text-danger">Greška prilikom dohvata faktura.</p>`;
-        }
+  try {
+    const res = await fetch(`/api/invoices/users/${user.id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     });
+
+    const data = await res.json();
+    loading.remove();
+
+    if (!data || !Array.isArray(data) || data.length === 0) {
+      container.innerHTML = `<p class="text-muted mb-0">Nema pronađenih deklaracija za "<strong>${keyword}</strong>".</p>`;
+      return;
+    }
+
+    // Filter data based on keyword
+    const filtered = data.filter(item =>
+      item.country_of_origin?.toLowerCase().includes(keyword.toLowerCase()) ||
+      item.file_name?.toLowerCase().includes(keyword.toLowerCase()) ||
+      item.invoice_number?.toLowerCase().includes(keyword.toLowerCase()) ||
+      item.supplier?.name?.toLowerCase().includes(keyword.toLowerCase())
+    );
+
+    if (filtered.length === 0) {
+      container.innerHTML = `<p class="text-muted mb-0">Nema rezultata koji odgovaraju upitu "<strong>${keyword}</strong>".</p>`;
+      return;
+    }
+
+    // Render list with click handler
+    let html = "";
+    filtered.forEach((invoice, index) => {
+  html += `
+    <div class="invoice-result" data-id="${invoice.id}" style="cursor:pointer;">
+      <h5 class="mb-3">
+        <a href="javascript:void(0)" class="text-body">
+          ${invoice.invoice_number || 'Broj deklaracije nije definisan'}
+        </a>
+      </h5>
+      <p class="text-success mb-0"><i class="ri-file-line align-middle me-1 fs-15" style="margin-top:-4px; font-size:15px!important"></i>${invoice.file_name || 'Nepoznato ime fajla'}</p>
+      <p class="text-success mb-0"><i class="ri-truck-line align-middle me-1 fs-15" style="margin-top:-4px; font-size:15px!important"></i>${invoice.supplier?.name || 'Nepoznati dobavljač'}</p>
+      <p class="text-success mb-0"><i class="ri-globe-line align-middle me-1 fs-15" style="margin-top:-4px; font-size:15px!important"></i>${invoice.country_of_origin || 'Nepoznata zemlja projekta'}</p>
+      <ul class="list-inline d-flex align-items-center g-3 text-muted fs-14 mb-0 mt-3">
+        <li class="list-inline-item me-3 d-flex" style="align-items:center!important">
+          <i class="ri-calendar-2-line align-middle me-1 fs-15" style="font-size:15px!important"></i>${
+            (() => {
+              const d = new Date(invoice.date_of_issue);
+              return `${(d.getMonth() + 1).toString().padStart(2, '0')}.${d.getDate().toString().padStart(2, '0')}.${d.getFullYear()}`;
+            })()
+          }
+        </li>
+        <li class="list-inline-item me-3 d-flex" style="align-items:center!important">
+          <i class="ri-money-dollar-circle-line align-middle me-1 fs-15" style="font-size:15px!important"></i>${parseFloat(invoice.total_price).toFixed(2)} KM
+        </li>
+      </ul>
+    </div>
+    ${index < filtered.length - 1 ? '<div class="border border-dashed mb-3"></div>' : ''}
+  `;
+});
+
+    container.innerHTML = html;
+
+    // Add click listeners to each invoice result div
+    document.querySelectorAll(".invoice-result").forEach(element => {
+      element.addEventListener("click", function () {
+        const invoiceId = this.getAttribute("data-id");
+        const invoice = filtered.find(i => i.id == invoiceId);
+        if (!invoice) return;
+
+        // Fill modal with invoice data
+        document.getElementById("invoice-no").textContent = invoice.invoice_number || "--";
+        document.getElementById("invoice-date").textContent = (() => {
+          const d = new Date(invoice.date_of_issue);
+          return `${(d.getMonth() + 1).toString().padStart(2, '0')}.${d.getDate().toString().padStart(2, '0')}.${d.getFullYear()}`;
+        })();
+        document.getElementById("payment-status").textContent = invoice.scanned === 1 ? "Da" : "Ne";
+        document.getElementById("total-amount").textContent = `${parseFloat(invoice.total_price).toFixed(2)} KM`;
+
+        document.getElementById("address-details").textContent = invoice.supplier?.address || "--";
+        document.getElementById("zip-code").textContent = invoice.supplier?.zip_code || "--";
+        document.getElementById("email").textContent = invoice.supplier?.email || "--";
+        document.getElementById("website").textContent = invoice.supplier?.website || "--";
+        document.getElementById("website").href = invoice.supplier?.website || "#";
+        document.getElementById("contact-no").textContent = invoice.supplier?.phone || "--";
+
+        document.getElementById("billing-name").textContent = invoice.supplier?.name || "--";
+        document.getElementById("billing-address-line-1").textContent = invoice.supplier?.address || "--";
+        document.getElementById("billing-phone-no").textContent = invoice.supplier?.phone || "--";
+        document.getElementById("billing-tax-no").textContent = invoice.supplier?.tax_id || "--";
+
+        document.getElementById("shipping-country").textContent = invoice.country_of_origin || "--";
+
+        // Clear old products list first
+        const productsList = document.getElementById("products-list");
+        productsList.innerHTML = "";
+
+        // Add invoice items rows (assuming invoice.items is an array)
+        if (Array.isArray(invoice.items)) {
+          invoice.items.forEach((item, idx) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${idx + 1}</td>
+              <td>${item.name || "--"}</td>
+              <td>${item.description || "--"}</td>
+              <td>${parseFloat(item.price || 0).toFixed(2)} KM</td>
+              <td>${item.quantity || 1}</td>
+              <td>${(parseFloat(item.price || 0) * (item.quantity || 1)).toFixed(2)} KM</td>
+            `;
+            productsList.appendChild(tr);
+          });
+        }
+
+        // Set payment method amount if available
+        document.getElementById("payment-method-amount").textContent = `${parseFloat(invoice.total_price).toFixed(2)}`;
+
+        // Show the modal (requires Bootstrap JS)
+        const modal = new bootstrap.Modal(document.getElementById("invoiceDetailsModal"));
+        modal.show();
+      });
+    });
+
+  } catch (err) {
+    console.error("Greška prilikom dohvata faktura:", err);
+    loading.remove();
+    container.innerHTML = `<p class="text-danger">Greška prilikom dohvata faktura.</p>`;
+  }
+});
 </script>
+
+<!-- Invoice Details Modal -->
+<div class="modal fade" id="invoiceDetailsModal" tabindex="-1" aria-labelledby="invoiceDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <!-- modal header -->
+      <div class="modal-header">
+        <h5 class="modal-title text-center w-100">
+          <i class="fas fa-file-alt" style="font-size:14px;margin-top:-7px!important"></i> Pregled deklaracije
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
+      </div>
+      <!-- modal body -->
+      <div class="modal-body p-0">
+        <!-- Your detailed modal content here -->
+        <div class="row justify-content-center">
+          <div class="card" id="demo">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="card-header border-bottom-dashed p-4 d-flex justify-content-between">
+                  <div>
+                    <img src="{{ URL::asset('build/images/logo-dek.png') }}" class="card-logo" alt="logo" height="30">
+                    <div class="mt-4">
+                      <h6 class="text-muted text-uppercase fw-semibold">Adresa</h6>
+                      <p class="text-muted mb-1" id="address-details">--</p>
+                      <p class="text-muted mb-0"><span>Poštanski broj:</span> <span id="zip-code">--</span></p>
+                    </div>
+                  </div>
+                  <div class="text-end">
+                    <h6><span class="text-muted fw-normal">Email:</span> <span id="email">--</span></h6>
+                    <h6><span class="text-muted fw-normal">Web:</span> <a href="#" class="link-primary" target="_blank" id="website">--</a></h6>
+                    <h6 class="mb-0"><span class="text-muted fw-normal">Telefon:</span> <span id="contact-no">--</span></h6>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-12">
+                <div class="card-body p-4">
+                  <div class="row g-3">
+                    <div class="col-lg-3 col-6">
+                      <p class="text-muted mb-2 text-uppercase fw-semibold">Faktura #</p>
+                      <h5 class="fs-14 mb-0">#<span id="invoice-no">--</span></h5>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                      <p class="text-muted mb-2 text-uppercase fw-semibold">Datum</p>
+                      <h5 class="fs-14 mb-0"><span id="invoice-date">--</span></h5>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                      <p class="text-muted mb-2 text-uppercase fw-semibold">Skenirana</p>
+                      <span class="badge bg-light text-dark fs-11" id="payment-status">--</span>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                      <p class="text-muted mb-2 text-uppercase fw-semibold">Ukupan iznos</p>
+                      <h5 class="fs-14 mb-0"><span id="total-amount">--</span></h5>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-12">
+                <div class="card-body p-4 border-top border-top-dashed">
+                  <div class="row g-3">
+                    <div class="col-6">
+                      <h6 class="text-muted text-uppercase fw-semibold mb-3">Dobavljač</h6>
+                      <p class="fw-medium mb-2" id="billing-name">--</p>
+                      <p class="text-muted mb-1" id="billing-address-line-1">--</p>
+                      <p class="text-muted mb-1"><span>Telefon: </span><span id="billing-phone-no">--</span></p>
+                      <p class="text-muted mb-0"><span>PIB: </span><span id="billing-tax-no">--</span></p>
+                    </div>
+                    <div class="col-6">
+                      <h6 class="text-muted text-uppercase fw-semibold mb-3">Zemlja porijekla</h6>
+                      <p class="fw-medium mb-2" id="shipping-country">--</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Invoice Items -->
+              <div class="col-lg-12">
+                <div class="card-body p-4">
+                  <div class="table-responsive">
+                    <table class="table table-borderless text-center table-nowrap align-middle mb-0">
+                      <thead>
+                        <tr class="table-active">
+                          <th>#</th>
+                          <th>Artikal</th>
+                          <th>Opis</th>
+                          <th>Cijena</th>
+                          <th>Količina</th>
+                          <th>Ukupno</th>
+                        </tr>
+                      </thead>
+                      <tbody id="products-list">
+                        <!-- Dynamic rows will be inserted here -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Totals -->
+              <div class="col-lg-12">
+                <div class="card-body pt-0">
+                  <div class="border-top border-top-dashed mt-2">
+                    <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto" style="width:250px">
+                      <tbody>
+                        <tr class="border-top border-top-dashed fs-15">
+                          <th scope="row">Ukupno</th>
+                          <th class="text-end"><span id="modal-total-amount"></span> KM</th>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="mt-4">
+                    <h6 class="text-muted text-uppercase fw-semibold mb-3">Detalji plaćanja:</h6>
+                    <p class="text-muted mb-1">Način plaćanja: <span class="fw-medium">Kartica</span></p>
+                    <p class="text-muted mb-1">Ime vlasnika kartice: <span class="fw-medium">Tin Tomić</span></p>
+                    <p class="text-muted mb-1">Broj kartice: <span class="fw-medium">xxxx xxxx xxxx 1234</span></p>
+                    <p class="text-muted">Ukupno za platiti: <span class="fw-medium"><span id="payment-method-amount">--</span> KM</span></p>
+                  </div>
+
+                  <div class="mt-4">
+                    <div class="alert alert-info">
+                      <p class="mb-0"><span class="fw-semibold">Napomena:</span> <span id="note">Račun je informativnog karaktera. Provjerite detalje prije plaćanja.</span></p>
+                    </div>
+                  </div>
+
+                  <div class="hstack gap-2 justify-content-end d-print-none mt-4">
+                    <a href="javascript:void(0);" class="btn btn-success" onclick="printInvoiceModal()">
+                      <i class="ri-printer-line align-bottom me-1"></i> Print
+                    </a>
+                    <a href="javascript:void(0);" class="btn btn-primary">
+                      <i class="ri-download-2-line align-bottom me-1"></i> Download
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+            </div> <!-- row -->
+          </div> <!-- card -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
     <!--end row-->
 @endsection

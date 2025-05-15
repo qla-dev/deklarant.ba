@@ -29,7 +29,7 @@
                 <!-- App Search-->
             <form class="app-search d-none d-md-block me-5" style="width: 77%;" id="global-search-form">
     <div class="position-relative">
-        <input type="text" class="form-control border" placeholder="Pretraga faktura, dobavljača, tarifa..." autocomplete="off"
+        <input type="text" class="form-control border" placeholder="Pretraga po broju fakture, imenu dokumenta, dobavljaču, zemlji projekla..." autocomplete="off"
             id="global-search" />
         <span class="mdi mdi-magnify search-widget-icon text-info"></span>
         <span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none" id="search-clear"></span>

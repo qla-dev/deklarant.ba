@@ -243,7 +243,7 @@ Moje spašene deklaracije
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title text-center w-100"><i class="fas fa-file-alt" style="font-size:14px;margin-top:-7px!important"></i>  Pregled fakture</h5>
+                <h5 class="modal-title text-center w-100"><i class="fas fa-file-alt" style="font-size:14px;margin-top:-7px!important"></i>  Pregled deklaracije</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                     aria-label="Zatvori"></button>
             </div>
