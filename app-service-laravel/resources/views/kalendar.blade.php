@@ -33,11 +33,11 @@
                         <div class="card-body">
                             <button class="btn btn-info w-100" id="btn-new-event" data-bs-toggle="modal"
                                 data-bs-target="#scanModal">
-                                <i class="fas fa-wand-magic-sparkles fs-6 me-1"></i><span class="fs-6">Skeniraj fakturu s
+                                <i class="fas fa-wand-magic-sparkles fs-6 me-1"></i><span class="fs-6">Skeniraj deklaraciju s
                                     AI</span>
                             </button>
                             <div id="external-events d-flex justify-content-center" class="mt-3">
-                                <p class="text-muted w-100 text-center mb-0">Klikni za skeniranje nove fakture!</p>
+                                <p class="text-muted w-100 text-center mb-0">Klikni za skeniranje nove deklaracije!</p>
                             </div>
                         </div>
                     </div>
@@ -261,7 +261,7 @@
             <div class="modal-content">
                 <div class="modal-header text-center">
                     <h5 class="modal-title w-100" id="scanModalLabel"><i class="fas fa-wand-magic-sparkles fs-6 me-1"
-                            style="font-size:10px;"></i>Skeniraj fakturu sa AI</h5>
+                            style="font-size:10px;"></i>Skeniraj deklaraciju sa AI</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
                 </div>
                 <div class="modal-body d-flex justify-content-center">

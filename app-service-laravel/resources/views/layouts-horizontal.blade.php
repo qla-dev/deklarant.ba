@@ -57,7 +57,7 @@
                             <span>Pregledaj sve</span>
                         </div>
                         <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
-                            <h6 class="text-muted text-uppercase fs-11 mb-1">Broj skeniranih faktura</h6>
+                            <h6 class="text-muted text-uppercase fs-11 mb-1">Broj skeniranih deklaracija</h6>
                             <div class="d-flex align-items-center justify-content-center">
                                 <i class="ri-file-text-line  text-info mb-1" style="font-size: 45px"></i>
                                 <h3 class="mb-0 ms-2"><span id="usedScans" class="counter-value">0</span></h3>
@@ -69,12 +69,14 @@
             </div>
 
             <!-- Middle Avatar Section -->
-            <div class="col-md-4 border-end order-1 order-md-0 d-flex align-items-center border-0 rounded-0 alert alert-light p-1 mb-2 m-lg-0">
+            <div class="col-md-4 border-start border-end order-1 order-md-0 d-flex align-items-center border-0 rounded-0 alert alert-light p-1 mb-2 m-lg-0">
                 <div class="p-2 text-center d-flex flex-column h-100 w-100 justify-content-center align-items-center">
                     <div class="card-body text-center p-2">
-                        <img id="user-avatar" src="{{ URL::asset('build/images/users/avatar-1.jpg') }}"
-                            class="rounded-circle shadow-sm mb-2" width="60" height="60" alt="Korisnički avatar">
-                        <h6 class="fw-bold mb-1 mt-1" id="welcome-user">Dobrodošli na deklarant.ba!</h6>
+                        <div class="row d-flex text-center mb-3 fs-4" style="justify-content: center!important;">
+                        <img id="user-avatar-middle" class="rounded-circle d-none" width="40" height="40">
+<div id="avatar-middle-fallback" class="rounded-circle bg-info d-flex justify-content-center align-items-center text-white" style="width: 50px; height: 50px;"></div>
+</div>
+                        <h6 class="fw-bold mb-1 mt-1" id="welcome-user">Dobrodošli na deklarant.ba</h6>
                         <p class="fw-semibold fs-7 mb-1 text-info" id="user-package-display">
                             Učitavanje paketa...
                         </p>
@@ -89,7 +91,7 @@
                             <button type="button" data-bs-toggle="modal" data-bs-target="#scanModal"
                                 class="btn btn-info w-50 animated-btn btn-sm d-flex align-items-center justify-content-center">
                                 <i class="fas fa-wand-magic-sparkles fs-6 me-1" style="font-size:10px;"></i>
-                                <span class="fs-6"> Skeniraj fakturu sa AI</span>
+                                <span class="fs-6"> Skeniraj deklaraciju sa AI</span>
                             </button>
                         </div>
                     </div>
@@ -191,7 +193,7 @@
             <div class="card-body" style="z-index:1;">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1 overflow-hidden">
-                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Broj spašenih faktura</p>
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Broj spašenih deklaracija</p>
                         <h4 class="fs-22 fw-semibold ff-secondary mb-0">
                             <span class="counter-value" id="totalInvoices" data-target="45">0</span><span
                                 class="counter-value">/500</span>
@@ -396,10 +398,11 @@
             <div class="col-xl-6 d-flex flex-column ">
                 <div class="row g-1 flex-fill mx-0">
                     <div class="col-md-6 ">
-                        <div class="card rounded-0 w-100 h-100 card-animate ">
+                        <div class="card rounded-0 w-100 h-100 card-animate mb-0">
                             <div class="card-header">
                                 <h5 class="mb-0">Zadnje korištene tarife</h5>
                             </div>
+
                             <div class="card-body align-items-center text-truncate">
                                 <div class="tariff-list">
                                     <!-- Dynamically populated supplier data goes here -->
@@ -411,21 +414,24 @@
                                 </div>
 
 
-                            </div>
+                         <div class="card-body d-flex justify-content-center align-items-center flex-column pb-0 pt-0" style="min-height: 200px;">
+    <div class="tariff-loader spinner-border text-info" role="status"></div>
+    <div class="tariff-list d-none w-100"></div>
+</div>
+
+
                         </div>
                     </div>
                     <div class="col-md-6 d-flex card-animate">
-                        <div class="card rounded-0 w-100 h-100">
+                        <div class="card rounded-0 w-100 h-100 mb-0">
                             <div class="card-header">
                                 <h5 class="mb-0">Zadnje korišteni dobavljači</h5>
                             </div>
-                            <div class="card-body">
-                                <div class="suppliers-list">
-                                    <!-- Dynamically populated supplier data goes here -->
-                                </div>
-                                <div class="card-footer mt-1 pt-0 pb-0 d-flex justify-content-center">
-
-                                </div>
+                        <div class="card-body d-flex justify-content-center align-items-center flex-column pb-0 pt-0" style="min-height: 200px;">
+    <div class="suppliers-loader spinner-border text-info" role="status"></div>
+    <div class="suppliers-list d-none w-100"></div>
+</div>
+                                 
                             </div>
 
                         </div>
@@ -442,7 +448,7 @@
         <div class="modal-content">
             <div class="modal-header text-center">
                 <h5 class="modal-title w-100" id="scanModalLabel"><i class="fas fa-wand-magic-sparkles fs-6 me-1"
-                        style="font-size:10px;"></i>Skeniraj fakturu sa AI</h5>
+                        style="font-size:10px;"></i>Skeniraj deklaraciju sa AI</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
             </div>
             <div class="modal-body d-flex justify-content-center">
@@ -455,7 +461,7 @@
 
                     <div class="text-center" id="dropzone-content">
                         <i class="ri-file-2-line text-info fs-1"></i>
-                        <p class="mt-3">Prevucite dokument ovdje ili kliknite kako bi uploadali i skenirali vašu fakturu
+                        <p class="mt-3">Prevucite dokument ovdje ili kliknite kako bi uploadali i skenirali vašu deklaraciju
                         </p>
                     </div>
 
@@ -468,7 +474,7 @@
 
                     <div id="scanningLoader" class="mt-4 text-center d-none">
                         <div class="spinner-border text-info" role="status" style="width: 3rem; height: 3rem;"></div>
-                        <p class="mt-3 fw-semibold" id="scanningText">Skeniranje fakture...</p>
+                        <p class="mt-3 fw-semibold" id="scanningText">Skeniranje deklaracije...</p>
                         <div id="successCheck" class="d-none mt-3">
                             <i class="ri-checkbox-circle-fill text-success fs-1 animate__animated animate__zoomIn"></i>
                             <p class="text-success fw-semibold mt-2">Uspješno skenirano!</p>
@@ -517,123 +523,136 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", async function() {
-        const user = JSON.parse(localStorage.getItem("user"));
-        const token = localStorage.getItem("auth_token");
-
-        if (!user || !token) {
-            console.warn("User or token missing in localStorage.");
-            return;
-        }
-
-        const API_URL = `/api/statistics/users/${user.id}`;
-
-        try {
-            const response = await axios.get(API_URL, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-
-            const stats = response.data || {};
-            console.log("Fetched stats:", stats);
-
-            // Get the suppliers data, ensure no demo supplier is added
-            const suppliers = stats.supplier_profit_changes || [];
-
-            // Limit to 5 suppliers
-            const limitedSuppliers = suppliers.slice(-5);
-
-            const suppliersContainer = document.querySelector(".suppliers-list");
-
-            if (suppliersContainer) {
-                suppliersContainer.innerHTML = ''; // Clear existing content
-
-                limitedSuppliers.forEach(supplier => {
-                    console.log("Rendering supplier:", supplier);
-
-                    // Convert percentage_change to a number
-                    const percentageChange = parseFloat(supplier.percentage_change);
-
-                    // Ensure we handle both positive and negative values
-                    const isPositive = percentageChange >= 0;
-                    const growthClass = isPositive ? "text-success" : "text-danger";
-                    const arrowIcon = isPositive ? "ri-arrow-up-line" : "ri-arrow-down-line";
-
-                    const supplierElement = document.createElement("div");
-                    supplierElement.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2");
-
-                    supplierElement.innerHTML = `
-                                <div>
-                                    <div class="fw-semibold">${supplier.name}</div>
-                                    <div class="text-muted fs-12">${supplier.owner ?? 'Nepoznat vlasnik'}</div>
-                                </div>
-                                <div class="${growthClass} fs-13">
-                                    ${isNaN(percentageChange) ? 'N/A' : percentageChange.toFixed(1)}% <i class="${arrowIcon} ms-1"></i>
-                                </div>
-                            `;
-
-                    suppliersContainer.appendChild(supplierElement);
-                });
-            }
-        } catch (error) {
-            console.error("Error fetching supplier data:", error);
-        }
-    });
-</script>
-
-
-<script>
-    document.addEventListener("DOMContentLoaded", async function() {
+    document.addEventListener("DOMContentLoaded", async function () {
         const token = localStorage.getItem("auth_token");
         const user = JSON.parse(localStorage.getItem("user"));
 
         if (!token || !user?.id) {
-            console.warn("User or token missing.");
+            console.warn("Missing auth or user.");
             return;
         }
 
+        const supplierContainer = document.querySelector(".suppliers-list");
+        const tariffContainer = document.querySelector(".tariff-list");
+        const supplierLoader = document.querySelector(".suppliers-loader");
+        const tariffLoader = document.querySelector(".tariff-loader");
+
         try {
-            const res = await axios.get(`/api/invoices/users/${user.id}`, {
+            const res = await axios.get(`/api/statistics/users/${user.id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
 
-            const invoices = res.data || [];
+            const stats = res.data || {};
 
-            // Filter invoices with non-empty items and take up to 5
-            const validItems = invoices
+            // --- Suppliers Section ---
+            const suppliers = stats.supplier_profit_changes || [];
+            const lastSuppliers = suppliers.slice(-5);
+
+            if (supplierLoader) supplierLoader.classList.add("d-none");
+            if (supplierContainer) {
+    supplierContainer.classList.remove("d-none");
+    supplierContainer.innerHTML = "";
+
+    if (lastSuppliers.length === 0) {
+        supplierContainer.innerHTML = `
+            <div class="text-muted text-center">Nema podataka o dobavljačima.</div>
+        `;
+    } else {
+        lastSuppliers.forEach(supplier => {
+            const percentage = parseFloat(supplier.percentage_change);
+            const isPositive = percentage >= 0;
+            const growthClass = isPositive ? "text-success" : "text-danger";
+            const arrow = isPositive ? "ri-arrow-up-line" : "ri-arrow-down-line";
+
+            supplierContainer.innerHTML += `
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <div class="fw-semibold">${supplier.name}</div>
+                        <div class="text-muted fs-12">${supplier.owner ?? 'Nepoznat vlasnik'}</div>
+                    </div>
+                    <div class="${growthClass} fs-13">
+                        ${isNaN(percentage) ? 'N/A' : percentage.toFixed(1)}%
+                        <i class="${arrow} ms-1"></i>
+                    </div>
+                </div>
+            `;
+        });
+
+        // Add the "Pregledaj sve" link at the bottom
+        supplierContainer.innerHTML += `
+            <div class="card-footer p-0 pb-0 pt-0 d-flex justify-content-end">
+                <a href="moji-dobavljaci" class="text-info fs-13 mb-2" style="margin-top:.7rem!important">Pregledaj sve</a>
+            </div>
+        `;
+    }
+}
+
+
+            // --- Tariff Section ---
+            const allInvoices = stats.invoices || [];
+            const validItems = allInvoices
                 .filter(inv => Array.isArray(inv.items) && inv.items.length > 0)
-                .flatMap(inv => inv.items.map(item => ({
-                    code: item.best_customs_code_matches?.[0] || "Nepoznat kod",
-                    name: item.item_description_original || item.item_description || "Nepoznat naziv",
-                    vat: "",
-                })))
+                .flatMap(inv =>
+                    inv.items.map(item => ({
+                        code: item.best_customs_code_matches?.[0] || "Nepoznat kod",
+                        name: item.item_description_original || item.item_description || "Nepoznat naziv",
+                    }))
+                )
                 .slice(0, 5);
 
-            const container = document.querySelector(".tariff-list");
-            container.innerHTML = "";
+            if (tariffLoader) tariffLoader.classList.add("d-none");
+            if (tariffContainer) {
+    tariffContainer.classList.remove("d-none");
+    tariffContainer.innerHTML = "";
 
-            validItems.forEach(item => {
-                container.innerHTML += `
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <div>
-                            <div class="fw-semibold">${item.code}</div>
-                            <div class="text-muted fs-12">${item.name}</div>
-                        </div>
-                        <div class="text-success fs-13">
-                             
-                        </div>
+    if (validItems.length === 0) {
+        tariffContainer.innerHTML = `
+            <div class="text-muted text-center">Nema nedavnih tarifa.</div>
+        `;
+    } else {
+        validItems.forEach(item => {
+            tariffContainer.innerHTML += `
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <div class="fw-semibold">${item.code}</div>
+                        <div class="text-muted fs-12">${item.name}</div>
                     </div>
-                `;
-            });
+                </div>
+            `;
+        });
+
+        // Append the "Pregledaj sve" link at the bottom
+        tariffContainer.innerHTML += `
+            <div class="card-footer p-0 pb-0 pt-0 d-flex justify-content-end">
+                <a href="moje-tarife" class="text-info fs-13 mb-2" style="margin-top:.7rem">Pregledaj sve</a>
+            </div>
+        `;
+    }
+}
+
 
         } catch (err) {
-            console.error("Greška pri dohvaćanju faktura:", err);
+            console.error("Greška pri dohvaćanju statistike:", err);
+
+            if (supplierLoader) supplierLoader.classList.add("d-none");
+            if (tariffLoader) tariffLoader.classList.add("d-none");
+
+            if (supplierContainer) {
+                supplierContainer.classList.remove("d-none");
+                supplierContainer.innerHTML = `<div class="text-danger">Greška pri dohvaćanju dobavljača.</div>`;
+            }
+
+            if (tariffContainer) {
+                tariffContainer.classList.remove("d-none");
+                tariffContainer.innerHTML = `<div class="text-danger">Greška pri dohvaćanju tarifa.</div>`;
+            }
         }
     });
 </script>
+
+
 
 
 
@@ -705,7 +724,7 @@
             });
         }
 
-        // ✅ Initial empty chart (0%)
+        //  Initial empty chart (0%)
         createDoughnutChart("doughnut1", 0);
 
         const user = JSON.parse(localStorage.getItem("user"));
@@ -735,7 +754,7 @@
 
             const usedPercentage = totalScans > 0 ? (usedScans / totalScans) * 100 : 0;
 
-            // ✅ Re-render with real data
+            //  Re-render with real data
             createDoughnutChart("doughnut1", usedPercentage);
 
         } catch (err) {
@@ -747,6 +766,7 @@
 
 
 <!-- doughnut2 -->
+
 
 <script>
     document.addEventListener("DOMContentLoaded", async function () {
@@ -819,7 +839,7 @@
             });
         }
 
-        // ✅ Initial chart with 0% used
+        
         createDoughnutChart("doughnut2", 0);
 
         const invoicesUrl = `/api/invoices/users/${user.id}`;
@@ -861,7 +881,7 @@
 
             const usedPercentage = invoiceLimit === Infinity ? 100 : Math.min((invoiceCount / invoiceLimit) * 100, 100);
 
-            // ✅ Update chart with real value
+            
             createDoughnutChart("doughnut2", usedPercentage);
 
         } catch (err) {
@@ -869,6 +889,7 @@
         }
     });
 </script>
+
 
 
 <!-- brzina skeniranja -->
@@ -959,20 +980,20 @@
                 remainScans: stats.remaining_scans ?? 0
             };
 
-            console.log("📌 Vrijednosti za prikaz u DOM-u:", fields);
+            console.log(" Vrijednosti za prikaz u DOM-u:", fields);
 
             Object.entries(fields).forEach(([id, value]) => {
                 const el = document.getElementById(id);
                 if (el) {
-                    console.log(`➡️ Ažuriram #${id} na:`, value);
+                    console.log(`➡ Ažuriram #${id} na:`, value);
                     el.innerText = value;
                 } else {
-                    console.warn(`⚠️ Element s ID '${id}' nije pronađen u DOM-u.`);
+                    console.warn(` Element s ID '${id}' nije pronađen u DOM-u.`);
                 }
             });
 
         } catch (error) {
-            console.error("❌ Greška pri dohvaćanju statistike:", error);
+            console.error(" Greška pri dohvaćanju statistike:", error);
         }
     });
 </script>
@@ -1020,31 +1041,42 @@
 
 <!-- avatar upload -->
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         const user = JSON.parse(localStorage.getItem("user"));
 
         if (user) {
             const welcome = document.getElementById("welcome-user");
             if (welcome) {
-                welcome.innerText = `Dobrodošao/la na deklarant.ba, ${user.username}!`;
+                welcome.innerText = `Dobrodošli na deklarant.ba ${user.username}`;
             }
 
-            const avatar = document.getElementById("user-avatar");
-            if (avatar) {
-                const avatarUrl = `/storage/uploads/avatars/${user.avatar}`;
-                // Check if the image loads correctly, fallback if not
+            const avatarImg = document.getElementById("user-avatar-middle");
+            const avatarFallback = document.getElementById("avatar-middle-fallback");
+
+            const avatarUrl = `/storage/uploads/avatars/${user.avatar}`;
+            const firstLetter = (user.username || "U")[0].toUpperCase();
+
+            if (avatarFallback) {
+                avatarFallback.textContent = firstLetter;
+            }
+
+            if (avatarImg) {
                 const testImg = new Image();
-                testImg.onload = function() {
-                    avatar.src = avatarUrl;
+                testImg.onload = function () {
+                    avatarImg.src = avatarUrl;
+                    avatarImg.classList.remove("d-none");
+                    if (avatarFallback) avatarFallback.classList.add("d-none");
                 };
-                testImg.onerror = function() {
-                    avatar.src = "/build/images/users/avatar-1.jpg";
+                testImg.onerror = function () {
+                    avatarImg.classList.add("d-none");
+                    if (avatarFallback) avatarFallback.classList.remove("d-none");
                 };
                 testImg.src = avatarUrl;
             }
         }
     });
 </script>
+
 
 
 <!-- suppliers -->

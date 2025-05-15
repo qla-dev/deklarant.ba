@@ -27,98 +27,39 @@
 
 
                 <!-- App Search-->
-                <form class="app-search d-none d-md-block me-5" style="width: 77%;">
-                    <div class="position-relative">
-                        <input type="text" class="form-control border" placeholder="Pretraga..." autocomplete="off"
-                            id="search-options" value="">
-                        <span class="mdi mdi-magnify search-widget-icon text-info"></span>
-                        <span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none"
-                            id="search-close-options"></span>
-                    </div>
-                    <div class="dropdown-menu dropdown-menu-lg" style="width: 56%;" id="search-dropdown">
-                        <div data-simplebar style="max-height: 320px;">
-                            <!-- item-->
-                            <div class="dropdown-header">
-                                <h6 class="text-overflow text-muted mb-0 text-uppercase">Recent Searches</h6>
-                            </div>
+            <form class="app-search d-none d-md-block me-5" style="width: 77%;" id="global-search-form">
+    <div class="position-relative">
+        <input type="text" class="form-control border" placeholder="Pretraga po broju deklaracije, imenu dokumenta, dobavljaču, zemlji projekla..." autocomplete="off"
+            id="global-search" />
+        <span class="mdi mdi-magnify search-widget-icon text-info"></span>
+        <span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none" id="search-clear"></span>
+    </div>
+</form>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const input = document.getElementById("global-search");
+    const clear = document.getElementById("search-clear");
 
-                            <div class="dropdown-item bg-transparent text-wrap">
-                                <a href="index" class="btn btn-soft-secondary btn-sm rounded-pill">how to setup <i
-                                        class="mdi mdi-magnify ms-1"></i></a>
-                                <a href="index" class="btn btn-soft-secondary btn-sm rounded-pill">buttons <i
-                                        class="mdi mdi-magnify ms-1"></i></a>
-                            </div>
-                            <!-- item-->
-                            <div class="dropdown-header mt-2">
-                                <h6 class="text-overflow text-muted mb-1 text-uppercase">Pages</h6>
-                            </div>
+    input.addEventListener("input", function () {
+        clear.classList.toggle("d-none", this.value.length === 0);
+    });
 
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <i class="ri-bubble-chart-line align-middle fs-18 text-muted me-2"></i>
-                                <span>Analytics Dashboard</span>
-                            </a>
+    clear.addEventListener("click", function () {
+        input.value = "";
+        clear.classList.add("d-none");
+    });
 
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <i class="ri-lifebuoy-line align-middle fs-18 text-muted me-2"></i>
-                                <span>Help Center</span>
-                            </a>
+    document.getElementById("global-search-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const keyword = input.value.trim();
+        if (keyword.length > 0) {
+            window.location.href = `/pretraga?keyword=${encodeURIComponent(keyword)}`;
+        }
+    });
+});
+</script>
 
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <i class="ri-user-settings-line align-middle fs-18 text-muted me-2"></i>
-                                <span>My account settings</span>
-                            </a>
 
-                            <!-- item-->
-                            <div class="dropdown-header mt-2">
-                                <h6 class="text-overflow text-muted mb-2 text-uppercase">Members</h6>
-                            </div>
-
-                            <div class="notification-list">
-                                <!-- item -->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item py-2">
-                                    <div class="d-flex">
-                                        <img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}"
-                                            class="me-3 rounded-circle avatar-xs" alt="user-pic">
-                                        <div class="flex-grow-1">
-                                            <h6 class="m-0">Angela Bernier</h6>
-                                            <span class="fs-11 mb-0 text-muted">Manager</span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <!-- item -->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item py-2">
-                                    <div class="d-flex">
-                                        <img src="{{ URL::asset('build/images/users/avatar-3.jpg') }}"
-                                            class="me-3 rounded-circle avatar-xs" alt="user-pic">
-                                        <div class="flex-grow-1">
-                                            <h6 class="m-0">David Grasso</h6>
-                                            <span class="fs-11 mb-0 text-muted">Web Designer</span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <!-- item -->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item py-2">
-                                    <div class="d-flex">
-                                        <img src="{{ URL::asset('build/images/users/avatar-5.jpg') }}"
-                                            class="me-3 rounded-circle avatar-xs" alt="user-pic">
-                                        <div class="flex-grow-1">
-                                            <h6 class="m-0">Mike Bunch</h6>
-                                            <span class="fs-11 mb-0 text-muted">React Developer</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="text-center pt-3 pb-1">
-                            <a href="pages-search-results" class="btn btn-info btn-sm">View All Results <i
-                                    class="ri-arrow-right-line ms-1"></i></a>
-                        </div>
-                    </div>
-                </form>
             </div>
 
             <div class="d-flex align-items-center">
@@ -213,7 +154,7 @@
                                     <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#scanModal"
                                         class="btn btn-info btn-sm text-white w-100 d-flex align-items-center justify-content-center">
                                         <i class="fas fa-wand-magic-sparkles fs-6 me-1"></i>
-                                        <span>Skeniraj fakturu sa AI</span>
+                                        <span>Skeniraj deklaraciju sa AI</span>
                                     </a>
                                 </div>
                                 
@@ -248,13 +189,13 @@
                         <span class="d-flex align-items-center">
 
                             <span class="text-start me-xl-2">
-                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text text-end"
+                                <span class="d-none d-xl-inline-block fw-medium user-name-text text-end"
                                     id="topbar-username">
                                     <script>
                                         document.write(JSON.parse(localStorage.getItem("user"))?.username || "Korisnik");
                                     </script>
                                 </span>
-                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Business</span>
+                                <span class="d-none d-xl-block fs-12 user-name-sub-text">Business</span>
 
 
                             </span>
@@ -275,20 +216,74 @@
 
                     <div class="dropdown-menu dropdown-menu-end border">
                         <!-- item-->
-                        <h6 class="dropdown-header" id="dropdownWelcome">Dobrodošli, <span id="dropdownUser">Korisnik</span>!</h6>
+                        <h6 class="dropdown-header" id="dropdownWelcome">Dobrodošli <span id="dropdownUser">Korisnik</span></h6>
                         <a class="dropdown-item" href="profil"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Moj nalog</span></a>
                         <a class="dropdown-item" href="pages-faqs"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Pomoć</span></a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="pages-profile"><i
-                                class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span
-                                class="align-middle">Dostupna skeniranja : <b>123</b></span></a>
+                        <a class="dropdown-item" href="cijene-paketa"><i class="fas fa-wand-magic-sparkles fs-12 text-muted me-1" ></i> <span
+                                class="align-middle">Dostupna skeniranja : <b id="remainScansTopbar"></b></span></a>
+
+
+                                <script>
+    document.addEventListener("DOMContentLoaded", async function() {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const token = localStorage.getItem("auth_token");
+
+        console.log("[INIT] Provjera lokalne pohrane...");
+        console.log(" Korisnik:", user);
+        console.log(" Token:", token?.substring(0, 25) + "..."); // da ne ispiše cijeli token
+
+        if (!user || !token) {
+            console.warn(" User ili token nedostaje u localStorage.");
+            return;
+        }
+
+        const API_URL = `/api/statistics/users/${user.id}`;
+        console.log(` Pozivam API: ${API_URL}`);
+
+        try {
+            const response = await axios.get(API_URL, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            console.log(" API response:", response);
+            const stats = response.data || {};
+
+            console.log(" Parsed statistike:", stats);
+
+            const fields = {
+                totalSuppliers: stats.total_suppliers ?? 0,
+                totalInvoices: stats.total_invoices ?? 0,
+                usedScans: stats.used_scans ?? 0,
+                remainScansTopbar: stats.remaining_scans ?? 0
+            };
+
+            console.log("📌 Vrijednosti za prikaz u DOM-u:", fields);
+
+            Object.entries(fields).forEach(([id, value]) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    console.log(`➡️ Ažuriram #${id} na:`, value);
+                    el.innerText = value;
+                } else {
+                    console.warn(`⚠️ Element s ID '${id}' nije pronađen u DOM-u.`);
+                }
+            });
+
+        } catch (error) {
+            console.error("❌ Greška pri dohvaćanju statistike:", error);
+        }
+    });
+</script>
 
                         <a class="dropdown-item" href="auth-lockscreen-basic"><i
                                 class="mdi mdi-sleep text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">Sleep</span></a>
 
                         <a class="dropdown-item" href="javascript:void(0);" id="logout-link">
-                            <i class="bx bx-power-off font-size-16 align-middle me-1"></i>
+                            <i class="bx bx-power-off text-muted fs-16 align-middle me-1" style="margin-top: -3px!important;"></i>
                             <span key="t-logout">@lang('translation.logout')</span>
                         </a>
 
@@ -382,7 +377,7 @@
         const topbarFallback = document.getElementById("topbar-avatar-fallback");
 
         // Show initials immediately
-        const firstLetter = (user.first_name || user.username || "U")[0].toUpperCase();
+        const firstLetter = (user.username || "U")[0].toUpperCase();
         if (avatarFallback) avatarFallback.textContent = firstLetter;
         if (topbarFallback) topbarFallback.textContent = firstLetter;
 

@@ -283,8 +283,13 @@
 
                 <!-- Location filled dynamically -->
                 <div class="hstack text-white-50 gap-2">
-                    <span id="profile-location"><i class="ri-map-pin-user-line align-middle"></i> Učitavanje
-                        lokacije...</span>
+                    <span id="profile-location"><i class="ri-map-pin-user-line align-middle"></i> Učitavanje...</span>
+
+                </div>
+
+              
+                <div class="hstack text-white-50 gap-1">
+                    Član od:<span id="joining-date" style="ms-0 p-0">Učitavanje...</span>
 
                 </div>
             </div>
@@ -334,41 +339,72 @@
             <div class="tab-pane fade show active mb-0" id="overview-tab">
                 <div class="row h-100 align-items-stretch">
                     <!-- Left Side Cards -->
-                    <div class="col-xxl-4 d-flex flex-column justify-content-between rounded-0">
+                    <div class="col-xxl-4 d-flex flex-column rounded-0">
                         <div class="card mb-3 d-flex flex-column align-items-center justify-content-center rounded-0">
-                            <div class="card-body text-center d-flex">
-                                <p class="fw-semibold mb-0" id="user-package-text" style="padding-top:4px; padding-right: 5px;">
-                                    Učitavanje...
-                                </p>
-                                <a href="cijene-paketa" class="btn btn-info text-white btn-sm mt-auto">
-                                    <i class="ri-arrow-up-circle-line"></i> Nadogradi paket
-                                </a>
-                            </div>
-                        </div>
+                           <div class="card-body d-flex align-items-center w-100 justify-content-between" style="min-height: 60px;">
+    <!-- Loader (shown initially) -->
+     <div class="w-100 d-flex justify-content-center" id="user-package-loader">
+    <div  class="spinner-border text-info" role="status"></div>
+</div>
+    <!-- Package text (hidden initially) -->
+    <p class="fw-semibold mb-0 d-none d-flex" id="user-package-text" style="justify-content: space-between;"></p>
 
+    <!-- Upgrade button (hidden initially) -->
+    <a href="cijene-paketa" id="upgrade-btn" class="btn btn-info text-white btn-sm d-none">
+        <i class="ri-arrow-up-circle-line"></i> Nadogradi paket
+    </a>
+</div>
+
+                        </div>
+  <div class="card d-flex flex-column justify-content-between rounded-0">
+                 <div class="card-body d-flex flex-column justify-content-between" style="min-height: 150px;">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="card-title mb-0">Moji dokumenti</h5>
+        <a href="moje-fakture" class="text-info fs-13">Pregledaj sve</a>
+    </div>
+
+    <!-- Loader -->
+    <div class="user-documents-loader d-flex justify-content-center align-items-center flex-grow-1" style="min-height: 142px;">
+        <div class="spinner-border text-info" role="status"></div>
+    </div>
+
+    <!-- Hidden initially -->
+    <div class="row g-3 mt-auto d-flex align-items-center justify-content-center text-center" 
+     id="user-documents" 
+     style="min-height: 120px;">
+    <div class="col-12 text-muted"></div>
+</div>
+
+
+</div>
+
+
+                        </div>
                         <div class="card mb-3 d-flex flex-column justify-content-center rounded-0">
-                            <div class="card-body">
-                                <h5 class="card-title">Moji dobavljači</h5>
-                                <div class="suppliers-list">
-                                    <!-- Dynamic suppliers will be injected here by JS -->
-                                    <div class="text-muted">Učitavanje dobavljača...</div>
-                                </div>
-                                <hr>
-                            </div>
+                          <div class="card-body position-relative pb-0" style="min-height: 300px;">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="card-title mb-0">Moji dobavljači</h5>
+        <a href="moji-dobavljaci" class="text-info fs-13">Pregledaj sve</a>
+    </div>
+
+    <!-- Loader vertically & horizontally centered -->
+    <div class="suppliers-loader position-absolute top-50 start-50 translate-middle">
+    <div class="spinner-border text-info" role="status"></div>
+</div>
+
+
+    <!-- List (hidden by default) -->
+    <div class="suppliers-list d-none" style="min-height: 100px;">
+        <!-- JS will inject content here -->
+    </div>
+</div>
+
+
+
                         </div>
 
 
-                        <div class="card d-flex flex-column justify-content-between rounded-0">
-                            <div class="card-body d-flex flex-column justify-content-between">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h5 class="card-title mb-0">Moji dokumenti</h5>
-                                    <a href="moje-fakture" class="text-info fs-13">View all</a>
-                                </div>
-                                <div class="row g-3 mt-auto" id="user-documents">
-                                    <!-- JS will inject 4 document tiles here -->
-                                </div>
-                            </div>
-                        </div>
+                      
                     </div>
 
                     <!-- Right Form with Tabs -->
@@ -423,10 +459,6 @@
                                                     <input type="email" class="form-control rounded-0" id="emailInput" placeholder="Učitavanje..." />
                                                 </div>
                                                 <div class="col-lg-6 mb-3">
-                                                    <label for="JoiningdatInput" class="form-label text-info">Datum pridruženja</label>
-                                                    <input type="text" class="form-control rounded-0" id="JoiningdatInput" placeholder="Učitavanje..." />
-                                                </div>
-                                                <div class="col-lg-6 mb-3">
                                                     <label for="designationInput" class="form-label text-info">Pozicija</label>
                                                     <input type="text" class="form-control rounded-0" id="designationInput" placeholder="Učitavanje..." />
                                                 </div>
@@ -434,18 +466,19 @@
                                                     <label for="websiteInput1" class="form-label text-info">Web stranica</label>
                                                     <input type="text" class="form-control rounded-0" id="websiteInput1" placeholder="Učitavanje..." />
                                                 </div>
+                                                    <div class="col-lg-6 mb-3">
+                                                    <label for="zipcodeInput" class="form-label text-info">Poštanski broj</label>
+                                                    <input type="text" class="form-control rounded-0" id="zipcodeInput" placeholder="Učitavanje..." />
+                                                </div>
                                                 <div class="col-lg-6 mb-3">
                                                     <label for="cityInput" class="form-label text-info">Grad</label>
                                                     <input type="text" class="form-control rounded-0" id="cityInput" placeholder="Učitavanje..." />
                                                 </div>
-                                                <div class="col-lg-6 mb-3">
+                                                <div class="col-lg-12 mb-3">
                                                     <label for="countryInput" class="form-label text-info">Država</label>
                                                     <input type="text" class="form-control rounded-0" id="countryInput" placeholder="Učitavanje..." />
                                                 </div>
-                                                <div class="col-lg-6 mb-3">
-                                                    <label for="zipcodeInput" class="form-label text-info">Poštanski broj</label>
-                                                    <input type="text" class="form-control rounded-0" id="zipcodeInput" placeholder="Učitavanje..." />
-                                                </div>
+                                            
                                                 <div class="col-lg-12 mb-3">
                                                     <label for="exampleFormControlTextarea" class="form-label text-info">Opis</label>
                                                     <textarea class="form-control rounded-0" id="exampleFormControlTextarea" placeholder="Učitavanje..." rows="3"></textarea>
@@ -453,31 +486,6 @@
                                                 <div class="col-lg-12 mt-4 mb-4">
                                                     <div class="hstack gap-2 justify-content-end">
                                                         <button type="submit" id="update-user-btn" class="btn btn-info"><i class="fas fa-save fs-6 me-1"></i> Ažuriraj podatke</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                    <!-- Change Password Tab -->
-                                    <div class="tab-pane fade" id="changePassword" role="tabpanel">
-                                        <form action="javascript:void(0);">
-                                            <div class="row">
-                                                <div class="col-lg-12 mb-3">
-                                                    <label for="oldPassword" class="form-label text-info">Stara lozinka</label>
-                                                    <input type="password" class="form-control rounded-0" id="oldPassword" placeholder="Unesite staru lozinku" />
-                                                </div>
-                                                <div class="col-lg-6 mb-3">
-                                                    <label for="newPassword" class="form-label text-info">Nova lozinka</label>
-                                                    <input type="password" class="form-control rounded-0" id="newPassword" placeholder="Unesite novu lozinku" />
-                                                </div>
-                                                <div class="col-lg-6 mb-3">
-                                                    <label for="confirmPassword" class="form-label text-info">Potvrdite novu lozinku</label>
-                                                    <input type="password" class="form-control rounded-0" id="confirmPassword" placeholder="Potvrdite novu lozinku" />
-                                                </div>
-                                                <div class="col-lg-12 mt-4 mb-4">
-                                                    <div class="hstack gap-2 justify-content-end">
-                                                        <button type="submit" id="change-password-btn" class="btn btn-info"><i class="fas fa-save fs-6 me-1"></i> Promijeni lozinku</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -497,7 +505,7 @@
                                                 </div>
 
                                                 <div class="col-lg-6 mb-3">
-                                                    <label for="documentIdInput" class="form-label text-info">ID dokumenta</label>
+                                                    <label for="documentIdInput" class="form-label text-info">ID broj</label>
                                                     <input type="text" class="form-control rounded-0" id="documentIdInput" placeholder="Učitavanje..." />
                                                 </div>
 
@@ -531,6 +539,31 @@
                                             </div>
                                         </form>
                                     </div>
+                                    <!-- Change Password Tab -->
+                                    <div class="tab-pane fade" id="changePassword" role="tabpanel">
+                                        <form action="javascript:void(0);">
+                                            <div class="row">
+                                                <div class="col-lg-12 mb-3">
+                                                    <label for="oldPassword" class="form-label text-info">Stara lozinka</label>
+                                                    <input type="password" class="form-control rounded-0" id="oldPassword" placeholder="Unesite staru lozinku" />
+                                                </div>
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="newPassword" class="form-label text-info">Nova lozinka</label>
+                                                    <input type="password" class="form-control rounded-0" id="newPassword" placeholder="Unesite novu lozinku" />
+                                                </div>
+                                                <div class="col-lg-6 mb-3">
+                                                    <label for="confirmPassword" class="form-label text-info">Potvrdite novu lozinku</label>
+                                                    <input type="password" class="form-control rounded-0" id="confirmPassword" placeholder="Potvrdite novu lozinku" />
+                                                </div>
+                                                <div class="col-lg-12 mt-4 mb-4">
+                                                    <div class="hstack gap-2 justify-content-end">
+                                                        <button type="submit" id="change-password-btn" class="btn btn-info"><i class="fas fa-save fs-6 me-1"></i> Promijeni lozinku</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                   
 
 
                                 </div>
@@ -553,7 +586,7 @@
                 <div class="modal-dialog modal-xl modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Pregled fakture</h5>
+                            <h5 class="modal-title">Pregled deklaracije</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                 aria-label="Zatvori"></button>
                         </div>
@@ -735,6 +768,9 @@
         <!-- StartUp Plan -->
         <div class="col-lg-4 mb-4">
             <div class="card pricing-box border-0 rounded-0 h-100">
+          <button type="button" id="btn-StartUp" class=" d-none btn btn-soft-info btn-sm  rounded-0 shadow-none w-100" style="position: absolute; border-bottom-left-radius: 0; border-bottom-right-radius:0">
+                                          Aktivan do: <span class="date-valid"></span>. godine
+                                    </button>
                 <div class="card-body p-4 m-2 d-flex flex-column">
                     <div class="d-flex align-items-center mb-3">
                         <div class="flex-grow-1">
@@ -752,15 +788,15 @@
                     </div>
                     <hr class="my-3 text-muted">
                     <ul class="list-unstyled text-muted vstack gap-3 mb-3">
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>100</b> AI Skeniranja Fakture</li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>50 strana</b> po Fakturi</li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>200</b> Faktura u historiji</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>100</b> AI Skeniranih Deklaracije</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>50 strana</b> po Deklaraciji</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>200</b> Deklaracija u historiji</li>
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: <b>20 s</b></li>
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i>30 dana</li>
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
                     </ul>
-                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal"
-                        class="btn btn-info w-100 mt-auto text-white">Započni</a>
+
+                        <a id="btnAction-StartUp" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal" href="javascript:void(0);" class="btn btn-info w-100 mt-auto text-white">Započni</a>
                 </div>
             </div>
         </div>
@@ -768,6 +804,10 @@
         <!-- GoBig Plan -->
         <div class="col-lg-4 mb-4">
             <div class="card pricing-box border-0 rounded-0 ribbon-box right h-100">
+      
+        <button type="button" id="btn-GoBig" class=" d-none btn btn-soft-info btn-sm shadow-none w-100 rounded-0" style="position: absolute; border-bottom-left-radius: 0; border-bottom-right-radius:0">
+                                          Aktivan do: <span class="date-valid"></span>. godine
+                                    </button>
                 <div class="card-body p-4 m-2 d-flex flex-column">
                     <div class="ribbon-two ribbon-two-info"><span>Popularno</span></div>
                     <div class="d-flex align-items-center mb-3">
@@ -786,15 +826,14 @@
                     </div>
                     <hr class="my-3 text-muted">
                     <ul class="list-unstyled text-muted vstack gap-3 mb-3">
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>200</b> AI Skeniranja Fakture</li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>150 strana</b> po Fakturi</li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>500</b> Faktura u historiji</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>200</b> AI Skeniranih Deklaracije</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>150 strana</b> po Deklaraciji</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>500</b> Deklaracija u historiji</li>
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: <b>10 s</b></li>
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i>120 dana</li>
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
                     </ul>
-                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal"
-                        class="btn btn-info w-100 mt-auto text-white">Započni</a>
+                        <a id="btnAction-GoBig" href="javascript:void(0);" class="btn btn-info w-100 mt-auto text-white" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal">Započni</a>
                 </div>
             </div>
         </div>
@@ -802,8 +841,8 @@
         <!-- Business Plan -->
         <div class="col-lg-4 mb-4">
             <div class="card pricing-box border-0 rounded-0 h-100">
-                <button type="button" class="btn btn-soft-info btn-sm shadow-none w-100" style="position: absolute; border-bottom-left-radius: 0; border-bottom-right-radius:0">
-                                         <i class="ri-file-list-3-line align-middle"></i> Aktivan do: 25.08.2025. godine
+               <button type="button" id="btn-Business" class=" d-none btn btn-soft-info btn-sm shadow-none w-100 rounded-0" style="position: absolute; border-bottom-left-radius: 0; border-bottom-right-radius:0">
+                                         Aktivan do:  <span class="date-valid"></span>.godine
                                     </button>
                 <div class="card-body p-4 m-2 d-flex flex-column">
                     <div class="d-flex align-items-center mb-3">
@@ -822,15 +861,15 @@
                     </div>
                     <hr class="my-3 text-muted">
                     <ul class="list-unstyled text-muted vstack gap-3 mb-3">
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>500</b> AI Skeniranja Fakture</li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>Neograničeno strana </b> po Fakturi</li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>Neograničeno</b> faktura u historiji</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>500</b> AI Skeniranih Deklaracije</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>Neograničeno strana </b> po Deklaraciji</li>
+                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>Neograničeno</b> Deklaracija u historiji</li>
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: <b>4 s</b></li>
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i>365 dana</li>
                         <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
                     </ul>
-                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal"
-                        class="btn btn-info w-100 mt-auto text-white">Produži</a>
+
+                        <a id="btnAction-Business" href="javascript:void(0);" class="btn btn-info w-100 mt-auto text-white" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal">Započni</a>
                 </div>
             </div>
         </div>
@@ -1109,11 +1148,16 @@
             const avatar = userData.avatar;
             const firstLetter = (userData.username || userData.email || "U")[0].toUpperCase();
 
-            // Profile data
+          // Profile data
             document.getElementById("profile-username").textContent = userData.first_name;
             document.getElementById("profile-lastname").textContent = userData.last_name;
+
+            // Format date to dd.mm.yyyy manually
+            const createdAt = new Date(userData.created_at);
+            const formattedDate = `${String(createdAt.getDate()).padStart(2, '0')}.${String(createdAt.getMonth() + 1).padStart(2, '0')}.${createdAt.getFullYear()}`;
+            document.getElementById("joining-date").textContent = formattedDate;
             document.getElementById("profile-location").innerHTML =
-                `<i class="ri-map-pin-user-line align-middle"></i> ${userData.city || 'Nepoznat grad'}, ${userData.country || 'Nepoznata država'}`;
+            `<i class="ri-map-pin-user-line align-middle"></i> ${userData.city || 'Nepoznat grad'}, ${userData.country || 'Nepoznata država'}`;
 
             // Always show initials immediately
             avatarFallback.textContent = firstLetter;
@@ -1297,7 +1341,7 @@
 
             const spinner = scanningLoader.querySelector(".spinner-border");
             const stages = [{
-                    text: "Skeniranje fakture...",
+                    text: "Skeniranje Deklaracije...",
                     until: 25
                 },
                 {
@@ -1305,7 +1349,7 @@
                     until: 60
                 },
                 {
-                    text: "Generisanje fakture...",
+                    text: "Generisanje Deklaracije...",
                     until: 90
                 },
                 {
@@ -1409,267 +1453,213 @@
 </script>
 
 
-<!-- UserProfile data -->
+<!-- Fetch UserProfile and Business data -->
 
 <script>
-    document.addEventListener("DOMContentLoaded", async function() {
-        try {
-            const user = JSON.parse(localStorage.getItem("user"));
-            const token = localStorage.getItem("auth_token");
+document.addEventListener("DOMContentLoaded", async function () {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = localStorage.getItem("auth_token");
 
-            if (!user || !token) {
-                console.warn("User or token not found in localStorage");
-                return;
-            }
+    if (!user || !token) {
+        console.warn("User or token not found in localStorage");
+        return;
+    }
 
-            const response = await fetch(`http://localhost:8000/api/users/${user.id}`, {
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            });
+    try {
+        const response = await fetch(`/api/users/${user.id}`, {
+            headers: { "Authorization": `Bearer ${token}` }
+        });
 
-            if (!response.ok) {
-                console.error("Failed to fetch user data");
-                return;
-            }
-
-            const data = await response.json();
-            const u = data.user;
-
-            const safeSet = (id, value) => {
-                const el = document.getElementById(id);
-                if (el) el.value = value || "";
-            };
-
-            // Safely fill form fields
-            safeSet("firstnameInput", u.first_name);
-            safeSet("lastnameInput", u.last_name);
-            safeSet("phonenumberInput", u.phone_number);
-            safeSet("emailInput", u.email);
-            safeSet("JoiningdatInput", u.joining_date);
-            safeSet("designationInput", u.designation);
-            safeSet("websiteInput1", u.website);
-            safeSet("cityInput", u.city);
-            safeSet("countryInput", u.country);
-            safeSet("zipcodeInput", u.zip_code);
-            safeSet("exampleFormControlTextarea", u.description);
-
-        } catch (err) {
-            console.error("Error loading user data:", err);
+        if (!response.ok) {
+            console.error("Failed to fetch user data");
+            return;
         }
-    });
+
+        const data = await response.json();
+        const u = data.user;
+        const company = u?.company;
+
+        window.userData = u;
+        window.companyDataFilled = false;
+
+        const updateInput = (id, value, fallbackPlaceholder) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (value && value.trim()) {
+                el.value = value;
+            } else {
+                el.value = "";
+                el.placeholder = fallbackPlaceholder;
+            }
+        };
+
+        // === Fill PERSONAL DETAILS immediately ===
+        updateInput("firstnameInput", u.first_name, "Unesite ime");
+        updateInput("lastnameInput", u.last_name, "Unesite prezime");
+        updateInput("phonenumberInput", u.phone_number, "Unesite broj mobitela");
+        updateInput("emailInput", u.email, "Unesite email adresu");
+        updateInput("JoiningdatInput", u.joining_date, "Unesite datum pridruženja");
+        updateInput("designationInput", u.designation, "Unesite poziciju");
+        updateInput("websiteInput1", u.website, "Unesite web stranicu");
+        updateInput("cityInput", u.city, "Unesite grad");
+        updateInput("countryInput", u.country, "Unesite državu");
+        updateInput("zipcodeInput", u.zip_code, "Unesite poštanski broj");
+
+        const desc = document.getElementById("exampleFormControlTextarea");
+        if (desc) {
+            if (u.description && u.description.trim()) {
+                desc.value = u.description;
+            } else {
+                desc.value = "";
+                desc.placeholder = "Unesite opis";
+            }
+        }
+
+        // === Fill COMPANY DETAILS when tab is shown ===
+        const tabLink = document.querySelector('a[href="#companyDetails"]');
+        if (tabLink) {
+            tabLink.addEventListener("shown.bs.tab", function () {
+                if (window.companyDataFilled) return;
+
+                const c = window.userData?.company || {};
+
+                updateInput("companyNameInput", c.name, "Unesite ime kompanije");
+                updateInput("addressInput", c.address, "Unesite adresu");
+                updateInput("documentIdInput", c.document_id || c.id, "Unesite ID broj");
+                updateInput("vatInput", c.pdv, "Unesite PDV broj");
+                updateInput("ownerInput", c.owner, "Unesite vlasnika");
+                updateInput("contactPersonInput", c.contact_person, "Unesite kontakt osobu");
+                updateInput("contactNumberInput", c.contact_number, "Unesite kontakt broj");
+
+                window.companyDataFilled = true;
+            });
+        }
+
+    } catch (err) {
+        console.error("Error fetching user/company data:", err);
+    }
+});
 </script>
+
+
+
+
+
 
 <!-- Update User data -->
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById("update-user-btn").addEventListener("click", async function(e) {
-            e.preventDefault();
-            e.stopPropagation();
+    document.addEventListener("DOMContentLoaded", function () {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const token = localStorage.getItem("auth_token");
 
-            const user = JSON.parse(localStorage.getItem("user"));
-            const token = localStorage.getItem("auth_token");
+        if (!user || !token) {
+            console.error("User or token not found in localStorage.");
+            return;
+        }
 
-            if (!user || !token) {
-                console.error("User or token not found in localStorage.");
-                return;
+        const showSuccess = (text) => {
+            Swal.fire({
+                icon: "success",
+                title: "Uspješno!",
+                text,
+                confirmButtonText: "U redu",
+                customClass: {
+                    confirmButton: 'btn btn-info w-xs mt-2',
+                },
+            });
+        };
+
+        const showError = (err) => {
+            Swal.fire("Greška", err.message || "Nešto je pošlo po zlu.", "error");
+        };
+
+        const getPayload = () => ({
+            first_name: document.getElementById("firstnameInput").value.trim(),
+            last_name: document.getElementById("lastnameInput").value.trim(),
+            phone_number: document.getElementById("phonenumberInput").value.trim(),
+            email: document.getElementById("emailInput").value.trim(),
+            joining_date: document.getElementById("JoiningdatInput")?.value.trim() || null,
+            designation: document.getElementById("designationInput").value.trim(),
+            website: document.getElementById("websiteInput1").value.trim(),
+            city: document.getElementById("cityInput").value.trim(),
+            country: document.getElementById("countryInput").value.trim(),
+            zip_code: document.getElementById("zipcodeInput").value.trim(),
+            description: document.getElementById("exampleFormControlTextarea").value.trim(),
+            company: {
+                name: document.getElementById("companyNameInput").value.trim(),
+                address: document.getElementById("addressInput").value.trim(),
+                id: document.getElementById("documentIdInput").value.trim(),
+                pdv: document.getElementById("vatInput").value.trim(),
+                owner: document.getElementById("ownerInput").value.trim(),
+                contact_person: document.getElementById("contactPersonInput").value.trim(),
+                contact_number: document.getElementById("contactNumberInput").value.trim()
             }
+        });
 
-            const payload = {
-                first_name: document.getElementById("firstnameInput").value.trim(),
-                last_name: document.getElementById("lastnameInput").value.trim(),
-                phone_number: document.getElementById("phonenumberInput").value.trim(),
-                email: document.getElementById("emailInput").value.trim(),
-                joining_date: document.getElementById("JoiningdatInput").value.trim(),
-                designation: document.getElementById("designationInput").value.trim(),
-                website: document.getElementById("websiteInput1").value.trim(),
-                city: document.getElementById("cityInput").value.trim(),
-                country: document.getElementById("countryInput").value.trim(),
-                zip_code: document.getElementById("zipcodeInput").value.trim(),
-                description: document.getElementById("exampleFormControlTextarea").value.trim(),
-            };
-
+        const handleSubmit = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/users/${user.id}`, {
+                const response = await fetch(`/api/users/${user.id}`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
                     },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify(getPayload())
                 });
 
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error("Greška pri ažuriranju podataka: " + errorText);
-                }
+                if (!response.ok) throw new Error(await response.text());
 
-                const responseData = await response.json();
-                const updatedUser = responseData.user;
+                const { user: updatedUser } = await response.json();
 
-                //  Live update UI
+                // Update UI
                 document.getElementById("profile-username").textContent = updatedUser.first_name;
                 document.getElementById("profile-lastname").textContent = updatedUser.last_name;
                 document.getElementById("profile-location").innerHTML =
                     `<i class="ri-map-pin-user-line align-middle"></i> ${updatedUser.city || 'Nepoznat grad'}, ${updatedUser.country || 'Nepoznata država'}`;
 
-                //  Update localStorage
+                // Save to localStorage
                 localStorage.setItem("user", JSON.stringify(updatedUser));
 
-                Swal.fire({
-                    icon: "success",
-                    title: "Uspješno!",
-                    text: "Vaši podaci su ažurirani.",
-                    confirmButtonText: "U redu",
-                    customClass: {
-                        confirmButton: 'btn btn-info w-xs mt-2',
-                    },
-                });
-
+                showSuccess("Podaci su uspješno ažurirani.");
             } catch (err) {
-                console.error("Error:", err);
-                Swal.fire("Greška", err.message || "Nešto je pošlo po zlu.", "error");
+                console.error("Greška:", err);
+                showError(err);
             }
-        });
-    });
-</script>
+        };
 
-<!-- Fetch User Company data -->
-
-<script>
-    document.addEventListener("DOMContentLoaded", async function() {
-        try {
-            const user = JSON.parse(localStorage.getItem("user"));
-            const token = localStorage.getItem("auth_token");
-
-            if (!user || !token) {
-                console.warn("User or token not found in localStorage");
-                return;
-            }
-
-            const response = await fetch(`http://localhost:8000/api/users/${user.id}`, {
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            });
-
-            if (!response.ok) {
-                console.error("Failed to fetch user data");
-                return;
-            }
-
-            const data = await response.json();
-            const company = data.user?.company;
-
-            if (!company) {
-                console.warn("No company data found for user");
-                return;
-            }
-
-            const safeSet = (id, value) => {
-                const el = document.getElementById(id);
-                if (el) el.value = value || "";
-            };
-
-            // Fill company form fields
-            safeSet("companyNameInput", company.name);
-            safeSet("addressInput", company.address);
-            safeSet("documentIdInput", company.id);
-            safeSet("vatInput", company.pdv);
-            safeSet("ownerInput", company.owner);
-            safeSet("contactPersonInput", company.contact_person);
-            safeSet("contactNumberInput", company.contact_number);
-
-        } catch (err) {
-            console.error("Error loading company data:", err);
-        }
-    });
-</script>
-<!-- Update user company data -->
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById("update-company-btn").addEventListener("click", async function(e) {
+        document.getElementById("update-user-btn").addEventListener("click", function (e) {
             e.preventDefault();
-            e.stopPropagation();
+            handleSubmit();
+        });
 
-            const user = JSON.parse(localStorage.getItem("user"));
-            const token = localStorage.getItem("auth_token");
-
-            if (!user || !token) {
-                console.error("User or token not found in localStorage.");
-                return;
-            }
-
-            const companyPayload = {
-                company: {
-                    name: document.getElementById("companyNameInput").value.trim(),
-                    address: document.getElementById("addressInput").value.trim(),
-                    id: document.getElementById("documentIdInput").value.trim(),
-                    pdv: document.getElementById("vatInput").value.trim(),
-                    owner: document.getElementById("ownerInput").value.trim(),
-                    contact_person: document.getElementById("contactPersonInput").value.trim(),
-                    contact_number: document.getElementById("contactNumberInput").value.trim(),
-                }
-            };
-
-            try {
-                const response = await fetch(`http://localhost:8000/api/users/${user.id}`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    },
-                    body: JSON.stringify(companyPayload)
-                });
-
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error("Greška pri ažuriranju podataka: " + errorText);
-                }
-
-                const responseData = await response.json();
-                const updatedUser = responseData.user;
-
-                //  Update localStorage
-                localStorage.setItem("user", JSON.stringify(updatedUser));
-
-                Swal.fire({
-                    icon: "success",
-                    title: "Uspješno!",
-                    text: "Podaci o kompaniji su ažurirani.",
-                    confirmButtonText: "U redu",
-                    customClass: {
-                        confirmButton: 'btn btn-info w-xs mt-2',
-                    },
-                });
-
-            } catch (err) {
-                console.error("Error:", err);
-                Swal.fire("Greška", err.message || "Nešto je pošlo po zlu.", "error");
-            }
+        document.getElementById("update-company-btn").addEventListener("click", function (e) {
+            e.preventDefault();
+            handleSubmit();
         });
     });
 </script>
+
 
 
 
 
 <!-- Moji dobavljači dynamic fetch-->
 <script>
-    document.addEventListener("DOMContentLoaded", async function() {
+    document.addEventListener("DOMContentLoaded", async function () {
         const user = JSON.parse(localStorage.getItem("user"));
         const token = localStorage.getItem("auth_token");
 
-        if (!user || !token) {
-            console.warn("User or token missing in localStorage.");
+        const loader = document.querySelector(".suppliers-loader");
+        const container = document.querySelector(".suppliers-list");
+
+        if (!user || !token || !container || !loader) {
+            console.warn("User, token, or container missing.");
             return;
         }
 
-        const API_URL = `/api/statistics/users/${user.id}`;
-
         try {
-            const response = await axios.get(API_URL, {
+            const response = await axios.get(`/api/statistics/users/${user.id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -1677,13 +1667,15 @@
 
             const stats = response.data || {};
             const suppliers = stats.supplier_profit_changes || [];
+            const limitedSuppliers = suppliers.slice(-5);
 
-            const limitedSuppliers = suppliers.slice(-5); // Last 5 suppliers
-            const suppliersContainer = document.querySelector(".suppliers-list");
+            loader.classList.add("d-none");
+            container.classList.remove("d-none");
+            container.innerHTML = "";
 
-            if (suppliersContainer) {
-                suppliersContainer.innerHTML = ''; // Clear placeholder
-
+            if (limitedSuppliers.length === 0) {
+                container.innerHTML = `<div class="text-muted text-center">Nema podataka o dobavljačima.</div>`;
+            } else {
                 limitedSuppliers.forEach(supplier => {
                     const percentageChange = parseFloat(supplier.percentage_change);
                     const isPositive = percentageChange >= 0;
@@ -1691,36 +1683,112 @@
                     const arrowIcon = isPositive ? "ri-arrow-up-line" : "ri-arrow-down-line";
 
                     const supplierElement = document.createElement("div");
-
-                    supplierElement.classList.add("d-flex", "justify-content-between", "mb-3")
-
+                    supplierElement.classList.add("d-flex", "justify-content-between", "mb-3");
                     supplierElement.innerHTML = `
-                    <img src="/images/orbico.png" class="avatar-xs rounded-circle me-3" />
-                    <div class="d-flex justify-content-between align-items-center flex-grow-1">
-                        <div>
-                            <h6 class="mb-0">${supplier.name || 'Nepoznat dobavljač'}</h6>
-                            <small class="text-muted">${supplier.owner || 'Nepoznat vlasnik'}</small>
+                        <img src="/images/orbico.png" class="avatar-xs rounded-circle me-3" />
+                        <div class="d-flex justify-content-between align-items-center flex-grow-1">
+                            <div>
+                                <h6 class="mb-0">${supplier.name || 'Nepoznat dobavljač'}</h6>
+                                <small class="text-muted">${supplier.owner || 'Nepoznat vlasnik'}</small>
+                            </div>
+                            <div class="${growthClass} text-end fs-13 ms-3">
+                                ${!isNaN(percentageChange) ? percentageChange.toFixed(1) + '%' : ''}
+                                <i class="${arrowIcon} ms-1"></i>
+                            </div>
                         </div>
-                        <div class="${growthClass} text-end fs-13 ms-3">
-                            ${!isNaN(percentageChange) ? percentageChange.toFixed(1) + '%' : ''}
-                            <i class="${arrowIcon} ms-1"></i>
-                        </div>
-                    </div>
                     `;
-
-
-                    suppliersContainer.appendChild(supplierElement);
+                    container.appendChild(supplierElement);
                 });
             }
+
         } catch (error) {
             console.error("Error fetching supplier data:", error);
-            const fallback = document.querySelector(".suppliers-list");
-            if (fallback) {
-                fallback.innerHTML = '<div class="text-danger">Greška pri učitavanju dobavljača.</div>';
-            }
+            loader.classList.add("d-none");
+            container.classList.remove("d-none");
+            container.innerHTML = '<div class="text-danger text-center">Greška pri učitavanju dobavljača.</div>';
         }
     });
 </script>
+
+
+
+
+<!-- Invoice fetch dynamic -->
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const token = localStorage.getItem("auth_token");
+        const user = JSON.parse(localStorage.getItem("user"));
+        const docsContainer = document.getElementById("user-documents");
+        const loader = document.querySelector(".user-documents-loader");
+
+        if (!token || !user || !docsContainer || !loader) return;
+
+        fetch(`/api/invoices/users/${user.id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            const invoices = Array.isArray(data) ? data : [];
+
+            const lastFour = invoices
+                .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+                .slice(0, 4);
+
+            loader.classList.add("d-none");
+            docsContainer.classList.remove("d-none");
+
+            if (lastFour.length === 0) {
+                docsContainer.innerHTML = `
+                    <div class="col-12 text-center text-muted">Nema dostupnih dokumenata.</div>
+                `;
+                return;
+            }
+
+            const iconMap = {
+                pdf: "ri-file-pdf-2-line",
+                xls: "ri-file-excel-2-line",
+                xlsx: "ri-file-excel-2-line",
+                jpg: "ri-file-image-line",
+                jpeg: "ri-file-image-line",
+                png: "ri-file-image-line",
+                txt: "ri-file-text-line",
+                doc: "ri-file-word-2-line",
+                docx: "ri-file-word-2-line",
+                default: "ri-file-line"
+            };
+
+            docsContainer.innerHTML = lastFour.map(inv => {
+                const ext = inv.file_name?.split(".").pop()?.toLowerCase() || '';
+                const icon = iconMap[ext] || iconMap.default;
+                const file = inv.file_name;
+
+                return `
+                    <div class="col-6 col-sm-3 text-center">
+                        <a href="#" class="text-decoration-none view-invoice" data-id="${inv.id}" title="Pregled Deklaracije">
+                            <i class="${icon} fs-24 text-info"></i>
+                            <p class="fs-13 text-muted mt-1 mb-0">${file}</p>
+                        </a>
+                    </div>
+                `;
+            }).join("");
+        })
+        .catch(err => {
+            console.error("Failed to fetch user invoices:", err);
+            loader.classList.add("d-none");
+            docsContainer.classList.remove("d-none");
+            docsContainer.innerHTML = `
+                <div class="col-12 text-center text-danger">Greška pri učitavanju dokumenata.</div>
+            `;
+        });
+    });
+</script>
+
+
+
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -1739,59 +1807,116 @@
 
 <!-- Dynamical Package update -->
 <script>
-    document.addEventListener("DOMContentLoaded", async function() {
-        const token = localStorage.getItem("auth_token");
-        if (!token) return console.warn("Missing auth token");
+document.addEventListener("DOMContentLoaded", async function () {
+    const token = localStorage.getItem("auth_token");
+    if (!token) return console.warn("Missing auth token");
 
-        try {
-            const res = await axios.get("/api/user-packages", {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                }
-            });
+    const loader = document.getElementById("user-package-loader");
+    const packageText = document.getElementById("user-package-text");
+    const upgradeBtn = document.getElementById("upgrade-btn");
 
-            const userPackages = res.data?.data || [];
+    // Declare packageName here so it is visible after try/catch
+    let packageName = null;
 
-            if (userPackages.length > 0) {
-                const userPackage = userPackages.find(p => p.active) || userPackages[0];
-                const packageName = userPackage?.package?.name;
-                const packageText = document.getElementById("user-package-text");
-
-                if (packageText && packageName) {
-                    let iconHTML = "";
-
-                    switch (packageName.toLowerCase()) {
-                        case "gobig":
-                            iconHTML = `<i class="ri-medal-line text-info fs-3 bu me-2"></i>`;
-                            break;
-                        case "startup":
-                            iconHTML = `<i class="ri-star-s-fill text-info fs-5 me-2"></i>`;
-                            break;
-                        case "business":
-                            iconHTML = `<i class="ri-shield-star-line text-info fs-2 me-2"></i>`;
-                            break;
-                        default:
-                            iconHTML = "";
-                    }
-
-                    packageText.innerHTML = `
-                        <span class="d-inline-flex align-items-center gap-2">
-                            Vaš trenutni paket je 
-                            <b class="d-inline-flex align-items-center gap-1 text-info">
-                                ${packageName}
-                                ${iconHTML}
-                                
-                            </b>
-                        </span>`;
-
-                }
+    try {
+        const res = await axios.get("/api/user-packages", {
+            headers: {
+                Authorization: `Bearer ${token}`,
             }
+        });
 
-        } catch (err) {
-            console.error("Greška pri dohvaćanju paketa korisnika:", err);
+        const userPackages = res.data?.data || [];
+
+   if (userPackages.length > 0) {
+    const userPackage = userPackages.find(p => p.active) || userPackages[0];
+    packageName = userPackage?.package?.name || null;
+    packageValid = userPackage?.expiration_date || null;
+
+    // Format packageValid date from yyyy-mm-dd to dd.mm.yyyy
+    let formattedDate = packageValid;
+    if (packageValid) {
+        const parts = packageValid.split("-");
+        formattedDate = `${parts[2]}.${parts[1]}.${parts[0]}`;
+    }
+
+    if (packageText && packageName) {
+        let iconHTML = "";
+
+        switch (packageName.toLowerCase()) {
+            case "gobig":
+                iconHTML = `<i class="ri-medal-line text-info fs-3 bu me-2" style="margin-top:-2px!important"></i>`;
+                break;
+            case "startup":
+                iconHTML = `<i class="ri-star-s-fill text-info fs-5 me-2" style="margin-top:-2px!important"></i>`;
+                break;
+            case "business":
+                iconHTML = `<i class="ri-shield-star-line text-info fs-2 me-2" style="margin-top:-2px!important"></i>`;
+                break;
+            default:
+                iconHTML = "";
         }
-    });
+
+        packageText.innerHTML = `
+            <span class="d-inline-flex align-items-center gap-1 fs-15">
+                <h5 class="card-title mb-0">Tvoj aktivni paket je</h5>
+                <b class="d-inline-flex gap-1 text-info mb-0 me-4" style="margin-bottom:-1px!important">
+                    ${packageName}
+                    ${iconHTML}
+                </b>
+            </span>`;
+
+        // Replace all .date-valid elements with the formatted date
+        document.querySelectorAll('.date-valid').forEach(el => {
+            el.textContent = formattedDate;
+        });
+    }
+} else {
+    packageText.textContent = "Nema aktivnog paketa.";
+}
+
+
+
+    } catch (err) {
+        console.error("Greška pri dohvaćanju paketa korisnika:", err);
+        packageText.textContent = "Greška pri učitavanju paketa.";
+    }
+
+    // Hide loader, show text and button
+    loader.classList.add("d-none");
+    packageText.classList.remove("d-none");
+    upgradeBtn.classList.remove("d-none");
+
+    // Normalize packageName to lowercase for comparison
+    const normalizedPackage = packageName?.toLowerCase();
+
+    // Show the "Aktivan do" button for the active package only
+    normalizedPackage === 'gobig' && document.getElementById('btn-GoBig')?.classList.remove('d-none');
+    normalizedPackage === 'startup' && document.getElementById('btn-StartUp')?.classList.remove('d-none');
+    normalizedPackage === 'business' && document.getElementById('btn-Business')?.classList.remove('d-none');
+
+    // Update action buttons text individually without loop
+    const btnActionGoBig = document.getElementById('btnAction-GoBig');
+    const btnActionStartUp = document.getElementById('btnAction-StartUp');
+    const btnActionBusiness = document.getElementById('btnAction-Business');
+
+    if (btnActionGoBig) {
+        btnActionGoBig.textContent = (normalizedPackage === 'gobig') ? 'Produži' : 'Započni';
+    }
+    if (btnActionStartUp) {
+        btnActionStartUp.textContent = (normalizedPackage === 'startup') ? 'Produži' : 'Započni';
+    }
+    if (btnActionBusiness) {
+        btnActionBusiness.textContent = (normalizedPackage === 'business') ? 'Produži' : 'Započni';
+    }
+
+    // Debug logs (optional)
+    console.log('Active package:', packageName);
+    console.log('btn-GoBig element:', document.getElementById('btn-GoBig'));
+});
+
 </script>
+
+
 
 <!-- Profile bg-img static upload logic temporary -->
 
@@ -1847,65 +1972,6 @@
                     console.error("Upload failed:", err);
                 });
         });
-    });
-</script>
-
-<!-- Invoice fetch dynamic -->
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const token = localStorage.getItem("auth_token");
-        const user = JSON.parse(localStorage.getItem("user"));
-        const docsContainer = document.getElementById("user-documents");
-
-        if (!token || !user || !docsContainer) return;
-
-        fetch(`/api/invoices/users/${user.id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            .then(res => res.json())
-            .then(data => {
-                const invoices = Array.isArray(data) ? data : [];
-
-                const lastFour = invoices
-                    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-                    .slice(0, 4);
-
-                const iconMap = {
-                    pdf: "ri-file-pdf-2-line",
-                    xls: "ri-file-excel-2-line",
-                    xlsx: "ri-file-excel-2-line",
-                    jpg: "ri-file-image-line",
-                    jpeg: "ri-file-image-line",
-                    png: "ri-file-image-line",
-                    txt: "ri-file-text-line",
-                    doc: "ri-file-word-2-line",
-                    docx: "ri-file-word-2-line",
-                    default: "ri-file-line"
-                };
-
-                docsContainer.innerHTML = lastFour
-                    .map(inv => {
-                        const ext = inv.file_name.split(".").pop().toLowerCase();
-                        const icon = iconMap[ext] || iconMap.default;
-                        const file = inv.file_name;
-
-                        return `
-                        <div class="col-6 col-sm-3 text-center">
-                            <a href="#" class="text-decoration-none view-invoice" data-id="${inv.id}" title="Pregled fakture">
-                                <i class="${icon} fs-24 text-info"></i>
-                                <p class="fs-13 text-muted mt-1 mb-0">${file}</p>
-                            </a>
-                        </div>
-                    `;
-                    })
-                    .join("");
-            })
-            .catch(err => {
-                console.error("Failed to fetch user invoices:", err);
-            });
     });
 </script>
 
@@ -1992,8 +2058,8 @@
                     bootstrap.Modal.getOrCreateInstance(document.getElementById('invoiceDetailsModal')).show();
                 })
                 .catch(err => {
-                    console.error('Greška pri učitavanju fakture:', err);
-                    alert('Greška pri učitavanju fakture.');
+                    console.error('Greška pri učitavanju Deklaracije:', err);
+                    alert('Greška pri učitavanju Deklaracije.');
                 });
         }
     });

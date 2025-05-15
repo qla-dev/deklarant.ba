@@ -422,3 +422,28 @@ color: #299cdb ;
     max-width: 700px!important;
 }
 
+.swiper-slide .flex-shrink-0 {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 50%;
+}
+
+#topbar-username {
+    color: unset!important;
+}
+
+
+.fc .fc-more-popover .fc-popover-body {
+
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+.navbar-menu {
+    z-index: 99996!important;
+}
+
+#page-topbar {
+    z-index: 99997!important;
+}
