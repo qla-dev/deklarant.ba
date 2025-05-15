@@ -432,3 +432,18 @@ color: #299cdb ;
 #topbar-username {
     color: unset!important;
 }
+
+
+.fc .fc-more-popover .fc-popover-body {
+
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+.navbar-menu {
+    z-index: 99996!important;
+}
+
+#page-topbar {
+    z-index: 99997!important;
+}
