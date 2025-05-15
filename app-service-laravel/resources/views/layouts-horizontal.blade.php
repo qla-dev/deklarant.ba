@@ -402,10 +402,23 @@
                             <div class="card-header">
                                 <h5 class="mb-0">Zadnje korištene tarife</h5>
                             </div>
+
+                            <div class="card-body align-items-center text-truncate">
+                                <div class="tariff-list">
+                                    <!-- Dynamically populated supplier data goes here -->
+                                </div>
+
+                                <div class="card-footer mt-1 pt-0 pb-0 d-flex justify-content-center">
+
+
+                                </div>
+
+
                          <div class="card-body d-flex justify-content-center align-items-center flex-column pb-0 pt-0" style="min-height: 200px;">
     <div class="tariff-loader spinner-border text-info" role="status"></div>
     <div class="tariff-list d-none w-100"></div>
 </div>
+
 
                         </div>
                     </div>
@@ -675,11 +688,17 @@
             }
         };
 
-        function createDoughnutChart(canvasId, usedPercentage) {
-            var ctx = document.getElementById(canvasId).getContext("2d");
-            var remaining = 100 - usedPercentage;
+        let chartInstance = null;
 
-            new Chart(ctx, {
+        function createDoughnutChart(canvasId, usedPercentage) {
+            const ctx = document.getElementById(canvasId).getContext("2d");
+            const remaining = 100 - usedPercentage;
+
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            chartInstance = new Chart(ctx, {
                 type: "doughnut",
                 data: {
                     labels: ["Iskorišteno", "Preostalo"],
@@ -704,6 +723,9 @@
                 plugins: [centerTextPlugin]
             });
         }
+
+        //  Initial empty chart (0%)
+        createDoughnutChart("doughnut1", 0);
 
         const user = JSON.parse(localStorage.getItem("user"));
         const token = localStorage.getItem("auth_token");
@@ -732,6 +754,7 @@
 
             const usedPercentage = totalScans > 0 ? (usedScans / totalScans) * 100 : 0;
 
+            //  Re-render with real data
             createDoughnutChart("doughnut1", usedPercentage);
 
         } catch (err) {
@@ -741,142 +764,133 @@
 </script>
 
 
+
 <!-- doughnut2 -->
 
-    <script>
-        document.addEventListener("DOMContentLoaded", async function() {
-            const user = JSON.parse(localStorage.getItem("user"));
-            const token = localStorage.getItem("auth_token");
-        
-            if (!user || !token) {
-                console.warn("User or token missing in localStorage.");
-                return;
-            }
-        
-            const invoicesUrl = `/api/invoices/users/${user.id}`;
-            const packagesUrl = `/api/user-packages`;
-        
-            try {
-                const packageRes = await axios.get(packagesUrl, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-            
-                const userPackages = packageRes.data?.data || [];
-                const userPackage = userPackages.find(p => p.active);
-                let invoiceLimit = 0;
-            
-                if (userPackage?.package?.name?.toLowerCase() === 'gobig') invoiceLimit = 500;
-                else if (userPackage?.package?.name?.toLowerCase() === 'startup') invoiceLimit = 200;
-                else if (userPackage?.package?.name?.toLowerCase() === 'business') invoiceLimit = Infinity;
-            
-                const invoiceRes = await axios.get(invoicesUrl, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-            
-                const invoices = invoiceRes.data || [];
-                const invoiceCount = invoices.length;
-            
-                const invoiceEl = document.getElementById("totalInvoices");
-                if (invoiceEl) invoiceEl.innerText = invoiceCount;
-            
-                const denominatorEl = invoiceEl.nextElementSibling;
-                if (denominatorEl && invoiceLimit !== Infinity) {
-                    denominatorEl.innerText = `/${invoiceLimit}`;
-                } else if (denominatorEl) {
-                    denominatorEl.innerText = "/∞";
-                }
-            
-                const usedPercentage = invoiceLimit === Infinity ? 100 : Math.min((invoiceCount / invoiceLimit) * 100, 100);
-                createDoughnutChart("doughnut2", usedPercentage);
-            
-            } catch (err) {
-                console.error("Greška prilikom dohvaćanja deklaracija ili paketa:", err);
-            }
-        
-            function createDoughnutChart(canvasId, usedPercentage) {
-                const ctx = document.getElementById(canvasId).getContext("2d");
-                const remaining = 100 - usedPercentage;
-            
-                new Chart(ctx, {
-                    type: "doughnut",
-                    data: {
-                        labels: ["Iskorišteno", "Preostalo"],
-                        datasets: [{
-                            data: [usedPercentage, remaining],
-                            backgroundColor: ["#299cdb", "#d6f0fa"],
-                        }, ],
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        cutout: "70%",
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                            tooltip: {
-                                enabled: false
-                            },
-                        },
-                    },
-                    plugins: [{
-                        id: "centerText",
-                        beforeDraw: function(chart) {
-                            const width = chart.width,
-                                height = chart.height,
-                                ctx = chart.ctx;
-                        
-                            ctx.restore();
-                            const fontSize = ((height / 8) * 2).toFixed(2);
-                            ctx.font = fontSize + "px sans-serif";
-                            ctx.textBaseline = "middle";
-                            ctx.textAlign = "center";
-                        
-                            const dataset = chart.data.datasets[0];
-                            const total = dataset.data.reduce((acc, val) => acc + val, 0);
-                            const percentage = Math.round((dataset.data[0] / total) * 100);
-                        
-                            const text = percentage + "%";
-                            const textX = Math.round(width / 2);
-                            const textY = Math.round(height / 2);
-                        
-                            ctx.fillStyle = "#299cdb";
-                            ctx.fillText(text, textX, textY);
-                            ctx.save();
-                        },
-                    }, ],
-                });
-            }
-        });
-    </script>
 
-
-<!-- carinske tarife -->
 <script>
-    document.addEventListener("DOMContentLoaded", async function() {
-        try {
-            const response = await fetch("/storage/data/tariff.json");
-            const tariffData = await response.json();
+    document.addEventListener("DOMContentLoaded", async function () {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const token = localStorage.getItem("auth_token");
 
-            // Broji samo one koji imaju ključ "Tarifna oznaka"
-            const totalTariffs = tariffData.filter(item => item["Tarifna oznaka"]).length;
+        if (!user || !token) {
+            console.warn("User or token missing in localStorage.");
+            return;
+        }
 
-            const tariffCounterEl = document.querySelector(".counter-value[data-target]");
-            if (tariffCounterEl) {
-                tariffCounterEl.setAttribute("data-target", totalTariffs);
-                tariffCounterEl.innerText = totalTariffs;
+        let chartInstance = null;
+
+        function createDoughnutChart(canvasId, usedPercentage) {
+            const ctx = document.getElementById(canvasId).getContext("2d");
+            const remaining = 100 - usedPercentage;
+
+            if (chartInstance) {
+                chartInstance.destroy();
             }
 
+            chartInstance = new Chart(ctx, {
+                type: "doughnut",
+                data: {
+                    labels: ["Iskorišteno", "Preostalo"],
+                    datasets: [{
+                        data: [usedPercentage, remaining],
+                        backgroundColor: ["#299cdb", "#d6f0fa"],
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: "70%",
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: false
+                        },
+                    },
+                },
+                plugins: [{
+                    id: "centerText",
+                    beforeDraw: function (chart) {
+                        const width = chart.width,
+                            height = chart.height,
+                            ctx = chart.ctx;
 
-        } catch (error) {
-            console.error("❌ Greška pri učitavanju tarifa:", error);
+                        ctx.restore();
+                        const fontSize = ((height / 8) * 2).toFixed(2);
+                        ctx.font = fontSize + "px sans-serif";
+                        ctx.textBaseline = "middle";
+                        ctx.textAlign = "center";
+
+                        const dataset = chart.data.datasets[0];
+                        const total = dataset.data.reduce((acc, val) => acc + val, 0);
+                        const percentage = Math.round((dataset.data[0] / total) * 100);
+
+                        const text = percentage + "%";
+                        const textX = Math.round(width / 2);
+                        const textY = Math.round(height / 2);
+
+                        ctx.fillStyle = "#299cdb";
+                        ctx.fillText(text, textX, textY);
+                        ctx.save();
+                    },
+                }],
+            });
+        }
+
+        
+        createDoughnutChart("doughnut2", 0);
+
+        const invoicesUrl = `/api/invoices/users/${user.id}`;
+        const packagesUrl = `/api/user-packages`;
+
+        try {
+            const packageRes = await axios.get(packagesUrl, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            const userPackages = packageRes.data?.data || [];
+            const userPackage = userPackages.find(p => p.active);
+            let invoiceLimit = 0;
+
+            if (userPackage?.package?.name?.toLowerCase() === 'gobig') invoiceLimit = 500;
+            else if (userPackage?.package?.name?.toLowerCase() === 'startup') invoiceLimit = 200;
+            else if (userPackage?.package?.name?.toLowerCase() === 'business') invoiceLimit = Infinity;
+
+            const invoiceRes = await axios.get(invoicesUrl, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            const invoices = invoiceRes.data || [];
+            const invoiceCount = invoices.length;
+
+            const invoiceEl = document.getElementById("totalInvoices");
+            if (invoiceEl) invoiceEl.innerText = invoiceCount;
+
+            const denominatorEl = invoiceEl?.nextElementSibling;
+            if (denominatorEl && invoiceLimit !== Infinity) {
+                denominatorEl.innerText = `/${invoiceLimit}`;
+            } else if (denominatorEl) {
+                denominatorEl.innerText = "/∞";
+            }
+
+            const usedPercentage = invoiceLimit === Infinity ? 100 : Math.min((invoiceCount / invoiceLimit) * 100, 100);
+
+            
+            createDoughnutChart("doughnut2", usedPercentage);
+
+        } catch (err) {
+            console.error("Greška prilikom dohvaćanja faktura ili paketa:", err);
         }
     });
 </script>
+
+
 
 <!-- brzina skeniranja -->
 
@@ -966,20 +980,20 @@
                 remainScans: stats.remaining_scans ?? 0
             };
 
-            console.log("📌 Vrijednosti za prikaz u DOM-u:", fields);
+            console.log(" Vrijednosti za prikaz u DOM-u:", fields);
 
             Object.entries(fields).forEach(([id, value]) => {
                 const el = document.getElementById(id);
                 if (el) {
-                    console.log(`➡️ Ažuriram #${id} na:`, value);
+                    console.log(`➡ Ažuriram #${id} na:`, value);
                     el.innerText = value;
                 } else {
-                    console.warn(`⚠️ Element s ID '${id}' nije pronađen u DOM-u.`);
+                    console.warn(` Element s ID '${id}' nije pronađen u DOM-u.`);
                 }
             });
 
         } catch (error) {
-            console.error("❌ Greška pri dohvaćanju statistike:", error);
+            console.error(" Greška pri dohvaćanju statistike:", error);
         }
     });
 </script>
