@@ -142,39 +142,8 @@
         /* or set fixed px: 1200px, 1400px */
     }
 
-    @media print {
-    body * {
-        visibility: hidden;
-    }
+   
 
-    #invoiceDetailsModal,
-    #invoiceDetailsModal * {
-        visibility: visible;
-    }
-
-    #invoiceDetailsModal {
-        
-        z-index: 9999;
-    }
-
-    .modal-content {
-        border: none !important;
-        box-shadow: none !important;
-    }EU
-
-    .d-print-none {
-        display: none !important;
-    }
-
-    .table {
-        width: 100% !important;
-    }
-
-    .card {
-        border: none !important;
-        box-shadow: none !important;
-    }
-}
 </style>
 @endsection
 @section('content')
@@ -238,182 +207,7 @@ Moje spašene deklaracije
     </div>
 </div>
 
-<div class="modal fade" id="invoiceDetailsModal" tabindex="-1" aria-labelledby="invoiceDetailsModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-center w-100"><i class="fas fa-file-alt" style="font-size:14px;margin-top:-7px!important"></i>  Pregled deklaracije</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                    aria-label="Zatvori"></button>
-            </div>
-            <div class="modal-body p-0">
-                <div class="row justify-content-center">
-                   <div class="card" id="demo">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div
-                                        class="card-header border-bottom-dashed p-4 d-flex justify-content-between">
-                                        <div>
-                                            <img src="{{ URL::asset('build/images/logo-dek.png') }}"
-                                                class="card-logo" alt="logo" height="30">
-                                            <div class="mt-4">
-                                                <h6 class="text-muted text-uppercase fw-semibold">Adresa
-                                                </h6>
-                                                <p class="text-muted mb-1" id="address-details">--</p>
-                                                <p class="text-muted mb-0" id="zip-code"><span>Poštanski
-                                                        broj:</span> --</p>
-                                            </div>
-                                        </div>
-                                        <div class="text-end">
 
-                                            <h6><span class="text-muted fw-normal">Email:</span> <span
-                                                    id="email">--</span></h6>
-                                            <h6><span class="text-muted fw-normal">Web:</span> <a href="#"
-                                                    class="link-primary" target="_blank" id="website">--</a>
-                                            </h6>
-                                            <h6 class="mb-0"><span
-                                                    class="text-muted fw-normal">Telefon:</span> <span
-                                                    id="contact-no">--</span></h6>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-12">
-                                    <div class="card-body p-4">
-                                        <div class="row g-3">
-                                            <div class="col-lg-3 col-6">
-                                                <p class="text-muted mb-2 text-uppercase fw-semibold">
-                                                    Faktura #</p>
-                                                <h5 class="fs-14 mb-0">#<span id="invoice-no">--</span></h5>
-                                            </div>
-                                            <div class="col-lg-3 col-6">
-                                                <p class="text-muted mb-2 text-uppercase fw-semibold">Datum
-                                                </p>
-                                                <h5 class="fs-14 mb-0"><span id="invoice-date">--</span>
-                                                </h5>
-                                            </div>
-                                            <div class="col-lg-3 col-6">
-                                                <p class="text-muted mb-2 text-uppercase fw-semibold">
-                                                    Skenirana</p>
-                                                <span class="badge bg-light text-dark fs-11"
-                                                    id="payment-status">--</span>
-                                            </div>
-                                            <div class="col-lg-3 col-6">
-                                                <p class="text-muted mb-2 text-uppercase fw-semibold">Ukupan
-                                                    iznos</p>
-                                                <h5 class="fs-14 mb-0"><span id="total-amount">--</span>
-                                                </h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-12">
-                                    <div class="card-body p-4 border-top border-top-dashed">
-                                        <div class="row g-3">
-                                            <div class="col-6">
-                                                <h6 class="text-muted text-uppercase fw-semibold mb-3">
-                                                    Dobavljač</h6>
-                                                <p class="fw-medium mb-2" id="billing-name">--</p>
-                                                <p class="text-muted mb-1" id="billing-address-line-1">--
-                                                </p>
-                                                <p class="text-muted mb-1"><span>Telefon: </span><span
-                                                        id="billing-phone-no">--</span></p>
-                                                <p class="text-muted mb-0"><span>PIB: </span><span
-                                                        id="billing-tax-no">--</span></p>
-                                            </div>
-                                            <div class="col-6">
-                                                <h6 class="text-muted text-uppercase fw-semibold mb-3">
-                                                    Zemlja porijekla</h6>
-                                                <p class="fw-medium mb-2" id="shipping-country">--</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Invoice Items -->
-                                <div class="col-lg-12">
-                                    <div class="card-body p-4">
-                                        <div class="table-responsive">
-                                            <table
-                                                class="table table-borderless text-center table-nowrap align-middle mb-0">
-                                                <thead>
-                                                    <tr class="table-active">
-                                                        <th>#</th>
-                                                        <th>Artikal</th>
-                                                        <th>Opis</th>
-                                                        <th>Cijena</th>
-                                                        <th>Količina</th>
-                                                        <th>Ukupno</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="products-list">
-                                                    <!-- Dynamic rows will be inserted here -->
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Totals -->
-                                <div class="col-lg-12">
-                                    <div class="card-body pt-0">
-                                        <div class="border-top border-top-dashed mt-2">
-                                            <table
-                                                class="table table-borderless table-nowrap align-middle mb-0 ms-auto"
-                                                style="width:250px">
-                                                <tbody>
-                                                    <tr class="border-top border-top-dashed fs-15">
-                                                        <th scope="row">Ukupno</th>
-                                                        <th class="text-end"><span id="modal-total-amount">
-                                                            </span> KM </th>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="mt-4">
-                                            <h6 class="text-muted text-uppercase fw-semibold mb-3">Detalji
-                                                plaćanja:</h6>
-                                            <p class="text-muted mb-1">Način plaćanja: <span
-                                                    class="fw-medium">Kartica</span></p>
-                                            <p class="text-muted mb-1">Ime vlasnika kartice: <span
-                                                    class="fw-medium">Tin Tomić</span></p>
-                                            <p class="text-muted mb-1">Broj kartice: <span
-                                                    class="fw-medium">xxxx xxxx xxxx 1234</span></p>
-                                            <p class="text-muted">Ukupno za platiti: <span
-                                                    class="fw-medium"><span
-                                                        id="payment-method-amount">755.96</span> KM</span>
-                                            </p>
-                                        </div>
-
-                                        <div class="mt-4">
-                                            <div class="alert alert-info">
-                                                <p class="mb-0"><span class="fw-semibold">Napomena:</span>
-                                                    <span id="note">Račun je informativnog karaktera.
-                                                        Provjerite detalje prije plaćanja.</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-                                            <a href="javascript:void(0);" class="btn btn-success" onclick="printInvoiceModal()">
-                                                <i class="ri-printer-line align-bottom me-1"></i> Print
-                                            </a>
-                                            <a href="javascript:void(0);" class="btn btn-primary">
-                                                <i class="ri-download-2-line align-bottom me-1"></i>
-                                                Download
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div> <!-- row -->
-                        </div> <!-- card -->
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <!--end row-->
@@ -469,7 +263,7 @@ Moje spašene deklaracije
                 {
                     data: 'file_name',
                     title: 'Moje fakture',
-                    render: (data, type, row) => `<a href="#" class="text-info view-invoice" data-id="${row.id}">${data}</a>`
+                    render: (data, type, row) => `<a href="/detalji-deklaracije/${row.id}" class="text-info">${data}</a>`
                 },
                 { data: 'country_of_origin', title: 'Zemlja porijekla' },
                 {
@@ -579,116 +373,15 @@ Moje spašene deklaracije
                     $(this).addClass('d-none');
                 });
 
-                console.log("✅ Search input initialized.");
+                console.log(" Search input initialized.");
             }
         });
     });
 </script>
 
-<script>
-    function printInvoiceModal() {
-        const printContents = document.querySelector('#invoiceDetailsModal .modal-body').innerHTML;
-        const originalContents = document.body.innerHTML;
-
-        // Create new window for printing
-        const printWindow = window.open('', '', 'height=700,width=900');
-        printWindow.document.write(`
-            <html>
-                <head>
-                    <title>Pregled fakture</title>
-                    <link rel="stylesheet" href="/build/css/bootstrap.min.css" />
-                    <style>
-                        body { font-family: sans-serif; padding: 20px; }
-                        table { width: 100%; border-collapse: collapse; }
-                        th, td { border: 1px solid #ccc; padding: 8px; }
-                        h5, h6 { margin-bottom: 5px; }
-                    </style>
-                </head>
-                <body>
-                    ${printContents}
-                </body>
-            </html>
-        `);
-        printWindow.document.close();
-        printWindow.focus();
-        printWindow.print();
-        printWindow.close();
-    }
-</script>
 
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        $(document).on('click', '.view-invoice', function(e) {
-            e.preventDefault();
-            const invoiceId = $(this).data('id');
-            const token = localStorage.getItem("auth_token");
 
-            fetch(`/api/invoices/${invoiceId}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                })
-                .then(response => response.json())
-                .then(invoice => {
-                    // Fetch supplier details
-                    fetch(`/api/suppliers/${invoice.supplier_id}`, {
-                            headers: {
-                                'Authorization': `Bearer ${token}`
-                            }
-                        })
-                        .then(res => res.json())
-                        .then(supplier => {
-                            // Fill invoice data
-                            $('#invoice-no').text(invoice.id);
-                            $('#invoice-date').text(new Date(invoice.date_of_issue).toLocaleDateString('hr'));
-                            $('#total-amount').text(`${parseFloat(invoice.total_price).toFixed(2)} KM`);
-                            $('#card-total-amount').text(`${parseFloat(invoice.total_price).toFixed(2)}`);
-                            $('#address-details').text(invoice.country_of_origin || '-');
-                            $('#payment-status').text(invoice.scanned === 1 ? 'Skenirano' : 'Nije skenirano');
-                            $('#shipping-country').text(invoice.country_of_origin || '--');
-
-                            // Supplier info
-                            $('#billing-name').text(supplier.name || '--');
-                            $('#billing-address-line-1').text(supplier.address || '--');
-                            $('#billing-phone-no').text(supplier.contact_phone || '--');
-                            $('#billing-tax-no').text(supplier.tax_id || '--');
-                            $('#email').text(supplier.contact_email || '--');
-
-                            // Fill invoice items and calculate total
-                            let itemsHTML = '';
-                            let totalSum = 0;
-
-                            invoice.items.forEach((item, index) => {
-                                const price = parseFloat(item.total_price || 0);
-                                totalSum += price;
-
-                                itemsHTML += `
-                                        <tr>
-                                            <th scope="row">${index + 1}</th>
-                                            <td class="text-start fw-medium">${item.item_description_original}</td> <!-- Artikal -->
-                                            <td class="text-muted text-wrap" style="white-space: normal; word-break: break-word; max-width: 500px;">${item.item_description}</td> <!-- Opis -->
-                                            <td>${item.base_price} ${item.currency}</td> <!-- Cijena -->
-                                            <td>${item.quantity}</td> <!-- Količina -->
-                                            <td class="text-end">${item.total_price} ${item.currency}</td> <!-- Ukupno -->
-                                        </tr>`;
-                            });
-
-                            $('#products-list').html(itemsHTML);
-                            $('#modal-total-amount').text(totalSum.toFixed(2));
-
-                            // Show modal
-                            const modal = new bootstrap.Modal(document.getElementById('invoiceDetailsModal'));
-                            modal.show();
-                        });
-                })
-                .catch(err => {
-                    console.error('Greška pri učitavanju fakture:', err);
-                    alert('Greška pri učitavanju fakture.');
-                });
-        });
-    });
-</script>
 
 
 @endsection

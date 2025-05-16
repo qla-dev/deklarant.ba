@@ -11,22 +11,10 @@
         /* 110.91px total offset */
         margin-top: 6px;
         width: 13.19vw;
-        
+
         z-index: 1050;
     }
 
-   
-
-    /* Push down below the fixed topbar */
-
-    /* Or whatever horizonta  offset fits your layout */
-
-
-    /* Above most content */
-
-
-    /* Optional: for better visibility */
-   
 </style>
 @endsection
 @section('content')
@@ -76,18 +64,17 @@
                         <div class="row g-4 mb-3 ">
                             <div class="col-6 text-start">
                                 <h6 class="text-muted text-uppercase fw-semibold mb-3">Podaci o dobavljaču</h6>
-                                <p class="fw-medium mb-2" id="supplier-name">Motorex</p>
-                                <p class="text-muted mb-1" id="supplier-address">305 S San Gabriel Blvd</p>
-                                <p class="text-muted mb-1"><span>Tel: +</span><span id="billing-phone-no">(387)
-                                        456-789</span></p>
-                                <p class="text-muted mb-0"><span>Tax: </span><span id="billing-tax-no">12-3456789</span> </p>
+                                <p class="fw-medium mb-2" id="supplier-name"></p>
+                                <p class="text-muted mb-1" id="supplier-address"></p>
+                                <p class="text-muted mb-1"><span>Tel: </span><span id="supplier-phone"></span></p>
+                                <p class="text-muted mb-0"><span>Tax: </span><span id="supplier-tax"></span> </p>
                             </div>
                             <!--end col-->
                             <div class="col-6 text-end">
                                 <h6 class="text-muted text-uppercase fw-semibold mb-3">Podaci o uvozniku</h6>
                                 <p class="fw-medium mb-2" id="carrier-name">SCHENKER</p>
                                 <p class="text-muted mb-1" id="carrier-address-line-1">305 S San Gabriel Blvd</p>
-                                <p class="text-muted mb-1"><span>Tel: +</span><span id="shipping-phone-no">(123)
+                                <p class="text-muted mb-1"><span>Tel: +</span><span id="carrier-phone">(123)
                                         456-7890</span></p>
                             </div>
                             <!--end col-->
@@ -101,18 +88,18 @@
                         <div class="row g-4 mb-3 justify-content-between align-items-center ">
                             <div class="col-lg-4 text-start">
                                 <p class="text-muted mb-2 text-uppercase fw-semibold">Broj fakture:</p>
-                                <h5 class="fs-14 mb-0">#<span id="invoice-no">25000355</span></h5>
+                                <h5 class="fs-14 mb-0">#<span id="invoice-no"> Učitavanje...</span></h5>
                             </div>
                             <!--end col-->
                             <div class="col-lg-4 text-center">
                                 <p class="text-muted mb-2 text-uppercase fw-semibold">Datum izdavanja</p>
-                                <h5 class="fs-14 mb-0"><span id="invoice-date">23. 05. 2025.</span> </h5>
+                                <h5 class="fs-14 mb-0"><span id="invoice-date"></span> </h5>
                             </div>
                             <!--end col-->
                             <!--end col-->
                             <div class="col-lg-4 text-end">
                                 <p class="text-muted mb-2 text-uppercase fw-semibold">Ukupan iznos:</p>
-                                <h5 class="fs-14 mb-0" id="currency">KM<span id="total-amount"> 755.96</span></h5>
+                                <h5 class="fs-14 mb-0" id="currency"><span id="total-1"> </span></h5>
                             </div>
                             <!--end col-->
                         </div>
@@ -139,54 +126,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="products-list">
-                                    <tr>
-                                        <th scope="row">01</th>
-                                        <td class="text-start">
-                                            <span class="fw-medium">Sweatshirt for Men (Pink)</span>
-                                            <p class="text-muted mb-0">Graphic Print Men & Women Sweatshirt</p>
-                                        </td>
-                                        <td>8764 32 21 20</td>
-                                        <td>$119.99</td>
-                                        <td>02</td>
-                                        <td>Njemačka</td>
-                                        <td class="text-end">$239.98</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">02</th>
-                                        <td class="text-start">
-                                            <span class="fw-medium">Sweatshirt for Men (Pink)</span>
-                                            <p class="text-muted mb-0">Graphic Print Men & Women Sweatshirt</p>
-                                        </td>
-                                        <td>8764 32 21 20</td>
-                                        <td>$119.99</td>
-                                        <td>02</td>
-                                        <td>Njemačka</td>
-                                        <td class="text-end">$239.98</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">03</th>
-                                        <td class="text-start">
-                                            <span class="fw-medium">350 ml Glass Grocery Container</span>
-                                            <p class="text-muted mb-0">Glass Grocery Container (Pack of 3, White)</p>
-                                        </td>
-                                        <td>8764 32 21 20</td>
-                                        <td>$119.99</td>
-                                        <td>03</td>
-                                        <td>Njemačka</td>
-                                        <td class="text-end">$239.98</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">04</th>
-                                        <td class="text-start">
-                                            <span class="fw-medium">Fabric Dual Tone Living Room Chair</span>
-                                            <p class="text-muted mb-0">Chair (White)</p>
-                                        </td>
-                                        <td>8764 32 21 20</td>
-                                        <td>$119.99</td>
-                                        <td>04</td>
-                                        <td>Njemačka</td>
-                                        <td class="text-end">$239.98</td>
-                                    </tr>
+
                                 </tbody>
                             </table>
                             <!--end table-->
@@ -197,7 +137,7 @@
 
                                     <tr class="border-top border-top-dashed fs-15">
                                         <th scope="row">Ukupan iznos</th>
-                                        <th class="text-end">KM 755.96</th>
+                                        <th class="text-end" id="total-amount"></th>
                                     </tr>
                                 </tbody>
                             </table>
@@ -256,4 +196,93 @@
         });
     });
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const invoiceId = window.location.pathname.split('/').pop();
+        const token = localStorage.getItem("auth_token");
+
+        if (!invoiceId || !token) {
+            alert("Niste prijavljeni ili faktura nije definisana.");
+            return;
+        }
+
+        try {
+            // 1. Fetch invoice
+            const invoiceRes = await fetch(`/api/invoices/${invoiceId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (!invoiceRes.ok) throw new Error("Greška pri dohvatu fakture.");
+            const invoice = await invoiceRes.json();
+
+            // Currency symbols map
+            const currencySymbols = {
+                "EUR": "€",
+                "USD": "$",
+                "KM": "KM",
+                // add more currency codes and symbols if needed
+            };
+
+            // Determine unique currencies in invoice items
+            const currencies = [...new Set(invoice.items.map(item => item.currency))];
+            let symbol = "KM"; // default symbol
+
+            if (currencies.length === 1) {
+                const code = currencies[0];
+                symbol = currencySymbols[code] || code;
+            } else if (currencies.length > 1) {
+                symbol = "Multiple"; // or customize as you wish for mixed currencies
+            }
+
+            // 2. Fill invoice details
+            document.getElementById("invoice-no").textContent = invoice.id;
+            document.getElementById("invoice-date").textContent = new Date(invoice.date_of_issue).toLocaleDateString('hr');
+            document.getElementById("total-1").textContent = ` ${symbol}${parseFloat(invoice.total_price).toFixed(2)}`;
+            document.getElementById("total-amount").textContent = `${symbol} ${parseFloat(invoice.total_price).toFixed(2)}`;
+
+            // 3. Fill product list
+            const productsList = document.getElementById("products-list");
+            productsList.innerHTML = ""; // Clear existing rows
+
+            invoice.items.forEach((item, index) => {
+                productsList.innerHTML += `
+                <tr>
+                    <th scope="row">${index + 1}</th>
+                    <td class="text-start">
+                        <span class="fw-medium">${item.item_description_original}</span>
+                        <p class="text-muted mb-0">${item.item_description}</p>
+                    </td>
+                    <td>${item.item_code}</td>
+                    <td>${item.base_price} ${item.currency}</td>
+                    <td>${item.quantity}</td>
+                    <td>${invoice.country_of_origin || '--'}</td>
+                    <td class="text-end">${item.total_price} ${item.currency}</td>
+                </tr>
+            `;
+            });
+
+            // 4. Fetch supplier
+            const supplierRes = await fetch(`/api/suppliers/${invoice.supplier_id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (!supplierRes.ok) throw new Error("Greška pri dohvatu dobavljača.");
+            const supplier = await supplierRes.json();
+
+            // 5. Fill supplier details
+            document.getElementById("supplier-name").textContent = supplier.name || "--";
+            document.getElementById("supplier-address").textContent = supplier.address || "--";
+            document.getElementById("supplier-phone").textContent = supplier.contact_phone || "--";
+            document.getElementById("supplier-tax").textContent = supplier.tax_id || "--";
+
+        } catch (err) {
+            console.error(err);
+            alert("Greška pri učitavanju fakture.");
+        }
+    });
+</script>
+
 @endsection
