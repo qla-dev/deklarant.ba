@@ -1,102 +1,114 @@
 @extends('layouts.master')
 @section('title')
-    @lang('translation.search-results')
+@lang('translation.search-results')
 @endsection
 @section('css')
-    <link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
+<link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
+<style>
+a:hover + .border {
+  border-color: #54cc94 !important;
+}
 
+
+
+</style>
 @endsection
 @section('content')
-    @component('components.breadcrumb')
-        @slot('li_1')
-            deklarant.ba
-        @endslot
-        @slot('title')
-            Rezultati pretrage za "<span class="text-info fw-medium ml-0 pl-0">{{ request('keyword') }}</span>"
-        @endslot
-    @endcomponent
-  <div class="row">
-    <div class="col-lg-12">
-        <div class="card">
-        
+@component('components.breadcrumb')
+@slot('li_1')
+deklarant.ba
+@endslot
+@slot('title')
+Rezultati pretrage za "<span class="text-info fw-medium ml-0 pl-0">{{ request('keyword') }}</span>"
+@endslot
+@endcomponent
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
 
-            <div class="card-body p-4">
-                <div class="tab-content text-muted">
-                    <!-- Moje deklaracije -->
-                    <div class="tab-pane active" id="all" role="tabpanel">
-                       <div id="invoice-loading">
-    <div class="text-center my-4">
-        <i class="mdi mdi-loading mdi-spin fs-24 text-info"></i>
-        <p class="text-muted">Učitavanje rezultata</p>
-    </div>
-</div>
-<div id="invoice-results"></div>
-                    </div>
 
-              
-                </div>
+      <div class="card-body p-4">
+        <div class="tab-content text-muted">
+          <!-- Moje deklaracije -->
+          <div class="tab-pane active" id="all" role="tabpanel">
+            <div id="invoice-loading">
+              <div class="text-center my-4">
+                <i class="mdi mdi-loading mdi-spin fs-24 text-info"></i>
+                <p class="text-muted">Učitavanje rezultata</p>
+              </div>
             </div>
+            <div id="invoice-results"></div>
+          </div>
+
+
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- JS script for fetching invoices -->
 <script>
- document.addEventListener("DOMContentLoaded", async function () {
-  const container = document.getElementById("invoice-results");
-  const loading = document.getElementById("invoice-loading");
-  const token = localStorage.getItem("auth_token");
-  const user = JSON.parse(localStorage.getItem("user"));
-  const keyword = "{{ request('keyword') }}";
+  document.addEventListener("DOMContentLoaded", async function() {
+    const container = document.getElementById("invoice-results");
+    const loading = document.getElementById("invoice-loading");
+    const token = localStorage.getItem("auth_token");
+    const user = JSON.parse(localStorage.getItem("user"));
+    const keyword = "{{ request('keyword') }}";
 
-  if (!user || !token) {
-    loading.remove();
-    container.innerHTML = `<p class="text-danger">Niste prijavljeni.</p>`;
-    return;
-  }
+    if (!user || !token) {
+      loading.remove();
+      container.innerHTML = `<p class="text-danger">Niste prijavljeni.</p>`;
+      return;
+    }
 
-  try {
-    const res = await fetch(`/api/invoices/users/${user.id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`
+    try {
+      const res = await fetch(`/api/invoices/users/${user.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      const data = await res.json();
+      loading.remove();
+
+      if (!data || !Array.isArray(data) || data.length === 0) {
+        container.innerHTML = `<p class="text-muted mb-0">Nema pronađenih deklaracija za "<strong>${keyword}</strong>".</p>`;
+        return;
       }
-    });
 
-    const data = await res.json();
-    loading.remove();
+      // Filter data based on keyword
+      const filtered = data.filter(item =>
+        item.country_of_origin?.toLowerCase().includes(keyword.toLowerCase()) ||
+        item.file_name?.toLowerCase().includes(keyword.toLowerCase()) ||
+        item.invoice_number?.toLowerCase().includes(keyword.toLowerCase()) ||
+        item.supplier?.name?.toLowerCase().includes(keyword.toLowerCase())
+      );
 
-    if (!data || !Array.isArray(data) || data.length === 0) {
-      container.innerHTML = `<p class="text-muted mb-0">Nema pronađenih deklaracija za "<strong>${keyword}</strong>".</p>`;
-      return;
-    }
+      if (filtered.length === 0) {
+        container.innerHTML = `<p class="text-muted mb-0">Nema rezultata koji odgovaraju upitu "<strong>${keyword}</strong>".</p>`;
+        return;
+      }
 
-    // Filter data based on keyword
-    const filtered = data.filter(item =>
-      item.country_of_origin?.toLowerCase().includes(keyword.toLowerCase()) ||
-      item.file_name?.toLowerCase().includes(keyword.toLowerCase()) ||
-      item.invoice_number?.toLowerCase().includes(keyword.toLowerCase()) ||
-      item.supplier?.name?.toLowerCase().includes(keyword.toLowerCase())
-    );
-
-    if (filtered.length === 0) {
-      container.innerHTML = `<p class="text-muted mb-0">Nema rezultata koji odgovaraju upitu "<strong>${keyword}</strong>".</p>`;
-      return;
-    }
-
-    // Render list with click handler
-    let html = "";
-    filtered.forEach((invoice, index) => {
-  html += `
-    <div class="invoice-result" data-id="${invoice.id}" style="cursor:pointer;">
+      // Render list with direct links to details page
+      let html = "";
+      filtered.forEach((invoice, index) => {
+        html += `
+  <a href="/detalji-deklaracije/${invoice.id}" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+    <div class="invoice-result" style="cursor:pointer;">
       <h5 class="mb-3">
-        <a href="javascript:void(0)" class="text-body">
-          ${invoice.invoice_number || 'Broj deklaracije nije definisan'}
-        </a>
+        ${invoice.invoice_number || 'Broj deklaracije nije definisan'}
       </h5>
-      <p class="text-success mb-0"><i class="ri-file-line align-middle me-1 fs-15" style="margin-top:-4px; font-size:15px!important"></i>${invoice.file_name || 'Nepoznato ime fajla'}</p>
-      <p class="text-success mb-0"><i class="ri-truck-line align-middle me-1 fs-15" style="margin-top:-4px; font-size:15px!important"></i>${invoice.supplier?.name || 'Nepoznati dobavljač'}</p>
-      <p class="text-success mb-0"><i class="ri-globe-line align-middle me-1 fs-15" style="margin-top:-4px; font-size:15px!important"></i>${invoice.country_of_origin || 'Nepoznata zemlja projekta'}</p>
+      <p class="text-success mb-0">
+        <i class="ri-file-line align-middle me-1 fs-15" style="margin-top:-4px; font-size:15px!important"></i>${invoice.file_name || 'Nepoznato ime fajla'}
+      </p>
+      <p class="text-success mb-0">
+        <i class="ri-truck-line align-middle me-1 fs-15" style="margin-top:-4px; font-size:15px!important"></i>${invoice.supplier?.name || 'Nepoznati dobavljač'}
+      </p>
+      <p class="text-success mb-0">
+        <i class="ri-globe-line align-middle me-1 fs-15" style="margin-top:-4px; font-size:15px!important"></i>${invoice.country_of_origin || 'Nepoznata zemlja projekta'}
+      </p>
       <ul class="list-inline d-flex align-items-center g-3 text-muted fs-14 mb-0 mt-3 mb-3">
         <li class="list-inline-item me-3 d-flex" style="align-items:center!important">
           <i class="ri-calendar-2-line align-middle me-1 fs-15" style="font-size:15px!important"></i>${
@@ -111,78 +123,24 @@
         </li>
       </ul>
     </div>
-    ${index < filtered.length - 1 ? '<div class="border border-dashed mb-3"></div>' : ''}
-  `;
-});
+  </a>
+  ${index < filtered.length - 1 ? '<div class="border border-dashed mb-3"></div>' : ''}
+`;
 
-    container.innerHTML = html;
-
-    // Add click listeners to each invoice result div
-    document.querySelectorAll(".invoice-result").forEach(element => {
-      element.addEventListener("click", function () {
-        const invoiceId = this.getAttribute("data-id");
-        const invoice = filtered.find(i => i.id == invoiceId);
-        if (!invoice) return;
-
-        // Fill modal with invoice data
-        document.getElementById("invoice-no").textContent = invoice.invoice_number || "--";
-        document.getElementById("invoice-date").textContent = (() => {
-          const d = new Date(invoice.date_of_issue);
-          return `${(d.getMonth() + 1).toString().padStart(2, '0')}.${d.getDate().toString().padStart(2, '0')}.${d.getFullYear()}`;
-        })();
-        document.getElementById("payment-status").textContent = invoice.scanned === 1 ? "Da" : "Ne";
-        document.getElementById("total-amount").textContent = `${parseFloat(invoice.total_price).toFixed(2)} KM`;
-
-        document.getElementById("address-details").textContent = invoice.supplier?.address || "--";
-        document.getElementById("zip-code").textContent = invoice.supplier?.zip_code || "--";
-        document.getElementById("email").textContent = invoice.supplier?.email || "--";
-        document.getElementById("website").textContent = invoice.supplier?.website || "--";
-        document.getElementById("website").href = invoice.supplier?.website || "#";
-        document.getElementById("contact-no").textContent = invoice.supplier?.phone || "--";
-
-        document.getElementById("billing-name").textContent = invoice.supplier?.name || "--";
-        document.getElementById("billing-address-line-1").textContent = invoice.supplier?.address || "--";
-        document.getElementById("billing-phone-no").textContent = invoice.supplier?.phone || "--";
-        document.getElementById("billing-tax-no").textContent = invoice.supplier?.tax_id || "--";
-
-        document.getElementById("shipping-country").textContent = invoice.country_of_origin || "--";
-
-        // Clear old products list first
-        const productsList = document.getElementById("products-list");
-        productsList.innerHTML = "";
-
-        // Add invoice items rows (assuming invoice.items is an array)
-        if (Array.isArray(invoice.items)) {
-          invoice.items.forEach((item, idx) => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-              <td>${idx + 1}</td>
-              <td>${item.name || "--"}</td>
-              <td>${item.description || "--"}</td>
-              <td>${parseFloat(item.price || 0).toFixed(2)} KM</td>
-              <td>${item.quantity || 1}</td>
-              <td>${(parseFloat(item.price || 0) * (item.quantity || 1)).toFixed(2)} KM</td>
-            `;
-            productsList.appendChild(tr);
-          });
-        }
-
-        // Set payment method amount if available
-        document.getElementById("payment-method-amount").textContent = `${parseFloat(invoice.total_price).toFixed(2)}`;
-
-        // Show the modal (requires Bootstrap JS)
-        const modal = new bootstrap.Modal(document.getElementById("invoiceDetailsModal"));
-        modal.show();
       });
-    });
 
-  } catch (err) {
-    console.error("Greška prilikom dohvata faktura:", err);
-    loading.remove();
-    container.innerHTML = `<p class="text-danger">Greška prilikom dohvata faktura.</p>`;
-  }
-});
+      container.innerHTML = html;
+
+      // Removed modal click handler code here
+
+    } catch (err) {
+      console.error("Greška prilikom dohvata faktura:", err);
+      loading.remove();
+      container.innerHTML = `<p class="text-danger">Greška prilikom dohvata faktura.</p>`;
+    }
+  });
 </script>
+
 
 <!-- Invoice Details Modal -->
 <div class="modal fade" id="invoiceDetailsModal" tabindex="-1" aria-labelledby="invoiceDetailsModalLabel" aria-hidden="true">
@@ -330,16 +288,16 @@
 </div>
 
 
-    <!--end row-->
+<!--end row-->
 @endsection
 @section('script')
-    <script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
+<script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
 
-    <!-- swiper js -->
-    <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
+<!-- swiper js -->
+<script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
 
-    <!-- search-result init js -->
-    <script src="{{ URL::asset('build/js/pages/search-result.init.js') }}"></script>
+<!-- search-result init js -->
+<script src="{{ URL::asset('build/js/pages/search-result.init.js') }}"></script>
 
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
+<script src="{{ URL::asset('build/js/app.js') }}"></script>
 @endsection
