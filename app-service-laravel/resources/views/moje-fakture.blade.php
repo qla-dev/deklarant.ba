@@ -263,7 +263,8 @@ Moje spašene deklaracije
                 {
                     data: 'file_name',
                     title: 'Moje fakture',
-                    render: (data, type, row) => `<a href="/detalji-deklaracije/${row.id}" class="text-info">${data}</a>`
+                    render: (data, type, row) => `<a href="/detalji-deklaracije/${row.id}" target="_blank" rel="noopener noreferrer" class="text-info">${data}</a>`
+
                 },
                 { data: 'country_of_origin', title: 'Zemlja porijekla' },
                 {

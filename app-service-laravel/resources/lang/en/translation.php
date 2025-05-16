@@ -44,7 +44,7 @@ return [
     "invoices"=>"Moje deklaracije",
     "basic-auth"=>"Sleep",
 
-    "details"=>"Invoice Details",
+    "details"=>"Pregled deklaracije",
     "create-invoice"=>"Kreiraj fakturu",
     "dobavljaci"=>"Moji dobavljači",
     "tarife"=>"Tarifne oznake",

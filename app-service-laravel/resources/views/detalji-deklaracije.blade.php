@@ -19,6 +19,13 @@
 @endsection
 @section('content')
 
+<head>
+    <!-- other head content like meta, title, css etc. -->
+    <base href="{{ url('/') }}/">
+    <!-- rest of head -->
+</head>
+
+
 
 <div class="row justify-content-center mt-0 mb-3">
 
