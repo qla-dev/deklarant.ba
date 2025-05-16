@@ -14,7 +14,6 @@
 
         z-index: 1050;
     }
-
 </style>
 @endsection
 @section('content')
@@ -210,18 +209,33 @@
         const token = localStorage.getItem("auth_token");
 
         if (!invoiceId || !token) {
-            alert("Niste prijavljeni ili faktura nije definisana.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Greška',
+                text: "Niste prijavljeni ili faktura nije definisana.",
+            });
             return;
         }
 
         try {
-            // 1. Fetch invoice
+            // Show loading Swal modal
+            Swal.fire({
+                title: 'Učitavanje deklaracije...',
+                allowOutsideClick: false,
+                html: '<div class="spinner-border text-info" role="status"><span class="visually-hidden">Loading...</span></div>',
+                showConfirmButton: false,
+            });
+
+
+
+            // Fetch invoice
             const invoiceRes = await fetch(`/api/invoices/${invoiceId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
-            if (!invoiceRes.ok) throw new Error("Greška pri dohvatu fakture.");
+
+            if (!invoiceRes.ok) throw new Error("Greška pri dohvatu deklaracije.");
             const invoice = await invoiceRes.json();
 
             // Currency symbols map
@@ -229,67 +243,75 @@
                 "EUR": "€",
                 "USD": "$",
                 "KM": "KM",
-                // add more currency codes and symbols if needed
             };
 
             // Determine unique currencies in invoice items
             const currencies = [...new Set(invoice.items.map(item => item.currency))];
-            let symbol = "KM"; // default symbol
+            let symbol = "KM";
 
             if (currencies.length === 1) {
                 const code = currencies[0];
                 symbol = currencySymbols[code] || code;
             } else if (currencies.length > 1) {
-                symbol = "Multiple"; // or customize as you wish for mixed currencies
+                symbol = "Multiple";
             }
 
-            // 2. Fill invoice details
+            // Fill invoice details
             document.getElementById("invoice-no").textContent = invoice.id;
             document.getElementById("invoice-date").textContent = new Date(invoice.date_of_issue).toLocaleDateString('hr');
             document.getElementById("total-1").textContent = ` ${symbol}${parseFloat(invoice.total_price).toFixed(2)}`;
             document.getElementById("total-amount").textContent = `${symbol} ${parseFloat(invoice.total_price).toFixed(2)}`;
 
-            // 3. Fill product list
+            // Fill product list
             const productsList = document.getElementById("products-list");
-            productsList.innerHTML = ""; // Clear existing rows
+            productsList.innerHTML = "";
 
             invoice.items.forEach((item, index) => {
                 productsList.innerHTML += `
-                <tr>
-                    <th scope="row">${index + 1}</th>
-                    <td class="text-start">
-                        <span class="fw-medium">${item.item_description_original}</span>
-                        <p class="text-muted mb-0">${item.item_description}</p>
-                    </td>
-                    <td>${item.item_code}</td>
-                    <td>${item.base_price} ${item.currency}</td>
-                    <td>${item.quantity}</td>
-                    <td>${invoice.country_of_origin || '--'}</td>
-                    <td class="text-end">${item.total_price} ${item.currency}</td>
-                </tr>
-            `;
+          <tr>
+            <th scope="row">${index + 1}</th>
+            <td class="text-start">
+              <span class="fw-medium">${item.item_description_original}</span>
+              <p class="text-muted mb-0">${item.item_description}</p>
+            </td>
+            <td>${item.item_code}</td>
+            <td>${item.base_price} ${item.currency}</td>
+            <td>${item.quantity}</td>
+            <td>${invoice.country_of_origin || '--'}</td>
+            <td class="text-end">${item.total_price} ${item.currency}</td>
+          </tr>
+        `;
             });
 
-            // 4. Fetch supplier
+            // Fetch supplier
             const supplierRes = await fetch(`/api/suppliers/${invoice.supplier_id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
+
             if (!supplierRes.ok) throw new Error("Greška pri dohvatu dobavljača.");
             const supplier = await supplierRes.json();
 
-            // 5. Fill supplier details
+            // Fill supplier details
             document.getElementById("supplier-name").textContent = supplier.name || "--";
             document.getElementById("supplier-address").textContent = supplier.address || "--";
             document.getElementById("supplier-phone").textContent = supplier.contact_phone || "--";
             document.getElementById("supplier-tax").textContent = supplier.tax_id || "--";
 
+            // Close loading modal after data is loaded
+            Swal.close();
+
         } catch (err) {
             console.error(err);
-            alert("Greška pri učitavanju fakture.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Greška',
+                text: 'Greška pri učitavanju fakture.',
+            });
         }
     });
 </script>
+
 
 @endsection
