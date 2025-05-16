@@ -447,3 +447,73 @@ color: #299cdb ;
 #page-topbar {
     z-index: 99997!important;
 }
+
+/* Hide .table-info only when data-bs-theme is NOT yet set */
+
+.custom-table {
+    --vz-table-color: #000;
+    --vz-table-bg: #d4ebf8;
+    --vz-table-border-color: #bfd4df;
+    --vz-table-striped-bg: #d0e6f3;
+    --vz-table-striped-color: #000;
+    --vz-table-active-bg: #cce2ee;
+    --vz-table-active-color: #000;
+    --vz-table-hover-bg: #cce2ee;
+    --vz-table-hover-color: #000;
+    color: var(--vz-table-color);
+    border-color: var(--vz-table-border-color);
+}
+
+.table>:not(caption)>*>* {
+    background-color: unset!important;
+    color: transparent;
+}
+
+.custom-table {
+    visibility: hidden;
+}
+
+[data-bs-theme=light].table>:not(caption)>*>* {
+    color: #212529!important;
+    background-color: unset!important;
+}
+
+[data-bs-theme=dark].table>:not(caption)>*>* {
+    color: white!important;
+    background-color: unset!important;
+}
+
+
+
+/* Show .table-info as soon as data-bs-theme is set (light or dark) */
+[data-bs-theme] .custom-table {
+  visibility: visible;
+}
+
+
+[data-bs-theme=dark] .dataTable .custom-table th{
+  background-color: rgba(41, 156, 219, 0.15) !important;
+  color: white;
+}
+
+
+[data-bs-theme=light] .dataTable .custom-table th {
+  background-color: #dff0fa!important; /* lighter blue tint */
+  color: #212529; /* typical dark text for light theme */
+}
+
+.dataTable {background-color: unset!important;}
+
+[data-bs-theme=dark] .dataTable td {
+    color: white!important;
+}
+
+[data-bs-theme=light] .dataTable td {
+    color: #212529!important;
+}
+
+.paginate_button {
+
+    background-color: unset!important;
+}
+

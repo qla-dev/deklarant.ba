@@ -175,7 +175,7 @@ Moje spašene deklaracije
             <div class="card-body">
                 <div class="table-responsive table-card ms-1 me-1 mb-0">
                     <table id="invoiceTable" class="table  w-100">
-                        <thead class="table-info">
+                        <thead class="custom-table">
                             <tr>
                                 <th>ID</th>
                                 <th>Moje fakture</th>
