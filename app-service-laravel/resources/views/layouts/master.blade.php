@@ -1,6 +1,21 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-layout="horizontal" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="enable" >
-
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-layout="horizontal" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="enable"  data-bs-theme>
+    <script>
+  (function() {
+    try {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark' || savedTheme === 'light') {
+        document.documentElement.setAttribute('data-bs-theme', savedTheme);
+      } else {
+        // Optional: default to dark or light based on prefers-color-scheme
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-bs-theme', prefersDark ? 'dark' : 'light');
+      }
+    } catch (e) {
+      // just in case localStorage access fails
+    }
+  })();
+</script>
 <head>
     <meta charset="utf-8" />
     <title>@yield('title') | deklarant.ba</title>
@@ -9,6 +24,7 @@
     <meta content="qla.dev" name="author" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ URL::asset('build/images/favicon.ico')}}">
+    
     @include('layouts.head-css')
 </head>
 
