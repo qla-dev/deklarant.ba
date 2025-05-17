@@ -37,7 +37,7 @@ class HomeController extends Controller
 
     public function root()
     {
-        return view('layouts-horizontal');
+        return view('home');
     }
 
     /*Language Translation*/
