@@ -195,7 +195,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                         document.write(JSON.parse(localStorage.getItem("user"))?.username || "Korisnik");
                                     </script>
                                 </span>
-                                <span class="d-none d-xl-block fs-12 user-name-sub-text">Business</span>
+                                <span class="d-none d-xl-block fs-12 user-name-sub-text text-end">Business</span>
 
 
                             </span>

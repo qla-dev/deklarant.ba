@@ -395,7 +395,6 @@ color: #299cdb ;
 #topbar-username
 
 {
-    padding-right: 5px!important;
     text-align: end!important;
     width: 100%!important;
 }
@@ -516,4 +515,10 @@ color: #299cdb ;
 
     background-color: unset!important;
 }
+
+.modal-backdrop.show {
+
+    z-index: 999998!important;
+}
+.modal {z-index: 999999!important;;}
 
