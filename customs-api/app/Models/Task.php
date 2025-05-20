@@ -37,7 +37,7 @@ class Task extends Model
     {
         $this->update([
             'status' => self::STATUS_COMPLETED,
-            'result' => ['items' => $result],
+            'result' => [$result],
             'processing_step' => null,
             'completed_at' => now()
         ]);

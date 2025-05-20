@@ -40,13 +40,14 @@ class ProcessUploadedFile implements ShouldQueue
 
             // Step 2: Extract data with LLM
             $this->task->update(['processing_step' => 'extraction']);
-            $items = $this->extractWithLLM($markdown);
+            $result = $this->extractWithLLM($markdown);
 
             // Step 3: Enrich with search API
             $this->task->update(['processing_step' => 'enrichment']);
-            $enrichedItems = $this->enrichWithSearchAPI($items);
+            $enrichedItems = $this->enrichWithSearchAPI($result['items']);
+            $result['items'] = $enrichedItems;
 
-            $this->task->markAsCompleted($enrichedItems);
+            $this->task->markAsCompleted($result);
         } catch (Exception $e) {
             $this->task->markAsFailed($e->getMessage());
             throw $e;
@@ -108,7 +109,7 @@ class ProcessUploadedFile implements ShouldQueue
     protected function getProcessFactory(): callable
     {
         return $this->processFactory ?? function (array $command) {
-            return new \Symfony\Component\Process\Process($command);
+            return new \Symfony\Component\Process\Process($command, timeout: null);
         };
     }
 
@@ -154,13 +155,13 @@ class ProcessUploadedFile implements ShouldQueue
         $response = $this->client->post(getenv('OLLAMA_URL') . '/api/generate', [
             'json' => [
                 'model' => getenv('OLLAMA_MODEL'),
-                'prompt' => file_get_contents(base_path("app/Jobs/prompt-markdown-to-json.txt")) .
-                    "\n\nHere's the markdown:\n\n$markdown",
-                // 'format' => 'json',
+                'prompt' => 
+                    "Here's the markdown of invoice:\n\n```md\n$markdown\n```\n\n"
+                    . file_get_contents(base_path("app/Jobs/prompt-markdown-to-json.txt")),
                 'stream' => false,
                 'options' => [
                     'temperature' => 0.1,
-                    'top_p' => 0.8,
+                    'num_predict' => 5000
                 ]
             ]
         ]);
@@ -198,7 +199,7 @@ class ProcessUploadedFile implements ShouldQueue
             }
         }
 
-        return $parsedResponse['items'] ?? [];
+        return $parsedResponse;
     }
 
     private function enrichWithSearchAPI(array $items): array
