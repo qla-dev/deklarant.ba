@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "customs-api"
+		},
+		{
+			"path": "app-service-laravel"
+		},
+		{
+			"path": "code-search"
+		}
+	],
+	"settings": {}
+}
