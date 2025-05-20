@@ -14,6 +14,30 @@
 
         z-index: 1050;
     }
+
+    .table> :not(caption)>*>* {
+        color: inherit !important;
+        background-color: transparent !important;
+    }
+
+    table.table {
+        border: 1px solid  !important;
+        visibility: visible !important;
+    }
+
+    thead th {
+        background: #f1f1f1;
+        color: #000;
+        border: 1px solid #ccc;
+    }
+
+    tbody td,
+    tbody th {
+        border: 1px solid #ccc;
+        color: #333;
+    }
+</style>
+
 </style>
 @endsection
 @section('content')
@@ -119,11 +143,12 @@
                 <div class="col-lg-12">
                     <div class="card-body p-4">
                         <div class="table-responsive">
-                            <table class="table table-borderless text-center table-nowrap align-middle mb-0">
+                            <table id="invoiceTable" class="table table-borderless text-center table-nowrap align-middle mb-0">
                                 <thead>
                                     <tr class="table-active">
-                                        <th scope="col" style="width: 50px;">#</th>
+                                        <th scope="col">#</th>
                                         <th scope="col">Proizvodi</th>
+                                        <th scope="col">Prevod</th>
                                         <th scope="col">Tarifna oznaka</th>
                                         <th scope="col">Cijena</th>
                                         <th scope="col">Količina</th>
@@ -132,6 +157,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="products-list">
+
 
                                 </tbody>
                             </table>
@@ -175,6 +201,9 @@
             <a href="javascript:void(0);" class="btn btn-info">
                 <i class="ri-download-2-line align-bottom me-1"></i> Preuzmi
             </a>
+            <a href="javascript:void(0);" class="btn btn-info" id="export-xlsx">
+                <i class="ri-file-excel-2-line align-bottom me-1"></i> Export tabele u CSV
+            </a>
         </div>
     </div>
 
@@ -186,6 +215,8 @@
 @section('script')
 <script src="{{ URL::asset('build/js/pages/invoicedetails.js') }}"></script>
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -203,10 +234,15 @@
     });
 </script>
 
+
+<!-- Declaration fill logic -->
 <script>
     document.addEventListener('DOMContentLoaded', async () => {
         const invoiceId = window.location.pathname.split('/').pop();
         const token = localStorage.getItem("auth_token");
+
+        console.log("%c[DEBUG] invoiceId:", "color: #1e90ff", invoiceId);
+        console.log("%c[DEBUG] token present:", "color: #1e90ff", !!token);
 
         if (!invoiceId || !token) {
             Swal.fire({
@@ -218,7 +254,6 @@
         }
 
         try {
-            // Show loading Swal modal
             Swal.fire({
                 title: 'Učitavanje deklaracije...',
                 allowOutsideClick: false,
@@ -226,26 +261,27 @@
                 showConfirmButton: false,
             });
 
-
-
-            // Fetch invoice
+            console.log("%c[DEBUG] Fetching invoice data...", "color: orange");
             const invoiceRes = await fetch(`/api/invoices/${invoiceId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
 
+            console.log("%c[DEBUG] invoiceRes.ok:", "color: orange", invoiceRes.ok);
+
             if (!invoiceRes.ok) throw new Error("Greška pri dohvatu deklaracije.");
             const invoice = await invoiceRes.json();
 
-            // Currency symbols map
+            console.log("%c[DEBUG] Invoice response:", "color: green", invoice);
+            console.log("%c[DEBUG] Invoice items:", "color: green", invoice.items);
+
+            // Currency logic
             const currencySymbols = {
                 "EUR": "€",
                 "USD": "$",
                 "KM": "KM",
             };
-
-            // Determine unique currencies in invoice items
             const currencies = [...new Set(invoice.items.map(item => item.currency))];
             let symbol = "KM";
 
@@ -257,53 +293,76 @@
             }
 
             // Fill invoice details
+            console.log("%c[DEBUG] Filling invoice details", "color: teal");
             document.getElementById("invoice-no").textContent = invoice.id;
             document.getElementById("invoice-date").textContent = new Date(invoice.date_of_issue).toLocaleDateString('hr');
             document.getElementById("total-1").textContent = ` ${symbol}${parseFloat(invoice.total_price).toFixed(2)}`;
             document.getElementById("total-amount").textContent = `${symbol} ${parseFloat(invoice.total_price).toFixed(2)}`;
+            
+
+
+            const productsList = document.getElementById("products-list");
+            console.log("%c[DEBUG] productsList exists:", "color: teal", !!productsList);
 
             // Fill product list
-            const productsList = document.getElementById("products-list");
-            productsList.innerHTML = "";
+            if (!invoice.items || !invoice.items.length) {
+                console.warn("%c[DEBUG] No items found in invoice", "color: red");
+                productsList.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-3">
+                            Nema unesenih stavki u ovoj deklaraciji.
+                        </td>
+                    </tr>
+                `;
+            } else {
+                console.log("%c[DEBUG] Rendering items in table...", "color: teal");
+                productsList.innerHTML = '';
+                invoice.items.forEach((item, index) => {
+                    console.log(`%c[DEBUG] Rendering item #${index + 1}`, "color: gray", item);
+                    productsList.innerHTML += `
+                        <tr>
+                            <th scope="row">${index + 1}</th>
+                            <td class="text-start">
+                                <span class="fw-medium">${item.item_description_original}</span>
+                                <p class="text-muted mb-0">${item.item_description}</p>
+                            </td>
+                            <td>Nema prevoda</td>
+                            <td>${item.item_code}</td>
+                            <td>${item.base_price} ${item.currency}</td>
+                            <td>${item.quantity}</td>
+                            <td>${invoice.country_of_origin || '--'}</td>
+                            <td class="text-end">${item.total_price} ${item.currency}</td>
+                        </tr>
+                    `;
+                });
+                console.log("%c[DEBUG] Final productsList.innerHTML:", "color: violet", productsList.innerHTML);
 
-            invoice.items.forEach((item, index) => {
-                productsList.innerHTML += `
-          <tr>
-            <th scope="row">${index + 1}</th>
-            <td class="text-start">
-              <span class="fw-medium">${item.item_description_original}</span>
-              <p class="text-muted mb-0">${item.item_description}</p>
-            </td>
-            <td>${item.item_code}</td>
-            <td>${item.base_price} ${item.currency}</td>
-            <td>${item.quantity}</td>
-            <td>${invoice.country_of_origin || '--'}</td>
-            <td class="text-end">${item.total_price} ${item.currency}</td>
-          </tr>
-        `;
-            });
+            }
 
             // Fetch supplier
+            console.log("%c[DEBUG] Fetching supplier...", "color: orange");
             const supplierRes = await fetch(`/api/suppliers/${invoice.supplier_id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
 
+            console.log("%c[DEBUG] supplierRes.ok:", "color: orange", supplierRes.ok);
+
             if (!supplierRes.ok) throw new Error("Greška pri dohvatu dobavljača.");
             const supplier = await supplierRes.json();
 
-            // Fill supplier details
+            console.log("%c[DEBUG] Supplier data:", "color: green", supplier);
+
             document.getElementById("supplier-name").textContent = supplier.name || "--";
             document.getElementById("supplier-address").textContent = supplier.address || "--";
             document.getElementById("supplier-phone").textContent = supplier.contact_phone || "--";
             document.getElementById("supplier-tax").textContent = supplier.tax_id || "--";
 
-            // Close loading modal after data is loaded
             Swal.close();
 
         } catch (err) {
-            console.error(err);
+            console.error("%c[ERROR] Exception occurred:", "color: red", err);
             Swal.fire({
                 icon: 'error',
                 title: 'Greška',
@@ -312,6 +371,37 @@
         }
     });
 </script>
+
+
+<!-- Export to xslx -->
+<script>
+    document.getElementById("export-xlsx").addEventListener("click", function () {
+        const table = document.getElementById("invoiceTable");
+        if (!table) {
+            alert("Tabela nije pronađena!");
+            return;
+        }
+
+        // 1. Convert table to worksheet
+        const ws = XLSX.utils.table_to_sheet(table);
+
+        // 2. Append "Ukupan iznos" row manually
+        const totalAmount = document.getElementById("total-amount")?.innerText || "--";
+
+        const sheetData = XLSX.utils.sheet_to_json(ws, { header: 1 }); // get 2D array of data
+        sheetData.push([]); // empty spacer row
+        sheetData.push(["", "", "", "", "", "Ukupan iznos:", totalAmount]); // add summary row
+
+        const newWs = XLSX.utils.aoa_to_sheet(sheetData);
+
+        // 3. Create workbook and export
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, newWs, "Faktura");
+
+        XLSX.writeFile(wb, "faktura.xlsx");
+    });
+</script>
+
 
 
 @endsection
