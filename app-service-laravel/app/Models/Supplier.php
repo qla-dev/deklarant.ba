@@ -19,10 +19,12 @@ class Supplier extends Model
         'avatar',
         'tax_id',
         'contact_email', 
-        'contact_phone'
+        'contact_phone',
+        'synonyms'
     ];
     protected $casts = [
         'created_at' => 'datetime',
+        'synonyms' => 'array'
     ];
     
 
@@ -76,6 +78,14 @@ public function getProfitPercentageChange()
     }
 
     return (($thisYear - $lastYear) / $lastYear) * 100;
+}
+
+public static function findBySynonym(string $value): ?self
+{
+    return self::query()
+        ->where('name', $value)
+        ->orWhereJsonContains('synonyms', $value)
+        ->first();
 }
 
 

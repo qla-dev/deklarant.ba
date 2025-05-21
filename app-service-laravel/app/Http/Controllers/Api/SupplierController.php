@@ -12,16 +12,20 @@ class SupplierController extends Controller
 {
     protected $model = Supplier::class;
 
+    protected string $label = 'supplier';
+    protected string $labelPlural = 'suppliers';
+
+
     public function index()
     {
         try {
             $suppliers = $this->model::all();
             return response()->json([
-                'message' => 'Suppliers retrieved successfully.',
+                'message' => "{$this->labelPlural} retrieved successfully.",
                 'data' => $suppliers
             ]);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to retrieve suppliers. Please try again later.'], 500);
+            return response()->json(['error' => "Failed to retrieve {$this->labelPlural}. Please try again later."], 500);
         }
     }
 
@@ -36,15 +40,16 @@ class SupplierController extends Controller
                 'tax_id' => 'required|string|unique:suppliers,tax_id',
                 'contact_email' => 'required|email|unique:suppliers,contact_email',
                 'contact_phone' => 'required|string|unique:suppliers,contact_phone',
+                'synonyms' => 'nullable|array',
             ]);
     
             $supplier = $this->model::create($data);
             return response()->json([
-                'message' => 'Supplier stored successfully.',
+                'message' => "{$this->label} stored successfully.",
                 'data' => $supplier
             ], 201);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to store supplier: ' . $e->getMessage()], 500);
+            return response()->json(['error' => "Failed to store {$this->label}: " . $e->getMessage()], 500);
         }
     }
 
@@ -54,9 +59,9 @@ class SupplierController extends Controller
             $supplier = $this->model::findOrFail($supplierId);
             return response()->json($supplier);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Supplier not found with the given ID.'], 404);
+            return response()->json(['error' => "{$this->label} not found with the given ID."], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to retrieve supplier. Please try again later.'], 500);
+            return response()->json(['error' => "Failed to retrieve {$this->label}. Please try again later."], 500);
         }
     }
 
@@ -66,13 +71,13 @@ class SupplierController extends Controller
             $supplier = $this->model::findOrFail($supplierId);
             $supplier->update($request->all());
             return response()->json([
-                'message' => 'Supplier updated successfully.',
+                'message' => "{$this->label} updated successfully.",
                 'data' => $supplier
             ]);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Supplier not found with the given ID.'], 404);
+            return response()->json(['error' => "{$this->label} not found with the given ID."], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to update supplier. Please check the data and try again.'], 500);
+            return response()->json(['error' => "Failed to update {$this->label}. Please check the data and try again."], 500);
         }
     }
 
@@ -81,11 +86,11 @@ class SupplierController extends Controller
         try {
             $supplier = $this->model::findOrFail($supplierId);
             $supplier->delete();
-            return response()->json(['message' => 'Supplier deleted successfully.']);
+            return response()->json(['message' => "{$this->label} deleted successfully."]);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Supplier not found with the given ID.'], 404);
+            return response()->json(['error' => "{$this->label} not found with the given ID."], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to delete supplier. Please try again later.'], 500);
+            return response()->json(['error' => "Failed to delete {$this->label}. Please try again later."], 500);
         }
     }
 }
