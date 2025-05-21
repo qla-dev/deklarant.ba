@@ -73,10 +73,15 @@ Route::middleware('auth:sanctum')->group(function () {
     // STATISTICS ROUTES
     Route::get('/statistics', [StatsController::class, 'getStatistics']);
     Route::get('/statistics/users/{id}', [StatsController::class, 'getUserStatisticsById'])->where('id', '[0-9]+');
-    Route::get('/statistics/suppliers/{id}', [StatsController::class, 'getSupplierStatisticsById'])->where('id', '[0-9]+');
+    Route::get('/statistics/suppliers/{id}', [StatsController::class, 'getEntityStatisticsById'])->where('id', '[0-9]+');
+    Route::get('/statistics/importers/{id}', [StatsController::class, 'getEntityStatisticsById'])->where('id', '[0-9]+');
 
-    Route::get('/suppliers/{id}/annual-profit', [StatsController::class, 'getSupplierAnnualProfit']);
-    Route::get('/suppliers/{id}/last-year-profit', [StatsController::class, 'getSupplierLastYearProfit']);
+    // SUPPLIERS' PROFIT
+    Route::get('/suppliers/{id}/annual-profit', [StatsController::class, 'getEntityAnnualProfit']);
+    Route::get('/suppliers/{id}/last-year-profit', [StatsController::class, 'getEntityLastYearProfit']);
+    // IMPORTERS' PROFIT
+    Route::get('/importers/{id}/annual-profit', [StatsController::class, 'getEntityAnnualProfit']);
+    Route::get('/importers/{id}/last-year-profit', [StatsController::class, 'getEntityLastYearProfit']);
 
 
     // USERS ROUTES

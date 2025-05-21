@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Supplier;
+use App\Models\Importer;
 use App\Models\Invoice;
 use App\Models\Package;
 use App\Models\User;
@@ -17,28 +18,55 @@ use Exception;
 
 class StatsController extends Controller
 {
+
+    protected function resolveEntityFromRequest(Request $request)
+{
+    $path = $request->path();
+
+    if (str_contains($path, 'importers')) {
+        return [
+            'model' => Importer::class,
+            'label' => 'Importer'
+        ];
+    }
+
+    return [
+        'model' => Supplier::class,
+        'label' => 'Supplier'
+    ];
+}
+
+    protected $modelUser = User::class;
+    protected $modelSupplier = Supplier::class;
+    protected $modelImporter = Importer::class;
+    protected $modelInvoice = Invoice::class;
+    protected $modelPackage = Package::class;
+    protected $modelInvoiceItem = InvoiceItem::class;
+    protected $modelTariffRate = TariffRate::class;
     /**
      * Get statistics for suppliers, invoices, invoices by country, and remaining scans.
      */
     public function getStatistics()
 {
     // Count total users
-    $userCount = User::count();
+    $userCount = $this->modelUser::count();
 
     // Count total suppliers
-    $supplierCount = Supplier::count();
+    $supplierCount = $this->modelSupplier::count();
+    $importerCount = $this->modelImporter::count();
 
     // Count total invoices
-    $invoiceCount = Invoice::count();
+    $invoiceCount = $this->modelInvoice::count();
 
     // Count invoices grouped by country
-    $invoicesByCountry = Invoice::selectRaw('country_of_origin, COUNT(*) as count')
+    $invoicesByCountry = $this->modelInvoice::selectRaw('country_of_origin, COUNT(*) as count')
                                 ->groupBy('country_of_origin')
                                 ->pluck('count', 'country_of_origin');
 
     return response()->json([
         'total_users' => $userCount,
         'total_suppliers' => $supplierCount,
+        'total_importers' => $importerCount,
         'total_invoices' => $invoiceCount,
         'invoices_by_country' => $invoicesByCountry
     ]);
@@ -51,71 +79,26 @@ class StatsController extends Controller
     public function getUserStatisticsById($id)
 {
     try {
-        $user = User::findOrFail($id);
-        // Fetch all invoices for the given user
-        $invoices = Invoice::where('user_id', $id)->get();
+        $user = $this->modelUser::findOrFail($id);
 
-        // Extract unique supplier IDs from invoices
-        $supplierIds = $invoices->pluck('supplier_id')->unique();
+        $invoiceCount = $this->modelInvoice::where('user_id', $user->id)->count();
 
-        // Fetch suppliers by their IDs
-        $suppliers = Supplier::whereIn('id', $supplierIds)->get(['id', 'name', 'owner', 'avatar']);
-
-        $supplierCount = Supplier::whereIn('id', function ($query) use ($user) {
-            $query->select('supplier_id')->from('invoices')->where('user_id', $user->id);
-        })->count();
-
-        $invoiceCount = Invoice::where('user_id', $user->id)->count();
-
-        $invoicesByCountry = Invoice::where('user_id', $user->id)
+        $invoicesByCountry = $this->modelInvoice::where('user_id', $user->id)
             ->selectRaw('country_of_origin, COUNT(*) as count')
             ->groupBy('country_of_origin')
             ->pluck('count', 'country_of_origin');
 
-        $usedScans = Invoice::where('user_id', $user->id)
+        $usedScans = $this->modelInvoice::where('user_id', $user->id)
             ->whereNotNull('task_id')
             ->count();
 
-        $totalScans = Package::whereIn('id', function ($query) use ($user) {
+        $totalScans = $this->modelPackage::whereIn('id', function ($query) use ($user) {
             $query->select('package_id')->from('user_packages')->where('user_id', $user->id);
         })->sum('available_scans');
 
         $remainingScans = max($totalScans - $usedScans, 0);
 
-        $topSuppliers = Supplier::select('suppliers.id', 'suppliers.name', 'suppliers.owner')
-            ->join('invoices', 'suppliers.id', '=', 'invoices.supplier_id')
-            ->where('invoices.user_id', $user->id)
-            ->groupBy('suppliers.id', 'suppliers.name', 'suppliers.owner')
-            ->get()
-            ->map(function ($supplier) {
-                $fullSupplier = Supplier::find($supplier->id);
-                return [
-                    'id' => $supplier->id,
-                    'name' => $supplier->name,
-                    'owner' => $supplier->owner,
-                    'annual_profit' => $fullSupplier ? $fullSupplier->getAnnualProfitAvg() : 0
-                ];
-            })
-            ->sortByDesc('annual_profit')
-            ->values();
-
-        $latestSuppliers = Supplier::select('suppliers.id', 'suppliers.name', 'suppliers.owner')
-            ->selectSub(function ($query) use ($user) {
-                $query->from('invoices')
-                    ->whereColumn('supplier_id', 'suppliers.id')
-                    ->where('user_id', $user->id)
-                    ->selectRaw('MAX(created_at)');
-            }, 'latest_invoice_date')
-            ->whereIn('id', function ($query) use ($user) {
-                $query->select('supplier_id')
-                        ->from('invoices')
-                        ->where('user_id', $user->id);
-            })
-            ->orderByDesc('latest_invoice_date')
-            ->get();
-            
-
-        $itemCodes = Invoice::where('user_id', $user->id)
+        $itemCodes = $this->modelInvoice::where('user_id', $user->id)
             ->orderByDesc('created_at')
             ->with('items')
             ->get()
@@ -123,15 +106,14 @@ class StatsController extends Controller
             ->unique()
             ->filter()
             ->values();
-        
-        // Count how many times each item_code appears across all invoice_items
-        $itemCodeCounts = InvoiceItem::whereIn('item_code', $itemCodes)
+
+        $itemCodeCounts = $this->modelInvoiceItem::whereIn('item_code', $itemCodes)
             ->selectRaw('item_code, COUNT(*) as total')
             ->groupBy('item_code')
-            ->pluck('total', 'item_code'); // returns ['ABC123' => 7, 'XYZ456' => 12, ...]
-        
-        $latestTariffs = TariffRate::whereIn('item_code', $itemCodes)
-            ->get(['id', 'item_code', 'name', 'tariff_rate']) // include item_code for matching
+            ->pluck('total', 'item_code');
+
+        $latestTariffs = $this->modelTariffRate::whereIn('item_code', $itemCodes)
+            ->get(['id', 'item_code', 'name', 'tariff_rate'])
             ->map(function ($tariff) use ($itemCodeCounts) {
                 return [
                     'id' => $tariff->id,
@@ -141,35 +123,22 @@ class StatsController extends Controller
                 ];
             })
             ->values();
-        
 
-        // Supplier profit change section
-        $supplierProfitChanges = Supplier::whereIn('id', function ($query) use ($user) {
-            $query->select('supplier_id')->from('invoices')->where('user_id', $user->id);
-        })->get()
-        ->map(function ($supplier) {
-            return [
-                'supplier_id' => $supplier->id,
-                'name' => $supplier->name,
-                'owner' => $supplier->owner,
-                'last_year_profit' => $supplier->getLastYearProfit(),
-                'current_year_profit' => $supplier->getCurrentYearProfit(),
-                'percentage_change' => round($supplier->getProfitPercentageChange(), 2)."%",
-            ];
-        });
+        // Generate stats for suppliers and importers
+        $supplierStats = $this->getEntityStats($user, Supplier::class, 'supplier_id');
+        $importerStats = $this->getEntityStats($user, Importer::class, 'importer_id');
 
         return response()->json([
             'user_id' => $user->id,
-            'total_suppliers' => $supplierCount,
-            'suppliers' => $suppliers,
             'total_invoices' => $invoiceCount,
             'invoices_by_country' => $invoicesByCountry,
             'used_scans' => $usedScans,
             'remaining_scans' => $remainingScans,
-            'top_suppliers' => $topSuppliers,
-            'latest_suppliers' => $latestSuppliers,
             'latest_tariffs' => $latestTariffs,
-            'supplier_profit_changes' => $supplierProfitChanges,
+
+            // Both entity stats
+            'supplier_stats' => $supplierStats,
+            'importer_stats' => $importerStats,
         ], 200);
 
     } catch (ModelNotFoundException $e) {
@@ -185,110 +154,207 @@ class StatsController extends Controller
     }
 }
 
+private function getEntityStats($user, string $modelClass, string $foreignKey)
+{
+    $entityKey = $foreignKey; // 'supplier_id' or 'importer_id'
+    $table = $modelClass::query()->getModel()->getTable();
+    $collectionKey = $table; // 'suppliers' or 'importers'
+
+    $invoices = $this->modelInvoice::where('user_id', $user->id)->get();
+    $entityIds = $invoices->pluck($foreignKey)->unique();
+
+    $entities = $modelClass::whereIn('id', $entityIds)->get(['id', 'name', 'owner', 'avatar']);
+
+    $entityCount = $modelClass::whereIn('id', function ($query) use ($user, $foreignKey) {
+        $query->select($foreignKey)->from('invoices')->where('user_id', $user->id);
+    })->count();
+
+    $topEntities = $modelClass::select("{$table}.id", 'name', 'owner')
+        ->join('invoices', "{$table}.id", '=', "invoices.{$foreignKey}")
+        ->where('invoices.user_id', $user->id)
+        ->groupBy("{$table}.id", 'name', 'owner')
+        ->get()
+        ->map(function ($entity) use ($modelClass, $entityKey) {
+            $full = $modelClass::find($entity->id);
+            return [
+                $entityKey => $entity->id,
+                'name' => $entity->name,
+                'owner' => $entity->owner,
+                'annual_profit' => $full ? $full->getAnnualProfitAvg() : 0,
+            ];
+        })
+        ->sortByDesc('annual_profit')
+        ->values();
+
+    $latestEntities = $modelClass::select("id", "name", "owner")
+        ->selectSub(function ($query) use ($user, $foreignKey, $table) {
+            $query->from('invoices')
+                ->whereColumn($foreignKey, "{$table}.id")
+                ->where('user_id', $user->id)
+                ->selectRaw('MAX(created_at)');
+        }, 'latest_invoice_date')
+        ->whereIn('id', function ($query) use ($user, $foreignKey) {
+            $query->select($foreignKey)->from('invoices')->where('user_id', $user->id);
+        })
+        ->orderByDesc('latest_invoice_date')
+        ->get()
+        ->map(function ($entity) use ($entityKey) {
+            return [
+                $entityKey => $entity->id,
+                'name' => $entity->name,
+                'owner' => $entity->owner,
+            ];
+        });
+
+    $profitChanges = $modelClass::whereIn('id', function ($query) use ($user, $foreignKey) {
+        $query->select($foreignKey)->from('invoices')->where('user_id', $user->id);
+    })->get()->map(function ($entity) use ($entityKey) {
+        return [
+            $entityKey => $entity->id,
+            'name' => $entity->name,
+            'owner' => $entity->owner,
+            'last_year_profit' => $entity->getLastYearProfit(),
+            'current_year_profit' => $entity->getCurrentYearProfit(),
+            'percentage_change' => round($entity->getProfitPercentageChange(), 2) . "%",
+        ];
+    });
+
+    return [
+        'total_' . $collectionKey => $entityCount,
+        $collectionKey => $entities,
+        'top_' . $collectionKey => $topEntities,
+        'latest_' . $collectionKey => $latestEntities,
+        $collectionKey . '_profit_changes' => $profitChanges,
+    ];
+}
+
+
 
 
     /**
      * Get statistics for a specific supplier by ID.
      */
-    public function getSupplierStatisticsById($id)
-    {
-        try {
-            $supplier = Supplier::findOrFail($id);
+    public function getEntityStatisticsById(Request $request, $id)
+{
+    // Dynamically resolve model and label from the URL
+    ['model' => $model, 'label' => $label] = $this->resolveEntityFromRequest($request);
 
-            // Count invoices associated with the supplier
-            $invoiceCount = Invoice::where('supplier_id', $supplier->id)->count();
+    // Determine the correct foreign key (e.g. 'supplier_id' or 'importer_id')
+    $foreignKey = strtolower($label) . '_id';
 
-            // Count invoices grouped by country for the supplier
-            $invoicesByCountry = Invoice::where('supplier_id', $supplier->id)
-                                        ->selectRaw('country_of_origin, COUNT(*) as count')
-                                        ->groupBy('country_of_origin')
-                                        ->pluck('count', 'country_of_origin');
+    try {
+        // Fetch entity model (Supplier or Importer)
+        $entity = $model::findOrFail($id);
 
-            // Count distinct users associated with this supplier via invoices
-            $userCount = User::whereIn('id', function ($query) use ($supplier) {
-                $query->select('user_id')->from('invoices')->where('supplier_id', $supplier->id);
-            })->count();
+        // Count total invoices for this entity
+        $invoiceCount = $this->modelInvoice::where($foreignKey, $entity->id)->count();
 
-            return response()->json([
-                'supplier_id' => $supplier->id,
-                'total_users' => $userCount,
-                'total_invoices' => $invoiceCount,
-                'invoices_by_country' => $invoicesByCountry
-            ], 200);
-        } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'Supplier not found',
-                'message' => $e->getMessage()
-            ], 404);
-        } catch (Exception $e) {
-            return response()->json([
-                'error' => 'Failed to retrieve supplier statistics',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        // Group invoices by country for this entity
+        $invoicesByCountry = $this->modelInvoice::where($foreignKey, $entity->id)
+            ->selectRaw('country_of_origin, COUNT(*) as count')
+            ->groupBy('country_of_origin')
+            ->pluck('count', 'country_of_origin');
+
+        // Count distinct users that have invoices with this entity
+        $userCount = $this->modelUser::whereIn('id', function ($query) use ($foreignKey, $entity) {
+            $query->select('user_id')
+                ->from('invoices')
+                ->where($foreignKey, $entity->id);
+        })->count();
+
+        return response()->json([
+            "{$foreignKey}" => $entity->id,
+            'total_users' => $userCount,
+            'total_invoices' => $invoiceCount,
+            'invoices_by_country' => $invoicesByCountry
+        ], 200);
+
+    } catch (ModelNotFoundException $e) {
+        return response()->json([
+            'error' => "$label not found",
+            'message' => $e->getMessage()
+        ], 404);
+    } catch (Exception $e) {
+        return response()->json([
+            'error' => "Failed to retrieve $label statistics",
+            'message' => $e->getMessage()
+        ], 500);
     }
+}
+
+
 
 
     /**
      * Get annual profit for a specific supplier.
      */
-    public function getSupplierLastYearProfit($supplierId)
+    public function getEntityLastYearProfit(Request $request, $id)
 {
-    $supplier = Supplier::find($supplierId);
+    ['model' => $model, 'label' => $label] = $this->resolveEntityFromRequest($request);
 
-    if (!$supplier) {
-        return response()->json(['error' => 'Supplier not found'], 404);
+    $foreignKey = strtolower($label) . '_id';
+    $entity = $model::find($id);
+
+    if (!$entity) {
+        return response()->json(['error' => "$label not found"], 404);
     }
 
-    $profit = $supplier->getLastYearProfit();
+    $profit = $entity->getLastYearProfit();
 
     return response()->json([
-        'supplier_id' => $supplier->id,
-        'last_year_profit' => $profit
+        "{$foreignKey}" => $entity->id,
+        'last_year_profit' => $profit,
     ]);
 }
 
 
-    public function getSupplierAnnualProfit($supplierId)
-{
-    $supplier = Supplier::find($supplierId);
 
-    if (!$supplier) {
-        return response()->json(['error' => 'Supplier not found'], 404);
+    public function getEntityAnnualProfit(Request $request, $id)
+{
+    ['model' => $model, 'label' => $label] = $this->resolveEntityFromRequest($request);
+    $foreignKey = strtolower($label) . '_id';
+
+    $entity = $model::find($id);
+
+    if (!$entity) {
+        return response()->json(['error' => "$label not found"], 404);
     }
 
     $now = Carbon::now();
-    $supplierCreationDate = Carbon::parse($supplier->created_at);
-    $yearsActive = max($supplierCreationDate->diffInYears($now), 1);
+    $created = Carbon::parse($entity->created_at);
+    $yearsActive = max($created->diffInYears($now), 1);
 
-    $totalProfit = Invoice::where('supplier_id', $supplier->id)->sum('total_price');
-
-    // Calculate the average annual profit
+    $totalProfit = $this->modelInvoice::where($foreignKey, $entity->id)->sum('total_price');
     $annualProfitAvg = $totalProfit / $yearsActive;
 
     return response()->json([
-        'supplier_id' => $supplier->id,
+        "{$foreignKey}" => $entity->id,
         'total_profit' => $totalProfit,
         'years_active' => $yearsActive,
-        'annual_profit_avg' => round($annualProfitAvg, 2)
+        'annual_profit_avg' => round($annualProfitAvg, 2),
     ]);
 }
 
-    public function getSupplierProfitChange($supplierId)
-    {
-        $supplier = Supplier::find($supplierId);
 
-        if (!$supplier) {
-            return response()->json(['error' => 'Supplier not found'], 404);
-        }
+    public function getEntityProfitChange(Request $request, $id)
+{
+    ['model' => $model, 'label' => $label] = $this->resolveEntityFromRequest($request);
 
-        return response()->json([
-            'supplier_id' => $supplier->id,
-            'last_year_profit' => $supplier->getLastYearProfit(),
-            'current_year_profit' => $supplier->getCurrentYearProfit(),
-            'percentage_change' => round($supplier->getProfitPercentageChange(), 2)
-        ]);
+    $foreignKey = strtolower($label) . '_id';
+    $entity = $model::find($id);
+
+    if (!$entity) {
+        return response()->json(['error' => "$label not found"], 404);
     }
+
+    return response()->json([
+        "{$foreignKey}" => $entity->id,
+        'last_year_profit' => $entity->getLastYearProfit(),
+        'current_year_profit' => $entity->getCurrentYearProfit(),
+        'percentage_change' => round($entity->getProfitPercentageChange(), 2),
+    ]);
+}
+
 
 
 }

@@ -9,4 +9,7 @@ use App\Http\Controllers\Api\SupplierController;
 class ImporterController extends SupplierController
 {
     protected $model = Importer::class;
+
+    protected string $label = 'importer';
+    protected string $labelPlural = 'importers';
 }
