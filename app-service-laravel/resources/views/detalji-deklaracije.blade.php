@@ -204,6 +204,9 @@
             <a href="javascript:void(0);" class="btn btn-info" id="export-xlsx">
                 <i class="ri-file-excel-2-line align-bottom me-1"></i> Export tabele u CSV
             </a>
+
+            <button class="btn btn-info" onclick="exportTableToCustomCSV()"><i class="fa-solid fa-file-csv"></i> Export tabele u CSV 2</button>
+
         </div>
     </div>
 
@@ -401,6 +404,54 @@
         XLSX.writeFile(wb, "faktura.xlsx");
     });
 </script>
+
+
+<!-- Export to csv -->
+<script>
+function exportTableToCustomCSV() {
+    const invoiceNo = document.getElementById("invoice-no")?.textContent?.trim() || "unknown";
+    const filename = `declaration_${invoiceNo}.csv`;
+
+    // Define custom headers (must match your spec exactly)
+    const headers = [
+        "TPL1", "Zemlja porijekla", "Povlastica", "Naziv robe", "Broj komada",
+        "Vrijednost", "Koleta", "Bruto kg", "Neto kg", "Required"
+    ];
+
+    let csv = [headers.join(";")];
+
+    const rows = document.querySelectorAll("#products-list tr");
+
+    rows.forEach(row => {
+        const cells = row.querySelectorAll("td");
+        let rowData = [];
+
+        // Map cells to the structure manually or with fallback
+        rowData.push(`"${cells[0]?.innerText.trim() || ""}"`); // TPL1
+        rowData.push(`"${cells[5]?.innerText.trim() || ""}"`); // Zemlja porijekla
+        rowData.push(`""`);                                     // Povlastica (empty)
+        rowData.push(`"${cells[1]?.innerText.trim() || ""}"`); // Naziv robe
+        rowData.push(`"${cells[4]?.innerText.trim() || ""}"`); // Broj komada
+        rowData.push(`"${cells[6]?.innerText.trim() || ""}"`); // Vrijednost (Ukupna cijena)
+        rowData.push(`""`);                                     // Koleta (empty)
+        rowData.push(`""`);                                     // Bruto kg (empty)
+        rowData.push(`""`);                                     // Neto kg (empty)
+        rowData.push(`""`);                                     // Required (empty)
+
+        csv.push(rowData.join(";"));
+    });
+
+    // Create CSV and download
+    const csvFile = new Blob([csv.join("\n")], { type: "text/csv" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(csvFile);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+</script>
+
 
 
 
