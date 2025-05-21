@@ -10,10 +10,12 @@ use Exception;
 
 class SupplierController extends Controller
 {
+    protected $model = Supplier::class;
+
     public function index()
     {
         try {
-            $suppliers = Supplier::all();
+            $suppliers = $this->$model::all();
             return response()->json([
                 'message' => 'Suppliers retrieved successfully.',
                 'data' => $suppliers
@@ -36,7 +38,7 @@ class SupplierController extends Controller
                 'contact_phone' => 'required|string|unique:suppliers,contact_phone',
             ]);
     
-            $supplier = Supplier::create($data);
+            $supplier = $this->$model::create($data);
             return response()->json([
                 'message' => 'Supplier stored successfully.',
                 'data' => $supplier
@@ -49,7 +51,7 @@ class SupplierController extends Controller
     public function show($supplierId)
     {
         try {
-            $supplier = Supplier::findOrFail($supplierId);
+            $supplier = $this->$model::findOrFail($supplierId);
             return response()->json($supplier);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Supplier not found with the given ID.'], 404);
@@ -61,7 +63,7 @@ class SupplierController extends Controller
     public function update(Request $request, $supplierId)
     {
         try {
-            $supplier = Supplier::findOrFail($supplierId);
+            $supplier = $this->$model::findOrFail($supplierId);
             $supplier->update($request->all());
             return response()->json([
                 'message' => 'Supplier updated successfully.',
@@ -77,7 +79,7 @@ class SupplierController extends Controller
     public function destroy($supplierId)
     {
         try {
-            $supplier = Supplier::findOrFail($supplierId);
+            $supplier = $this->$model::findOrFail($supplierId);
             $supplier->delete();
             return response()->json(['message' => 'Supplier deleted successfully.']);
         } catch (ModelNotFoundException $e) {

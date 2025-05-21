@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\InvoiceItemController;
 use App\Http\Controllers\Api\PackageController;
 use App\Http\Controllers\Api\UserPackageController;
 use App\Http\Controllers\Api\SupplierController;
+use App\Http\Controllers\Api\ImporterController;
 use App\Http\Controllers\Api\TariffRateController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\StatsController;
@@ -59,6 +60,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // SUPPLIER ROUTES
     Route::apiResource('suppliers', SupplierController::class);
 
+    // IMPORTER ROUTES
+    Route::apiResource('importers', ImporterController::class);
+
 
     // USER PACKAGES ROUTES
     Route::apiResource('user-packages', UserPackageController::class);
@@ -96,6 +100,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/invoices/{invoiceId}/scan', [InvoiceController::class, 'scan']);
     Route::get('/invoices/{id}/scan', [InvoiceController::class, 'getScanStatus']);
     Route::get('/invoices/{id}/scan/result', [InvoiceController::class, 'getScanResult']);
+    Route::get('/invoices/{id}/scan/parties', [InvoiceController::class, 'getScanParties']);
 });
 
 

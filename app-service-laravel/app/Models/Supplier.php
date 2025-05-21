@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use App\Models\Invoice;use Illuminate\Support\Facades\Log;
 
+// A.K.A. dobavljac
 class Supplier extends Model
 {
     use HasFactory;

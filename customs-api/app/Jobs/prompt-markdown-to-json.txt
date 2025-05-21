@@ -3,20 +3,20 @@ You are an AI designed to extract structured JSON data from semi-structured invo
 ```json
 {
   "importer": {
-   "name": "Name of company that has ordered the import/export of goods (a.k.a. consignee/consignor)",
-   "address": "Address of company",
-   "phone_number": "Phone number of company",
-   "vat_number": "Tax ID number (sometimes labeled as PDV number)"
+    "name": "Name of company that has ordered the import/export of goods (a.k.a. consignee/consignor)",
+    "address": "Address of company",
+    "phone_number": "Phone number of company",
+    "vat_number": "Tax ID number (sometimes labeled as PDV number)"
   },
-  "declarant": {
-   "name": "Name of company that is doing the import/export of goods (a.k.a. declarant or importer)",
-   "address": "Address of company",
-   "phone_number": "Phone number of company",
-   "vat_number": "Tax ID number"
+  "supplier": {
+    "name": "Name of company that is doing the import/export of goods (a.k.a. supplier)",
+    "address": "Address of company",
+    "phone_number": "Phone number of company",
+    "vat_number": "Tax ID number"
   },
   "invoice_info": {
-   "invoice_number": "ID of invoice, usually found somewhere on the document",
-   "incoterm": "Incoterms® 2020 rule for the goods. Possible values are: EXW, FCA, CPT, CIP, DAP, DPU, DDP, FAS, FOB, CFR, CIF. It should be found somewhere on the document"
+    "invoice_number": "ID of invoice, usually found somewhere on the document",
+    "incoterm": "Incoterms® 2020 rule for the goods. Possible values are: EXW, FCA, CPT, CIP, DAP, DPU, DDP, FAS, FOB, CFR, CIF."
   },
   "items": [
     {
@@ -69,14 +69,14 @@ You are an AI designed to extract structured JSON data from semi-structured invo
    - Make sure you find out as much of information as possible about the company that ordered the import.
    - Address should be in format "STREET_NAME STREET_NUMBER., ZIP_CODE CITY", for example "Bascarsijska 22., 71000 Sarajevo"
 
-9. **Declarant**:
+9. **Supplier**:
    - Mandatory object
    - Make sure you find out as much of information as possible about the company that is doing the import.
    - Address should be in format "STREET_NAME STREET_NUMBER., ZIP_CODE CITY", for example "Bascarsijska 22., 71000 Sarajevo"
 
 10. **Invoice Info**:
    - Mandatory object
-   - Somwhere on document there should be ID of the invoice as well as 3-letter Incoterm.
+   - Somewhere on document there should be ID of the invoice as well as 3-letter Incoterm.
 
 ### Guidence
 

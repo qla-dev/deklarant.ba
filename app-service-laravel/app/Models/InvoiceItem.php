@@ -17,11 +17,14 @@ class InvoiceItem extends Model
         'item_code',
         'item_description_original',
         'item_description',
+        'item_description_translated',
         'quantity',
         'base_price',
         'total_price',
         'currency',
         'best_customs_code_matches',
+        'country_of_origin',
+        'quantity_type'
     ];
 
     protected $casts = [

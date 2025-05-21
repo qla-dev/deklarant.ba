@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Invoice;
 use App\Models\Supplier;
+use App\Models\Importer;
 use App\Models\User;
 use App\Services\AiService;
 use Illuminate\Http\Request;
@@ -238,34 +239,73 @@ class InvoiceController extends Controller
         }
     }
 
+    private function tryGetAiResult($invoice_id)
+    {
+        $invoice = Invoice::findOrFail($invoice_id);
+
+        // Verify invoice belongs to current user
+        if ($invoice->user_id !== auth()->id()) {
+            return response()->json(['error' => 'Unauthorized access to invoice'], 403);
+        }
+
+        // Check if invoice has task_id
+        if (!$invoice->task_id) {
+            return response()->json(['error' => 'No scan task associated with this invoice'], 404);
+        }
+
+        // Get task result from AI service
+        $result = app(AiService::class)->getTaskResult($invoice->task_id);
+
+        if (!$result) {
+            return response()->json(['error' => 'Scan result not found'], 404);
+        }
+
+        return $result;
+    }
+
     public function getScanResult($id)
     {
         try {
-            $invoice = Invoice::findOrFail($id);
-
-            // Verify invoice belongs to current user
-            if ($invoice->user_id !== auth()->id()) {
-                return response()->json(['error' => 'Unauthorized access to invoice'], 403);
+            $result = $this->tryGetAiResult($id);
+            // Check if it's a Laravel HTTP Response
+            if ($result instanceof \Illuminate\Http\JsonResponse) {
+                // Handle the error response
+                return $result;
             }
-
-            // Check if invoice has task_id
-            if (!$invoice->task_id) {
-                return response()->json(['error' => 'No scan task associated with this invoice'], 404);
-            }
-
-            // Get task result from AI service
-            $result = app(AiService::class)->getTaskResult($invoice->task_id);
-
-            if (!$result) {
-                return response()->json(['error' => 'Scan result not found'], 404);
-            }
-
             return response()->json([
                 'result' => $result,
                 'invoice_id' => $invoice->id,
                 'task_id' => $invoice->task_id
             ]);
 
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Invoice not found'], 404);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Failed to get scan result: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function getScanParties($id)
+    {
+        try {
+            $result = $this->tryGetAiResult($id);
+            // Check if it's a Laravel HTTP Response
+            if ($result instanceof \Illuminate\Http\JsonResponse) {
+                // Handle the error response
+                return $result;
+            }
+            // TODO: Change to importer
+            $importer = Importer::where('name', $result['importer']['name'])->first();
+            $supplier = Supplier::where('name', $result['supplier']['name'])->first();
+
+            $importer_id = $importer ? $importer->id : null;
+            $supplier_id = $supplier ? $supplier->id : null;
+            return response()->json([
+                'supplier' => $result['supplier'],
+                'importer' => $result['importer'],
+                'supplier_id' => $supplier_id,
+                'importer_id' => $importer_id,
+            ]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Invoice not found'], 404);
         } catch (Exception $e) {
@@ -302,8 +342,15 @@ class InvoiceController extends Controller
                     'total_price' => $base_price * $quantity,
                     'currency' => $item['currency'],
                     'best_customs_code_matches' => $item['detected_codes'] ?? [],
+                    'country_of_origin' => $item['country_of_origin'],
+                    'quantity_type' => $item['quantity_type'],
                 ];
             }, $result['items']);
+
+            $invoice->update([
+                'incoterm' => $result['invoice_info']['incoterm'],
+                'invoice_number' => $result['invoice_info']['invoice_number']
+            ]);
 
             // Save items
             $invoice->items()->createMany($items);

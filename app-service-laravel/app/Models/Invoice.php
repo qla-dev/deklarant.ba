@@ -18,8 +18,10 @@ class Invoice extends Model
         'total_price',
         'date_of_issue',
         'country_of_origin',
-        'scan_time',
-        'task_id' // When this is null it means this file wasn't processed by AI
+        'scan_time', // When this is null it means this file wasn't processed by AI
+        'task_id', // When this is null it means this file wasn't processed by AI
+        'incoterm',
+        'invoice_number'
     ];
 
     public function items()
@@ -31,4 +33,3 @@ class Invoice extends Model
         return $this->belongsTo(Supplier::class);
     }
 }
-
