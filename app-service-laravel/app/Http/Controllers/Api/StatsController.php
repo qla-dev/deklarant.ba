@@ -143,7 +143,7 @@ class StatsController extends Controller
             ->values();
         
 
-        // ✅ Supplier profit change section
+        // Supplier profit change section
         $supplierProfitChanges = Supplier::whereIn('id', function ($query) use ($user) {
             $query->select('supplier_id')->from('invoices')->where('user_id', $user->id);
         })->get()
