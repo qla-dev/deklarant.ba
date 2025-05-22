@@ -344,6 +344,7 @@ class InvoiceController extends Controller
                     'best_customs_code_matches' => $item['detected_codes'] ?? [],
                     'country_of_origin' => $item['country_of_origin'],
                     'quantity_type' => $item['quantity_type'],
+                    'num_packages' => $item['num_packages'],
                 ];
             }, $result['items']);
 

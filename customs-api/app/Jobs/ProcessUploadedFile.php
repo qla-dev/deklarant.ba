@@ -161,7 +161,7 @@ class ProcessUploadedFile implements ShouldQueue
                 'stream' => false,
                 'options' => [
                     'temperature' => 0.1,
-                    'num_predict' => 5000
+                    'num_predict' => 10000
                 ]
             ]
         ]);

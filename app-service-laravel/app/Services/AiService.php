@@ -44,7 +44,7 @@ class AiService
             return null;
         }
         if ($response->status() < 200 || $response->status() >= 300) {
-            throw new RuntimeException("API request failed with status: {$response->status()}");
+            throw new RuntimeException("API request failed with status: {$response->status()} - {$response->getBody()->getContents()}");
         }
 
         return $response->json() ?? throw new RuntimeException("Failed to parse JSON response");

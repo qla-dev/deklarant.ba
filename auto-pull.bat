@@ -7,6 +7,9 @@ REM ─────────────────────────�
 :LOOP
     echo [%DATE% %TIME%] Running git pull...
     git pull
+    cd app-service-laravel
+    php artisan migrate
+    cd ..
     echo.
     REM Wait 60 seconds before next pull
     timeout /t 60 /nobreak >nul

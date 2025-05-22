@@ -13,7 +13,7 @@ class FileManagerController extends Controller
     protected function handleFileUpload(Request $request, string $disk = 'public'): array
     {
         $request->validate([
-            'file' => 'required|file|max:5120|mimes:png,jpg,jpeg,pdf,webp,xlsx',
+            'file' => 'required|file|max:5120|mimes:png,jpg,jpeg,pdf,webp,xlsx,xls',
             'folder' => 'nullable|string'
         ]);
 
