@@ -19,6 +19,12 @@
         /* allow wrapping of long lines */
     }
 
+    .form-check-input:checked {
+        background-color: #299dcb !important;
+        border-color: #299dcb !important;
+    }
+
+
 
     /* Optional: make the search input area full width too */
     .select2-container--default .select2-search--dropdown .select2-search__field {
@@ -60,6 +66,26 @@
         z-index: 1050;
     }
 
+    .custom-select-icon {
+        /* Remove default arrow in some browsers */
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+
+        /* Add padding on right for the icon */
+        padding-right: 2rem;
+
+        /* Position relative to allow background positioning */
+        position: relative;
+        background-image: url('data:image/svg+xml;utf8,<svg fill="gray" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 1rem;
+        background-color: #f4f4fc;
+        /* keep your bg */
+    }
+
+
 
     .custom-swal-popup {
         padding-top: 1.5rem;
@@ -75,6 +101,15 @@
         border-top-color: transparent;
         border-radius: 50%;
         animation: spin 0.8s linear infinite;
+    }
+
+    .custom-select-icon:focus {
+        box-shadow: none !important;
+        /* Remove Bootstrap purple shadow */
+        outline: none !important;
+        /* Remove default outline */
+        border-color: #299dcb;
+        /* Optional: set border color to info blue */
     }
 
     @keyframes spin {
@@ -127,6 +162,31 @@
                         <input type="text" class="form-control mb-2" id="company-zip" name="zip" placeholder="Poštanski broj">
                         <input type="email" class="form-control" id="company-email" name="email" placeholder="Email">
                     </div>
+
+                    <!-- Incoterm Dropdown Section -->
+
+                </div>
+
+                <div style="min-width: 200px;">
+                    <h6 class="text-muted text-uppercase fw-semibold mt-1 ">Incoterm</h6>
+                    <select class="form-select mb-2 custom-select-icon" style="background: #f4f4fc;" name="incoterm" id="incoterm" placeholder="Odaberite incoterm">
+
+                        <option value="EXW">EXW</option>
+                        <option value="FCA">FCA</option>
+                        <option value="CPT">CPT</option>
+                        <option value="CIP">CIP</option>
+                        <option value="DAP">DAP</option>
+                        <option value="DPU">DPU</option>
+                        <option value="DDP">DDP</option>
+                        <option value="FAS">FAS</option>
+                        <option value="FOB">FOB</option>
+                        <option value="CFR">CFR</option>
+                        <option value="CIF">CIF</option>
+                    </select>
+                    <div style="min-width: 220px;">
+                        <h6 class="text-muted text-uppercase fw-semibold mt-1">Broj fakture</h6>
+                        <input type="text" class="form-control" id="invoice-no" name="invoice_no" placeholder="Unesite broj fakture">
+                    </div>
                 </div>
 
             </div>
@@ -154,7 +214,7 @@
             <div class="card-body p-4 border-top border-top-dashed">
                 <div class="row g-4 mb-3">
                     <div class="col-lg-4 text-start">
-                        <label class="text-muted text-uppercase fw-semibold mb-1">Broj fakture</label>
+                        <label class="text-muted text-uppercase fw-semibold mb-1">ID Deklaracije</label>
                         <input type="text" class="form-control" id="invoice-no1" name="invoice_no" placeholder="Broj fakture">
                     </div>
                     <div class="col-lg-4 text-center">
@@ -172,27 +232,34 @@
 
             <div class="card-body p-4 border-top border-top-dashed">
                 <div class="table-responsive">
-                    <table class="table table-borderless text-center table-nowrap align-middle mb-0">
+                    <table class="table table-borderless text-center table-nowrap align-middle mb-0" id="products-table">
                         <thead class="table-active">
                             <tr>
-                                <th style="width: 50px;">#</th>
-                                <th style="width: 200px;">Proizvodi </th>
-                                <th style="width: 140px;">Bosanski prevod </th>
-                                <th>Tarifna oznaka</th>
-                                <th style="width:200px;">Zemlja porijekla</th>
-                                <th style="width:60px;">Cijena</th>
-                                <th style="width:60px;">Količina</th>
-                                <th style="width:70px;">Ukupno</th>
-                                <th style="width:20px;">Akcija</th>
+                                <th style="width: 50px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">#</th>
+                                <th style="width: 200px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Proizvodi </th>
+                                <th style="width: 140px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Opis </th>
+                                <th style="width: 140px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Tarifna oznaka</th>
+                                <th style="width: 60px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Tip kvantiteta</th>
+                                <th style="width:70px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Zemlja porijekla</th>
+                                <th style="width:60px; text-align: center;vertical-align: middle; text-align: left; padding-bottom: 1rem;">Cijena</th>
+                                <th style="width: 60px; text-align: center;vertical-align: middle;">
+                                    Količina<br>
+                                    <small style="font-weight: normal; font-size: 0.75rem; color: #666;">
+                                        Broj paketa
+                                    </small>
+                                </th>
+
+                                <th style="width:70px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Ukupno</th>
+                                <th style="width:20px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Akcija</th>
                             </tr>
                         </thead>
                         <tbody id="newlink">
 
                         </tbody>
                         <tbody>
-                            <tr>
-                                <td colspan="4" class="text-start mt-2">
-                                    <a href="javascript:void(0)" id="add-item" class="btn btn-info fw-medium">
+                            <tr class="text-end mt-3">
+                                <td colspan="10" class="text-end mt-3">
+                                    <a href="javascript:void(0)" id="add-item" class="btn btn-info fw-medium text-end mt-2">
                                         <i class="ri-add-fill me-1 align-bottom"></i> Dodaj proizvod
                                     </a>
                                 </td>
@@ -229,6 +296,9 @@
             </button>
             <a href="javascript:void(0);" id="export-xml" class="btn btn-info">
                 <i class="ri-file-code-line align-bottom me-1"></i> Exportuj u XML
+            </a>
+            <a href="javascript:void(0);" id="reset-form" class="btn btn-info text-truncate">
+                <i class="ri-delete-bin-line align-bottom me-1"></i> Obriši proizvode
             </a>
         </div>
     </div>
@@ -509,48 +579,330 @@
         const tariff = item.tariff_code || "";
         const price = item.base_price || 0;
         const quantity = item.quantity || 0;
-        const origin = item.origin || "Njemačka";
+        const origin = item.country_of_origin || "DE";
         const total = (price * quantity).toFixed(2);
+        const desc = item.item_description;
 
         console.log(` Adding row ${index + 1}:`, item, suggestions);
 
         const row = document.createElement("tr");
         row.classList.add("product");
 
+        function generateCountryOptions(selectedCode = "") {
+            // ISO country codes + names (lowercase for flag URL)
+            const countries = [{
+                    code: "af",
+                    name: "Afghanistan"
+                }, {
+                    code: "al",
+                    name: "Albania"
+                }, {
+                    code: "dz",
+                    name: "Algeria"
+                },
+                {
+                    code: "ad",
+                    name: "Andorra"
+                }, {
+                    code: "ao",
+                    name: "Angola"
+                }, {
+                    code: "ag",
+                    name: "Antigua and Barbuda"
+                },
+                {
+                    code: "ar",
+                    name: "Argentina"
+                }, {
+                    code: "am",
+                    name: "Armenia"
+                }, {
+                    code: "au",
+                    name: "Australia"
+                },
+                {
+                    code: "at",
+                    name: "Austria"
+                }, {
+                    code: "az",
+                    name: "Azerbaijan"
+                }, {
+                    code: "bs",
+                    name: "Bahamas"
+                },
+                {
+                    code: "bh",
+                    name: "Bahrain"
+                }, {
+                    code: "bd",
+                    name: "Bangladesh"
+                }, {
+                    code: "bb",
+                    name: "Barbados"
+                },
+                {
+                    code: "by",
+                    name: "Belarus"
+                }, {
+                    code: "be",
+                    name: "Belgium"
+                }, {
+                    code: "bz",
+                    name: "Belize"
+                },
+                {
+                    code: "ba",
+                    name: "Bosnia and Herzegovina"
+                }, {
+                    code: "hr",
+                    name: "Croatia"
+                }, {
+                    code: "rs",
+                    name: "Serbia"
+                },
+                {
+                    code: "me",
+                    name: "Montenegro"
+                }, {
+                    code: "si",
+                    name: "Slovenia"
+                }, {
+                    code: "mk",
+                    name: "North Macedonia"
+                },
+                {
+                    code: "de",
+                    name: "Germany"
+                }, {
+                    code: "fr",
+                    name: "France"
+                }, {
+                    code: "us",
+                    name: "United States"
+                },
+                {
+                    code: "gb",
+                    name: "United Kingdom"
+                }, {
+                    code: "it",
+                    name: "Italy"
+                }, {
+                    code: "es",
+                    name: "Spain"
+                },
+                {
+                    code: "cn",
+                    name: "China"
+                }, {
+                    code: "jp",
+                    name: "Japan"
+                }, {
+                    code: "in",
+                    name: "India"
+                }
+                // Add more if needed (or I can give you all 195 full set)
+            ];
+            return countries.map(({
+                code,
+                name
+            }) => {
+                const flagUrl = `https://flagcdn.com/w40/${code}.png`;
+                const isSelected = selectedCode?.toLowerCase() === code ? "selected" : "";
+                return `<option value="${code.toUpperCase()}" ${isSelected} data-flag="${flagUrl}">${code.toUpperCase()}</option>`;
+            }).join("");
+
+        }
+
+        document.getElementById('reset-form').addEventListener('click', function(e) {
+            e.preventDefault();
+
+            Swal.fire({
+                title: 'Jesi li siguran/na?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Da',
+                cancelButtonText: 'Ne',
+                reverseButtons: true,
+                focusCancel: true,
+                confirmButtonColor: '#299dcb', // info color
+                cancelButtonColor: '#6c757d' // bootstrap secondary gray
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const table = document.getElementById('products-table');
+                    if (table) {
+                        const tbody = table.querySelector('tbody');
+                        if (tbody) {
+                            tbody.innerHTML = ''; // Remove all product rows
+                        }
+                    }
+                    //location.reload();
+                }
+                // If cancelled, just closes and does nothing (no reopening)
+            });
+        });
+
+
+
+
+
+
+
         row.innerHTML = `
-        <td>${index + 1}</td>
-        <td><input type="text" class="form-control"  style="width:200px;" name="item_name[]" value="${name}" placeholder="Naziv proizvoda"></td>
-        <td><input type="text" class="form-control" style="width: 140px;" name="item_translation[]" placeholder="Unesite prevod"></td>
+          <td style="width: 50px;">${index + 1}</td>
 
-        <td class="d-flex align-items-center gap-2">
-             <select class="form-control select2-tariff" name="item_code[]" data-prefill="${tariff}" data-suggestions='${JSON.stringify(suggestions)}'></select>
-             <button type="button" class="btn btn-outline-info btn-sm show-ai-btn" style="height: 37.1px; width="37.1px;" title="Prikaži AI prijedloge">
-             <i class="fas fa-wand-magic-sparkles"></i>
-            </button>
-</td>
+          <td colspan="2" style="width: 340px;">
+            <div style="display: flex; gap: 0.25rem;">
+              <input type="text" class="form-control" name="item_name[]" placeholder="Naziv proizvoda" value="${name}" style="flex:1;">
+              <input type="text" class="form-control" name="item_desc[]" placeholder="Opis proizvoda" value="${desc}" style="flex:1;">
+            </div>
+            <input 
+              type="text" 
+              class="form-control form-control-sm mt-1" 
+              style="font-size: 0.85rem;" 
+              name="item_prev[]" 
+              placeholder="Prevod"
+            >
+          </td>
 
+          <td class="text-start" style="width: 150px;">
+            <div style="position: relative; width: 100%;">
+              <select
+                class="form-control select2-tariff "
+                style="width: 100%; padding-right: 45px;"
+                name="item_code[]"
+                data-prefill="${tariff}"
+                data-suggestions='${JSON.stringify(suggestions)}'>
+              </select>
 
+              <button
+                type="button"
+                class="btn btn-outline-info btn-sm show-ai-btn"
+                style="
+                  position: absolute;
+                  top: 50%;
+                  right: 5px;
+                  transform: translateY(-50%);
+                  height: 30px;
+                  width: 30px;
+                  padding: 0;
+                  border-radius: 3px;
+                "
+                title="Prikaži AI prijedloge"
+              >
+                <i class="fas fa-wand-magic-sparkles" style="font-size: 16px;"></i>
+              </button>
+            </div>
+          </td>
 
-        <td><input type="text"  style="width:200px;" class="form-control" name="origin[]" value="${origin}" step="0.01"></td>
-        <td><input type="number" style="width:60px;" class="form-control text-start-truncate" name="price[]" value="${price}" ></td>
-        <td>
-          <div class="input-group input-group-sm" style="width: 100px; height:37.1px;">
-            <button class="btn btn-outline-info btn-sm decrement-qty" style="background: #f4f4fc !important; " type="button">−</button>
-            <input type="number" class="form-control text-center" name="quantity[]" value="${quantity}" step="1" min="0">
-            <button class="btn btn-outline-info btn-sm increment-qty" style="background: #f4f4fc !important; "  type="button">+</button>
-          </div>
-        </td>
+          <td style="width: 60px;">
+            <input 
+              type="text" 
+              class="form-control" 
+              name="quantity_type[]" 
+              placeholder="AD, AE.." 
+            >
+          </td>
 
-        <td><input "type="text" style="width:70px;" class="form-control text-start" name="total[]" value="${total}"></td>
-        <td style="width: 20px;">
-            <button type="button" class="btn btn-danger btn-sm remove-row" title="Ukloni red">
-              <i class="fas fa-times"></i>
-            </button>
-        </td>
-            
-        
-        
+          <td style="width: 70px;">
+            <select class="form-select" name="origin[]">
+              ${generateCountryOptions(origin)}
+            </select>
+          </td>
+
+          <td style="width: 60px;">
+            <input 
+              type="number" 
+              class="form-control text-start-truncate" 
+              name="price[]" 
+              value="${price}" 
+              style="width: 100%;"
+            >
+          </td>
+
+          <td style="width: 80px;">
+            <div style="display: flex; flex-direction: column; gap: 2px; width: 100%;">
+              <div class="input-group input-group-sm" style="width: 100%;">
+                <button 
+                  class="btn btn-outline-info btn-sm decrement-qty" 
+                  style="background: #f4f4fc !important; width: 20px; padding: 0;" 
+                  type="button"
+                >−</button>
+                <input 
+                  type="number" 
+                  class="form-control text-center" 
+                  name="quantity[]" 
+                  value="${quantity}" 
+                  step="1" 
+                  min="0"
+                  style="padding: 0 5px; height: 30px;"
+                >
+                <button 
+                  class="btn btn-outline-info btn-sm increment-qty" 
+                  style="background: #f4f4fc !important; width: 20px; padding: 0;" 
+                  type="button"
+                >+</button>
+              </div>
+              
+            <div class="input-group input-group-sm" style="height: 30px;">
+                <button 
+                  class="btn btn-outline-info btn-sm decrement-kolata" 
+                  type="button" 
+                  style="padding: 0; width: 20px;"
+                >−</button>
+
+                <input
+                  type="number"
+                  class="form-control text-center"
+                  name="kolata[]"
+                  placeholder="Broj paketa"
+                  min="0"
+                  step="1"
+                  style="height: 30px; padding: 0 5px; font-size: 10px;"
+                >
+
+                <button 
+                  class="btn btn-outline-info btn-sm increment-kolata" 
+                  type="button" 
+                  style="padding: 0; width: 20px;"
+                >+</button>
+                </div>
+            </div>
+          </td>
+
+          <td style="width: 70px;">
+            <input 
+              type="text" 
+              class="form-control text-start" 
+              name="total[]" 
+              value="${total}"
+              style="width: 100%;"
+            >
+          </td>
+
+          <td style="width: 20px; text-align: center;">
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                <button type="button" class="btn btn-danger btn-sm remove-row" style="width: 30px;" title="Ukloni red" style="padding: 0">
+                  <i class="fas fa-times"></i>
+                </button>
+                <input type="checkbox" class="form-check-input " data-bs-toggle="tooltip"  style="width: 30px; height: 26.66px;" title="Povlastica DA/NE" />
+              </div>
+            </td>
+
         `;
+
+
+        $(row).find('select[name="origin[]"]').select2({
+            templateResult: formatFlag,
+            templateSelection: formatFlag,
+            placeholder: "Select a country",
+            width: 'resolve'
+        });
+
+        function formatFlag(state) {
+            if (!state.id) return state.text;
+            const flagUrl = $(state.element).data('flag');
+            return $(`<span class="flag-option"><img src="${flagUrl}" width="20" style="margin-right: 10px;" /> ${state.text}</span>`);
+        }
 
         tbody.appendChild(row);
         initializeTariffSelects();
@@ -581,6 +933,61 @@
         // Optional: update global total as well
         updateTotalAmount();
     });
+
+    document.addEventListener('click', (event) => {
+        // Handle decrement button click
+        if (event.target.closest('.decrement-kolata')) {
+            const container = event.target.closest('div'); // or closest input group wrapper
+            const input = container.querySelector('input[name="kolata[]"]');
+            if (input) {
+                let currentValue = parseInt(input.value) || 0;
+                if (currentValue > 0) {
+                    input.value = currentValue - 1;
+                    input.dispatchEvent(new Event('change')); // if you listen for changes
+                }
+            }
+        }
+
+        // Handle increment button click
+        if (event.target.closest('.increment-kolata')) {
+            const container = event.target.closest('div'); // or closest input group wrapper
+            const input = container.querySelector('input[name="kolata[]"]');
+            if (input) {
+                let currentValue = parseInt(input.value) || 0;
+                input.value = currentValue + 1;
+                input.dispatchEvent(new Event('change'));
+            }
+        }
+
+        // Initialize all tooltips once
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+            if (!bootstrap.Tooltip.getInstance(tooltipTriggerEl)) { // avoid re-init
+                new bootstrap.Tooltip(tooltipTriggerEl, {
+                    trigger: 'hover',
+                    delay: {
+                        show: 100,
+                        hide: 100
+                    }
+                });
+            }
+        });
+
+        // Add a single click listener outside to hide tooltips on outside click
+        document.addEventListener('click', function(e) {
+            tooltipTriggerList.forEach(function(el) {
+                var tooltip = bootstrap.Tooltip.getInstance(el);
+                if (tooltip && e.target !== el && !el.contains(e.target)) {
+                    tooltip.hide();
+                }
+            });
+        });
+
+
+
+
+    });
+
 
 
 
