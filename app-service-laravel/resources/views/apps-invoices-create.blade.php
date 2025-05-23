@@ -393,8 +393,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 
-
-
 <script>
     let _invoice_data = null;
     let processedTariffData = [];
@@ -751,9 +749,12 @@
           <td style="width: 50px;">${index + 1}</td>
 
           <td colspan="2" style="width: 340px;">
-            <div style="display: flex; gap: 0.25rem;">
-              <input type="text" class="form-control" name="item_name[]" placeholder="Naziv proizvoda" value="${name}" style="flex:1;">
-              <input type="text" class="form-control" name="item_desc[]" placeholder="Opis proizvoda" value="${desc}" style="flex:1;">
+            <div class="input-group" style="display: flex; gap: 0.25rem;">
+              <input type="text" class="form-control item-name" name="item_name[]" placeholder="Naziv proizvoda" value="${name}" style="flex:1;">
+              <button class="btn btn-outline-info rounded" onmouseover="updateTooltip(this)" type="button" onclick="searchFromInputs(this)" data-bs-toggle="tooltip" data-bs-placement="top"   title="">
+                 <i class="fa-brands fa-google"></i>
+            </button>
+              <input type="text" class="form-control item-desc" name="item_desc[]" placeholder="Opis proizvoda" value="${desc}" style="flex:1;">
             </div>
             <input 
               type="text" 
@@ -881,9 +882,10 @@
 
           <td style="width: 20px; text-align: center;">
               <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
-                <button type="button" class="btn btn-danger btn-sm remove-row" style="width: 30px;" title="Ukloni red" style="padding: 0">
+                <button type="button" class="btn btn-danger btn-sm remove-row"   style="width: 30px;" title="Ukloni red" style="padding: 0">
                   <i class="fas fa-times"></i>
                 </button>
+                
                 <input type="checkbox" class="form-check-input " data-bs-toggle="tooltip"  style="width: 30px; height: 26.66px;" title="Povlastica DA/NE" />
               </div>
             </td>
@@ -1286,6 +1288,50 @@
 
     });
 </script>
+
+
+<!-- Google search -->
+
+<script>
+    function searchFromInputs(button) {
+        const nameInput = button.closest('.input-group').querySelector('.item-name');
+        const descInput = button.closest('.input-group').parentElement.querySelector('.item-desc');
+
+        const name = nameInput.value.trim();
+        const desc = descInput.value.trim();
+        const query = encodeURIComponent(`${name} ${desc}`);
+
+
+        if (name || desc) {
+            window.open(`https://www.google.com/search?q=${query}`, '_blank');
+        }
+    }
+
+    function updateTooltip(button) {
+        const nameInput = document.querySelector('.item-name');
+        const descInput = document.querySelector('.item-desc');
+
+        const name = nameInput?.value.trim() || '';
+        const desc = descInput?.value.trim() || '';
+        const label = (name || desc) ?
+            `Klikni za pretragu: ${name} ${desc}` :
+            'Klikni za Google pretragu';
+
+        // Update title attribute for fallback
+        button.setAttribute('title', label);
+        button.setAttribute('data-bs-original-title', label); // for Bootstrap
+
+        // Update Bootstrap tooltip instance if it exists
+        const tooltip = bootstrap.Tooltip.getInstance(button);
+        if (tooltip) {
+            tooltip.setContent({
+                '.tooltip-inner': label
+            });
+        }
+    }
+</script>
+
+
 
 
 <!-- Fixed side buttons -->
