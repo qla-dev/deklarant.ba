@@ -101,16 +101,16 @@
             <!-- Right Columns remain unchanged -->
 
             <div class="col-md-2 col-6 border-end border-0 order-4 order-md-0 bg-white card-animate mt-lg-0 mt-md-0 mt-4">
-                <a href="moji-dobavljaci">
+                <a href="moji-klijenti">
                     <div class="d-flex card  rounded-0 m-0 flex-column h-100">
                         <div class="bg-info text-white text-center py-1 rounded-0">
                             <i class=" ri-arrow-up-s-line me-1"></i>
                             <span>Pregledaj sve</span>
                         </div>
                         <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
-                            <h6 class="text-muted text-uppercase fs-11 mb-1">Moji dobavljači</h6>
+                            <h6 class="text-muted text-uppercase fs-11 mb-1">Moji klijenti</h6>
                             <div class="d-flex align-items-center justify-content-center">
-                                <i class="ri-truck-line text-info" style="font-size: 45px"></i>
+                                <i class="ri-user-line text-info" style="font-size: 45px"></i>
                                 <h3 class="mb-0 ms-2"><span class="counter-value" id="totalSuppliers">0</span></h3>
                             </div>
                         </div>

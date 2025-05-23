@@ -48,13 +48,13 @@
 
             <ul class="navbar-nav  " id="navbar-nav">
 
-                <li class="nav-item me-3">
+                <li class="nav-item me-1">
                     <a class="nav-link menu-link ps-0 d-flex align-items-center justify-content-between" href="#" id="homeLink">
                         <span>
                             <i class="ri-home-line text-info"></i>
                             <span>@lang('translation.home')</span>
                         </span>
-                        <i class="ri-arrow-down-s-line text-muted collapse-toggler" data-bs-toggle="collapse" data-bs-target="#sidebarDashboards" role="button" aria-expanded="false" aria-controls="sidebarDashboards" style="cursor: pointer;"></i>
+                        <i class="ri-arrow-down-s-line text-muted collapse-toggler" data-bs-toggle="collapse" data-bs-target="#sidebarDashboards" role="button" aria-expanded="false" aria-controls="sidebarDashboards" style="cursor: pointer; min-width:unset!important"></i>
                     </a>
 
                     <div class="collapse menu-dropdown" id="sidebarDashboards">
@@ -69,7 +69,7 @@
                     </div>
                 </li>
 
-                <li class="nav-item me-3">
+                <li class="nav-item me-1">
                     <a class="nav-link menu-link" href="kalendar"  role="button"
                         aria-expanded="false" aria-controls="sidebarApps">
                         <i class="ri-calendar-line text-info"></i> <span>@lang('translation.statistic')
@@ -79,8 +79,8 @@
                 </li>
 
 
-                <li class="nav-item me-3">
-                    <a class="nav-link menu-link" href="moje-fakture"  role="button"
+                <li class="nav-item me-1">
+                    <a class="nav-link menu-link" href="moje-deklaracije"  role="button"
                         aria-expanded="false" aria-controls="sidebarLayouts">
                         <i class="ri-file-line text-info "></i> <span>@lang('translation.myorder')</span> 
 
@@ -91,16 +91,26 @@
 
                 <!-- end Dashboard Menu -->
 
-                <li class="nav-item me-3">
-                    <a class="nav-link menu-link" href="moji-dobavljaci"  role="button"
+                <li class="nav-item me-1">
+                    <a class="nav-link menu-link" href="moji-klijenti"  role="button"
                         aria-expanded="false" aria-controls="sidebarAuth">
-                        <i class="ri-truck-line text-info fs-4"></i> <span>@lang('translation.clients')
+                        <i class="ri-user-line text-info fs-4"></i> <span>@lang('translation.clients')
                         </span>
                     </a>
                    
                 </li>
 
-                <li class="nav-item me-3">
+                
+                <li class="nav-item me-1">
+                    <a class="nav-link menu-link" href="moji-dobavljaci"  role="button"
+                        aria-expanded="false" aria-controls="sidebarAuth">
+                        <i class="ri-truck-line text-info fs-4"></i> <span>@lang('translation.importers')
+                        </span>
+                    </a>
+                   
+                </li>
+
+                <li class="nav-item me-1">
                     <a class="nav-link menu-link" href="tarifne-oznake"  role="button"
                         aria-expanded="false" aria-controls="sidebarPages">
                         <i class="mdi mdi-sticker-text-outline text-info"></i> <span>@lang('translation.declarant')
@@ -111,7 +121,7 @@
 
                 
 
-                <li class="nav-item me-3">
+                <li class="nav-item me-1">
                     <a class="nav-link menu-link" href="cijene-paketa"  role="button"
                         aria-expanded="false" aria-controls="sidebarUI">
                         <i class="ri-price-tag-3-line text-info"></i> <span>@lang('translation.pricing')

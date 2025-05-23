@@ -41,12 +41,12 @@ return [
     "my-wallet"=>"My Wallet",
     "ico-list"=>"ICO List",
     "kyc-application"=>"KYC Application",
-    "invoices"=>"Moje deklaracije",
+    "invoices"=>"Deklaracije",
     "basic-auth"=>"Sleep",
 
     "details"=>"Pregled deklaracije",
     "create-invoice"=>"Kreiraj fakturu",
-    "dobavljaci"=>"Moji dobavljači",
+    "dobavljaci"=>"Dobavljači",
     "tarife"=>"Tarifne oznake",
     "kurs"=>"Kursna lista",
 
@@ -245,8 +245,9 @@ return [
     "home" => "Početna",
     "statistic"=>"Kalendar",
     "exclist" => "Kursna lista",
-    "myorder" => "Moje deklaracije",
-    "clients" => "Moji dobavljači",
+    "myorder" => "Deklaracije",
+    "clients" => "Klijenti",
+    "importers" => "Dobavljači",
     "declarant" => "Tarifne oznake",
 
 
