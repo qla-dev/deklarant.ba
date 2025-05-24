@@ -38,8 +38,8 @@
     }
 
     .select2-container--default .select2-results>.select2-results__options {
-        background: transparent !important;
-        opacity: 0.9 !important;
+
+        opacity: 1 !important;
         backdrop-filter: blur(4px);
         /* Optional: add blur for better visibility */
         border: 1px solid #ccc;
@@ -193,20 +193,35 @@
             <div class="card-body p-4 border-top border-top-dashed">
                 <div class="row g-4">
                     <div class="col-6 text-start">
-                        <h6 class="text-muted text-uppercase fw-semibold mb-3">Dobavljač</h6>
+
+                        <h6 class="text-muted text-uppercase fw-semibold mb-3">Podaci o dobavljaču</h6>
+                        <small id="billing-name-ai-label" class="text-info d-flex align-items-center d-none mb-2">Podaci ispunjeni s AI</small>
+                        <div class="mb-2">
+                            <select id="supplier-select2" class="form-select"></select>
+                        </div>
                         <input type="text" class="form-control mb-2" id="billing-name" name="supplier_name" placeholder="Naziv dobavljača">
+
                         <input type="text" class="form-control mb-2" id="billing-address-line-1" name="supplier_address" placeholder="Adresa dobavljača">
                         <input type="text" class="form-control mb-2" id="billing-phone-no" name="supplier_phone" placeholder="Telefon">
-                        <input type="text" class="form-control mb-2" id="billing-tax-no" name="supplier_tax" placeholder="PIB">
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+                        <input type="text" class="form-control mb-2" id="billing-tax-no" name="supplier_tax" placeholder="VAT">
+                        <input type="email" class="form-control mb-2" id="email" name="email" placeholder="Email">
+                        <input type="email" class="form-control" id="supplier-owner" name="supplierOwner" placeholder="Vlasnik">
                     </div>
                     <div class="col-6 text-end">
                         <h6 class="text-muted text-uppercase fw-semibold mb-3 text-end">Podaci o uvozniku</h6>
+                        <small id="carrier-name-ai-label" class="text-info text-end d-flex align-items-center d-none mb-2">Podaci ispunjeni s AI</small>
+                        <div class="mb-2">
+                            <select id="importer-select2" class="form-select"></select>
+                        </div>
+
                         <input type="text" class="form-control mb-2 text-end" id="carrier-name" name="uvoznikime" placeholder="Uvoznik">
+
                         <input type="text" class="form-control mb-2 text-end" id="carrier-address" name="uvoznikadresa" placeholder="Adresa">
                         <input type="text" class="form-control mb-2 text-end" id="carrier-tel" name="uvozniktel" placeholder="Telefon">
-                        <input type="text" class="form-control mb-2 text-end" id="carrier-tax" name="uvozniktel" placeholder="PIB">
+                        <input type="text" class="form-control mb-2 text-end" id="carrier-tax" name="uvozniktel" placeholder="VAT">
                         <input type="text" class="form-control mb-2 text-end" id="carrier-email" name="uvozniktel" placeholder="Email">
+                        <input type="text" class="form-control mb-2 text-end" id="carrier-owner" name="carrierOwner" placeholder="Vlasnik">
+
                     </div>
                 </div>
             </div>
@@ -329,50 +344,6 @@
 </div>
 
 
-<div class="modal fade" id="createSupplierModal" tabindex="-1" aria-labelledby="createSupplierModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content border-0 shadow-lg">
-            <div class=" d-flex align-items-center bg-info text-white " style="height: 40px;">
-                <h5 class="d-flex align-items-center justify-content-center w-100 m-0 text-white" id="createSupplierModalLabel">
-                    <i class="ri-user-add-line me-2"></i> Novi dobavljač
-                </h5>
-                <button type="button" class="btn-close btn-close-white d-flex align-items-center me-2 text-white" data-bs-dismiss="modal" aria-label="Zatvori"></button>
-            </div>
-
-            <div class="modal-body">
-                <div class="mb-3">
-                    <i class="ri-building-4-line text-info fs-5 ms-1"></i> <label class="form-label"> Naziv firme</label>
-                    <input type="text" class="form-control" id="supplier-name" placeholder="Unesite naziv firme">
-                </div>
-                <div class="mb-3">
-                    <i class="ri-user-2-line text-info fs-5 ms-1"></i><label class="form-label">Vlasnik</label>
-                    <input type="text" class="form-control" id="supplier-owner" placeholder="Unesite ime vlasnika">
-                </div>
-                <div class="mb-3">
-                    <i class="ri-home-office-line text-info fs-5 ms-1"></i><label class="form-label">Adresa</label>
-                    <input type="text" class="form-control" id="supplier-address" placeholder="Unesite adresu">
-                </div>
-                <div class="mb-3">
-                    <i class="ri-discount-percent-line text-info fs-5 ms-1"></i><label class="form-label">PIB</label>
-                    <input type="text" class="form-control" id="supplier-tax" placeholder="Unesite porezni broj">
-                </div>
-                <div class="mb-3">
-                    <i class="ri-phone-line text-info fs-5 ms-1"></i><label class="form-label">Telefon</label>
-                    <input type="text" class="form-control" id="supplier-phone" placeholder="Unesite broj telefona">
-                </div>
-                <div class="mb-3">
-                    <i class="ri-mail-line text-info fs-5 ms-1"></i><label class="form-label">Email</label>
-                    <input type="email" class="form-control" id="supplier-email" placeholder="Unesite email adresu">
-                </div>
-            </div>
-
-            <div class="modal-footer bg-light">
-                <button type="button" class="btn btn-info" data-bs-dismiss="modal">Otkaži</button>
-                <button type="button" class="btn btn-info" id="saveSupplierBtn">Sačuvaj</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 
@@ -580,6 +551,8 @@
         const origin = item.country_of_origin || "DE";
         const total = (price * quantity).toFixed(2);
         const desc = item.item_description;
+        const package_num = item.num_packages || 0;
+        const qtype = item.quantity_type || "";
 
         console.log(` Adding row ${index + 1}:`, item, suggestions);
 
@@ -772,12 +745,18 @@
                 style="width: 100%; padding-right: 45px;"
                 name="item_code[]"
                 data-prefill="${tariff}"
-                data-suggestions='${JSON.stringify(suggestions)}'>
+                data-suggestions='${JSON.stringify(suggestions)
+                .replace(/&/g, '&amp;')
+                .replace(/'/g, '&#39;')
+                .replace(/"/g, '&quot;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')}'>
               </select>
 
               <button
                 type="button"
                 class="btn btn-outline-info btn-sm show-ai-btn"
+
                 style="
                   position: absolute;
                   top: 50%;
@@ -788,6 +767,7 @@
                   padding: 0;
                   border-radius: 3px;
                 "
+                
                 title="Prikaži AI prijedloge"
               >
                 <i class="fas fa-wand-magic-sparkles" style="font-size: 16px;"></i>
@@ -801,6 +781,8 @@
               class="form-control" 
               name="quantity_type[]" 
               placeholder="AD, AE.." 
+              value="${qtype}"
+              
             >
           </td>
 
@@ -859,6 +841,7 @@
                   min="0"
                   step="1"
                   style="height: 30px; padding: 0 5px; font-size: 10px;"
+                  value="${package_num}"
                 >
 
                 <button 
@@ -881,8 +864,8 @@
           </td>
 
           <td style="width: 20px; text-align: center;">
-              <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
-                <button type="button" class="btn btn-danger btn-sm remove-row"   style="width: 30px;" title="Ukloni red" style="padding: 0">
+              <div style="display: flex; flex-direction: column; align-items: end; gap: 2px;">
+                <button type="button" class="btn btn-danger btn-sm remove-row text-center "   style="width: 30px;" title="Ukloni red"  >
                   <i class="fas fa-times"></i>
                 </button>
                 
@@ -1020,170 +1003,108 @@
                 tariff_code: bestTariffCode
             }, suggestions);
         });
+        if (invoice.incoterm) {
+            document.getElementById("incoterm").value = invoice.incoterm;
+        }
+        if (invoice.invoice_number) {
+            const cleaned = invoice.invoice_number.replaceAll("/", "");
+            document.getElementById("invoice-no").value = cleaned;
+        }
+
+
+
     }
 
 
-    async function promptForSupplierAfterScan() {
+
+
+
+
+
+
+    async function fetchAndPrefillParties() {
+        const taskId = localStorage.getItem("scan_invoice_id");
         const token = localStorage.getItem("auth_token");
+        if (!taskId || !token) return;
 
-        console.log(" Fetching suppliers...");
-        const res = await fetch("/api/suppliers", {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-
-        const json = await res.json();
-        const suppliers = json.data || [];
-        console.log(" Suppliers loaded:", suppliers);
-
-        if (!suppliers.length) {
-            Swal.fire("Greška", "Nema dostupnih dobavljača.", "error");
-            return;
-        }
-
-        let html = `<select id="supplierSelect" class="form-control">`;
-        suppliers.forEach(s => {
-            html += `<option value="${s.id}" data-name="${s.name}" data-address="${s.address}" data-tax="${s.tax_id}" data-phone="${s.contact_phone}" data-email="${s.contact_email}">
-            ${s.name} (${s.owner})
-        </option>`;
-        });
-        html += `</select>`;
-
-        console.log(" Showing supplier selection prompt...");
-        const {
-            isConfirmed,
-            isDismissed,
-            value: selectedId
-        } = await Swal.fire({
-            title: "Odaberite dobavljača",
-            html,
-            showCancelButton: true,
-            cancelButtonText: "Dodaj novog dobavljača",
-            confirmButtonText: "Potvrdi",
-            focusConfirm: false,
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            preConfirm: () => {
-                const val = document.getElementById("supplierSelect").value;
-                console.log(" Pre-confirm value:", val);
-                return val;
-            },
-            customClass: {
-                confirmButton: "btn btn-info me-2",
-                cancelButton: "btn btn-info me-2"
-            },
-            buttonsStyling: false
-        });
-
-        if (isConfirmed && selectedId) {
-            const selected = document.querySelector(`#supplierSelect option[value="${selectedId}"]`);
-            if (selected) {
-                console.log(" User selected existing supplier:", selected.dataset);
-                document.getElementById("billing-name").value = selected.dataset.name || "";
-                document.getElementById("billing-address-line-1").value = selected.dataset.address || "";
-                document.getElementById("billing-tax-no").value = selected.dataset.tax || "";
-                document.getElementById("billing-phone-no").value = selected.dataset.phone || "";
-                document.getElementById("email").value = selected.dataset.email || "";
-                localStorage.setItem("selected_supplier_id", selectedId);
-                console.log(" selected_supplier_id set to:", selectedId);
-            } else {
-                console.warn(" Could not find selected option in DOM");
-            }
-            return;
-        }
-
-        if (isDismissed) {
-            console.log(" User wants to create a new supplier");
-            const modal = new bootstrap.Modal(document.getElementById("createSupplierModal"));
-            modal.show();
-
-            //  Ensure only one event listener is added
-            const saveBtn = document.getElementById("saveSupplierBtn");
-            saveBtn.replaceWith(saveBtn.cloneNode(true));
-            document.getElementById("saveSupplierBtn").addEventListener("click", async () => {
-                const name = document.getElementById("supplier-name").value.trim();
-                const owner = document.getElementById("supplier-owner").value.trim();
-                const address = document.getElementById("supplier-address").value.trim();
-                const tax = document.getElementById("supplier-tax").value.trim();
-                const phone = document.getElementById("supplier-phone").value.trim();
-                const email = document.getElementById("supplier-email").value.trim();
-
-                const payload = {
-                    name,
-                    owner,
-                    address,
-                    tax_id: tax,
-                    contact_email: email,
-                    contact_phone: phone,
-                    avatar: ""
-                };
-
-                console.log(" Sending new supplier payload:", payload);
-
-                try {
-                    const response = await fetch("/api/suppliers", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${token}`
-                        },
-                        body: JSON.stringify(payload)
-                    });
-
-                    const responseText = await response.text();
-                    console.log(" Raw response text:", responseText);
-
-                    if (!response.ok) {
-                        const err = JSON.parse(responseText);
-                        console.error(" Supplier creation failed:", err);
-                        Swal.fire("Greška", err?.error || "Neuspješno kreiranje dobavljača.", "error");
-                        return;
-                    }
-
-                    const newSupplier = JSON.parse(responseText);
-                    console.log(" Supplier created:", newSupplier);
-
-                    // Fill invoice screen
-                    document.getElementById("billing-name").value = newSupplier.data.name || "";
-                    document.getElementById("billing-address-line-1").value = newSupplier.data.address || "";
-                    document.getElementById("billing-tax-no").value = newSupplier.data.tax_id || "";
-                    document.getElementById("billing-phone-no").value = newSupplier.data.contact_phone || "";
-                    document.getElementById("email").value = newSupplier.data.contact_email || "";
-
-                    //  Save ID to localStorage
-                    localStorage.setItem("selected_supplier_id", newSupplier.data.id);
-
-                    console.log(" Saved selected_supplier_id after creation:", newSupplier.data.id);
-
-                    bootstrap.Modal.getInstance(document.getElementById("createSupplierModal"))?.hide();
-
-                    Swal.fire({
-                        icon: "success",
-                        title: "Dobavljač kreiran",
-                        text: "Podaci su automatski popunjeni.",
-                        confirmButtonText: "U redu",
-                        customClass: {
-                            confirmButton: "btn btn-info"
-                        },
-                        buttonsStyling: false
-                    });
-
-                } catch (err) {
-                    console.error(" Unexpected error:", err);
-                    Swal.fire("Greška", "Neočekivana greška pri slanju podataka.", "error");
+        try {
+            const res = await fetch(`/api/invoices/${taskId}/scan/parties`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
                 }
             });
+
+            const data = await res.json();
+            if (!res.ok) throw new Error("Greška u AI response");
+
+            const {
+                supplier,
+                importer
+            } = data;
+
+            // Fill fields
+            if (supplier) {
+                const aiSupplier = {
+                    id: "ai-supplier",
+                    text: `${supplier.name} – ${supplier.address}`,
+                    full: {
+                        ...supplier,
+                        tax_id: supplier.vat_number
+                    }
+                };
+                const supplierOption = new Option(aiSupplier.text, aiSupplier.id, true, true);
+                $("#supplier-select2 option[value='ai-supplier']").remove();
+                $("#supplier-select2").append(supplierOption).val(aiSupplier.id).trigger("change");
+
+                $("#billing-name").val(supplier.name || ""); // 🟢 sync name input
+
+
+                const option = new Option(aiSupplier.text, aiSupplier.id, true, true);
+
+
+                document.getElementById("billing-address-line-1").value = supplier.address || "";
+                document.getElementById("billing-tax-no").value = supplier.vat_number || "";
+                document.getElementById("billing-phone-no").value = supplier.phone_number || "";
+                const label = document.getElementById("billing-name-ai-label");
+                if (label) label.classList.remove("d-none");
+            }
+
+            if (importer) {
+                const aiImporter = {
+                    id: "ai-importer",
+                    text: `${importer.name} – ${importer.address}`,
+                    full: {
+                        ...importer,
+                        tax_id: importer.vat_number
+                    }
+                };
+                const importerOption = new Option(aiImporter.text, aiImporter.id, true, true);
+                $("#importer-select2 option[value='ai-importer']").remove();
+                $("#importer-select2").append(importerOption).val(aiImporter.id).trigger("change");
+                $("#carrier-name").val(importer.name || "");
+
+
+
+
+                document.getElementById("carrier-name").value = importer.name || "";
+                document.getElementById("carrier-address").value = importer.address || "";
+                document.getElementById("carrier-tax").value = importer.vat_number || "";
+                document.getElementById("carrier-tel").value = importer.phone_number || "";
+                const label = document.getElementById("carrier-name-ai-label");
+                if (label) label.classList.remove("d-none");
+            }
+
+            // Activate dropdown override
+
+
+        } catch (err) {
+            console.error("Greška u fetchAndPrefillParties:", err);
+            Swal.fire("Greška", err.message || "Neuspješno dohvaćanje podataka.", "error");
         }
     }
 
-
-
-
-
-
-
     document.addEventListener("DOMContentLoaded", async () => {
+
         console.log(" Page loaded. Starting init process...");
 
         const tariffRes = await fetch("{{ URL::asset('build/json/tariff.json') }}");
@@ -1212,61 +1133,200 @@
         _invoice_data = null;
 
         await fillInvoiceData();
-        await promptForSupplierAfterScan();
+        await fetchAndPrefillParties();
+        $("#supplier-select2").select2({
+            placeholder: "Pretraži dobavljača",
+            allowClear: true,
+            ajax: {
+                url: "/api/suppliers",
+                dataType: "json",
+                delay: 250,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("auth_token")}`
+                },
+                data: params => ({
+                    search: params.term
+                }),
+                processResults: data => ({
+                    results: data.data.map(s => ({
+                        id: s.id,
+                        text: `${s.name} – ${s.address}`,
+                        full: s
+                    }))
+                }),
+                cache: true
+            },
+            tags: true,
+            allowClear: false
+        });
+
+        $('#supplier-select2').on('select2:select', function(e) {
+            const data = e.params.data.full;
+            if (data) {
+                $('#billing-name').val(data.name || "");
+                $('#billing-address-line-1').val(data.address || "");
+                $('#billing-phone-no').val(data.contact_phone || "");
+                $('#billing-tax-no').val(data.tax_id || "");
+                $('#email').val(data.contact_email || "");
+            }
+        });
+
+        $("#importer-select2").select2({
+            placeholder: "Pretraži uvoznika",
+            allowClear: true,
+            ajax: {
+                url: "/api/importers",
+                dataType: "json",
+                delay: 250,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("auth_token")}`
+                },
+                data: params => ({
+                    search: params.term
+                }),
+                processResults: data => ({
+                    results: data.data.map(s => ({
+                        id: s.id,
+                        text: `${s.name} – ${s.address}`,
+                        full: s
+                    }))
+                }),
+                cache: true
+            },
+            tags: true,
+            allowClear: false
+        });
+
+        $('#importer-select2').on('select2:select', function(e) {
+            const data = e.params.data.full;
+            if (data) {
+
+                $('#carrier-address').val(data.address || "");
+                $('#carrier-name').val(data.name || "");
+                $('#carrier-phone').val(data.contact_phone || "");
+                $('#carrier-tax').val(data.tax_id || "");
+                $('#carrier-email').val(data.contact_email || "");
+            }
+        });
+
+
+        // await promptForSupplierAfterScan();
         $(document).on('click', '.show-ai-btn', function() {
-            console.log(" AI button clicked");
+            console.log("✅ AI button clicked");
 
             const select = $(this).closest('td').find('select.select2-tariff');
-            const rawSuggestions = select.data("suggestions");
-            if (!rawSuggestions || !Array.isArray(rawSuggestions)) return;
+            console.log("🔎 Found select element:", select);
+
+            let rawSuggestions = select.data("suggestions");
+            try {
+                if (typeof rawSuggestions === "string") {
+                    rawSuggestions = JSON.parse(rawSuggestions);
+                }
+            } catch (err) {
+                console.error("❌ Failed to parse suggestions JSON:", err);
+                return;
+            }
+
+            console.log("📦 Raw suggestions:", rawSuggestions);
+
+            if (!rawSuggestions) {
+                console.warn(" No suggestions found on data attribute.");
+                return;
+            }
+
+            if (!Array.isArray(rawSuggestions)) {
+                console.warn(" Suggestions are not an array:", typeof rawSuggestions);
+                return;
+            }
 
             const sorted = [...rawSuggestions].sort((a, b) => a.closeness - b.closeness).slice(0, 10);
+            console.log(" Sorted suggestions:", sorted);
+
             const container = document.getElementById("aiSuggestionsBody");
+            if (!container) {
+                console.error(" aiSuggestionsBody not found in DOM");
+                return;
+            }
 
             if (!sorted.length) {
                 container.innerHTML = `<div class="text-muted">Nema prijedloga.</div>`;
+                console.log("ℹ️ No sorted suggestions to show.");
             } else {
                 container.innerHTML = sorted.map((s, i) => `
-      <div class="mb-2">
-          <div><strong>${i + 1}. Tarifna oznaka:</strong> ${s.entry["Tarifna oznaka"]}</div>
-          <div><strong>Naziv:</strong> ${s.entry["Naziv"]}</div>
-          
-          <button class="btn btn-sm btn-info mt-1 use-tariff" data-value="${s.entry["Tarifna oznaka"]}">Koristi ovu oznaku</button>
-          <hr>
-      </div>
-    `).join("");
+            <div class="mb-2">
+                <div><strong>${i + 1}. Tarifna oznaka:</strong> ${s.entry["Tarifna oznaka"]}</div>
+                <div><strong>Naziv:</strong> ${s.entry["Naziv"]}</div>
+                <button class="btn btn-sm btn-info mt-1 use-tariff" data-value="${s.entry["Tarifna oznaka"]}">
+                    Koristi ovu oznaku
+                </button>
+                <hr>
+            </div>
+        `).join("");
+                console.log(" Inserted suggestions into modal body.");
             }
 
             $('#aiSuggestionModal').data('target-select', select);
-            const modal = new bootstrap.Modal(document.getElementById("aiSuggestionModal"));
+            console.log(" Set data-target-select on modal.");
+
+            const modalEl = document.getElementById("aiSuggestionModal");
+            if (!modalEl) {
+                console.error(" Modal element not found with ID aiSuggestionModal");
+                return;
+            }
+
+            let modal = bootstrap.Modal.getInstance(modalEl);
+            console.log(" Existing modal instance:", modal);
+
+            if (!modal) {
+                modal = new bootstrap.Modal(modalEl, {
+                    backdrop: 'static',
+                    keyboard: true
+                });
+                console.log(" Modal instance created.");
+            }
+
             modal.show();
-            console.log(" Bootstrap modal should be showing now");
+            console.log(" Bootstrap modal should be showing now.");
         });
+
         $(document).on('click', '.use-tariff', function() {
             const code = $(this).data('value');
+            console.log(" User selected code:", code);
+
             const select = $('#aiSuggestionModal').data('target-select');
+            console.log(" Target select:", select);
 
             if (select && code) {
                 const matched = processedTariffData.find(item => item.id === code);
+                console.log("🔍 Matched tariff code:", matched);
+
                 if (matched) {
                     const option = new Option(matched.id, matched.id, true, true);
                     select.find('option').remove();
                     select.append(option).trigger('change');
+                    console.log(" Code applied to select2 field.");
+                } else {
+                    console.warn(" No match found in processedTariffData.");
                 }
+            } else {
+                console.warn(" Select or code not defined properly.");
             }
 
-
-
-
             const modal = bootstrap.Modal.getInstance(document.getElementById("aiSuggestionModal"));
-            if (modal) modal.hide();
-            console.log(" Oznaka primijenjena i modal zatvoren");
+            if (modal) {
+                modal.hide();
+                console.log(" Modal closed.");
+            } else {
+                console.warn(" No modal instance to close.");
+            }
         });
+
         $(document).on('click', '.remove-row', function() {
             $(this).closest('tr').remove();
+            console.log(" Row removed.");
             updateTotalAmount();
-            // If you're recalculating total after row deletion
         });
+
 
 
 
@@ -1275,15 +1335,23 @@
 
         document.getElementById("invoice-date").value = new Date().toISOString().split("T")[0];
         console.log(" Invoice date and number set.");
-        document.getElementById("carrier-name").value = "Motorex";
-        document.getElementById("carrier-address").value = "305 S San Gabriel Blvd";
-        document.getElementById("carrier-tel").value = "+123 62 845 515"
-        document.getElementById("carrier-email").value = "motorex@business.com";
-        document.getElementById("carrier-tax").value = "12376597623461";
+
 
         document.getElementById("company-address").value = "Vilsonovo, 9, Sarajevo ";
         document.getElementById("company-zip").value = "71000";
         document.getElementById("company-email").value = "business@deklarant.ba";
+
+
+        document.getElementById("billing-name")?.addEventListener("input", () => {
+            const label = document.getElementById("billing-name-ai-label");
+            if (label) label.classList.add("d-none");
+        });
+
+        // Hide AI label when user types in importer name
+        document.getElementById("carrier-name")?.addEventListener("input", () => {
+            const label = document.getElementById("carrier-name-ai-label");
+            if (label) label.classList.add("d-none");
+        });
 
 
     });
@@ -1355,112 +1423,173 @@
 
 <!-- Save logic script final -->
 <script>
-    document.getElementById("save-invoice-btn").addEventListener("click", async function(e) {
-        e.preventDefault();
-        e.stopPropagation();
+document.getElementById("save-invoice-btn").addEventListener("click", async function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const btn = this;
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Spašavanje...`;
 
-        const btn = this;
-        btn.disabled = true;
-        btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Spašavanje...`;
+    let missingFields = [];
 
-        try {
-            const token = localStorage.getItem("auth_token");
-            const userId = 3; // Or dynamically set it
-            const supplierId = parseInt(localStorage.getItem("selected_supplier_id"));
-
-            if (!supplierId || isNaN(supplierId)) {
-                Swal.fire("Greška", "Nije odabran dobavljač.", "error");
-                btn.disabled = false;
-                btn.innerHTML = `<i class="ri-printer-line align-bottom me-1"></i> Sačuvaj`;
-                return;
-            }
-
-            const items = [];
-            document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
-                const item_name = row.querySelector('[name="item_name[]"]')?.value?.trim() || "";
-                const item_description_original = item_name; // assume same as item_name input
-                const item_code = row.querySelector('[name="item_code[]"]')?.value || "";
-                const origin = row.querySelector('[name="origin[]"]')?.value || "";
-                const base_price = parseFloat(row.querySelector('[name="price[]"]')?.value || "0");
-                const quantity = parseFloat(row.querySelector('[name="quantity[]"]')?.value || "0");
-                const total_price = parseFloat((base_price * quantity).toFixed(2));
-                const item_description = row.querySelector('[name="item_code[]"] option:checked')?.textContent || "";
-
-                items.push({
-                    item_name,
-                    item_code,
-                    item_description,
-                    item_description_original,
-                    origin,
-                    base_price,
-                    quantity,
-                    total_price,
-                    currency: "EUR",
-                    version: new Date().getFullYear(),
-                    best_customs_code_matches: globalAISuggestions[index]?.map(s => s.entry?.["Tarifna oznaka"])?.slice(0, 10) || []
-                });
-            });
-
-
-            const payload = {
-                file_name: "invoice_" + Date.now() + ".pdf",
-                total_price: parseFloat(document.getElementById("total-amount")?.value || "0"),
-                date_of_issue: document.getElementById("invoice-date")?.value,
-                country_of_origin: document.getElementById("shipping-country")?.value || "Germany",
-                invoice_id: getInvoiceId(),
-                items,
-                supplier: {
-                    name: document.getElementById("billing-name")?.value,
-                    address: document.getElementById("billing-address-line-1")?.value,
-                    phone: document.getElementById("billing-phone-no")?.value,
-                    tax: document.getElementById("billing-tax-no")?.value,
-                    email: document.getElementById("email")?.value
-                }
-            };
-
-            console.log(" Sending payload:", payload);
-
-            const res = await fetch(`/api/invoices/users/${userId}/suppliers/${supplierId}/form`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
-                },
-                body: JSON.stringify(payload)
-            });
-
-            const resText = await res.text();
-            let resJson;
-            try {
-                resJson = JSON.parse(resText);
-            } catch {
-                console.warn(" Response is not valid JSON:", resText);
-            }
-
-            if (!res.ok) {
-                throw new Error(resJson?.error || "Greška pri spašavanju fakture.");
-            }
-
-            Swal.fire({
-                icon: "success",
-                title: "Uspješno",
-                text: "Faktura je sačuvana.",
-                confirmButtonText: "U redu",
-                customClass: {
-                    confirmButton: "btn btn-info"
-                },
-                buttonsStyling: false
-            });
-
-        } catch (err) {
-            console.error(" Greška:", err);
-            Swal.fire("Greška", err.message || "Neočekivana greška.", "error");
-        } finally {
-            btn.disabled = false;
-            btn.innerHTML = `<i class="ri-printer-line align-bottom me-1"></i> Sačuvaj`;
+    function checkRequired(id, label) {
+        const input = document.getElementById(id);
+        if (!input || !input.value.trim()) {
+            input.classList.add("is-invalid");
+            missingFields.push(label);
+        } else {
+            input.classList.remove("is-invalid");
         }
-    });
+    }
+
+    // Check all required fields
+    checkRequired("billing-name", "Naziv dobavljača");
+    checkRequired("billing-address-line-1", "Adresa dobavljača");
+    checkRequired("billing-tax-no", "PIB dobavljača");
+    checkRequired("billing-phone-no", "Telefon dobavljača");
+    checkRequired("email", "Email dobavljača");
+    checkRequired("supplier-owner", "Vlasnik");
+
+    checkRequired("carrier-name", "Naziv uvoznika");
+    checkRequired("carrier-address", "Adresa uvoznika");
+    checkRequired("carrier-tax", "PIB uvoznika");
+    checkRequired("carrier-tel", "Telefon uvoznika");
+    checkRequired("carrier-email", "Email uvoznika");
+    checkRequired("carrier-owner", "Vlasnik");
+
+    if (missingFields.length > 0) {
+        Swal.fire("Greška", "Obavezna polja nisu popunjena:\n" + missingFields.join(", "), "error");
+        btn.disabled = false;
+        btn.innerHTML = `<i class="ri-printer-line align-bottom me-1"></i> Sačuvaj`;
+        return;
+    }
+
+    const token = localStorage.getItem("auth_token");
+    const user = JSON.parse(localStorage.getItem("user"));
+    const userId = user?.id;
+    if (!userId) {
+        Swal.fire("Greška", "Korisnički ID nije pronađen.", "error");
+        return;
+    }
+
+    async function ensureEntity(endpoint, data) {
+        const res = await fetch(`/api/${endpoint}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(data)
+        });
+        const json = await res.json();
+        if (!res.ok) throw new Error(json?.error || `Greška kod spremanja ${endpoint}`);
+        return json.data.id;
+    }
+
+    try {
+        // Build supplier and importer data
+        const supplierData = {
+            name: document.getElementById("billing-name").value.trim(),
+            address: document.getElementById("billing-address-line-1").value.trim(),
+            tax_id: document.getElementById("billing-tax-no").value.trim(),
+            contact_phone: document.getElementById("billing-phone-no").value.trim(),
+            contact_email: document.getElementById("email").value.trim(),
+            owner: document.getElementById("supplier-owner").value.trim() || null,
+            avatar: null,
+            synonyms: []
+        };
+
+        const importerData = {
+            name: document.getElementById("carrier-name").value.trim(),
+            address: document.getElementById("carrier-address").value.trim(),
+            tax_id: document.getElementById("carrier-tax").value.trim(),
+            contact_phone: document.getElementById("carrier-tel").value.trim(),
+            contact_email: document.getElementById("carrier-email").value.trim(),
+            owner: document.getElementById("carrier-owner").value.trim() || null,
+            avatar: null,
+            synonyms: []
+        };
+
+        const supplierId = await ensureEntity("suppliers", supplierData);
+        const importerId = await ensureEntity("importers", importerData);
+
+        // Build invoice items
+        const items = [];
+        document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
+            const item_name = row.querySelector('[name="item_name[]"]')?.value?.trim() || "";
+            const item_description_original = item_name;
+            const item_code = row.querySelector('[name="item_code[]"]')?.value || "";
+            const origin = row.querySelector('[name="origin[]"]')?.value || "";
+            const base_price = parseFloat(row.querySelector('[name="price[]"]')?.value || "0");
+            const quantity = parseFloat(row.querySelector('[name="quantity[]"]')?.value || "0");
+            const total_price = parseFloat((base_price * quantity).toFixed(2));
+            const item_description = row.querySelector('[name="item_code[]"] option:checked')?.textContent || "";
+            const quantity_type = row.querySelector('[name="quantity_type[]"]')?.value || "";
+            const package_num = row.querySelector('[name="kolata[]"]')?.value || "";
+
+            items.push({
+                item_name,
+                item_code,
+                item_description,
+                item_description_original,
+                origin,
+                base_price,
+                quantity,
+                quantity_type,
+                package_num,
+                total_price,
+                currency: "EUR",
+                version: new Date().getFullYear(),
+                best_customs_code_matches: globalAISuggestions[index]?.map(s => s.entry?.["Tarifna oznaka"])?.slice(0, 10) || []
+            });
+        });
+
+        const payload = {
+            file_name: "invoice_" + Date.now() + ".pdf",
+            total_price: parseFloat(document.getElementById("total-amount")?.value || "0"),
+            date_of_issue: document.getElementById("invoice-date")?.value,
+            country_of_origin: document.getElementById("shipping-country")?.value || "Germany",
+            invoice_id: getInvoiceId(),
+            items,
+            supplier_id: supplierId,
+            importer_id: importerId
+        };
+
+        console.log("📦 Sending payload:", payload);
+
+        const res = await fetch(`/api/invoices/users/${userId}/suppliers/${supplierId}/form`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const resJson = await res.json();
+        if (!res.ok) throw new Error(resJson?.error || "Greška pri spašavanju fakture.");
+
+        Swal.fire({
+            icon: "success",
+            title: "Uspješno",
+            text: "Faktura je sačuvana.",
+            confirmButtonText: "U redu",
+            customClass: {
+                confirmButton: "btn btn-info"
+            },
+            buttonsStyling: false
+        });
+
+    } catch (err) {
+        console.error("❌ Greška:", err);
+        Swal.fire("Greška", err.message || "Neočekivana greška.", "error");
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="ri-printer-line align-bottom me-1"></i> Sačuvaj`;
+    }
+});
 </script>
+
 <!-- Export to XML -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
