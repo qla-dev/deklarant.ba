@@ -522,3 +522,7 @@ color: #299cdb ;
 }
 .modal {z-index: 999999!important;;}
 
+.accordion-button:not(.collapsed) {
+    color: #299cdb!important;
+}
+

@@ -1,95 +1,77 @@
 @extends('layouts.master')
-@section('title') @lang('translation.faqs') @endsection
+@section('title') Česta pitanja - deklarant.ba @endsection
 @section('content')
-    @component('components.breadcrumb')
-        @slot('li_1') Pages @endslot
-        @slot('title') FAQs @endslot
-    @endcomponent
-
     <div class="row">
         <div class="col-lg-12">
-            <div class="card rounded-0 bg-success-subtle mx-n4 mt-n4 border-top">
-                <div class="px-4">
-                    <div class="row">
-                        <div class="col-xxl-5 align-self-center">
-                            <div class="py-4">
-                                <h4 class="display-6 coming-soon-text">Frequently asked questions</h4>
-                                <p class="text-success fs-15 mt-3">If you can not find answer to your question in our FAQ, you can always contact us or email us. We will answer you shortly!</p>
-                                <div class="hstack flex-wrap gap-2">
-                                    <button type="button" class="btn btn-primary btn-label rounded-pill"><i class="ri-mail-line label-icon align-middle rounded-pill fs-16 me-2"></i> Email Us</button>
-                                    <button type="button" class="btn btn-info btn-label rounded-pill"><i class="ri-twitter-line label-icon align-middle rounded-pill fs-16 me-2"></i> Send Us Tweet</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xxl-3 ms-auto">
-                            <div class="mb-n5 pb-1 faq-img d-none d-xxl-block">
-                                <img src="{{ URL::asset('build/images/faq-img.png') }}" alt="" class="img-fluid">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- end card body -->
-            </div>
-            <!-- end card -->
-
             <div class="row justify-content-evenly mb-4">
                 <div class="col-lg-4">
                     <div class="mt-3">
                         <div class="d-flex align-items-center mb-2">
                             <div class="flex-shrink-0 me-1">
-                                <i class="ri-question-line fs-24 align-middle text-success me-1"></i>
+                                <i class="ri-information-line fs-24 align-middle text-info me-1"></i>
                             </div>
                             <div class="flex-grow-1">
-                                <h5 class="fs-16 mb-0 fw-semibold">General Questions</h5>
+                                <h5 class="fs-16 mb-0 fw-semibold">O platformi</h5>
                             </div>
                         </div>
-
                         <div class="accordion accordion-border-box" id="genques-accordion">
                             <div class="accordion-item shadow">
                                 <h2 class="accordion-header" id="genques-headingOne">
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#genques-collapseOne" aria-expanded="true" aria-controls="genques-collapseOne">
-                                        What is Lorem Ipsum ?
+                                        Šta je deklarant.ba?
                                     </button>
                                 </h2>
                                 <div id="genques-collapseOne" class="accordion-collapse collapse show" aria-labelledby="genques-headingOne" data-bs-parent="#genques-accordion">
                                     <div class="accordion-body">
-                                        If several languages coalesce, the grammar of the resulting language is more simple and regular than that of the individual languages. The new common language will be more simple and regular than the existing European languages. It will be as simple their most common words.
+                                        deklarant.ba je digitalna platforma za izradu, upravljanje i praćenje carinskih deklaracija i prateće dokumentacije. Omogućava automatsko prepoznavanje podataka iz faktura i drugih dokumenata, te značajno ubrzava i pojednostavljuje carinske procedure za firme i fizička lica.
                                     </div>
                                 </div>
                             </div>
                             <div class="accordion-item shadow">
                                 <h2 class="accordion-header" id="genques-headingTwo">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#genques-collapseTwo" aria-expanded="false" aria-controls="genques-collapseTwo">
-                                        Why do we use it ?
+                                        Koje probleme rješava deklarant.ba?
                                     </button>
                                 </h2>
                                 <div id="genques-collapseTwo" class="accordion-collapse collapse" aria-labelledby="genques-headingTwo" data-bs-parent="#genques-accordion">
                                     <div class="accordion-body">
-                                        The new common language will be more simple and regular than the existing European languages. It will be as simple as Occidental; in fact, it will be Occidental. To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental is.
+                                        Platforma uklanja potrebu za ručnim unosom podataka, smanjuje greške i omogućava automatsko popunjavanje deklaracija na osnovu učitanih dokumenata. Sve deklaracije i statusi su dostupni na jednom mjestu, što olakšava praćenje i arhiviranje.
                                     </div>
                                 </div>
                             </div>
                             <div class="accordion-item shadow">
                                 <h2 class="accordion-header" id="genques-headingThree">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#genques-collapseThree" aria-expanded="false" aria-controls="genques-collapseThree">
-                                        Where does it come from ?
+                                        Kako funkcioniše automatsko prepoznavanje podataka?
                                     </button>
                                 </h2>
                                 <div id="genques-collapseThree" class="accordion-collapse collapse" aria-labelledby="genques-headingThree" data-bs-parent="#genques-accordion">
                                     <div class="accordion-body">
-                                        he wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains.But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete.
+                                        Nakon što učitate fakturu ili drugi dokument, sistem koristi napredne algoritme za prepoznavanje teksta i automatski popunava polja deklaracije. Sve podatke možete dodatno provjeriti i korigovati prije slanja.
                                     </div>
                                 </div>
                             </div>
                             <div class="accordion-item shadow">
                                 <h2 class="accordion-header" id="genques-headingFour">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#genques-collapseFour" aria-expanded="false" aria-controls="genques-collapseFour">
-                                        Where can I get some ?
+                                        Ko može koristiti deklarant.ba?
                                     </button>
                                 </h2>
                                 <div id="genques-collapseFour" class="accordion-collapse collapse" aria-labelledby="genques-headingFour" data-bs-parent="#genques-accordion">
                                     <div class="accordion-body">
-                                        Cras ultricies mi eu turpis hendrerit fringilla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; In ac dui quis mi consectetuer lacinia. Nam pretium turpis et arcu arcu tortor, suscipit eget, imperdiet nec, imperdiet iaculis aliquam ultrices mauris.
+                                        Platforma je namijenjena špediterima, uvoznicima, izvoznicima, logističkim kompanijama i fizičkim licima koja povremeno uvoze ili izvoze robu.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item shadow">
+                                <h2 class="accordion-header" id="genques-headingFive">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#genques-collapseFive" aria-expanded="false" aria-controls="genques-collapseFive">
+                                        Da li je korištenje platforme usklađeno sa zakonima?
+                                    </button>
+                                </h2>
+                                <div id="genques-collapseFive" class="accordion-collapse collapse" aria-labelledby="genques-headingFive" data-bs-parent="#genques-accordion">
+                                    <div class="accordion-body">
+                                        Da, deklarant.ba je usklađen sa zakonima o zaštiti podataka i carinskim propisima Bosne i Hercegovine.
                                     </div>
                                 </div>
                             </div>
@@ -101,59 +83,70 @@
                     <div class="mt-3">
                         <div class="d-flex align-items-center mb-2">
                             <div class="flex-shrink-0 me-1">
-                                <i class="ri-user-settings-line fs-24 align-middle text-success me-1"></i>
+                                <i class="ri-tools-line fs-24 align-middle text-info me-1"></i>
                             </div>
                             <div class="flex-grow-1">
-                                <h5 class="fs-16 mb-0 fw-semibold">Manage Account</h5>
+                                <h5 class="fs-16 mb-0 fw-semibold">Korištenje i funkcionalnosti</h5>
                             </div>
                         </div>
-
                         <div class="accordion accordion-border-box" id="manageaccount-accordion">
                             <div class="accordion-item shadow">
                                 <h2 class="accordion-header" id="manageaccount-headingOne">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#manageaccount-collapseOne" aria-expanded="false" aria-controls="manageaccount-collapseOne">
-                                        Where can I get some ?
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#manageaccount-collapseOne" aria-expanded="true" aria-controls="manageaccount-collapseOne">
+                                        Kako započeti korištenje deklarant.ba?
                                     </button>
                                 </h2>
-                                <div id="manageaccount-collapseOne" class="accordion-collapse collapse" aria-labelledby="manageaccount-headingOne" data-bs-parent="#manageaccount-accordion">
+                                <div id="manageaccount-collapseOne" class="accordion-collapse collapse show" aria-labelledby="manageaccount-headingOne" data-bs-parent="#manageaccount-accordion">
                                     <div class="accordion-body">
-                                        If several languages coalesce, the grammar of the resulting language is more simple and regular than that of the individual languages. The new common language will be more simple and regular than the existing European languages. It will be as simple their most common words.
+                                        Registrujte se na platformi, potvrdite e-mail i odmah možete unositi ili učitavati dokumente za izradu deklaracija.
                                     </div>
                                 </div>
                             </div>
                             <div class="accordion-item shadow">
                                 <h2 class="accordion-header" id="manageaccount-headingTwo">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#manageaccount-collapseTwo" aria-expanded="true" aria-controls="manageaccount-collapseTwo">
-                                        Where does it come from ?
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#manageaccount-collapseTwo" aria-expanded="false" aria-controls="manageaccount-collapseTwo">
+                                        Kako se unose podaci za deklaraciju?
                                     </button>
                                 </h2>
-                                <div id="manageaccount-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="manageaccount-headingTwo" data-bs-parent="#manageaccount-accordion">
+                                <div id="manageaccount-collapseTwo" class="accordion-collapse collapse" aria-labelledby="manageaccount-headingTwo" data-bs-parent="#manageaccount-accordion">
                                     <div class="accordion-body">
-                                        The new common language will be more simple and regular than the existing European languages. It will be as simple as Occidental; in fact, it will be Occidental. To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental is.
+                                        Podaci se mogu unijeti ručno ili automatski učitavanjem dokumenata (faktura, otpremnica). Sistem prepoznaje podatke i popunjava polja, a vi ih možete provjeriti i izmijeniti.
                                     </div>
                                 </div>
                             </div>
                             <div class="accordion-item shadow">
                                 <h2 class="accordion-header" id="manageaccount-headingThree">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#manageaccount-collapseThree" aria-expanded="false" aria-controls="manageaccount-collapseThree">
-                                        Why do we use it ?
+                                        Kako mogu pratiti status svojih deklaracija?
                                     </button>
                                 </h2>
                                 <div id="manageaccount-collapseThree" class="accordion-collapse collapse" aria-labelledby="manageaccount-headingThree" data-bs-parent="#manageaccount-accordion">
                                     <div class="accordion-body">
-                                        he wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains.But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete.
+                                        U profilu imate pregled svih deklaracija sa statusima (u pripremi, poslano, obrađeno, odbijeno). Svaka promjena statusa je vidljiva u realnom vremenu.
                                     </div>
                                 </div>
                             </div>
                             <div class="accordion-item shadow">
                                 <h2 class="accordion-header" id="manageaccount-headingFour">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#manageaccount-collapseFour" aria-expanded="false" aria-controls="manageaccount-collapseFour">
-                                        What is Lorem Ipsum ?
+                                        Da li mogu koristiti platformu za više firmi ili korisnika?
                                     </button>
                                 </h2>
                                 <div id="manageaccount-collapseFour" class="accordion-collapse collapse" aria-labelledby="manageaccount-headingFour" data-bs-parent="#manageaccount-accordion">
                                     <div class="accordion-body">
-                                        Cras ultricies mi eu turpis hendrerit fringilla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; In ac dui quis mi consectetuer lacinia. Nam pretium turpis et arcu arcu tortor, suscipit eget, imperdiet nec, imperdiet iaculis aliquam ultrices mauris.
+                                        Da, možete kreirati više profila i povezati ih sa različitim firmama ili odjelima, te upravljati pristupima i ovlaštenjima.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item shadow">
+                                <h2 class="accordion-header" id="manageaccount-headingFive">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#manageaccount-collapseFive" aria-expanded="false" aria-controls="manageaccount-collapseFive">
+                                        Šta ako naiđem na problem ili imam dodatna pitanja?
+                                    </button>
+                                </h2>
+                                <div id="manageaccount-collapseFive" class="accordion-collapse collapse" aria-labelledby="manageaccount-headingFive" data-bs-parent="#manageaccount-accordion">
+                                    <div class="accordion-body">
+                                        Na raspolaganju je podrška putem e-maila i kontakt forme. Također, dostupna je baza znanja i video uputstva.
                                     </div>
                                 </div>
                             </div>
@@ -165,59 +158,58 @@
                     <div class="mt-3">
                         <div class="d-flex align-items-center mb-2">
                             <div class="flex-shrink-0 me-1">
-                                <i class="ri-shield-keyhole-line fs-24 align-middle text-success me-1"></i>
+                                <i class="ri-lock-line fs-24 align-middle text-info me-1"></i>
                             </div>
                             <div class="flex-grow-1">
-                                <h5 class="fs-16 mb-0 fw-semibold">Privacy &amp; Security</h5>
+                                <h5 class="fs-16 mb-0 fw-semibold">Privatnost i sigurnost</h5>
                             </div>
                         </div>
-
                         <div class="accordion accordion-border-box" id="privacy-accordion">
                             <div class="accordion-item shadow">
                                 <h2 class="accordion-header" id="privacy-headingOne">
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#privacy-collapseOne" aria-expanded="true" aria-controls="privacy-collapseOne">
-                                        Why do we use it ?
+                                        Kako deklarant.ba štiti moje podatke?
                                     </button>
                                 </h2>
                                 <div id="privacy-collapseOne" class="accordion-collapse collapse show" aria-labelledby="privacy-headingOne" data-bs-parent="#privacy-accordion">
                                     <div class="accordion-body">
-                                        If several languages coalesce, the grammar of the resulting language is more simple and regular than that of the individual languages. The new common language will be more simple and regular than the existing European languages. It will be as simple their most common words.
+                                        Svi podaci su pohranjeni na sigurnim serverima u skladu sa GDPR regulativom i zakonima BiH. Pristup podacima je zaštićen višeslojnom autentifikacijom i enkripcijom.
                                     </div>
                                 </div>
                             </div>
                             <div class="accordion-item shadow">
                                 <h2 class="accordion-header" id="privacy-headingTwo">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#privacy-collapseTwo" aria-expanded="false" aria-controls="privacy-collapseTwo">
-                                        Where can I get some ?
+                                        Ko ima pristup mojim informacijama?
                                     </button>
                                 </h2>
                                 <div id="privacy-collapseTwo" class="accordion-collapse collapse" aria-labelledby="privacy-headingTwo" data-bs-parent="#privacy-accordion">
                                     <div class="accordion-body">
-                                        The new common language will be more simple and regular than the existing European languages. It will be as simple as Occidental; in fact, it will be Occidental. To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental is.
+                                        Pristup vašim podacima imaju samo ovlašteni korisnici i administratori, u skladu sa politikom privatnosti i ugovorom o korištenju platforme.
                                     </div>
                                 </div>
                             </div>
                             <div class="accordion-item shadow">
                                 <h2 class="accordion-header" id="privacy-headingThree">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#privacy-collapseThree" aria-expanded="false" aria-controls="privacy-collapseThree">
-                                        What is Lorem Ipsum ?
+                                        Kako mogu izbrisati svoj nalog ili podatke?
                                     </button>
                                 </h2>
                                 <div id="privacy-collapseThree" class="accordion-collapse collapse" aria-labelledby="privacy-headingThree" data-bs-parent="#privacy-accordion">
                                     <div class="accordion-body">
-                                        he wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains.But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete.
+                                        Brisanje naloga ili podataka možete zahtijevati putem profila ili kontaktiranjem podrške. Svi podaci se trajno uklanjaju iz sistema nakon potvrde zahtjeva.
                                     </div>
                                 </div>
                             </div>
                             <div class="accordion-item shadow">
                                 <h2 class="accordion-header" id="privacy-headingFour">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#privacy-collapseFour" aria-expanded="false" aria-controls="privacy-collapseFour">
-                                        Where does it come from ?
+                                        Da li su moji dokumenti dostupni trećim licima?
                                     </button>
                                 </h2>
                                 <div id="privacy-collapseFour" class="accordion-collapse collapse" aria-labelledby="privacy-headingFour" data-bs-parent="#privacy-accordion">
                                     <div class="accordion-body">
-                                        Cras ultricies mi eu turpis hendrerit fringilla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; In ac dui quis mi consectetuer lacinia. Nam pretium turpis et arcu arcu tortor, suscipit eget, imperdiet nec, imperdiet iaculis aliquam ultrices mauris.
+                                        Ne, vaši dokumenti nisu dostupni trećim licima bez vaše izričite saglasnosti, osim u slučajevima propisanim zakonom.
                                     </div>
                                 </div>
                             </div>
