@@ -255,14 +255,14 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-info ">
             <div class="modal-header bg-info text-white">
-                <h5 class="modal-title" id="virmanModalLabel">Upute za plaćanje virmanom</h5>
+                <h5 class="modal-title w-100 text-center" id="virmanModalLabel">Upute za plaćanje virmanom</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Zatvori"></button>
             </div>
             <div class="modal-body">
                 <div class="mb-3">
                     <label class="form-label fw-bold">Naziv primaoca:</label>
-                    <p class="mb-0">Qla Dev d.o.o. Sarajevo</p>
+                    <p class="mb-0">qla.dev</p>
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold">Broj računa (IBAN):</label>
