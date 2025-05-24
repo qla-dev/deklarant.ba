@@ -254,8 +254,8 @@
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-info ">
-            <div class="modal-header bg-info text-white">
-                <h5 class="modal-title w-100 text-center" id="virmanModalLabel">Upute za plaćanje virmanom</h5>
+            <div class="modal-header bg-info text-white align-items-center">
+                <h5 class="modal-title w-100 text-center text-white" id="virmanModalLabel">Upute za plaćanje virmanom</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Zatvori"></button>
             </div>
