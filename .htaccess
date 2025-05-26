@@ -2,8 +2,8 @@
     Options -Indexes
     RewriteEngine On
 
-    # 1. Allow access to download-deploy.php in root
-    RewriteCond %{REQUEST_URI} ^/download-deploy\.php$
+    # 1. Allow access to deploy helper scripts in root
+    RewriteCond %{REQUEST_URI} ^/(download-deploy|run-composer-install|run-migrations)\.php$
     RewriteRule ^ - [L]
 
     # 2. Redirect root URL (i.e. "/") to Laravel's public folder

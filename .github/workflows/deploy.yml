@@ -20,6 +20,7 @@ jobs:
             --exclude='vendor/' \
             --exclude='node_modules/' \
             --exclude='public/build/' \
+            --exclude='resources/' \
             --exclude='.git/' \
             --exclude='.github/' \
             --exclude='tests/' \
@@ -66,36 +67,31 @@ jobs:
 
           curl -f "https://deklarant.zavlan.org/download-deploy.php?artifact=$ARTIFACT_ID&dest=."
 
-  prepare-vendor-artifact:
-    name: Prepare Vendor Artifact
+  prepare-resources-artifact:
+    name: Prepare Resources Artifact
+    needs: deploy-code
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./app-service-laravel
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
+      - name: Prepare resources artifact
+        run: |
+          mkdir -p ./deploy-resources/app-service-laravel
+          cp -r ./app-service-laravel/resources ./deploy-resources/app-service-laravel/
 
-      - name: Install Composer dependencies (no dev)
-        run: composer install --no-dev --optimize-autoloader
-
-      - name: Upload vendor artifact
+      - name: Upload resources artifact
         uses: actions/upload-artifact@v4
         with:
-          name: vendor-artifact
-          path: ./app-service-laravel/vendor/
+          name: resources-artifact
+          path: ./deploy-resources
 
-  deploy-vendor:
-    name: Deploy Vendor
-    needs: prepare-vendor-artifact
+  deploy-resources:
+    name: Deploy Resources
+    needs: prepare-resources-artifact
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy vendor artifact
+      - name: Deploy resources artifact
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -105,19 +101,38 @@ jobs:
           RUN_ID=${{ github.run_id }}
 
           ARTIFACT_ID=$(gh api repos/$REPO_OWNER/$REPO_NAME/actions/artifacts \
-            | jq --argjson run_id "$RUN_ID" --arg name "vendor-artifact" \
+            | jq --argjson run_id "$RUN_ID" --arg name "resources-artifact" \
               '.artifacts[] | select(.name == $name and .workflow_run.id == $run_id) | .id' \
             | sort -n | tail -1)
 
           if [ -z "$ARTIFACT_ID" ]; then
-            echo "Artifact not found for vendor."
+            echo "Artifact not found for resources."
             exit 1
           fi
 
-          curl -f "https://deklarant.zavlan.org/download-deploy.php?artifact=$ARTIFACT_ID&dest=./app-service-laravel/vendor"
+          curl -f "https://deklarant.zavlan.org/download-deploy.php?artifact=$ARTIFACT_ID&dest=."
+
+  run-composer-install:
+    name: Run Composer Install
+    needs: deploy-resources
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger remote composer install
+        run: |
+          curl -f "https://deklarant.zavlan.org/run-composer-install.php"
+
+  run-migrations:
+    name: Run Laravel Migrations
+    needs: run-composer-install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger remote migrations
+        run: |
+          curl -f "https://deklarant.zavlan.org/run-migrations.php"
 
   prepare-js-artifact:
     name: Prepare JS Artifact
+    needs: run-migrations
     runs-on: ubuntu-latest
     defaults:
       run:
