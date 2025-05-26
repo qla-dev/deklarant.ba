@@ -44,6 +44,8 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./app-service-laravel/
           server-dir: /
+          log-level: verbose
+          protocol: ftps
           exclude: |
             **/.git*
             **/.github/**
