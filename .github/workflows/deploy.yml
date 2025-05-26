@@ -30,8 +30,8 @@ jobs:
             **/vendor/**
             **/node_modules/**
             **/public/build/**
-            **/.git
-            **/.github
+            **/.git/**
+            **/.github/**
             **/tests/**
             **/package*.json
             **/vite.config.js
@@ -40,6 +40,8 @@ jobs:
             **/phpunit.xml
             **/tests/**
             **/.*
+            **/*.bat
+            **/*.code-workspace
 
   upload-vendor:
     name: Upload Vendor Folder
