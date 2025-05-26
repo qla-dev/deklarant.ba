@@ -544,7 +544,7 @@ Kalendarni prikaz mojih faktura
     });
 </script>
 
-
+<!-- Scan upload old
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const token = localStorage.getItem("auth_token");
@@ -686,7 +686,7 @@ Kalendarni prikaz mojih faktura
             uploadFiles(fileInput.files);
         });
     });
-</script>
+</script> -->
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {

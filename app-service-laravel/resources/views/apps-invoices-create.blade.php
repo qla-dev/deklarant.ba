@@ -12,7 +12,7 @@
     /* Ensures the selected text is truncated with ellipsis and tooltip works */
     .select2-container--default .select2-results__options {
         max-width: none !important;
-        min-width: 400px !important;
+       
         /* or use 100% if you want it full-width */
         white-space: normal;
 
@@ -441,17 +441,17 @@
         if (!invoice_id) return;
 
         Swal.fire({
-            title: 'Skeniranje...',
-            html: `<div class="custom-swal-spinner mb-3"></div><div id="swal-status-message">Čeka na obradu...</div>`,
+            title: 'Skeniranje ',
+            html: `<div class="custom-swal-spinner mb-3"></div><div id="swal-status-message">Čeka na obradu</div>`,
             showConfirmButton: false,
             allowOutsideClick: false
         });
 
         const stepTextMap = {
-            null: "Čeka na početak obrade...",
-            conversion: "Konvertovanje dokumenta...",
-            extraction: "Ekstrakcija podataka...",
-            enrichment: "Obogaćivanje podataka..."
+            null: "Čeka na početak obrade",
+            conversion: "Konvertovanje dokumenta",
+            extraction: "Ekstrakcija podataka",
+            enrichment: "Obogaćivanje podataka"
         };
 
         while (true) {
@@ -469,7 +469,7 @@
 
             const el = document.getElementById("swal-status-message");
             if (el) {
-                const message = stepTextMap[step] || "Obrađujemo podatke...";
+                const message = stepTextMap[step] || "Obrađujemo podatke";
                 el.textContent = message;
             }
 
@@ -486,7 +486,7 @@
             if (status === "error") {
                 Swal.close();
                 console.error("Scan error:", json?.status?.error_message);
-                Swal.fire("Greška", json?.status?.error_message || "Greška pri skeniranju.", "error");
+                Swal.fire("Greška", json?.status?.error_message || "Greška pri skeniranju", "error");
                 break;
             }
 
@@ -787,7 +787,7 @@
           </td>
 
           <td style="width: 70px;">
-            <select class="form-select" name="origin[]">
+            <select class="form-select" name="origin[]" style="width: 100%;">
               ${generateCountryOptions(origin)}
             </select>
           </td>
@@ -799,6 +799,7 @@
               name="price[]" 
               value="${price}" 
               style="width: 100%;"
+              
             >
           </td>
 
@@ -880,7 +881,18 @@
             templateResult: formatFlag,
             templateSelection: formatFlag,
             placeholder: "Select a country",
-            width: 'resolve'
+            width: 'style',
+            language: {
+             noResults: function () {
+                 return "Nisu pronađeni rezultati";
+             },
+             searching: function () {
+                 return "Pretraga…";
+             },
+             inputTooShort: function () {
+                 return "Unesite još znakova…";
+             }
+         }
         });
 
         function formatFlag(state) {
@@ -1099,7 +1111,7 @@
 
         } catch (err) {
             console.error("Greška u fetchAndPrefillParties:", err);
-            Swal.fire("Greška", err.message || "Neuspješno dohvaćanje podataka.", "error");
+            Swal.fire("Greška", err.message || "Neuspješno dohvaćanje podataka", "error");
         }
     }
 
@@ -1468,7 +1480,7 @@ document.getElementById("save-invoice-btn").addEventListener("click", async func
     const user = JSON.parse(localStorage.getItem("user"));
     const userId = user?.id;
     if (!userId) {
-        Swal.fire("Greška", "Korisnički ID nije pronađen.", "error");
+        Swal.fire("Greška", "Korisnički ID nije pronađen", "error");
         return;
     }
 
@@ -1567,12 +1579,12 @@ document.getElementById("save-invoice-btn").addEventListener("click", async func
         });
 
         const resJson = await res.json();
-        if (!res.ok) throw new Error(resJson?.error || "Greška pri spašavanju fakture.");
+        if (!res.ok) throw new Error(resJson?.error || "Greška pri spašavanju fakture");
 
         Swal.fire({
             icon: "success",
             title: "Uspješno",
-            text: "Faktura je sačuvana.",
+            text: "Faktura je sačuvana",
             confirmButtonText: "U redu",
             customClass: {
                 confirmButton: "btn btn-info"
@@ -1581,8 +1593,8 @@ document.getElementById("save-invoice-btn").addEventListener("click", async func
         });
 
     } catch (err) {
-        console.error("❌ Greška:", err);
-        Swal.fire("Greška", err.message || "Neočekivana greška.", "error");
+        console.error(" Greška:", err);
+        Swal.fire("Greška", err.message || "Neočekivana greška", "error");
     } finally {
         btn.disabled = false;
         btn.innerHTML = `<i class="ri-printer-line align-bottom me-1"></i> Sačuvaj`;
