@@ -37,17 +37,17 @@ jobs:
         run: npm run build
 
       - name: Upload source code and build artifacts
-        uses: git-ftp/ftp-deploy@v1.2.0
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_URL }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./app-service-laravel/
           server-dir: /
-          protocol: ftp
           exclude: |
             **/.git*
             **/.github/**
+            **/.vscode/**
             **/node_modules/**
             **/tests/**
             **/package*.json
