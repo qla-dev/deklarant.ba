@@ -1,18 +1,50 @@
-name: Deploy Laravel to cPanel via FTP
+name: Deploy Laravel to cPanel (Parallel with SFTP)
 
 on:
   push:
     branches:
-      - main  # Change to your main branch if different
+      - main
 
 jobs:
-  deploy:
-    name: Deploy via FTP
+  upload-code:
+    name: Upload Laravel Code
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./app-service-laravel
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
+      - name: Upload source code
+        uses: SamKirkland/FTP-Deploy-Action@4.3.4
+        with:
+          server: ${{ secrets.FTP_URL }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: "sftp"
+          local-dir: ./
+          server-dir: /
+          state-name: "code-deploy"
+          exclude: |
+            vendor/**
+            node_modules/**
+            public/build/**
+            .git*
+            .github/**
+            tests/**
+            package*.json
+            vite.config.js
+            resources/**
+            storage/**
+            phpunit.xml
+
+  upload-vendor:
+    name: Upload Vendor Folder
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./app-service-laravel
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -22,38 +54,48 @@ jobs:
         with:
           php-version: '8.2'
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install PHP dependencies
+      - name: Install Composer dependencies (no dev)
         run: composer install --no-dev --optimize-autoloader
 
-      - name: Install NPM dependencies
-        run: npm install
-
-      - name: Build assets
-        run: npm run build
-
-      - name: Upload source code and build artifacts
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Upload vendor folder
+        uses: SamKirkland/FTP-Deploy-Action@4.3.4
         with:
           server: ${{ secrets.FTP_URL }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./app-service-laravel/
-          server-dir: /
-          log-level: verbose
-          protocol: ftps
-          exclude: |
-            **/.git*
-            **/.github/**
-            **/.vscode/**
-            **/node_modules/**
-            **/tests/**
-            **/package*.json
-            **/vite.config.js
-            **/resources/**
-            **/public/storage/**
-            !public/build/**
+          protocol: "sftp"
+          local-dir: ./app-service-laravel/vendor/
+          server-dir: /app-service-laravel/vendor
+          state-name: "vendor-deploy"
+
+  upload-js:
+    name: Upload JS Build (Vite)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./app-service-laravel
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install NPM packages
+        run: npm ci
+
+      - name: Build Vite assets
+        run: npm run build
+
+      - name: Upload build folder
+        uses: SamKirkland/FTP-Deploy-Action@4.3.4
+        with:
+          server: ${{ secrets.FTP_URL }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: "sftp"
+          local-dir: ./app-service-laravel/public/build/
+          server-dir: /app-service-laravel/public/build
+          state-name: "build-deploy"
