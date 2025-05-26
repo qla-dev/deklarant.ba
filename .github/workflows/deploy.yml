@@ -49,7 +49,7 @@ jobs:
           ARTIFACT_ID=$(gh api repos/$REPO_OWNER/$REPO_NAME/actions/artifacts \
             | jq '.artifacts[] | select(.name == "code-artifact") | .id')
 
-          curl -f "https://deklarant.ba/deploy-download.php?artifact=${ARTIFACT_ID}&dest=."
+          curl -f "https://deklarant.ba/deploy-download.php?artifact=$ARTIFACT_ID&dest=."
 
   upload-vendor:
     name: Upload Vendor Folder
@@ -86,7 +86,7 @@ jobs:
           ARTIFACT_ID=$(gh api repos/$REPO_OWNER/$REPO_NAME/actions/artifacts \
             | jq '.artifacts[] | select(.name == "vendor-artifact") | .id')
 
-          curl -f "https://deklarant.ba/deploy-download.php?artifact=${ARTIFACT_ID}&dest=app-service-laravel/vendor"
+          curl -f "https://deklarant.ba/deploy-download.php?artifact=$ARTIFACT_ID&dest=app-service-laravel/vendor"
 
   upload-js:
     name: Upload JS Build (Vite)
@@ -126,4 +126,4 @@ jobs:
           ARTIFACT_ID=$(gh api repos/$REPO_OWNER/$REPO_NAME/actions/artifacts \
             | jq '.artifacts[] | select(.name == "js-artifact") | .id')
 
-          curl -f "https://deklarant.ba/deploy-download.php?artifact=${ARTIFACT_ID}&dest=app-service-laravel/public/build"
+          curl -f "https://deklarant.ba/deploy-download.php?artifact=$ARTIFACT_ID&dest=app-service-laravel/public/build"
