@@ -27,17 +27,17 @@ jobs:
           server-dir: /
           state-name: "code-deploy"
           exclude: |
-            vendor/**
-            node_modules/**
-            public/build/**
-            .git*
-            .github/**
-            tests/**
-            package*.json
-            vite.config.js
-            resources/**
-            storage/**
-            phpunit.xml
+            **/vendor/**
+            **/node_modules/**
+            **/public/build/**
+            **/.git
+            **/.github
+            **/tests/**
+            **/package*.json
+            **/vite.config.js
+            **/resources/**
+            **/storage/**
+            **/phpunit.xml
 
   upload-vendor:
     name: Upload Vendor Folder
