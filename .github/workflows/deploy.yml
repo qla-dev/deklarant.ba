@@ -31,12 +31,13 @@ jobs:
             --exclude='*.code-workspace' \
             --exclude='**/.*'
           find . -name ".htaccess" -exec cp --parents {} ../deploy-code/ \;
+          mv ../deploy-code .
 
       - name: Upload code artifact
         uses: actions/upload-artifact@v4
         with:
           name: code-artifact
-          path: ../deploy-code
+          path: ./deploy-code
           include-hidden-files: true
 
   deploy-code:
