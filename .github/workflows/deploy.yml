@@ -1,4 +1,4 @@
-name: Deploy Laravel to cPanel (Parallel with FTPS)
+name: Deploy Laravel to cPanel (Artifact Method)
 
 on:
   push:
@@ -16,32 +16,43 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Upload source code
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Prepare code artifact
+        run: |
+          mkdir deploy-code
+          rsync -a ./ deploy-code \
+            --exclude='vendor/' \
+            --exclude='node_modules/' \
+            --exclude='public/build/' \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='tests/' \
+            --exclude='package*.json' \
+            --exclude='vite.config.js' \
+            --exclude='resources/' \
+            --exclude='storage/' \
+            --exclude='phpunit.xml' \
+            --exclude='.*' \
+            --exclude='*.bat' \
+            --exclude='*.code-workspace'
+
+      - name: Upload code artifact
+        uses: actions/upload-artifact@v4
         with:
-          server: ${{ secrets.FTP_URL }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: "ftps"
-          local-dir: ./
-          server-dir: //
-          state-name: "code-deploy"
-          exclude: |
-            **/vendor/**
-            **/node_modules/**
-            **/public/build/**
-            **/.git/**
-            **/.github/**
-            **/tests/**
-            **/package*.json
-            **/vite.config.js
-            **/resources/**
-            **/storage/**
-            **/phpunit.xml
-            **/tests/**
-            **/.*
-            **/*.bat
-            **/*.code-workspace
+          name: code-artifact
+          path: ./app-service-laravel/deploy-code
+
+      - name: Call deploy script for code
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          REPO_FULL="${{ github.repository }}"
+          REPO_OWNER=$(echo "$REPO_FULL" | cut -d'/' -f1)
+          REPO_NAME=$(echo "$REPO_FULL" | cut -d'/' -f2)
+
+          ARTIFACT_ID=$(gh api repos/$REPO_OWNER/$REPO_NAME/actions/artifacts \
+            | jq '.artifacts[] | select(.name == "code-artifact") | .id')
+
+          curl -f "https://deklarant.ba/deploy-download.php?artifact=${ARTIFACT_ID}&dest=app-service-laravel"
 
   upload-vendor:
     name: Upload Vendor Folder
@@ -61,16 +72,24 @@ jobs:
       - name: Install Composer dependencies (no dev)
         run: composer install --no-dev --optimize-autoloader
 
-      - name: Upload vendor folder
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Upload vendor artifact
+        uses: actions/upload-artifact@v4
         with:
-          server: ${{ secrets.FTP_URL }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: "ftps"
-          local-dir: ./app-service-laravel/vendor/
-          server-dir: /app-service-laravel/vendor/
-          state-name: "vendor-deploy"
+          name: vendor-artifact
+          path: ./app-service-laravel/vendor/
+
+      - name: Call deploy script for vendor
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          REPO_FULL="${{ github.repository }}"
+          REPO_OWNER=$(echo "$REPO_FULL" | cut -d'/' -f1)
+          REPO_NAME=$(echo "$REPO_FULL" | cut -d'/' -f2)
+
+          ARTIFACT_ID=$(gh api repos/$REPO_OWNER/$REPO_NAME/actions/artifacts \
+            | jq '.artifacts[] | select(.name == "vendor-artifact") | .id')
+
+          curl -f "https://deklarant.ba/deploy-download.php?artifact=${ARTIFACT_ID}&dest=app-service-laravel/vendor"
 
   upload-js:
     name: Upload JS Build (Vite)
@@ -93,13 +112,21 @@ jobs:
       - name: Build Vite assets
         run: npm run build
 
-      - name: Upload build folder
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Upload JS artifact
+        uses: actions/upload-artifact@v4
         with:
-          server: ${{ secrets.FTP_URL }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: "ftps"
-          local-dir: ./app-service-laravel/public/build/
-          server-dir: /app-service-laravel/public/build/
-          state-name: "build-deploy"
+          name: js-artifact
+          path: ./app-service-laravel/public/build/
+
+      - name: Call deploy script for JS build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          REPO_FULL="${{ github.repository }}"
+          REPO_OWNER=$(echo "$REPO_FULL" | cut -d'/' -f1)
+          REPO_NAME=$(echo "$REPO_FULL" | cut -d'/' -f2)
+
+          ARTIFACT_ID=$(gh api repos/$REPO_OWNER/$REPO_NAME/actions/artifacts \
+            | jq '.artifacts[] | select(.name == "js-artifact") | .id')
+
+          curl -f "https://deklarant.ba/deploy-download.php?artifact=${ARTIFACT_ID}&dest=app-service-laravel/public/build"
