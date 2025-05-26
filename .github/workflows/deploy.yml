@@ -25,7 +25,6 @@ jobs:
             --exclude='tests/' \
             --exclude='package*.json' \
             --exclude='vite.config.js' \
-            --exclude='resources/' \
             --exclude='storage/' \
             --exclude='phpunit.xml' \
             --exclude='*.bat' \
