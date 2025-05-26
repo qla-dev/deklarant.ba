@@ -24,7 +24,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: "ftps"
           local-dir: ./
-          server-dir: /
+          server-dir: //
           state-name: "code-deploy"
           exclude: |
             **/vendor/**
@@ -67,7 +67,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: "ftps"
           local-dir: ./app-service-laravel/vendor/
-          server-dir: /app-service-laravel/vendor
+          server-dir: /app-service-laravel/vendor/
           state-name: "vendor-deploy"
 
   upload-js:
@@ -99,5 +99,5 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: "ftps"
           local-dir: ./app-service-laravel/public/build/
-          server-dir: /app-service-laravel/public/build
+          server-dir: /app-service-laravel/public/build/
           state-name: "build-deploy"
