@@ -19,7 +19,7 @@ jobs:
           rsync -a . ../deploy-code/ \
             --exclude='vendor/' \
             --exclude='node_modules/' \
-            --exclude='public/build/' \
+            --exclude='public/' \
             --exclude='resources/' \
             --exclude='.git/' \
             --exclude='.github/' \
@@ -154,7 +154,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: js-artifact
-          path: ./app-service-laravel/public/build/
+          path: ./app-service-laravel/public/
+          include-hidden-files: true
 
   deploy-js:
     name: Deploy JS Build
@@ -180,4 +181,4 @@ jobs:
             exit 1
           fi
 
-          curl -f "https://deklarant.zavlan.org/download-deploy.php?artifact=$ARTIFACT_ID&dest=./app-service-laravel/public/build"
+          curl -f "https://deklarant.zavlan.org/download-deploy.php?artifact=$ARTIFACT_ID&dest=./app-service-laravel/public"
