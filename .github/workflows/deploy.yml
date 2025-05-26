@@ -69,7 +69,6 @@ jobs:
 
   prepare-resources-artifact:
     name: Prepare Resources Artifact
-    needs: deploy-code
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -114,7 +113,7 @@ jobs:
 
   run-composer-install:
     name: Run Composer Install
-    needs: deploy-resources
+    needs: deploy-code
     runs-on: ubuntu-latest
     steps:
       - name: Trigger remote composer install
@@ -132,7 +131,6 @@ jobs:
 
   prepare-js-artifact:
     name: Prepare JS Artifact
-    needs: run-migrations
     runs-on: ubuntu-latest
     defaults:
       run:
