@@ -55,13 +55,18 @@ if (!$success || $httpCode !== 200) {
 echo "Downloaded artifact to $tmpFile\n";
 
 // Unzip
-$zip = new ZipArchive();
-if ($zip->open($tmpFile) === true) {
-    $fullPath = rtrim($destination, '/');
-    $zip->extractTo($fullPath);
-    $zip->close();
-    echo "Artifact extracted to $fullPath\n";
-} else {
+$escapedDest = escapeshellarg($destination);
+$escapedFile = escapeshellarg($tmpFile);
+
+$output = [];
+$returnVar = 0;
+exec("unzip -o $escapedFile -d $escapedDest", $output, $returnVar);
+
+echo implode("\n", $output) . "\n";
+
+if ($returnVar !== 0) {
     http_response_code(500);
-    echo "Failed to unzip artifact.\n";
+    echo "Extraction failed with code $returnVar\n";
+} else {
+    echo "Extracted successfully to $destination\n";
 }
