@@ -1239,7 +1239,7 @@
 
 
 
-<!-- Upload data -->
+<!-- Upload data 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const token = localStorage.getItem("auth_token");
@@ -1388,7 +1388,7 @@
             uploadFiles(fileInput.files);
         });
     });
-</script>
+</script> -->
 
 
 <!-- user package -->

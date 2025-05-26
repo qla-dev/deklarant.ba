@@ -27,37 +27,37 @@
 
 
                 <!-- App Search-->
-            <form class="app-search d-none d-md-block me-5" style="width: 77%;" id="global-search-form">
-    <div class="position-relative">
-        <input type="text" class="form-control border" placeholder="Pretraga po broju deklaracije, imenu dokumenta, dobavljaču, zemlji projekla..." autocomplete="off"
-            id="global-search" />
-        <span class="mdi mdi-magnify search-widget-icon text-info"></span>
-        <span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none" id="search-clear"></span>
-    </div>
-</form>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const input = document.getElementById("global-search");
-    const clear = document.getElementById("search-clear");
+                <form class="app-search d-none d-md-block me-5" style="width: 77%;" id="global-search-form">
+                    <div class="position-relative">
+                        <input type="text" class="form-control border" placeholder="Pretraga po broju deklaracije, imenu dokumenta, dobavljaču, zemlji projekla..." autocomplete="off"
+                            id="global-search" />
+                        <span class="mdi mdi-magnify search-widget-icon text-info"></span>
+                        <span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none" id="search-clear"></span>
+                    </div>
+                </form>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        const input = document.getElementById("global-search");
+                        const clear = document.getElementById("search-clear");
 
-    input.addEventListener("input", function () {
-        clear.classList.toggle("d-none", this.value.length === 0);
-    });
+                        input.addEventListener("input", function() {
+                            clear.classList.toggle("d-none", this.value.length === 0);
+                        });
 
-    clear.addEventListener("click", function () {
-        input.value = "";
-        clear.classList.add("d-none");
-    });
+                        clear.addEventListener("click", function() {
+                            input.value = "";
+                            clear.classList.add("d-none");
+                        });
 
-    document.getElementById("global-search-form").addEventListener("submit", function (e) {
-        e.preventDefault();
-        const keyword = input.value.trim();
-        if (keyword.length > 0) {
-            window.location.href = `/pretraga?keyword=${encodeURIComponent(keyword)}`;
-        }
-    });
-});
-</script>
+                        document.getElementById("global-search-form").addEventListener("submit", function(e) {
+                            e.preventDefault();
+                            const keyword = input.value.trim();
+                            if (keyword.length > 0) {
+                                window.location.href = `/pretraga?keyword=${encodeURIComponent(keyword)}`;
+                            }
+                        });
+                    });
+                </script>
 
 
             </div>
@@ -158,6 +158,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                     </a>
                                 </div>
                                 
+
                             </div>
                         </div>
                     </div>
@@ -220,63 +221,63 @@ document.addEventListener("DOMContentLoaded", function () {
                         <a class="dropdown-item" href="profil"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Moj nalog</span></a>
                         <a class="dropdown-item" href="faqs"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Pomoć</span></a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="cijene-paketa"><i class="fas fa-wand-magic-sparkles fs-12 text-muted me-1" ></i> <span
+                        <a class="dropdown-item" href="cijene-paketa"><i class="fas fa-wand-magic-sparkles fs-12 text-muted me-1"></i> <span
                                 class="align-middle">Dostupna skeniranja : <b id="remainScansTopbar"></b></span></a>
 
 
-                                <script>
-    document.addEventListener("DOMContentLoaded", async function() {
-        const user = JSON.parse(localStorage.getItem("user"));
-        const token = localStorage.getItem("auth_token");
+                        <script>
+                            document.addEventListener("DOMContentLoaded", async function() {
+                                const user = JSON.parse(localStorage.getItem("user"));
+                                const token = localStorage.getItem("auth_token");
 
-        console.log("[INIT] Provjera lokalne pohrane...");
-        console.log(" Korisnik:", user);
-        console.log(" Token:", token?.substring(0, 25) + "..."); // da ne ispiše cijeli token
+                                console.log("[INIT] Provjera lokalne pohrane...");
+                                console.log(" Korisnik:", user);
+                                console.log(" Token:", token?.substring(0, 25) + "..."); // da ne ispiše cijeli token
 
-        if (!user || !token) {
-            console.warn(" User ili token nedostaje u localStorage.");
-            return;
-        }
+                                if (!user || !token) {
+                                    console.warn(" User ili token nedostaje u localStorage.");
+                                    return;
+                                }
 
-        const API_URL = `/api/statistics/users/${user.id}`;
-        console.log(` Pozivam API: ${API_URL}`);
+                                const API_URL = `/api/statistics/users/${user.id}`;
+                                console.log(` Pozivam API: ${API_URL}`);
 
-        try {
-            const response = await axios.get(API_URL, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
+                                try {
+                                    const response = await axios.get(API_URL, {
+                                        headers: {
+                                            Authorization: `Bearer ${token}`
+                                        }
+                                    });
 
-            console.log(" API response:", response);
-            const stats = response.data || {};
+                                    console.log(" API response:", response);
+                                    const stats = response.data || {};
 
-            console.log(" Parsed statistike:", stats);
+                                    console.log(" Parsed statistike:", stats);
 
-            const fields = {
-                totalSuppliers: stats.total_suppliers ?? 0,
-                totalInvoices: stats.total_invoices ?? 0,
-                usedScans: stats.used_scans ?? 0,
-                remainScansTopbar: stats.remaining_scans ?? 0
-            };
+                                    const fields = {
+                                        totalSuppliers: stats.total_suppliers ?? 0,
+                                        totalInvoices: stats.total_invoices ?? 0,
+                                        usedScans: stats.used_scans ?? 0,
+                                        remainScansTopbar: stats.remaining_scans ?? 0
+                                    };
 
-            console.log("📌 Vrijednosti za prikaz u DOM-u:", fields);
+                                    console.log("📌 Vrijednosti za prikaz u DOM-u:", fields);
 
-            Object.entries(fields).forEach(([id, value]) => {
-                const el = document.getElementById(id);
-                if (el) {
-                    console.log(`➡️ Ažuriram #${id} na:`, value);
-                    el.innerText = value;
-                } else {
-                    console.warn(`⚠️ Element s ID '${id}' nije pronađen u DOM-u.`);
-                }
-            });
+                                    Object.entries(fields).forEach(([id, value]) => {
+                                        const el = document.getElementById(id);
+                                        if (el) {
+                                            console.log(`➡️ Ažuriram #${id} na:`, value);
+                                            el.innerText = value;
+                                        } else {
+                                            console.warn(`⚠️ Element s ID '${id}' nije pronađen u DOM-u.`);
+                                        }
+                                    });
 
-        } catch (error) {
-            console.error("❌ Greška pri dohvaćanju statistike:", error);
-        }
-    });
-</script>
+                                } catch (error) {
+                                    console.error("❌ Greška pri dohvaćanju statistike:", error);
+                                }
+                            });
+                        </script>
 
                         <a class="dropdown-item" href="auth-lockscreen-basic"><i
                                 class="mdi mdi-sleep text-muted fs-16 align-middle me-1"></i> <span
@@ -292,7 +293,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         <!-- Buttons Group -->
 
-                        
+
 
 
                     </div>
@@ -307,6 +308,12 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
     </div>
 </header>
+<div id="uploadLoader" style="display: none; text-align: center;">
+    <div class="spinner-border text-info" role="status" style="width: 2rem; height: 2rem;">
+        <span class="visually-hidden">Uploading...</span>
+    </div>
+</div>
+
 
 <!-- removeNotificationModal -->
 <div id="removeNotificationModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">
@@ -638,22 +645,8 @@ document.addEventListener("DOMContentLoaded", function () {
             const formData = new FormData();
             Array.from(files).forEach(file => formData.append('file', file));
 
-            progressContainer.style.display = "block";
-            progressBar.style.width = "0%";
-            progressBar.innerText = "0%";
-
-            let fakeProgress = 0;
-            const fakeInterval = setInterval(() => {
-                fakeProgress += 5;
-                if (fakeProgress > 100) fakeProgress = 100;
-
-                progressBar.style.width = fakeProgress + "%";
-                progressBar.innerText = fakeProgress + "%";
-
-                if (fakeProgress === 100) {
-                    clearInterval(fakeInterval);
-                }
-            }, 150);
+            // Show small spinner (e.g., under dropzone or centered)
+            document.getElementById("uploadLoader").style.display = "block";
 
             fetch('/api/storage/invoice-uploads', {
                     method: 'POST',
@@ -670,20 +663,36 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
                 .then(data => {
                     console.log('Upload successful:', data);
-
                     if (data.invoice_id) {
                         localStorage.setItem("scan_invoice_id", data.invoice_id);
                     }
 
-                    // No SweetAlert here — just proceed
-                    window.location.href = "/apps-invoices-create";
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('scanModal'));
+                    if (modal) {
+                        modal.hide();
+                    }
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Uspješno uploadovan dokument',
+                        confirmButtonText: 'Nastavi',
+                        customClass: {
+                            confirmButton: 'btn btn-info'
+                        },
+                        buttonsStyling: false
+                    }).then(() => {
+                        window.location.href = "/apps-invoices-create";
+                    });
                 })
                 .catch(error => {
                     console.error('Upload error:', error);
                     alert('Greška prilikom uploada.');
-                    progressContainer.style.display = "none";
+                })
+                .finally(() => {
+                    document.getElementById("uploadLoader").style.display = "none";
                 });
         }
+
 
         dropzone.addEventListener("dragover", e => {
             e.preventDefault();
