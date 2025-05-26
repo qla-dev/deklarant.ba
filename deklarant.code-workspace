@@ -11,6 +11,9 @@
 		{
 			"name": "code-search",
 			"path": "code-search"
+		},
+		{
+			"path": ".github"
 		}
 	],
 	"settings": {}
