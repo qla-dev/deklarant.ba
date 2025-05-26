@@ -16,7 +16,7 @@ jobs:
       - name: Prepare code artifact
         run: |
           mkdir deploy-code
-          rsync -a ./ deploy-code \
+          rsync -a . deploy-code/ \
             --exclude='vendor/' \
             --exclude='node_modules/' \
             --exclude='public/build/' \
@@ -61,7 +61,7 @@ jobs:
             exit 1
           fi
 
-          curl -f "https://deklarant.zavlan.org/deploy-download.php?artifact=$ARTIFACT_ID&dest=."
+          curl -f "https://deklarant.zavlan.org/download-deploy.php?artifact=$ARTIFACT_ID&dest=."
 
   prepare-vendor-artifact:
     name: Prepare Vendor Artifact
@@ -111,7 +111,7 @@ jobs:
             exit 1
           fi
 
-          curl -f "https://deklarant.zavlan.org/deploy-download.php?artifact=$ARTIFACT_ID&dest=./app-service-laravel/vendor"
+          curl -f "https://deklarant.zavlan.org/download-deploy.php?artifact=$ARTIFACT_ID&dest=./app-service-laravel/vendor"
 
   prepare-js-artifact:
     name: Prepare JS Artifact
@@ -164,4 +164,4 @@ jobs:
             exit 1
           fi
 
-          curl -f "https://deklarant.zavlan.org/deploy-download.php?artifact=$ARTIFACT_ID&dest=./app-service-laravel/public/build"
+          curl -f "https://deklarant.zavlan.org/download-deploy.php?artifact=$ARTIFACT_ID&dest=./app-service-laravel/public/build"
