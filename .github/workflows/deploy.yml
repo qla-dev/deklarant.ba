@@ -6,8 +6,8 @@ on:
       - main
 
 jobs:
-  upload-code:
-    name: Upload Laravel Code
+  prepare-code-artifact:
+    name: Prepare Code Artifact
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -38,7 +38,12 @@ jobs:
           name: code-artifact
           path: ./deploy-code
 
-      - name: Call deploy script for code
+  deploy-code:
+    name: Deploy Code
+    needs: prepare-code-artifact
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy code artifact
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -49,7 +54,7 @@ jobs:
 
           ARTIFACT_ID=$(gh api repos/$REPO_OWNER/$REPO_NAME/actions/artifacts \
             | jq --argjson run_id "$RUN_ID" --arg name "code-artifact" \
-            '.artifacts[] | select(.name == $name and .workflow_run.id == $run_id) | .id' \
+              '.artifacts[] | select(.name == $name and .workflow_run.id == $run_id) | .id' \
             | sort -n | tail -1)
 
           if [ -z "$ARTIFACT_ID" ]; then
@@ -57,10 +62,10 @@ jobs:
             exit 1
           fi
 
-          curl -f "https://deklarant.ba/deploy-download.php?artifact=${ARTIFACT_ID}&dest=."
+          curl -f "https://deklarant.ba/deploy-download.php?artifact=$ARTIFACT_ID&dest=."
 
-  upload-vendor:
-    name: Upload Vendor Folder
+  prepare-vendor-artifact:
+    name: Prepare Vendor Artifact
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -83,7 +88,12 @@ jobs:
           name: vendor-artifact
           path: ./app-service-laravel/vendor/
 
-      - name: Call deploy script for vendor
+  deploy-vendor:
+    name: Deploy Vendor
+    needs: deploy-code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy vendor artifact
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -94,7 +104,7 @@ jobs:
 
           ARTIFACT_ID=$(gh api repos/$REPO_OWNER/$REPO_NAME/actions/artifacts \
             | jq --argjson run_id "$RUN_ID" --arg name "vendor-artifact" \
-            '.artifacts[] | select(.name == $name and .workflow_run.id == $run_id) | .id' \
+              '.artifacts[] | select(.name == $name and .workflow_run.id == $run_id) | .id' \
             | sort -n | tail -1)
 
           if [ -z "$ARTIFACT_ID" ]; then
@@ -102,10 +112,10 @@ jobs:
             exit 1
           fi
 
-          curl -f "https://deklarant.ba/deploy-download.php?artifact=${ARTIFACT_ID}&dest=app-service-laravel/vendor"
+          curl -f "https://deklarant.ba/deploy-download.php?artifact=$ARTIFACT_ID&dest=app-service-laravel/vendor"
 
-  upload-js:
-    name: Upload JS Build (Vite)
+  prepare-js-artifact:
+    name: Prepare JS Artifact
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -131,7 +141,12 @@ jobs:
           name: js-artifact
           path: ./app-service-laravel/public/build/
 
-      - name: Call deploy script for JS build
+  deploy-js:
+    name: Deploy JS Build
+    needs: deploy-vendor
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy JS artifact
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -142,7 +157,7 @@ jobs:
 
           ARTIFACT_ID=$(gh api repos/$REPO_OWNER/$REPO_NAME/actions/artifacts \
             | jq --argjson run_id "$RUN_ID" --arg name "js-artifact" \
-            '.artifacts[] | select(.name == $name and .workflow_run.id == $run_id) | .id' \
+              '.artifacts[] | select(.name == $name and .workflow_run.id == $run_id) | .id' \
             | sort -n | tail -1)
 
           if [ -z "$ARTIFACT_ID" ]; then
@@ -150,4 +165,4 @@ jobs:
             exit 1
           fi
 
-          curl -f "https://deklarant.ba/deploy-download.php?artifact=${ARTIFACT_ID}&dest=app-service-laravel/public/build"
+          curl -f "https://deklarant.ba/deploy-download.php?artifact=$ARTIFACT_ID&dest=app-service-laravel/public/build"
