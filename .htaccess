@@ -1,7 +1,11 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Redirect root requests to Laravel public/index.php
+    # Allow direct access to deploy-download.php
+    RewriteCond %{REQUEST_URI} ^/deploy-download\\.php$ [NC]
+    RewriteRule ^ - [L]
+
+    # Redirect everything else to Laravel's public/ folder
     RewriteCond %{REQUEST_URI} !^/app-service-laravel/public/
     RewriteRule ^(.*)$ app-service-laravel/public/$1 [L]
 </IfModule>
