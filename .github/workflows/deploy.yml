@@ -42,7 +42,7 @@ jobs:
           server: ${{ secrets.FTP_URL }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./app-service-laravel
+          local-dir: ./app-service-laravel/
           server-dir: /
           exclude: |
             **/.git*
@@ -61,5 +61,5 @@ jobs:
           server: ${{ secrets.FTP_URL }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./app-service-laravel/vendor
+          local-dir: ./app-service-laravel/vendor/
           server-dir: /vendor
