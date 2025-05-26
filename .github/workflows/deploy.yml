@@ -56,7 +56,7 @@ jobs:
             exit 1
           fi
 
-          curl -f "https://deklarant.ba/deploy-download.php?artifact=${ARTIFACT_ID}&dest=app-service-laravel"
+          curl -f "https://deklarant.ba/deploy-download.php?artifact=${ARTIFACT_ID}&dest=."
 
   upload-vendor:
     name: Upload Vendor Folder
