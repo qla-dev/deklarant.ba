@@ -29,6 +29,7 @@ jobs:
             --exclude='storage/' \
             --exclude='phpunit.xml' \
             --exclude='.*' \
+            --include='.htaccess' \
             --exclude='*.bat' \
             --exclude='*.code-workspace'
 
@@ -90,7 +91,7 @@ jobs:
 
   deploy-vendor:
     name: Deploy Vendor
-    needs: [deploy-code, prepare-vendor-artifact]
+    needs: prepare-vendor-artifact
     runs-on: ubuntu-latest
     steps:
       - name: Deploy vendor artifact
@@ -143,7 +144,7 @@ jobs:
 
   deploy-js:
     name: Deploy JS Build
-    needs: [deploy-vendor, prepare-js-artifact]
+    needs: prepare-js-artifact
     runs-on: ubuntu-latest
     steps:
       - name: Deploy JS artifact
