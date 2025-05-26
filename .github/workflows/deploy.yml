@@ -49,7 +49,8 @@ jobs:
 
           ARTIFACT_ID=$(gh api repos/$REPO_OWNER/$REPO_NAME/actions/artifacts \
             | jq --argjson run_id "$RUN_ID" --arg name "code-artifact" \
-              '.artifacts[] | select(.name == $name and .workflow_run.id == $run_id) | .id')
+            '.artifacts[] | select(.name == $name and .workflow_run.id == $run_id) | .id' \
+            | sort -n | tail -1)
 
           if [ -z "$ARTIFACT_ID" ]; then
             echo "Artifact not found for code."
@@ -93,7 +94,8 @@ jobs:
 
           ARTIFACT_ID=$(gh api repos/$REPO_OWNER/$REPO_NAME/actions/artifacts \
             | jq --argjson run_id "$RUN_ID" --arg name "vendor-artifact" \
-              '.artifacts[] | select(.name == $name and .workflow_run.id == $run_id) | .id')
+            '.artifacts[] | select(.name == $name and .workflow_run.id == $run_id) | .id' \
+            | sort -n | tail -1)
 
           if [ -z "$ARTIFACT_ID" ]; then
             echo "Artifact not found for vendor."
@@ -140,7 +142,8 @@ jobs:
 
           ARTIFACT_ID=$(gh api repos/$REPO_OWNER/$REPO_NAME/actions/artifacts \
             | jq --argjson run_id "$RUN_ID" --arg name "js-artifact" \
-              '.artifacts[] | select(.name == $name and .workflow_run.id == $run_id) | .id')
+            '.artifacts[] | select(.name == $name and .workflow_run.id == $run_id) | .id' \
+            | sort -n | tail -1)
 
           if [ -z "$ARTIFACT_ID" ]; then
             echo "Artifact not found for JS build."
