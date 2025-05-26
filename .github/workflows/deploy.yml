@@ -62,7 +62,7 @@ jobs:
             exit 1
           fi
 
-          curl -f "https://deklarant.ba/deploy-download.php?artifact=$ARTIFACT_ID&dest=."
+          curl -f "https://deklarant.zavlan.org/deploy-download.php?artifact=$ARTIFACT_ID&dest=."
 
   prepare-vendor-artifact:
     name: Prepare Vendor Artifact
@@ -112,7 +112,7 @@ jobs:
             exit 1
           fi
 
-          curl -f "https://deklarant.ba/deploy-download.php?artifact=$ARTIFACT_ID&dest=./app-service-laravel/vendor"
+          curl -f "https://deklarant.zavlan.org/deploy-download.php?artifact=$ARTIFACT_ID&dest=./app-service-laravel/vendor"
 
   prepare-js-artifact:
     name: Prepare JS Artifact
@@ -165,4 +165,4 @@ jobs:
             exit 1
           fi
 
-          curl -f "https://deklarant.ba/deploy-download.php?artifact=$ARTIFACT_ID&dest=./app-service-laravel/public/build"
+          curl -f "https://deklarant.zavlan.org/deploy-download.php?artifact=$ARTIFACT_ID&dest=./app-service-laravel/public/build"
