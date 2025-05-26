@@ -15,8 +15,8 @@ jobs:
 
       - name: Prepare code artifact
         run: |
-          mkdir deploy-code
-          rsync -a . deploy-code/ \
+          mkdir ../deploy-code
+          rsync -a . ../deploy-code/ \
             --exclude='vendor/' \
             --exclude='node_modules/' \
             --exclude='public/build/' \
@@ -30,13 +30,13 @@ jobs:
             --exclude='*.bat' \
             --exclude='*.code-workspace' \
             --exclude='**/.*'
-          find . -name ".htaccess" -exec cp --parents {} deploy-code/ \;
+          find . -name ".htaccess" -exec cp --parents {} ../deploy-code/ \;
 
       - name: Upload code artifact
         uses: actions/upload-artifact@v4
         with:
           name: code-artifact
-          path: ./deploy-code
+          path: ../deploy-code
           include-hidden-files: true
 
   deploy-code:
