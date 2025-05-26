@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Upload source code
-        uses: SamKirkland/FTP-Deploy-Action@4.3.4
+        uses: SamKirkland/FTP-Deploy-Action@4.3.5
         with:
           server: ${{ secrets.FTP_URL }}
           username: ${{ secrets.FTP_USERNAME }}
@@ -58,7 +58,7 @@ jobs:
         run: composer install --no-dev --optimize-autoloader
 
       - name: Upload vendor folder
-        uses: SamKirkland/FTP-Deploy-Action@4.3.4
+        uses: SamKirkland/FTP-Deploy-Action@4.3.5
         with:
           server: ${{ secrets.FTP_URL }}
           username: ${{ secrets.FTP_USERNAME }}
@@ -90,7 +90,7 @@ jobs:
         run: npm run build
 
       - name: Upload build folder
-        uses: SamKirkland/FTP-Deploy-Action@4.3.4
+        uses: SamKirkland/FTP-Deploy-Action@4.3.5
         with:
           server: ${{ secrets.FTP_URL }}
           username: ${{ secrets.FTP_USERNAME }}
