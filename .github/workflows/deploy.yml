@@ -29,13 +29,16 @@ jobs:
             --exclude='storage/' \
             --exclude='phpunit.xml' \
             --exclude='*.bat' \
-            --exclude='*.code-workspace'
+            --exclude='*.code-workspace' \
+            --exclude='**/.*'
+          find . -name ".htaccess" -exec cp --parents {} deploy-code/ \;
 
       - name: Upload code artifact
         uses: actions/upload-artifact@v4
         with:
           name: code-artifact
           path: ./deploy-code
+          include-hidden-files: true
 
   deploy-code:
     name: Deploy Code
