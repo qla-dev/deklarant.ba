@@ -28,8 +28,6 @@ jobs:
             --exclude='resources/' \
             --exclude='storage/' \
             --exclude='phpunit.xml' \
-            --exclude='.*' \
-            --include='.htaccess' \
             --exclude='*.bat' \
             --exclude='*.code-workspace'
 
