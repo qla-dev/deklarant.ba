@@ -38,6 +38,8 @@ jobs:
             **/resources/**
             **/storage/**
             **/phpunit.xml
+            **/tests/**
+            **/.*
 
   upload-vendor:
     name: Upload Vendor Folder
