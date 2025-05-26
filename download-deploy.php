@@ -25,7 +25,7 @@ if (!$artifactId || !$destination) {
 $apiUrl = "https://api.github.com/repos/{OWNER}/{REPO}/actions/artifacts/$artifactId/zip";
 
 // Replace {OWNER} and {REPO} with actual values
-$apiUrl = str_replace(['{OWNER}', '{REPO}'], ['YOUR_GITHUB_USERNAME', 'YOUR_REPO'], $apiUrl);
+$apiUrl = str_replace(['{OWNER}', '{REPO}'], ['qla-dev', 'deklarant.ba'], $apiUrl);
 
 // Download artifact
 $tmpFile = tempnam(sys_get_temp_dir(), 'artifact_') . '.zip';
