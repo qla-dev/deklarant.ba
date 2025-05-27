@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\StatsController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\FileManagerController;
 use App\Http\Controllers\Api\ExchangeRateController;
+use App\Http\Middleware\IsAdmin;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,10 +59,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     // SUPPLIER ROUTES
-    Route::apiResource('suppliers', SupplierController::class);
+    Route::apiResource('suppliers', SupplierController::class)->middleware(IsAdmin::class);
 
     // IMPORTER ROUTES
-    Route::apiResource('importers', ImporterController::class);
+    Route::apiResource('importers', ImporterController::class)->middleware(IsAdmin::class);
 
 
     // USER PACKAGES ROUTES
