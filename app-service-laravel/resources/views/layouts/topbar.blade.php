@@ -196,7 +196,14 @@
                                         document.write(JSON.parse(localStorage.getItem("user"))?.username || "Korisnik");
                                     </script>
                                 </span>
-                                <span class="d-none d-xl-block fs-12 user-name-sub-text text-end">Business</span>
+                                <span class="d-none d-xl-block fs-12 user-name-sub-text text-end">  <script>
+                                    const user = JSON.parse(localStorage.getItem("user"));
+                                    if (user?.role === "superadmin") {
+                                        document.write("Superadmin");
+                                    } else {
+                                        document.write("Business");
+                                    }
+                                </script></span>
 
 
                             </span>
