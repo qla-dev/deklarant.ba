@@ -113,7 +113,11 @@ class InvoiceController extends Controller
     {
         try {
             $invoice = Invoice::findOrFail($invoiceId);
-            $invoice->update($request->all());
+            $data = $request->all();
+            if (isset($data['importer_id'])) {
+                $invoice->importer_id = $data['importer_id'];
+            }
+            $invoice->update($data);
 
             return response()->json([
                 'message' => 'Invoice updated successfully.',
@@ -266,6 +270,7 @@ class InvoiceController extends Controller
     public function getScanResult($id)
     {
         try {
+            $invoice = Invoice::findOrFail($id);
             $result = $this->tryGetAiResult($id);
             // Check if it's a Laravel HTTP Response
             if ($result instanceof \Illuminate\Http\JsonResponse) {
@@ -381,17 +386,20 @@ class InvoiceController extends Controller
                 'items.*.base_price' => 'required|numeric',
                 'items.*.total_price' => 'required|numeric',
                 'items.*.currency' => 'required|string',
+                'importer_id' => 'required|integer|exists:importers,id',
                 'items.*.version' => 'required|integer',
                 'items.*.best_customs_code_matches' => 'required|array',
             ]);
 
             $supplier = Supplier::findOrFail($supplierId);
+            $importer = Importer::findOrFail($data['importer_id']);
             $user = User::findOrFail($userId);
 
             // Save the invoice first
             $invoice = Invoice::create([
                 'user_id' => $userId,
                 'supplier_id' => $supplier->id,
+                'importer_id' => $importer->id,
                 'file_name' => $data['file_name'] ?? null,
                 'total_price' => $data['total_price'],
                 'date_of_issue' => $data['date_of_issue'],

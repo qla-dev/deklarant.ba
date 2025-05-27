@@ -588,6 +588,8 @@
     document.addEventListener("DOMContentLoaded", initDarkModeToggle);
 </script>
 
+
+<!-- Upload files logic -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const token = localStorage.getItem("auth_token");
