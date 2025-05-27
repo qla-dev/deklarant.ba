@@ -29,7 +29,8 @@ class User extends Authenticatable
         'country',
         'zip_code',
         'description',
-        'company'
+        'company',
+        'role' 
     ];
 
     protected $hidden = [
@@ -40,7 +41,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'skills' => 'array',
-        'company' => 'array'
+        'company' => 'array',
+        'role' => 'string' 
     ];
 
     /**
@@ -80,6 +82,7 @@ class User extends Authenticatable
             'country' => $userData['country'] ?? null,
             'zip_code' => $userData['zip_code'] ?? null,
             'description' => $userData['description'] ?? null,
+            'role' => $userData['role'] ?? 'user'
         ]);
     }
 }
