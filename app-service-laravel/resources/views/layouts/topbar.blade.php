@@ -379,10 +379,7 @@
         const user = JSON.parse(localStorage.getItem("user"));
         const avatarBasePath = "/storage/uploads/avatars/";
 
-        if (!token || !user || !user.id) {
-            alert("Niste prijavljeni.");
-            return;
-        }
+    
 
         const avatarImg = document.getElementById("user-avatar");
         const avatarFallback = document.getElementById("avatar-fallback");
@@ -449,7 +446,8 @@
                     await axios.post("/api/auth/logout", {}, {
                         headers: {
                             Authorization: `Bearer ${token}`
-                        }
+                        },
+                        withCredentials: true // Add credentials for cookies
                     });
                 } catch (err) {
                     console.error("Logout failed:", err);
@@ -600,11 +598,7 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const token = localStorage.getItem("auth_token");
-        if (!token) {
-            alert("Niste prijavljeni. Molimo ulogujte se.");
-            window.location.href = "/login";
-            return;
-        }
+  
 
         const dropzone = document.getElementById("dropzone");
         const fileInput = document.getElementById("fileInput");

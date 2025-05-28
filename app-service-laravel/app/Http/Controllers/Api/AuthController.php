@@ -130,9 +130,22 @@ public function login(Request $request)
     {
         // Log out from session (web guard)
         Auth::logout();
-        // Delete current access token (API guard)
-        $request->user()->currentAccessToken()->delete();
-        return response()->json(['message' => 'Successfully logged out.'], 200);
+
+        // Invalidate the session and regenerate token
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        // Delete all access tokens for the user (API guard)
+        $user = $request->user();
+        if ($user) {
+            $user->tokens()->delete();
+        }
+
+        // Forget the session cookie
+        $cookieName = config('session.cookie');
+        $cookie = cookie($cookieName, null, -1);
+
+        return response()->json(['message' => 'Successfully logged out.'], 200)->withCookie($cookie);
     }
 
     public function myToken(Request $request)
