@@ -447,19 +447,15 @@
                 }
 
                 try {
-                    await axios.post("/api/auth/logout", {}, {
+                    await axios.post("/api/logoutUser", {}, {
                         headers: {
                             Authorization: `Bearer ${token}`
-                        },
-                        withCredentials: true // Add credentials for cookies
+                        }, credentials for cookies
                     });
                 } catch (err) {
                     console.error("Logout failed:", err);
                 }
 
-                localStorage.removeItem("auth_token");
-                localStorage.removeItem("user");
-                window.location.href = "/login";
             });
         }
     });

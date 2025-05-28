@@ -128,18 +128,18 @@ public function login(Request $request)
 
     public function logoutUser(Request $request)
     {
+        // Delete all access tokens for the authenticated user
+        $userId = Auth::id();
+        if ($userId) {
+            PersonalAccessToken::where('tokenable_id', $userId)->delete();
+        }
+
         // Log out from session (web guard)
         Auth::logout();
 
         // Invalidate the session and regenerate token
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
-        // Delete all access tokens for the user (API guard)
-        $user = $request->user();
-        if ($user) {
-            $user->tokens()->delete();
-        }
 
         // Forget the session cookie
         $cookieName = config('session.cookie');
