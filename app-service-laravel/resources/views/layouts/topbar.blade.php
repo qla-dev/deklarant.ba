@@ -290,13 +290,11 @@
                                 class="mdi mdi-sleep text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">Sleep</span></a>
 
-                        <a class="dropdown-item" href="javascript:void(0);" id="logout-link">
-                            <i class="bx bx-power-off text-muted fs-16 align-middle me-1" style="margin-top: -3px!important;"></i>
-                            <span key="t-logout">@lang('translation.logout')</span>
-                        </a>
+                   
                          <form method="POST" action="/custom-logout">
     @csrf
-    <button type="submit">Logout</button>
+    <button class="dropdown-item" type="submit"><i class="bx bx-power-off text-muted fs-16 align-middle me-1" style="margin-top: -3px!important;"></i>
+                            <span key="t-logout">@lang('translation.logout')</span></button>
 </form>
 
 

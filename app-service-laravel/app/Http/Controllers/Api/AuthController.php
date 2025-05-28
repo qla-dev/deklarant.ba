@@ -149,6 +149,22 @@ public function login(Request $request)
         return redirect('/')->withCookie($cookie);
     }
 
+    public function logout(Request $request)
+    {
+        // Get token from Authorization header
+        $token = $request->bearerToken();
+
+        if ($token) {
+            $currentToken = PersonalAccessToken::findToken($token);
+            if ($currentToken) {
+                $currentToken->delete();
+                return response()->json(['message' => 'Logged out from API part.']);
+            }
+        }
+
+        return response()->json(['message' => 'No valid token found.'], 400);
+    }
+
     public function myToken(Request $request)
     {
         $token = $request->bearerToken();
