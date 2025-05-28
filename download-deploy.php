@@ -70,3 +70,13 @@ if ($returnVar !== 0) {
 } else {
     echo "Extracted successfully to $destination\n";
 }
+
+exec("rm -rf /tmp/artifact_*", $output, $returnVar);
+
+echo implode("\n", $output) . "\n";
+
+if ($returnVar !== 0) {
+    echo "WARNING: Deleting artifact in tmp failed with code $returnVar\n";
+} else {
+    echo "Removed temporary artifacts\n";
+}
