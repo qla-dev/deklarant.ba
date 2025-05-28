@@ -14,6 +14,8 @@ use App\Http\Controllers\Api\StatsController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\FileManagerController;
 use App\Http\Controllers\Api\ExchangeRateController;
+use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\CanScan;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,10 +60,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     // SUPPLIER ROUTES
-    Route::apiResource('suppliers', SupplierController::class);
+    Route::apiResource('suppliers', SupplierController::class)->middleware(IsAdmin::class);
+    Route::put('suppliers/{supplier}', [SupplierController::class, 'update'])->middleware(IsAdmin::class);
 
     // IMPORTER ROUTES
-    Route::apiResource('importers', ImporterController::class);
+    Route::apiResource('importers', ImporterController::class)->middleware(IsAdmin::class);
+    Route::put('importers/{importer}', [ImporterController::class, 'update'])->middleware(IsAdmin::class);
 
 
     // USER PACKAGES ROUTES
@@ -94,12 +98,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // FILE MANAGER ROUTES
 
-    Route::post('/storage/uploads', [FileManagerController::class, 'uploadFile']);
+    Route::post('/storage/uploads', [FileManagerController::class, 'uploadFile'])->middleware(CanScan::class);
     Route::post('/apps-file-manager/create-folder', [FileManagerController::class, 'createFolder']);
     Route::get('/folders/{path?}', [FileManagerController::class, 'showFolder'])->where('path', '.*');
 
     // INVOICE UPLOAD ROUTES
-    Route::post('/storage/invoice-uploads', [FileManagerController::class, 'uploadInvoiceFile']);
+    Route::post('/storage/invoice-uploads', [FileManagerController::class, 'uploadInvoiceFile'])->middleware(CanScan::class);
 
     // SCAN ROUTES
     Route::post('/invoices/{invoiceId}/scan', [InvoiceController::class, 'scan']);

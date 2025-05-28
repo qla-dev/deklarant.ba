@@ -150,7 +150,11 @@ Prijava
                     showConfirmButton: false,
                     timer: 1500
                 }).then(() => {
-                    window.location.href = "/";
+                    if (user.role === 'superadmin') {
+                        window.location.href = "/dobavljaci";
+                    } else {
+                        window.location.href = "/";
+                    }
                 });
             } catch (error) {
                 Swal.fire({

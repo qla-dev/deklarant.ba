@@ -114,7 +114,7 @@ class AuthController extends Controller
             'message' => $isFromRegistration ? 'Registration and Login successful.' : 'Login successful',
             'token' => $token,
             'macAddress' => $macAddress,
-            'user' => $user->only(['id', 'username', 'email', 'avatar']),
+            'user' => $user->only(['id', 'username','role', 'email', 'avatar']),
         ], 200);
     }
 

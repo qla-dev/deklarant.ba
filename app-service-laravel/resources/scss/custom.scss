@@ -12,7 +12,7 @@ File: Custom Css File
 
 
 
-#navbar-nav {width: 100%; justify-content: space-between;}
+#navbar-nav-user, #navbar-nav-admin, .user-nav, .admin-nav {width: 100%!important; justify-content: space-between!important;}
 
 @media (min-width: 1024px) and (max-width:1300px) {
     [data-layout=horizontal] .navbar-menu {
