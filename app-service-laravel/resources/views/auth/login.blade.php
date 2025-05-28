@@ -151,7 +151,7 @@ Prijava
                     timer: 1500
                 }).then(() => {
                     if (user.role === 'superadmin') {
-                        window.location.href = "/dobavljaci";
+                        window.location.href = "/";
                     } else {
                         window.location.href = "/";
                     }

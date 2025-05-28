@@ -294,6 +294,10 @@
                             <i class="bx bx-power-off text-muted fs-16 align-middle me-1" style="margin-top: -3px!important;"></i>
                             <span key="t-logout">@lang('translation.logout')</span>
                         </a>
+                         <form method="POST" action="/custom-logout">
+    @csrf
+    <button type="submit">Logout</button>
+</form>
 
 
 

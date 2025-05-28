@@ -126,7 +126,7 @@ public function login(Request $request)
 }
 
 
-    public function logout(Request $request)
+    public function logoutUser(Request $request)
     {
         // Log out from session (web guard)
         Auth::logout();
@@ -145,7 +145,8 @@ public function login(Request $request)
         $cookieName = config('session.cookie');
         $cookie = cookie($cookieName, null, -1);
 
-        return response()->json(['message' => 'Successfully logged out.'], 200)->withCookie($cookie);
+        // Redirect to /
+        return redirect('/')->withCookie($cookie);
     }
 
     public function myToken(Request $request)
