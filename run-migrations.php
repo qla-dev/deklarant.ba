@@ -14,5 +14,8 @@ runOrFail('php artisan config:clear 2>&1');
 runOrFail('php artisan cache:clear 2>&1');
 runOrFail('php artisan view:clear 2>&1');
 runOrFail('php artisan route:clear 2>&1');
+runOrFail('php artisan config:cache 2>&1');
+runOrFail('php artisan route:cache 2>&1');
+runOrFail('php artisan view:cache 2>&1');
 
 http_response_code(200);
