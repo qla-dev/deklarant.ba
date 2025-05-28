@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Laravel\Sanctum\PersonalAccessToken;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Exception;
 
 class AuthController extends Controller
@@ -71,55 +72,65 @@ class AuthController extends Controller
         }
     }
 
-    public function login(Request $request)
-    {
-        // Retrieve MAC address from request headers
-        $macAddress = $request->header('MAC-Address');
-    
-        // Check if the user is already logged in from the same device
-        $isLoggedFromSameDevice = $this->isLoggedFromSameDevice($request);
-        if ($isLoggedFromSameDevice) {
-            return $isLoggedFromSameDevice;
-        }
-        
-        $identifier = $request->has('username') ? 'username' : 'email';
 
-        $request->validate([
-            $identifier => 'required|string',
-            'password'  => 'required|string',
-        ]);
 
-        $user = User::where('email', $request->input($identifier))
-                        ->orWhere('username', $request->input($identifier))
-                        ->first();
+public function login(Request $request)
+{
+    // Retrieve MAC address from request headers
+    $macAddress = $request->header('MAC-Address');
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Invalid login credentials.'], 401);
-        }
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        // Store MAC address in personal_access_tokens table
-        DB::table('personal_access_tokens')
-            ->where('tokenable_id', $user->id)
-            ->latest()
-            ->update(['device' => $macAddress]);
-    
-        Log::info("User {$user->email} logged in successfully. MAC: {$macAddress} Token: {$token}");
-    
-        // Check if the request came from the registration function
-        $isFromRegistration = $request->input('from_registration', false);
-    
-        return response()->json([
-            'message' => $isFromRegistration ? 'Registration and Login successful.' : 'Login successful',
-            'token' => $token,
-            'macAddress' => $macAddress,
-            'user' => $user->only(['id', 'username','role', 'email', 'avatar']),
-        ], 200);
+    // Check if the user is already logged in from the same device
+    $isLoggedFromSameDevice = $this->isLoggedFromSameDevice($request);
+    if ($isLoggedFromSameDevice) {
+        return $isLoggedFromSameDevice;
     }
+
+    $identifier = $request->has('username') ? 'username' : 'email';
+
+    $request->validate([
+        $identifier => 'required|string',
+        'password'  => 'required|string',
+    ]);
+
+    $user = User::where('email', $request->input($identifier))
+                ->orWhere('username', $request->input($identifier))
+                ->first();
+
+    if (!$user || !Hash::check($request->password, $user->password)) {
+        return response()->json(['message' => 'Invalid login credentials.'], 401);
+    }
+
+    //  Log in via session (optional, for web routes using 'web' guard)
+    Auth::login($user);
+
+    // Create API token for Sanctum usage
+    $token = $user->createToken('auth_token')->plainTextToken;
+
+    // Store MAC address in personal_access_tokens table
+    DB::table('personal_access_tokens')
+        ->where('tokenable_id', $user->id)
+        ->latest()
+        ->update(['device' => $macAddress]);
+
+    Log::info("User {$user->email} logged in. MAC: {$macAddress} Token: {$token}");
+
+    // From registration flag
+    $isFromRegistration = $request->input('from_registration', false);
+
+    return response()->json([
+        'message' => $isFromRegistration ? 'Registration and Login successful.' : 'Login successful',
+        'token' => $token,
+        'macAddress' => $macAddress,
+        'user' => $user->only(['id', 'username', 'role', 'email', 'avatar']),
+    ], 200);
+}
+
 
     public function logout(Request $request)
     {
+        // Log out from session (web guard)
+        Auth::logout();
+        // Delete current access token (API guard)
         $request->user()->currentAccessToken()->delete();
         return response()->json(['message' => 'Successfully logged out.'], 200);
     }

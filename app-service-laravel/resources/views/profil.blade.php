@@ -292,6 +292,10 @@
                     Član od:<span id="joining-date" style="ms-0 p-0">Učitavanje...</span>
 
                 </div>
+                @auth
+    <p>Welcome, {{ Auth::user()->username }}</p>
+@endauth
+
             </div>
         </div>
 
