@@ -197,7 +197,7 @@
                         <h6 class="text-muted text-uppercase fw-semibold mb-3">Podaci o dobavljaču</h6>
                 
                         <div class="mb-2">
-                            <button type="button" class="btn btn-outline-primary mb-2" id="add-new-supplier">+ Novi dobavljač</button>
+                            <button type="button" class="btn btn-outline-info mb-2" id="add-new-supplier">Obriši AI podatke i unesi ručno</button>
                             <select id="supplier-select2" class="form-select"></select>
                         </div>
                         <input type="text" class="form-control mb-2" id="billing-name" name="supplier_name" placeholder="Naziv dobavljača">
@@ -210,8 +210,9 @@
                     </div>
                     <div class="col-6 text-end">
                         <h6 class="text-muted text-uppercase fw-semibold mb-3 text-end">Podaci o uvozniku</h6>
-                       
-                            <button type="button" class="btn btn-outline-primary mb-2" id="add-new-importer">+ Novi uvoznik</button>
+                        
+                        <div class="mb-2">
+                            <button type="button" class="btn btn-outline-info mb-2" id="add-new-importer">Obriši AI podatke i unesi ručno</button>
                             <select id="importer-select2" class="form-select"></select>
                         </div>
 
@@ -442,16 +443,18 @@
         return true;
     }
 
-    async function waitForAIResult() {
+    async function waitForAIResult(showLoader = true) {
         const invoice_id = getInvoiceId();
         if (!invoice_id) return;
 
-        Swal.fire({
-            title: 'Skeniranje ',
-            html: `<div class="custom-swal-spinner mb-3"></div><div id="swal-status-message">Čeka na obradu</div>`,
-            showConfirmButton: false,
-            allowOutsideClick: false
-        });
+        if (showLoader) {
+            Swal.fire({
+                title: 'Skeniranje ',
+                html: `<div class="custom-swal-spinner mb-3"></div><div id="swal-status-message">Čeka na obradu</div>`,
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+        }
 
         const stepTextMap = {
             null: "Čeka na početak obrade",
@@ -839,8 +842,6 @@
               
             <div class="input-group input-group-sm" style="height: 30px;">
                 <button 
-                  class="btn btn-outline-info btn-sm decrement-kolata" 
-                  type="button" 
                   style="padding: 0; width: 20px;"
                 >−</button>
 
@@ -1025,7 +1026,9 @@
             }, suggestions);
         });
         if (invoice.incoterm) {
-            document.getElementById("incoterm").value = invoice.incoterm;
+            // Extract only the code (first word) for the select
+            const incotermCode = invoice.incoterm.split(' ')[0];
+            document.getElementById("incoterm").value = incotermCode;
         }
         if (invoice.invoice_number) {
             const cleaned = invoice.invoice_number.replaceAll("/", "");
@@ -1223,157 +1226,173 @@
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
+    console.log(" Page loaded. Starting init process...");
 
-        console.log(" Page loaded. Starting init process...");
+    // Parallelize tariff and invoice fetch for faster load
+    const [tariffRes, invoice] = await Promise.all([
+        fetch("{{ URL::asset('build/json/tariff.json') }}"),
+        getInvoice()
+    ]);
+    const tariffData = await tariffRes.json();
+    console.log(" Tariff data loaded:", tariffData);
 
-        const tariffRes = await fetch("{{ URL::asset('build/json/tariff.json') }}");
-        const tariffData = await tariffRes.json();
-        console.log(" Tariff data loaded:", tariffData);
+    processedTariffData = tariffData
+        .filter(item => item["Tarifna oznaka"] && item["Naziv"] && item["Puni Naziv"])
+        .map(item => ({
+            id: item["Tarifna oznaka"],
+            text: item["Puni Naziv"].split(">>>").pop().trim(),
+            display: `${item["Tarifna oznaka"]} – ${item["Naziv"]}`,
+            depth: item["Puni Naziv"].split(">>>").length - 1,
+            isLeaf: item["Tarifna oznaka"].replace(/\s/g, '').length === 10,
+            search: [item["Naziv"], item["Puni Naziv"], item["Tarifna oznaka"]].join(" ").toLowerCase()
+        }));
+    console.log(" Processed tariff data:", processedTariffData);
 
-        processedTariffData = tariffData
-            .filter(item => item["Tarifna oznaka"] && item["Naziv"] && item["Puni Naziv"])
-            .map(item => ({
-                id: item["Tarifna oznaka"],
-                text: item["Puni Naziv"].split(">>>").pop().trim(),
-                display: `${item["Tarifna oznaka"]} – ${item["Naziv"]}`,
-                depth: item["Puni Naziv"].split(">>>").length - 1,
-                isLeaf: item["Tarifna oznaka"].replace(/\s/g, '').length === 10,
-                search: [item["Naziv"], item["Puni Naziv"], item["Tarifna oznaka"]].join(" ").toLowerCase()
-            }));
-        console.log(" Processed tariff data:", processedTariffData);
+    // Only show loader and run scan if needed
+    let scanNeeded = false;
+    if (invoice.task_id == null) scanNeeded = true;
+    else if (!invoice.items?.length) scanNeeded = true;
 
-        const invoice = await getInvoice();
+    if (scanNeeded) {
+        Swal.fire({
+            title: 'Skeniranje',
+            html: `<div class=\"custom-swal-spinner mb-3\"></div><div id=\"swal-status-message\">Čeka na obradu</div>`,
+            showConfirmButton: false,
+            allowOutsideClick: false
+        });
         if (invoice.task_id == null && await startAiScan()) {
             await waitForAIResult();
         } else if (!invoice.items?.length) {
             await waitForAIResult();
         }
+        Swal.close();
+    }
 
-        _invoice_data = null;
+    _invoice_data = null;
 
-        await fillInvoiceData();
-        await fetchAndPrefillParties();
-        $("#supplier-select2").select2({
-            placeholder: "Pretraži dobavljača",
-            allowClear: true,
-            ajax: {
-                url: "/api/suppliers",
-                dataType: "json",
-                delay: 250,
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("auth_token")}`
-                },
-                data: params => ({
-                    search: params.term
-                }),
-                processResults: data => ({
-                    results: data.data.map(s => ({
-                        id: s.id,
-                        text: `${s.name} – ${s.address}`,
-                        full: s
-                    }))
-                }),
-                cache: true
+    await fillInvoiceData();
+    await fetchAndPrefillParties();
+    $("#supplier-select2").select2({
+        placeholder: "Pretraži dobavljača",
+        allowClear: true,
+        ajax: {
+            url: "/api/suppliers",
+            dataType: "json",
+            delay: 250,
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("auth_token")}`
             },
-            tags: true,
-            allowClear: false
-        });
+            data: params => ({
+                search: params.term
+            }),
+            processResults: data => ({
+                results: data.data.map(s => ({
+                    id: s.id,
+                    text: `${s.name} – ${s.address}`,
+                    full: s
+                }))
+            }),
+            cache: true
+        },
+        tags: true,
+        allowClear: false
+    });
 
-        $('#supplier-select2').on('select2:select', function(e) {
-            const data = e.params.data.full;
-            if (data) {
-                $('#billing-name').val(data.name || "");
-                $('#billing-address-line-1').val(data.address || "");
-                $('#billing-phone-no').val(data.contact_phone || "");
-                $('#billing-tax-no').val(data.tax_id || "");
-                $('#email').val(data.contact_email || "");
-                $('#supplier-owner').val(data.owner || ""); // Fill owner field
-            }
-        });
+    $('#supplier-select2').on('select2:select', function(e) {
+        const data = e.params.data.full;
+        if (data) {
+            $('#billing-name').val(data.name || "");
+            $('#billing-address-line-1').val(data.address || "");
+            $('#billing-phone-no').val(data.contact_phone || "");
+            $('#billing-tax-no').val(data.tax_id || "");
+            $('#email').val(data.contact_email || "");
+            $('#supplier-owner').val(data.owner || ""); // Fill owner field
+        }
+    });
 
-        $("#importer-select2").select2({
-            placeholder: "Pretraži uvoznika",
-            allowClear: true,
-            ajax: {
-                url: "/api/importers",
-                dataType: "json",
-                delay: 250,
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("auth_token")}`
-                },
-                data: params => ({
-                    search: params.term
-                }),
-                processResults: data => ({
-                    results: data.data.map(s => ({
-                        id: s.id,
-                        text: `${s.name} – ${s.address}`,
-                        full: s
-                    }))
-                }),
-                cache: true
+    $("#importer-select2").select2({
+        placeholder: "Pretraži uvoznika",
+        allowClear: true,
+        ajax: {
+            url: "/api/importers",
+            dataType: "json",
+            delay: 250,
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("auth_token")}`
             },
-            tags: true,
-            allowClear: false
-        });
+            data: params => ({
+                search: params.term
+            }),
+            processResults: data => ({
+                results: data.data.map(s => ({
+                    id: s.id,
+                    text: `${s.name} – ${s.address}`,
+                    full: s
+                }))
+            }),
+            cache: true
+        },
+        tags: true,
+        allowClear: false
+    });
 
-        $('#importer-select2').on('select2:select', function(e) {
-            const data = e.params.data.full;
-            if (data) {
+    $('#importer-select2').on('select2:select', function(e) {
+        const data = e.params.data.full;
+        if (data) {
 
-                $('#carrier-address').val(data.address || "");
-                $('#carrier-name').val(data.name || "");
-                $('#carrier-phone').val(data.contact_phone || "");
-                $('#carrier-tax').val(data.tax_id || "");
-                $('#carrier-email').val(data.contact_email || "");
-                $('#carrier-owner').val(data.owner || ""); // Fill owner field
+            $('#carrier-address').val(data.address || "");
+            $('#carrier-name').val(data.name || "");
+            $('#carrier-phone').val(data.contact_phone || "");
+            $('#carrier-tax').val(data.tax_id || "");
+            $('#carrier-email').val(data.contact_email || "");
+            $('#carrier-owner').val(data.owner || ""); // Fill owner field
+        }
+    });
+
+
+    // await promptForSupplierAfterScan();
+    $(document).on('click', '.show-ai-btn', function() {
+        console.log("✅ AI button clicked");
+
+        const select = $(this).closest('td').find('select.select2-tariff');
+        console.log("🔎 Found select element:", select);
+
+        let rawSuggestions = select.data("suggestions");
+        try {
+            if (typeof rawSuggestions === "string") {
+                rawSuggestions = JSON.parse(rawSuggestions);
             }
-        });
+        } catch (err) {
+            console.error("❌ Failed to parse suggestions JSON:", err);
+            return;
+        }
 
+        console.log("📦 Raw suggestions:", rawSuggestions);
 
-        // await promptForSupplierAfterScan();
-        $(document).on('click', '.show-ai-btn', function() {
-            console.log("✅ AI button clicked");
+        if (!rawSuggestions) {
+            console.warn(" No suggestions found on data attribute.");
+            return;
+        }
 
-            const select = $(this).closest('td').find('select.select2-tariff');
-            console.log("🔎 Found select element:", select);
+        if (!Array.isArray(rawSuggestions)) {
+            console.warn(" Suggestions are not an array:", typeof rawSuggestions);
+            return;
+        }
 
-            let rawSuggestions = select.data("suggestions");
-            try {
-                if (typeof rawSuggestions === "string") {
-                    rawSuggestions = JSON.parse(rawSuggestions);
-                }
-            } catch (err) {
-                console.error("❌ Failed to parse suggestions JSON:", err);
-                return;
-            }
+        const sorted = [...rawSuggestions].sort((a, b) => a.closeness - b.closeness).slice(0, 10);
+        console.log(" Sorted suggestions:", sorted);
 
-            console.log("📦 Raw suggestions:", rawSuggestions);
+        const container = document.getElementById("aiSuggestionsBody");
+        if (!container) {
+            console.error(" aiSuggestionsBody not found in DOM");
+            return;
+        }
 
-            if (!rawSuggestions) {
-                console.warn(" No suggestions found on data attribute.");
-                return;
-            }
-
-            if (!Array.isArray(rawSuggestions)) {
-                console.warn(" Suggestions are not an array:", typeof rawSuggestions);
-                return;
-            }
-
-            const sorted = [...rawSuggestions].sort((a, b) => a.closeness - b.closeness).slice(0, 10);
-            console.log(" Sorted suggestions:", sorted);
-
-            const container = document.getElementById("aiSuggestionsBody");
-            if (!container) {
-                console.error(" aiSuggestionsBody not found in DOM");
-                return;
-            }
-
-            if (!sorted.length) {
-                container.innerHTML = `<div class="text-muted">Nema prijedloga.</div>`;
-                console.log("ℹ️ No sorted suggestions to show.");
-            } else {
-                container.innerHTML = sorted.map((s, i) => `
+        if (!sorted.length) {
+            container.innerHTML = `<div class="text-muted">Nema prijedloga.</div>`;
+            console.log("ℹ️ No sorted suggestions to show.");
+        } else {
+            container.innerHTML = sorted.map((s, i) => `
             <div class="mb-2">
                 <div><strong>${i + 1}. Tarifna oznaka:</strong> ${s.entry["Tarifna oznaka"]}</div>
                 <div><strong>Naziv:</strong> ${s.entry["Naziv"]}</div>
@@ -1456,7 +1475,6 @@
         document.getElementById("invoice-date").value = new Date().toISOString().split("T")[0];
         console.log(" Invoice date and number set.");
 
-
         document.getElementById("company-address").value = "Vilsonovo, 9, Sarajevo ";
         document.getElementById("company-zip").value = "71000";
         document.getElementById("company-email").value = "business@deklarant.ba";
@@ -1501,8 +1519,51 @@
             // Do NOT call fetchAndPrefillParties or touch supplier fields
         });
     });
-</script>
 
+
+    $(document).ready(function() {
+        // Add SweetAlert confirmation for supplier manual entry
+        $('#add-new-supplier').off('click').on('click', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Jesi li siguran/na?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Da',
+                cancelButtonText: 'Ne',
+                reverseButtons: true,
+                focusCancel: true,
+                confirmButtonColor: '#299dcb',
+                cancelButtonColor: '#6c757d'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.forceNewSupplier = true;
+                    fetchAndPrefillParties();
+                }
+            });
+        });
+        // Add SweetAlert confirmation for importer manual entry
+        $('#add-new-importer').off('click').on('click', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Jesi li siguran/na?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Da',
+                cancelButtonText: 'Ne',
+                reverseButtons: true,
+                focusCancel: true,
+                confirmButtonColor: '#299dcb',
+                cancelButtonColor: '#6c757d'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.forceNewImporter = true;
+                    fetchAndPrefillParties();
+                }
+            });
+        });
+    });
+</script>
 
 <!-- Google search -->
 
@@ -1807,11 +1868,12 @@
                     "&": "&amp;",
                     "'": "&apos;",
                     '"': "&quot;",
-                } [c]));
+                }));
 
             // Build XML string
             let xml = `<invoice>\n`;
             invoiceData.items.forEach((item) => {
+
                 xml += `  <item>\n`;
                 xml += `    <tarif>${escapeXml(item.tarif)}</tarif>\n`;
                 xml += `    <name>${escapeXml(item.name)}</name>\n`;
@@ -1829,8 +1891,8 @@
             xml += `  <total>${escapeXml(invoiceData.total)}</total>\n`;
             xml += `</invoice>`;
 
-           
-            });
+            // Create blob and download
+            const blob = new Blob([xml], { type: 'text/xml' });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
             link.download = "invoice.xml";

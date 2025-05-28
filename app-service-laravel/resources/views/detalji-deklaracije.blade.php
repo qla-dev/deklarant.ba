@@ -21,7 +21,7 @@
     }
 
     table.table {
-        border: 1px solid  !important;
+        border: 1px solid !important;
         visibility: visible !important;
     }
 
@@ -74,14 +74,31 @@
                         <div class="row g-4 mb-3 ">
 
                             <!--end col-->
-                            <div class="col-12 text-start">
-                                <h6 class="text-muted text-uppercase fw-semibold mb-3 mt-2">Osnovni podaci</h6>
-                                <p class="text-muted mb-1"><span>E-mail: </span><span id="shipping-phone-no">deklarant@skeniraj.ba</span></p>
-                                <p class="text-muted mb-1"><span>Tel: </span><span id="shipping-phone-no">+(387) 63974234</span></p>
-                                <p class="text-muted mb-1"><span>VAT: </span><span id="shipping-phone-no">BA12314519</span></p>
-                                <p class="text-muted mb-1"><span>Adresa: </span><span id="shipping-phone-no">Vilsonovo 9, Sarajevo</span></p>
+                            <div class="row">
+                                <!-- LEFT: Osnovni podaci -->
+                                <div class="col-md-8">
+                                    <h6 class="text-muted text-uppercase fw-semibold mb-3 mt-2">Osnovni podaci</h6>
+                                    <p class="text-muted mb-1"><span>E-mail: </span><span id="shipping-email">deklarant@skeniraj.ba</span></p>
+                                    <p class="text-muted mb-1"><span>Tel: </span><span id="shipping-phone">+(387) 63974234</span></p>
+                                    <p class="text-muted mb-1"><span>VAT: </span><span id="shipping-vat">BA12314519</span></p>
+                                    <p class="text-muted mb-1"><span>Adresa: </span><span id="shipping-address">Vilsonovo 9, Sarajevo</span></p>
+                                </div>
 
+                                <!-- RIGHT: Incoterm and Broj fakture stacked -->
+                                <div class="col-md-4 text-end" style="padding-right: 0px;">
+                                    <div class="mb-3">
+                                        <h6 class="text-muted text-uppercase fw-semibold mt-1">Incoterm</h6>
+                                        <h5 class="fs-14 mb-0"><span id="incoterm"></span></h5>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6 class="text-muted text-uppercase fw-semibold mt-1">Broj fakture</h6>
+                                        <h5 class="fs-14 mb-0"><span id="invoice-no"></span></h5>
+                                    </div>
+                                    
+                                </div>
                             </div>
+
+
                             <!--end col-->
                         </div>
                         <!--end row-->
@@ -92,20 +109,28 @@
                 <div class="col-lg-12">
                     <div class="card-body p-4 border-top border-top-dashed">
                         <div class="row g-4 mb-3 ">
-                            <div class="col-6 text-start">
+                            <div class="col-8 text-start">
                                 <h6 class="text-muted text-uppercase fw-semibold mb-3">Podaci o dobavljaču</h6>
                                 <p class="fw-medium mb-2" id="supplier-name"></p>
                                 <p class="text-muted mb-1" id="supplier-address"></p>
                                 <p class="text-muted mb-1"><span>Tel: </span><span id="supplier-phone"></span></p>
-                                <p class="text-muted mb-0"><span>Tax: </span><span id="supplier-tax"></span> </p>
+                                <p class="text-muted mb-1"><span>Email: </span><span id="supplier-email"></span></p>
+                                <p class="text-muted mb-1"><span>Vlasnik: </span><span id="supplier-owner"></span></p>
+                                <p class="text-muted mb-1"><span>JIB/VAT: </span><span id="supplier-tax"></span></p>
+                               
                             </div>
                             <!--end col-->
-                            <div class="col-6 text-end">
+                            <div class="col-4 text-end">
                                 <h6 class="text-muted text-uppercase fw-semibold mb-3">Podaci o uvozniku</h6>
                                 <p class="fw-medium mb-2" id="carrier-name">SCHENKER</p>
                                 <p class="text-muted mb-1" id="carrier-address-line-1">305 S San Gabriel Blvd</p>
-                                <p class="text-muted mb-1"><span>Tel: +</span><span id="carrier-phone">(123)
-                                        456-7890</span></p>
+                                <p class="text-muted mb-1"><span>Tel:</span><span id="carrier-phone">(123) 456-7890</span></p>
+                                <p class="text-muted mb-1"><span>Email: </span><span id="carrier-email"></span></p>
+                                <p class="text-muted mb-1"><span>Vlasnik: </span><span id="carrier-owner"></span></p>
+                                <p class="text-muted mb-1"><span>JIB/VAT: </span><span id="carrier-tax"></span></p>
+                                
+                                <!-- Add incoterm here, top right -->
+                                
                             </div>
                             <!--end col-->
                         </div>
@@ -117,15 +142,14 @@
                     <div class="card-body p-4 border-top border-top-dashed">
                         <div class="row g-4 mb-3 justify-content-between align-items-center ">
                             <div class="col-lg-4 text-start">
-                                <p class="text-muted mb-2 text-uppercase fw-semibold">Broj fakture:</p>
-                                <h5 class="fs-14 mb-0">#<span id="invoice-no"> Učitavanje...</span></h5>
+                                <p class="text-muted mb-2 text-uppercase fw-semibold">Id fakture:</p>
+                                <h5 class="fs-14 mb-0">#<span id="invoice-id"> Učitavanje...</span></h5>
                             </div>
                             <!--end col-->
                             <div class="col-lg-4 text-center">
                                 <p class="text-muted mb-2 text-uppercase fw-semibold">Datum izdavanja</p>
                                 <h5 class="fs-14 mb-0"><span id="invoice-date"></span> </h5>
                             </div>
-                            <!--end col-->
                             <!--end col-->
                             <div class="col-lg-4 text-end">
                                 <p class="text-muted mb-2 text-uppercase fw-semibold">Ukupan iznos:</p>
@@ -146,42 +170,35 @@
                             <table id="invoiceTable" class="table table-borderless text-center table-nowrap align-middle mb-0">
                                 <thead>
                                     <tr class="table-active">
-                                        <th scope="col">#</th>
-                                        <th scope="col">Proizvodi</th>
-                                        <th scope="col">Prevod</th>
-                                        <th scope="col">Tarifna oznaka</th>
-                                        <th scope="col">Cijena</th>
-                                        <th scope="col">Količina</th>
-                                        <th scope="col">Zemlja porijekla</th>
-                                        <th scope="col" class="text-end">Ukupna cijena</th>
+                                        <th>#</th>
+                                        <th>Proizvodi</th>
+                                        <th>Opis</th>
+                                        <th>Prevod</th>
+                                        <th>Tarifna oznaka</th>
+                                        <th>Tip kvantiteta</th>
+                                        <th>Zemlja porijekla</th>
+                                        <th>Cijena</th>
+                                        <th>Količina</th>
+                                        <th>Broj paketa</th>
+                                        <th>Ukupno</th>
+                                        <th>Povlastica</th>
                                     </tr>
                                 </thead>
                                 <tbody id="products-list">
-
-
+                                    <!-- Populated by JS -->
                                 </tbody>
                             </table>
-                            <!--end table-->
                         </div>
                         <div class="border-top border-top-dashed mt-2">
                             <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto" style="width:250px">
                                 <tbody class="border-bottom-dashed">
-
                                     <tr class="border-top border-top-dashed fs-15">
                                         <th scope="row">Ukupan iznos</th>
                                         <th class="text-end" id="total-amount"></th>
                                     </tr>
                                 </tbody>
                             </table>
-                            <!--end table-->
-
-                            </table>
-                            <!--end table-->
                         </div>
-
-
-
-
                     </div>
                     <!--end card-body-->
                 </div>
@@ -297,11 +314,15 @@
 
             // Fill invoice details
             console.log("%c[DEBUG] Filling invoice details", "color: teal");
-            document.getElementById("invoice-no").textContent = invoice.id;
+            document.getElementById("invoice-no").textContent = invoice.invoice_number || '--';
             document.getElementById("invoice-date").textContent = new Date(invoice.date_of_issue).toLocaleDateString('hr');
             document.getElementById("total-1").textContent = ` ${symbol}${parseFloat(invoice.total_price).toFixed(2)}`;
             document.getElementById("total-amount").textContent = `${symbol} ${parseFloat(invoice.total_price).toFixed(2)}`;
-            
+            if (document.getElementById("incoterm")) {
+                document.getElementById("incoterm").textContent = invoice.incoterm || '--';
+            }
+            document.getElementById("invoice-no").textContent = invoice.invoice_number || '--';
+            document.getElementById("invoice-id").textContent = invoice.id || '--';
 
 
             const productsList = document.getElementById("products-list");
@@ -309,58 +330,76 @@
 
             // Fill product list
             if (!invoice.items || !invoice.items.length) {
-                console.warn("%c[DEBUG] No items found in invoice", "color: red");
                 productsList.innerHTML = `
                     <tr>
-                        <td colspan="7" class="text-center text-muted py-3">
+                        <td colspan="12" class="text-center text-muted py-3">
                             Nema unesenih stavki u ovoj deklaraciji.
                         </td>
                     </tr>
                 `;
             } else {
-                console.log("%c[DEBUG] Rendering items in table...", "color: teal");
                 productsList.innerHTML = '';
                 invoice.items.forEach((item, index) => {
-                    console.log(`%c[DEBUG] Rendering item #${index + 1}`, "color: gray", item);
+                    // Find best customs code match for Tarifna oznaka if not present
+                    let tarifnaOznaka = item.tariff_code || item.item_code || '';
+                    if (!tarifnaOznaka && Array.isArray(item.best_customs_code_matches) && item.best_customs_code_matches.length > 0) {
+                        const best = item.best_customs_code_matches.find(e => e.entry?.["Tarifna oznaka"]);
+                        if (best) {
+                            tarifnaOznaka = best.entry["Tarifna oznaka"];
+                        }
+                    }
                     productsList.innerHTML += `
                         <tr>
                             <th scope="row">${index + 1}</th>
-                            <td class="text-start">
-                                <span class="fw-medium">${item.item_description_original}</span>
-                                <p class="text-muted mb-0">${item.item_description}</p>
-                            </td>
-                            <td>Nema prevoda</td>
-                            <td>${item.item_code}</td>
-                            <td>${item.base_price} ${item.currency}</td>
+                            <td>${item.item_description_original || item.item_description || ''}</td>
+                            <td>${item.item_description || ''}</td>
+                            <td>${item.translation || ''}</td>
+                            <td>${tarifnaOznaka}</td>
+                            <td>${item.quantity_type || ''}</td>
+                            <td>${item.country_of_origin || ''}</td>
+                            <td>${item.base_price} ${item.currency || ''}</td>
                             <td>${item.quantity}</td>
-                            <td>${invoice.country_of_origin || '--'}</td>
-                            <td class="text-end">${item.total_price} ${item.currency}</td>
+                            <td>${item.num_packages || '0'}</td>
+                            <td>${item.total_price || (item.base_price * item.quantity).toFixed(2)} ${item.currency || ''}</td>
+                            <td>${item.povlastica ? 'DA' : 'NE'}</td>
                         </tr>
                     `;
                 });
-                console.log("%c[DEBUG] Final productsList.innerHTML:", "color: violet", productsList.innerHTML);
-
             }
 
-            // Fetch supplier
-            console.log("%c[DEBUG] Fetching supplier...", "color: orange");
+            // Fetch and fill supplier and importer data
             const supplierRes = await fetch(`/api/suppliers/${invoice.supplier_id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
-
-            console.log("%c[DEBUG] supplierRes.ok:", "color: orange", supplierRes.ok);
-
-            if (!supplierRes.ok) throw new Error("Greška pri dohvatu dobavljača.");
             const supplier = await supplierRes.json();
-
-            console.log("%c[DEBUG] Supplier data:", "color: green", supplier);
-
+            // Fill supplier fields
             document.getElementById("supplier-name").textContent = supplier.name || "--";
             document.getElementById("supplier-address").textContent = supplier.address || "--";
             document.getElementById("supplier-phone").textContent = supplier.contact_phone || "--";
-            document.getElementById("supplier-tax").textContent = supplier.tax_id || "--";
+            document.getElementById("supplier-tax").textContent = supplier.tax_id || supplier.jib || "--";
+            document.getElementById("supplier-email").textContent = supplier.email || supplier.contact_email || "--";
+            document.getElementById("supplier-owner").textContent = supplier.owner || "--";
+
+            // Fill importer/carrier fields if available
+            if (invoice.importer_id) {
+                const importerRes = await fetch(`/api/importers/${invoice.importer_id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                if (importerRes.ok) {
+                    const importer = await importerRes.json();
+                    document.getElementById("carrier-name").textContent = importer.name || "--";
+                    document.getElementById("carrier-address-line-1").textContent = importer.address || "--";
+                    document.getElementById("carrier-phone").textContent = importer.contact_phone || "--";
+                    document.getElementById("carrier-tax").textContent = importer.tax_id || importer.jib || "--";
+                    document.getElementById("carrier-email").textContent = importer.email || importer.contact_email || "--";
+                    document.getElementById("carrier-owner").textContent = importer.owner || "--";
+
+                }
+            }
 
             Swal.close();
 
@@ -378,7 +417,7 @@
 
 <!-- Export to xslx -->
 <script>
-    document.getElementById("export-xlsx").addEventListener("click", function () {
+    document.getElementById("export-xlsx").addEventListener("click", function() {
         const table = document.getElementById("invoiceTable");
         if (!table) {
             alert("Tabela nije pronađena!");
@@ -391,7 +430,9 @@
         // 2. Append "Ukupan iznos" row manually
         const totalAmount = document.getElementById("total-amount")?.innerText || "--";
 
-        const sheetData = XLSX.utils.sheet_to_json(ws, { header: 1 }); // get 2D array of data
+        const sheetData = XLSX.utils.sheet_to_json(ws, {
+            header: 1
+        }); // get 2D array of data
         sheetData.push([]); // empty spacer row
         sheetData.push(["", "", "", "", "", "Ukupan iznos:", totalAmount]); // add summary row
 
@@ -408,48 +449,50 @@
 
 <!-- Export to csv -->
 <script>
-function exportTableToCustomCSV() {
-    const invoiceNo = document.getElementById("invoice-no")?.textContent?.trim() || "unknown";
-    const filename = `declaration_${invoiceNo}.csv`;
+    function exportTableToCustomCSV() {
+        const invoiceNo = document.getElementById("invoice-no")?.textContent?.trim() || "unknown";
+        const filename = `declaration_${invoiceNo}.csv`;
 
-    // Define custom headers (must match your spec exactly)
-    const headers = [
-        "TPL1", "Zemlja porijekla", "Povlastica", "Naziv robe", "Broj komada",
-        "Vrijednost", "Koleta", "Bruto kg", "Neto kg", "Required"
-    ];
+        // Define custom headers (must match your spec exactly)
+        const headers = [
+            "TPL1", "Zemlja porijekla", "Povlastica", "Naziv robe", "Broj komada",
+            "Vrijednost", "Koleta", "Bruto kg", "Neto kg", "Required"
+        ];
 
-    let csv = [headers.join(";")];
+        let csv = [headers.join(";")];
 
-    const rows = document.querySelectorAll("#products-list tr");
+        const rows = document.querySelectorAll("#products-list tr");
 
-    rows.forEach(row => {
-        const cells = row.querySelectorAll("td");
-        let rowData = [];
+        rows.forEach(row => {
+            const cells = row.querySelectorAll("td");
+            let rowData = [];
 
-        // Map cells to the structure manually or with fallback
-        rowData.push(`"${cells[0]?.innerText.trim() || ""}"`); // TPL1
-        rowData.push(`"${cells[5]?.innerText.trim() || ""}"`); // Zemlja porijekla
-        rowData.push(`""`);                                     // Povlastica (empty)
-        rowData.push(`"${cells[1]?.innerText.trim() || ""}"`); // Naziv robe
-        rowData.push(`"${cells[4]?.innerText.trim() || ""}"`); // Broj komada
-        rowData.push(`"${cells[6]?.innerText.trim() || ""}"`); // Vrijednost (Ukupna cijena)
-        rowData.push(`""`);                                     // Koleta (empty)
-        rowData.push(`""`);                                     // Bruto kg (empty)
-        rowData.push(`""`);                                     // Neto kg (empty)
-        rowData.push(`""`);                                     // Required (empty)
+            // Map cells to the structure manually or with fallback
+            rowData.push(`"${cells[0]?.innerText.trim() || ""}"`); // TPL1
+            rowData.push(`"${cells[5]?.innerText.trim() || ""}"`); // Zemlja porijekla
+            rowData.push(`""`); // Povlastica (empty)
+            rowData.push(`"${cells[1]?.innerText.trim() || ""}"`); // Naziv robe
+            rowData.push(`"${cells[4]?.innerText.trim() || ""}"`); // Broj komada
+            rowData.push(`"${cells[6]?.innerText.trim() || ""}"`); // Vrijednost (Ukupna cijena)
+            rowData.push(`""`); // Koleta (empty)
+            rowData.push(`""`); // Bruto kg (empty)
+            rowData.push(`""`); // Neto kg (empty)
+            rowData.push(`""`); // Required (empty)
 
-        csv.push(rowData.join(";"));
-    });
+            csv.push(rowData.join(";"));
+        });
 
-    // Create CSV and download
-    const csvFile = new Blob([csv.join("\n")], { type: "text/csv" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(csvFile);
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
+        // Create CSV and download
+        const csvFile = new Blob([csv.join("\n")], {
+            type: "text/csv"
+        });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(csvFile);
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 </script>
 
 
