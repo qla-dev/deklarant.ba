@@ -192,20 +192,11 @@
                             <span class="text-start me-xl-2">
                                 <span class="d-none d-xl-inline-block fw-medium user-name-text text-end"
                                     id="topbar-username">
-                                    <script>
-                                        document.write(JSON.parse(localStorage.getItem("user"))?.username || "Korisnik");
-                                    </script>
+                                {{ Auth::user()->username ?? 'Korisnik' }}
                                 </span>
-                                <span class="d-none d-xl-block fs-12 user-name-sub-text text-end">  <script>
-                                    const user = JSON.parse(localStorage.getItem("user"));
-                                    if (user?.role === "superadmin") {
-                                        document.write("Superadmin");
-                                    } else {
-                                        document.write("Business");
-                                    }
-                                </script></span>
-
-
+                                <span class="d-none d-xl-block fs-12 user-name-sub-text text-end">
+                                    {{ Auth::user()->role == 'user' ? 'Business' : (Auth::user()->role == 'superadmin' ? 'Superadmin' : Auth::user()->role) }}
+                                </span>
                             </span>
 
                             <img id="topbar-avatar" class="rounded-circle header-profile-user d-none"
@@ -224,7 +215,7 @@
 
                     <div class="dropdown-menu dropdown-menu-end border">
                         <!-- item-->
-                        <h6 class="dropdown-header" id="dropdownWelcome">Dobrodošli <span id="dropdownUser">Korisnik</span></h6>
+                        <h6 class="dropdown-header" id="dropdownWelcome">Dobrodošli {{ Auth::user()->username ?? 'Korisnik' }}</h6>
                         <a class="dropdown-item" href="profil"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Moj nalog</span></a>
                         <a class="dropdown-item" href="faqs"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Pomoć</span></a>
                         <div class="dropdown-divider"></div>
@@ -290,10 +281,12 @@
                                 class="mdi mdi-sleep text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">Sleep</span></a>
 
-                        <a class="dropdown-item" href="javascript:void(0);" id="logout-link">
-                            <i class="bx bx-power-off text-muted fs-16 align-middle me-1" style="margin-top: -3px!important;"></i>
-                            <span key="t-logout">@lang('translation.logout')</span>
-                        </a>
+                   
+                         <form method="POST" action="/custom-logout">
+    @csrf
+    <button class="dropdown-item" type="submit"><i class="bx bx-power-off text-muted fs-16 align-middle me-1" style="margin-top: -3px!important;"></i>
+                            <span key="t-logout">@lang('translation.logout')</span></button>
+</form>
 
 
 
@@ -379,10 +372,7 @@
         const user = JSON.parse(localStorage.getItem("user"));
         const avatarBasePath = "/storage/uploads/avatars/";
 
-        if (!token || !user || !user.id) {
-            alert("Niste prijavljeni.");
-            return;
-        }
+    
 
         const avatarImg = document.getElementById("user-avatar");
         const avatarFallback = document.getElementById("avatar-fallback");
@@ -446,18 +436,15 @@
                 }
 
                 try {
-                    await axios.post("/api/auth/logout", {}, {
+                    await axios.post("/api/logoutUser", {}, {
                         headers: {
                             Authorization: `Bearer ${token}`
-                        }
+                        }, credentials for cookies
                     });
                 } catch (err) {
                     console.error("Logout failed:", err);
                 }
 
-                localStorage.removeItem("auth_token");
-                localStorage.removeItem("user");
-                window.location.href = "/login";
             });
         }
     });
@@ -600,11 +587,7 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const token = localStorage.getItem("auth_token");
-        if (!token) {
-            alert("Niste prijavljeni. Molimo ulogujte se.");
-            window.location.href = "/login";
-            return;
-        }
+  
 
         const dropzone = document.getElementById("dropzone");
         const fileInput = document.getElementById("fileInput");

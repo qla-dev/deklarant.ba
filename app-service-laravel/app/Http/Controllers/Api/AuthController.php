@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Laravel\Sanctum\PersonalAccessToken;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Exception;
 
 class AuthController extends Controller
@@ -71,57 +72,97 @@ class AuthController extends Controller
         }
     }
 
-    public function login(Request $request)
+
+
+public function login(Request $request)
+{
+    // Retrieve MAC address from request headers
+    $macAddress = $request->header('MAC-Address');
+
+    // Check if the user is already logged in from the same device
+    $isLoggedFromSameDevice = $this->isLoggedFromSameDevice($request);
+    if ($isLoggedFromSameDevice) {
+        return $isLoggedFromSameDevice;
+    }
+
+    $identifier = $request->has('username') ? 'username' : 'email';
+
+    $request->validate([
+        $identifier => 'required|string',
+        'password'  => 'required|string',
+    ]);
+
+    $user = User::where('email', $request->input($identifier))
+                ->orWhere('username', $request->input($identifier))
+                ->first();
+
+    if (!$user || !Hash::check($request->password, $user->password)) {
+        return response()->json(['message' => 'Invalid login credentials.'], 401);
+    }
+
+    //  Log in via session (optional, for web routes using 'web' guard)
+    Auth::login($user);
+
+    // Create API token for Sanctum usage
+    $token = $user->createToken('auth_token')->plainTextToken;
+
+    // Store MAC address in personal_access_tokens table
+    DB::table('personal_access_tokens')
+        ->where('tokenable_id', $user->id)
+        ->latest()
+        ->update(['device' => $macAddress]);
+
+    Log::info("User {$user->email} logged in. MAC: {$macAddress} Token: {$token}");
+
+    // From registration flag
+    $isFromRegistration = $request->input('from_registration', false);
+
+    return response()->json([
+        'message' => $isFromRegistration ? 'Registration and Login successful.' : 'Login successful',
+        'token' => $token,
+        'macAddress' => $macAddress,
+        'user' => $user->only(['id', 'username', 'role', 'email', 'avatar']),
+    ], 200);
+}
+
+
+    public function logoutUser(Request $request)
     {
-        // Retrieve MAC address from request headers
-        $macAddress = $request->header('MAC-Address');
-    
-        // Check if the user is already logged in from the same device
-        $isLoggedFromSameDevice = $this->isLoggedFromSameDevice($request);
-        if ($isLoggedFromSameDevice) {
-            return $isLoggedFromSameDevice;
-        }
-        
-        $identifier = $request->has('username') ? 'username' : 'email';
-
-        $request->validate([
-            $identifier => 'required|string',
-            'password'  => 'required|string',
-        ]);
-
-        $user = User::where('email', $request->input($identifier))
-                        ->orWhere('username', $request->input($identifier))
-                        ->first();
-
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Invalid login credentials.'], 401);
+        // Delete all access tokens for the authenticated user
+        $userId = Auth::id();
+        if ($userId) {
+            PersonalAccessToken::where('tokenable_id', $userId)->delete();
         }
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        // Log out from session (web guard)
+        Auth::logout();
 
-        // Store MAC address in personal_access_tokens table
-        DB::table('personal_access_tokens')
-            ->where('tokenable_id', $user->id)
-            ->latest()
-            ->update(['device' => $macAddress]);
-    
-        Log::info("User {$user->email} logged in successfully. MAC: {$macAddress} Token: {$token}");
-    
-        // Check if the request came from the registration function
-        $isFromRegistration = $request->input('from_registration', false);
-    
-        return response()->json([
-            'message' => $isFromRegistration ? 'Registration and Login successful.' : 'Login successful',
-            'token' => $token,
-            'macAddress' => $macAddress,
-            'user' => $user->only(['id', 'username','role', 'email', 'avatar']),
-        ], 200);
+        // Invalidate the session and regenerate token
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        // Forget the session cookie
+        $cookieName = config('session.cookie');
+        $cookie = cookie($cookieName, null, -1);
+
+        // Redirect to /
+        return redirect('/')->withCookie($cookie);
     }
 
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
-        return response()->json(['message' => 'Successfully logged out.'], 200);
+        // Get token from Authorization header
+        $token = $request->bearerToken();
+
+        if ($token) {
+            $currentToken = PersonalAccessToken::findToken($token);
+            if ($currentToken) {
+                $currentToken->delete();
+                return response()->json(['message' => 'Logged out from API part.']);
+            }
+        }
+
+        return response()->json(['message' => 'No valid token found.'], 400);
     }
 
     public function myToken(Request $request)

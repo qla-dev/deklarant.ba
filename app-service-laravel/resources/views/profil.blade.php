@@ -292,6 +292,10 @@
                     Član od:<span id="joining-date" style="ms-0 p-0">Učitavanje...</span>
 
                 </div>
+                @auth
+    <p>Welcome, {{ Auth::user()->username }}</p>
+@endauth
+
             </div>
         </div>
 
@@ -1131,10 +1135,7 @@
         const avatarImg = document.getElementById("user-avatar");
         const avatarFallback = document.getElementById("avatar-fallback");
 
-        if (!token || !user) {
-            alert("Niste prijavljeni.");
-            return;
-        }
+    
 
         // 1. Fetch user and update UI
         fetch(`/api/users/${user.id}`, {
@@ -1256,201 +1257,6 @@
 
 
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const token = localStorage.getItem("auth_token");
-        if (!token) {
-            alert("Niste prijavljeni. Molimo ulogujte se.");
-            window.location.href = "/login";
-            return;
-        }
-
-        const dropzone = document.getElementById("dropzone");
-        const fileInput = document.getElementById("fileInput");
-        const fileList = document.getElementById("fileList");
-        const dropzoneContent = document.getElementById("dropzone-content");
-        const progressContainer = document.getElementById("uploadProgressContainer");
-        const progressBar = document.getElementById("uploadProgressBar");
-        const scanningLoader = document.getElementById("scanningLoader");
-        const scanningText = document.getElementById("scanningText");
-        const successCheck = document.getElementById("successCheck");
-
-        function updateFileList(files) {
-            fileList.innerHTML = "";
-            if (files.length > 0) {
-                fileList.style.display = "block";
-                dropzoneContent.style.display = "none";
-            } else {
-                fileList.style.display = "none";
-                dropzoneContent.style.display = "block";
-            }
-
-            Array.from(files).forEach((file, index) => {
-                const fileItem = document.createElement("div");
-                fileItem.classList.add("file-item");
-
-                const fileName = document.createElement("span");
-                fileName.textContent = file.name;
-
-                const removeBtn = document.createElement("span");
-                removeBtn.textContent = "×";
-                removeBtn.classList.add("remove-file");
-                removeBtn.dataset.index = index;
-
-                removeBtn.addEventListener("click", function() {
-                    let dt = new DataTransfer();
-                    let fileArray = Array.from(fileInput.files);
-                    fileArray.splice(index, 1);
-                    fileArray.forEach(f => dt.items.add(f));
-                    fileInput.files = dt.files;
-                    updateFileList(fileInput.files);
-                });
-
-                fileItem.appendChild(fileName);
-                fileItem.appendChild(removeBtn);
-                fileList.appendChild(fileItem);
-            });
-        }
-
-        function generateFakeScanData() {
-            return [{
-                    "Tarifna oznaka": "0101 21 00 00",
-                    "Naziv": "čistokrvne priplodne životinje",
-                    "Quantity": 2,
-                    "Unit Price": 540.00
-                },
-                {
-                    "Tarifna oznaka": "2710 12 41 00",
-                    "Naziv": "kerozin",
-                    "Quantity": 120,
-                    "Unit Price": 1.25
-                },
-                {
-                    "Tarifna oznaka": "0201 30 00 00",
-                    "Naziv": "goveđe meso",
-                    "Quantity": 46,
-                    "Unit Price": 1.14
-                }
-            ];
-        }
-
-        function simulateScan() {
-            scanningLoader.classList.remove("d-none");
-            dropzoneContent.style.display = "none";
-            fileList.style.display = "none";
-
-            const spinner = scanningLoader.querySelector(".spinner-border");
-            const stages = [{
-                    text: "Skeniranje Deklaracije...",
-                    until: 25
-                },
-                {
-                    text: "Prepoznavanje podataka...",
-                    until: 60
-                },
-                {
-                    text: "Generisanje Deklaracije...",
-                    until: 90
-                },
-                {
-                    text: "Završeno skeniranje...",
-                    until: 100
-                }
-            ];
-
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress++;
-                for (const stage of stages) {
-                    if (progress <= stage.until) {
-                        scanningText.innerText = stage.text;
-                        break;
-                    }
-                }
-
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    if (spinner) {
-                        spinner.classList.add("fade-out");
-                        setTimeout(() => {
-                            spinner.remove();
-                            scanningText.classList.add("d-none");
-
-                            successCheck.classList.remove("d-none");
-                            successCheck.classList.add("animate__animated", "animate__fadeIn");
-
-                            const fakeScanResults = generateFakeScanData();
-                            console.log("Saving to localStorage:", fakeScanResults);
-                            localStorage.setItem("ai_scan_result", JSON.stringify(fakeScanResults));
-
-                            setTimeout(() => {
-                                window.location.href = "/apps-invoices-create";
-                            }, 500);
-                        }, 400);
-                    }
-                }
-            }, 50);
-        }
-
-        function uploadFiles(files) {
-            const formData = new FormData();
-            Array.from(files).forEach(file => formData.append('file', file));
-
-            progressContainer.style.display = "block";
-            progressBar.style.width = "0%";
-            progressBar.innerText = "0%";
-
-            let fakeProgress = 0;
-            const fakeInterval = setInterval(() => {
-                fakeProgress += 3;
-                if (fakeProgress > 100) fakeProgress = 100;
-
-                progressBar.style.width = fakeProgress + "%";
-                progressBar.innerText = fakeProgress + "%";
-
-                if (fakeProgress === 100) {
-                    clearInterval(fakeInterval);
-                    Swal.fire({
-                        icon: "success",
-                        title: "Uspješno uploadan dokument",
-                        showConfirmButton: false,
-                        timer: 1600
-                    }).then(() => {
-                        progressContainer.style.display = "none";
-                        simulateScan();
-                    });
-                }
-            }, 200);
-        }
-
-        dropzone.addEventListener("dragover", e => {
-            e.preventDefault();
-            dropzone.classList.add("bg-light");
-        });
-
-        dropzone.addEventListener("dragleave", () => {
-            dropzone.classList.remove("bg-light");
-        });
-
-        dropzone.addEventListener("drop", e => {
-            e.preventDefault();
-            dropzone.classList.remove("bg-light");
-            let dt = new DataTransfer();
-            Array.from(fileInput.files).forEach(f => dt.items.add(f));
-            Array.from(e.dataTransfer.files).forEach(f => dt.items.add(f));
-            fileInput.files = dt.files;
-            updateFileList(fileInput.files);
-            uploadFiles(fileInput.files);
-        });
-
-        dropzone.addEventListener("click", () => fileInput.click());
-
-        fileInput.addEventListener("change", () => {
-            updateFileList(fileInput.files);
-            uploadFiles(fileInput.files);
-        });
-    });
-</script>
 
 
 <!-- Fetch UserProfile and Business data -->

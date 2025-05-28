@@ -76,7 +76,7 @@
                             <img id="user-avatar-middle" class="rounded-circle d-none" width="40" height="40">
                             <div id="avatar-middle-fallback" class="rounded-circle bg-info d-flex justify-content-center align-items-center text-white" style="width: 50px; height: 50px;"></div>
                         </div>
-                        <h6 class="fw-bold mb-1 mt-1" id="welcome-user">Dobrodošli na deklarant.ba</h6>
+                        <h6 class="fw-bold mb-1 mt-1">Dobrodošli na deklarant.ba {{ Auth::user()->username ?? '' }}</h6>
                         <p class="fw-semibold fs-7 mb-1 text-info" id="user-package-display">
                             Učitavanje paketa...
                         </p>
@@ -512,7 +512,7 @@
 <script>
     document.addEventListener("DOMContentLoaded", async function() {
         const token = localStorage.getItem("auth_token");
-        const user = JSON.parse(localStorage.getItem("user"));
+        const user = @json(Auth::user());
 
         if (!token || !user?.id) {
             console.warn("Missing auth or user.");
@@ -714,7 +714,7 @@
         //  Initial empty chart (0%)
         createDoughnutChart("doughnut1", 0);
 
-        const user = JSON.parse(localStorage.getItem("user"));
+        const user = @json(Auth::user());
         const token = localStorage.getItem("auth_token");
 
         if (!user || !token) {
@@ -757,7 +757,7 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", async function() {
-        const user = JSON.parse(localStorage.getItem("user"));
+        const user = @json(Auth::user());
         const token = localStorage.getItem("auth_token");
 
         if (!user || !token) {
@@ -933,7 +933,7 @@
 <!-- Used scans | remainining scans -->
 <script>
     document.addEventListener("DOMContentLoaded", async function() {
-        const user = JSON.parse(localStorage.getItem("user"));
+        const user = @json(Auth::user());
         const token = localStorage.getItem("auth_token");
 
         console.log("[INIT] Provjera lokalne pohrane...");
@@ -1029,12 +1029,12 @@
 <!-- avatar upload -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const user = JSON.parse(localStorage.getItem("user"));
+        const user = @json(Auth::user());
 
         if (user) {
             const welcome = document.getElementById("welcome-user");
             if (welcome) {
-                welcome.innerText = `Dobrodošli na deklarant.ba ${user.username}`;
+                welcome.innerText = `Dobrodošli na deklarant.ba {{ Auth::user()->username ?? '' }}`;
             }
 
             const avatarImg = document.getElementById("user-avatar-middle");
