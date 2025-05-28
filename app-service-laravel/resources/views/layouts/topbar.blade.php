@@ -157,7 +157,7 @@
                                         <span>Skeniraj deklaraciju sa AI</span>
                                     </a>
                                 </div>
-                                
+
 
                             </div>
                         </div>
@@ -595,6 +595,8 @@
     document.addEventListener("DOMContentLoaded", initDarkModeToggle);
 </script>
 
+
+<!-- Upload files logic -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const token = localStorage.getItem("auth_token");
@@ -652,7 +654,6 @@
             const formData = new FormData();
             Array.from(files).forEach(file => formData.append('file', file));
 
-            // Show small spinner (e.g., under dropzone or centered)
             document.getElementById("uploadLoader").style.display = "block";
 
             fetch('/api/storage/invoice-uploads', {
@@ -663,9 +664,7 @@
                     }
                 })
                 .then(response => {
-                    if (!response.ok) {
-                        throw new Error("Upload failed");
-                    }
+                    if (!response.ok) throw new Error("Upload failed");
                     return response.json();
                 })
                 .then(data => {
@@ -675,9 +674,7 @@
                     }
 
                     const modal = bootstrap.Modal.getInstance(document.getElementById('scanModal'));
-                    if (modal) {
-                        modal.hide();
-                    }
+                    if (modal) modal.hide();
 
                     Swal.fire({
                         icon: 'success',
@@ -688,7 +685,25 @@
                         },
                         buttonsStyling: false
                     }).then(() => {
-                        window.location.href = "/apps-invoices-create";
+                        // Remove or hide .modal-backdrop.show overlays
+                        document.querySelectorAll('.modal-backdrop.show').forEach(el => {
+                            el.classList.remove('show');
+                            el.style.display = 'none';
+                            el.style.zIndex = '';
+                            el.remove();
+                        });
+                        // Remove any remaining modal-backdrop overlays (even without .show)
+                        document.querySelectorAll('.modal-backdrop').forEach(el => {
+                            el.style.display = 'none';
+                            el.style.zIndex = '';
+                            el.remove();
+                        });
+                        document.body.classList.remove('modal-open');
+                        if (window.location.pathname === "/apps-invoices-create") {
+                            setTimeout(() => location.reload(), 100);
+                        } else {
+                            window.location.href = "/apps-invoices-create";
+                        }
                     });
                 })
                 .catch(error => {
@@ -699,6 +714,8 @@
                     document.getElementById("uploadLoader").style.display = "none";
                 });
         }
+
+
 
 
         dropzone.addEventListener("dragover", e => {

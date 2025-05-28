@@ -12,7 +12,7 @@
     /* Ensures the selected text is truncated with ellipsis and tooltip works */
     .select2-container--default .select2-results__options {
         max-width: none !important;
-       
+
         /* or use 100% if you want it full-width */
         white-space: normal;
 
@@ -195,8 +195,9 @@
                     <div class="col-6 text-start">
 
                         <h6 class="text-muted text-uppercase fw-semibold mb-3">Podaci o dobavljaču</h6>
-                        <small id="billing-name-ai-label" class="text-info d-flex align-items-center d-none mb-2">Podaci ispunjeni s AI</small>
+                
                         <div class="mb-2">
+                            <button type="button" class="btn btn-outline-primary mb-2" id="add-new-supplier">+ Novi dobavljač</button>
                             <select id="supplier-select2" class="form-select"></select>
                         </div>
                         <input type="text" class="form-control mb-2" id="billing-name" name="supplier_name" placeholder="Naziv dobavljača">
@@ -209,8 +210,8 @@
                     </div>
                     <div class="col-6 text-end">
                         <h6 class="text-muted text-uppercase fw-semibold mb-3 text-end">Podaci o uvozniku</h6>
-                        <small id="carrier-name-ai-label" class="text-info text-end d-flex align-items-center d-none mb-2">Podaci ispunjeni s AI</small>
-                        <div class="mb-2">
+                       
+                            <button type="button" class="btn btn-outline-primary mb-2" id="add-new-importer">+ Novi uvoznik</button>
                             <select id="importer-select2" class="form-select"></select>
                         </div>
 
@@ -218,7 +219,7 @@
 
                         <input type="text" class="form-control mb-2 text-end" id="carrier-address" name="uvoznikadresa" placeholder="Adresa">
                         <input type="text" class="form-control mb-2 text-end" id="carrier-tel" name="uvozniktel" placeholder="Telefon">
-                        <input type="text" class="form-control mb-2 text-end" id="carrier-tax" name="uvozniktel" placeholder="VAT">
+                        <input type="text" class="form-control mb-2 text-end" id="carrier-tax" name="uvozniktel" placeholder="JIB">
                         <input type="text" class="form-control mb-2 text-end" id="carrier-email" name="uvozniktel" placeholder="Email">
                         <input type="text" class="form-control mb-2 text-end" id="carrier-owner" name="carrierOwner" placeholder="Vlasnik">
 
@@ -307,7 +308,7 @@
                 <i class="ri-download-2-line align-bottom me-1"></i> Preuzmi
             </a>
             <button type="button" id="save-invoice-btn" class="btn btn-info">
-                <i class="ri-printer-line align-bottom me-1"></i> Sačuvaj
+                <i class="ri-save-line align-bottom me-1"></i> Sačuvaj
             </button>
             <a href="javascript:void(0);" id="export-xml" class="btn btn-info">
                 <i class="ri-file-code-line align-bottom me-1"></i> Exportuj u XML
@@ -363,11 +364,16 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-
+<!-- Scan and other logic script -->
 <script>
+    console.log('🟢 Custom invoice JS loaded');
     let _invoice_data = null;
     let processedTariffData = [];
     let globalAISuggestions = [];
+
+    // Add global flags
+    window.forceNewSupplier = false;
+    window.forceNewImporter = false;
 
     function getInvoiceId() {
         const id = localStorage.getItem("scan_invoice_id");
@@ -379,7 +385,7 @@
         let total = 0;
 
         // Loop through all invoice rows
-        document.querySelectorAll("#newlink tr.product").forEach(row => {
+        document.querySelectorAll("#newlink tr.product").forEach(function(row) {
             const price = parseFloat(row.querySelector('input[name="price[]"]')?.value || 0);
             const quantity = parseFloat(row.querySelector('input[name="quantity[]"]')?.value || 0);
             total += price * quantity;
@@ -464,29 +470,33 @@
             const json = await res.json();
             const status = json?.status?.status;
             const step = json?.status?.processing_step;
+            const errorMsg = json?.status?.error_message;
 
-            console.log(" Scan status:", status, "| Step:", step);
+            console.log(" Scan status:", status, "| Step:", step, "| Error:", errorMsg);
 
             const el = document.getElementById("swal-status-message");
             if (el) {
-                const message = stepTextMap[step] || "Obrađujemo podatke";
-                el.textContent = message;
+                if (status === "failed" || status === "error") {
+                    el.innerHTML = `<span class='text-danger'>Greška: ${errorMsg || 'Nepoznata greška'}</span><br><span class='text-muted'>Korak: ${stepTextMap[step] || step || ''}</span>`;
+                } else {
+                    const message = stepTextMap[step] || "Obrađujemo podatke";
+                    el.textContent = message;
+                }
             }
 
             if (status === "completed") {
                 if (el) el.textContent = "Završeno";
-
-                // Wait a bit to show "Završeno" before closing
                 await new Promise(r => setTimeout(r, 1000));
                 Swal.close();
                 _invoice_data = null;
                 break;
             }
 
-            if (status === "error") {
+            if (status === "failed" || status === "error") {
+                await new Promise(r => setTimeout(r, 1000));
                 Swal.close();
-                console.error("Scan error:", json?.status?.error_message);
-                Swal.fire("Greška", json?.status?.error_message || "Greška pri skeniranju", "error");
+                console.error("Scan error:", errorMsg);
+                Swal.fire("Greška", errorMsg || "Greška pri skeniranju", "error");
                 break;
             }
 
@@ -883,16 +893,16 @@
             placeholder: "Select a country",
             width: 'style',
             language: {
-             noResults: function () {
-                 return "Nisu pronađeni rezultati";
-             },
-             searching: function () {
-                 return "Pretraga…";
-             },
-             inputTooShort: function () {
-                 return "Unesite još znakova…";
-             }
-         }
+                noResults: function() {
+                    return "Nisu pronađeni rezultati";
+                },
+                searching: function() {
+                    return "Pretraga…";
+                },
+                inputTooShort: function() {
+                    return "Unesite još znakova…";
+                }
+            }
         });
 
         function formatFlag(state) {
@@ -982,7 +992,6 @@
 
 
 
-
     });
 
 
@@ -1031,9 +1040,6 @@
 
 
 
-
-
-
     async function fetchAndPrefillParties() {
         const taskId = localStorage.getItem("scan_invoice_id");
         const token = localStorage.getItem("auth_token");
@@ -1051,63 +1057,164 @@
 
             const {
                 supplier,
-                importer
+                importer,
+                supplier_id,
+                importer_id
             } = data;
+            // Get invoice data for IDs
+            const invoice = await getInvoice();
 
-            // Fill fields
-            if (supplier) {
-                const aiSupplier = {
-                    id: "ai-supplier",
-                    text: `${supplier.name} – ${supplier.address}`,
-                    full: {
-                        ...supplier,
-                        tax_id: supplier.vat_number
+            // --- SUPPLIER LOGIC ---
+            let supplierId = invoice.supplier_id || supplier_id;
+            if (window.forceNewSupplier) {
+                // Always remove any previous 'Novi dobavljač' option
+                $("#supplier-select2 option[value='new']").remove();
+                // Add and select 'Novi dobavljač'
+                const newOption = new Option('Novi dobavljač', 'new', true, true);
+                $("#supplier-select2").append(newOption).trigger('change');
+                if (supplier) {
+                    $("#billing-name").val(supplier.name || "").prop('readonly', false);
+                    $("#billing-address-line-1").val(supplier.address || "").prop('readonly', false);
+                    $("#billing-phone-no").val(supplier.phone_number || "").prop('readonly', false);
+                    $("#billing-tax-no").val(supplier.vat_number || "").prop('readonly', false);
+                    $("#email").val(supplier.email || "").prop('readonly', false);
+                    $("#supplier-owner").val(supplier.owner || "").prop('readonly', false);
+                } else {
+                    $("#billing-name, #billing-address-line-1, #billing-phone-no, #billing-tax-no, #email, #supplier-owner").val("").prop('readonly', false);
+                }
+                const label = document.getElementById("billing-name-ai-label");
+                if (label) label.classList.remove("d-none");
+                window.forceNewSupplier = false;
+            } else if (supplierId) {
+                // Ensure the option exists before setting value
+                if ($(`#supplier-select2 option[value='${supplierId}']`).length === 0) {
+                    const text = supplier?.name ? `${supplier.name} – ${supplier.address || ''}` : supplierId;
+                    const newOption = new Option(text, supplierId, true, true);
+                    $("#supplier-select2").append(newOption);
+                }
+                console.log("[SUPPLIER] Prefilling from ID:", supplierId, invoice.supplier_id ? 'invoice.supplier_id' : 'parties.supplier_id');
+                $("#supplier-select2").val(supplierId).trigger("change");
+                $.ajax({
+                    url: `/api/suppliers/${supplierId}`,
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    },
+                    success: function(dbSupplier) {
+                        console.log("[SUPPLIER] Prefilling textboxes from DB for ID:", supplierId, dbSupplier);
+                        $("#billing-name").val(dbSupplier.name || "").prop('readonly', true);
+                        $("#billing-address-line-1").val(dbSupplier.address || "").prop('readonly', true);
+                        $("#billing-phone-no").val(dbSupplier.contact_phone || "").prop('readonly', true);
+                        $("#billing-tax-no").val(dbSupplier.tax_id || "").prop('readonly', true);
+                        $("#email").val(dbSupplier.contact_email || "").prop('readonly', true);
+                        $("#supplier-owner").val(dbSupplier.owner || "").prop('readonly', true);
+                        const label = document.getElementById("billing-name-ai-label");
+                        if (label) label.classList.add("d-none");
+                    },
+                    error: function() {
+                        if (supplier) {
+                            // Not found in DB, add 'Novi dobavljač' to select2
+                            const newOption = new Option('Novi dobavljač', 'new', true, true);
+                            $("#supplier-select2").append(newOption).trigger('change');
+                            $("#billing-name").val(supplier.name || "").prop('readonly', false);
+                            $("#billing-address-line-1").val(supplier.address || "").prop('readonly', false);
+                            $("#billing-phone-no").val(supplier.phone_number || "").prop('readonly', false);
+                            $("#billing-tax-no").val(supplier.vat_number || "").prop('readonly', false);
+                            $("#email").val(supplier.email || "").prop('readonly', false);
+                            $("#supplier-owner").val(supplier.owner || "").prop('readonly', false);
+                            const label = document.getElementById("billing-name-ai-label");
+                            if (label) label.classList.remove("d-none");
+                        }
                     }
-                };
-                const supplierOption = new Option(aiSupplier.text, aiSupplier.id, true, true);
-                $("#supplier-select2 option[value='ai-supplier']").remove();
-                $("#supplier-select2").append(supplierOption).val(aiSupplier.id).trigger("change");
-
-                $("#billing-name").val(supplier.name || ""); // 🟢 sync name input
-
-
-                const option = new Option(aiSupplier.text, aiSupplier.id, true, true);
-
-
-                document.getElementById("billing-address-line-1").value = supplier.address || "";
-                document.getElementById("billing-tax-no").value = supplier.vat_number || "";
-                document.getElementById("billing-phone-no").value = supplier.phone_number || "";
+                });
+            } else if (supplier) {
+                // Not found in DB, add 'Novi dobavljač' to select2
+                const newOption = new Option('Novi dobavljač', 'new', true, true);
+                $("#supplier-select2").append(newOption).trigger('change');
+                $("#billing-name").val(supplier.name || "").prop('readonly', false);
+                $("#billing-address-line-1").val(supplier.address || "").prop('readonly', false);
+                $("#billing-phone-no").val(supplier.phone_number || "").prop('readonly', false);
+                $("#billing-tax-no").val(supplier.vat_number || "").prop('readonly', false);
+                $("#email").val(supplier.email || "").prop('readonly', false);
+                $("#supplier-owner").val(supplier.owner || "").prop('readonly', false);
                 const label = document.getElementById("billing-name-ai-label");
                 if (label) label.classList.remove("d-none");
             }
 
-            if (importer) {
-                const aiImporter = {
-                    id: "ai-importer",
-                    text: `${importer.name} – ${importer.address}`,
-                    full: {
-                        ...importer,
-                        tax_id: importer.vat_number
+            // --- IMPORTER LOGIC ---
+            let importerId = invoice.importer_id || importer_id;
+            if (window.forceNewImporter) {
+                $("#importer-select2 option[value='new']").remove();
+                const newOption = new Option('Novi uvoznik', 'new', true, true);
+                $("#importer-select2").append(newOption).trigger('change');
+                if (importer) {
+                    $("#carrier-name").val(importer.name || "").prop('readonly', false);
+                    $("#carrier-address").val(importer.address || "").prop('readonly', false);
+                    $("#carrier-tel").val(importer.phone_number || "").prop('readonly', false);
+                    $("#carrier-tax").val(importer.vat_number || "").prop('readonly', false);
+                    $("#carrier-email").val(importer.email || "").prop('readonly', false);
+                    $("#carrier-owner").val(importer.owner || "").prop('readonly', false);
+                } else {
+                    $("#carrier-name, #carrier-address, #carrier-tel, #carrier-tax, #carrier-email, #carrier-owner").val("").prop('readonly', false);
+                }
+                const label = document.getElementById("carrier-name-ai-label");
+                if (label) label.classList.remove("d-none");
+                window.forceNewImporter = false;
+            } else if (importerId) {
+                // Ensure the option exists before setting value
+                if ($(`#importer-select2 option[value='${importerId}']`).length === 0) {
+                    const text = importer?.name ? `${importer.name} – ${importer.address || ''}` : importerId;
+                    const newOption = new Option(text, importerId, true, true);
+                    $("#importer-select2").append(newOption);
+                }
+                console.log("[IMPORTER] Prefilling from ID:", importerId, invoice.importer_id ? 'invoice.importer_id' : 'parties.importer_id');
+                $("#importer-select2").val(importerId).trigger("change");
+                $.ajax({
+                    url: `/api/importers/${importerId}`,
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    },
+                    success: function(dbImporter) {
+                        console.log("[IMPORTER] Prefilling textboxes from DB for ID:", importerId, dbImporter);
+                        $("#carrier-name").val(dbImporter.name || "").prop('readonly', true);
+                        $("#carrier-address").val(dbImporter.address || "").prop('readonly', true);
+                        $("#carrier-tel").val(dbImporter.contact_phone || "").prop('readonly', true);
+                        $("#carrier-tax").val(dbImporter.tax_id || "").prop('readonly', true);
+                        $("#carrier-email").val(dbImporter.contact_email || "").prop('readonly', true);
+                        $("#carrier-owner").val(dbImporter.owner || "").prop('readonly', true);
+                        const label = document.getElementById("carrier-name-ai-label");
+                        if (label) label.classList.add("d-none");
+                    },
+                    error: function() {
+                        if (importer) {
+                            // Not found in DB, add 'Novi uvoznik' to select2
+                            const newOption = new Option('Novi uvoznik', 'new', true, true);
+                            $("#importer-select2").append(newOption).trigger('change');
+                            $("#carrier-name").val(importer.name || "").prop('readonly', false);
+                            $("#carrier-address").val(importer.address || "").prop('readonly', false);
+                            $("#carrier-tel").val(importer.phone_number || "").prop('readonly', false);
+                            $("#carrier-tax").val(importer.vat_number || "").prop('readonly', false);
+                            $("#carrier-email").val(importer.email || "").prop('readonly', false);
+                            $("#carrier-owner").val(importer.owner || "").prop('readonly', false);
+                            const label = document.getElementById("carrier-name-ai-label");
+                            if (label) label.classList.remove("d-none");
+                        }
                     }
-                };
-                const importerOption = new Option(aiImporter.text, aiImporter.id, true, true);
-                $("#importer-select2 option[value='ai-importer']").remove();
-                $("#importer-select2").append(importerOption).val(aiImporter.id).trigger("change");
-                $("#carrier-name").val(importer.name || "");
-
-
-
-
-                document.getElementById("carrier-name").value = importer.name || "";
-                document.getElementById("carrier-address").value = importer.address || "";
-                document.getElementById("carrier-tax").value = importer.vat_number || "";
-                document.getElementById("carrier-tel").value = importer.phone_number || "";
+                });
+            } else if (importer) {
+                // Always remove any previous 'Novi uvoznik' option
+                $("#importer-select2 option[value='new']").remove();
+                // Add and select 'Novi uvoznik'
+                const newOption = new Option('Novi uvoznik', 'new', true, true);
+                $("#importer-select2").append(newOption).trigger('change');
+                $("#carrier-name").val(importer.name || "").prop('readonly', false);
+                $("#carrier-address").val(importer.address || "").prop('readonly', false);
+                $("#carrier-tel").val(importer.phone_number || "").prop('readonly', false);
+                $("#carrier-tax").val(importer.vat_number || "").prop('readonly', false);
+                $("#carrier-email").val(importer.email || "").prop('readonly', false);
+                $("#carrier-owner").val(importer.owner || "").prop('readonly', false);
                 const label = document.getElementById("carrier-name-ai-label");
                 if (label) label.classList.remove("d-none");
             }
-
-            // Activate dropdown override
-
 
         } catch (err) {
             console.error("Greška u fetchAndPrefillParties:", err);
@@ -1180,6 +1287,7 @@
                 $('#billing-phone-no').val(data.contact_phone || "");
                 $('#billing-tax-no').val(data.tax_id || "");
                 $('#email').val(data.contact_email || "");
+                $('#supplier-owner').val(data.owner || ""); // Fill owner field
             }
         });
 
@@ -1218,6 +1326,7 @@
                 $('#carrier-phone').val(data.contact_phone || "");
                 $('#carrier-tax').val(data.tax_id || "");
                 $('#carrier-email').val(data.contact_email || "");
+                $('#carrier-owner').val(data.owner || ""); // Fill owner field
             }
         });
 
@@ -1335,7 +1444,6 @@
 
         $(document).on('click', '.remove-row', function() {
             $(this).closest('tr').remove();
-            console.log(" Row removed.");
             updateTotalAmount();
         });
 
@@ -1366,6 +1474,32 @@
         });
 
 
+    });
+
+
+    // Add buttons above supplier and importer fields
+    $(document).ready(function() {
+
+        // Handler for new supplier
+        $(document).on('click', '#add-new-supplier', function() {
+            // Only clear and unlock supplier fields
+            $("#billing-name, #billing-address-line-1, #billing-phone-no, #billing-tax-no, #email, #supplier-owner").val("").prop('readonly', false).removeClass("is-invalid");
+            // Set select2 to 'new' option
+            $("#supplier-select2 option[value='new']").remove();
+            var newOption = new Option('Novi dobavljač', 'new', true, true);
+            $("#supplier-select2").append(newOption).val('new').trigger('change');
+            // Do NOT call fetchAndPrefillParties or touch importer fields
+        });
+
+        // Handler for new importer
+        $(document).on('click', '#add-new-importer', function() {
+            // Only clear and unlock importer fields
+            $("#carrier-name, #carrier-address, #carrier-tel, #carrier-tax, #carrier-email, #carrier-owner").val("").prop('readonly', false).removeClass("is-invalid");
+            $("#importer-select2 option[value='new']").remove();
+            var newOption = new Option('Novi uvoznik', 'new', true, true);
+            $("#importer-select2").append(newOption).val('new').trigger('change');
+            // Do NOT call fetchAndPrefillParties or touch supplier fields
+        });
     });
 </script>
 
@@ -1435,171 +1569,206 @@
 
 <!-- Save logic script final -->
 <script>
-document.getElementById("save-invoice-btn").addEventListener("click", async function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    const btn = this;
-    btn.disabled = true;
-    btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Spašavanje...`;
+    document.getElementById("save-invoice-btn").addEventListener("click", async function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const btn = this;
+        btn.disabled = true;
+        btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Spašavanje...`;
 
-    let missingFields = [];
+        let missingFields = [];
 
-    function checkRequired(id, label) {
-        const input = document.getElementById(id);
-        if (!input || !input.value.trim()) {
-            input.classList.add("is-invalid");
-            missingFields.push(label);
-        } else {
-            input.classList.remove("is-invalid");
+        function checkRequired(id, label) {
+            const input = document.getElementById(id);
+            if (!input || !input.value.trim()) {
+                input.classList.add("is-invalid");
+                missingFields.push(label);
+            } else {
+                input.classList.remove("is-invalid");
+            }
         }
-    }
 
-    // Check all required fields
-    checkRequired("billing-name", "Naziv dobavljača");
-    checkRequired("billing-address-line-1", "Adresa dobavljača");
-    checkRequired("billing-tax-no", "PIB dobavljača");
-    checkRequired("billing-phone-no", "Telefon dobavljača");
-    checkRequired("email", "Email dobavljača");
-    checkRequired("supplier-owner", "Vlasnik");
+        // Check all required fields
+        checkRequired("billing-name", "Naziv dobavljača");
+        checkRequired("billing-address-line-1", "Adresa dobavljača");
+        checkRequired("billing-tax-no", "PIB dobavljača");
+        checkRequired("billing-phone-no", "Telefon dobavljača");
+        checkRequired("email", "Email dobavljača");
+        checkRequired("supplier-owner", "Vlasnik");
 
-    checkRequired("carrier-name", "Naziv uvoznika");
-    checkRequired("carrier-address", "Adresa uvoznika");
-    checkRequired("carrier-tax", "PIB uvoznika");
-    checkRequired("carrier-tel", "Telefon uvoznika");
-    checkRequired("carrier-email", "Email uvoznika");
-    checkRequired("carrier-owner", "Vlasnik");
+        checkRequired("carrier-name", "Naziv uvoznika");
+        checkRequired("carrier-address", "Adresa uvoznika");
+        checkRequired("carrier-tax", "PIB uvoznika");
+        checkRequired("carrier-tel", "Telefon uvoznika");
+        checkRequired("carrier-email", "Email uvoznika");
+        checkRequired("carrier-owner", "Vlasnik");
 
-    if (missingFields.length > 0) {
-        Swal.fire("Greška", "Obavezna polja nisu popunjena:\n" + missingFields.join(", "), "error");
-        btn.disabled = false;
-        btn.innerHTML = `<i class="ri-printer-line align-bottom me-1"></i> Sačuvaj`;
-        return;
-    }
+        if (missingFields.length > 0) {
+            Swal.fire("Greška", "Obavezna polja nisu popunjena:\n" + missingFields.join(", "), "error");
+            btn.disabled = false;
+            btn.innerHTML = `<i class="ri-save-line align-bottom me-1"></i> Sačuvaj`;
+            return;
+        }
 
-    const token = localStorage.getItem("auth_token");
-    const user = JSON.parse(localStorage.getItem("user"));
-    const userId = user?.id;
-    if (!userId) {
-        Swal.fire("Greška", "Korisnički ID nije pronađen", "error");
-        return;
-    }
+        const token = localStorage.getItem("auth_token");
+        const user = JSON.parse(localStorage.getItem("user"));
+        const userId = user?.id;
+        if (!userId) {
+            Swal.fire("Greška", "Korisnički ID nije pronađen", "error");
+            return;
+        }
 
-    async function ensureEntity(endpoint, data) {
-        const res = await fetch(`/api/${endpoint}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify(data)
-        });
-        const json = await res.json();
-        if (!res.ok) throw new Error(json?.error || `Greška kod spremanja ${endpoint}`);
-        return json.data.id;
-    }
+        async function ensureEntity(endpoint, data, select2Id) {
+            const selectedId = $(select2Id).val();
+            // If 'Novi dobavljač' or 'Novi uvoznik' is selected, create new
+            if (selectedId === 'new') {
+                const res = await fetch(`/api/${endpoint}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data)
+                });
+                const json = await res.json();
+                if (!res.ok) throw new Error(json?.error || `Greška kod spremanja ${endpoint}`);
+                return json.data.id;
+            } else {
+                // Use existing ID
+                return selectedId;
+            }
+        }
 
-    try {
-        // Build supplier and importer data
-        const supplierData = {
-            name: document.getElementById("billing-name").value.trim(),
-            address: document.getElementById("billing-address-line-1").value.trim(),
-            tax_id: document.getElementById("billing-tax-no").value.trim(),
-            contact_phone: document.getElementById("billing-phone-no").value.trim(),
-            contact_email: document.getElementById("email").value.trim(),
-            owner: document.getElementById("supplier-owner").value.trim() || null,
-            avatar: null,
-            synonyms: []
-        };
+        try {
+            // Build supplier and importer data
+            const supplierData = {
+                name: document.getElementById("billing-name").value.trim(),
+                address: document.getElementById("billing-address-line-1").value.trim(),
+                tax_id: document.getElementById("billing-tax-no").value.trim(),
+                contact_phone: document.getElementById("billing-phone-no").value.trim(),
+                contact_email: document.getElementById("email").value.trim(),
+                owner: document.getElementById("supplier-owner").value.trim() || null,
+                avatar: null,
+                synonyms: []
+            };
 
-        const importerData = {
-            name: document.getElementById("carrier-name").value.trim(),
-            address: document.getElementById("carrier-address").value.trim(),
-            tax_id: document.getElementById("carrier-tax").value.trim(),
-            contact_phone: document.getElementById("carrier-tel").value.trim(),
-            contact_email: document.getElementById("carrier-email").value.trim(),
-            owner: document.getElementById("carrier-owner").value.trim() || null,
-            avatar: null,
-            synonyms: []
-        };
+            const importerData = {
+                name: document.getElementById("carrier-name").value.trim(),
+                address: document.getElementById("carrier-address").value.trim(),
+                tax_id: document.getElementById("carrier-tax").value.trim(),
+                contact_phone: document.getElementById("carrier-tel").value.trim(),
+                contact_email: document.getElementById("carrier-email").value.trim(),
+                owner: document.getElementById("carrier-owner").value.trim() || null,
+                avatar: null,
+                synonyms: []
+            };
 
-        const supplierId = await ensureEntity("suppliers", supplierData);
-        const importerId = await ensureEntity("importers", importerData);
+            // --- Ensure valid integer IDs for supplier and importer ---
+            function isValidId(id) {
+                return id && !isNaN(id) && Number.isInteger(Number(id)) && Number(id) > 0;
+            }
 
-        // Build invoice items
-        const items = [];
-        document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
-            const item_name = row.querySelector('[name="item_name[]"]')?.value?.trim() || "";
-            const item_description_original = item_name;
-            const item_code = row.querySelector('[name="item_code[]"]')?.value || "";
-            const origin = row.querySelector('[name="origin[]"]')?.value || "";
-            const base_price = parseFloat(row.querySelector('[name="price[]"]')?.value || "0");
-            const quantity = parseFloat(row.querySelector('[name="quantity[]"]')?.value || "0");
-            const total_price = parseFloat((base_price * quantity).toFixed(2));
-            const item_description = row.querySelector('[name="item_code[]"] option:checked')?.textContent || "";
-            const quantity_type = row.querySelector('[name="quantity_type[]"]')?.value || "";
-            const package_num = row.querySelector('[name="kolata[]"]')?.value || "";
+            // Only create if 'Novi ...' is selected, otherwise just use ID
+            let supplierId = await ensureEntity("suppliers", supplierData, "#supplier-select2");
+            let importerId = await ensureEntity("importers", importerData, "#importer-select2");
 
-            items.push({
-                item_name,
-                item_code,
-                item_description,
-                item_description_original,
-                origin,
-                base_price,
-                quantity,
-                quantity_type,
-                package_num,
-                total_price,
-                currency: "EUR",
-                version: new Date().getFullYear(),
-                best_customs_code_matches: globalAISuggestions[index]?.map(s => s.entry?.["Tarifna oznaka"])?.slice(0, 10) || []
+            // If still not valid, show error and abort
+            if (!isValidId(supplierId)) {
+                Swal.fire("Greška", "Molimo odaberite ili unesite validnog dobavljača.", "error");
+                btn.disabled = false;
+                btn.innerHTML = `<i class=\"ri-save-line align-bottom me-1\"></i> Sačuvaj`;
+                return;
+            }
+            if (!isValidId(importerId)) {
+                Swal.fire("Greška", "Molimo odaberite ili unesite validnog uvoznika.", "error");
+                btn.disabled = false;
+                btn.innerHTML = `<i class=\"ri-save-line align-bottom me-1\"></i> Sačuvaj`;
+                return;
+            }
+
+            supplierId = Number(supplierId);
+            importerId = Number(importerId);
+
+            // Build invoice items
+            const items = [];
+            document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
+                const item_name = row.querySelector('[name="item_name[]"]')?.value?.trim() || "";
+                const item_description_original = item_name;
+                const item_code = row.querySelector('[name="item_code[]"]')?.value || "";
+                const origin = row.querySelector('[name="origin[]"]')?.value || "";
+                const base_price = parseFloat(row.querySelector('[name="price[]"]')?.value || "0");
+                const quantity = parseFloat(row.querySelector('[name="quantity[]"]')?.value || "0");
+                const total_price = parseFloat((base_price * quantity).toFixed(2));
+                const item_description = row.querySelector('[name="item_code[]"] option:checked')?.textContent || "";
+                const quantity_type = row.querySelector('[name="quantity_type[]"]')?.value || "";
+                const package_num = row.querySelector('[name="kolata[]"]')?.value || "";
+
+                items.push({
+                    item_name,
+                    item_code,
+                    item_description,
+                    item_description_original,
+                    origin,
+                    base_price,
+                    quantity,
+                    quantity_type,
+                    package_num,
+                    total_price,
+                    currency: "EUR",
+                    version: new Date().getFullYear(),
+                    best_customs_code_matches: globalAISuggestions[index]?.map(s => s.entry?.["Tarifna oznaka"])?.slice(0, 10) || []
+                });
             });
-        });
 
-        const payload = {
-            file_name: "invoice_" + Date.now() + ".pdf",
-            total_price: parseFloat(document.getElementById("total-amount")?.value || "0"),
-            date_of_issue: document.getElementById("invoice-date")?.value,
-            country_of_origin: document.getElementById("shipping-country")?.value || "Germany",
-            invoice_id: getInvoiceId(),
-            items,
-            supplier_id: supplierId,
-            importer_id: importerId
-        };
+            // Use the existing invoice file name and ID from upload
+            const invoiceId = getInvoiceId();
+            const invoiceData = await getInvoice();
+            const fileName = invoiceData.file_name || "invoice.pdf";
 
-        console.log("📦 Sending payload:", payload);
+            const payload = {
+                file_name: fileName, // use the file name from the uploaded invoice
+                total_price: parseFloat(document.getElementById("total-amount")?.value || "0"),
+                date_of_issue: document.getElementById("invoice-date")?.value,
+                country_of_origin: document.getElementById("shipping-country")?.value || "Germany",
+                items,
+                supplier_id: supplierId,
+                importer_id: importerId // always send both
+            };
 
-        const res = await fetch(`/api/invoices/users/${userId}/suppliers/${supplierId}/form`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify(payload)
-        });
+            console.log("📦 Sending payload (update):", payload);
 
-        const resJson = await res.json();
-        if (!res.ok) throw new Error(resJson?.error || "Greška pri spašavanju fakture");
+            // Update the existing invoice instead of creating a new one
+            const res = await fetch(`/api/invoices/${invoiceId}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(payload)
+            });
 
-        Swal.fire({
-            icon: "success",
-            title: "Uspješno",
-            text: "Faktura je sačuvana",
-            confirmButtonText: "U redu",
-            customClass: {
-                confirmButton: "btn btn-info"
-            },
-            buttonsStyling: false
-        });
+            const resJson = await res.json();
+            if (!res.ok) throw new Error(resJson?.error || "Greška pri spašavanju fakture");
 
-    } catch (err) {
-        console.error(" Greška:", err);
-        Swal.fire("Greška", err.message || "Neočekivana greška", "error");
-    } finally {
-        btn.disabled = false;
-        btn.innerHTML = `<i class="ri-printer-line align-bottom me-1"></i> Sačuvaj`;
-    }
-});
+            Swal.fire({
+                icon: "success",
+                title: "Uspješno",
+                text: "Faktura je sačuvana",
+                confirmButtonText: "U redu",
+                customClass: {
+                    confirmButton: "btn btn-info"
+                },
+                buttonsStyling: false
+            });
+
+        } catch (err) {
+            console.error(" Greška:", err);
+            Swal.fire("Greška", err.message || "Neočekivana greška", "error");
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = `<i class="ri-save-line align-bottom me-1"></i> Sačuvaj`;
+        }
+    });
 </script>
 
 <!-- Export to XML -->
@@ -1618,41 +1787,49 @@ document.getElementById("save-invoice-btn").addEventListener("click", async func
                 total: document.getElementById("cart-total")?.value || "",
             };
 
-            document.querySelectorAll("#newlink tr.product").forEach(row => {
+            document.querySelectorAll("#newlink tr.product").forEach((row) => {
                 invoiceData.items.push({
                     tarif: row.querySelector(".select2-tariff")?.value || "",
                     name: row.querySelector("input[name='item_name[]']")?.value || "",
-                    translation: row.querySelector("input[name='item_translation[]']")?.value || "",
-                    origin: row.querySelector("input[name='origin[]']")?.value || "",
+                    translation: row.querySelector("input[name='item_prev[]']")?.value || "",
+                    origin: row.querySelector("select[name='origin[]']")?.value || "",
                     price: row.querySelector("input[name='price[]']")?.value || "",
                     quantity: row.querySelector("input[name='quantity[]']")?.value || "",
                     total: row.querySelector("input[name='total[]']")?.value || "",
                 });
             });
 
+            // Escape function for XML safety
+            const escapeXml = (str) =>
+                String(str).replace(/[<>&'"]/g, (c) => ({
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    "&": "&amp;",
+                    "'": "&apos;",
+                    '"': "&quot;",
+                } [c]));
+
             // Build XML string
             let xml = `<invoice>\n`;
-            invoiceData.items.forEach(item => {
+            invoiceData.items.forEach((item) => {
                 xml += `  <item>\n`;
-                xml += `    <tarif>${item.tarif}</tarif>\n`;
-                xml += `    <name>${item.name}</name>\n`;
-                xml += `    <translation>${item.translation}</translation>\n`;
-                xml += `    <origin>${item.origin}</origin>\n`;
-                xml += `    <price>${item.price}</price>\n`;
-                xml += `    <quantity>${item.quantity}</quantity>\n`;
-                xml += `    <total>${item.total}</total>\n`;
+                xml += `    <tarif>${escapeXml(item.tarif)}</tarif>\n`;
+                xml += `    <name>${escapeXml(item.name)}</name>\n`;
+                xml += `    <translation>${escapeXml(item.translation)}</translation>\n`;
+                xml += `    <origin>${escapeXml(item.origin)}</origin>\n`;
+                xml += `    <price>${escapeXml(item.price)}</price>\n`;
+                xml += `    <quantity>${escapeXml(item.quantity)}</quantity>\n`;
+                xml += `    <total>${escapeXml(item.total)}</total>\n`;
                 xml += `  </item>\n`;
             });
-            xml += `  <subtotal>${invoiceData.subtotal}</subtotal>\n`;
-            xml += `  <tax>${invoiceData.tax}</tax>\n`;
-            xml += `  <discount>${invoiceData.discount}</discount>\n`;
-            xml += `  <shipping>${invoiceData.shipping}</shipping>\n`;
-            xml += `  <total>${invoiceData.total}</total>\n`;
+            xml += `  <subtotal>${escapeXml(invoiceData.subtotal)}</subtotal>\n`;
+            xml += `  <tax>${escapeXml(invoiceData.tax)}</tax>\n`;
+            xml += `  <discount>${escapeXml(invoiceData.discount)}</discount>\n`;
+            xml += `  <shipping>${escapeXml(invoiceData.shipping)}</shipping>\n`;
+            xml += `  <total>${escapeXml(invoiceData.total)}</total>\n`;
             xml += `</invoice>`;
 
-            // Create and download file
-            const blob = new Blob([xml], {
-                type: "application/xml"
+           
             });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
@@ -1664,15 +1841,17 @@ document.getElementById("save-invoice-btn").addEventListener("click", async func
     });
 </script>
 
+
 <!-- Export to PDF -->
 <script>
-    document.getElementById("export-pdf").addEventListener("click", function() {
+    document.getElementById("export-pdf").addEventEventListener("click", function() {
         const element = document.getElementById("invoice_form"); // or wrap the main content
         const opt = {
             margin: 0.5,
             filename: 'faktura.pdf',
             image: {
                 type: 'jpeg',
+
                 quality: 0.98
             },
             html2canvas: {
@@ -1687,8 +1866,6 @@ document.getElementById("save-invoice-btn").addEventListener("click", async func
         html2pdf().set(opt).from(element).save();
     });
 </script>
-
-
 
 
 
