@@ -518,9 +518,9 @@ color: #299cdb ;
 
 .modal-backdrop.show {
 
-    z-index: 999998!important;
+    z-index: 0!important;
 }
-.modal {z-index: 999999!important;;}
+.modal {z-index: 999999!important;}
 
 .accordion-button:not(.collapsed) {
     color: #299cdb!important;

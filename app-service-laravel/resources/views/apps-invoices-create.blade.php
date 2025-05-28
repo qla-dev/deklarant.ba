@@ -195,8 +195,9 @@
                     <div class="col-6 text-start">
 
                         <h6 class="text-muted text-uppercase fw-semibold mb-3">Podaci o dobavljaču</h6>
-                        <small id="billing-name-ai-label" class="text-info d-flex align-items-center d-none mb-2">Podaci ispunjeni s AI</small>
+                
                         <div class="mb-2">
+                            <button type="button" class="btn btn-outline-primary mb-2" id="add-new-supplier">+ Novi dobavljač</button>
                             <select id="supplier-select2" class="form-select"></select>
                         </div>
                         <input type="text" class="form-control mb-2" id="billing-name" name="supplier_name" placeholder="Naziv dobavljača">
@@ -209,8 +210,8 @@
                     </div>
                     <div class="col-6 text-end">
                         <h6 class="text-muted text-uppercase fw-semibold mb-3 text-end">Podaci o uvozniku</h6>
-                        <small id="carrier-name-ai-label" class="text-info text-end d-flex align-items-center d-none mb-2">Podaci ispunjeni s AI</small>
-                        <div class="mb-2">
+                       
+                            <button type="button" class="btn btn-outline-primary mb-2" id="add-new-importer">+ Novi uvoznik</button>
                             <select id="importer-select2" class="form-select"></select>
                         </div>
 
@@ -365,9 +366,14 @@
 
 <!-- Scan and other logic script -->
 <script>
+    console.log('🟢 Custom invoice JS loaded');
     let _invoice_data = null;
     let processedTariffData = [];
     let globalAISuggestions = [];
+
+    // Add global flags
+    window.forceNewSupplier = false;
+    window.forceNewImporter = false;
 
     function getInvoiceId() {
         const id = localStorage.getItem("scan_invoice_id");
@@ -1060,7 +1066,26 @@
 
             // --- SUPPLIER LOGIC ---
             let supplierId = invoice.supplier_id || supplier_id;
-            if (supplierId) {
+            if (window.forceNewSupplier) {
+                // Always remove any previous 'Novi dobavljač' option
+                $("#supplier-select2 option[value='new']").remove();
+                // Add and select 'Novi dobavljač'
+                const newOption = new Option('Novi dobavljač', 'new', true, true);
+                $("#supplier-select2").append(newOption).trigger('change');
+                if (supplier) {
+                    $("#billing-name").val(supplier.name || "").prop('readonly', false);
+                    $("#billing-address-line-1").val(supplier.address || "").prop('readonly', false);
+                    $("#billing-phone-no").val(supplier.phone_number || "").prop('readonly', false);
+                    $("#billing-tax-no").val(supplier.vat_number || "").prop('readonly', false);
+                    $("#email").val(supplier.email || "").prop('readonly', false);
+                    $("#supplier-owner").val(supplier.owner || "").prop('readonly', false);
+                } else {
+                    $("#billing-name, #billing-address-line-1, #billing-phone-no, #billing-tax-no, #email, #supplier-owner").val("").prop('readonly', false);
+                }
+                const label = document.getElementById("billing-name-ai-label");
+                if (label) label.classList.remove("d-none");
+                window.forceNewSupplier = false;
+            } else if (supplierId) {
                 // Ensure the option exists before setting value
                 if ($(`#supplier-select2 option[value='${supplierId}']`).length === 0) {
                     const text = supplier?.name ? `${supplier.name} – ${supplier.address || ''}` : supplierId;
@@ -1071,7 +1096,9 @@
                 $("#supplier-select2").val(supplierId).trigger("change");
                 $.ajax({
                     url: `/api/suppliers/${supplierId}`,
-                    headers: { Authorization: `Bearer ${token}` },
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    },
                     success: function(dbSupplier) {
                         console.log("[SUPPLIER] Prefilling textboxes from DB for ID:", supplierId, dbSupplier);
                         $("#billing-name").val(dbSupplier.name || "").prop('readonly', true);
@@ -1115,7 +1142,24 @@
 
             // --- IMPORTER LOGIC ---
             let importerId = invoice.importer_id || importer_id;
-            if (importerId) {
+            if (window.forceNewImporter) {
+                $("#importer-select2 option[value='new']").remove();
+                const newOption = new Option('Novi uvoznik', 'new', true, true);
+                $("#importer-select2").append(newOption).trigger('change');
+                if (importer) {
+                    $("#carrier-name").val(importer.name || "").prop('readonly', false);
+                    $("#carrier-address").val(importer.address || "").prop('readonly', false);
+                    $("#carrier-tel").val(importer.phone_number || "").prop('readonly', false);
+                    $("#carrier-tax").val(importer.vat_number || "").prop('readonly', false);
+                    $("#carrier-email").val(importer.email || "").prop('readonly', false);
+                    $("#carrier-owner").val(importer.owner || "").prop('readonly', false);
+                } else {
+                    $("#carrier-name, #carrier-address, #carrier-tel, #carrier-tax, #carrier-email, #carrier-owner").val("").prop('readonly', false);
+                }
+                const label = document.getElementById("carrier-name-ai-label");
+                if (label) label.classList.remove("d-none");
+                window.forceNewImporter = false;
+            } else if (importerId) {
                 // Ensure the option exists before setting value
                 if ($(`#importer-select2 option[value='${importerId}']`).length === 0) {
                     const text = importer?.name ? `${importer.name} – ${importer.address || ''}` : importerId;
@@ -1126,7 +1170,9 @@
                 $("#importer-select2").val(importerId).trigger("change");
                 $.ajax({
                     url: `/api/importers/${importerId}`,
-                    headers: { Authorization: `Bearer ${token}` },
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    },
                     success: function(dbImporter) {
                         console.log("[IMPORTER] Prefilling textboxes from DB for ID:", importerId, dbImporter);
                         $("#carrier-name").val(dbImporter.name || "").prop('readonly', true);
@@ -1241,6 +1287,7 @@
                 $('#billing-phone-no').val(data.contact_phone || "");
                 $('#billing-tax-no').val(data.tax_id || "");
                 $('#email').val(data.contact_email || "");
+                $('#supplier-owner').val(data.owner || ""); // Fill owner field
             }
         });
 
@@ -1279,6 +1326,7 @@
                 $('#carrier-phone').val(data.contact_phone || "");
                 $('#carrier-tax').val(data.tax_id || "");
                 $('#carrier-email').val(data.contact_email || "");
+                $('#carrier-owner').val(data.owner || ""); // Fill owner field
             }
         });
 
@@ -1426,6 +1474,32 @@
         });
 
 
+    });
+
+
+    // Add buttons above supplier and importer fields
+    $(document).ready(function() {
+
+        // Handler for new supplier
+        $(document).on('click', '#add-new-supplier', function() {
+            // Only clear and unlock supplier fields
+            $("#billing-name, #billing-address-line-1, #billing-phone-no, #billing-tax-no, #email, #supplier-owner").val("").prop('readonly', false).removeClass("is-invalid");
+            // Set select2 to 'new' option
+            $("#supplier-select2 option[value='new']").remove();
+            var newOption = new Option('Novi dobavljač', 'new', true, true);
+            $("#supplier-select2").append(newOption).val('new').trigger('change');
+            // Do NOT call fetchAndPrefillParties or touch importer fields
+        });
+
+        // Handler for new importer
+        $(document).on('click', '#add-new-importer', function() {
+            // Only clear and unlock importer fields
+            $("#carrier-name, #carrier-address, #carrier-tel, #carrier-tax, #carrier-email, #carrier-owner").val("").prop('readonly', false).removeClass("is-invalid");
+            $("#importer-select2 option[value='new']").remove();
+            var newOption = new Option('Novi uvoznik', 'new', true, true);
+            $("#importer-select2").append(newOption).val('new').trigger('change');
+            // Do NOT call fetchAndPrefillParties or touch supplier fields
+        });
     });
 </script>
 
@@ -1704,58 +1778,80 @@
         if (!exportBtn) return;
 
         exportBtn.addEventListener("click", () => {
-                const invoiceData = {
-                    items: [],
-                    subtotal: document.getElementById("cart-subtotal")?.value || "",
-                    tax: document.getElementById("cart-tax")?.value || "",
-                    discount: document.getElementById("cart-discount")?.value || "",
-                    shipping: document.getElementById("cart-shipping")?.value || "",
-                    total: document.getElementById("cart-total")?.value || "",
-                };
+            const invoiceData = {
+                items: [],
+                subtotal: document.getElementById("cart-subtotal")?.value || "",
+                tax: document.getElementById("cart-tax")?.value || "",
+                discount: document.getElementById("cart-discount")?.value || "",
+                shipping: document.getElementById("cart-shipping")?.value || "",
+                total: document.getElementById("cart-total")?.value || "",
+            };
 
-                document.querySelectorAll("#newlink tr.product").forEach row => {
-                    invoiceData.items.push({
-                        tarif: row.querySelector(".select2-tariff")?.value || "",
-                        name: row.querySelector("input[name='item_name[]']")?.value || "",
-                        translation: row.querySelector("input[name='item_translation[]']")?.value || "",
-                        origin: row.querySelector("input[name='origin[]']")?.value || "",
-                        price: row.querySelector("input[name='price[]']")?.value || "",
-                        quantity: row.querySelector("input[name='quantity[]']")?.value || "",
-                        total: row.querySelector("input[name='total[]']")?.value || "",
-                    });
+            document.querySelectorAll("#newlink tr.product").forEach((row) => {
+                invoiceData.items.push({
+                    tarif: row.querySelector(".select2-tariff")?.value || "",
+                    name: row.querySelector("input[name='item_name[]']")?.value || "",
+                    translation: row.querySelector("input[name='item_prev[]']")?.value || "",
+                    origin: row.querySelector("select[name='origin[]']")?.value || "",
+                    price: row.querySelector("input[name='price[]']")?.value || "",
+                    quantity: row.querySelector("input[name='quantity[]']")?.value || "",
+                    total: row.querySelector("input[name='total[]']")?.value || "",
                 });
+            });
+
+            // Escape function for XML safety
+            const escapeXml = (str) =>
+                String(str).replace(/[<>&'"]/g, (c) => ({
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    "&": "&amp;",
+                    "'": "&apos;",
+                    '"': "&quot;",
+                } [c]));
 
             // Build XML string
-            let xml = `<invoice>\n`; invoiceData.items.forEach(item => {
+            let xml = `<invoice>\n`;
+            invoiceData.items.forEach((item) => {
                 xml += `  <item>\n`;
-                xml += `    <tarif>${item.tarif}</tarif>\n`;
-                xml += `    <name>${item.name}</name>\n`;
-                xml += `    <translation>${item.translation}</translation>\n`;
-                xml += `    <origin>${item.origin}</origin>\n`;
-                xml += `    <price>${item.price}</price>\n`;
-                xml += `    <quantity>${item.quantity}</quantity>\n`;
-                xml += `    <total>${item.total}</total>\n`;
+                xml += `    <tarif>${escapeXml(item.tarif)}</tarif>\n`;
+                xml += `    <name>${escapeXml(item.name)}</name>\n`;
+                xml += `    <translation>${escapeXml(item.translation)}</translation>\n`;
+                xml += `    <origin>${escapeXml(item.origin)}</origin>\n`;
+                xml += `    <price>${escapeXml(item.price)}</price>\n`;
+                xml += `    <quantity>${escapeXml(item.quantity)}</quantity>\n`;
+                xml += `    <total>${escapeXml(item.total)}</total>\n`;
                 xml += `  </item>\n`;
-            }); xml += `  <subtotal>${invoiceData.subtotal}</subtotal>\n`; xml += `  <tax>${invoiceData.tax}</tax>\n`; xml += `  <discount>${invoiceData.discount}</discount>\n`; xml += `  <shipping>${invoiceData.shipping}</shipping>\n`; xml += `  <total>${invoiceData.total}</total>\n`; xml += `</invoice>`;
-
-            // Create and download file
-            const blob = new Blob([xml], {
-                type: "application/xml"
             });
-            const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "invoice.xml"; document.body.appendChild(link); link.click(); document.body.removeChild(link);
+            xml += `  <subtotal>${escapeXml(invoiceData.subtotal)}</subtotal>\n`;
+            xml += `  <tax>${escapeXml(invoiceData.tax)}</tax>\n`;
+            xml += `  <discount>${escapeXml(invoiceData.discount)}</discount>\n`;
+            xml += `  <shipping>${escapeXml(invoiceData.shipping)}</shipping>\n`;
+            xml += `  <total>${escapeXml(invoiceData.total)}</total>\n`;
+            xml += `</invoice>`;
+
+           
+            });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "invoice.xml";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         });
     });
 </script>
 
+
 <!-- Export to PDF -->
 <script>
-    document.getElementById("export-pdf").addEventListener("click", function() {
+    document.getElementById("export-pdf").addEventEventListener("click", function() {
         const element = document.getElementById("invoice_form"); // or wrap the main content
         const opt = {
             margin: 0.5,
             filename: 'faktura.pdf',
             image: {
                 type: 'jpeg',
+
                 quality: 0.98
             },
             html2canvas: {
@@ -1770,8 +1866,6 @@
         html2pdf().set(opt).from(element).save();
     });
 </script>
-
-
 
 
 
