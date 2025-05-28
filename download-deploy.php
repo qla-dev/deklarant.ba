@@ -71,12 +71,7 @@ if ($returnVar !== 0) {
     echo "Extracted successfully to $destination\n";
 }
 
-exec("rm -rf /tmp/artifact_*", $output, $returnVar);
-
-echo implode("\n", $output) . "\n";
-
-if ($returnVar !== 0) {
-    echo "WARNING: Deleting artifact in tmp failed with code $returnVar\n";
-} else {
-    echo "Removed temporary artifacts\n";
-}
+exec("rm $escapedFile", $output, $returnVar);
+$fileWithoutExtension = pathinfo($tmpFile, PATHINFO_DIRNAME) . '/' . pathinfo($tmpFile, PATHINFO_FILENAME);
+$escapedFolder = escapeshellarg($fileWithoutExtension);
+exec("rm -rf $escapedFolder", $output, $returnVar);
