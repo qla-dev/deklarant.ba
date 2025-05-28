@@ -192,20 +192,11 @@
                             <span class="text-start me-xl-2">
                                 <span class="d-none d-xl-inline-block fw-medium user-name-text text-end"
                                     id="topbar-username">
-                                    <script>
-                                        document.write(JSON.parse(localStorage.getItem("user"))?.username || "Korisnik");
-                                    </script>
+                                {{ Auth::user()->username ?? 'Korisnik' }}
                                 </span>
-                                <span class="d-none d-xl-block fs-12 user-name-sub-text text-end">  <script>
-                                    const user = JSON.parse(localStorage.getItem("user"));
-                                    if (user?.role === "superadmin") {
-                                        document.write("Superadmin");
-                                    } else {
-                                        document.write("Business");
-                                    }
-                                </script></span>
-
-
+                                <span class="d-none d-xl-block fs-12 user-name-sub-text text-end">
+                                    {{ Auth::user()->role == 'user' ? 'Business' : (Auth::user()->role == 'superadmin' ? 'Superadmin' : Auth::user()->role) }}
+                                </span>
                             </span>
 
                             <img id="topbar-avatar" class="rounded-circle header-profile-user d-none"
@@ -224,7 +215,7 @@
 
                     <div class="dropdown-menu dropdown-menu-end border">
                         <!-- item-->
-                        <h6 class="dropdown-header" id="dropdownWelcome">Dobrodošli <span id="dropdownUser">Korisnik</span></h6>
+                        <h6 class="dropdown-header" id="dropdownWelcome">Dobrodošli {{ Auth::user()->username ?? 'Korisnik' }}</h6>
                         <a class="dropdown-item" href="profil"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Moj nalog</span></a>
                         <a class="dropdown-item" href="faqs"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Pomoć</span></a>
                         <div class="dropdown-divider"></div>

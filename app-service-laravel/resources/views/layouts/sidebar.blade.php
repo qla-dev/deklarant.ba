@@ -46,134 +46,92 @@
         <div class="container-fluid d-flex justify-content-center  ">
 
 
-
-
-            <ul class="navbar-nav admin-nav d-none" id="navbar-nav-user">
-                <li class="nav-item me-1">
-                    <a class="nav-link menu-link ps-0 d-flex align-items-center justify-content-between" href="#" id="homeLink">
-                        <span>
-                            <i class="ri-home-line text-info"></i>
-                            <span>@lang('translation.home')</span>
-                        </span>
-                        <i class="ri-arrow-down-s-line text-muted collapse-toggler" data-bs-toggle="collapse" data-bs-target="#sidebarDashboards" role="button" aria-expanded="false" aria-controls="sidebarDashboards" style="cursor: pointer; min-width:unset!important"></i>
-                    </a>
-                    <div class="collapse menu-dropdown" id="sidebarDashboards">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a href="/" class="nav-link">@lang('translation.information_dashboard')</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="analitika" class="nav-link">@lang('translation.analytics')</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item me-1">
-                    <a class="nav-link menu-link" href="kalendar"  role="button"
-                        aria-expanded="false" aria-controls="sidebarApps">
-                        <i class="ri-calendar-line text-info"></i> <span>@lang('translation.statistic')
-                        </span>
-                    </a>
-                </li>
-                <li class="nav-item me-1">
-                    <a class="nav-link menu-link" href="moje-deklaracije"  role="button"
-                        aria-expanded="false" aria-controls="sidebarLayouts">
-                        <i class="ri-file-line text-info "></i> <span>@lang('translation.myorder')</span> 
-                    </a>
-                </li>
-                <li class="nav-item me-1">
-                    <a class="nav-link menu-link" href="moji-klijenti"  role="button"
-                        aria-expanded="false" aria-controls="sidebarAuth">
-                        <i class="ri-user-line text-info fs-4"></i> <span>@lang('translation.clients')
-                        </span>
-                    </a>
-                </li>
-                <li class="nav-item me-1">
-                    <a class="nav-link menu-link" href="moji-dobavljaci"  role="button"
-                        aria-expanded="false" aria-controls="sidebarAuth">
-                        <i class="ri-truck-line text-info fs-4"></i> <span>@lang('translation.importers')
-                        </span>
-                    </a>
-                </li>
-                <li class="nav-item me-1">
-                    <a class="nav-link menu-link" href="tarifne-oznake"  role="button"
-                        aria-expanded="false" aria-controls="sidebarPages">
-                        <i class="mdi mdi-sticker-text-outline text-info"></i> <span>@lang('translation.declarant')
-                        </span>
-                    </a>
-                </li>
-                <li class="nav-item me-1">
-                    <a class="nav-link menu-link" href="cijene-paketa"  role="button"
-                        aria-expanded="false" aria-controls="sidebarUI">
-                        <i class="ri-price-tag-3-line text-info"></i> <span>@lang('translation.pricing')
-                        </span>
-                    </a>
+{{-- USER NAVIGATION --}}
+@if(Auth::user()->role == 'user')
+<ul class="navbar-nav admin-nav" id="navbar-nav-user">
+    <li class="nav-item me-1">
+        <a class="nav-link menu-link ps-0 d-flex align-items-center justify-content-between" href="#" id="homeLink">
+            <span>
+                <i class="ri-home-line text-info"></i>
+                <span>@lang('translation.home')</span>
+            </span>
+            <i class="ri-arrow-down-s-line text-muted collapse-toggler" data-bs-toggle="collapse" data-bs-target="#sidebarDashboards" role="button" aria-expanded="false" aria-controls="sidebarDashboards" style="cursor: pointer; min-width:unset!important"></i>
+        </a>
+        <div class="collapse menu-dropdown" id="sidebarDashboards">
+            <ul class="nav nav-sm flex-column">
+                <li class="nav-item">
+                    <a href="/" class="nav-link">@lang('translation.information_dashboard')</a>
                 </li>
                 <li class="nav-item">
-                    <a href="javascript:void(0);"
-                        data-bs-toggle="modal"
-                        data-bs-target="#scanModal"
-                        style="width: 190px; height:28px;"
-                        class="btn btn-info btn-sm ms-5 text-white py-0 d-flex align-items-center justify-content-center">
-                        <i class="fas fa-wand-magic-sparkles fs-6 me-1"></i>
-                        <span class="fs-6"> Skeniraj deklaraciju sa AI</span>
-                    </a>
+                    <a href="analitika" class="nav-link">@lang('translation.analytics')</a>
                 </li>
             </ul>
-               <ul class="navbar-nav user-nav d-none" id="navbar-nav-admin" style="justify-content: unset!important; gap: 10px!important;">
-                           <li class="nav-item me-1">
-                    <a class="nav-link menu-link" href="moji-korisnici"  role="button"
-                        aria-expanded="false" aria-controls="sidebarAuth">
-                        <i class="ri-user-line text-info fs-4"></i> <span>Korisnici aplikacije
-                        </span>
-                    </a>
-                </li>
-                            <li class="nav-item me-1">
-                    <a class="nav-link menu-link" href="moji-klijenti"  role="button"
-                        aria-expanded="false" aria-controls="sidebarAuth">
-                        <i class="ri-user-line text-info fs-4"></i> <span>Distrubuteri
-                        </span>
-                    </a>
-                </li>
-                <li class="nav-item me-1">
-                    <a class="nav-link menu-link" href="moji-dobavljaci"  role="button"
-                        aria-expanded="false" aria-controls="sidebarAuth">
-                        <i class="ri-truck-line text-info fs-4"></i> <span>@lang('translation.importers')
-                        </span>
-                    </a>
-                </li>
-               
-            </ul>
+        </div>
+    </li>
+    <li class="nav-item me-1">
+        <a class="nav-link menu-link" href="kalendar">
+            <i class="ri-calendar-line text-info"></i> <span>@lang('translation.statistic')</span>
+        </a>
+    </li>
+    <li class="nav-item me-1">
+        <a class="nav-link menu-link" href="moje-deklaracije">
+            <i class="ri-file-line text-info"></i> <span>@lang('translation.myorder')</span>
+        </a>
+    </li>
+    <li class="nav-item me-1">
+        <a class="nav-link menu-link" href="moji-klijenti">
+            <i class="ri-user-line text-info fs-4"></i> <span>@lang('translation.clients')</span>
+        </a>
+    </li>
+    <li class="nav-item me-1">
+        <a class="nav-link menu-link" href="moji-dobavljaci">
+            <i class="ri-truck-line text-info fs-4"></i> <span>@lang('translation.importers')</span>
+        </a>
+    </li>
+    <li class="nav-item me-1">
+        <a class="nav-link menu-link" href="tarifne-oznake">
+            <i class="mdi mdi-sticker-text-outline text-info"></i> <span>@lang('translation.declarant')</span>
+        </a>
+    </li>
+    <li class="nav-item me-1">
+        <a class="nav-link menu-link" href="cijene-paketa">
+            <i class="ri-price-tag-3-line text-info"></i> <span>@lang('translation.pricing')</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#scanModal" class="btn btn-info btn-sm ms-5 text-white py-0 d-flex align-items-center justify-content-center" style="width: 190px; height:28px;">
+            <i class="fas fa-wand-magic-sparkles fs-6 me-1"></i>
+            <span class="fs-6"> Skeniraj deklaraciju sa AI</span>
+        </a>
+    </li>
+</ul>
+@endif
 
-            <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    try {
-                        const user = localStorage.getItem('user');
-                        const userNav = document.getElementById('navbar-nav-user');
-                        const adminNav = document.getElementById('navbar-nav-admin');
-                        if (user) {
-                            const userObj = JSON.parse(user);
-                            if (userObj.role === 'user') {
-                                userNav?.classList.remove('d-none');
-                                adminNav?.classList.add('d-none');
-                            } else if (userObj.role === 'superadmin') {
-                                adminNav?.classList.remove('d-none');
-                                userNav?.classList.add('d-none');
-                            } else {
-                                // Show both or handle other roles as needed
-                                userNav?.classList.remove('d-none');
-                                adminNav?.classList.remove('d-none');
-                            }
-                        } else {
-                            // Default: hide both or show one as needed
-                            userNav?.classList.remove('d-none');
-                            adminNav?.classList.remove('d-none');
-                        }
-                    } catch (e) {
-                        // Ignore errors
-                    }
-                });
-            </script>
+{{-- SUPERADMIN NAVIGATION --}}
+@if(Auth::user()->role == 'superadmin')
+<ul class="navbar-nav user-nav" id="navbar-nav-admin" style="justify-content: unset!important; gap: 10px!important;">
+    <li class="nav-item me-1">
+        <a class="nav-link menu-link" href="moji-korisnici">
+            <i class="ri-user-line text-info fs-4"></i> <span>Korisnici aplikacije</span>
+        </a>
+    </li>
+    <li class="nav-item me-1">
+        <a class="nav-link menu-link" href="moji-klijenti">
+            <i class="ri-user-line text-info fs-4"></i> <span>Distribrateri</span>
+        </a>
+    </li>
+    <li class="nav-item me-1">
+        <a class="nav-link menu-link" href="moji-dobavljaci">
+            <i class="ri-truck-line text-info fs-4"></i> <span>@lang('translation.importers')</span>
+        </a>
+    </li>
+</ul>
+@endif
+
+
+         
+
+        
 
 
 
