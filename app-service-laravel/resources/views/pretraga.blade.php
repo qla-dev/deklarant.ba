@@ -54,7 +54,7 @@ Rezultati pretrage za "<span class="text-info fw-medium ml-0 pl-0">{{ request('k
     const container = document.getElementById("invoice-results");
     const loading = document.getElementById("invoice-loading");
     const token = localStorage.getItem("auth_token");
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = @json(Auth::user());
     const keyword = "{{ request('keyword') }}";
 
     if (!user || !token) {

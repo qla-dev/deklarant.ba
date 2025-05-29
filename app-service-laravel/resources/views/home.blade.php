@@ -933,6 +933,7 @@
 <!-- Used scans | remainining scans -->
 <script>
     document.addEventListener("DOMContentLoaded", async function() {
+        // Use backend user, not localStorage
         const user = @json(Auth::user());
         const token = localStorage.getItem("auth_token");
 
@@ -941,7 +942,12 @@
         console.log(" Token:", token?.substring(0, 25) + "..."); // da ne ispiše cijeli token
 
         if (!user || !token) {
-            console.warn(" User ili token nedostaje u localStorage.");
+            if (!user) {
+                console.warn("[HOME] Backend user missing!");
+            }
+            if (!token) {
+                console.warn("[HOME] Auth token missing in localStorage.");
+            }
             return;
         }
 

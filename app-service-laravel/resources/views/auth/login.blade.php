@@ -135,13 +135,10 @@ Prijava
                     }
                 });
 
-                const {
-                    token,
-                    user
-                } = response.data;
+                const { token, redirect } = response.data;
 
                 localStorage.setItem("auth_token", token);
-                localStorage.setItem("user", JSON.stringify(user));
+                // No longer storing user in localStorage
 
                 Swal.fire({
                     icon: 'success',
@@ -150,11 +147,7 @@ Prijava
                     showConfirmButton: false,
                     timer: 1500
                 }).then(() => {
-                    if (user.role === 'superadmin') {
-                        window.location.href = "/";
-                    } else {
-                        window.location.href = "/";
-                    }
+                    window.location.href = redirect || "/";
                 });
             } catch (error) {
                 Swal.fire({

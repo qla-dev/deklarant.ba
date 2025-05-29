@@ -225,15 +225,22 @@
 
                         <script>
                             document.addEventListener("DOMContentLoaded", async function() {
-                                const user = JSON.parse(localStorage.getItem("user"));
+                                // Removed old localStorage user check, now only use backend user
+                                const user = @json(Auth::user());
                                 const token = localStorage.getItem("auth_token");
 
                                 console.log("[INIT] Provjera lokalne pohrane...");
                                 console.log(" Korisnik:", user);
-                                console.log(" Token:", token?.substring(0, 25) + "..."); // da ne ispiše cijeli token
+                                console.log(" Token:", token?.substring(0, 25) + "...");
 
                                 if (!user || !token) {
-                                    console.warn(" User ili token nedostaje u localStorage.");
+                                    // Only warn if user is actually missing (should not happen)
+                                    if (!user) {
+                                        console.warn("[TOPBAR] Backend user missing!");
+                                    }
+                                    if (!token) {
+                                        console.warn("[TOPBAR] Auth token missing in localStorage.");
+                                    }
                                     return;
                                 }
 
@@ -369,7 +376,7 @@
 <script>
     document.addEventListener("DOMContentLoaded", async function() {
         const token = localStorage.getItem("auth_token");
-        const user = JSON.parse(localStorage.getItem("user"));
+        const user = @json(Auth::user());
         const avatarBasePath = "/storage/uploads/avatars/";
 
     
@@ -439,7 +446,7 @@
                     await axios.post("/api/logoutUser", {}, {
                         headers: {
                             Authorization: `Bearer ${token}`
-                        }, credentials for cookies
+                        }, 
                     });
                 } catch (err) {
                     console.error("Logout failed:", err);

@@ -195,7 +195,7 @@
                     <div class="col-6 text-start">
 
                         <h6 class="text-muted text-uppercase fw-semibold mb-3">Podaci o dobavljaču</h6>
-                
+
                         <div class="mb-2">
                             <button type="button" class="btn btn-outline-info mb-2" id="add-new-supplier">Obriši AI podatke i unesi ručno</button>
                             <select id="supplier-select2" class="form-select"></select>
@@ -210,7 +210,7 @@
                     </div>
                     <div class="col-6 text-end">
                         <h6 class="text-muted text-uppercase fw-semibold mb-3 text-end">Podaci o uvozniku</h6>
-                        
+
                         <div class="mb-2">
                             <button type="button" class="btn btn-outline-info mb-2" id="add-new-importer">Obriši AI podatke i unesi ručno</button>
                             <select id="importer-select2" class="form-select"></select>
@@ -367,7 +367,7 @@
 
 <!-- Scan and other logic script -->
 <script>
-    console.log('🟢 Custom invoice JS loaded');
+    console.log(' Custom invoice JS loaded');
     let _invoice_data = null;
     let processedTariffData = [];
     let globalAISuggestions = [];
@@ -419,6 +419,7 @@
 
     async function startAiScan() {
         const taskId = getInvoiceId();
+        
         if (!taskId) {
             console.warn(" No task ID found in localStorage.");
             return false;
@@ -1226,173 +1227,173 @@
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
-    console.log(" Page loaded. Starting init process...");
+        console.log(" Page loaded. Starting init process...");
 
-    // Parallelize tariff and invoice fetch for faster load
-    const [tariffRes, invoice] = await Promise.all([
-        fetch("{{ URL::asset('build/json/tariff.json') }}"),
-        getInvoice()
-    ]);
-    const tariffData = await tariffRes.json();
-    console.log(" Tariff data loaded:", tariffData);
+        // Parallelize tariff and invoice fetch for faster load
+        const [tariffRes, invoice] = await Promise.all([
+            fetch("{{ URL::asset('build/json/tariff.json') }}"),
+            getInvoice()
+        ]);
+        const tariffData = await tariffRes.json();
+        console.log(" Tariff data loaded:", tariffData);
 
-    processedTariffData = tariffData
-        .filter(item => item["Tarifna oznaka"] && item["Naziv"] && item["Puni Naziv"])
-        .map(item => ({
-            id: item["Tarifna oznaka"],
-            text: item["Puni Naziv"].split(">>>").pop().trim(),
-            display: `${item["Tarifna oznaka"]} – ${item["Naziv"]}`,
-            depth: item["Puni Naziv"].split(">>>").length - 1,
-            isLeaf: item["Tarifna oznaka"].replace(/\s/g, '').length === 10,
-            search: [item["Naziv"], item["Puni Naziv"], item["Tarifna oznaka"]].join(" ").toLowerCase()
-        }));
-    console.log(" Processed tariff data:", processedTariffData);
+        processedTariffData = tariffData
+            .filter(item => item["Tarifna oznaka"] && item["Naziv"] && item["Puni Naziv"])
+            .map(item => ({
+                id: item["Tarifna oznaka"],
+                text: item["Puni Naziv"].split(">>>").pop().trim(),
+                display: `${item["Tarifna oznaka"]} – ${item["Naziv"]}`,
+                depth: item["Puni Naziv"].split(">>>").length - 1,
+                isLeaf: item["Tarifna oznaka"].replace(/\s/g, '').length === 10,
+                search: [item["Naziv"], item["Puni Naziv"], item["Tarifna oznaka"]].join(" ").toLowerCase()
+            }));
+        console.log(" Processed tariff data:", processedTariffData);
 
-    // Only show loader and run scan if needed
-    let scanNeeded = false;
-    if (invoice.task_id == null) scanNeeded = true;
-    else if (!invoice.items?.length) scanNeeded = true;
+        // Only show loader and run scan if needed
+        let scanNeeded = false;
+        if (invoice.task_id == null) scanNeeded = true;
+        else if (!invoice.items?.length) scanNeeded = true;
 
-    if (scanNeeded) {
-        Swal.fire({
-            title: 'Skeniranje',
-            html: `<div class=\"custom-swal-spinner mb-3\"></div><div id=\"swal-status-message\">Čeka na obradu</div>`,
-            showConfirmButton: false,
-            allowOutsideClick: false
-        });
-        if (invoice.task_id == null && await startAiScan()) {
-            await waitForAIResult();
-        } else if (!invoice.items?.length) {
-            await waitForAIResult();
-        }
-        Swal.close();
-    }
-
-    _invoice_data = null;
-
-    await fillInvoiceData();
-    await fetchAndPrefillParties();
-    $("#supplier-select2").select2({
-        placeholder: "Pretraži dobavljača",
-        allowClear: true,
-        ajax: {
-            url: "/api/suppliers",
-            dataType: "json",
-            delay: 250,
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("auth_token")}`
-            },
-            data: params => ({
-                search: params.term
-            }),
-            processResults: data => ({
-                results: data.data.map(s => ({
-                    id: s.id,
-                    text: `${s.name} – ${s.address}`,
-                    full: s
-                }))
-            }),
-            cache: true
-        },
-        tags: true,
-        allowClear: false
-    });
-
-    $('#supplier-select2').on('select2:select', function(e) {
-        const data = e.params.data.full;
-        if (data) {
-            $('#billing-name').val(data.name || "");
-            $('#billing-address-line-1').val(data.address || "");
-            $('#billing-phone-no').val(data.contact_phone || "");
-            $('#billing-tax-no').val(data.tax_id || "");
-            $('#email').val(data.contact_email || "");
-            $('#supplier-owner').val(data.owner || ""); // Fill owner field
-        }
-    });
-
-    $("#importer-select2").select2({
-        placeholder: "Pretraži uvoznika",
-        allowClear: true,
-        ajax: {
-            url: "/api/importers",
-            dataType: "json",
-            delay: 250,
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("auth_token")}`
-            },
-            data: params => ({
-                search: params.term
-            }),
-            processResults: data => ({
-                results: data.data.map(s => ({
-                    id: s.id,
-                    text: `${s.name} – ${s.address}`,
-                    full: s
-                }))
-            }),
-            cache: true
-        },
-        tags: true,
-        allowClear: false
-    });
-
-    $('#importer-select2').on('select2:select', function(e) {
-        const data = e.params.data.full;
-        if (data) {
-
-            $('#carrier-address').val(data.address || "");
-            $('#carrier-name').val(data.name || "");
-            $('#carrier-phone').val(data.contact_phone || "");
-            $('#carrier-tax').val(data.tax_id || "");
-            $('#carrier-email').val(data.contact_email || "");
-            $('#carrier-owner').val(data.owner || ""); // Fill owner field
-        }
-    });
-
-
-    // await promptForSupplierAfterScan();
-    $(document).on('click', '.show-ai-btn', function() {
-        console.log("✅ AI button clicked");
-
-        const select = $(this).closest('td').find('select.select2-tariff');
-        console.log("🔎 Found select element:", select);
-
-        let rawSuggestions = select.data("suggestions");
-        try {
-            if (typeof rawSuggestions === "string") {
-                rawSuggestions = JSON.parse(rawSuggestions);
+        if (scanNeeded) {
+            Swal.fire({
+                title: 'Skeniranje',
+                html: `<div class=\"custom-swal-spinner mb-3\"></div><div id=\"swal-status-message\">Čeka na obradu</div>`,
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+            if (invoice.task_id == null && await startAiScan()) {
+                await waitForAIResult();
+            } else if (!invoice.items?.length) {
+                await waitForAIResult();
             }
-        } catch (err) {
-            console.error("❌ Failed to parse suggestions JSON:", err);
-            return;
+            Swal.close();
         }
 
-        console.log("📦 Raw suggestions:", rawSuggestions);
+        _invoice_data = null;
 
-        if (!rawSuggestions) {
-            console.warn(" No suggestions found on data attribute.");
-            return;
-        }
+        await fillInvoiceData();
+        await fetchAndPrefillParties();
+        $("#supplier-select2").select2({
+            placeholder: "Pretraži dobavljača",
+            allowClear: true,
+            ajax: {
+                url: "/api/suppliers",
+                dataType: "json",
+                delay: 250,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("auth_token")}`
+                },
+                data: params => ({
+                    search: params.term
+                }),
+                processResults: data => ({
+                    results: data.data.map(s => ({
+                        id: s.id,
+                        text: `${s.name} – ${s.address}`,
+                        full: s
+                    }))
+                }),
+                cache: true
+            },
+            tags: true,
+            allowClear: false
+        });
 
-        if (!Array.isArray(rawSuggestions)) {
-            console.warn(" Suggestions are not an array:", typeof rawSuggestions);
-            return;
-        }
+        $('#supplier-select2').on('select2:select', function(e) {
+            const data = e.params.data.full;
+            if (data) {
+                $('#billing-name').val(data.name || "");
+                $('#billing-address-line-1').val(data.address || "");
+                $('#billing-phone-no').val(data.contact_phone || "");
+                $('#billing-tax-no').val(data.tax_id || "");
+                $('#email').val(data.contact_email || "");
+                $('#supplier-owner').val(data.owner || ""); // Fill owner field
+            }
+        });
 
-        const sorted = [...rawSuggestions].sort((a, b) => a.closeness - b.closeness).slice(0, 10);
-        console.log(" Sorted suggestions:", sorted);
+        $("#importer-select2").select2({
+            placeholder: "Pretraži uvoznika",
+            allowClear: true,
+            ajax: {
+                url: "/api/importers",
+                dataType: "json",
+                delay: 250,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("auth_token")}`
+                },
+                data: params => ({
+                    search: params.term
+                }),
+                processResults: data => ({
+                    results: data.data.map(s => ({
+                        id: s.id,
+                        text: `${s.name} – ${s.address}`,
+                        full: s
+                    }))
+                }),
+                cache: true
+            },
+            tags: true,
+            allowClear: false
+        });
 
-        const container = document.getElementById("aiSuggestionsBody");
-        if (!container) {
-            console.error(" aiSuggestionsBody not found in DOM");
-            return;
-        }
+        $('#importer-select2').on('select2:select', function(e) {
+            const data = e.params.data.full;
+            if (data) {
 
-        if (!sorted.length) {
-            container.innerHTML = `<div class="text-muted">Nema prijedloga.</div>`;
-            console.log("ℹ️ No sorted suggestions to show.");
-        } else {
-            container.innerHTML = sorted.map((s, i) => `
+                $('#carrier-address').val(data.address || "");
+                $('#carrier-name').val(data.name || "");
+                $('#carrier-phone').val(data.contact_phone || "");
+                $('#carrier-tax').val(data.tax_id || "");
+                $('#carrier-email').val(data.contact_email || "");
+                $('#carrier-owner').val(data.owner || ""); // Fill owner field
+            }
+        });
+
+
+        // await promptForSupplierAfterScan();
+        $(document).on('click', '.show-ai-btn', function() {
+            console.log("✅ AI button clicked");
+
+            const select = $(this).closest('td').find('select.select2-tariff');
+            console.log("🔎 Found select element:", select);
+
+            let rawSuggestions = select.data("suggestions");
+            try {
+                if (typeof rawSuggestions === "string") {
+                    rawSuggestions = JSON.parse(rawSuggestions);
+                }
+            } catch (err) {
+                console.error("❌ Failed to parse suggestions JSON:", err);
+                return;
+            }
+
+            console.log("📦 Raw suggestions:", rawSuggestions);
+
+            if (!rawSuggestions) {
+                console.warn(" No suggestions found on data attribute.");
+                return;
+            }
+
+            if (!Array.isArray(rawSuggestions)) {
+                console.warn(" Suggestions are not an array:", typeof rawSuggestions);
+                return;
+            }
+
+            const sorted = [...rawSuggestions].sort((a, b) => a.closeness - b.closeness).slice(0, 10);
+            console.log(" Sorted suggestions:", sorted);
+
+            const container = document.getElementById("aiSuggestionsBody");
+            if (!container) {
+                console.error(" aiSuggestionsBody not found in DOM");
+                return;
+            }
+
+            if (!sorted.length) {
+                container.innerHTML = `<div class="text-muted">Nema prijedloga.</div>`;
+                console.log("ℹ️ No sorted suggestions to show.");
+            } else {
+                container.innerHTML = sorted.map((s, i) => `
             <div class="mb-2">
                 <div><strong>${i + 1}. Tarifna oznaka:</strong> ${s.entry["Tarifna oznaka"]}</div>
                 <div><strong>Naziv:</strong> ${s.entry["Naziv"]}</div>
@@ -1672,7 +1673,8 @@
         }
 
         const token = localStorage.getItem("auth_token");
-        const user = JSON.parse(localStorage.getItem("user"));
+        const user = @json(Auth::user());
+
         const userId = user?.id;
         if (!userId) {
             Swal.fire("Greška", "Korisnički ID nije pronađen", "error");
@@ -1892,7 +1894,9 @@
             xml += `</invoice>`;
 
             // Create blob and download
-            const blob = new Blob([xml], { type: 'text/xml' });
+            const blob = new Blob([xml], {
+                type: 'text/xml'
+            });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
             link.download = "invoice.xml";

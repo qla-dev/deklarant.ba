@@ -232,7 +232,9 @@ Moje spašene deklaracije
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const token = localStorage.getItem("auth_token");
-        const user = JSON.parse(localStorage.getItem("user"));
+        const user = @json(Auth::user());
+
+        
 
         if (!token || !user) {
             alert("Niste prijavljeni.");
