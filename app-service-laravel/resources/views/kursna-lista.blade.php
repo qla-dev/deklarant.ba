@@ -141,6 +141,17 @@
         max-width: 75vw;
         /* or set fixed px: 1200px, 1400px */
     }
+
+    /* Fix for DataTables rows being invisible due to color: transparent */
+    .table>:not(caption)>*>* {
+        
+        color: inherit !important;
+    }
+    /* Ensure .table-info applies background and text color to thead */
+    thead.table-info th {
+        background-color: #d1ecfd !important; /* Bootstrap 5 info bg */
+        color: inherit !important; /* Bootstrap 5 info text */
+    }
 </style>
 @endsection
 @section('content')
@@ -227,7 +238,9 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const token = localStorage.getItem("auth_token");
-        const user = JSON.parse(localStorage.getItem("user"));
+        const user = @json(Auth::user());
+
+        
 
         if (!token || !user) {
             alert("Niste prijavljeni.");

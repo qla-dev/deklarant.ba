@@ -406,11 +406,16 @@ Kalendarni prikaz mojih faktura
     document.addEventListener('DOMContentLoaded', function() {
         const calendarEl = document.getElementById('calendar');
         const token = localStorage.getItem('auth_token');
-        const user = JSON.parse(localStorage.getItem("user"));
+        const user = @json(Auth::user());
+
+        console.log('[Calendar] Loaded user:', user);
+        console.log('[Calendar] Loaded token:', token);
+    
         const userId = user?.id;
+        console.log('[Calendar] Using userId:', userId);
 
         if (!userId || !token) {
-            console.error("Missing user ID or auth token");
+            console.error('[Calendar] Missing user ID or auth token', { userId, token });
             return;
         }
 
@@ -419,9 +424,17 @@ Kalendarni prikaz mojih faktura
                     'Authorization': `Bearer ${token}`
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                console.log('[Calendar] Invoice fetch response status:', response.status);
+                return response.json();
+            })
             .then(invoices => {
+                console.log('[Calendar] Raw invoices from API:', invoices);
+                if (!Array.isArray(invoices)) {
+                    invoices = [];
+                }
                 invoices = invoices.filter(i => i.date_of_issue);
+                console.log('[Calendar] Filtered invoices with date_of_issue:', invoices);
 
                 const events = invoices.map(invoice => ({
                     id: invoice.id,
@@ -433,6 +446,7 @@ Kalendarni prikaz mojih faktura
                         invoiceData: invoice
                     }
                 }));
+                console.log('[Calendar] Events to render:', events);
 
                 const calendar = new FullCalendar.Calendar(calendarEl, {
                     initialView: 'dayGridMonth',
@@ -488,11 +502,12 @@ Kalendarni prikaz mojih faktura
                 });
 
                 calendar.render();
+                console.log('[Calendar] Calendar rendered.');
 
                 latestInvoicesList(invoices);
             })
             .catch(error => {
-                console.error('Greška pri učitavanju faktura:', error);
+                console.error('[Calendar] Greška pri učitavanju faktura:', error);
             });
 
         function latestInvoicesList(invoices) {

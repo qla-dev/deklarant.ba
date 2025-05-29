@@ -134,6 +134,15 @@
     .table-card .dataTables_info{
         padding-left: 0 !important;
     }
+     .table>:not(caption)>*>* {
+        
+        color: inherit !important;
+    }
+    /* Ensure .table-info applies background and text color to thead */
+    thead.table-info th {
+        background-color: #d1ecfd !important; /* Bootstrap 5 info bg */
+        color: inherit !important; /* Bootstrap 5 info text */
+    }
 
 
 
@@ -226,7 +235,7 @@ Lista dobavljača
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const token = localStorage.getItem("auth_token");
-        const user = JSON.parse(localStorage.getItem("user"));
+        const user = @json(Auth::user());
 
         if (!token || !user) {
             alert("Niste prijavljeni.");
@@ -240,15 +249,22 @@ Lista dobavljača
             })
             .then(res => res.json())
             .then(data => {
-                const profitMap = {};
-                data.supplier_profit_changes.forEach(p => {
-                    profitMap[p.supplier_id] = p;
-                });
-
-                const enrichedSuppliers = data.suppliers.map(supplier => ({
-                    ...supplier,
-                    ...profitMap[supplier.id]
-                }));
+                // Defensive: handle missing or undefined supplier_profit_changes or suppliers
+                const suppliers = Array.isArray(data.suppliers) ? data.suppliers : [];
+                // If there are no profit changes, just show the suppliers as-is
+                let enrichedSuppliers;
+                if (Array.isArray(data.supplier_profit_changes) && data.supplier_profit_changes.length > 0) {
+                    const profitMap = {};
+                    data.supplier_profit_changes.forEach(p => {
+                        profitMap[p.supplier_id] = p;
+                    });
+                    enrichedSuppliers = suppliers.map(supplier => ({
+                        ...supplier,
+                        ...profitMap[supplier.id]
+                    }));
+                } else {
+                    enrichedSuppliers = suppliers;
+                }
 
                 const table = $('#suppliersTable').DataTable({
                     data: enrichedSuppliers,

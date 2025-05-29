@@ -118,12 +118,17 @@ public function login(Request $request)
 
     $isFromRegistration = $request->input('from_registration', false);
 
+    // Determine redirect URL based on user role
+    $redirectUrl = ($user->role === 'superadmin') ? '/home' : '/';
+
     return response()->json([
         'message' => $isFromRegistration ? 'Registration and Login successful.' : 'Login successful',
         'token' => $token,
         'macAddress' => $macAddress,
         'user' => $user->only(['id', 'username', 'role', 'email', 'avatar']),
-    ]);
+        'redirect' => $redirectUrl,
+    ], 200);
+
 }
 
 
