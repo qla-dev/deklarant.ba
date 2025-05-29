@@ -70,3 +70,10 @@ if ($returnVar !== 0) {
 } else {
     echo "Extracted successfully to $destination\n";
 }
+
+echo "Removing $escapedFile\n";
+exec("rm $escapedFile", $output, $returnVar);
+$fileWithoutExtension = pathinfo($tmpFile, PATHINFO_DIRNAME) . '/' . pathinfo($tmpFile, PATHINFO_FILENAME);
+$escapedFolder = escapeshellarg($fileWithoutExtension);
+echo "Removing folder $escapedFolder";
+exec("rm -rf $escapedFolder", $output, $returnVar);
