@@ -76,10 +76,8 @@ class AuthController extends Controller
 
 public function login(Request $request)
 {
-    // Retrieve MAC address from request headers
     $macAddress = $request->header('MAC-Address');
 
-    // Check if the user is already logged in from the same device
     $isLoggedFromSameDevice = $this->isLoggedFromSameDevice($request);
     if ($isLoggedFromSameDevice) {
         return $isLoggedFromSameDevice;
@@ -100,13 +98,17 @@ public function login(Request $request)
         return response()->json(['message' => 'Invalid login credentials.'], 401);
     }
 
-    //  Log in via session (optional, for web routes using 'web' guard)
+    // Log in via session (for web routes)
     Auth::login($user);
 
-    // Create API token for Sanctum usage
-    $token = $user->createToken('auth_token')->plainTextToken;
+    // Generate token
+    $tokenResult = $user->createToken('auth_token');
+    $token = $tokenResult->plainTextToken;
 
-    // Store MAC address in personal_access_tokens table
+    // Save token in session
+    session(['auth_token' => $token]);
+
+    // Store MAC address in token table
     DB::table('personal_access_tokens')
         ->where('tokenable_id', $user->id)
         ->latest()
@@ -114,7 +116,6 @@ public function login(Request $request)
 
     Log::info("User {$user->email} logged in. MAC: {$macAddress} Token: {$token}");
 
-    // From registration flag
     $isFromRegistration = $request->input('from_registration', false);
 
     return response()->json([
@@ -122,7 +123,7 @@ public function login(Request $request)
         'token' => $token,
         'macAddress' => $macAddress,
         'user' => $user->only(['id', 'username', 'role', 'email', 'avatar']),
-    ], 200);
+    ]);
 }
 
 
@@ -153,6 +154,7 @@ public function login(Request $request)
     {
         // Get token from Authorization header
         $token = $request->bearerToken();
+        session()->forget('auth_token');
 
         if ($token) {
             $currentToken = PersonalAccessToken::findToken($token);

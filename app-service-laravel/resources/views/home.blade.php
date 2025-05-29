@@ -76,7 +76,7 @@
                             <img id="user-avatar-middle" class="rounded-circle d-none" width="40" height="40">
                             <div id="avatar-middle-fallback" class="rounded-circle bg-info d-flex justify-content-center align-items-center text-white" style="width: 50px; height: 50px;"></div>
                         </div>
-                        <h6 class="fw-bold mb-1 mt-1">Dobrodošli na deklarant.ba {{ Auth::user()->username ?? '' }}</h6>
+                        <h6 class="fw-bold mb-1 mt-1">Dobrodošli na deklarant.ba {{ Auth::user()->username ?? '' }}, Token: {{ session('auth_token') }}</h6>
                         <p class="fw-semibold fs-7 mb-1 text-info" id="user-package-display">
                             Učitavanje paketa...
                         </p>
