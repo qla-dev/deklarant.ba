@@ -10,6 +10,6 @@ class ImporterController extends SupplierController
 {
     protected $model = Importer::class;
 
-    protected string $label = 'importer';
-    protected string $labelPlural = 'importers';
+    protected string $label = 'uvoznik';
+    protected string $labelPlural = 'uvoznici';
 }

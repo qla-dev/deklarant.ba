@@ -12,8 +12,8 @@ class SupplierController extends Controller
 {
     protected $model = Supplier::class;
 
-    protected string $label = 'supplier';
-    protected string $labelPlural = 'suppliers';
+    protected string $label = 'dobavljač';
+    protected string $labelPlural = 'dobavljači';
 
 
     public function index()
@@ -25,7 +25,7 @@ class SupplierController extends Controller
                 'data' => $suppliers
             ]);
         } catch (Exception $e) {
-            return response()->json(['error' => "Failed to retrieve {$this->labelPlural}. Please try again later."], 500);
+            return response()->json(['error' => "Neuspješno preuzeti {$this->labelPlural}. Pokušajte ponovo kasnije."], 500);
         }
     }
 
@@ -49,7 +49,7 @@ class SupplierController extends Controller
                 'data' => $supplier
             ], 201);
         } catch (Exception $e) {
-            return response()->json(['error' => "Failed to store {$this->label}: " . $e->getMessage()], 500);
+            return response()->json(['error' => "Neuspješno sačuvan {$this->label}: " . $e->getMessage()], 500);
         }
     }
 
@@ -59,9 +59,9 @@ class SupplierController extends Controller
             $supplier = $this->model::findOrFail($supplierId);
             return response()->json($supplier);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => "{$this->label} not found with the given ID."], 404);
+            return response()->json(['error' => "{$this->label} nije pronađen s unesenim ID-om"], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => "Failed to retrieve {$this->label}. Please try again later."], 500);
+            return response()->json(['error' => "Neuspješno preuzet {$this->label}. Pokušajte ponovo kasnije."], 500);
         }
     }
 
@@ -75,9 +75,9 @@ class SupplierController extends Controller
                 'data' => $supplier
             ]);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => "{$this->label} not found with the given ID."], 404);
+            return response()->json(['error' => "{$this->label} nije pronađen s unesenim ID-om."], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => "Failed to update {$this->label}. Please check the data and try again."], 500);
+            return response()->json(['error' => "Neuspješno ažuriran {$this->label}. Pokušajte ponovo kasnije."], 500);
         }
     }
 
@@ -88,9 +88,9 @@ class SupplierController extends Controller
             $supplier->delete();
             return response()->json(['message' => "{$this->label} deleted successfully."]);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => "{$this->label} not found with the given ID."], 404);
+            return response()->json(['error' => "{$this->label} nije pronađen s unesenim ID-om."], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => "Failed to delete {$this->label}. Please try again later."], 500);
+            return response()->json(['error' => "Neuspješno obrisan {$this->label}. Pokušajte ponovo kasnije."], 500);
         }
     }
 }
