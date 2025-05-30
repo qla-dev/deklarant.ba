@@ -102,8 +102,9 @@ class FileManagerController extends Controller
         $disk->makeDirectory($path);
 
         $message = ($folderName !== $baseFolder)
-            ? "There is already a folder with that name, the new folder has been created as '{$folderName}'"
-            : 'Folder created successfully.';
+            ? "Fascikla s tim imenom već postoji, nova fascikla je kreirana kao '{$folderName}'"
+            : 'Fascikla je uspješno kreirana.';
+
 
         return response()->json([
             'message' => $message,
@@ -120,7 +121,7 @@ class FileManagerController extends Controller
         $fullPath = 'uploads/' . trim($path, '/');
 
         if (!$disk->exists($fullPath)) {
-            return response()->json(['message' => 'Folder not found'], 404);
+            return response()->json(['message' => 'Fascikla nije pronađena'], 404);
         }
 
         return response()->json([

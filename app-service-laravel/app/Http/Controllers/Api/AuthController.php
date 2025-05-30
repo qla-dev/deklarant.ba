@@ -40,7 +40,7 @@ class AuthController extends Controller
             ]);
 
             if ($validatedData['password'] !== $validatedData['confirm_password']) {
-                return response()->json(['error' => 'Password confirmation does not match.'], 400);
+                return response()->json(['error' => 'Potvrda lozinke se ne podudara.'], 400);
             }
 
             $userResponse = User::create([
@@ -97,7 +97,7 @@ public function login(Request $request)
                 ->first();
 
     if (!$user || !Hash::check($request->password, $user->password)) {
-        return response()->json(['message' => 'Invalid login credentials.'], 401);
+        return response()->json(['message' => 'Neispravni pristupni podaci.'], 401);
     }
 
     //  Log in via session (optional, for web routes using 'web' guard)
@@ -158,11 +158,11 @@ public function login(Request $request)
             $currentToken = PersonalAccessToken::findToken($token);
             if ($currentToken) {
                 $currentToken->delete();
-                return response()->json(['message' => 'Logged out from API part.']);
+                return response()->json(['message' => 'Odjavljeni ste iz API dijela.']);
             }
         }
 
-        return response()->json(['message' => 'No valid token found.'], 400);
+        return response()->json(['message' => 'Nije pronađen važeći token.'], 400);
     }
 
     public function myToken(Request $request)
@@ -170,13 +170,13 @@ public function login(Request $request)
         $token = $request->bearerToken();
 
         if (!$token) {
-            return response()->json(['message' => 'No token found in the request.'], 400);
+            return response()->json(['message' => 'Token nije pronađen u zahtjevu.'], 400);
         }
 
         $currentToken = PersonalAccessToken::findToken($token);
 
         if (!$currentToken) {
-            return response()->json(['message' => 'Token not found or invalid.'], 401);
+            return response()->json(['message' => 'Token nije pronađen ili je nevažeći.'], 401);
         }
 
         return response()->json(['token_data' => $currentToken, 'current_token' => $token]);
@@ -188,7 +188,7 @@ public function login(Request $request)
         $currentToken = PersonalAccessToken::findToken($token);
 
         if ($currentToken) {
-            return response()->json(['message' => 'You are already logged in.'], 401);
+            return response()->json(['message' => 'Već ste prijavljeni.'], 401);
         }
 
         return null;
@@ -217,7 +217,7 @@ public function login(Request $request)
 
         if ($existingToken) {
             return response()->json([
-                'message' => 'User is already logged in from this device.',
+                'message' => 'Korisnik je već prijavljen sa ovog uređaja.',
                 'device' => $macAddress
             ], 409);
         }

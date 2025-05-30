@@ -23,7 +23,7 @@ class InvoiceController extends Controller
             $invoices = Invoice::with('items')->get();
             return response()->json($invoices);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to retrieve invoices. Please try again later.'], 500);
+            return response()->json(['error' => 'Neuspješno preuzimanje deklaracija. Pokušajte ponovo kasnije.'], 500);
         }
     }
 
@@ -34,7 +34,7 @@ class InvoiceController extends Controller
             $this->fillWithAiDataIfNecessary($invoice);
             return response()->json($invoice);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Invoice not found with the given ID.'], 404);
+            return response()->json(['error' => 'Deklaracija s unesenim ID-om nije pronađena.'], 404);
         }
     }
 
@@ -47,12 +47,12 @@ class InvoiceController extends Controller
                 ->get();
 
             if ($invoices->isEmpty()) {
-                return response()->json(['error' => 'No invoices found for the specified supplier.'], 404);
+                return response()->json(['error' => 'Nisu pronađene deklaracije za navedenog dobavljača.'], 404);
             }
 
             return response()->json($invoices);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to retrieve invoices. Please check the supplier ID and try again.'], 500);
+            return response()->json(['error' => 'Neuspješno preuzimanje deklaracija. Provjerite ID dobavljača i pokušajte ponovo.'], 500);
         }
     }
 
@@ -68,7 +68,7 @@ class InvoiceController extends Controller
                 ->get();
 
             if ($invoices->isEmpty()) {
-                return response()->json(['error' => 'No invoices found for the specified user.'], 404);
+                return response()->json(['error' => 'Nisu pronađene deklaracije za navedenog korisnika.'], 404);
             }
 
             return response()->json($invoices);
@@ -103,10 +103,11 @@ class InvoiceController extends Controller
                 'data' => $invoice
             ], 201);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Supplier not found. Please check the supplier ID and try again.'], 404);
+            return response()->json(['error' => 'Dobavljač nije pronađen. Provjerite ID dobavljača i pokušajte ponovo.'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to create invoice. ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Neuspješno kreiranje deklaracije. ' . $e->getMessage()], 500);
         }
+
     }
 
     public function update(Request $request, $invoiceId)
@@ -124,10 +125,11 @@ class InvoiceController extends Controller
                 'data' => $invoice
             ]);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Invoice not found with the given ID.'], 404);
+            return response()->json(['error' => 'Deklaracija s unesenim ID-om nije pronađena.'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to update invoice. Please check the data and try again.'], 500);
+            return response()->json(['error' => 'Neuspješno ažuriranje deklaracije. Provjerite podatke i pokušajte ponovo.'], 500);
         }
+
     }
 
     public function destroy($invoiceId)
@@ -138,10 +140,11 @@ class InvoiceController extends Controller
 
             return response()->json(['message' => 'Invoice deleted successfully.']);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Invoice not found with the given ID.'], 404);
+            return response()->json(['error' => 'Deklaracija s unesenim ID-om nije pronađena.'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to delete invoice. Please try again later.'], 500);
+            return response()->json(['error' => 'Neuspješno brisanje deklaracije. Pokušajte ponovo kasnije.'], 500);
         }
+
     }
 
     public function scan($invoiceId)
@@ -181,10 +184,11 @@ class InvoiceController extends Controller
             ]);
 
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Invoice not found with the given ID.'], 404);
+            return response()->json(['error' => 'Deklaracija s unesenim ID-om nije pronađena.'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to scan invoice: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Neuspješno skeniranje deklaracije: ' . $e->getMessage()], 500);
         }
+
     }
 
     public function getInvoiceInfoById($id)
@@ -223,12 +227,29 @@ class InvoiceController extends Controller
                 return response()->json(['error' => 'No scan task associated with this invoice'], 404);
             }
 
-            // Get task status from AI service
+            
             $status = app(AiService::class)->getTaskStatus($invoice->task_id);
 
             if (!$status) {
                 return response()->json(['error' => 'Scan task not found'], 404);
             }
+            
+            if ($invoice->user_id !== auth()->id()) {
+                return response()->json(['error' => 'Niste ovlašteni za pristup ovoj deklaraciji.'], 403);
+            }
+
+            // Provjera da li deklaracija ima task_id
+            if (!$invoice->task_id) {
+                return response()->json(['error' => 'Za ovu deklaraciju nije povezan nijedan zadatak za skeniranje.'], 404);
+            }
+
+            // Get task status from AI service
+            $status = app(AiService::class)->getTaskStatus($invoice->task_id);
+
+            if (!$status) {
+                return response()->json(['error' => 'Nalog za skeniranje nije pronađen.'], 404);
+            }
+
 
             return response()->json([
                 'status' => $status,
@@ -237,9 +258,9 @@ class InvoiceController extends Controller
             ]);
 
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Invoice not found'], 404);
+            return response()->json(['error' => 'Deklaracija nije pronađena.'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to get scan status: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Neuspješno dohvaćanje statusa skeniranja: ' . $e->getMessage()], 500);
         }
     }
 
@@ -249,19 +270,19 @@ class InvoiceController extends Controller
 
         // Verify invoice belongs to current user
         if ($invoice->user_id !== auth()->id()) {
-            return response()->json(['error' => 'Unauthorized access to invoice'], 403);
+            return response()->json(['error' => 'Neovlašten pristup deklaraciji.'], 403);
         }
 
         // Check if invoice has task_id
         if (!$invoice->task_id) {
-            return response()->json(['error' => 'No scan task associated with this invoice'], 404);
+            return response()->json(['error' => 'Nema povezanog naloga za skeniranje s ovom deklaracijom.'], 404);
         }
 
         // Get task result from AI service
         $result = app(AiService::class)->getTaskResult($invoice->task_id);
 
         if (!$result) {
-            return response()->json(['error' => 'Scan result not found'], 404);
+            return response()->json(['error' => 'Rezultat skeniranja nije pronađen.'], 404);
         }
 
         return $result;
@@ -284,9 +305,9 @@ class InvoiceController extends Controller
             ]);
 
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Invoice not found'], 404);
+            return response()->json(['error' => 'Deklaracija nije pronađena.'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to get scan result: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Neuspješno dohvaćanje statusa skeniranja: ' . $e->getMessage()], 500);
         }
     }
 
@@ -312,9 +333,9 @@ class InvoiceController extends Controller
                 'importer_id' => $importer_id,
             ]);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Invoice not found'], 404);
+            return response()->json(['error' => 'Deklaracija nije pronađena.'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to get scan result: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Neuspješno dohvaćanje statusa skeniranja: ' . $e->getMessage()], 500);
         }
     }
 
@@ -366,7 +387,7 @@ class InvoiceController extends Controller
             
         } catch (Exception $e) {
             // Log error but don't fail the request
-            \Log::error("Failed to fill invoice with AI data: " . $e->getMessage());
+            \Log::error("Neuspješno popunjavanje deklaracije AI podacima:" . $e->getMessage());
         }
     }
 
@@ -434,10 +455,11 @@ class InvoiceController extends Controller
             ], 201);
 
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Supplier or user not found. Please check IDs and try again.'], 404);
+            return response()->json(['error' => 'Dobavljač ili korisnik nije pronađen. Provjerite ID-ove i pokušajte ponovo.'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to create invoice. ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Neuspješno kreiranje deklaracije. ' . $e->getMessage()], 500);
         }
+
     }
 
 

@@ -26,13 +26,13 @@ class StatsController extends Controller
     if (str_contains($path, 'importers')) {
         return [
             'model' => Importer::class,
-            'label' => 'Importer'
+            'label' => 'Uvoznik'
         ];
     }
 
     return [
         'model' => Supplier::class,
-        'label' => 'Supplier'
+        'label' => 'Dobavljač'
     ];
 }
 
@@ -142,16 +142,17 @@ class StatsController extends Controller
         ], 200);
 
     } catch (ModelNotFoundException $e) {
-        return response()->json([
-            'error' => 'User not found',
-            'message' => $e->getMessage()
-        ], 404);
+    return response()->json([
+        'error' => 'Korisnik nije pronađen.',
+        'message' => $e->getMessage()
+    ], 404);
     } catch (Exception $e) {
         return response()->json([
-            'error' => 'Failed to retrieve user statistics',
+            'error' => 'Neuspješno preuzimanje statistike korisnika.',
             'message' => $e->getMessage()
         ], 500);
     }
+
 }
 
 private function getEntityStats($user, string $modelClass, string $foreignKey)
@@ -271,12 +272,12 @@ private function getEntityStats($user, string $modelClass, string $foreignKey)
 
     } catch (ModelNotFoundException $e) {
         return response()->json([
-            'error' => "$label not found",
+            'error' => "$label nije pronađen.",
             'message' => $e->getMessage()
         ], 404);
     } catch (Exception $e) {
         return response()->json([
-            'error' => "Failed to retrieve $label statistics",
+            'error' => "Neuspješno preuzeta statistika {$label}a",
             'message' => $e->getMessage()
         ], 500);
     }
@@ -296,7 +297,7 @@ private function getEntityStats($user, string $modelClass, string $foreignKey)
     $entity = $model::find($id);
 
     if (!$entity) {
-        return response()->json(['error' => "$label not found"], 404);
+        return response()->json(['error' => "$label nije pronađen"], 404);
     }
 
     $profit = $entity->getLastYearProfit();
@@ -317,7 +318,7 @@ private function getEntityStats($user, string $modelClass, string $foreignKey)
     $entity = $model::find($id);
 
     if (!$entity) {
-        return response()->json(['error' => "$label not found"], 404);
+        return response()->json(['error' => "$label nije pronađen"], 404);
     }
 
     $now = Carbon::now();
@@ -344,7 +345,7 @@ private function getEntityStats($user, string $modelClass, string $foreignKey)
     $entity = $model::find($id);
 
     if (!$entity) {
-        return response()->json(['error' => "$label not found"], 404);
+        return response()->json(['error' => "$label nije pronađen"], 404);
     }
 
     return response()->json([

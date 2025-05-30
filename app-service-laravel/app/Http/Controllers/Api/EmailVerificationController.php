@@ -20,11 +20,11 @@ class EmailVerificationController extends Controller
         $user = User::where('email', $request->input('email'))->first();
 
         if (!$user) {
-            return response()->json(['error' => 'User not found'], 404);
+            return response()->json(['error' => 'Korisnik nije pronađen.'], 404);
         }
 
         if ($user->verified) {
-            return response()->json(['message' => 'Email is already verified']);
+            return response()->json(['message' => 'Email adresa je već verifikovana.']);
         }
 
         // Generate signed verification URL
@@ -42,7 +42,7 @@ class EmailVerificationController extends Controller
 
             return response()->json(['message' => 'Verification email sent']);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to send email: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Greška pri slanju emaila: ' . $e->getMessage()], 500);
         }
     }
 
@@ -59,11 +59,11 @@ class EmailVerificationController extends Controller
 
         if (!$user) {
             \Log::error("User not found", ['email' => $email]);
-            return response()->json(['error' => 'Invalid verification link'], 404);
+            return response()->json(['error' => 'Neispravan verifikacijski link.'], 404);
         }
 
         if ($user->verified) {
-            return response()->json(['message' => 'Email already verified']);
+            return response()->json(['message' => 'Email je već verifikovan.']);
         }
 
         $user->verified = 1;

@@ -21,7 +21,7 @@ class UserPackageController extends Controller
                 'data' => $userPackages
             ]);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to retrieve user packages. Please try again later.'], 500);
+            return response()->json(['error' => 'Neuspješno preuzimanje korisničkih paketa. Pokušajte ponovo kasnije.'], 500);
         }
     }
 
@@ -49,9 +49,9 @@ class UserPackageController extends Controller
                 'data' => $userPackage
             ], 201);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'User or Package not found. Please check the IDs and try again.'], 404);
+            return response()->json(['error' => 'Korisnik ili paket nije pronađen. Provjerite ID-ove i pokušajte ponovo.'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to assign user package: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Neuspješno dodjeljivanje korisničkog paketa: ' . $e->getMessage()], 500);
         }
     }
 
@@ -64,9 +64,9 @@ class UserPackageController extends Controller
                 'data' => $userPackage
             ]);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'User package not found with the given ID.'], 404);
+            return response()->json(['error' => 'Korisnički paket s unesenim ID-om nije pronađen.'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to retrieve user package. Please try again later.'], 500);
+            return response()->json(['Neuspješno preuzimanje korisničkog paketa. Pokušajte ponovo kasnije.'], 500);
         }
     }
 
@@ -80,9 +80,9 @@ class UserPackageController extends Controller
                 'data' => $userPackage
             ]);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'User package not found with the given ID.'], 404);
+            return response()->json(['error' => 'Korisnički paket s unesenim ID-om nije pronađen.'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to update user package. Please check the data and try again.'], 500);
+            return response()->json(['error' => 'Neuspješno ažuriranje korisničkog paketa. Provjerite podatke i pokušajte ponovo.'], 500);
         }
     }
 
@@ -93,9 +93,9 @@ class UserPackageController extends Controller
             $userPackage->delete();
             return response()->json(['message' => 'User package deleted successfully.']);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'User package not found with the given ID.'], 404);
+            return response()->json(['error' => 'Korisnički paket s unesenim ID-om nije pronađen.'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Failed to delete user package. Please try again later.'], 500);
+            return response()->json(['error' => 'Neuspješno brisanje korisničkog paketa. Pokušajte ponovo kasnije.'], 500);
         }
     }
 }

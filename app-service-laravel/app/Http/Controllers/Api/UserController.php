@@ -25,7 +25,7 @@ class UserController extends Controller
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'error' => 'Failed to retrieve users',
+                'error' => 'Neuspješno preuzimanje korisnika.',
                 'message' => $e->getMessage()
             ], 500);
         }
@@ -45,12 +45,12 @@ class UserController extends Controller
             ], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json([
-                'error' => 'User not found',
+                'error' => 'Korisnik nije pronađen.',
                 'message' => $e->getMessage()
             ], 404);
         } catch (Exception $e) {
             return response()->json([
-                'error' => 'Failed to retrieve user',
+                'error' => 'Neuspješno preuzimanje korisnika.',
                 'message' => $e->getMessage()
             ], 500);
         }
@@ -105,17 +105,17 @@ class UserController extends Controller
             ], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json([
-                'error' => 'User not found',
+                'error' => 'Korisnik nije pronađen.',
                 'message' => $e->getMessage()
             ], 404);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
-                'error' => 'Validation failed',
+                'error' => 'Validacija nije uspjela.',
                 'message' => $e->errors()
             ], 422);
         } catch (Exception $e) {
             return response()->json([
-                'error' => 'Failed to update user',
+                'error' => 'Neuspješno ažuriranje korisnika.',
                 'message' => $e->getMessage()
             ], 500);
         }
@@ -135,12 +135,12 @@ class UserController extends Controller
             ], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json([
-                'error' => 'User not found',
+                'error' => 'Korisnik nije pronađen.',
                 'message' => $e->getMessage()
             ], 404);
         } catch (Exception $e) {
             return response()->json([
-                'error' => 'Failed to delete user',
+                'error' => 'Neuspješno brisanje korisnika.',
                 'message' => $e->getMessage()
             ], 500);
         }
