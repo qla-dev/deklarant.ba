@@ -565,7 +565,7 @@ Baza tarifnih oznaka
         $(document).on('click', '.view-invoice', function(e) {
             e.preventDefault();
             const invoiceId = $(this).data('id');
-            const token = localStorage.getItem("auth_token");
+            
 
             fetch(`/api/invoices/${invoiceId}`, {
                     headers: {

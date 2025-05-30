@@ -234,8 +234,7 @@ Lista dobavljača
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const token = localStorage.getItem("auth_token");
-        const user = @json(Auth::user());
+       
 
         if (!token || !user) {
             alert("Niste prijavljeni.");

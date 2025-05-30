@@ -259,7 +259,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', async () => {
         const invoiceId = window.location.pathname.split('/').pop();
-        const token = localStorage.getItem("auth_token");
+        
 
         console.log("%c[DEBUG] invoiceId:", "color: #1e90ff", invoiceId);
         console.log("%c[DEBUG] token present:", "color: #1e90ff", !!token);

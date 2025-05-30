@@ -406,7 +406,7 @@
             console.log(" Fetching invoice...");
             const res = await fetch(`/api/invoices/${getInvoiceId()}`, {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem("auth_token")}`
+                    Authorization: `Bearer ${token}`
                 }
             });
             _invoice_data = await res.json();
@@ -429,7 +429,7 @@
         const response = await fetch(`/api/invoices/${taskId}/scan`, {
             method: "POST",
             headers: {
-                Authorization: `Bearer ${localStorage.getItem("auth_token")}`
+                Authorization: `Bearer ${token}`
             }
         });
 
@@ -467,7 +467,7 @@
         while (true) {
             const res = await fetch(`/api/invoices/${invoice_id}/scan`, {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('auth_token')}`
+                    Authorization: `Bearer ${token}`
                 }
             });
 
@@ -1046,7 +1046,6 @@
 
     async function fetchAndPrefillParties() {
         const taskId = localStorage.getItem("scan_invoice_id");
-        const token = localStorage.getItem("auth_token");
         if (!taskId || !token) return;
 
         try {
@@ -1281,7 +1280,7 @@
                 dataType: "json",
                 delay: 250,
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem("auth_token")}`
+                    Authorization: `Bearer ${token}`
                 },
                 data: params => ({
                     search: params.term
@@ -1319,7 +1318,7 @@
                 dataType: "json",
                 delay: 250,
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem("auth_token")}`
+                    Authorization: `Bearer ${token}`
                 },
                 data: params => ({
                     search: params.term
@@ -1672,9 +1671,7 @@
             return;
         }
 
-        const token = localStorage.getItem("auth_token");
-        const user = @json(Auth::user());
-
+        
         const userId = user?.id;
         if (!userId) {
             Swal.fire("Greška", "Korisnički ID nije pronađen", "error");

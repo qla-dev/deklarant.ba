@@ -302,7 +302,7 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", async function () {
-    const token = localStorage.getItem("auth_token");
+    
     if (!token) return console.warn("Missing auth token");
 
     // Declare packageName and packageValid for scope

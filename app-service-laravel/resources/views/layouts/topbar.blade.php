@@ -226,8 +226,8 @@
                         <script>
                             document.addEventListener("DOMContentLoaded", async function() {
                                 // Removed old localStorage user check, now only use backend user
-                                const user = @json(Auth::user());
-                                const token = localStorage.getItem("auth_token");
+                         
+                                 
 
                                 console.log("[INIT] Provjera lokalne pohrane...");
                                 console.log(" Korisnik:", user);
@@ -370,13 +370,16 @@
 
 <!-- Swiper JS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
+<script>
+    user = @json(Auth::user());
+    token = @json(session('auth_token'));
+</script>
 
 
 <script>
     document.addEventListener("DOMContentLoaded", async function() {
-        const token = localStorage.getItem("auth_token");
-        const user = @json(Auth::user());
+         
+ 
         const avatarBasePath = "/storage/uploads/avatars/";
 
     
@@ -436,7 +439,7 @@
 
         if (logoutLink) {
             logoutLink.addEventListener("click", async function() {
-                const token = localStorage.getItem("auth_token");
+                 
 
                 if (!token) {
                     return window.location.href = "/login";
@@ -460,7 +463,7 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const user = JSON.parse(localStorage.getItem("user"));
-        const token = localStorage.getItem("auth_token");
+         
         const el = document.getElementById("dropdownUser");
         const el1 = document.getElementById("topbar-username");
         const el2 = document.getElementById("topbar-position");
@@ -593,7 +596,7 @@
 <!-- Upload files logic -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const token = localStorage.getItem("auth_token");
+         
   
 
         const dropzone = document.getElementById("dropzone");

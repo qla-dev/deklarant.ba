@@ -405,8 +405,7 @@ Kalendarni prikaz mojih faktura
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const calendarEl = document.getElementById('calendar');
-        const token = localStorage.getItem('auth_token');
-        const user = @json(Auth::user());
+        
 
         console.log('[Calendar] Loaded user:', user);
         console.log('[Calendar] Loaded token:', token);

@@ -76,7 +76,7 @@
                             <img id="user-avatar-middle" class="rounded-circle d-none" width="40" height="40">
                             <div id="avatar-middle-fallback" class="rounded-circle bg-info d-flex justify-content-center align-items-center text-white" style="width: 50px; height: 50px;"></div>
                         </div>
-                        <h6 class="fw-bold mb-1 mt-1">Dobrodošli na deklarant.ba {{ Auth::user()->username ?? '' }}, Token: {{ session('auth_token') }}</h6>
+                        <h6 class="fw-bold mb-1 mt-1">Dobrodošli na deklarant.ba {{ Auth::user()->username ?? '' }}</h6>
                         <p class="fw-semibold fs-7 mb-1 text-info" id="user-package-display">
                             Učitavanje paketa...
                         </p>
@@ -511,8 +511,8 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", async function() {
-        const token = localStorage.getItem("auth_token");
-        const user = @json(Auth::user());
+          
+         
 
         if (!token || !user?.id) {
             console.warn("Missing auth or user.");
@@ -714,8 +714,8 @@
         //  Initial empty chart (0%)
         createDoughnutChart("doughnut1", 0);
 
-        const user = @json(Auth::user());
-        const token = localStorage.getItem("auth_token");
+         ;
+          
 
         if (!user || !token) {
             console.warn("Token ili korisnik nije pronađen.");
@@ -757,8 +757,8 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", async function() {
-        const user = @json(Auth::user());
-        const token = localStorage.getItem("auth_token");
+         ;
+          
 
         if (!user || !token) {
             console.warn("User or token missing in localStorage.");
@@ -883,7 +883,7 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", async function() {
-        const token = localStorage.getItem("auth_token");
+          
         if (!token) return console.warn("Missing auth token");
 
         try {
@@ -934,8 +934,8 @@
 <script>
     document.addEventListener("DOMContentLoaded", async function() {
         // Use backend user, not localStorage
-        const user = @json(Auth::user());
-        const token = localStorage.getItem("auth_token");
+         ;
+          
 
         console.log("[INIT] Provjera lokalne pohrane...");
         console.log(" Korisnik:", user);
@@ -998,7 +998,7 @@
 
 
         const API_URL = `/api/statistics`;
-        const token = localStorage.getItem("auth_token");
+          
 
         if (!token) {
             console.warn("No token found in localStorage.");
@@ -1035,7 +1035,7 @@
 <!-- avatar upload -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const user = @json(Auth::user());
+         
 
         if (user) {
             const welcome = document.getElementById("welcome-user");
@@ -1122,7 +1122,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", async function() {
-        const token = localStorage.getItem("auth_token");
+          
 
         if (!token) {
             console.warn("Missing auth token.");
@@ -1400,7 +1400,7 @@
 <!-- user package -->
 <script>
     document.addEventListener("DOMContentLoaded", async function() {
-        const token = localStorage.getItem("auth_token");
+         
         if (!token) return console.warn("Nedostaje auth token");
 
         try {

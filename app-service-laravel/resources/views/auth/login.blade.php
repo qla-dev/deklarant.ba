@@ -135,10 +135,8 @@ Prijava
                     }
                 });
 
-                const { token, redirect } = response.data;
-
-                localStorage.setItem("auth_token", token);
-                // No longer storing user in localStorage
+                const { redirect } = response.data;
+                // Removed: localStorage.setItem("auth_token", token);
 
                 Swal.fire({
                     icon: 'success',
