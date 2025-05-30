@@ -652,9 +652,10 @@
             fetch('/api/storage/invoice-uploads', {
                     method: 'POST',
                     body: formData,
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
+                   headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'Authorization': `Bearer ${token}`
+                        }
                 })
                 .then(response => {
                     if (!response.ok) throw new Error("Upload failed");
