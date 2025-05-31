@@ -401,7 +401,7 @@
                     <div class="col-md-6">
                         <div class="card rounded-0 w-100 h-100 card-animate mb-0">
                             <div class="card-header">
-                                <h5 class="mb-0">Zadnje korištene tarife</h5>
+                                <h5 class="mb-0">Nedavne tarife</h5>
                             </div>
                             <div class="card-body d-flex justify-content-center align-items-center flex-column pb-0 pt-0" style="min-height: 200px;">
                                 <div class="tariff-loader spinner-border text-info" role="status"></div>
@@ -415,7 +415,7 @@
                     <div class="col-md-6 d-flex card-animate">
                         <div class="card rounded-0 w-100 h-100 mb-0">
                             <div class="card-header">
-                                <h5 class="mb-0">Zadnje korišteni dobavljači</h5>
+                                <h5 class="mb-0">Nedavni klijenti</h5>
                             </div>
                             <div class="card-body d-flex justify-content-center align-items-center flex-column pb-0 pt-0" style="min-height: 200px;">
                                 <div class="suppliers-loader spinner-border text-info" role="status"></div>
@@ -557,9 +557,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                                 <div class="fw-semibold">${supplier.name}</div>
                                 <div class="text-muted fs-12">${supplier.owner ?? "Nepoznat vlasnik"}</div>
                             </div>
-                            <div class="${growthClass} fs-13">
-                                ${isNaN(percentage) ? "Nije definisano" : percentage.toFixed(1)}%
-                                <i class="${arrow} ms-1"></i>
+                            <div class="text-info fs-12">
+                                ${!supplier.address ? "Nije definisano" : supplier.address}
                             </div>
                         </div>
                     `;
@@ -567,7 +566,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                 supplierContainer.innerHTML += `
                     <div class="card-footer p-0 pb-0 pt-0 d-flex justify-content-end pregledaj-vise-bottom-right">
-                        <a href="moji-dobavljaci" class="text-info fs-6 " style="margin:1rem">Pregledaj sve</a>
+                        <a href="moji-klijenti" class="text-info fs-6 " style="margin:1rem">Pregledaj sve</a>
                     </div>
                 `;
             }

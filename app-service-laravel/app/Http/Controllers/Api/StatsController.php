@@ -186,7 +186,7 @@ private function getEntityStats($user, string $modelClass, string $foreignKey)
         ->sortByDesc('annual_profit')
         ->values();
 
-    $latestEntities = $modelClass::select("id", "name", "owner")
+    $latestEntities = $modelClass::select("id", "name", "owner","address")
         ->selectSub(function ($query) use ($user, $foreignKey, $table) {
             $query->from('invoices')
                 ->whereColumn($foreignKey, "{$table}.id")
@@ -203,6 +203,7 @@ private function getEntityStats($user, string $modelClass, string $foreignKey)
                 $entityKey => $entity->id,
                 'name' => $entity->name,
                 'owner' => $entity->owner,
+                'address' => $entity->address,
             ];
         });
 
