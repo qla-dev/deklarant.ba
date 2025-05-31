@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\FileManagerController;
 use App\Http\Controllers\Api\ExchangeRateController;
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\CanScan;
+use App\Http\Middleware\IsMineProfile;
 
 /*
 |--------------------------------------------------------------------------
@@ -92,7 +93,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/users', [UserController::class, 'getAllUsers']);
     Route::get('/users/{id}', [UserController::class, 'getUserById']);
-    Route::put('/users/{id}', [UserController::class, 'updateUser']);
+    Route::put('/users/{id}', [UserController::class, 'updateUser'])->middleware(IsMineProfile::class);
     Route::delete('/users/{id}', [UserController::class, 'deleteUser']);
 
 
