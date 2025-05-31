@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Package;
 use Carbon\Carbon;
 
 class User extends Authenticatable
@@ -74,6 +75,18 @@ class User extends Authenticatable
     {
         return self::where('email', $email)->first();
     }
+
+        public function userPackages()
+    {
+        return $this->hasMany(UserPackage::class);
+    }
+
+        public function getActivePackageName(): ?string
+    {
+        $userPackage = $this->userPackages()->with('package')->first();
+        return $userPackage?->package?->name;
+    }
+
 
     /**
      * Create a user instance from local database data.

@@ -1882,13 +1882,13 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         switch (packageName.toLowerCase()) {
             case "gobig":
-                iconHTML = `<i class="ri-medal-line text-info fs-3 bu me-2" style="margin-top:-2px!important"></i>`;
+                iconHTML = `<i class="ri-medal-line text-info fs-3 bu me-2" style="margin-top:-6px!important;position:absolute!important; margin-left:45px"></i>`;
                 break;
             case "startup":
-                iconHTML = `<i class="ri-star-s-fill text-info fs-5 me-2" style="margin-top:-2px!important"></i>`;
+                iconHTML = `<i class="ri-star-s-fill text-info fs-5 me-2" style="margin-top:-2px!important;position:absolute!important; margin-left:56px"></i>`;
                 break;
             case "business":
-                iconHTML = `<i class="ri-shield-star-line text-info fs-2 me-2" style="margin-top:-2px!important"></i>`;
+                iconHTML = `<i class="ri-shield-star-line text-info fs-2 me-2" style="margin-top:-10px!important;position:absolute!important; margin-left:66px"></i>`;
                 break;
             default:
                 iconHTML = "";
