@@ -72,8 +72,8 @@
             <div class="col-md-4 border-start border-end order-1 order-md-0 d-flex align-items-center border-0 rounded-0 alert alert-light p-1 mb-2 m-lg-0">
                 <div class="p-2 text-center d-flex flex-column h-100 w-100 justify-content-center align-items-center">
                     <div class="card-body text-center p-2">
-                        <div class="row d-flex text-center mb-3 fs-4" style="justify-content: center!important;">
-                            <img id="user-avatar-middle" class="rounded-circle d-none" width="40" height="40">
+                        <div class="row d-flex text-center mb-3 fs-4" style="justify-content: center!important; height: 50px;">
+                            <img id="user-avatar-middle" class="img-thumbnail rounded-circle d-none"  style="object-fit: cover; aspect-ratio: 1/1; max-width: 50px; max-height: 50px; min-width: 50px; min-height: 50px; display: block;padding-right: 0px; padding-left: 0px; padding: 0.15rem; border: 0; background-color: transparent;">
                             <div id="avatar-middle-fallback" class="rounded-circle bg-info d-flex justify-content-center align-items-center text-white" style="width: 50px; height: 50px;"></div>
                         </div>
                         <h6 class="fw-bold mb-1 mt-1">Dobrodošli na deklarant.ba {{ Auth::user()->username ?? '' }}</h6>
