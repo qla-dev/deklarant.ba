@@ -406,6 +406,7 @@
             console.log(" Fetching invoice...");
             const res = await fetch(`/api/invoices/${getInvoiceId()}`, {
                 headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                     Authorization: `Bearer ${token}`
                 }
             });
@@ -429,6 +430,7 @@
         const response = await fetch(`/api/invoices/${taskId}/scan`, {
             method: "POST",
             headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                 Authorization: `Bearer ${token}`
             }
         });
@@ -467,6 +469,7 @@
         while (true) {
             const res = await fetch(`/api/invoices/${invoice_id}/scan`, {
                 headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                     Authorization: `Bearer ${token}`
                 }
             });
@@ -1051,6 +1054,7 @@
         try {
             const res = await fetch(`/api/invoices/${taskId}/scan/parties`, {
                 headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                     Authorization: `Bearer ${token}`
                 }
             });
@@ -1100,6 +1104,7 @@
                 $.ajax({
                     url: `/api/suppliers/${supplierId}`,
                     headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                         Authorization: `Bearer ${token}`
                     },
                     success: function(dbSupplier) {
@@ -1174,6 +1179,7 @@
                 $.ajax({
                     url: `/api/importers/${importerId}`,
                     headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                         Authorization: `Bearer ${token}`
                     },
                     success: function(dbImporter) {
@@ -1280,6 +1286,7 @@
                 dataType: "json",
                 delay: 250,
                 headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                     Authorization: `Bearer ${token}`
                 },
                 data: params => ({
@@ -1318,6 +1325,7 @@
                 dataType: "json",
                 delay: 250,
                 headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                     Authorization: `Bearer ${token}`
                 },
                 data: params => ({
@@ -1685,6 +1693,7 @@
                 const res = await fetch(`/api/${endpoint}`, {
                     method: "POST",
                     headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`
                     },
@@ -1801,6 +1810,7 @@
             const res = await fetch(`/api/invoices/${invoiceId}`, {
                 method: "PUT",
                 headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`
                 },
