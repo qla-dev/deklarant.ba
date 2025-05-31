@@ -87,6 +87,17 @@ class User extends Authenticatable
         return $userPackage?->package?->name;
     }
 
+      public function getRemainingScans(): ?int
+        {
+            $userPackage = $this->userPackages()->first();
+            return $userPackage?->remaining_scans;
+        }
+    
+
+    
+      
+ 
+
 
     /**
      * Create a user instance from local database data.

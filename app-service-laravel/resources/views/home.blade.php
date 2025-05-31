@@ -36,14 +36,14 @@
                 <div class="d-flex card  rounded-0 m-0 flex-column h-100">
                     <div class="bg-danger text-white text-center py-1 rounded-0">
                         <i class="ri-alert-line me-1"></i>
-                        <span><b>3</b> dostupna. Nadopuni!</span>
+                        <span><b>{{ Auth::user()->getRemainingScans() ?? '0' }}</b> dostupna/ih. Nadopuni!</span>
                     </div>
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
                         <h6 class="text-muted text-uppercase fs-11 mb-1" style="margin-top: -10px;">Dostupna AI
                             skeniranja</h6>
                         <div class="d-flex align-items-center justify-content-center" style="margin-top: 20px;">
                             <i class="fas fa-wand-magic-sparkles text-info mb-1" style="font-size: 35px;"></i>
-                            <h3 class="mb-0 ms-2"><span class="counter-value" id="remainScans">0</span></h3>
+                            <h3 class="mb-0 ms-2"><span class="counter-value">{{ Auth::user()->getRemainingScans() ?? '0' }}</span></h3>
                         </div>
                     </div>
                 </div>
@@ -290,7 +290,7 @@
                         <div class="card rounded-0 h-100 ">
                             <div class="card-header d-flex justify-content-between">
                                 <h5 class="card-title mb-0 fs-6">Zahtjevi za inspekcijski nadzor</h5>
-                                <a class="text-muted fs-6">Pogledaj sve</a>
+                                <a class="text-info fs-6">Pregledaj sve</a>
                             </div>
                             <div class="card-body d-flex align-items-center justify-content-center">
 
@@ -317,7 +317,7 @@
                         <div class="card rounded-0 h-100">
                             <div class="card-header d-flex justify-content-between">
                                 <h5 class="card-title mb-0 fs-6">Carinjenje po nepotpunoj izjavi</h5>
-                                <a class="text-muted fs-6">Pogledaj sve</a>
+                                <a class="text-info fs-6">Pregledaj sve</a>
                             </div>
                             <div class="card-body d-flex justify-content-center align-items-center">
 
@@ -343,7 +343,7 @@
                         <div class="card rounded-0 h-100">
                             <div class="card-header d-flex justify-content-between">
                                 <h5 class="card-title mb-0 fs-6">Izjave za carinjenje pošiljki</h5>
-                                <a class="text-muted fs-6">Pogledaj sve</a>
+                                <a class="text-info fs-6">Pregledaj sve</a>
                             </div>
                             <div class="card-body d-flex justify-content-center align-items-center">
 
@@ -369,7 +369,7 @@
                         <div class="card rounded-0 h-100">
                             <div class="card-header d-flex justify-content-between">
                                 <h5 class="card-title mb-0 fs-6">Obrasci</h5>
-                                <a class="text-muted fs-6">Pogledaj sve</a>
+                                <a class="text-info fs-6">Pregledaj sve</a>
                             </div>
                             <div class="card-body d-flex justify-content-center align-items-center">
 
@@ -510,134 +510,142 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", async function() {
-          
-         
+document.addEventListener("DOMContentLoaded", async function () {
+    if (!token || !user?.id) {
+        console.warn("Missing auth or user.");
+        return;
+    }
 
-        if (!token || !user?.id) {
-            console.warn("Missing auth or user.");
-            return;
-        }
+    const supplierContainer = document.querySelector(".suppliers-list");
+    const tariffContainer = document.querySelector(".tariff-list");
+    const supplierLoader = document.querySelector(".suppliers-loader");
+    const tariffLoader = document.querySelector(".tariff-loader");
 
-        const supplierContainer = document.querySelector(".suppliers-list");
-        const tariffContainer = document.querySelector(".tariff-list");
-        const supplierLoader = document.querySelector(".suppliers-loader");
-        const tariffLoader = document.querySelector(".tariff-loader");
+    try {
+        const res = await axios.get(`/api/statistics/users/${user.id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
 
-        try {
-            const res = await axios.get(`/api/statistics/users/${user.id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
+        const stats = res.data || {};
+        console.log("Stats response:", stats);
 
-            const stats = res.data || {};
+        // --- Suppliers Section ---
+        const suppliers = stats.supplier_stats?.latest_suppliers || [];
+        const lastSuppliers = suppliers.slice(-5);
 
-            // --- Suppliers Section ---
-            const suppliers = stats.supplier_profit_changes || [];
-            const lastSuppliers = suppliers.slice(-5);
+        if (supplierLoader) supplierLoader.classList.add("d-none");
+        if (supplierContainer) {
+            supplierContainer.classList.remove("d-none");
+            supplierContainer.innerHTML = "";
 
-            if (supplierLoader) supplierLoader.classList.add("d-none");
-            if (supplierContainer) {
-                supplierContainer.classList.remove("d-none");
-                supplierContainer.innerHTML = "";
+            if (lastSuppliers.length === 0) {
+                supplierContainer.innerHTML = `
+                    <div class="text-muted text-center">Nema podataka o dobavljačima.</div>
+                `;
+            } else {
+                lastSuppliers.forEach((supplier) => {
+                    const percentage = parseFloat(supplier.percentage_change);
+                    const isPositive = percentage >= 0;
+                    const growthClass = isPositive ? "text-success" : "text-danger";
+                    const arrow = isPositive ? "ri-arrow-up-line" : "ri-arrow-down-line";
 
-                if (lastSuppliers.length === 0) {
-                    supplierContainer.innerHTML = `
-            <div class="text-muted text-center">Nema podataka o dobavljačima.</div>
-        `;
-                } else {
-                    lastSuppliers.forEach(supplier => {
-                        const percentage = parseFloat(supplier.percentage_change);
-                        const isPositive = percentage >= 0;
-                        const growthClass = isPositive ? "text-success" : "text-danger";
-                        const arrow = isPositive ? "ri-arrow-up-line" : "ri-arrow-down-line";
-
-                        supplierContainer.innerHTML += `
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <div>
-                        <div class="fw-semibold">${supplier.name}</div>
-                        <div class="text-muted fs-12">${supplier.owner ?? 'Nepoznat vlasnik'}</div>
-                    </div>
-                    <div class="${growthClass} fs-13">
-                        ${isNaN(percentage) ? 'N/A' : percentage.toFixed(1)}%
-                        <i class="${arrow} ms-1"></i>
-                    </div>
-                </div>
-            `;
-                    });
-
-                    // Add the "Pregledaj sve" link at the bottom
                     supplierContainer.innerHTML += `
-            <div class="card-footer p-0 pb-0 pt-0 d-flex justify-content-end">
-                <a href="moji-dobavljaci" class="text-info fs-13 mb-2" style="margin-top:.7rem!important">Pregledaj sve</a>
-            </div>
-        `;
-                }
-            }
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <div class="fw-semibold">${supplier.name}</div>
+                                <div class="text-muted fs-12">${supplier.owner ?? "Nepoznat vlasnik"}</div>
+                            </div>
+                            <div class="${growthClass} fs-13">
+                                ${isNaN(percentage) ? "Nije definisano" : percentage.toFixed(1)}%
+                                <i class="${arrow} ms-1"></i>
+                            </div>
+                        </div>
+                    `;
+                });
 
-
-            // --- Tariff Section ---
-            const allInvoices = stats.invoices || [];
-            const validItems = allInvoices
-                .filter(inv => Array.isArray(inv.items) && inv.items.length > 0)
-                .flatMap(inv =>
-                    inv.items.map(item => ({
-                        code: item.best_customs_code_matches?.[0] || "Nepoznat kod",
-                        name: item.item_description_original || item.item_description || "Nepoznat naziv",
-                    }))
-                )
-                .slice(0, 5);
-
-            if (tariffLoader) tariffLoader.classList.add("d-none");
-            if (tariffContainer) {
-                tariffContainer.classList.remove("d-none");
-                tariffContainer.innerHTML = "";
-
-                if (validItems.length === 0) {
-                    tariffContainer.innerHTML = `
-            <div class="text-muted text-center">Nema nedavnih tarifa.</div>
-        `;
-                } else {
-                    validItems.forEach(item => {
-                        tariffContainer.innerHTML += `
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <div>
-                        <div class="fw-semibold">${item.code}</div>
-                        <div class="text-muted fs-12">${item.name}</div>
+                supplierContainer.innerHTML += `
+                    <div class="card-footer p-0 pb-0 pt-0 d-flex justify-content-end pregledaj-vise-bottom-right">
+                        <a href="moji-dobavljaci" class="text-info fs-6 " style="margin:1rem">Pregledaj sve</a>
                     </div>
-                </div>
-            `;
-                    });
-
-                    // Append the "Pregledaj sve" link at the bottom
-                    tariffContainer.innerHTML += `
-            <div class="card-footer p-0 pb-0 pt-0 d-flex justify-content-end">
-                <a href="moje-tarife" class="text-info fs-13 mb-2" style="margin-top:.7rem">Pregledaj sve</a>
-            </div>
-        `;
-                }
-            }
-
-
-        } catch (err) {
-            console.error("Greška pri dohvaćanju statistike:", err);
-
-            if (supplierLoader) supplierLoader.classList.add("d-none");
-            if (tariffLoader) tariffLoader.classList.add("d-none");
-
-            if (supplierContainer) {
-                supplierContainer.classList.remove("d-none");
-                supplierContainer.innerHTML = `<div class="text-danger">Greška pri dohvaćanju dobavljača.</div>`;
-            }
-
-            if (tariffContainer) {
-                tariffContainer.classList.remove("d-none");
-                tariffContainer.innerHTML = `<div class="text-danger">Greška pri dohvaćanju tarifa.</div>`;
+                `;
             }
         }
-    });
+
+        // --- Tariff Section ---
+        const allInvoices = stats.invoices || [];
+        console.log("All invoices:", allInvoices);
+
+        const validItems = [];
+
+        allInvoices.forEach((inv) => {
+            if (Array.isArray(inv.items) && inv.items.length > 0) {
+                inv.items.forEach((item) => {
+                    console.log("Checking item:", item);
+
+                    const code =
+                        item.best_customs_code_matches?.[0] || "Nepoznat kod";
+                    const name =
+                        item.item_description_original ||
+                        item.item_description ||
+                        "Nepoznat naziv";
+
+                    validItems.push({ code, name });
+                });
+            }
+        });
+
+        const recentItems = validItems.slice(0, 5);
+        console.log("Valid tariff items:", recentItems);
+
+        if (tariffLoader) tariffLoader.classList.add("d-none");
+        if (tariffContainer) {
+            tariffContainer.classList.remove("d-none");
+            tariffContainer.innerHTML = "";
+
+            if (recentItems.length === 0) {
+                tariffContainer.innerHTML = `
+                    <div class="text-muted text-center">Nema nedavnih tarifa.</div>
+                `;
+            } else {
+                recentItems.forEach((item) => {
+                    tariffContainer.innerHTML += `
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <div class="fw-semibold">${item.code}</div>
+                                <div class="text-muted fs-12">${item.name}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                tariffContainer.innerHTML += `
+                    <div class="card-footer p-0 pb-0 pt-0 d-flex justify-content-end  pregledaj-vise-bottom-right">
+                        <a href="moje-tarife" class="text-info fs-13 mb-2" style="margin-top:.2rem!important;margin-right:1rem">Pregledaj sve</a>
+                    </div>
+                `;
+            }
+        }
+    } catch (err) {
+        console.error("Greška pri dohvaćanju statistike:", err);
+
+        if (supplierLoader) supplierLoader.classList.add("d-none");
+        if (tariffLoader) tariffLoader.classList.add("d-none");
+
+        if (supplierContainer) {
+            supplierContainer.classList.remove("d-none");
+            supplierContainer.innerHTML = `<div class="text-danger">Greška pri dohvaćanju dobavljača.</div>`;
+        }
+
+        if (tariffContainer) {
+            tariffContainer.classList.remove("d-none");
+            tariffContainer.innerHTML = `<div class="text-danger">Greška pri dohvaćanju tarifa.</div>`;
+        }
+    }
+});
 </script>
+
 
 
 
@@ -967,7 +975,7 @@
             console.log(" Parsed statistike:", stats);
 
             const fields = {
-                totalSuppliers: stats.total_suppliers ?? 0,
+                totalSuppliers: stats.supplier_stats.total_suppliers ?? 0,
                 totalInvoices: stats.total_invoices ?? 0,
                 usedScans: stats.used_scans ?? 0,
                 remainScans: stats.remaining_scans ?? 0

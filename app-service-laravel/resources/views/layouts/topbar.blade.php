@@ -234,7 +234,7 @@
                         <a class="dropdown-item" href="faqs"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Pomoć</span></a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="cijene-paketa"><i class="fas fa-wand-magic-sparkles fs-12 text-muted me-1"></i> <span
-                                class="align-middle">Dostupna skeniranja : <b id="remainScansTopbar"></b></span></a>
+                                class="align-middle">Dostupna skeniranja : <b>{{ Auth::user()->getRemainingScans() ?? '0' }}</b></span></a>
 
 
                         <script>

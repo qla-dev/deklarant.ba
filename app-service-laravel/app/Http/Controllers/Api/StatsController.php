@@ -112,8 +112,13 @@ class StatsController extends Controller
             ->groupBy('item_code')
             ->pluck('total', 'item_code');
 
-        $latestTariffs = $this->modelTariffRate::whereIn('item_code', $itemCodes)
-            ->get(['id', 'item_code', 'name', 'tariff_rate'])
+        // Debug output for troubleshooting
+        \Log::info('itemCodes', ['itemCodes' => $itemCodes]);
+        \Log::info('itemCodeCounts', ['itemCodeCounts' => $itemCodeCounts]);
+        $tariffQueryResult = $this->modelTariffRate::whereIn('item_code', $itemCodes)
+            ->get(['id', 'item_code', 'name', 'tariff_rate']);
+        \Log::info('Tariff query result', ['tariffs' => $tariffQueryResult]);
+        $latestTariffs = $tariffQueryResult
             ->map(function ($tariff) use ($itemCodeCounts) {
                 return [
                     'id' => $tariff->id,
