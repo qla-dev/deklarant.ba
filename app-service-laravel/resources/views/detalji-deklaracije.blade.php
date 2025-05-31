@@ -341,7 +341,7 @@
                 productsList.innerHTML = '';
                 invoice.items.forEach((item, index) => {
                     // Find best customs code match for Tarifna oznaka if not present
-                    let tarifnaOznaka = item.tariff_code || item.item_code || '';
+                    let tarifnaOznaka = item.item_code || item.tariff_code || '';
                     if (!tarifnaOznaka && Array.isArray(item.best_customs_code_matches) && item.best_customs_code_matches.length > 0) {
                         const best = item.best_customs_code_matches.find(e => e.entry?.["Tarifna oznaka"]);
                         if (best) {

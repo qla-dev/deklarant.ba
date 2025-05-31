@@ -198,6 +198,7 @@
 
                         <div class="mb-2">
                             <button type="button" class="btn btn-outline-info mb-2" id="add-new-supplier">Obriši AI podatke i unesi ručno</button>
+                            <button type="button" class="btn btn-info mb-2" id="refill-supplier-ai">Populiši ponovo s AI</button>
                             <select id="supplier-select2" class="form-select"></select>
                         </div>
                         <input type="text" class="form-control mb-2" id="billing-name" name="supplier_name" placeholder="Naziv dobavljača">
@@ -213,6 +214,7 @@
 
                         <div class="mb-2">
                             <button type="button" class="btn btn-outline-info mb-2" id="add-new-importer">Obriši AI podatke i unesi ručno</button>
+                            <button type="button" class="btn btn-info mb-2" id="refill-importer-ai">Populiši ponovo s AI</button>
                             <select id="importer-select2" class="form-select"></select>
                         </div>
 
@@ -375,6 +377,7 @@
     // Add global flags
     window.forceNewSupplier = false;
     window.forceNewImporter = false;
+    window.skipPrefillParties = false; // NEW: skip prefill after manual clear
 
     function getInvoiceId() {
         const id = localStorage.getItem("scan_invoice_id");
@@ -716,14 +719,23 @@
                 cancelButtonColor: '#6c757d' // bootstrap secondary gray
             }).then((result) => {
                 if (result.isConfirmed) {
+                    window.skipPrefillParties = true; // NEW: skip prefill after clear
+                    // Clear all supplier and importer fields and selects
+                    $("#supplier-select2").val(null).trigger('change');
+                    $("#importer-select2").val(null).trigger('change');
+                    $("#billing-name, #billing-address-line-1, #billing-phone-no, #billing-tax-no, #email, #supplier-owner").val("").prop('readonly', false);
+                    $("#carrier-name, #carrier-address, #carrier-tel, #carrier-tax, #carrier-email, #carrier-owner").val("").prop('readonly', false);
+                    // Remove 'Novi dobavljač' and 'Novi uvoznik' options if present
+                    $("#supplier-select2 option[value='new']").remove();
+                    $("#importer-select2 option[value='new']").remove();
+                    // Remove all product rows
                     const table = document.getElementById('products-table');
                     if (table) {
                         const tbody = table.querySelector('tbody');
                         if (tbody) {
-                            tbody.innerHTML = ''; // Remove all product rows
+                            tbody.innerHTML = '';
                         }
                     }
-                    //location.reload();
                 }
                 // If cancelled, just closes and does nothing (no reopening)
             });
@@ -844,8 +856,9 @@
                 >+</button>
               </div>
               
-            <div class="input-group input-group-sm" style="height: 30px;">
+             <div class="input-group input-group-sm" style="height: 30px;">
                 <button 
+                class="btn btn-outline-info btn-sm decrement-kolata"
                   style="padding: 0; width: 20px;"
                 >−</button>
 
@@ -1232,6 +1245,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
+        window.skipPrefillParties = false; // Always allow prefill on page load/scan
         console.log(" Page loaded. Starting init process...");
 
         // Parallelize tariff and invoice fetch for faster load
@@ -1277,7 +1291,10 @@
         _invoice_data = null;
 
         await fillInvoiceData();
-        await fetchAndPrefillParties();
+        if (!window.skipPrefillParties) {
+            await fetchAndPrefillParties();
+        }
+        window.skipPrefillParties = false; // reset after use
         $("#supplier-select2").select2({
             placeholder: "Pretraži dobavljača",
             allowClear: true,
@@ -1508,22 +1525,25 @@
 
         // Handler for new supplier
         $(document).on('click', '#add-new-supplier', function() {
+            window.skipPrefillParties = true; // Prevent prefill after clearing
             // Only clear and unlock supplier fields
             $("#billing-name, #billing-address-line-1, #billing-phone-no, #billing-tax-no, #email, #supplier-owner").val("").prop('readonly', false).removeClass("is-invalid");
-            // Set select2 to 'new' option
+            // Set select2 to empty
+            $("#supplier-select2").val(null).trigger('change');
+            // Remove 'Novi dobavljač' option if present
             $("#supplier-select2 option[value='new']").remove();
-            var newOption = new Option('Novi dobavljač', 'new', true, true);
-            $("#supplier-select2").append(newOption).val('new').trigger('change');
             // Do NOT call fetchAndPrefillParties or touch importer fields
         });
 
         // Handler for new importer
         $(document).on('click', '#add-new-importer', function() {
+            window.skipPrefillParties = true; // Prevent prefill after clearing
             // Only clear and unlock importer fields
             $("#carrier-name, #carrier-address, #carrier-tel, #carrier-tax, #carrier-email, #carrier-owner").val("").prop('readonly', false).removeClass("is-invalid");
+            // Set select2 to empty
+            $("#importer-select2").val(null).trigger('change');
+            // Remove 'Novi uvoznik' option if present
             $("#importer-select2 option[value='new']").remove();
-            var newOption = new Option('Novi uvoznik', 'new', true, true);
-            $("#importer-select2").append(newOption).val('new').trigger('change');
             // Do NOT call fetchAndPrefillParties or touch supplier fields
         });
     });
@@ -1545,8 +1565,13 @@
                 cancelButtonColor: '#6c757d'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.forceNewSupplier = true;
-                    fetchAndPrefillParties();
+                    window.skipPrefillParties = true;
+                    // Only clear and unlock supplier fields
+                    $("#billing-name, #billing-address-line-1, #billing-phone-no, #billing-tax-no, #email, #supplier-owner").val("").prop('readonly', false).removeClass("is-invalid");
+                    // Remove and add 'Novi dobavljač' option, then select it
+                    $("#supplier-select2 option[value='new']").remove();
+                    var newOption = new Option('Novi dobavljač', 'new', true, true);
+                    $("#supplier-select2").append(newOption).val('new').trigger('change');
                 }
             });
         });
@@ -1565,12 +1590,103 @@
                 cancelButtonColor: '#6c757d'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.forceNewImporter = true;
-                    fetchAndPrefillParties();
+                    window.skipPrefillParties = true;
+                    // Only clear and unlock importer fields
+                    $("#carrier-name, #carrier-address, #carrier-tel, #carrier-tax, #carrier-email, #carrier-owner").val("").prop('readonly', false).removeClass("is-invalid");
+                    // Remove and add 'Novi uvoznik' option, then select it
+                    $("#importer-select2 option[value='new']").remove();
+                    var newOption = new Option('Novi uvoznik', 'new', true, true);
+                    $("#importer-select2").append(newOption).val('new').trigger('change');
                 }
             });
         });
     });
+
+    // 1. Add buttons in the DOM (jQuery, after DOMContentLoaded)
+$(document).ready(function() {
+    // Add 'Popuni ponovo s AI' button next to 'Obriši' for supplier
+    if ($('#add-new-supplier').length && !$('#refill-supplier-ai').length) {
+        $('<button type="button" id="refill-supplier-ai" class="btn btn-info btn-sm ms-2">Populiši ponovo s AI</button>')
+            .insertAfter('#add-new-supplier');
+    }
+    // Add 'Popuni ponovo s AI' button next to 'Obriši' for importer
+    if ($('#add-new-importer').length && !$('#refill-importer-ai').length) {
+        $('<button type="button" id="refill-importer-ai" class="btn btn-info btn-sm ms-2">Populiši ponovo s AI</button>')
+            .insertAfter('#add-new-importer');
+    }
+
+    // Handler for supplier AI refill
+    $(document).on('click', '#refill-supplier-ai', async function() {
+        const taskId = localStorage.getItem("scan_invoice_id");
+        if (!taskId || !window.token) return;
+        try {
+            const res = await fetch(`/api/invoices/${taskId}/scan/parties`, {
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error("Greška u AI response");
+            const supplier = data.supplier;
+            if (supplier) {
+                // Set select2 to 'Novi dobavljač'
+                $("#supplier-select2 option[value='new']").remove();
+                var newOption = new Option('Novi dobavljač', 'new', true, true);
+                $("#supplier-select2").append(newOption).val('new').trigger('change');
+                // Fill fields
+                $("#billing-name").val(supplier.name || "").prop('readonly', false);
+                $("#billing-address-line-1").val(supplier.address || "").prop('readonly', false);
+                $("#billing-phone-no").val(supplier.phone_number || "").prop('readonly', false);
+                $("#billing-tax-no").val(supplier.vat_number || "").prop('readonly', false);
+                $("#email").val(supplier.email || "").prop('readonly', false);
+                $("#supplier-owner").val(supplier.owner || "").prop('readonly', false);
+                const label = document.getElementById("billing-name-ai-label");
+                if (label) label.classList.remove("d-none");
+            } else {
+                Swal.fire("Greška", "Nema AI podataka za dobavljača", "error");
+            }
+        } catch (err) {
+            Swal.fire("Greška", err.message || "Neuspješno dohvaćanje podataka", "error");
+        }
+    });
+
+    // Handler for importer AI refill
+    $(document).on('click', '#refill-importer-ai', async function() {
+        const taskId = localStorage.getItem("scan_invoice_id");
+        if (!taskId || !window.token) return;
+        try {
+            const res = await fetch(`/api/invoices/${taskId}/scan/parties`, {
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error("Greška u AI response");
+            const importer = data.importer;
+            if (importer) {
+                // Set select2 to 'Novi uvoznik'
+                $("#importer-select2 option[value='new']").remove();
+                var newOption = new Option('Novi uvoznik', 'new', true, true);
+                $("#importer-select2").append(newOption).val('new').trigger('change');
+                // Fill fields
+                $("#carrier-name").val(importer.name || "").prop('readonly', false);
+                $("#carrier-address").val(importer.address || "").prop('readonly', false);
+                $("#carrier-tel").val(importer.phone_number || "").prop('readonly', false);
+                $("#carrier-tax").val(importer.vat_number || "").prop('readonly', false);
+                $("#carrier-email").val(importer.email || "").prop('readonly', false);
+                $("#carrier-owner").val(importer.owner || "").prop('readonly', false);
+                const label = document.getElementById("carrier-name-ai-label");
+                if (label) label.classList.remove("d-none");
+            } else {
+                Swal.fire("Greška", "Nema AI podataka za uvoznika", "error");
+            }
+        } catch (err) {
+            Swal.fire("Greška", err.message || "Neuspješno dohvaćanje podataka", "error");
+        }
+    });
+});
 </script>
 
 <!-- Google search -->
@@ -1763,7 +1879,8 @@
             document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
                 const item_name = row.querySelector('[name="item_name[]"]')?.value?.trim() || "";
                 const item_description_original = item_name;
-                const item_code = row.querySelector('[name="item_code[]"]')?.value || "";
+                const item_code = $(row).find('[name="item_code[]"]').val() || "";
+
                 const origin = row.querySelector('[name="origin[]"]')?.value || "";
                 const base_price = parseFloat(row.querySelector('[name="price[]"]')?.value || "0");
                 const quantity = parseFloat(row.querySelector('[name="quantity[]"]')?.value || "0");

@@ -253,8 +253,7 @@
         <div class="col-auto">
             <div class="avatar-lg position-relative" id="avatar-wrapper">
                 <!-- Avatar image -->
-                <img id="user-avatar" class="img-thumbnail rounded-circle"
-                    >
+                <img id="user-avatar" class="img-thumbnail rounded-circle">
 
                 <div id="avatar-fallback" class="rounded-circle d-flex justify-content-center align-items-center text-white fw-bold d-none"
                     style="width: 100%; height: 100%; font-size: 2.5rem;">
@@ -276,7 +275,7 @@
             <div class="p-2">
                 <!-- Username filled dynamically -->
                 <div class="d-flex align-items-center  flex-wrap">
-                        <h3 class="text-white mb-1 me-2" id="profile-fullname">
+                    <h3 class="text-white mb-1 me-2" id="profile-fullname">
                         {{ Auth::user()->first_name && Auth::user()->last_name 
                         ? Auth::user()->first_name . ' ' . Auth::user()->last_name 
                         : Auth::user()->username }}
@@ -297,9 +296,9 @@
                     Član od:
                     <span id="joining-date">
                         @if(Auth::user()->joining_date)
-                            {{ \Carbon\Carbon::parse(Auth::user()->joining_date)->format('d.m.Y') }}
+                        {{ \Carbon\Carbon::parse(Auth::user()->joining_date)->format('d.m.Y') }}
                         @else
-                            Nepoznat datum
+                        Nepoznat datum
                         @endif
                     </span>
 
@@ -353,70 +352,70 @@
                     <!-- Left Side Cards -->
                     <div class="col-xxl-4 d-flex flex-column rounded-0">
                         <div class="card mb-3 d-flex flex-column align-items-center justify-content-center rounded-0">
-                           <div class="card-body d-flex align-items-center w-100 justify-content-between" style="min-height: 60px;">
-    <!-- Loader (shown initially) -->
-     <div class="w-100 d-flex justify-content-center" id="user-package-loader">
-    <div  class="spinner-border text-info" role="status"></div>
-</div>
-    <!-- Package text (hidden initially) -->
-    <p class="fw-semibold mb-0 d-none d-flex" id="user-package-text" style="justify-content: space-between;"></p>
+                            <div class="card-body d-flex align-items-center w-100 justify-content-between" style="min-height: 60px;">
+                                <!-- Loader (shown initially) -->
+                                <div class="w-100 d-flex justify-content-center" id="user-package-loader">
+                                    <div class="spinner-border text-info" role="status"></div>
+                                </div>
+                                <!-- Package text (hidden initially) -->
+                                <p class="fw-semibold mb-0 d-none d-flex" id="user-package-text" style="justify-content: space-between;"></p>
 
-    <!-- Upgrade button (hidden initially) -->
-    <a href="cijene-paketa" id="upgrade-btn" class="btn btn-info text-white btn-sm d-none">
-        <i class="ri-arrow-up-circle-line"></i> Nadogradi paket
-    </a>
-</div>
+                                <!-- Upgrade button (hidden initially) -->
+                                <a href="cijene-paketa" id="upgrade-btn" class="btn btn-info text-white btn-sm d-none">
+                                    <i class="ri-arrow-up-circle-line"></i> Nadogradi paket
+                                </a>
+                            </div>
 
                         </div>
-  <div class="card d-flex flex-column justify-content-between rounded-0">
-                 <div class="card-body d-flex flex-column justify-content-between" style="min-height: 150px;">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="card-title mb-0">Moji dokumenti</h5>
-        <a href="moje-fakture" class="text-info fs-13">Pregledaj sve</a>
-    </div>
+                        <div class="card d-flex flex-column justify-content-between rounded-0">
+                            <div class="card-body d-flex flex-column justify-content-between" style="min-height: 150px;">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="card-title mb-0">Moji dokumenti</h5>
+                                    <a href="moje-fakture" class="text-info fs-13">Pregledaj sve</a>
+                                </div>
 
-    <!-- Loader -->
-    <div class="user-documents-loader d-flex justify-content-center align-items-center flex-grow-1" style="min-height: 142px;">
-        <div class="spinner-border text-info" role="status"></div>
-    </div>
+                                <!-- Loader -->
+                                <div class="user-documents-loader d-flex justify-content-center align-items-center flex-grow-1" style="min-height: 142px;">
+                                    <div class="spinner-border text-info" role="status"></div>
+                                </div>
 
-    <!-- Hidden initially -->
-    <div class="row g-3 mt-auto d-flex align-items-center justify-content-center text-center" 
-     id="user-documents" 
-     style="min-height: 120px;">
-    <div class="col-12 text-muted"></div>
-</div>
+                                <!-- Hidden initially -->
+                                <div class="row g-3 mt-auto d-flex align-items-center justify-content-center text-center"
+                                    id="user-documents"
+                                    style="min-height: 120px;">
+                                    <div class="col-12 text-muted"></div>
+                                </div>
 
 
-</div>
+                            </div>
 
 
                         </div>
                         <div class="card mb-3 d-flex flex-column justify-content-center rounded-0">
-                          <div class="card-body position-relative pb-0" style="min-height: 300px;">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="card-title mb-0">Moji dobavljači</h5>
-        <a href="moji-dobavljaci" class="text-info fs-13">Pregledaj sve</a>
-    </div>
+                            <div class="card-body position-relative pb-0" style="min-height: 300px;">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="card-title mb-0">Moji dobavljači</h5>
+                                    <a href="moji-dobavljaci" class="text-info fs-13">Pregledaj sve</a>
+                                </div>
 
-    <!-- Loader vertically & horizontally centered -->
-    <div class="suppliers-loader position-absolute top-50 start-50 translate-middle">
-    <div class="spinner-border text-info" role="status"></div>
-</div>
+                                <!-- Loader vertically & horizontally centered -->
+                                <div class="suppliers-loader position-absolute top-50 start-50 translate-middle">
+                                    <div class="spinner-border text-info" role="status"></div>
+                                </div>
 
 
-    <!-- List (hidden by default) -->
-    <div class="suppliers-list d-none" style="min-height: 100px;">
-        <!-- JS will inject content here -->
-    </div>
-</div>
+                                <!-- List (hidden by default) -->
+                                <div class="suppliers-list d-none" style="min-height: 100px;">
+                                    <!-- JS will inject content here -->
+                                </div>
+                            </div>
 
 
 
                         </div>
 
 
-                      
+
                     </div>
 
                     <!-- Right Form with Tabs -->
@@ -478,7 +477,7 @@
                                                     <label for="websiteInput1" class="form-label text-info">Web stranica</label>
                                                     <input type="text" class="form-control rounded-0" id="websiteInput1" placeholder="Web stranica" />
                                                 </div>
-                                                    <div class="col-lg-6 mb-3">
+                                                <div class="col-lg-6 mb-3">
                                                     <label for="zipcodeInput" class="form-label text-info">Poštanski broj</label>
                                                     <input type="text" class="form-control rounded-0" id="zipcodeInput" placeholder="Poštanski broj" />
                                                 </div>
@@ -490,7 +489,7 @@
                                                     <label for="countryInput" class="form-label text-info">Država</label>
                                                     <input type="text" class="form-control rounded-0" id="countryInput" placeholder="Država" />
                                                 </div>
-                                            
+
                                                 <div class="col-lg-12 mb-3">
                                                     <label for="exampleFormControlTextarea" class="form-label text-info">Opis</label>
                                                     <textarea class="form-control rounded-0" id="exampleFormControlTextarea" placeholder="Opis" rows="3"></textarea>
@@ -575,7 +574,7 @@
                                             </div>
                                         </form>
                                     </div>
-                                   
+
 
 
                                 </div>
@@ -777,276 +776,276 @@
             <div class="tab-pane fade mt-0" id="projects">
                 <div class="container">
                     <div class="row justify-content-center">
-        <!-- StartUp Plan -->
-        <div class="col-lg-4 mb-4">
-            <div class="card pricing-box border-0 rounded-0 h-100">
-          <button type="button" id="btn-StartUp" class=" d-none btn btn-soft-info btn-sm  rounded-0 shadow-none w-100" style="position: absolute; border-bottom-left-radius: 0; border-bottom-right-radius:0">
-                                          Aktivan do: <span class="date-valid"></span>. godine
-                                    </button>
-                <div class="card-body p-4 m-2 d-flex flex-column">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="flex-grow-1">
-                            <h5 class="fw-semibold mb-1">StartUp</h5>
-                            <p class="text-muted mb-0">Za manja preduzeća</p>
-                        </div>
-                        <div class="avatar-sm">
-                            <div class="avatar-title bg-light rounded-circle text-ifno">
-                                <i class="ri-star-s-fill text-info fs-5"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pt-2 pb-3">
-                        <h2>500 <small class="fs-5">KM</small><span class="fs-6 text-muted"></span></h2>
-                    </div>
-                    <hr class="my-3 text-muted">
-                    <ul class="list-unstyled text-muted vstack gap-3 mb-3">
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>100</b> AI Skeniranih Deklaracije</li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>50 strana</b> po Deklaraciji</li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>200</b> Deklaracija u historiji</li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: <b>20 s</b></li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>30 dana</li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
-                    </ul>
-
-                        <a id="btnAction-StartUp" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal" href="javascript:void(0);" class="btn btn-info w-100 mt-auto text-white">Započni</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- GoBig Plan -->
-        <div class="col-lg-4 mb-4">
-            <div class="card pricing-box border-0 rounded-0 ribbon-box right h-100">
-      
-        <button type="button" id="btn-GoBig" class=" d-none btn btn-soft-info btn-sm shadow-none w-100 rounded-0" style="position: absolute; border-bottom-left-radius: 0; border-bottom-right-radius:0">
-                                          Aktivan do: <span class="date-valid"></span>. godine
-                                    </button>
-                <div class="card-body p-4 m-2 d-flex flex-column">
-                    <div class="ribbon-two ribbon-two-info"><span>Popularno</span></div>
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="flex-grow-1">
-                            <h5 class="fw-semibold mb-1">GoBig</h5>
-                            <p class="text-muted mb-0">Idealno za biznise u razvoju</p>
-                        </div>
-                        <div class="avatar-sm">
-                            <div class="avatar-title bg-light rounded-circle text-primary">
-                                <i class="ri-medal-line text-info fs-3"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pt-2 pb-3">
-                        <h2>850 <small class="fs-5">KM</small><span class="fs-6 text-muted"></span></h2>
-                    </div>
-                    <hr class="my-3 text-muted">
-                    <ul class="list-unstyled text-muted vstack gap-3 mb-3">
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>200</b> AI Skeniranih Deklaracije</li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>150 strana</b> po Deklaraciji</li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>500</b> Deklaracija u historiji</li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: <b>10 s</b></li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>120 dana</li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
-                    </ul>
-                        <a id="btnAction-GoBig" href="javascript:void(0);" class="btn btn-info w-100 mt-auto text-white" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal">Započni</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Business Plan -->
-        <div class="col-lg-4 mb-4">
-            <div class="card pricing-box border-0 rounded-0 h-100">
-               <button type="button" id="btn-Business" class=" d-none btn btn-soft-info btn-sm shadow-none w-100 rounded-0" style="position: absolute; border-bottom-left-radius: 0; border-bottom-right-radius:0">
-                                         Aktivan do:  <span class="date-valid"></span>.godine
-                                    </button>
-                <div class="card-body p-4 m-2 d-flex flex-column">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="flex-grow-1">
-                            <h5 class="fw-semibold mb-1">Business</h5>
-                            <p class="text-muted mb-0">Skrojeno za velike biznise</p>
-                        </div>
-                        <div class="avatar-sm">
-                            <div class="avatar-title bg-light rounded-circle text-primary">
-                                <i class="ri-shield-star-line text-info fs-2"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pt-2 pb-3">
-                        <h2>2000 <small class="fs-5">KM</small><span class="fs-6 text-muted"></span></h2>
-                    </div>
-                    <hr class="my-3 text-muted">
-                    <ul class="list-unstyled text-muted vstack gap-3 mb-3">
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>500</b> AI Skeniranih Deklaracije</li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>Neograničeno strana </b> po Deklaraciji</li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>Neograničeno</b> Deklaracija u historiji</li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: <b>4 s</b></li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>365 dana</li>
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
-                    </ul>
-
-                        <a id="btnAction-Business" href="javascript:void(0);" class="btn btn-info w-100 mt-auto text-white" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal">Započni</a>
-                </div>
-            </div>
-        </div>
-    </div>
-                </div>
-            </div>
-        </div>
-
-
-                </div>
-            </div>
-            <!--end row-->
-
-            <!-- Payment Method Modal -->
-            <!-- Modal za plaćanje karticom -->
-            <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content border-info  rounded-0 shadow">
-                        <div class=" d-flex align-items-center justify-content-between bg-info text-white py-1">
-                            <h5 class="modal-title d-flex align-items-center  ms-1 me-1 text-white"
-                                id="paymentModalLabel">Unesite vaše podatke</h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                                aria-label="Zatvori"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form>
-                                <div class="mb-3">
-                                    <label for="cardName" class="form-label">Ime i prezime vlasnika kartice</label>
-                                    <input type="text" class="form-control border-info rounded-0" id="cardName"
-                                        placeholder="Ime i Prezime">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="cardNumber" class="form-label">Broj kartice</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control border-info rounded-0" id="cardNumber"
-                                            placeholder="0000 0000 0000 0000">
-                                        <span class="input-group-text bg-white border-info rounded-0">
-                                            <img src="https://img.icons8.com/color/32/000000/mastercard-logo.png"
-                                                id="cardLogo" alt="Mastercard" height="20">
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="expiry" class="form-label">Datum isteka</label>
-                                        <input type="text" class="form-control border-info rounded-0" id="expiry"
-                                            placeholder="MM/GG">
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="cvc" class="form-label">CVC kod</label>
-                                        <input type="text" class="form-control border-info rounded-0" id="cvc"
-                                            placeholder="123">
-                                    </div>
-                                </div>
-
-
-                                <div class="form-check mb-3">
-                                    <input class="form-check-input border-info rounded-0" type="checkbox" id="saveCard">
-                                    <label class="form-check-label" for="saveCard">
-                                        Sačuvaj podatke o kartici za naredna plaćanja
-                                    </label>
-                                </div>
-                                <div class="form-check mb-3">
-                                    <input class="form-check-input border-info rounded-0" type="checkbox"
-                                        id="termsCheck">
-                                    <label class="form-check-label" for="termsCheck">
-                                        Prihvatam <a href="#">uslove korištenja</a> i <a href="#">politiku
-                                            privatnosti</a>
-                                    </label>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer d-flex justify-content-center align-items center ">
-                            <button type="button" class="btn btn-outline-info w-50"
-                                data-bs-dismiss="modal">Otkaži</button>
-                            <button type="submit" class="btn btn-info text-white w-50">Plati</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modal za izbor načina plaćanja -->
-            <div class="modal fade" id="paymentChoiceModal" tabindex="-1" aria-labelledby="paymentChoiceModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content border-info  shadow">
-                        <div class="d-flex justify-content-between bg-info py-1 px-1 text-white">
-
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                                aria-label="Zatvori"></button>
-                        </div>
-                        <div class="modal-body text-center">
-                            <p class="mb-4">Molimo odaberite način na koji želite izvršiti uplatu:</p>
-                            <div class="d-grid gap-3">
-                                <button class="btn btn-info text-white" data-bs-dismiss="modal" data-bs-toggle="modal"
-                                    data-bs-target="#paymentModal">
-                                    💳 Kartično plaćanje
+                        <!-- StartUp Plan -->
+                        <div class="col-lg-4 mb-4">
+                            <div class="card pricing-box border-0 rounded-0 h-100">
+                                <button type="button" id="btn-StartUp" class=" d-none btn btn-soft-info btn-sm  rounded-0 shadow-none w-100" style="position: absolute; border-bottom-left-radius: 0; border-bottom-right-radius:0">
+                                    Aktivan do: <span class="date-valid"></span>. godine
                                 </button>
-                                <button class="btn btn-outline-info" data-bs-dismiss="modal" data-bs-toggle="modal"
-                                    data-bs-target="#virmanModal">
-                                    🧾 Plaćanje virmanom
+                                <div class="card-body p-4 m-2 d-flex flex-column">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="flex-grow-1">
+                                            <h5 class="fw-semibold mb-1">StartUp</h5>
+                                            <p class="text-muted mb-0">Za manja preduzeća</p>
+                                        </div>
+                                        <div class="avatar-sm">
+                                            <div class="avatar-title bg-light rounded-circle text-ifno">
+                                                <i class="ri-star-s-fill text-info fs-5"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="pt-2 pb-3">
+                                        <h2>500 <small class="fs-5">KM</small><span class="fs-6 text-muted"></span></h2>
+                                    </div>
+                                    <hr class="my-3 text-muted">
+                                    <ul class="list-unstyled text-muted vstack gap-3 mb-3">
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>100</b> AI Skeniranih Deklaracije</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>50 strana</b> po Deklaraciji</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>200</b> Deklaracija u historiji</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: <b>20 s</b></li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>30 dana</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
+                                    </ul>
+
+                                    <a id="btnAction-StartUp" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal" href="javascript:void(0);" class="btn btn-info w-100 mt-auto text-white">Započni</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- GoBig Plan -->
+                        <div class="col-lg-4 mb-4">
+                            <div class="card pricing-box border-0 rounded-0 ribbon-box right h-100">
+
+                                <button type="button" id="btn-GoBig" class=" d-none btn btn-soft-info btn-sm shadow-none w-100 rounded-0" style="position: absolute; border-bottom-left-radius: 0; border-bottom-right-radius:0">
+                                    Aktivan do: <span class="date-valid"></span>. godine
                                 </button>
+                                <div class="card-body p-4 m-2 d-flex flex-column">
+                                    <div class="ribbon-two ribbon-two-info"><span>Popularno</span></div>
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="flex-grow-1">
+                                            <h5 class="fw-semibold mb-1">GoBig</h5>
+                                            <p class="text-muted mb-0">Idealno za biznise u razvoju</p>
+                                        </div>
+                                        <div class="avatar-sm">
+                                            <div class="avatar-title bg-light rounded-circle text-primary">
+                                                <i class="ri-medal-line text-info fs-3"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="pt-2 pb-3">
+                                        <h2>850 <small class="fs-5">KM</small><span class="fs-6 text-muted"></span></h2>
+                                    </div>
+                                    <hr class="my-3 text-muted">
+                                    <ul class="list-unstyled text-muted vstack gap-3 mb-3">
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>200</b> AI Skeniranih Deklaracije</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>150 strana</b> po Deklaraciji</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>500</b> Deklaracija u historiji</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: <b>10 s</b></li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>120 dana</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
+                                    </ul>
+                                    <a id="btnAction-GoBig" href="javascript:void(0);" class="btn btn-info w-100 mt-auto text-white" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal">Započni</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Business Plan -->
+                        <div class="col-lg-4 mb-4">
+                            <div class="card pricing-box border-0 rounded-0 h-100">
+                                <button type="button" id="btn-Business" class=" d-none btn btn-soft-info btn-sm shadow-none w-100 rounded-0" style="position: absolute; border-bottom-left-radius: 0; border-bottom-right-radius:0">
+                                    Aktivan do: <span class="date-valid"></span>.godine
+                                </button>
+                                <div class="card-body p-4 m-2 d-flex flex-column">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="flex-grow-1">
+                                            <h5 class="fw-semibold mb-1">Business</h5>
+                                            <p class="text-muted mb-0">Skrojeno za velike biznise</p>
+                                        </div>
+                                        <div class="avatar-sm">
+                                            <div class="avatar-title bg-light rounded-circle text-primary">
+                                                <i class="ri-shield-star-line text-info fs-2"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="pt-2 pb-3">
+                                        <h2>2000 <small class="fs-5">KM</small><span class="fs-6 text-muted"></span></h2>
+                                    </div>
+                                    <hr class="my-3 text-muted">
+                                    <ul class="list-unstyled text-muted vstack gap-3 mb-3">
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>500</b> AI Skeniranih Deklaracije</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>Neograničeno strana </b> po Deklaraciji</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>Neograničeno</b> Deklaracija u historiji</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: <b>4 s</b></li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>365 dana</li>
+                                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i><b>24/7</b> Support</li>
+                                    </ul>
+
+                                    <a id="btnAction-Business" href="javascript:void(0);" class="btn btn-info w-100 mt-auto text-white" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal">Započni</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Modal za plaćanje virmanom -->
-            <div class="modal fade" id="virmanModal" tabindex="-1" aria-labelledby="virmanModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content border-info ">
-                        <div class="modal-header bg-info text-white">
-                            <h5 class="modal-title" id="virmanModalLabel">Upute za plaćanje virmanom</h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                                aria-label="Zatvori"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Naziv primaoca:</label>
-                                <p class="mb-0">Qla Dev d.o.o. Sarajevo</p>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Broj računa (IBAN):</label>
-                                <p class="mb-0">BA39 1542 0512 3456 7890</p>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Svrha uplate:</label>
-                                <p class="mb-0">Uplata paketa usluga – <span class="text-info fw-semibold">[StartUp /
-                                        GoBig / Business]</span></p>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Iznos:</label>
-                                <p class="mb-0 text-info fs-5">[unesi iznos u KM]</p>
-                            </div>
-                            <hr>
-                            <p class="text-muted small">
-                                Nakon izvršene uplate, molimo pošaljite dokaz o uplati na email:
-                                <strong>uplate@qla.dev</strong> radi brže obrade.
-                            </p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Zatvori</button>
-                            <button type="button" class="btn btn-info text-white">Uredu</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-
-
-
-
-
-
-
         </div>
 
 
     </div>
+</div>
+<!--end row-->
+
+<!-- Payment Method Modal -->
+<!-- Modal za plaćanje karticom -->
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-info  rounded-0 shadow">
+            <div class=" d-flex align-items-center justify-content-between bg-info text-white py-1">
+                <h5 class="modal-title d-flex align-items-center  ms-1 me-1 text-white"
+                    id="paymentModalLabel">Unesite vaše podatke</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Zatvori"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="cardName" class="form-label">Ime i prezime vlasnika kartice</label>
+                        <input type="text" class="form-control border-info rounded-0" id="cardName"
+                            placeholder="Ime i Prezime">
+                    </div>
+                    <div class="mb-3">
+                        <label for="cardNumber" class="form-label">Broj kartice</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control border-info rounded-0" id="cardNumber"
+                                placeholder="0000 0000 0000 0000">
+                            <span class="input-group-text bg-white border-info rounded-0">
+                                <img src="https://img.icons8.com/color/32/000000/mastercard-logo.png"
+                                    id="cardLogo" alt="Mastercard" height="20">
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="expiry" class="form-label">Datum isteka</label>
+                            <input type="text" class="form-control border-info rounded-0" id="expiry"
+                                placeholder="MM/GG">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="cvc" class="form-label">CVC kod</label>
+                            <input type="text" class="form-control border-info rounded-0" id="cvc"
+                                placeholder="123">
+                        </div>
+                    </div>
+
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input border-info rounded-0" type="checkbox" id="saveCard">
+                        <label class="form-check-label" for="saveCard">
+                            Sačuvaj podatke o kartici za naredna plaćanja
+                        </label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input border-info rounded-0" type="checkbox"
+                            id="termsCheck">
+                        <label class="form-check-label" for="termsCheck">
+                            Prihvatam <a href="#">uslove korištenja</a> i <a href="#">politiku
+                                privatnosti</a>
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer d-flex justify-content-center align-items center ">
+                <button type="button" class="btn btn-outline-info w-50"
+                    data-bs-dismiss="modal">Otkaži</button>
+                <button type="submit" class="btn btn-info text-white w-50">Plati</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal za izbor načina plaćanja -->
+<div class="modal fade" id="paymentChoiceModal" tabindex="-1" aria-labelledby="paymentChoiceModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-info  shadow">
+            <div class="d-flex justify-content-between bg-info py-1 px-1 text-white">
+
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Zatvori"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p class="mb-4">Molimo odaberite način na koji želite izvršiti uplatu:</p>
+                <div class="d-grid gap-3">
+                    <button class="btn btn-info text-white" data-bs-dismiss="modal" data-bs-toggle="modal"
+                        data-bs-target="#paymentModal">
+                        💳 Kartično plaćanje
+                    </button>
+                    <button class="btn btn-outline-info" data-bs-dismiss="modal" data-bs-toggle="modal"
+                        data-bs-target="#virmanModal">
+                        🧾 Plaćanje virmanom
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal za plaćanje virmanom -->
+<div class="modal fade" id="virmanModal" tabindex="-1" aria-labelledby="virmanModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-info ">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title" id="virmanModalLabel">Upute za plaćanje virmanom</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Zatvori"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Naziv primaoca:</label>
+                    <p class="mb-0">Qla Dev d.o.o. Sarajevo</p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Broj računa (IBAN):</label>
+                    <p class="mb-0">BA39 1542 0512 3456 7890</p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Svrha uplate:</label>
+                    <p class="mb-0">Uplata paketa usluga – <span class="text-info fw-semibold">[StartUp /
+                            GoBig / Business]</span></p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Iznos:</label>
+                    <p class="mb-0 text-info fs-5">[unesi iznos u KM]</p>
+                </div>
+                <hr>
+                <p class="text-muted small">
+                    Nakon izvršene uplate, molimo pošaljite dokaz o uplati na email:
+                    <strong>uplate@qla.dev</strong> radi brže obrade.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Zatvori</button>
+                <button type="button" class="btn btn-info text-white">Uredu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+</div>
 </div>
 
 
@@ -1136,7 +1135,7 @@
 <!-- User Avatar photo upload-->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        
+        const csrftoken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         const avatarBasePath = "/storage/uploads/avatars/";
 
         const avatarImg = document.getElementById("user-avatar");
@@ -1157,14 +1156,11 @@
         .then(data => {
             const userData = data.user;
             const avatar = userData.avatar;
+
             // Use first letter of first_name, else username, else email
             let initial = "U";
-            if (userData.first_name && userData.first_name.length > 0) {
-                initial = userData.first_name[0].toUpperCase();
-            } else if (userData.username && userData.username.length > 0) {
+            if (userData.username?.length > 0) {
                 initial = userData.username[0].toUpperCase();
-            } else if (userData.email && userData.email.length > 0) {
-                initial = userData.email[0].toUpperCase();
             }
             avatarFallback.textContent = initial;
             avatarFallback.classList.remove("d-none");
@@ -1223,7 +1219,8 @@
                     method: "PUT",
                     headers: {
                         Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": csrftoken
                     },
                     body: JSON.stringify({
                         avatar: avatarFileName
@@ -1235,7 +1232,6 @@
                 const updatedAvatar = update.user.avatar;
                 const imgPath = `${avatarBasePath}${updatedAvatar}?t=${Date.now()}`;
 
-                // Show initials while image loads
                 avatarFallback.classList.remove("d-none");
                 avatarImg.classList.add("d-none");
 
@@ -1246,7 +1242,7 @@
                     avatarFallback.classList.add("d-none");
                 };
                 img.onerror = function () {
-                    // Image failed to load, initials stay
+                    // Image failed to load
                 };
                 img.src = imgPath;
             })
@@ -1263,318 +1259,96 @@
 
 
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        
-        if (!token) {
-            alert("Niste prijavljeni. Molimo ulogujte se.");
-            window.location.href = "/login";
-            return;
-        }
 
-        const dropzone = document.getElementById("dropzone");
-        const fileInput = document.getElementById("fileInput");
-        const fileList = document.getElementById("fileList");
-        const dropzoneContent = document.getElementById("dropzone-content");
-        const progressContainer = document.getElementById("uploadProgressContainer");
-        const progressBar = document.getElementById("uploadProgressBar");
-        const scanningLoader = document.getElementById("scanningLoader");
-        const scanningText = document.getElementById("scanningText");
-        const successCheck = document.getElementById("successCheck");
-
-        function updateFileList(files) {
-            fileList.innerHTML = "";
-            if (files.length > 0) {
-                fileList.style.display = "block";
-                dropzoneContent.style.display = "none";
-            } else {
-                fileList.style.display = "none";
-                dropzoneContent.style.display = "block";
-            }
-
-            Array.from(files).forEach((file, index) => {
-                const fileItem = document.createElement("div");
-                fileItem.classList.add("file-item");
-
-                const fileName = document.createElement("span");
-                fileName.textContent = file.name;
-
-                const removeBtn = document.createElement("span");
-                removeBtn.textContent = "×";
-                removeBtn.classList.add("remove-file");
-                removeBtn.dataset.index = index;
-
-                removeBtn.addEventListener("click", function() {
-                    let dt = new DataTransfer();
-                    let fileArray = Array.from(fileInput.files);
-                    fileArray.splice(index, 1);
-                    fileArray.forEach(f => dt.items.add(f));
-                    fileInput.files = dt.files;
-                    updateFileList(fileInput.files);
-                });
-
-                fileItem.appendChild(fileName);
-                fileItem.appendChild(removeBtn);
-                fileList.appendChild(fileItem);
-            });
-        }
-
-        function generateFakeScanData() {
-            return [{
-                    "Tarifna oznaka": "0101 21 00 00",
-                    "Naziv": "čistokrvne priplodne životinje",
-                    "Quantity": 2,
-                    "Unit Price": 540.00
-                },
-                {
-                    "Tarifna oznaka": "2710 12 41 00",
-                    "Naziv": "kerozin",
-                    "Quantity": 120,
-                    "Unit Price": 1.25
-                },
-                {
-                    "Tarifna oznaka": "0201 30 00 00",
-                    "Naziv": "goveđe meso",
-                    "Quantity": 46,
-                    "Unit Price": 1.14
-                }
-            ];
-        }
-
-        function simulateScan() {
-            scanningLoader.classList.remove("d-none");
-            dropzoneContent.style.display = "none";
-            fileList.style.display = "none";
-
-            const spinner = scanningLoader.querySelector(".spinner-border");
-            const stages = [{
-                    text: "Skeniranje Deklaracije...",
-                    until: 25
-                },
-                {
-                    text: "Prepoznavanje podataka...",
-                    until: 60
-                },
-                {
-                    text: "Generisanje Deklaracije...",
-                    until: 90
-                },
-                {
-                    text: "Završeno skeniranje...",
-                    until: 100
-                }
-            ];
-
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress++;
-                for (const stage of stages) {
-                    if (progress <= stage.until) {
-                        scanningText.innerText = stage.text;
-                        break;
-                    }
-                }
-
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    if (spinner) {
-                        spinner.classList.add("fade-out");
-                        setTimeout(() => {
-                            spinner.remove();
-                            scanningText.classList.add("d-none");
-
-                            successCheck.classList.remove("d-none");
-                            successCheck.classList.add("animate__animated", "animate__fadeIn");
-
-                            const fakeScanResults = generateFakeScanData();
-                            console.log("Saving to localStorage:", fakeScanResults);
-                            localStorage.setItem("ai_scan_result", JSON.stringify(fakeScanResults));
-
-                            setTimeout(() => {
-                                window.location.href = "/apps-invoices-create";
-                            }, 500);
-                        }, 400);
-                    }
-                }
-            }, 50);
-        }
-
-        function uploadFiles(files) {
-            const formData = new FormData();
-            Array.from(files).forEach(file => formData.append('file', file));
-
-            progressContainer.style.display = "block";
-            progressBar.style.width = "0%";
-            progressBar.innerText = "0%";
-
-            let fakeProgress = 0;
-            const fakeInterval = setInterval(() => {
-                fakeProgress += 3;
-                if (fakeProgress > 100) fakeProgress = 100;
-
-                progressBar.style.width = fakeProgress + "%";
-                progressBar.innerText = fakeProgress + "%";
-
-                if (fakeProgress === 100) {
-                    clearInterval(fakeInterval);
-                    Swal.fire({
-                        icon: "success",
-                        title: "Uspješno uploadan dokument",
-                        showConfirmButton: false,
-                        timer: 1600
-                    }).then(() => {
-                        progressContainer.style.display = "none";
-                        simulateScan();
-                    });
-                }
-            }, 200);
-        }
-
-        dropzone.addEventListener("dragover", e => {
-            e.preventDefault();
-            dropzone.classList.add("bg-light");
-        });
-
-        dropzone.addEventListener("dragleave", () => {
-            dropzone.classList.remove("bg-light");
-        });
-
-        dropzone.addEventListener("drop", e => {
-            e.preventDefault();
-            dropzone.classList.remove("bg-light");
-            let dt = new DataTransfer();
-            Array.from(fileInput.files).forEach(f => dt.items.add(f));
-            Array.from(e.dataTransfer.files).forEach(f => dt.items.add(f));
-            fileInput.files = dt.files;
-            updateFileList(fileInput.files);
-            uploadFiles(fileInput.files);
-        });
-
-        dropzone.addEventListener("click", () => fileInput.click());
-
-        fileInput.addEventListener("change", () => {
-            updateFileList(fileInput.files);
-            uploadFiles(fileInput.files);
-        });
-        function uploadFiles(files) {
-            const formData = new FormData();
-            Array.from(files).forEach(file => formData.append('file', file));
-
-            progressContainer.style.display = "block";
-            progressBar.style.width = "0%";
-            progressBar.innerText = "0%";
-
-            let fakeProgress = 0;
-            const fakeInterval = setInterval(() => {
-                fakeProgress += 3;
-                if (fakeProgress > 100) fakeProgress = 100;
-
-                progressBar.style.width = fakeProgress + "%";
-                progressBar.innerText = fakeProgress + "%";
-
-                if (fakeProgress === 100) {
-                    clearInterval(fakeInterval);
-                    Swal.fire({
-                        icon: "success",
-                        title: "Uspješno uploadan dokument",
-                        showConfirmButton: false,
-                        timer: 1600
-                    }).then(() => {
-                        progressContainer.style.display = "none";
-                        simulateScan();
-                    });
-                }
-            }, 200);
-        }
-    });
-</script>
 
 
 <!-- Fetch UserProfile and Business data -->
 
 <script>
-document.addEventListener("DOMContentLoaded", async function () {
-    
+    document.addEventListener("DOMContentLoaded", async function() {
 
-    if (!user || !token) {
-        console.warn("User or token not found in localStorage");
-        return;
-    }
 
-    try {
-        const response = await fetch(`/api/users/${user.id}`, {
-            headers: { "Authorization": `Bearer ${token}` }
-        });
-
-        if (!response.ok) {
-            console.error("Failed to fetch user data");
+        if (!user || !token) {
+            console.warn("User or token not found in localStorage");
             return;
         }
 
-        const data = await response.json();
-        const u = data.user;
-        const company = u?.company;
-
-        window.userData = u;
-        window.companyDataFilled = false;
-
-        const updateInput = (id, value, fallbackPlaceholder) => {
-            const el = document.getElementById(id);
-            if (!el) return;
-            if (value && value.trim()) {
-                el.value = value;
-            } else {
-                el.value = "";
-                el.placeholder = fallbackPlaceholder;
-            }
-        };
-
-        // === Fill PERSONAL DETAILS immediately ===
-        updateInput("firstnameInput", u.first_name, "Unesite ime");
-        updateInput("lastnameInput", u.last_name, "Unesite prezime");
-        updateInput("phonenumberInput", u.phone_number, "Unesite broj mobitela");
-        updateInput("emailInput", u.email, "Unesite email adresu");
-        updateInput("JoiningdatInput", u.joining_date, "Unesite datum pridruženja");
-        updateInput("designationInput", u.designation, "Unesite poziciju");
-        updateInput("websiteInput1", u.website, "Unesite web stranicu");
-        updateInput("cityInput", u.city, "Unesite grad");
-        updateInput("countryInput", u.country, "Unesite državu");
-        updateInput("zipcodeInput", u.zip_code, "Unesite poštanski broj");
-
-        const desc = document.getElementById("exampleFormControlTextarea");
-        if (desc) {
-            if (u.description && u.description.trim()) {
-                desc.value = u.description;
-            } else {
-                desc.value = "";
-                desc.placeholder = "Unesite opis";
-            }
-        }
-
-        // === Fill COMPANY DETAILS when tab is shown ===
-        const tabLink = document.querySelector('a[href="#companyDetails"]');
-        if (tabLink) {
-            tabLink.addEventListener("shown.bs.tab", function () {
-                if (window.companyDataFilled) return;
-
-                const c = window.userData?.company || {};
-
-                updateInput("companyNameInput", c.name, "Unesite ime kompanije");
-                updateInput("addressInput", c.address, "Unesite adresu");
-                updateInput("documentIdInput", c.document_id || c.id, "Unesite ID broj");
-                updateInput("vatInput", c.pdv, "Unesite PDV broj");
-                updateInput("ownerInput", c.owner, "Unesite vlasnika");
-                updateInput("contactPersonInput", c.contact_person, "Unesite kontakt osobu");
-                updateInput("contactNumberInput", c.contact_number, "Unesite kontakt broj");
-
-                window.companyDataFilled = true;
+        try {
+            const response = await fetch(`/api/users/${user.id}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
             });
-        }
 
-    } catch (err) {
-        console.error("Error fetching user/company data:", err);
-    }
-});
+            if (!response.ok) {
+                console.error("Failed to fetch user data");
+                return;
+            }
+
+            const data = await response.json();
+            const u = data.user;
+            const company = u?.company;
+
+            window.userData = u;
+            window.companyDataFilled = false;
+
+            const updateInput = (id, value, fallbackPlaceholder) => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                if (value && value.trim()) {
+                    el.value = value;
+                } else {
+                    el.value = "";
+                    el.placeholder = fallbackPlaceholder;
+                }
+            };
+
+            // === Fill PERSONAL DETAILS immediately ===
+            updateInput("firstnameInput", u.first_name, "Unesite ime");
+            updateInput("lastnameInput", u.last_name, "Unesite prezime");
+            updateInput("phonenumberInput", u.phone_number, "Unesite broj mobitela");
+            updateInput("emailInput", u.email, "Unesite email adresu");
+            updateInput("JoiningdatInput", u.joining_date, "Unesite datum pridruženja");
+            updateInput("designationInput", u.designation, "Unesite poziciju");
+            updateInput("websiteInput1", u.website, "Unesite web stranicu");
+            updateInput("cityInput", u.city, "Unesite grad");
+            updateInput("countryInput", u.country, "Unesite državu");
+            updateInput("zipcodeInput", u.zip_code, "Unesite poštanski broj");
+
+            const desc = document.getElementById("exampleFormControlTextarea");
+            if (desc) {
+                if (u.description && u.description.trim()) {
+                    desc.value = u.description;
+                } else {
+                    desc.value = "";
+                    desc.placeholder = "Unesite opis";
+                }
+            }
+
+            // === Fill COMPANY DETAILS when tab is shown ===
+            const tabLink = document.querySelector('a[href="#companyDetails"]');
+            if (tabLink) {
+                tabLink.addEventListener("shown.bs.tab", function() {
+                    if (window.companyDataFilled) return;
+
+                    const c = window.userData?.company || {};
+
+                    updateInput("companyNameInput", c.name, "Unesite ime kompanije");
+                    updateInput("addressInput", c.address, "Unesite adresu");
+                    updateInput("documentIdInput", c.document_id || c.id, "Unesite ID broj");
+                    updateInput("vatInput", c.pdv, "Unesite PDV broj");
+                    updateInput("ownerInput", c.owner, "Unesite vlasnika");
+                    updateInput("contactPersonInput", c.contact_person, "Unesite kontakt osobu");
+                    updateInput("contactNumberInput", c.contact_number, "Unesite kontakt broj");
+
+                    window.companyDataFilled = true;
+                });
+            }
+
+        } catch (err) {
+            console.error("Error fetching user/company data:", err);
+        }
+    });
 </script>
 
 
@@ -1585,7 +1359,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 <!-- Update User data -->
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         // Get CSRF token from meta tag
         const csrftoken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -1639,7 +1413,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
-                        
+
                         'X-CSRF-TOKEN': csrftoken
                     },
                     body: JSON.stringify(getPayload())
@@ -1647,10 +1421,12 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                 if (!response.ok) throw new Error(await response.text());
 
-                const { user: updatedUser } = await response.json();
+                const {
+                    user: updatedUser
+                } = await response.json();
 
                 // Update UI
-               
+
                 document.getElementById("profile-location").innerHTML =
                     `<i class="ri-map-pin-user-line align-middle"></i> ${updatedUser.city || 'Nepoznat grad'}, ${updatedUser.country || 'Nepoznata država'}`;
 
@@ -1674,11 +1450,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         };
 
-        document.getElementById("update-user-btn").addEventListener("click", function (e) {
+        document.getElementById("update-user-btn").addEventListener("click", function(e) {
             e.preventDefault();
             handleSubmit();
         });
-        document.getElementById("update-company-btn").addEventListener("click", function (e) {
+        document.getElementById("update-company-btn").addEventListener("click", function(e) {
             e.preventDefault();
             handleSubmit();
         });
@@ -1688,7 +1464,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 <!-- Moji dobavljači dynamic fetch-->
 <script>
-    document.addEventListener("DOMContentLoaded", async function () {
+    document.addEventListener("DOMContentLoaded", async function() {
 
         const loader = document.querySelector(".suppliers-loader");
         const container = document.querySelector(".suppliers-list");
@@ -1756,54 +1532,54 @@ document.addEventListener("DOMContentLoaded", async function () {
 <!-- Invoice fetch dynamic -->
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         const docsContainer = document.getElementById("user-documents");
         const loader = document.querySelector(".user-documents-loader");
 
         if (!token || !user || !docsContainer || !loader) return;
 
         fetch(`/api/invoices/users/${user.id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            const invoices = Array.isArray(data) ? data : [];
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                const invoices = Array.isArray(data) ? data : [];
 
-            const lastFour = invoices
-                .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-                .slice(0, 4);
+                const lastFour = invoices
+                    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+                    .slice(0, 4);
 
-            loader.classList.add("d-none");
-            docsContainer.classList.remove("d-none");
+                loader.classList.add("d-none");
+                docsContainer.classList.remove("d-none");
 
-            if (lastFour.length === 0) {
-                docsContainer.innerHTML = `
+                if (lastFour.length === 0) {
+                    docsContainer.innerHTML = `
                     <div class="col-12 text-center text-muted">Nema dostupnih dokumenata.</div>
                 `;
-                return;
-            }
+                    return;
+                }
 
-            const iconMap = {
-                pdf: "ri-file-pdf-2-line",
-                xls: "ri-file-excel-2-line",
-                xlsx: "ri-file-excel-2-line",
-                jpg: "ri-file-image-line",
-                jpeg: "ri-file-image-line",
-                png: "ri-file-image-line",
-                txt: "ri-file-text-line",
-                doc: "ri-file-word-2-line",
-                docx: "ri-file-word-2-line",
-                default: "ri-file-line"
-            };
+                const iconMap = {
+                    pdf: "ri-file-pdf-2-line",
+                    xls: "ri-file-excel-2-line",
+                    xlsx: "ri-file-excel-2-line",
+                    jpg: "ri-file-image-line",
+                    jpeg: "ri-file-image-line",
+                    png: "ri-file-image-line",
+                    txt: "ri-file-text-line",
+                    doc: "ri-file-word-2-line",
+                    docx: "ri-file-word-2-line",
+                    default: "ri-file-line"
+                };
 
-            docsContainer.innerHTML = lastFour.map(inv => {
-                const ext = inv.file_name?.split(".").pop()?.toLowerCase() || '';
-                const icon = iconMap[ext] || iconMap.default;
-                const file = inv.file_name;
+                docsContainer.innerHTML = lastFour.map(inv => {
+                    const ext = inv.file_name?.split(".").pop()?.toLowerCase() || '';
+                    const icon = iconMap[ext] || iconMap.default;
+                    const file = inv.file_name;
 
-                return `
+                    return `
                     <div class="col-6 col-sm-3 text-center">
                         <a href="#" class="text-decoration-none view-invoice" data-id="${inv.id}" title="Pregled Deklaracije">
                             <i class="${icon} fs-24 text-info"></i>
@@ -1811,16 +1587,16 @@ document.addEventListener("DOMContentLoaded", async function () {
                         </a>
                     </div>
                 `;
-            }).join("");
-        })
-        .catch(err => {
-            console.error("Failed to fetch user invoices:", err);
-            loader.classList.add("d-none");
-            docsContainer.classList.remove("d-none");
-            docsContainer.innerHTML = `
+                }).join("");
+            })
+            .catch(err => {
+                console.error("Failed to fetch user invoices:", err);
+                loader.classList.add("d-none");
+                docsContainer.classList.remove("d-none");
+                docsContainer.innerHTML = `
                 <div class="col-12 text-center text-danger">Greška pri učitavanju dokumenata.</div>
             `;
-        });
+            });
     });
 </script>
 
@@ -1845,56 +1621,58 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 <!-- Dynamical Package update -->
 <script>
-document.addEventListener("DOMContentLoaded", async function () {
-    
-
-    const loader = document.getElementById("user-package-loader");
-    const packageText = document.getElementById("user-package-text");
-    const upgradeBtn = document.getElementById("upgrade-btn");
-
-    // Declare packageName here so it is visible after try/catch
-    let packageName = null;
-
-    try {
-        const res = await axios.get("/api/user-packages", {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            }
-        });
-
-        const userPackages = res.data?.data || [];
+    document.addEventListener("DOMContentLoaded", async function() {
 
 
-   if (userPackages.length > 0) {
-    const userPackage = userPackages.find(p => p.active) || userPackages[0];
-    packageName = userPackage?.package?.name || null;
-    packageValid = userPackage?.expiration_date || null;
+        const loader = document.getElementById("user-package-loader");
+        const packageText = document.getElementById("user-package-text");
+        const upgradeBtn = document.getElementById("upgrade-btn");
 
-    // Format packageValid date from yyyy-mm-dd to dd.mm.yyyy
-    let formattedDate = packageValid;
-    if (packageValid) {
-        const parts = packageValid.split("-");
-        formattedDate = `${parts[2]}.${parts[1]}.${parts[0]}`;
-    }
+        // Declare packageName here so it is visible after try/catch
+        let packageName = null;
 
-    if (packageText && packageName) {
-        let iconHTML = "";
+        try {
+            const res = await axios.get("/api/user-packages", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
 
-        switch (packageName.toLowerCase()) {
-            case "gobig":
-                iconHTML = `<i class="ri-medal-line text-info fs-3 bu me-2" style="margin-top:-6px!important;position:absolute!important; margin-left:45px"></i>`;
-                break;
-            case "startup":
-                iconHTML = `<i class="ri-star-s-fill text-info fs-5 me-2" style="margin-top:-2px!important;position:absolute!important; margin-left:56px"></i>`;
-                break;
-            case "business":
-                iconHTML = `<i class="ri-shield-star-line text-info fs-2 me-2" style="margin-top:-10px!important;position:absolute!important; margin-left:66px"></i>`;
-                break;
-            default:
-                iconHTML = "";
-        }
+            const userPackages = res.data?.data || [];
 
-        packageText.innerHTML = `
+
+            if (userPackages.length > 0) {
+                const userPackage = userPackages.find(p => p.active) || userPackages[0];
+                packageName = userPackage?.package?.name || null;
+                packageValid = userPackage?.expiration_date || null;
+
+
+                // Format packageValid date from yyyy-mm-dd to dd.mm.yyyy
+                let formattedDate = packageValid;
+                if (packageValid) {
+                    const parts = packageValid.split("-");
+                    formattedDate = `${parts[2]}.${parts[1]}.${parts[0]}`;
+                }
+
+
+                if (packageText && packageName) {
+                    let iconHTML = "";
+
+                    switch (packageName.toLowerCase()) {
+                        case "gobig":
+                            iconHTML = `<i class="ri-medal-line text-info fs-3 bu me-2" style="margin-top:-2px!important"></i>`;
+                            break;
+                        case "startup":
+                            iconHTML = `<i class="ri-star-s-fill text-info fs-5 me-2" style="margin-top:-2px!important"></i>`;
+                            break;
+                        case "business":
+                            iconHTML = `<i class="ri-shield-star-line text-info fs-2 me-2" style="margin-top:-2px!important"></i>`;
+                            break;
+                        default:
+                            iconHTML = "";
+                    }
+
+                    packageText.innerHTML = `
             <span class="d-inline-flex align-items-center gap-1 fs-15">
                 <h5 class="card-title mb-0">Tvoj aktivni paket je</h5>
                 <b class="d-inline-flex gap-1 text-info mb-0 me-4" style="margin-bottom:-1px!important">
@@ -1903,55 +1681,54 @@ document.addEventListener("DOMContentLoaded", async function () {
                 </b>
             </span>`;
 
-        // Replace all .date-valid elements with the formatted date
-        document.querySelectorAll('.date-valid').forEach(el => {
-            el.textContent = formattedDate;
-        });
-    }
-} else {
-    packageText.textContent = "Nema aktivnog paketa.";
-}
+                    // Replace all .date-valid elements with the formatted date
+                    document.querySelectorAll('.date-valid').forEach(el => {
+                        el.textContent = formattedDate;
+                    });
+                }
+            } else {
+                packageText.textContent = "Nema aktivnog paketa.";
+            }
 
 
 
-    } catch (err) {
-        console.error("Greška pri dohvaćanju paketa korisnika:", err);
-        packageText.textContent = "Greška pri učitavanju paketa.";
-    }
+        } catch (err) {
+            console.error("Greška pri dohvaćanju paketa korisnika:", err);
+            packageText.textContent = "Greška pri učitavanju paketa.";
+        }
 
-    // Hide loader, show text and button
-    loader.classList.add("d-none");
-    packageText.classList.remove("d-none");
-    upgradeBtn.classList.remove("d-none");
+        // Hide loader, show text and button
+        loader.classList.add("d-none");
+        packageText.classList.remove("d-none");
+        upgradeBtn.classList.remove("d-none");
 
-    // Normalize packageName to lowercase for comparison
-    const normalizedPackage = packageName?.toLowerCase();
+        // Normalize packageName to lowercase for comparison
+        const normalizedPackage = packageName?.toLowerCase();
 
-    // Show the "Aktivan do" button for the active package only
-    normalizedPackage === 'gobig' && document.getElementById('btn-GoBig')?.classList.remove('d-none');
-    normalizedPackage === 'startup' && document.getElementById('btn-StartUp')?.classList.remove('d-none');
-    normalizedPackage === 'business' && document.getElementById('btn-Business')?.classList.remove('d-none');
+        // Show the "Aktivan do" button for the active package only
+        normalizedPackage === 'gobig' && document.getElementById('btn-GoBig')?.classList.remove('d-none');
+        normalizedPackage === 'startup' && document.getElementById('btn-StartUp')?.classList.remove('d-none');
+        normalizedPackage === 'business' && document.getElementById('btn-Business')?.classList.remove('d-none');
 
-    // Update action buttons text individually without loop
-    const btnActionGoBig = document.getElementById('btnAction-GoBig');
-    const btnActionStartUp = document.getElementById('btnAction-StartUp');
-    const btnActionBusiness = document.getElementById('btnAction-Business');
+        // Update action buttons text individually without loop
+        const btnActionGoBig = document.getElementById('btnAction-GoBig');
+        const btnActionStartUp = document.getElementById('btnAction-StartUp');
+        const btnActionBusiness = document.getElementById('btnAction-Business');
 
-    if (btnActionGoBig) {
-        btnActionGoBig.textContent = (normalizedPackage === 'gobig') ? 'Produži' : 'Započni';
-    }
-    if (btnActionStartUp) {
-        btnActionStartUp.textContent = (normalizedPackage === 'startup') ? 'Produži' : 'Započni';
-    }
-    if (btnActionBusiness) {
-        btnActionBusiness.textContent = (normalizedPackage === 'business') ? 'Produži' : 'Započni';
-    }
+        if (btnActionGoBig) {
+            btnActionGoBig.textContent = (normalizedPackage === 'gobig') ? 'Produži' : 'Započni';
+        }
+        if (btnActionStartUp) {
+            btnActionStartUp.textContent = (normalizedPackage === 'startup') ? 'Produži' : 'Započni';
+        }
+        if (btnActionBusiness) {
+            btnActionBusiness.textContent = (normalizedPackage === 'business') ? 'Produži' : 'Započni';
+        }
 
-    // Debug logs (optional)
-    console.log('Active package:', packageName);
-    console.log('btn-GoBig element:', document.getElementById('btn-GoBig'));
-});
-
+        // Debug logs (optional)
+        console.log('Active package:', packageName);
+        console.log('btn-GoBig element:', document.getElementById('btn-GoBig'));
+    });
 </script>
 
 
@@ -1962,6 +1739,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     document.addEventListener("DOMContentLoaded", function() {
         const backgroundImage = document.getElementById("profile-background");
         const input = document.getElementById("background-img-input");
+        const csrftoken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
         const backgroundUploadPath = "/storage/uploads/profile_backgrounds/";
         const defaultImagePath = "/images/profile-bg.jpg";
@@ -1991,7 +1769,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             fetch(`/api/storage/uploads`, {
                     method: "POST",
                     headers: {
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Bearer ${token}`,
+                        'X-CSRF-TOKEN': csrftoken
                     },
                     body: formData
                 })
@@ -2025,7 +1804,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
 
         function openInvoiceModal(invoiceId) {
-    
+
             // Fetch invoice details
             fetch(`/api/invoices/${invoiceId}`, {
                     headers: {
@@ -2099,5 +1878,3 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     });
 </script>
-
-@endsection
