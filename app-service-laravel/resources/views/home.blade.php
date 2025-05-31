@@ -50,7 +50,7 @@
             </div>
 
             <div class="col-md-2 col-6 border-0 order-3 order-md-0 bg-white card-animate mt-lg-0 mt-md-0 mt-3">
-                <a href="moje-fakture">
+                <a href="moje-deklaracije">
                     <div class="d-flex card m-0  rounded-0 flex-column h-100">
                         <div class="bg-info text-white text-center py-1 rounded-0">
                             <i class=" ri-arrow-up-s-line me-1"></i>
@@ -162,7 +162,7 @@
             <div class="card-body" style="z-index:1;">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1 overflow-hidden">
-                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Izvršena skeniranja</p>
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">aktivan {{ Auth::user()->getActivePackageName()}} paket</p>
                         <h4 class="fs-22 fw-semibold ff-secondary mb-0">
                             <span id="usedScansValue">0</span>/<span id="totalScansValue">0</span>
                         </h4>

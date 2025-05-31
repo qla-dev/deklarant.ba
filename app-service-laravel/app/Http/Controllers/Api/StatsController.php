@@ -91,12 +91,11 @@ class StatsController extends Controller
         $usedScans = $this->modelInvoice::where('user_id', $user->id)
             ->whereNotNull('task_id')
             ->count();
-
         $totalScans = $this->modelPackage::whereIn('id', function ($query) use ($user) {
             $query->select('package_id')->from('user_packages')->where('user_id', $user->id);
         })->sum('available_scans');
 
-        $remainingScans = max($totalScans - $usedScans, 0);
+        $remainingScans = $user->getRemainingScans();
 
         $itemCodes = $this->modelInvoice::where('user_id', $user->id)
             ->orderByDesc('created_at')
@@ -112,13 +111,8 @@ class StatsController extends Controller
             ->groupBy('item_code')
             ->pluck('total', 'item_code');
 
-        // Debug output for troubleshooting
-        \Log::info('itemCodes', ['itemCodes' => $itemCodes]);
-        \Log::info('itemCodeCounts', ['itemCodeCounts' => $itemCodeCounts]);
-        $tariffQueryResult = $this->modelTariffRate::whereIn('item_code', $itemCodes)
-            ->get(['id', 'item_code', 'name', 'tariff_rate']);
-        \Log::info('Tariff query result', ['tariffs' => $tariffQueryResult]);
-        $latestTariffs = $tariffQueryResult
+        $latestTariffs = $this->modelTariffRate::whereIn('item_code', $itemCodes)
+            ->get(['id', 'item_code', 'name', 'tariff_rate'])
             ->map(function ($tariff) use ($itemCodeCounts) {
                 return [
                     'id' => $tariff->id,
