@@ -403,23 +403,26 @@
                             <div class="card-header">
                                 <h5 class="mb-0">Nedavne tarife</h5>
                             </div>
-                            <div class="card-body d-flex justify-content-center align-items-center flex-column pb-0 pt-0" style="min-height: 200px;">
-                                <div class="tariff-loader spinner-border text-info" role="status"></div>
-                                <div class="tariff-list d-none w-100"></div>
+                                                      <div class="card-body d-flex justify-content-center align-items-center flex-column pb-0 pt-0 position-relative" style="min-height: 200px;">
+                                <div class="position-absolute top-50 start-50 translate-middle">
+                                    <div class="tariff-loader spinner-border text-info" role="status"></div>
+                                </div>
+                                <div class="tariff-list d-none w-100 mt-3"></div>
                             </div>
-                            <div class="card-footer mt-1 pt-0 pb-0 d-flex justify-content-center"></div>
                         </div>
                     </div>
 
                     <!-- Second column: Zadnje korišteni dobavljači -->
-                    <div class="col-md-6 d-flex card-animate">
+                                       <div class="col-md-6 d-flex card-animate">
                         <div class="card rounded-0 w-100 h-100 mb-0">
                             <div class="card-header">
                                 <h5 class="mb-0">Nedavni klijenti</h5>
                             </div>
-                            <div class="card-body d-flex justify-content-center align-items-center flex-column pb-0 pt-0" style="min-height: 200px;">
-                                <div class="suppliers-loader spinner-border text-info" role="status"></div>
-                                <div class="suppliers-list d-none w-100"></div>
+                                                       <div class="card-body d-flex justify-content-start align-items-center flex-column pb-0 pt-0 position-relative" style="min-height: 200px;">
+                                <div class="position-absolute top-50 start-50 translate-middle">
+                                    <div class="suppliers-loader spinner-border text-info" role="status"></div>
+                                </div>
+                                <div class="suppliers-list d-none w-100 mt-3"></div>
                             </div>
                         </div>
                     </div>
