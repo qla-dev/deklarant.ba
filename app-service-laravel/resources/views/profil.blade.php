@@ -1646,12 +1646,14 @@
                 packageName = userPackage?.package?.name || null;
                 packageValid = userPackage?.expiration_date || null;
 
+
                 // Format packageValid date from yyyy-mm-dd to dd.mm.yyyy
                 let formattedDate = packageValid;
                 if (packageValid) {
                     const parts = packageValid.split("-");
                     formattedDate = `${parts[2]}.${parts[1]}.${parts[0]}`;
                 }
+
 
                 if (packageText && packageName) {
                     let iconHTML = "";

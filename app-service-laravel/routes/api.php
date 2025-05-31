@@ -61,11 +61,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     // SUPPLIER ROUTES
-    Route::apiResource('suppliers', SupplierController::class)->middleware(IsAdmin::class);
+    Route::apiResource('suppliers', SupplierController::class);
     Route::put('suppliers/{supplier}', [SupplierController::class, 'update'])->middleware(IsAdmin::class);
 
     // IMPORTER ROUTES
-    Route::apiResource('importers', ImporterController::class)->middleware(IsAdmin::class);
+    Route::apiResource('importers', ImporterController::class);
     Route::put('importers/{importer}', [ImporterController::class, 'update'])->middleware(IsAdmin::class);
 
 

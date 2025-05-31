@@ -358,9 +358,18 @@ class InvoiceController extends Controller
             $items = array_map(function ($item) {
                 $quantity = $item['quantity'] ?? 0;
                 $base_price = $item['unit_price'] ?? 0;
+
+                $best_entry = null;
+                foreach ($item['entries'] as $entry) {
+                    if (is_null($best_entry) || $entry['closeness'] < $best_entry['closeness']) {
+                        $best_entry = $entry;
+                    }
+                }
+                $item_code = $best_entry ? $best_entry['entry']['Tarifna oznaka'] : null;
+
                 return [
                     'version' => 1,
-                    'item_code' => '',
+                    'item_code' => $item_code,
                     'item_description_original' => $item['original_name'],
                     'item_description' => $item['item_name'],
                     'quantity' => $quantity,

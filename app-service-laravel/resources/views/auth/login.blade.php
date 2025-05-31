@@ -131,7 +131,8 @@ Prijava
                     password,
                 }, {
                     headers: {
-                        'MAC-Address': mac
+                        'MAC-Address': mac,
+                        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,         
                     }
                 });
 

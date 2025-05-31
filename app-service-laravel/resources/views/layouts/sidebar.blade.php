@@ -47,7 +47,7 @@
 
 
 {{-- USER NAVIGATION --}}
-@if(Auth::user()->role == 'user')
+@auth
 <ul class="navbar-nav admin-nav" id="navbar-nav-user">
     <li class="nav-item me-1">
         <a class="nav-link menu-link ps-0 d-flex align-items-center justify-content-between" href="#" id="homeLink">
@@ -105,7 +105,7 @@
         </a>
     </li>
 </ul>
-@endif
+@endauth
 
 {{-- SUPERADMIN NAVIGATION --}}
 @if(Auth::user()->role == 'superadmin')

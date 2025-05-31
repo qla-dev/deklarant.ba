@@ -10,7 +10,7 @@ class InvoiceItem extends Model
     use HasFactory;
 
     protected $table = 'invoice_items';
-    
+
     protected $fillable = [
         'invoice_id',
         'version',
@@ -35,10 +35,5 @@ class InvoiceItem extends Model
     public function invoice()
     {
         return $this->belongsTo(Invoice::class);
-    }
-
-    public function tariffRate()
-    {
-        return $this->belongsTo(TariffRate::class, 'item_code', 'item_code');
     }
 }

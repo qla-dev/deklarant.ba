@@ -10,34 +10,28 @@ class TariffRate extends Model
     use HasFactory;
 
     protected $table = 'tariff_rates';
-    
+
     protected $fillable = [
-        'item_code', 
+        'item_code',
         'version',
-        'name', 
+        'name',
         'tariff_rate',
-        'EU', 
-        'CEFTA', 
-        'IRN', 
-        'TUR', 
-        'CHE_LIE', 
-        'ISL', 
+        'EU',
+        'CEFTA',
+        'IRN',
+        'TUR',
+        'CHE_LIE',
+        'ISL',
         'NOR',
-        'section', 
-        'head', 
+        'section',
+        'head',
         'english_name'
     ];
 
-    public function invoiceItems()
-{
-    return $this->hasMany(InvoiceItem::class, 'item_code', 'item_code');
-}
-
-public function scopeLatestByName($query, $name)
-{
-    return $query->where('name', $name)
-        ->orderByDesc('version')
-        ->first();
-}
-
+    public function scopeLatestByName($query, $name)
+    {
+        return $query->where('name', $name)
+            ->orderByDesc('version')
+            ->first();
+    }
 }

@@ -91,12 +91,11 @@ class StatsController extends Controller
         $usedScans = $this->modelInvoice::where('user_id', $user->id)
             ->whereNotNull('task_id')
             ->count();
-
         $totalScans = $this->modelPackage::whereIn('id', function ($query) use ($user) {
             $query->select('package_id')->from('user_packages')->where('user_id', $user->id);
         })->sum('available_scans');
 
-        $remainingScans = max($totalScans - $usedScans, 0);
+        $remainingScans = $user->getRemainingScans();
 
         $itemCodes = $this->modelInvoice::where('user_id', $user->id)
             ->orderByDesc('created_at')
@@ -187,7 +186,7 @@ private function getEntityStats($user, string $modelClass, string $foreignKey)
         ->sortByDesc('annual_profit')
         ->values();
 
-    $latestEntities = $modelClass::select("id", "name", "owner")
+    $latestEntities = $modelClass::select("id", "name", "owner","address")
         ->selectSub(function ($query) use ($user, $foreignKey, $table) {
             $query->from('invoices')
                 ->whereColumn($foreignKey, "{$table}.id")
@@ -204,6 +203,7 @@ private function getEntityStats($user, string $modelClass, string $foreignKey)
                 $entityKey => $entity->id,
                 'name' => $entity->name,
                 'owner' => $entity->owner,
+                'address' => $entity->address,
             ];
         });
 
