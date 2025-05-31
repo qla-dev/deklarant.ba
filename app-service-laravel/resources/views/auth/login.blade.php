@@ -131,7 +131,8 @@ Prijava
                     password,
                 }, {
                     headers: {
-                        'MAC-Address': mac
+                        Authorization: `Bearer ${token}`,
+                    'X-CSRF-TOKEN': csrftoken
                     }
                 });
 
