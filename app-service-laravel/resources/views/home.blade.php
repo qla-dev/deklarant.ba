@@ -57,7 +57,7 @@
                             <span>Pregledaj sve</span>
                         </div>
                         <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
-                            <h6 class="text-muted text-uppercase fs-11 mb-1">Broj skeniranih deklaracija</h6>
+                            <h6 class="text-muted text-uppercase fs-11 mb-1">Spašene deklaracija</h6>
                             <div class="d-flex align-items-center justify-content-center">
                                 <i class="ri-file-text-line  text-info mb-1" style="font-size: 45px"></i>
                                 <h3 class="mb-0 ms-2"><span id="usedScans" class="counter-value">0</span></h3>
@@ -127,7 +127,7 @@
                             <span>Pregledaj sve</span>
                         </div>
                         <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
-                            <h6 class="text-muted text-uppercase fs-11 mb-1">Broj carinskih tarifa</h6>
+                            <h6 class="text-muted text-uppercase fs-11 mb-1">Carinske tarife</h6>
                             <div class="d-flex align-items-center justify-content-center">
                                 <i class="ri-barcode-box-line text-info" style="font-size: 45px"></i>
                                 <h3 class="mb-0 ms-2"><span class="counter-value" data-target="128">0</span></h3>
@@ -193,10 +193,11 @@
             <div class="card-body" style="z-index:1;">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1 overflow-hidden">
-                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Broj spašenih deklaracija</p>
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Spašene deklaracija</p>
                         <h4 class="fs-22 fw-semibold ff-secondary mb-0">
                             <span class="counter-value" id="totalInvoices" data-target="45">0</span><span
-                                class="counter-value">/500</span>
+                                class="counter-value">/{{ Auth::user()->getActivePackageStats()->document_history ?? '0' }}</span>
+                               
                         </h4>
                     </div>
                     <div class="flex-shrink-0">
@@ -852,11 +853,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             const userPackages = packageRes.data?.data || [];
             const userPackage = userPackages.find(p => p.active);
             let invoiceLimit = 0;
-
-            if (userPackage?.package?.name?.toLowerCase() === 'gobig') invoiceLimit = 500;
-            else if (userPackage?.package?.name?.toLowerCase() === 'startup') invoiceLimit = 200;
-            else if (userPackage?.package?.name?.toLowerCase() === 'business') invoiceLimit = Infinity;
-
+            const invoiceLimit = {{ Auth::user()->getActivePackageStats()->document_history ?? '0' }};
             const invoiceRes = await axios.get(invoicesUrl, {
                 headers: {
                     Authorization: `Bearer ${token}`

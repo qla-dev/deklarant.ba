@@ -87,6 +87,21 @@ class User extends Authenticatable
         return $userPackage?->package?->name;
     }
 
+    public function getActivePackageAvaliableScans(): ?string
+    {
+        $userPackage = $this->userPackages()->with('package')->first();
+        return $userPackage?->package?->available_scans;
+    }
+
+
+     public function getActivePackageStats(): Package
+{
+    $userPackage = $this->userPackages()->with('package')->first();
+    return $userPackage?->package;
+}
+
+
+
       public function getRemainingScans(): ?int
         {
             $userPackage = $this->userPackages()->first();
