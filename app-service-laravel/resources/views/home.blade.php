@@ -852,8 +852,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             const userPackages = packageRes.data?.data || [];
             const userPackage = userPackages.find(p => p.active);
-            let invoiceLimit = 0;
+
             const invoiceLimit = {{ Auth::user()->getActivePackageStats()->document_history ?? '0' }};
+
             const invoiceRes = await axios.get(invoicesUrl, {
                 headers: {
                     Authorization: `Bearer ${token}`
