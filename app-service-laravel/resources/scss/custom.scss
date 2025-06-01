@@ -493,22 +493,26 @@ color: #299cdb ;
 [data-bs-theme=dark] .dataTable .custom-table th{
   background-color: rgba(41, 156, 219, 0.15) !important;
   color: white;
+  vertical-align: middle!important;
 }
 
 
 [data-bs-theme=light] .dataTable .custom-table th {
   background-color: #dff0fa!important; /* lighter blue tint */
   color: #212529; /* typical dark text for light theme */
+  vertical-align: middle!important;
 }
 
 .dataTable {background-color: unset!important;}
 
 [data-bs-theme=dark] .dataTable td {
     color: white!important;
+    vertical-align: middle!important;
 }
 
 [data-bs-theme=light] .dataTable td {
     color: #212529!important;
+    vertical-align: middle!important;
 }
 
 .paginate_button {
@@ -532,4 +536,30 @@ color: #299cdb ;
     bottom: 0px!important;
     width: 98%;
 }
+thead.custom-table + tbody tr > td:last-child {
+    justify-content: center; /* or space-between, flex-end, etc. */
+    gap: 8px; /* optional spacing between icons/buttons */
+    align-items: center;
+}
+
+
+thead.custom-table th:last-child {
+    width: 130px;
+    min-width: 130px;
+    max-width: 130px;
+}
+
+.custom-table td {
+
+    vertical-align: middle!important;
+}
+
+
+.custom-table tbody td {
+    vertical-align: middle;
+}
+
+
+
+
 

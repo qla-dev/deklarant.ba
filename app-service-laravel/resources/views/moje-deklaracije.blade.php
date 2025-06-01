@@ -178,13 +178,15 @@ Moje spašene deklaracije
                         <thead class="custom-table">
                             <tr>
                                 <th>ID</th>
-                                <th>Moje fakture</th>
-                                <th>Zemlja porijekla</th>
-                                <th>Tip datoteke</th>
-                                <th>Cijena</th>
+                                <th>Ime dokumenta</th>
+                               
+                               
                                 <th>Datum</th>
-                                <th>Skenirana</th>
+                                 <th>Zemlja porijekla</th>
                                 <th>Dobavljač</th>
+                                                                <th>Cijena</th>
+                                 <th>Originalni dokument</th>
+
                                 <th>Vlasnik</th>
                                 <th>Akcija</th>
                             </tr>
@@ -256,6 +258,7 @@ Moje spašene deklaracije
             scrollX: true,
             autoWidth: true,
             lengthChange: false,
+            order: [[0, 'desc']],
             fixedColumns: {
                 leftColumns: 1
             },
@@ -263,14 +266,26 @@ Moje spašene deklaracije
                 { data: null, title: 'ID', render: (data, type, row, meta) => meta.row + 1 },
                 {
                     data: 'file_name',
-                    title: 'Moje fakture',
-                    render: (data, type, row) => `<a href="/detalji-deklaracije/${row.id}" target="_blank" rel="noopener noreferrer" class="text-info">${data}</a>`
+                    title: 'Ime dokumenta',
+                    render: (data, type, row) => {
+                        const name = data && data.length > 30 ? data.substring(0, 30) + '..' : data;
+                        return `<a href="/detalji-deklaracije/${row.id}" target="_blank" rel="noopener noreferrer" class="text-info">${name}</a>`;
+                    }
 
                 },
-                { data: 'country_of_origin', title: 'Zemlja porijekla' },
-                {
+               
+           
+               
+                { data: 'date_of_issue', title: 'Datum', render: data => new Date(data).toLocaleDateString('hr') },
+                 { data: 'country_of_origin', title: 'Zemlja porijekla' },
+                { data: 'supplier.name', title: 'Dobavljač', defaultContent: '<span class="text-muted">N/A</span>' },
+                { data: 'supplier.owner', title: 'Vlasnik', defaultContent: '<span class="text-muted">N/A</span>' },
+                 { data: 'total_price', title: 'Cijena', render: data => `${parseFloat(data).toFixed(2)} KM` },
+                     {
                     data: 'file_name',
-                    title: 'Tip datoteke',
+                     orderable: false,
+                    title: 'Originalni dokument',
+                     className: 'text-center',
                     render: function (data) {
                         if (!data) return '<span class="badge bg-secondary">N/A</span>';
                         const ext = data.split('.').pop().toLowerCase();
@@ -281,18 +296,16 @@ Moje spašene deklaracije
                         return `<span class="badge ${badgeMap[ext] || 'bg-secondary'} text-uppercase">${ext}</span>`;
                     }
                 },
-                { data: 'total_price', title: 'Cijena fakture', render: data => `${parseFloat(data).toFixed(2)} KM` },
-                { data: 'date_of_issue', title: 'Datum', render: data => new Date(data).toLocaleDateString('hr') },
-                { data: 'scanned', title: 'Skenirana', render: data => data === 1 ? 'Da' : 'Ne' },
-                { data: 'supplier.name', title: 'Dobavljač', defaultContent: '<span class="text-muted">N/A</span>' },
-                { data: 'supplier.owner', title: 'Vlasnik', defaultContent: '<span class="text-muted">N/A</span>' },
                 {
                     data: null, title: 'Akcija', orderable: false, searchable: false, className: 'text-center',
                     render: row => `
-                        <button class="btn btn-sm btn-soft-info me-1 edit-invoice" data-id="${row.id}">
+                        <button class="btn btn-sm btn-soft-info me-1 view-invoice" data-id="${row.id}" title="Pregledaj deklaraciju">
+                            <i class="ri-eye-line"></i>
+                        </button>
+                        <button class="btn btn-sm btn-soft-info me-1 edit-invoice" data-id="${row.id}" title="Uredi deklaraciju">
                             <i class="ri-edit-line"></i>
                         </button>
-                        <button class="btn btn-sm btn-soft-danger delete-invoice" data-id="${row.id}">
+                        <button class="btn btn-sm btn-soft-danger delete-invoice" data-id="${row.id}" title="Obriši deklaraciju">
                             <i class="ri-delete-bin-line"></i>
                         </button>`
                 }
