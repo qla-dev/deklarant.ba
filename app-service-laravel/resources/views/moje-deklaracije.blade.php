@@ -263,7 +263,7 @@ Moje spašene deklaracije
                 leftColumns: 1
             },
             columns: [
-                { data: null, title: 'ID', render: (data, type, row, meta) => meta.row + 1 },
+                { data: 'id', title: 'ID' },
                 {
                     data: 'file_name',
                     title: 'Ime dokumenta',
@@ -277,9 +277,19 @@ Moje spašene deklaracije
            
                
                 { data: 'date_of_issue', title: 'Datum', render: data => new Date(data).toLocaleDateString('hr') },
-                 { data: 'country_of_origin', title: 'Zemlja porijekla' },
-                { data: 'supplier.name', title: 'Dobavljač', defaultContent: '<span class="text-muted">N/A</span>' },
-                { data: 'supplier.owner', title: 'Vlasnik', defaultContent: '<span class="text-muted">N/A</span>' },
+                              { 
+                    data: 'country_of_origin', 
+                    title: 'Zemlja porijekla', 
+                    render: function(data) {
+                        if (!data || data === 'default') {
+                            return '<span class="text-muted">Nepoznato</span>';
+                        }
+                        return data;
+                    },
+                    defaultContent: '<span class="text-muted">Nepoznato</span>'
+                },
+                { data: 'supplier.name', title: 'Dobavljač', defaultContent: '<span class="text-muted">Nepoznato</span>' },
+                { data: 'supplier.owner', title: 'Vlasnik', defaultContent: '<span class="text-muted">Nepoznato</span>' },
                  { data: 'total_price', title: 'Cijena', render: data => `${parseFloat(data).toFixed(2)} KM` },
                      {
                     data: 'file_name',

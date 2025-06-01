@@ -558,7 +558,16 @@ thead.custom-table th:last-child {
 .custom-table tbody td {
     vertical-align: middle;
 }
+    .detached-fixed-buttons {
 
+        position: fixed !important;
+        top: calc(70.8px + 40.5px);
+        /* 110.91px total offset */
+        margin-top: 15px;
+        width: 13.19vw;
+
+        z-index: 1050;
+    }
 
 
 
