@@ -105,7 +105,6 @@ height: 450px;
 
 /* Fixed typo */
 
-background-color: #f8f9fa;
 text-align: center;
 padding: 50px;
 cursor: pointer;
@@ -126,7 +125,11 @@ transition: background-color 0.3s ease-in-out;
 
 
 .dropzone:hover {
-background-color: #e3f2fd;
+    background-color: #e3f2fd;
+}
+
+[data-bs-theme=dark] .dropzone:hover {
+    background-color: #22313a;
 }
 
 .dropzone input {
