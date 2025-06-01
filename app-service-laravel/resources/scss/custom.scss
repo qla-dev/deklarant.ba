@@ -561,13 +561,30 @@ thead.custom-table th:last-child {
     .detached-fixed-buttons {
 
         position: fixed !important;
-        top: calc(70.8px + 40.5px);
-        /* 110.91px total offset */
+        top: 111px;
         margin-top: 15px;
-        width: 13.19vw;
-
+        width: 190px;
         z-index: 1050;
     }
+
+
+    @media (max-width: 1300px) {
+        .detached-fixed-buttons {
+            top: 66px !important;
+            width: 190px;
+        }
+    }
+
+#sidebar-buttons-container {
+
+    width: 215px!important;
+}
+
+#fixed-buttons .btn {
+
+        display: flex;
+        align-items: center;
+}
 
 
 

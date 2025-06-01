@@ -44,7 +44,7 @@
 <div class="row justify-content-center mt-0 mb-3">
 
 
-    <div class="card col-10 col-md-10">
+    <div class="card col">
         <div class="row">
 
             <div class="col-lg-12">
@@ -201,19 +201,19 @@
 
         <!--end card-->
     </div>
-    <div class="col-2 col-md-2 d-print-none" id="sidebar-buttons-container">
-        <div id="fixed-buttons" class="d-flex flex-column gap-2">
-            <a href="javascript:window.print()" class="btn btn-info">
+    <div class="d-print-none" id="sidebar-buttons-container">
+        <div id="fixed-buttons" class="d-flex flex-column gap-3">
+            <a href="javascript:window.print()" class="btn btn-soft-info">
                 <i class="ri-printer-line align-bottom me-1"></i> Isprintaj deklaraciju
             </a>
-            <a href="javascript:void(0);" class="btn btn-info">
+            <a href="javascript:void(0);" class="btn btn-soft-info">
                 <i class="ri-download-2-line align-bottom me-1"></i> Preuzmi
             </a>
-            <a href="javascript:void(0);" class="btn btn-info" id="export-xlsx">
+            <a href="javascript:void(0);" class="btn btn-soft-info" id="export-xlsx">
                 <i class="ri-file-excel-2-line align-bottom me-1"></i> Export tabele u CSV
             </a>
 
-            <button class="btn btn-info" onclick="exportTableToCustomCSV()"><i class="fa-solid fa-file-csv"></i> Export tabele u CSV 2</button>
+            <button class="btn btn-soft-info" onclick="exportTableToCustomCSV()"><i class="fa-solid fa-file-csv me-1"></i> Export tabele u CSV</button>
      <div class="text-start">
                                 <p class="text-muted mb-2 text-uppercase fw-semibold">Ukupan iznos:</p>
                                 <h5 class="fs-14 mb-0" id="currency"><span id="total-1"> </span></h5>
