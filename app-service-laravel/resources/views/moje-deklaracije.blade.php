@@ -173,7 +173,11 @@ Moje spašene deklaracije
             </div>
 
             <div class="card-body">
-                <div class="table-responsive table-card ms-1 me-1 mb-0">
+                <div id="invoice-loading" class="text-center my-4 mb-5">
+                    <i class="mdi mdi-loading mdi-spin fs-24 text-info"></i>
+                    <p class="text-muted">Učitavanje rezultata</p>
+                </div>
+                <div class="table-responsive table-card ms-1 me-1 mb-0" style="display:none" id="invoice-table-container">
                     <table id="invoiceTable" class="table  w-100">
                         <thead class="custom-table">
                             <tr>
@@ -244,10 +248,14 @@ Moje spašene deklaracije
 
         console.log("Initializing DataTable for user:", user);
 
+        const tableContainer = document.getElementById('invoice-table-container');
+        const loader = document.getElementById('invoice-loading');
         const table = $('#invoiceTable').DataTable({
             ajax: {
                 url: `/api/invoices/users/${user.id}`,
                 dataSrc: function (json) {
+                    loader && loader.remove();
+                    tableContainer && (tableContainer.style.display = 'block');
                     console.log("Fetched invoice data:", json);
                     return json;
                 },
@@ -269,7 +277,7 @@ Moje spašene deklaracije
                     title: 'Ime dokumenta',
                     render: (data, type, row) => {
                         const name = data && data.length > 30 ? data.substring(0, 30) + '..' : data;
-                        return `<a href="/detalji-deklaracije/${row.id}" target="_blank" rel="noopener noreferrer" class="text-info">${name}</a>`;
+                        return `<a href="/deklaracija/${row.id}" target="_blank" rel="noopener noreferrer" class="text-info">${name}</a>`;
                     }
 
                 },
@@ -309,12 +317,12 @@ Moje spašene deklaracije
                 {
                     data: null, title: 'Akcija', orderable: false, searchable: false, className: 'text-center',
                     render: row => `
-                        <button class="btn btn-sm btn-soft-info me-1 view-invoice" data-id="${row.id}" title="Pregledaj deklaraciju">
+                        <a class="btn btn-sm btn-soft-info me-1 view-invoice" href="/detalji-deklaracije/${row.id}" title="Pregledaj deklaraciju">
                             <i class="ri-eye-line"></i>
-                        </button>
-                        <button class="btn btn-sm btn-soft-info me-1 edit-invoice" data-id="${row.id}" title="Uredi deklaraciju">
+                        </a>
+                        <a class="btn btn-sm btn-soft-info me-1 edit-invoice" href="/deklaracija/${row.id}" title="Uredi deklaraciju">
                             <i class="ri-edit-line"></i>
-                        </button>
+                        </a>
                         <button class="btn btn-sm btn-soft-danger delete-invoice" data-id="${row.id}" title="Obriši deklaraciju">
                             <i class="ri-delete-bin-line"></i>
                         </button>`

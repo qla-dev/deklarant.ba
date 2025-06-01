@@ -44,7 +44,7 @@
 <div class="row justify-content-center mt-0 mb-3">
 
 
-    <div class="card col">
+    <div class="card col paper-layout">
         <div class="row">
 
             <div class="col-lg-12">
@@ -62,7 +62,7 @@
                 </div>
                 <div class="col-lg-12">
                     <div class="card-body p-4  ">
-                        <div class="row g-4 mb-3 ">
+                        <div class="row ">
 
                             <!--end col-->
                             <div class="row">
@@ -72,7 +72,7 @@
                                     <p class="text-muted mb-1"><span>E-mail: </span><span id="shipping-email">deklarant@skeniraj.ba</span></p>
                                     <p class="text-muted mb-1"><span>Tel: </span><span id="shipping-phone">+(387) 63974234</span></p>
                                     <p class="text-muted mb-1"><span>VAT: </span><span id="shipping-vat">BA12314519</span></p>
-                                    <p class="text-muted mb-1"><span>Adresa: </span><span id="shipping-address">Vilsonovo 9, Sarajevo</span></p>
+                                    <p class="text-muted mb-0"><span>Adresa: </span><span id="shipping-address">Vilsonovo 9, Sarajevo</span></p>
                                 </div>
 
                                 <!-- RIGHT: Incoterm and Broj fakture stacked -->
@@ -98,8 +98,8 @@
                 </div>
                 <!--end col-->
                 <div class="col-lg-12">
-                    <div class="card-body p-4 border-top border-top-dashed">
-                        <div class="row g-4 mb-3 ">
+                    <div class="card-body p-4 border-top border-top-dashed ">
+                        <div class="row pt-1">
                             <div class="col-8 text-start">
                                 <h6 class="text-muted text-uppercase fw-semibold mb-3">Podaci o dobavljaču</h6>
                                 <p class="fw-medium mb-2" id="supplier-name"></p>
@@ -107,7 +107,7 @@
                                 <p class="text-muted mb-1"><span>Tel: </span><span id="supplier-phone"></span></p>
                                 <p class="text-muted mb-1"><span>Email: </span><span id="supplier-email"></span></p>
                                 <p class="text-muted mb-1"><span>Vlasnik: </span><span id="supplier-owner"></span></p>
-                                <p class="text-muted mb-1"><span>JIB/VAT: </span><span id="supplier-tax"></span></p>
+                                <p class="text-muted mb-0"><span>JIB/VAT: </span><span id="supplier-tax"></span></p>
                                
                             </div>
                             <!--end col-->
@@ -129,36 +129,14 @@
                     </div>
                     <!--end card-body-->
                 </div>
-                <div class="col-lg-12">
-                    <div class="card-body p-4 border-top border-top-dashed">
-                        <div class="row g-4 mb-3 justify-content-between align-items-center ">
-                            <div class="col-lg-4 text-start">
-                                <p class="text-muted mb-2 text-uppercase fw-semibold">Id fakture:</p>
-                                <h5 class="fs-14 mb-0">#<span id="invoice-id"> Učitavanje...</span></h5>
-                            </div>
-                            <!--end col-->
-                            <div class="col-lg-4 text-center">
-                                <p class="text-muted mb-2 text-uppercase fw-semibold">Datum izdavanja</p>
-                                <h5 class="fs-14 mb-0"><span id="invoice-date"></span> </h5>
-                            </div>
-                            <!--end col-->
-                            <div class="col-lg-4 text-end">
-                                <p class="text-muted mb-2 text-uppercase fw-semibold">Ukupan iznos:</p>
-                                <h5 class="fs-14 mb-0" id="currency"><span id="total-1"> </span></h5>
-                            </div>
-                            <!--end col-->
-                        </div>
-                        <!--end row-->
-                    </div>
-                    <!--end card-body-->
-                </div>
+              
                 <!--end col-->
 
                 <!--end col-->
                 <div class="col-lg-12">
-                    <div class="card-body p-4">
-                        <div class="table-responsive">
-                            <table id="invoiceTable" class="table table-borderless text-center table-nowrap align-middle mb-0">
+                    <div class="card-body p-4 border-top border-top-dashed">
+                        <div class="table-responsive pt-2">
+                            <table id="invoiceTable" class="table table-borderless text-center table-nowrap align-middle mb-0 tabel-layout">
                                 <thead>
                                     <tr class="table-active">
                                         <th>#</th>
@@ -168,11 +146,13 @@
                                         <th>Tarifna oznaka</th>
                                         <th>Tip kvantiteta</th>
                                         <th>Zemlja porijekla</th>
+                                        <th>Povlastica</th>
                                         <th>Cijena</th>
                                         <th>Količina</th>
                                         <th>Broj paketa</th>
-                                        <th>Ukupno</th>
-                                        <th>Povlastica</th>
+                                         
+                                        <th style="border-right: 1px solid gray;">Ukupno</th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody id="products-list">
@@ -180,16 +160,8 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="border-top border-top-dashed mt-2">
-                            <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto" style="width:250px">
-                                <tbody class="border-bottom-dashed">
-                                    <tr class="border-top border-top-dashed fs-15">
-                                        <th scope="row">Ukupan iznos</th>
-                                        <th class="text-end" id="total-amount"></th>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        
+                    
                     </div>
                     <!--end card-body-->
                 </div>
@@ -201,25 +173,8 @@
 
         <!--end card-->
     </div>
-    <div class="d-print-none" id="sidebar-buttons-container">
-        <div id="fixed-buttons" class="d-flex flex-column gap-3">
-            <a href="javascript:window.print()" class="btn btn-soft-info">
-                <i class="ri-printer-line align-bottom me-1"></i> Isprintaj deklaraciju
-            </a>
-            <a href="javascript:void(0);" class="btn btn-soft-info">
-                <i class="ri-download-2-line align-bottom me-1"></i> Preuzmi
-            </a>
-            <a href="javascript:void(0);" class="btn btn-soft-info" id="export-xlsx">
-                <i class="ri-file-excel-2-line align-bottom me-1"></i> Export tabele u CSV
-            </a>
-
-            <button class="btn btn-soft-info" onclick="exportTableToCustomCSV()"><i class="fa-solid fa-file-csv me-1"></i> Export tabele u CSV</button>
-     <div class="text-start">
-                                <p class="text-muted mb-2 text-uppercase fw-semibold">Ukupan iznos:</p>
-                                <h5 class="fs-14 mb-0" id="currency"><span id="total-1"> </span></h5>
-                            </div>
-        </div>
-    </div>
+    
+@include('components.fixed-sidebar')
 
 </div>
 
@@ -311,7 +266,6 @@
             document.getElementById("invoice-no").textContent = invoice.invoice_number || '--';
             document.getElementById("invoice-date").textContent = new Date(invoice.date_of_issue).toLocaleDateString('hr');
             document.getElementById("total-1").textContent = ` ${symbol}${parseFloat(invoice.total_price).toFixed(2)}`;
-            document.getElementById("total-amount").textContent = `${symbol} ${parseFloat(invoice.total_price).toFixed(2)}`;
             if (document.getElementById("incoterm")) {
                 document.getElementById("incoterm").textContent = invoice.incoterm || '--';
             }
@@ -351,11 +305,13 @@
                             <td>${tarifnaOznaka}</td>
                             <td>${item.quantity_type || ''}</td>
                             <td>${item.country_of_origin || ''}</td>
+                            <td>${item.povlastica ? 'DA' : 'NE'}</td>
                             <td>${item.base_price} ${item.currency || ''}</td>
                             <td>${item.quantity}</td>
                             <td>${item.num_packages || '0'}</td>
-                            <td>${item.total_price || (item.base_price * item.quantity).toFixed(2)} ${item.currency || ''}</td>
-                            <td>${item.povlastica ? 'DA' : 'NE'}</td>
+                            
+                            <td >${item.total_price || (item.base_price * item.quantity).toFixed(2)} ${item.currency || ''}</td>
+                      
                         </tr>
                     `;
                 });
@@ -422,7 +378,6 @@
         const ws = XLSX.utils.table_to_sheet(table);
 
         // 2. Append "Ukupan iznos" row manually
-        const totalAmount = document.getElementById("total-amount")?.innerText || "--";
 
         const sheetData = XLSX.utils.sheet_to_json(ws, {
             header: 1
@@ -488,6 +443,56 @@
         document.body.removeChild(link);
     }
 </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const totalIznos = document.querySelector(".total-iznos");
+
+    function hasVerticalScrollbar() {
+        return document.documentElement.scrollHeight > window.innerHeight;
+    }
+
+    function toggleFixed() {
+        const scrollBottom = window.scrollY + window.innerHeight;
+        const pageHeight = document.documentElement.scrollHeight;
+
+        if (pageHeight - scrollBottom <= 80) {
+            totalIznos.classList.add("static");
+        } else {
+            totalIznos.classList.remove("static");
+        }
+
+        updateRightMargin();
+    }
+
+    function updateRightMargin() {
+        const container = document.querySelector(".page-content .container-fluid");
+
+        if (container && totalIznos) {
+            const viewportWidth = window.innerWidth;
+            const containerRight = container.offsetLeft + container.offsetWidth;
+            let rightSpace = Math.max(0, viewportWidth - containerRight);
+
+            // If scrollbar is present, decrease margin by 5px
+            if (hasVerticalScrollbar()) {
+                rightSpace = Math.max(0, rightSpace -20);
+            }
+
+            totalIznos.style.marginRight = `${rightSpace}px`;
+            totalIznos.classList.add("visible");
+        }
+    }
+
+    // Initial run
+    toggleFixed();
+    updateRightMargin();
+
+    // Watch scroll and resize
+    window.addEventListener("scroll", toggleFixed);
+    window.addEventListener("resize", updateRightMargin);
+});
+</script>
+
 
 
 
