@@ -29,27 +29,29 @@
                 <!-- App Search-->
                 <form class="app-search d-none d-md-block me-5" style="width: 77%;" id="global-search-form">
                     <div class="position-relative">
-                        <input type="text" class="form-control border" placeholder="Pretraga po broju deklaracije, imenu dokumenta, dobavljaču, zemlji projekla..." autocomplete="off"
-                            id="global-search" />
+                        <input type="text" class="form-control border"
+                            placeholder="Pretraga po broju deklaracije, imenu dokumenta, dobavljaču, zemlji projekla..."
+                            autocomplete="off" id="global-search" />
                         <span class="mdi mdi-magnify search-widget-icon text-info"></span>
-                        <span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none" id="search-clear"></span>
+                        <span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none"
+                            id="search-clear"></span>
                     </div>
                 </form>
                 <script>
-                    document.addEventListener("DOMContentLoaded", function() {
+                    document.addEventListener("DOMContentLoaded", function () {
                         const input = document.getElementById("global-search");
                         const clear = document.getElementById("search-clear");
 
-                        input.addEventListener("input", function() {
+                        input.addEventListener("input", function () {
                             clear.classList.toggle("d-none", this.value.length === 0);
                         });
 
-                        clear.addEventListener("click", function() {
+                        clear.addEventListener("click", function () {
                             input.value = "";
                             clear.classList.add("d-none");
                         });
 
-                        document.getElementById("global-search-form").addEventListener("submit", function(e) {
+                        document.getElementById("global-search-form").addEventListener("submit", function (e) {
                             e.preventDefault();
                             const keyword = input.value.trim();
                             if (keyword.length > 0) {
@@ -84,8 +86,7 @@
                                 <div class="input-group">
                                     <input type="text" class="form-control border border-2" placeholder="Pretraga ..."
                                         aria-label="Recipient's username">
-                                    <button class="btn btn-info" type="submit"><i
-                                            class="mdi mdi-magnify"></i></button>
+                                    <button class="btn btn-info" type="submit"><i class="mdi mdi-magnify"></i></button>
                                 </div>
                             </div>
                         </form>
@@ -192,7 +193,7 @@
                             <span class="text-start me-xl-2">
                                 <span class="d-none d-xl-inline-block fw-medium user-name-text text-end"
                                     id="topbar-username">
-                                {{ Auth::user()->username ?? 'Korisnik' }}
+                                    {{ Auth::user()->username ?? 'Korisnik' }}
                                 </span>
                                 <span class="d-none d-xl-block fs-12 user-name-sub-text text-end">
                                     @if (Auth::user()->role == 'superadmin')
@@ -205,7 +206,8 @@
                                         @if ($packageName)
                                             {{ $packageName }}
                                         @else
-                                            <a class="text-info" style="white-space:nowrap; cursor:pointer;" onclick="window.location.href='{{ url('cijene-paketa') }}'">Odaberi paket</a>
+                                            <a class="text-info" style="white-space:nowrap; cursor:pointer;"
+                                                onclick="window.location.href='{{ url('cijene-paketa') }}'">Odaberi paket</a>
                                         @endif
                                     @else
                                         {{ Auth::user()->role }}
@@ -213,8 +215,8 @@
                                 </span>
                             </span>
 
-                            <img id="topbar-avatar" class="rounded-circle header-profile-user d-none"
-                                width="32" height="32" />
+                            <img id="topbar-avatar" class="rounded-circle header-profile-user d-none" width="32"
+                                height="32" />
                             <div id="topbar-avatar-fallback"
                                 class="rounded-circle bg-info text-white d-flex justify-content-center align-items-center"
                                 style="width: 32px; height: 32px; font-size: 14px; padding: 12px!important;">
@@ -229,85 +231,32 @@
 
                     <div class="dropdown-menu dropdown-menu-end border">
                         <!-- item-->
-                        <h6 class="dropdown-header" id="dropdownWelcome">Dobrodošli {{ Auth::user()->username ?? 'Korisnik' }}</h6>
-                        <a class="dropdown-item" href="profil"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Moj nalog</span></a>
-                        <a class="dropdown-item" href="faqs"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Pomoć</span></a>
+                        <h6 class="dropdown-header" id="dropdownWelcome">Dobrodošli
+                            {{ Auth::user()->username ?? 'Korisnik' }}</h6>
+                        <a class="dropdown-item" href="profil"><i
+                                class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
+                                class="align-middle">Moj nalog</span></a>
+                        <a class="dropdown-item" href="faqs"><i
+                                class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span
+                                class="align-middle">Pomoć</span></a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="cijene-paketa"><i class="fas fa-wand-magic-sparkles fs-12 text-muted me-1"></i> <span
-                                class="align-middle">Dostupna skeniranja : <b>{{ Auth::user()->getRemainingScans() ?? '0' }}</b></span></a>
-
-
-                        <script>
-                            document.addEventListener("DOMContentLoaded", async function() {
-                                // Removed old localStorage user check, now only use backend user
-                         
-                                 
-
-                                console.log("[INIT] Provjera lokalne pohrane...");
-                                console.log(" Korisnik:", user);
-                                console.log(" Token:", token?.substring(0, 25) + "...");
-
-                                if (!user || !token) {
-                                    // Only warn if user is actually missing (should not happen)
-                                    if (!user) {
-                                        console.warn("[TOPBAR] Backend user missing!");
-                                    }
-                                    if (!token) {
-                                        console.warn("[TOPBAR] Auth token missing in localStorage.");
-                                    }
-                                    return;
-                                }
-
-                                const API_URL = `/api/statistics/users/${user.id}`;
-                                console.log(` Pozivam API: ${API_URL}`);
-
-                                try {
-                                    const response = await axios.get(API_URL, {
-                                        headers: {
-                                            Authorization: `Bearer ${token}`
-                                        }
-                                    });
-
-                                    console.log(" API response:", response);
-                                    const stats = response.data || {};
-
-                                    console.log(" Parsed statistike:", stats);
-
-                                    const fields = {
-                                        totalSuppliers: stats.total_suppliers ?? 0,
-                                        totalInvoices: stats.total_invoices ?? 0,
-                                        usedScans: stats.used_scans ?? 0,
-                                        remainScansTopbar: stats.remaining_scans ?? 0
-                                    };
-
-                                    console.log("📌 Vrijednosti za prikaz u DOM-u:", fields);
-
-                                    Object.entries(fields).forEach(([id, value]) => {
-                                        const el = document.getElementById(id);
-                                        if (el) {
-                                            console.log(`➡️ Ažuriram #${id} na:`, value);
-                                            el.innerText = value;
-                                        } else {
-                                            console.warn(`⚠️ Element s ID '${id}' nije pronađen u DOM-u.`);
-                                        }
-                                    });
-
-                                } catch (error) {
-                                    console.error("❌ Greška pri dohvaćanju statistike:", error);
-                                }
-                            });
-                        </script>
+                        <a class="dropdown-item" href="cijene-paketa"><i
+                                class="fas fa-wand-magic-sparkles fs-12 text-muted me-1"></i> <span
+                                class="align-middle">Dostupna skeniranja :
+                                <b>{{ Auth::user()->getRemainingScans() ?? '0' }}</b></span></a>
 
                         <a class="dropdown-item" href="auth-lockscreen-basic"><i
                                 class="mdi mdi-sleep text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">Sleep</span></a>
 
-                   
-                         <form method="POST" action="/custom-logout">
-    @csrf
-    <button class="dropdown-item" type="submit"><i class="bx bx-power-off text-muted fs-16 align-middle me-1" style="margin-top: -3px!important;"></i>
-                            <span key="t-logout">@lang('translation.logout')</span></button>
-</form>
+
+                        <form method="POST" action="/custom-logout">
+                            @csrf
+                            <button class="dropdown-item" type="submit"><i
+                                    class="bx bx-power-off text-muted fs-16 align-middle me-1"
+                                    style="margin-top: -3px!important;"></i>
+                                <span key="t-logout">@lang('translation.logout')</span></button>
+                        </form>
 
 
 
@@ -391,12 +340,12 @@
 
 
 <script>
-    document.addEventListener("DOMContentLoaded", async function() {
-         
- 
+    document.addEventListener("DOMContentLoaded", async function () {
+
+
         const avatarBasePath = "/storage/uploads/avatars/";
 
-    
+
 
         const avatarImg = document.getElementById("user-avatar");
         const avatarFallback = document.getElementById("avatar-fallback");
@@ -448,12 +397,12 @@
 </script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         const logoutLink = document.getElementById("logout-link");
 
         if (logoutLink) {
-            logoutLink.addEventListener("click", async function() {
-                 
+            logoutLink.addEventListener("click", async function () {
+
 
                 if (!token) {
                     return window.location.href = "/login";
@@ -463,7 +412,7 @@
                     await axios.post("/api/logoutUser", {}, {
                         headers: {
                             Authorization: `Bearer ${token}`
-                        }, 
+                        },
                     });
                 } catch (err) {
                     console.error("Logout failed:", err);
@@ -475,9 +424,9 @@
 </script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         const user = JSON.parse(localStorage.getItem("user"));
-         
+
         const el = document.getElementById("dropdownUser");
         const el1 = document.getElementById("topbar-username");
         const el2 = document.getElementById("topbar-position");
@@ -493,7 +442,7 @@
 </script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         const user = JSON.parse(localStorage.getItem("user"));
 
         if (user) {
@@ -503,10 +452,10 @@
                 const avatarUrl = `/storage/uploads/avatars/${user.avatar}`;
 
                 const testImg = new Image();
-                testImg.onload = function() {
+                testImg.onload = function () {
                     topbarAvatar.src = avatarUrl;
                 };
-                testImg.onerror = function() {
+                testImg.onerror = function () {
                     topbarAvatar.src = "/build/images/users/avatar-1.jpg";
                 };
                 testImg.src = avatarUrl;
@@ -515,12 +464,12 @@
     });
 </script>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         const fullscreenBtn = document.querySelector('[data-toggle-custom="fullscreen"]');
 
         if (!fullscreenBtn) return;
 
-        fullscreenBtn.addEventListener("click", function(e) {
+        fullscreenBtn.addEventListener("click", function (e) {
             e.preventDefault();
             document.body.classList.toggle("fullscreen-enable");
 
@@ -594,7 +543,7 @@
         }
 
         if (toggleBtn) {
-            toggleBtn.addEventListener("click", function() {
+            toggleBtn.addEventListener("click", function () {
                 const currentMode = html.getAttribute("data-bs-theme");
                 const newMode = currentMode === "dark" ? "light" : "dark";
                 setLayoutMode("data-bs-theme", newMode, `layout-mode-${newMode}`, html);
@@ -609,9 +558,9 @@
 
 <!-- Upload files logic -->
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-         
-  
+    document.addEventListener("DOMContentLoaded", function () {
+
+
 
         const dropzone = document.getElementById("dropzone");
         const fileInput = document.getElementById("fileInput");
@@ -642,7 +591,7 @@
                 removeBtn.classList.add("remove-file");
                 removeBtn.dataset.index = index;
 
-                removeBtn.addEventListener("click", function() {
+                removeBtn.addEventListener("click", function () {
                     let dt = new DataTransfer();
                     let fileArray = Array.from(fileInput.files);
                     fileArray.splice(index, 1);
@@ -664,13 +613,13 @@
             document.getElementById("uploadLoader").style.display = "block";
 
             fetch('/api/storage/invoice-uploads', {
-                    method: 'POST',
-                    body: formData,
-                   headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                            'Authorization': `Bearer ${token}`
-                        }
-                })
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Authorization': `Bearer ${token}`
+                }
+            })
                 .then(response => {
                     if (!response.ok) throw new Error("Upload failed");
                     return response.json();
@@ -754,3 +703,66 @@
         });
     });
 </script>
+
+
+<!-- Statistics API -->
+ <script>
+                            document.addEventListener("DOMContentLoaded", async function() {
+                                // Removed old localStorage user check, now only use backend user
+                         
+                                 
+
+                                console.log("[INIT] Provjera lokalne pohrane...");
+                                console.log(" Korisnik:", user);
+                                console.log(" Token:", token?.substring(0, 25) + "...");
+
+                                if (!user || !token) {
+                                    // Only warn if user is actually missing (should not happen)
+                                    if (!user) {
+                                        console.warn("[TOPBAR] Backend user missing!");
+                                    }
+                                    if (!token) {
+                                        console.warn("[TOPBAR] Auth token missing in localStorage.");
+                                    }
+                                    return;
+                                }
+
+                                const API_URL = `/api/statistics/users/${user.id}`;
+                                console.log(` Pozivam API: ${API_URL}`);
+
+                                try {
+                                    const response = await axios.get(API_URL, {
+                                        headers: {
+                                            Authorization: `Bearer ${token}`
+                                        }
+                                    });
+
+                                    console.log(" API response:", response);
+                                    const stats = response.data || {};
+
+                                    console.log(" Parsed statistike:", stats);
+
+                                    const fields = {
+                                        totalSuppliers: stats.total_suppliers ?? 0,
+                                        totalInvoices: stats.total_invoices ?? 0,
+                                        usedScans: stats.total_invoices ?? 0,
+                                        remainScansTopbar: stats.remaining_scans ?? 0
+                                    };
+
+                                    console.log("📌 Vrijednosti za prikaz u DOM-u:", fields);
+
+                                    Object.entries(fields).forEach(([id, value]) => {
+                                        const el = document.getElementById(id);
+                                        if (el) {
+                                            console.log(`➡️ Ažuriram #${id} na:`, value);
+                                            el.innerText = value;
+                                        } else {
+                                            console.warn(`⚠️ Element s ID '${id}' nije pronađen u DOM-u.`);
+                                        }
+                                    });
+
+                                } catch (error) {
+                                    console.error("❌ Greška pri dohvaćanju statistike:", error);
+                                }
+                            });
+                        </script>

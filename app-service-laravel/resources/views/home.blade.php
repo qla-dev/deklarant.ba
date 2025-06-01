@@ -33,7 +33,8 @@
         <div class="row g-0">
             <!-- Left Columns -->
             <div class="col-md-2 col-6 border-end border-0 order-2 order-md-0 bg-white card-animate mt-lg-0 mt-md-0 mt-3">
-                <div class="d-flex card  rounded-0 m-0 flex-column h-100">
+             <a href="cijene-paketa">  
+            <div class="d-flex card  rounded-0 m-0 flex-column h-100">
                     <div class="bg-danger text-white text-center py-1 rounded-0">
                         <i class="ri-alert-line me-1"></i>
                         <span><b>{{ Auth::user()->getRemainingScans() ?? '0' }}</b> dostupna/ih. Nadopuni!</span>
@@ -47,6 +48,7 @@
                         </div>
                     </div>
                 </div>
+                </a>  
             </div>
 
             <div class="col-md-2 col-6 border-0 order-3 order-md-0 bg-white card-animate mt-lg-0 mt-md-0 mt-3">
@@ -57,7 +59,7 @@
                             <span>Pregledaj sve</span>
                         </div>
                         <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
-                            <h6 class="text-muted text-uppercase fs-11 mb-1">Spašene deklaracija</h6>
+                            <h6 class="text-muted text-uppercase fs-11 mb-1">Spašene deklaracije</h6>
                             <div class="d-flex align-items-center justify-content-center">
                                 <i class="ri-file-text-line  text-info mb-1" style="font-size: 45px"></i>
                                 <h3 class="mb-0 ms-2"><span id="usedScans" class="counter-value">0</span></h3>
@@ -120,17 +122,17 @@
 
 
             <div class="col-md-2 col-6 border-0 order-5 order-md-0 bg-white card-animate mt-lg-0 mt-md-0 mt-4">
-                <a href="kursna-lista">
-                    <div class="d-flex  card m-0 rounded-0 flex-column h-100">
+                <a href="moji-dobavljaci">
+                    <div class="d-flex card  rounded-0 m-0 flex-column h-100">
                         <div class="bg-info text-white text-center py-1 rounded-0">
-                            <i class="ri-arrow-up-s-line me-1"></i>
+                            <i class=" ri-arrow-up-s-line me-1"></i>
                             <span>Pregledaj sve</span>
                         </div>
                         <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
-                            <h6 class="text-muted text-uppercase fs-11 mb-1">Carinske tarife</h6>
+                            <h6 class="text-muted text-uppercase fs-11 mb-1">Moji dobavljači</h6>
                             <div class="d-flex align-items-center justify-content-center">
-                                <i class="ri-barcode-box-line text-info" style="font-size: 45px"></i>
-                                <h3 class="mb-0 ms-2"><span class="counter-value" data-target="128">0</span></h3>
+                                <i class="ri-truck-line text-info" style="font-size: 45px"></i>
+                                <h3 class="mb-0 ms-2"><span class="counter-value" id="totalImporters">0</span></h3>
                             </div>
                         </div>
                     </div>
@@ -164,7 +166,9 @@
                     <div class="flex-grow-1 overflow-hidden">
                         <p class="text-uppercase fw-medium text-muted text-truncate mb-3">aktivan {{ Auth::user()->getActivePackageName()}} paket</p>
                         <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                            <span id="usedScansValue">0</span>/<span id="totalScansValue">0</span>
+         
+                          <span id="remainingScans">{{ Auth::user()->getRemainingScans() ?? '0' }}</span>/<span id="totalScans">{{ Auth::user()->getActivePackageStats()->available_scans ?? '0' }}</span>
+
                         </h4>
                     </div>
                     <div class="flex-shrink-0">
@@ -193,7 +197,7 @@
             <div class="card-body" style="z-index:1;">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1 overflow-hidden">
-                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Spašene deklaracija</p>
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Spašene deklaracije</p>
                         <h4 class="fs-22 fw-semibold ff-secondary mb-0">
                             <span class="counter-value" id="totalInvoices" data-target="45">0</span><span
                                 class="counter-value">/{{ Auth::user()->getActivePackageStats()->document_history ?? '0' }}</span>
@@ -226,13 +230,13 @@
             <div class="card-body" style="z-index:1;">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1 overflow-hidden">
-                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Zakonskih dokumenata</p>
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Carinskih tarifa</p>
                         <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                            <span class="counter-value" data-target="19">19</span>
+                            <span class="counter-value" data-target="19.542">19.542</span>
                         </h4>
                     </div>
                     <div style="width: 80px; height: 80px;" class="d-flex align-items-center justify-content-center">
-                        <i class="ri-scales-line text-info" style="font-size: 45px;"></i>
+                        <i class="ri-barcode-box-line text-info" style="font-size: 45px;"></i>
                     </div>
                 </div>
             </div>
@@ -404,7 +408,7 @@
                             <div class="card-header">
                                 <h5 class="mb-0">Nedavne tarife</h5>
                             </div>
-                                                      <div class="card-body d-flex justify-content-center align-items-center flex-column pb-0 pt-0 position-relative" style="min-height: 200px;">
+                                                      <div class="card-body d-flex justify-content-start align-items-center flex-column pb-0 pt-0 position-relative" style="min-height: 200px;">
                                 <div class="position-absolute top-50 start-50 translate-middle">
                                     <div class="tariff-loader spinner-border text-info" role="status"></div>
                                 </div>
@@ -546,7 +550,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             if (lastSuppliers.length === 0) {
                 supplierContainer.innerHTML = `
-                    <div class="text-muted text-center">Nema podataka o dobavljačima.</div>
+                    <div class="text-muted text-center position-absolute translate-middle top-50 start-50">Nema podataka o dobavljačima</div>
                 `;
             } else {
                 lastSuppliers.forEach((supplier) => {
@@ -609,7 +613,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             if (recentItems.length === 0) {
                 tariffContainer.innerHTML = `
-                    <div class="text-muted text-center">Nema nedavnih tarifa.</div>
+                    <div class="text-muted text-center position-absolute translate-middle top-50 start-50">Nema nedavnih tarifa</div>
                 `;
             } else {
                 recentItems.forEach((item) => {
@@ -658,13 +662,13 @@ document.addEventListener("DOMContentLoaded", async function () {
 <!-- new doughnut logic -->
 
 <script>
-    document.addEventListener("DOMContentLoaded", async function() {
+    document.addEventListener("DOMContentLoaded", function () {
         const centerTextPlugin = {
             id: "centerText",
-            beforeDraw: function(chart) {
-                const width = chart.width,
-                    height = chart.height,
-                    ctx = chart.ctx;
+            beforeDraw: function (chart) {
+                const width = chart.width;
+                const height = chart.height;
+                const ctx = chart.ctx;
 
                 ctx.restore();
                 const fontSize = ((height / 8) * 2).toFixed(2);
@@ -674,7 +678,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                 const dataset = chart.data.datasets[0];
                 const total = dataset.data.reduce((acc, val) => acc + val, 0);
-                const percentage = Math.round((dataset.data[0] / total) * 100);
+                const percentage = total > 0 ? Math.round((dataset.data[0] / total) * 100) : 0;
 
                 const text = percentage + "%";
                 const textX = Math.round(width / 2);
@@ -688,9 +692,12 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         let chartInstance = null;
 
-        function createDoughnutChart(canvasId, usedPercentage) {
+        function createDoughnutChart(canvasId) {
             const ctx = document.getElementById(canvasId).getContext("2d");
-            const remaining = 100 - usedPercentage;
+
+            const remaining = parseInt(document.getElementById("remainingScans").textContent) || 0;
+            const total = parseInt(document.getElementById("totalScans").textContent) || 0;
+            const used = total - remaining;
 
             if (chartInstance) {
                 chartInstance.destroy();
@@ -701,7 +708,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 data: {
                     labels: ["Iskorišteno", "Preostalo"],
                     datasets: [{
-                        data: [usedPercentage, remaining],
+                        data: [used, remaining],
                         backgroundColor: ["#299cdb", "#d6f0fa"],
                     }]
                 },
@@ -710,54 +717,15 @@ document.addEventListener("DOMContentLoaded", async function () {
                     maintainAspectRatio: false,
                     cutout: "70%",
                     plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            enabled: false
-                        }
+                        legend: { display: false },
+                        tooltip: { enabled: false }
                     }
                 },
                 plugins: [centerTextPlugin]
             });
         }
 
-        //  Initial empty chart (0%)
-        createDoughnutChart("doughnut1", 0);
-
-         ;
-          
-
-        if (!user || !token) {
-            console.warn("Token ili korisnik nije pronađen.");
-            return;
-        }
-
-        const API_URL = `/api/statistics/users/${user.id}`;
-
-        try {
-            const response = await axios.get(API_URL, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-
-            const stats = response.data || {};
-            const usedScans = stats.used_scans ?? 0;
-            const remainingScans = stats.remaining_scans ?? 0;
-            const totalScans = usedScans + remainingScans;
-
-            document.getElementById("usedScansValue").innerText = usedScans;
-            document.getElementById("totalScansValue").innerText = totalScans;
-
-            const usedPercentage = totalScans > 0 ? (usedScans / totalScans) * 100 : 0;
-
-            //  Re-render with real data
-            createDoughnutChart("doughnut1", usedPercentage);
-
-        } catch (err) {
-            console.error("Greška prilikom dohvaćanja statistike:", err);
-        }
+        createDoughnutChart("doughnut1");
     });
 </script>
 
@@ -938,105 +906,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
 
-<!-- Used scans | remainining scans -->
-<script>
-    document.addEventListener("DOMContentLoaded", async function() {
-        // Use backend user, not localStorage
-         ;
-          
 
-        console.log("[INIT] Provjera lokalne pohrane...");
-        console.log(" Korisnik:", user);
-        console.log(" Token:", token?.substring(0, 25) + "..."); // da ne ispiše cijeli token
-
-        if (!user || !token) {
-            if (!user) {
-                console.warn("[HOME] Backend user missing!");
-            }
-            if (!token) {
-                console.warn("[HOME] Auth token missing in localStorage.");
-            }
-            return;
-        }
-
-        const API_URL = `/api/statistics/users/${user.id}`;
-        console.log(` Pozivam API: ${API_URL}`);
-
-        try {
-            const response = await axios.get(API_URL, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-
-            console.log(" API response:", response);
-            const stats = response.data || {};
-
-            console.log(" Parsed statistike:", stats);
-
-            const fields = {
-                totalSuppliers: stats.supplier_stats.total_suppliers ?? 0,
-                totalInvoices: stats.total_invoices ?? 0,
-                usedScans: stats.used_scans ?? 0,
-                remainScans: stats.remaining_scans ?? 0
-            };
-
-            console.log(" Vrijednosti za prikaz u DOM-u:", fields);
-
-            Object.entries(fields).forEach(([id, value]) => {
-                const el = document.getElementById(id);
-                if (el) {
-                    console.log(`➡ Ažuriram #${id} na:`, value);
-                    el.innerText = value;
-                } else {
-                    console.warn(` Element s ID '${id}' nije pronađen u DOM-u.`);
-                }
-            });
-
-        } catch (error) {
-            console.error(" Greška pri dohvaćanju statistike:", error);
-        }
-    });
-</script>
-
-
-<!-- statistics -->
-<script>
-    document.addEventListener("DOMContentLoaded", async function() {
-
-
-        const API_URL = `/api/statistics`;
-          
-
-        if (!token) {
-            console.warn("No token found in localStorage.");
-            return;
-        }
-
-        try {
-            const response = await axios.get(API_URL, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-
-            });
-
-            const stats = response.data || {};
-            const fields = {
-                totalNumSup: stats.total_suppliers ?? 0,
-
-            };
-
-            Object.entries(fields).forEach(([id, value]) => {
-                const el = document.getElementById(id);
-                if (el) el.innerText = value;
-            });
-
-        } catch (error) {
-            console.error("Error fetching statistics:", error);
-        }
-    });
-</script>
 
 
 

@@ -235,10 +235,10 @@
 <!-- Profile Foreground -->
 <div class="profile-foreground position-relative mx-n4 mt-n4">
     <div class="profile-wid-bg">
-        <div class="text-end p-3" style="position: absolute; right: 0;">
+        <div class="text-end p-4" style="position: absolute; right: 0;">
             <div class="p-0 ms-auto rounded-circle profile-photo-edit">
                 <input id="background-img-input" type="file" class="profile-foreground-img-file-input d-none">
-                <label for="background-img-input" class="profile-photo-edit btn btn-light w-100">
+                <label for="background-img-input" class="profile-photo-edit btn btn-light w-100" style="padding-left: 10px; padding-right: 10px; padding-top: 6px; padding-bottom: 6px;">
                     <i class="ri-image-edit-line align-bottom me-1"></i> Promijeni naslovnu sliku
                 </label>
             </div>
@@ -361,66 +361,57 @@
                                 <p class="fw-semibold mb-0 d-none d-flex" id="user-package-text" style="justify-content: space-between;"></p>
 
                                 <!-- Upgrade button (hidden initially) -->
-                                <a href="cijene-paketa" id="upgrade-btn" class="btn btn-info text-white btn-sm d-none">
+                                <a href="cijene-paketa" id="upgrade-btn" class="btn btn-info text-white btn-sm d-none fs-6">
                                     <i class="ri-arrow-up-circle-line"></i> Nadogradi paket
                                 </a>
                             </div>
 
                         </div>
-                        <div class="card d-flex flex-column justify-content-between rounded-0">
-                            <div class="card-body d-flex flex-column justify-content-between" style="min-height: 150px;">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h5 class="card-title mb-0">Moji dokumenti</h5>
-                                    <a href="moje-fakture" class="text-info fs-13">Pregledaj sve</a>
-                                </div>
+                       <!-- MOJE DEKLARACIJE -->
+<div class="card rounded-0 w-100 mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Moje deklaracije</h5>
+        <a href="moje-deklaracije" class="text-info text-end fs-13">Pregledaj sve</a>
+    </div>
+    <div class="card-body d-flex justify-content-start align-items-center flex-column pb-0 pt-0 position-relative" style="min-height: 200px;">
+        <!-- Centered loader -->
+        <div class="position-absolute top-50 start-50 translate-middle">
+            <div class="user-documents-loader spinner-border text-info" role="status"></div>
+        </div>
 
-                                <!-- Loader -->
-                                <div class="user-documents-loader d-flex justify-content-center align-items-center flex-grow-1" style="min-height: 142px;">
-                                    <div class="spinner-border text-info" role="status"></div>
-                                </div>
+        <!-- Content hidden initially -->
+        <div class="row g-3 mt-3 user-documents d-none w-100 text-center" id="user-documents">
+            <div class="col-12 text-muted"></div>
+        </div>
+    </div>
+</div>
 
-                                <!-- Hidden initially -->
-                                <div class="row g-3 mt-auto d-flex align-items-center justify-content-center text-center"
-                                    id="user-documents"
-                                    style="min-height: 120px;">
-                                    <div class="col-12 text-muted"></div>
-                                </div>
+<!-- MOJI KLIJENTI -->
+<div class="card rounded-0 w-100 mb-0">
+     <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Moji klijenti</h5>
+        <a href="moji-klijenti" class="text-info text-end fs-13">Pregledaj sve</a>
+    </div>
+    <div class="card-body d-flex justify-content-start align-items-center flex-column pb-0 pt-0 position-relative" style="min-height: 250px;">
+        <!-- Centered loader -->
+        <div class="position-absolute top-50 start-50 translate-middle">
+            <div class="suppliers-loader spinner-border text-info" role="status"></div>
+        </div>
 
+        <!-- Content hidden initially -->
+        <div class="suppliers-list d-none w-100 mt-3"></div>
+    </div>
+</div>
 
-                            </div>
-
-
-                        </div>
-                        <div class="card mb-3 d-flex flex-column justify-content-center rounded-0">
-                            <div class="card-body position-relative pb-0" style="min-height: 300px;">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h5 class="card-title mb-0">Moji dobavljači</h5>
-                                    <a href="moji-dobavljaci" class="text-info fs-13">Pregledaj sve</a>
-                                </div>
-
-                                <!-- Loader vertically & horizontally centered -->
-                                <div class="suppliers-loader position-absolute top-50 start-50 translate-middle">
-                                    <div class="spinner-border text-info" role="status"></div>
-                                </div>
-
-
-                                <!-- List (hidden by default) -->
-                                <div class="suppliers-list d-none" style="min-height: 100px;">
-                                    <!-- JS will inject content here -->
-                                </div>
-                            </div>
-
-
-
-                        </div>
+                        
 
 
 
                     </div>
 
                     <!-- Right Form with Tabs -->
-                    <div class="col-xxl-8 d-flex flex-column h-100">
-                        <div class="card flex-grow-1 d-flex flex-column rounded-0">
+                    <div class="col-xxl-8 d-flex flex-column">
+                        <div class="card d-flex flex-column rounded-0">
                             <!-- Nav Tabs -->
                             <div class="card-header" style="margin-bottom: 0;">
                                 <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
@@ -494,7 +485,7 @@
                                                     <label for="exampleFormControlTextarea" class="form-label text-info">Opis</label>
                                                     <textarea class="form-control rounded-0" id="exampleFormControlTextarea" placeholder="Opis" rows="3"></textarea>
                                                 </div>
-                                                <div class="col-lg-12 mt-4 mb-4">
+                                                <div class="col-lg-12 mt-4 mb-2">
                                                     <div class="hstack gap-2 justify-content-end">
                                                         <button type="submit" id="update-user-btn" class="btn btn-info"><i class="fas fa-save fs-6 me-1"></i> Ažuriraj podatke</button>
                                                     </div>
@@ -540,7 +531,7 @@
                                                     <input type="text" class="form-control rounded-0" id="contactNumberInput" placeholder="Kontakt broj" />
                                                 </div>
 
-                                                <div class="col-lg-12 mt-4 mb-4">
+                                                <div class="col-lg-12 mt-4 mb-2">
                                                     <div class="hstack gap-2 justify-content-end">
                                                         <button type="submit" id="update-company-btn" class="btn btn-info">
                                                             <i class="fas fa-save fs-6 me-1"></i> Ažuriraj podatke
@@ -566,7 +557,7 @@
                                                     <label for="confirmPassword" class="form-label text-info">Potvrdite novu lozinku</label>
                                                     <input type="password" class="form-control rounded-0" id="confirmPassword" placeholder="Potvrdite novu lozinku" />
                                                 </div>
-                                                <div class="col-lg-12 mt-4 mb-4">
+                                                <div class="col-lg-12 mt-4 mb-2">
                                                     <div class="hstack gap-2 justify-content-end">
                                                         <button type="submit" id="change-password-btn" class="btn btn-info"><i class="fas fa-save fs-6 me-1"></i> Promijeni lozinku</button>
                                                     </div>
@@ -1462,72 +1453,76 @@
 </script>
 
 
-<!-- Moji dobavljači dynamic fetch-->
+
+<!-- Moji dobavljači dynamic fetch -->
 <script>
-    document.addEventListener("DOMContentLoaded", async function() {
+document.addEventListener("DOMContentLoaded", async function () {
+    if (!token || !user?.id) {
+        console.warn("Missing auth or user.");
+        return;
+    }
 
-        const loader = document.querySelector(".suppliers-loader");
-        const container = document.querySelector(".suppliers-list");
+    const supplierContainer = document.querySelector(".suppliers-list");
+    const supplierLoader = document.querySelector(".suppliers-loader");
 
-        if (!user || !token || !container || !loader) {
-            console.warn("User, token, or container missing.");
-            return;
-        }
+    try {
+        const res = await axios.get(`/api/statistics/users/${user.id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
 
-        try {
-            const response = await axios.get(`/api/statistics/users/${user.id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
+        const stats = res.data || {};
+        console.log("Stats response:", stats);
 
-            const stats = response.data || {};
-            const suppliers = stats.supplier_profit_changes || [];
-            const limitedSuppliers = suppliers.slice(-5);
+        // --- Suppliers Section ---
+        const suppliers = stats.supplier_stats?.latest_suppliers || [];
+        const lastSuppliers = suppliers.slice(-5);
 
-            loader.classList.add("d-none");
-            container.classList.remove("d-none");
-            container.innerHTML = "";
+        if (supplierLoader) supplierLoader.classList.add("d-none");
+        if (supplierContainer) {
+            supplierContainer.classList.remove("d-none");
+            supplierContainer.innerHTML = "";
 
-            if (limitedSuppliers.length === 0) {
-                container.innerHTML = `<div class="text-muted text-center">Nema podataka o dobavljačima.</div>`;
+            if (lastSuppliers.length === 0) {
+                supplierContainer.innerHTML = `
+                    <div class="text-muted text-center position-absolute translate-middle top-50 start-50">Nema podataka o dobavljačima</div>
+                `;
             } else {
-                limitedSuppliers.forEach(supplier => {
-                    const percentageChange = parseFloat(supplier.percentage_change);
-                    const isPositive = percentageChange >= 0;
+                lastSuppliers.forEach((supplier) => {
+                    const percentage = parseFloat(supplier.percentage_change);
+                    const isPositive = percentage >= 0;
                     const growthClass = isPositive ? "text-success" : "text-danger";
-                    const arrowIcon = isPositive ? "ri-arrow-up-line" : "ri-arrow-down-line";
+                    const arrow = isPositive ? "ri-arrow-up-line" : "ri-arrow-down-line";
 
-                    const supplierElement = document.createElement("div");
-                    supplierElement.classList.add("d-flex", "justify-content-between", "mb-3");
-                    supplierElement.innerHTML = `
-                        <img src="/images/orbico.png" class="avatar-xs rounded-circle me-3" />
-                        <div class="d-flex justify-content-between align-items-center flex-grow-1">
+                    supplierContainer.innerHTML += `
+                        <div class="d-flex justify-content-between align-items-center mb-2">
                             <div>
-                                <h6 class="mb-0">${supplier.name || 'Nepoznat dobavljač'}</h6>
-                                <small class="text-muted">${supplier.owner || 'Nepoznat vlasnik'}</small>
+                                <div class="fw-semibold">${supplier.name}</div>
+                                <div class="text-muted fs-12">${supplier.owner ?? "Nepoznat vlasnik"}</div>
                             </div>
-                            <div class="${growthClass} text-end fs-13 ms-3">
-                                ${!isNaN(percentageChange) ? percentageChange.toFixed(1) + '%' : ''}
-                                <i class="${arrowIcon} ms-1"></i>
+                            <div class="text-info fs-12">
+                                ${!supplier.address ? "Nije definisano" : supplier.address}
                             </div>
                         </div>
                     `;
-                    container.appendChild(supplierElement);
                 });
+
+               
             }
-
-        } catch (error) {
-            console.error("Error fetching supplier data:", error);
-            loader.classList.add("d-none");
-            container.classList.remove("d-none");
-            container.innerHTML = '<div class="text-danger text-center">Greška pri učitavanju dobavljača.</div>';
         }
-    });
+    } catch (err) {
+        console.error("Greška pri dohvaćanju statistike:", err);
+
+        if (supplierLoader) supplierLoader.classList.add("d-none");
+
+        if (supplierContainer) {
+            supplierContainer.classList.remove("d-none");
+            supplierContainer.innerHTML = `<div class="text-danger">Greška pri dohvaćanju dobavljača.</div>`;
+        }
+    }
+});
 </script>
-
-
-
 
 <!-- Invoice fetch dynamic -->
 
@@ -1549,14 +1544,14 @@
 
                 const lastFour = invoices
                     .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-                    .slice(0, 4);
+                    .slice(0, 8);
 
                 loader.classList.add("d-none");
                 docsContainer.classList.remove("d-none");
 
                 if (lastFour.length === 0) {
                     docsContainer.innerHTML = `
-                    <div class="col-12 text-center text-muted">Nema dostupnih dokumenata.</div>
+                    <div class="text-muted text-center position-absolute translate-middle top-50 start-50">Nema dostupnih dokumenata</div>
                 `;
                     return;
                 }
@@ -1577,13 +1572,16 @@
                 docsContainer.innerHTML = lastFour.map(inv => {
                     const ext = inv.file_name?.split(".").pop()?.toLowerCase() || '';
                     const icon = iconMap[ext] || iconMap.default;
-                    const file = inv.file_name;
+                    let file = inv.file_name || '';
+                    if (file.length > 10) {
+                        file = file.substring(0, 10) + '..';
+                    }
 
                     return `
                     <div class="col-6 col-sm-3 text-center">
                         <a href="#" class="text-decoration-none view-invoice" data-id="${inv.id}" title="Pregled Deklaracije">
                             <i class="${icon} fs-24 text-info"></i>
-                            <p class="fs-13 text-muted mt-1 mb-0">${file}</p>
+                            <p class="fs-13 text-muted mt-1 mb-0" style="white-space:nowrap!important">${file}</p>
                         </a>
                     </div>
                 `;
@@ -1660,13 +1658,13 @@
 
                     switch (packageName.toLowerCase()) {
                         case "gobig":
-                            iconHTML = `<i class="ri-medal-line text-info fs-3 bu me-2" style="margin-top:-2px!important"></i>`;
+                            iconHTML = `<i class="ri-medal-line text-info fs-3 me-2 position-absolute" style="margin-top:-6px!important;margin-left: 45px;"></i>`;
                             break;
                         case "startup":
-                            iconHTML = `<i class="ri-star-s-fill text-info fs-5 me-2" style="margin-top:-2px!important"></i>`;
+                            iconHTML = `<i class="ri-star-s-fill text-info fs-3 me-2 position-absolute" style="margin-top:-2px!important;margin-left: 60px;"></i>`;
                             break;
                         case "business":
-                            iconHTML = `<i class="ri-shield-star-line text-info fs-2 me-2" style="margin-top:-2px!important"></i>`;
+                            iconHTML = `<i class="ri-shield-star-line text-info fs-3 me-2 position-absolute" style="margin-top:-8px!important;margin-left: 68px;"></i>`;
                             break;
                         default:
                             iconHTML = "";
