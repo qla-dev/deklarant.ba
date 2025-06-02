@@ -15,10 +15,10 @@ class TariffRateController extends Controller
         try {
             $tariffRates = TariffRate::all();
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno preuzimanje carinskih stopa. Pokušajte ponovo kasnije.'], 500);
+            return response()->json(['error' => 'Neuspješno preuzimanje carinskih stopa. Pokušajte ponovo kasnije'], 500);
         }
         return response()->json([
-            'message' => 'Tariff rates retrieved successfully.',
+            'message' => 'Carinske stope uspješno preuzete',
             'data' => $tariffRates
         ]);
     }
@@ -46,7 +46,7 @@ class TariffRateController extends Controller
     
             $tariffRate = TariffRate::create($data);
             return response()->json([
-                'message' => 'Tariff rate created successfully.',
+                'message' => 'Carinska stopa uspješno kreirana',
                 'data' => $tariffRate
             ], 201);
         } catch (Exception $e) {
@@ -59,13 +59,13 @@ class TariffRateController extends Controller
         try {
             $tariffRate = TariffRate::findOrFail($tariffRateId);
             return response()->json([
-                'message' => 'Tariff rate retrieved successfully.',
+                'message' => 'Carinska stopa uspješno preuzeta',
                 'data' => $tariffRate
             ]);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Carinska stopa s unesenim ID-om nije pronađena.'], 404);
+            return response()->json(['error' => 'Carinska stopa s unesenim ID-om nije pronađena'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno preuzimanje carinske stope. Pokušajte ponovo kasnije.'], 500);
+            return response()->json(['error' => 'Neuspješno preuzimanje carinske stope. Pokušajte ponovo kasnije'], 500);
         }
 
     }
@@ -96,13 +96,13 @@ class TariffRateController extends Controller
             $tariffRate->update($data);
     
             return response()->json([
-                'message' => 'Tariff rate updated successfully.',
+                'message' => 'Carinska stopa uspješno ažurirana',
                 'data' => $tariffRate
             ]);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Carinska stopa s unesenim ID-om nije pronađena.'], 404);
+            return response()->json(['error' => 'Carinska stopa s unesenim ID-om nije pronađena'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno ažuriranje carinske stope. Provjerite podatke i pokušajte ponovo.'], 500);
+            return response()->json(['error' => 'Neuspješno ažuriranje carinske stope. Provjerite podatke i pokušajte ponovo'], 500);
         }
     }
 
@@ -111,11 +111,11 @@ class TariffRateController extends Controller
         try {
             $tariffRate = TariffRate::findOrFail($tariffRateId);
             $tariffRate->delete();
-            return response()->json(['message' => 'Tariff rate deleted successfully.']);
+            return response()->json(['message' => 'carinska stopa uspješno izbrisana']);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Carinska stopa s unesenim ID-om nije pronađena.'], 404);
+            return response()->json(['error' => 'Carinska stopa s unesenim ID-om nije pronađena'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno brisanje carinske stope. Pokušajte ponovo kasnije.'], 500);
+            return response()->json(['error' => 'Neuspješno brisanje carinske stope. Pokušajte ponovo kasnije'], 500);
         }
 
     }

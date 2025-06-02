@@ -142,12 +142,12 @@ class StatsController extends Controller
 
     } catch (ModelNotFoundException $e) {
     return response()->json([
-        'error' => 'Korisnik nije pronađen.',
+        'error' => 'Korisnik nije pronađen',
         'message' => $e->getMessage()
     ], 404);
     } catch (Exception $e) {
         return response()->json([
-            'error' => 'Neuspješno preuzimanje statistike korisnika.',
+            'error' => 'Neuspješno preuzimanje statistike korisnika',
             'message' => $e->getMessage()
         ], 500);
     }
