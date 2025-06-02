@@ -20,11 +20,11 @@ class EmailVerificationController extends Controller
         $user = User::where('email', $request->input('email'))->first();
 
         if (!$user) {
-            return response()->json(['error' => 'Korisnik nije pronađen.'], 404);
+            return response()->json(['error' => 'Korisnik nije pronađen'], 404);
         }
 
         if ($user->verified) {
-            return response()->json(['message' => 'Email adresa je već verifikovana.']);
+            return response()->json(['message' => 'Email adresa je već verifikovana']);
         }
 
         // Generate signed verification URL
@@ -35,12 +35,12 @@ class EmailVerificationController extends Controller
         );
 
         try {
-            Mail::raw("Click the link to verify your email: $verificationUrl", function ($message) use ($user) {
+            Mail::raw("Kliknite na link kako biste potvrdili svoju e-mail adresu: $verificationUrl", function ($message) use ($user) {
                 $message->to($user->email)
-                        ->subject('Email Verification');
+                        ->subject('Verifikacija maila');
             });
 
-            return response()->json(['message' => 'Verification email sent']);
+            return response()->json(['message' => 'Email za verifikaciju poslan']);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Greška pri slanju emaila: ' . $e->getMessage()], 500);
         }
@@ -49,7 +49,7 @@ class EmailVerificationController extends Controller
     // Step 2: Verify the email
     public function verifyEmail(Request $request)
     {
-        \Log::info("Verification request received", ['request_data' => $request->all()]);
+        \Log::info("Zahtjev za verifikaciju primljen", ['request_data' => $request->all()]);
 
         $request->validate(['email' => 'required|email']);
 
@@ -58,20 +58,20 @@ class EmailVerificationController extends Controller
         $user = User::where('email', $email)->first();
 
         if (!$user) {
-            \Log::error("User not found", ['email' => $email]);
-            return response()->json(['error' => 'Neispravan verifikacijski link.'], 404);
+            \Log::error("Korisnik nije pronađen", ['email' => $email]);
+            return response()->json(['error' => 'Neispravan verifikacijski link'], 404);
         }
 
         if ($user->verified) {
-            return response()->json(['message' => 'Email je već verifikovan.']);
+            return response()->json(['message' => 'Email je već verifikovan']);
         }
 
         $user->verified = 1;
         $user->email_verified_at = Carbon::now();
         $user->save();
 
-        \Log::info("User verification updated", ['email' => $email]);
+        \Log::info("Verifikacija korisnika ažurirana", ['email' => $email]);
 
-        return response()->json(['message' => 'Email verified successfully']);
+        return response()->json(['message' => 'Email je uspješno verifikovan']);
     }
 }

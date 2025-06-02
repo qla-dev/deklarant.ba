@@ -39,7 +39,7 @@ class FileManagerController extends Controller
         $storedPath = $disk->putFileAs($file, $fullPath);
 
         return [
-            'message' => "File uploaded successfully!",
+            'message' => "Datoteka je uspješno učitana",
             'original_name' => $originalName,
             'stored_as' => $finalName,
             'path' => $storedPath,
@@ -103,7 +103,7 @@ class FileManagerController extends Controller
 
         $message = ($folderName !== $baseFolder)
             ? "Fascikla s tim imenom već postoji, nova fascikla je kreirana kao '{$folderName}'"
-            : 'Fascikla je uspješno kreirana.';
+            : 'Fascikla je uspješno kreirana';
 
 
         return response()->json([
