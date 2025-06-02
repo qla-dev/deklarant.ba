@@ -19,7 +19,7 @@ class CanScan
 
         $userPackage = UserPackage::where('user_id', $user->id)->first();
 
-        if (!$userPackage) {
+        if (!$userPackage || $userPackage->active == 0) {
             return response()->json(['message' => 'Nažalost, pretplata nije aktivna'], 405);
         }
 
