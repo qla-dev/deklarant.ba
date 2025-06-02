@@ -360,7 +360,7 @@ class InvoiceController extends Controller
                 $base_price = $item['unit_price'] ?? 0;
 
                 $best_entry = null;
-                foreach ($item['entries'] as $entry) {
+                foreach ($item['detected_codes'] as $entry) {
                     if (is_null($best_entry) || $entry['closeness'] < $best_entry['closeness']) {
                         $best_entry = $entry;
                     }

@@ -56,7 +56,7 @@ You are an AI designed to extract structured JSON data from semi-structured invo
    - Detect country of origin for each item.
    - Use two-letter country of origin code - ISO 3166-1 alpha-2 standard.
    - If you are not sure of country of origin for a single item, then try to deduce country of origin for whole document and use that information for every item of unknown origin.
-     - To deduce country of origin of document it should be best to look into contact details for the address company that is doing transport.
+     - To deduce country of origin of document it should be best to look into contact details for the address company that is doing transport (supplier). Perhaps a phone number or city. However, country of origin never Bosnia and Herzegovina.
 
 7. **Currency**:
    - Detect currency from context (like document headers, totals, or line items).
