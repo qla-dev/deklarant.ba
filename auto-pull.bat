@@ -10,6 +10,7 @@ REM ─────────────────────────�
     cd app-service-laravel
     php artisan migrate
     cd ..
+    node clear_routes.js
     echo.
     REM Wait 60 seconds before next pull
     timeout /t 60 /nobreak >nul

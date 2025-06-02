@@ -163,7 +163,7 @@ private function getEntityStats($user, string $modelClass, string $foreignKey)
     $invoices = $this->modelInvoice::where('user_id', $user->id)->get();
     $entityIds = $invoices->pluck($foreignKey)->unique();
 
-    $entities = $modelClass::whereIn('id', $entityIds)->get(['id', 'name', 'owner', 'avatar']);
+    $entities = $modelClass::whereIn('id', $entityIds)->get(['id', 'name', 'owner', 'avatar', 'address','tax_id','contact_email','contact_phone']);
 
     $entityCount = $modelClass::whereIn('id', function ($query) use ($user, $foreignKey) {
         $query->select($foreignKey)->from('invoices')->where('user_id', $user->id);

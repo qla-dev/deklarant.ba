@@ -142,7 +142,7 @@ Prijava
                 Swal.fire({
                     icon: 'success',
                     title: 'Prijava uspješna!',
-                    text: 'Uspješno ste prijavljeni.',
+                    text: 'Uspješno ste prijavljeni',
                     showConfirmButton: false,
                     timer: 1500
                 }).then(() => {
@@ -152,7 +152,7 @@ Prijava
                 Swal.fire({
                     icon: 'error',
                     title: 'Greška',
-                    text: error.response?.data?.message || "Greška prilikom prijave."
+                    text: error.response?.data?.message || "Greška prilikom prijave"
                 });
             }
         });

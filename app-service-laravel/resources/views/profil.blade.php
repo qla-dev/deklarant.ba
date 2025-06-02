@@ -373,14 +373,14 @@
         <h5 class="mb-0">Moje deklaracije</h5>
         <a href="moje-deklaracije" class="text-info text-end fs-13">Pregledaj sve</a>
     </div>
-    <div class="card-body d-flex justify-content-start align-items-center flex-column pb-0 pt-0 position-relative" style="min-height: 200px;">
+    <div class="card-body d-flex justify-content-center align-items-center flex-column pb-0 pt-0 position-relative" style="min-height: 180px;">
         <!-- Centered loader -->
         <div class="position-absolute top-50 start-50 translate-middle">
             <div class="user-documents-loader spinner-border text-info" role="status"></div>
         </div>
 
         <!-- Content hidden initially -->
-        <div class="row g-3 mt-3 user-documents d-none w-100 text-center" id="user-documents">
+        <div class="row g-3 user-documents d-none w-100 text-center" id="user-documents">
             <div class="col-12 text-muted"></div>
         </div>
     </div>
