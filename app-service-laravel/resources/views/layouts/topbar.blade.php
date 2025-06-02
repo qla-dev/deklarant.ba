@@ -656,10 +656,10 @@
                             el.remove();
                         });
                         document.body.classList.remove('modal-open');
-                        if (window.location.pathname === "/apps-invoices-create") {
+                        if (window.location.pathname === "/deklaracija") {
                             setTimeout(() => location.reload(), 100);
                         } else {
-                            window.location.href = "/apps-invoices-create";
+                            window.location.href = "/deklaracija";
                         }
                     });
                 })

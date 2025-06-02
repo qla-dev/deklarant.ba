@@ -34,6 +34,10 @@ Route::get('/detalji-deklaracije/{id}', function ($id) {
     return view('detalji-deklaracije'); // just returns the Blade view
 })->name('invoices.view');
 
+Route::get('/deklaracija/{id}', function ($id) {
+    return view('deklaracija');
+});
+
 // Custom logout route
 Route::post('/custom-logout', [App\Http\Controllers\Api\AuthController::class, 'logoutUser'])->name('logout2');
 
