@@ -44,14 +44,14 @@ Lista klijenata
                 </div>
                 <div class="table-responsive table-card ms-1 me-1 mb-2">
                     <table id="suppliersTable" class="table mb-2 w-100">
-                        <thead class="table-info">
+                        <thead class="custom-table">
                             <tr>
                                 <th>ID</th>
                                 <th>Naziv firme</th>
                                 <th>Vlasnik</th>
-                                <th>Profit prošle godine</th>
-                                <th>Profit ove godine</th>
-                                <th></th>
+                                <th>Adresa</th>
+                                <th>Email</th>
+                                <th>Telefon</th>
                                 <th>Akcija</th>
 
                             </tr>
@@ -165,21 +165,32 @@ document.addEventListener("DOMContentLoaded", async function () {
                     data: 'name',
                     title: 'Naziv firme',
                     render: (data, type, row) => {
-                        const avatar = row.avatar
-                            ? `/storage/uploads/suppliers/${row.avatar}`
-                            : '/build/images/users/avatar-1.jpg';
+                        let avatarHTML;
+                        if (row.avatar) {
+                            const avatar = `/storage/uploads/suppliers/${row.avatar}`;
+                            avatarHTML = `<img src="${avatar}" alt="avatar" class="rounded-circle me-2" width="40" height="40" style="object-fit: cover;">`;
+                        } else {
+                            const firstLetter = row.name?.[0]?.toUpperCase() || "?";
+                            avatarHTML = `
+                                <div class="rounded-circle d-flex align-items-center justify-content-center text-white shadow-sm me-2"
+                                     style="width: 30px; height: 30px; background-color: #299cdb; font-size: 14px;">
+                                     ${firstLetter}
+                                </div>`;
+                        }
                         return `
                             <div class="d-flex align-items-center">
-                                <img src="${avatar}" alt="avatar" class="rounded-circle me-2" width="30" height="30" style="object-fit: cover;">
+                                ${avatarHTML}
                                 <span>${data}</span>
                             </div>`;
                     }
                 },
                 { data: 'owner', title: 'Vlasnik' },
-                {
-                    data: 'last_year_profit',
-                    title: 'Profit prošle godine',
-                    render: data => data ? `${parseFloat(data).toFixed(2)} KM` : '-'
+                  {
+                    data: null,
+                    title: 'Adresa',
+                    render: (data, type, row) => {
+                        return row.contact_email ? row.address : 'Nepoznato';
+                    }
                 },
                 {
                     data: null,
@@ -205,18 +216,16 @@ document.addEventListener("DOMContentLoaded", async function () {
                         let callBtn = '';
                         if (row.contact_phone) {
                             callBtn = `
-                                <a href="tel:${row.contact_phone}" class="btn btn-sm btn-soft-success me-1" title="Pozovi">
+                                <a href="tel:${row.contact_phone}" class="btn btn-sm btn-soft-success me-1" title="Pozovi klijenta">
                                     <i class="ri-phone-line"></i>
                                 </a>`;
                         }
                         return `
-                            <button class="btn btn-sm btn-soft-info me-1 edit-supplier" data-id="${row.id}">
-                                <i class="ri-edit-line"></i>
-                            </button>
-                            <button class="btn btn-sm btn-soft-danger delete-supplier" data-id="${row.id}">
-                                <i class="ri-delete-bin-line"></i>
-                            </button>
-                            ${callBtn}
+                          ${callBtn}
+                            <button class="btn btn-sm btn-soft-danger delete-invoice" data-id="${row.id}" title="Obriši klijenta">
+                            <i class="ri-delete-bin-line"></i>
+                        </button>
+                          
                         `;
                     }
                 }

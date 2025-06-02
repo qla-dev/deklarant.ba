@@ -566,7 +566,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                                 <div class="text-muted fs-12">${supplier.owner ?? "Nepoznat vlasnik"}</div>
                             </div>
                             <div class="text-info fs-12">
-                                ${!supplier.address ? "Nije definisano" : supplier.address}
+                                ${!supplier.address ? "Nije definisano" : supplier.address}<i class="ri-map-pin-line text-info ms-1"></i>
                             </div>
                         </div>
                     `;
