@@ -8,6 +8,7 @@ use App\Models\Supplier;
 use App\Models\Importer;
 use App\Models\Invoice;
 use App\Models\Package;
+use App\Models\UserPackage;
 use App\Models\User;
 use App\Models\TariffRate;
 use App\Models\InvoiceItem;
@@ -354,6 +355,40 @@ private function getEntityStats($user, string $modelClass, string $foreignKey)
         'current_year_profit' => $entity->getCurrentYearProfit(),
         'percentage_change' => round($entity->getProfitPercentageChange(), 2),
     ]);
+}
+
+
+public function getAllUserStatistics()
+{
+    $users = User::all();
+
+    $response = $users->map(function ($user) {
+        $totalInvoices = Invoice::where('user_id', $user->id)->count();
+
+        $userPackage = UserPackage::with('package')
+            ->where('user_id', $user->id)
+            ->orderByDesc('created_at')
+            ->first();
+
+        
+        $package = $userPackage?->package;
+
+        return [
+            'user_id' => $user->id,
+            'total_invoices' => $totalInvoices,
+            'used_scans' => $userPackage?->used_scans ?? 0,
+            'remaining_scans' => $userPackage?->remaining_scans ?? 0,
+            'expiration_date' => $userPackage?->expiration_date,
+            'active' => $userPackage?->active ?? 0,
+            'assigned_at' => $userPackage?->created_at,
+            'package_name' => $package?->name ?? null,
+            'package_description' => $package?->description ?? null,
+            'page_limit' => $package?->page_limit ?? 0,
+            'document_history' => $package?->document_history ?? 0,
+        ];
+    });
+
+    return response()->json($response);
 }
 
 
