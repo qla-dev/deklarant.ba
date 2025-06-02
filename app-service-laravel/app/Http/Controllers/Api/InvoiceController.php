@@ -99,7 +99,7 @@ class InvoiceController extends Controller
             ]);
 
             return response()->json([
-                'message' => 'Invoice created successfully',
+                'message' => 'Deklaracija uspješno kreirana',
                 'data' => $invoice
             ], 201);
         } catch (ModelNotFoundException $e) {

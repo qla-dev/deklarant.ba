@@ -21,7 +21,7 @@ class SupplierController extends Controller
         try {
             $suppliers = $this->model::all();
             return response()->json([
-                'message' => "{$this->labelPlural} uspješno preuzeti",
+                'message' => ucfirst("{$this->labelPlural} uspješno preuzeti"),
                 'data' => $suppliers
             ]);
         } catch (Exception $e) {
@@ -45,7 +45,7 @@ class SupplierController extends Controller
     
             $supplier = $this->model::create($data);
             return response()->json([
-                'message' => "{$this->label} uspješno sačuvan",
+                'message' => ucfirst("{$this->label} uspješno sačuvan"),
                 'data' => $supplier
             ], 201);
         } catch (Exception $e) {
@@ -59,7 +59,7 @@ class SupplierController extends Controller
             $supplier = $this->model::findOrFail($supplierId);
             return response()->json($supplier);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => "{$this->label} nije pronađen s unesenim ID-om"], 404);
+            return response()->json(['error' => ucfirst("{$this->label} nije pronađen s unesenim ID-om")], 404);
         } catch (Exception $e) {
             return response()->json(['error' => "Neuspješno preuzet {$this->label}. Pokušajte ponovo kasnije"], 500);
         }
@@ -75,7 +75,7 @@ class SupplierController extends Controller
                 'data' => $supplier
             ]);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => "{$this->label} nije pronađen s unesenim ID-om"], 404);
+            return response()->json(['error' => ucfirst("{$this->label} nije pronađen s unesenim ID-om")], 404);
         } catch (Exception $e) {
             return response()->json(['error' => "Neuspješno ažuriran {$this->label}. Pokušajte ponovo kasnije"], 500);
         }
@@ -86,9 +86,9 @@ class SupplierController extends Controller
         try {
             $supplier = $this->model::findOrFail($supplierId);
             $supplier->delete();
-            return response()->json(['message' => "{$this->label} uspješno izbrisan"]);
+            return response()->json(['message' => ucfirst("{$this->label} uspješno izbrisan")]);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => "{$this->label} nije pronađen s unesenim ID-om"], 404);
+            return response()->json(['error' => ucfirst("{$this->label} nije pronađen s unesenim ID-om")], 404);
         } catch (Exception $e) {
             return response()->json(['error' => "Neuspješno izbrisan {$this->label}. Pokušajte ponovo kasnije"], 500);
         }
