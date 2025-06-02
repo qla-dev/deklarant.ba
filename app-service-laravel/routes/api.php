@@ -78,6 +78,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // STATISTICS ROUTES
     Route::get('/statistics', [StatsController::class, 'getStatistics']);
     Route::get('/statistics/users/{id}', [StatsController::class, 'getUserStatisticsById'])->where('id', '[0-9]+');
+    Route::get('/statistics/users', [StatsController::class, 'getAllUserStatistics']);
     Route::get('/statistics/suppliers/{id}', [StatsController::class, 'getEntityStatisticsById'])->where('id', '[0-9]+');
     Route::get('/statistics/importers/{id}', [StatsController::class, 'getEntityStatisticsById'])->where('id', '[0-9]+');
 
