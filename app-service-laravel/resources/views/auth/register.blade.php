@@ -133,7 +133,7 @@
                 Swal.fire({
                     icon: 'success',
                     title: 'Registracija uspješna!',
-                    text: message || 'Uspješno ste registrovani.',
+                    text: message || 'Uspješno ste registrovani',
                     showConfirmButton: false,
                     timer: 1500
                 }).then(() => {
@@ -142,7 +142,7 @@
 
             } catch (error) {
                 console.error("Registration failed:", error);
-                const msg = error.response?.data?.message || "Došlo je do greške prilikom registracije.";
+                const msg = error.response?.data?.message || "Došlo je do greške prilikom registracije";
 
                 Swal.fire({
                     icon: 'error',
