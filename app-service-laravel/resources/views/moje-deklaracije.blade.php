@@ -152,7 +152,8 @@
 deklarant.ba
 @endslot
 @slot('title')
-Moje spašene deklaracije
+Moje spašene deklaracije <span class="counter-value-invoice" id="invoice-count">0</span><span
+    class="counter-value">/{{ Auth::user()->getActivePackageStats()->document_history ?? '0' }}</span>
 @endslot
 @endcomponent
 
@@ -342,7 +343,7 @@ Moje spašene deklaracije
                         },
                         {
                             extend: 'pdf',
-                            text: '<i class="ri-file-pdf-line align-bottom me-1"></i> Export u PDF',
+                            text: '<i class="ri-file-pdf-2-line align-bottom me-1"></i> Export u PDF',
                             className: 'btn btn-soft-info me-1 ms-1 rounded-1'
                         },
                         {
@@ -408,6 +409,15 @@ Moje spašene deklaracije
 
                 console.log(" Search input initialized.");
             }
+        });
+
+        // Update all invoice count elements in header and breadcrumb
+        table.on('xhr', function () {
+            const data = table.ajax.json();
+            const count = Array.isArray(data) ? data.length : 0;
+            document.querySelectorAll('.counter-value-invoice').forEach(function(el) {
+                el.textContent = count;
+            });
         });
     });
 </script>

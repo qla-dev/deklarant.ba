@@ -743,7 +743,8 @@
                                     console.log(" Parsed statistike:", stats);
 
                                     const fields = {
-                                        totalSuppliers: stats.total_suppliers ?? 0,
+                                        totalSuppliers: stats.supplier_stats?.total_suppliers ?? 0,
+                                        suppliers = stats.supplier_stats?.latest_suppliers
                                         totalInvoices: stats.total_invoices ?? 0,
                                         usedScans: stats.total_invoices ?? 0,
                                         remainScansTopbar: stats.remaining_scans ?? 0

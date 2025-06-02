@@ -224,185 +224,167 @@ Lista klijenata
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        
+    document.addEventListener("DOMContentLoaded", function () {
 
-        if (!token || !user) {
-            alert("Niste prijavljeni.");
+
+        if (!Array.isArray(totalSuppliers)) {
+            console.error("❌ totalSuppliers nije validan niz.");
             return;
         }
 
-        fetch(`/api/statistics/users/${user.id}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-            .then(res => res.json())
-            .then(data => {
-                const profitMap = {};
-                data.supplier_profit_changes.forEach(p => {
-                    profitMap[p.supplier_id] = p;
-                });
-
-                const enrichedSuppliers = data.suppliers.map(supplier => ({
-                    ...supplier,
-                    ...profitMap[supplier.id]
-                }));
-
-                const table = $('#suppliersTable').DataTable({
-                    data: enrichedSuppliers,
-                    scrollX: true,
-                    autoWidth: true,
-                    lengthChange: false,
-                    fixedColumns: {
-                        leftColumns: 1
-                    },
-                    drawCallback: function() {
-                        $('.dataTables_paginate ul.pagination')
-                            .addClass('pagination-separated pagination-sm justify-content-center mb-0');
-                        $('.dataTables_paginate ul.pagination li.page-item a.page-link')
-                            .addClass('rounded');
-                    },
-                    columns: [{
-                            data: null,
-                            title: 'ID',
-                            render: (data, type, row, meta) => meta.row + 1
-                        },
-                        {
-                            data: 'name',
-                            title: 'Naziv firme',
-                            render: (data, type, row) => {
-                                const avatar = row.avatar ? `/storage/uploads/suppliers/${row.avatar}` : '/build/images/users/avatar-1.jpg';
-                                return `
-                                    <div class="d-flex align-items-center">
-                                        <img src="${avatar}" alt="avatar" class="rounded-circle me-2" width="30" height="30" style="object-fit: cover;">
-                                        <span>${data}</span>
-                                    </div>`;
-                            }
-                        },
-                        {
-                            data: 'owner',
-                            title: 'Vlasnik'
-                        },
-                        {
-                            data: 'last_year_profit',
-                            title: 'Profit prošle godine',
-                            render: data => data ? `${parseFloat(data).toFixed(2)} KM` : '-'
-                        },
-                        {
-                            data: 'current_year_profit',
-                            title: 'Profit ove godine',
-                            render: data => data ? `${parseFloat(data).toFixed(2)} KM` : '-'
-                        },
-                        {
-                            data: 'percentage_change',
-                            title: 'Promjena (%)',
-                            render: data => {
-                                if (!data) return '-';
-                                const num = parseFloat(data);
-                                const badge = num > 0 ? 'success' : num < 0 ? 'danger' : 'secondary';
-                                return `<span class="badge bg-${badge}">${data}</span>`;
-                            }
-                        },
-                        {
-                            data: null,
-                            title: 'Akcija',
-                            orderable: false,
-                            searchable: false,
-                            className: 'text-center',
-                            render: row => `
-                                <button class="btn btn-sm btn-soft-info me-1 edit-supplier" data-id="${row.id}">
-                                    <i class="ri-edit-line"></i>
-                                </button>
-                                <button class="btn btn-sm btn-soft-danger delete-supplier" data-id="${row.id}">
-                                    <i class="ri-delete-bin-line"></i>
-                                </button>`
-                        }
-                    ],
-                    dom: '<"datatable-topbar d-flex justify-content-between align-items-center mb-3"Bf>rt<"d-flex justify-content-between align-items-center mt-4 px-0"i p>',
-
-                    buttons: [{
-                            extend: 'csv',
-                            text: 'Export u CSV',
-                            className: 'btn btn-info me-1 ms-1 rounded-1'
-                        },
-                        {
-                            extend: 'excelHtml5',
-                            text: 'Export u Excel',
-                            className: 'btn btn-info me-1 ms-1 rounded-1'
-                        },
-                        {
-                            extend: 'pdf',
-                            text: 'Export u PDF',
-                            className: 'btn btn-info me-1 ms-1 rounded-1'
-                        },
-                        {
-                            extend: 'print',
-                            text: 'Štampa',
-                            className: 'btn btn-info me-1 ms-1 rounded-1'
-                        },
-                        {
-                            extend: 'colvis',
-                            text: 'Kolone',
-                            className: 'btn btn-info me-1 ms-1 rounded-1'
-                        },
-                        {
-                            extend: 'pageLength',
-                            text: 'Prikaži redova',
-                            className: 'btn-info me-1 ms-1 rounded-1'
-                        }
-                    ],
-                    language: {
-                        paginate: {
-                            first: "←",
-                            last: "→",
-                            next: "→",
-                            previous: "←"
-                        },
-                        info: "Prikazivanje _START_ do _END_ od _TOTAL_ stavki",
-                        infoEmpty: "Prikazivanje 0 do 0 od 0 stavki",
-                        infoFiltered: "(filtrirano iz _MAX_ ukupnih stavki)",
-                        search: "",
-                        zeroRecords: "Nema pronađenih stavki"
-                    },
-                    initComplete: function() {
-                        const api = this.api();
-
-                        $('#suppliersTable_filter')
-                            .addClass('flex-grow-1 me-0')
-                            .css('max-width', '400px')
-                            .html(`
-                                <div class="position-relative w-100">
-                                    <input type="text" class="form-control" placeholder="Pretraga..." autocomplete="off"
-                                        id="supplier-search-input" style="width: 100%; padding-left: 2rem;">
-                                    <span class="mdi mdi-magnify text-info fs-5 ps-2 position-absolute top-50 start-0 translate-middle-y"></span>
-                                    <span class="mdi mdi-close-circle position-absolute top-50 end-0 translate-middle-y me-2 d-none"
-                                        id="supplier-search-clear" style="cursor:pointer;"></span>
-                                </div>
-                            `);
-
-                        const input = $('#supplier-search-input');
-                        const clear = $('#supplier-search-clear');
-
-                        input.on('input', function() {
-                            const val = $(this).val();
-                            api.search(val).draw();
-                            clear.toggleClass('d-none', val.length === 0);
-                        });
-
-                        clear.on('click', function() {
-                            input.val('');
-                            api.search('').draw();
-                            $(this).addClass('d-none');
-                        });
-
-                        console.log(" Supplier search input initialized.");
+        const table = $('#suppliersTable').DataTable({
+            data: totalSuppliers, 
+            scrollX: true,
+            autoWidth: true,
+            lengthChange: false,
+            fixedColumns: {
+                leftColumns: 1
+            },
+            drawCallback: function () {
+                $('.dataTables_paginate ul.pagination')
+                    .addClass('pagination-separated pagination-sm justify-content-center mb-0');
+                $('.dataTables_paginate ul.pagination li.page-item a.page-link')
+                    .addClass('rounded');
+            },
+            columns: [
+                {
+                    data: null,
+                    title: 'ID',
+                    render: (data, type, row, meta) => meta.row + 1
+                },
+                {
+                    data: 'name',
+                    title: 'Naziv firme',
+                    render: (data, type, row) => {
+                        const avatar = row.avatar
+                            ? `/storage/uploads/suppliers/${row.avatar}`
+                            : '/build/images/users/avatar-1.jpg';
+                        return `
+                            <div class="d-flex align-items-center">
+                                <img src="${avatar}" alt="avatar" class="rounded-circle me-2" width="30" height="30" style="object-fit: cover;">
+                                <span>${data}</span>
+                            </div>`;
                     }
+                },
+                {
+                    data: 'owner',
+                    title: 'Vlasnik'
+                },
+                {
+                    data: 'last_year_profit',
+                    title: 'Profit prošle godine',
+                    render: data => data ? `${parseFloat(data).toFixed(2)} KM` : '-'
+                },
+                {
+                    data: 'current_year_profit',
+                    title: 'Profit ove godine',
+                    render: data => data ? `${parseFloat(data).toFixed(2)} KM` : '-'
+                },
+                {
+                    data: 'percentage_change',
+                    title: 'Promjena (%)',
+                    render: data => {
+                        if (!data) return '-';
+                        const num = parseFloat(data);
+                        const badge = num > 0 ? 'success' : num < 0 ? 'danger' : 'secondary';
+                        return `<span class="badge bg-${badge}">${data}</span>`;
+                    }
+                },
+                {
+                    data: null,
+                    title: 'Akcija',
+                    orderable: false,
+                    searchable: false,
+                    className: 'text-center',
+                    render: row => `
+                        <button class="btn btn-sm btn-soft-info me-1 edit-supplier" data-id="${row.id}">
+                            <i class="ri-edit-line"></i>
+                        </button>
+                        <button class="btn btn-sm btn-soft-danger delete-supplier" data-id="${row.id}">
+                            <i class="ri-delete-bin-line"></i>
+                        </button>`
+                }
+            ],
+            dom: '<"datatable-topbar d-flex justify-content-between align-items-center mb-3"Bf>rt<"d-flex justify-content-between align-items-center mt-4 px-0"i p>',
+            buttons: [
+                {
+                    extend: 'csv',
+                    text: 'Export u CSV',
+                    className: 'btn btn-info me-1 ms-1 rounded-1'
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: 'Export u Excel',
+                    className: 'btn btn-info me-1 ms-1 rounded-1'
+                },
+                {
+                    extend: 'pdf',
+                    text: 'Export u PDF',
+                    className: 'btn btn-info me-1 ms-1 rounded-1'
+                },
+                {
+                    extend: 'print',
+                    text: 'Štampa',
+                    className: 'btn btn-info me-1 ms-1 rounded-1'
+                },
+                {
+                    extend: 'colvis',
+                    text: 'Kolone',
+                    className: 'btn btn-info me-1 ms-1 rounded-1'
+                },
+                {
+                    extend: 'pageLength',
+                    text: 'Prikaži redova',
+                    className: 'btn-info me-1 ms-1 rounded-1'
+                }
+            ],
+            language: {
+                paginate: {
+                    first: "←",
+                    last: "→",
+                    next: "→",
+                    previous: "←"
+                },
+                info: "Prikazivanje _START_ do _END_ od _TOTAL_ stavki",
+                infoEmpty: "Prikazivanje 0 do 0 od 0 stavki",
+                infoFiltered: "(filtrirano iz _MAX_ ukupnih stavki)",
+                search: "",
+                zeroRecords: "Nema pronađenih stavki"
+            },
+            initComplete: function () {
+                const api = this.api();
+
+                $('#suppliersTable_filter')
+                    .addClass('flex-grow-1 me-0')
+                    .css('max-width', '400px')
+                    .html(`
+                        <div class="position-relative w-100">
+                            <input type="text" class="form-control" placeholder="Pretraga..." autocomplete="off"
+                                id="supplier-search-input" style="width: 100%; padding-left: 2rem;">
+                            <span class="mdi mdi-magnify text-info fs-5 ps-2 position-absolute top-50 start-0 translate-middle-y"></span>
+                            <span class="mdi mdi-close-circle position-absolute top-50 end-0 translate-middle-y me-2 d-none"
+                                id="supplier-search-clear" style="cursor:pointer;"></span>
+                        </div>
+                    `);
+
+                const input = $('#supplier-search-input');
+                const clear = $('#supplier-search-clear');
+
+                input.on('input', function () {
+                    const val = $(this).val();
+                    api.search(val).draw();
+                    clear.toggleClass('d-none', val.length === 0);
                 });
-            })
-            .catch(err => {
-                console.error(" Greška pri učitavanju podataka:", err);
-            });
+
+                clear.on('click', function () {
+                    input.val('');
+                    api.search('').draw();
+                    $(this).addClass('d-none');
+                });
+
+                console.log("🔍 Supplier search input initialized.");
+            }
+        });
     });
 </script>
 
