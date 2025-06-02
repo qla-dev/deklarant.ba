@@ -114,6 +114,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/invoices/{id}/scan/parties', [InvoiceController::class, 'getScanParties']);
 });
  Route::post('/loginUser', [AuthController::class, 'login']);
+ Route::post('/registerUser', [AuthController::class, 'registerUser']);
  Route::post('/logoutUser', [AuthController::class, 'logoutUser']);
 
 // LOGIN AND REGISTER ROUTES
