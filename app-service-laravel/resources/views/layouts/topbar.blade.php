@@ -560,8 +560,6 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
 
-
-
         const dropzone = document.getElementById("dropzone");
         const fileInput = document.getElementById("fileInput");
         const fileList = document.getElementById("fileList");
@@ -606,6 +604,26 @@
             });
         }
 
+        function closeScanModalIfOpen() {
+            // Close scanModal if open
+            const scanModalEl = document.getElementById('scanModal');
+            if (scanModalEl) {
+                let modalInstance = bootstrap.Modal.getInstance(scanModalEl);
+                if (!modalInstance) {
+                    modalInstance = new bootstrap.Modal(scanModalEl);
+                }
+                modalInstance.hide();
+            }
+            // Remove/hide all modal backdrops
+            document.querySelectorAll('.modal-backdrop.show, .modal-backdrop').forEach(el => {
+                el.classList.remove('show');
+                el.style.display = 'none';
+                el.style.zIndex = '';
+                el.remove();
+            });
+            document.body.classList.remove('modal-open');
+        }
+
         function uploadFiles(files) {
             const formData = new FormData();
             Array.from(files).forEach(file => formData.append('file', file));
@@ -620,9 +638,39 @@
                     'Authorization': `Bearer ${token}`
                 }
             })
-                .then(response => {
-                    if (!response.ok) throw new Error("Upload failed");
-                    return response.json();
+                .then(async response => {
+                    let data;
+                    try {
+                        data = await response.json();
+                    } catch (e) {
+                        data = {};
+                    }
+                    if (!response.ok) {
+                        // Close modal before showing SweetAlert
+                        closeScanModalIfOpen();
+                        // Show backend error in SweetAlert
+                        let message = data.message || 'Greška prilikom uploada.';
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Upload nije uspio',
+                            text: message,
+                            showCancelButton: true,
+                            confirmButtonText: 'Zatvori',
+                            cancelButtonText: 'Aktiviraj pretplatu',
+                            customClass: {
+                                confirmButton: 'btn btn-soft-info',
+                                cancelButton: 'btn btn-info ms-2'
+                            },
+                            buttonsStyling: false,
+                            reverseButtons: false
+                        }).then((result) => {
+                            if (result.dismiss === Swal.DismissReason.cancel) {
+                                window.location.href = '/cijene-paketa';
+                            }
+                        });
+                        throw new Error(message);
+                    }
+                    return data;
                 })
                 .then(data => {
                     console.log('Upload successful:', data);
@@ -630,13 +678,12 @@
                         localStorage.setItem("scan_invoice_id", data.invoice_id);
                     }
 
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('scanModal'));
-                    if (modal) modal.hide();
+                    closeScanModalIfOpen();
 
                     Swal.fire({
                         icon: 'success',
                         title: 'Uspješno uploadovan dokument',
-                        confirmButtonText: 'Nastavi',
+                        confirmButtonText: 'Nastavi na obradu',
                         customClass: {
                             confirmButton: 'btn btn-info'
                         },
@@ -664,16 +711,13 @@
                     });
                 })
                 .catch(error => {
+                    // Error already handled above, so just log here
                     console.error('Upload error:', error);
-                    alert('Greška prilikom uploada.');
                 })
                 .finally(() => {
                     document.getElementById("uploadLoader").style.display = "none";
                 });
         }
-
-
-
 
         dropzone.addEventListener("dragover", e => {
             e.preventDefault();
