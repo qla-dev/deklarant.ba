@@ -752,6 +752,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         });
 
+        // Update all .counter-value-invoice elements to total invoice
+        document.querySelectorAll('.counter-value-invoice').forEach(function(el) {
+            el.textContent = fields.totalInvoices;
+        });
+
     } catch (error) {
         console.error("❌ Greška pri dohvaćanju statistike:", error);
     }

@@ -62,7 +62,7 @@
                             <h6 class="text-muted text-uppercase fs-11 mb-1">Spašene deklaracije</h6>
                             <div class="d-flex align-items-center justify-content-center">
                                 <i class="ri-file-text-line  text-info mb-1" style="font-size: 45px"></i>
-                                <h3 class="mb-0 ms-2"><span id="usedScans" class="counter-value">0</span></h3>
+                                <h3 class="mb-0 ms-2"><span class="counter-value counter-value-invoice">0</span></h3>
                             </div>
                         </div>
 

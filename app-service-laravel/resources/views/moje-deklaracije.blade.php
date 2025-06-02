@@ -14,7 +14,7 @@
 deklarant.ba
 @endslot
 @slot('title')
-Moje spašene deklaracije <span class="counter-value-invoice" id="invoice-count">0</span><span
+Moje spašene deklaracije <span class="counter-value-invoice">0</span><span
     class="counter-value">/{{ Auth::user()->getActivePackageStats()->document_history ?? '0' }}</span>
 @endslot
 @endcomponent
