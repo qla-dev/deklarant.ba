@@ -292,7 +292,7 @@
                         <tbody class="border-bottom-dashed">
                             <tr class="border-top border-top-dashed fs-15">
                                 <th>Ukupan iznos</th>
-                                <th class="text-end" id="modal-total-amount">-- KM</th>
+                                <th class="text-end" id="modal-total-amount"> </th>
                             </tr>
                         </tbody>
                     </table>
@@ -369,6 +369,16 @@
 
 <!-- Scan and other logic script -->
 <script>
+
+    const editModeMatch = window.location.pathname.match(/\/deklaracija\/(\d+)/);
+    const isEditMode = !!editModeMatch;
+
+    if (isEditMode) {
+        console.warn("🛑 Edit mode detected – skipping scan/autofill script.");
+        // Exit the script entirely
+        // Note: Wrap the entire content below inside an IIFE or block
+        // Or better – put all scan logic inside a condition
+    } else {
     console.log(' Custom invoice JS loaded');
     let _invoice_data = null;
     let processedTariffData = [];
@@ -741,12 +751,6 @@
             });
         });
 
-
-
-
-
-
-
         row.innerHTML = `
           <td style="width: 50px;">${index + 1}</td>
 
@@ -1013,8 +1017,6 @@
     });
 
 
-
-
     async function fillInvoiceData() {
         const invoice = await getInvoice();
         const items = invoice.items || [];
@@ -1055,9 +1057,6 @@
 
 
     }
-
-
-
 
 
     async function fetchAndPrefillParties() {
@@ -1686,8 +1685,11 @@ $(document).ready(function() {
             Swal.fire("Greška", err.message || "Neuspješno dohvaćanje podataka", "error");
         }
     });
-});
+    });
+
+ }
 </script>
+
 
 <!-- Google search -->
 
@@ -1728,6 +1730,7 @@ $(document).ready(function() {
             });
         }
     }
+}
 </script>
 
 
@@ -1795,7 +1798,7 @@ $(document).ready(function() {
             return;
         }
 
-        
+
         const userId = user?.id;
         if (!userId) {
             Swal.fire("Greška", "Korisnički ID nije pronađen", "error");
@@ -2056,6 +2059,259 @@ $(document).ready(function() {
         html2pdf().set(opt).from(element).save();
     });
 </script>
+
+
+<!-- edit fill -->
+
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const match = window.location.pathname.match(/\/deklaracija\/(\d+)/);
+        const invoiceId = match ? match[1] : null;
+
+        if (!invoiceId) {
+            console.log(" No ID in URL — skipping load-invoice script.");
+            return;
+        }
+
+        console.log(" Deklaracija edit mode detected — fetching invoice:", invoiceId);
+
+        try {
+            const [tariffRes, invoiceRes, suppliersRes, importersRes] = await Promise.all([
+                fetch("{{ URL::asset('build/json/tariff.json') }}"),
+                fetch(`/api/invoices/${invoiceId}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                }),
+                fetch("/api/suppliers", {
+                    headers: { Authorization: `Bearer ${token}` }
+                }),
+                fetch("/api/importers", {
+                    headers: { Authorization: `Bearer ${token}` }
+                })
+            ]);
+
+            const [tariffJson, invoice, suppliersJson, importersJson] = [
+                await tariffRes.json(),
+                await invoiceRes.json(),
+                await suppliersRes.json(),
+                await importersRes.json()
+            ];
+
+            console.log(" Invoice loaded:", invoice);
+            console.log(" Tariff data loaded:", tariffJson);
+
+            const processedTariffData = tariffJson
+                .filter(item => item["Tarifna oznaka"])
+                .map(item => ({
+                    id: item["Tarifna oznaka"],
+                    text: item["Tarifna oznaka"]
+                }));
+
+            const supplierOptions = suppliersJson.data.map(s => ({
+                id: s.id,
+                text: `${s.name} – ${s.address}`,
+                full: s
+            }));
+
+            const importerOptions = importersJson.data.map(i => ({
+                id: i.id,
+                text: `${i.name} – ${i.address}`,
+                full: i
+            }));
+
+            $('#supplier-select2').select2({
+                placeholder: "Pretraži dobavljača",
+                width: '100%',
+                data: supplierOptions
+            });
+
+            $('#importer-select2').select2({
+                placeholder: "Pretraži uvoznika",
+                width: '100%',
+                data: importerOptions
+            });
+
+            // Prefill selected supplier
+            if (invoice.supplier_id) {
+                const selectedSupplier = supplierOptions.find(s => s.id === invoice.supplier_id);
+                if (selectedSupplier) {
+                    const newOption = new Option(selectedSupplier.text, selectedSupplier.id, true, true);
+                    $('#supplier-select2').append(newOption).trigger('change');
+                }
+            }
+
+            // Prefill selected importer
+            if (invoice.importer_id) {
+                const selectedImporter = importerOptions.find(i => i.id === invoice.importer_id);
+                if (selectedImporter) {
+                    const newOption = new Option(selectedImporter.text, selectedImporter.id, true, true);
+                    $('#importer-select2').append(newOption).trigger('change');
+                }
+            }
+
+            waitForEl("#invoice_number", el => el.value = invoice.invoice_number || "");
+            waitForEl("#date", el => el.value = invoice.date_of_issue || "");
+            waitForEl("#total-amount", el => el.value = `${invoice.total_price} `);
+            waitForEl("#invoice-no", el => el.value = `${invoice.invoice_number} `);
+            waitForEl("#invoice-no1", el => el.value = `${invoice.id}`);
+            waitForEl("#incoterm", el => el.value = (invoice.incoterm || "").split(" ")[0]);
+            waitForEl("#invoice-date", el => el.value = invoice.date_of_issue || "");
+
+            if (invoice.supplier_id) {
+                try {
+                    const sres = await fetch(`/api/suppliers/${invoice.supplier_id}`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                    const supplier = await sres.json();
+                    console.log(" Supplier loaded:", supplier);
+                    waitForEl("#billing-name", el => el.value = supplier.name || "");
+                    waitForEl("#billing-address-line-1", el => el.value = supplier.address || "");
+                    waitForEl("#billing-phone-no", el => el.value = supplier.contact_phone || "");
+                    waitForEl("#billing-tax-no", el => el.value = supplier.tax_id || "");
+                    waitForEl("#email", el => el.value = supplier.contact_email || "");
+                    waitForEl("#supplier-owner", el => el.value = supplier.owner || "");
+                } catch (e) {
+                    console.warn(" Failed to load supplier:", e);
+                }
+            }
+
+            if (invoice.importer_id) {
+                try {
+                    const ires = await fetch(`/api/importers/${invoice.importer_id}`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                    const importer = await ires.json();
+                    console.log("📦 Importer loaded:", importer);
+                    waitForEl("#carrier-name", el => el.value = importer.name || "");
+                    waitForEl("#carrier-address", el => el.value = importer.address || "");
+                    waitForEl("#carrier-tel", el => el.value = importer.contact_phone || "");
+                    waitForEl("#carrier-tax", el => el.value = importer.tax_id || "");
+                    waitForEl("#carrier-email", el => el.value = importer.contact_email || "");
+                    waitForEl("#carrier-owner", el => el.value = importer.owner || "");
+                } catch (e) {
+                    console.warn("⚠️ Failed to load importer:", e);
+                }
+            }
+
+            waitForTableBody((tbody) => {
+                console.log("✅ tbody found, filling invoice items...");
+                tbody.innerHTML = "";
+
+                invoice.items.forEach((item, index) => {
+                    let tarifnaOznaka = item.item_code?.trim();
+                    if (!tarifnaOznaka && Array.isArray(item.best_customs_code_matches) && item.best_customs_code_matches.length > 0) {
+                        tarifnaOznaka = item.best_customs_code_matches[0]?.entry?.["Tarifna oznaka"]?.trim() || "";
+                    }
+
+                    const name = item.item_description_original || "";
+                    const desc = item.item_description || "";
+                    const qtype = item.quantity_type || "";
+                    const origin = item.country_of_origin || "";
+                    const price = item.base_price || "";
+                    const quantity = item.quantity || "";
+                    const total = item.total_price || (item.base_price * item.quantity).toFixed(2);
+                    const package_num = item.num_packages || "";
+
+                    tbody.innerHTML += `
+<tr class="product">
+    <td>${index + 1}</td>
+    <td colspan="2">
+        <div class="input-group" style="display: flex; gap: 0.25rem;">
+            <input type="text" class="form-control item-name" name="item_name[]" placeholder="Naziv proizvoda" value="${name}" style="flex:1;">
+            <button class="btn btn-outline-info rounded" type="button" onclick="searchFromInputs(this)">
+                <i class="fa-brands fa-google"></i>
+            </button>
+            <input type="text" class="form-control item-desc" name="item_desc[]" placeholder="Opis proizvoda" value="${desc}" style="flex:1;">
+        </div>
+        <input type="text" class="form-control form-control-sm mt-1" name="item_prev[]" placeholder="Prevod" value="${item.translation || ''}">
+    </td>
+    <td>
+        <div style="position: relative;">
+            <select class="form-control select2-tariff" name="item_code[]">
+               <option value="${tarifnaOznaka}" selected>${tarifnaOznaka}</option>
+            </select>
+        </div>
+    </td>
+    <td><input type="text" class="form-control" name="quantity_type[]" value="${qtype}"></td>
+    <td>
+        <select class="form-select select2-country" name="origin[]">
+            ${generateCountryOptions(origin)}
+        </select>
+    </td>
+    <td><input type="number" class="form-control" name="price[]" value="${price}"></td>
+    <td>
+        <div class="input-group input-group-sm">
+            <button class="btn btn-outline-info btn-sm" type="button">−</button>
+            <input type="number" class="form-control text-center" name="quantity[]" value="${quantity}" min="0" style="padding: 0 5px;">
+            <button class="btn btn-outline-info btn-sm" type="button">+</button>
+        </div>
+        <div class="input-group input-group-sm mt-1">
+            <button class="btn btn-outline-info btn-sm" type="button">−</button>
+            <input type="number" class="form-control text-center" name="kolata[]" value="${package_num}" min="0">
+            <button class="btn btn-outline-info btn-sm" type="button">+</button>
+        </div>
+    </td>
+    <td><input type="text" class="form-control" name="total[]" value="${total}"></td>
+    <td>
+        <button class="btn btn-danger btn-sm remove-row"><i class="fas fa-times"></i></button>
+    </td>
+</tr>`;
+                });
+
+                setTimeout(() => {
+                    $('.select2-country').select2({
+                        templateResult: formatCountryWithFlag,
+                        templateSelection: formatCountryWithFlag,
+                        width: 'resolve',
+                        minimumResultsForSearch: Infinity
+                    });
+                    $('.select2-tariff').select2({
+                        data: processedTariffData,
+                        width: 'resolve'
+                    });
+                }, 100);
+            });
+
+        } catch (e) {
+            console.error("❌ Error loading invoice:", e);
+            Swal.fire("Greška", "Nije moguće učitati deklaraciju.", "error");
+        }
+    });
+
+    function waitForEl(selector, callback) {
+        const interval = setInterval(() => {
+            const el = document.querySelector(selector);
+            if (el) {
+                clearInterval(interval);
+                callback(el);
+            }
+        }, 100);
+    }
+
+    function waitForTableBody(callback) {
+        const interval = setInterval(() => {
+            const tbody = document.querySelector("#newlink");
+            if (tbody) {
+                clearInterval(interval);
+                callback(tbody);
+            }
+        }, 100);
+    }
+
+    function generateCountryOptions(selectedCode = "") {
+        const countries = ["ba", "hr", "rs", "de", "fr", "us", "gb", "it", "es", "cn", "jp", "in"];
+        return countries.map(code => {
+            const selected = selectedCode?.toLowerCase() === code ? "selected" : "";
+            return `<option value="${code.toUpperCase()}" ${selected}>${code.toUpperCase()}</option>`;
+        }).join("");
+    }
+
+    function formatCountryWithFlag(state) {
+        if (!state.id) return state.text;
+        const flagUrl = `https://flagcdn.com/w40/${state.id.toLowerCase()}.png`;
+        return $(`<span><img src="${flagUrl}" class="me-2" width="20" /> ${state.text}</span>`);
+    }
+</script>
+
 
 
 
