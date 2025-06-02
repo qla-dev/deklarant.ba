@@ -94,7 +94,7 @@ class User extends Authenticatable
     }
 
 
-     public function getActivePackageStats(): Package
+    public function getActivePackageStats(): ?Package
 {
     $userPackage = $this->userPackages()->with('package')->first();
     return $userPackage?->package;
