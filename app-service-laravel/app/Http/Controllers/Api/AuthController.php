@@ -40,7 +40,7 @@ class AuthController extends Controller
             ]);
 
             if ($validatedData['password'] !== $validatedData['confirm_password']) {
-                return response()->json(['error' => 'Potvrda lozinke se ne podudara.'], 400);
+                return response()->json(['error' => 'Potvrda lozinke se ne podudara'], 400);
             }
 
             $userResponse = User::create([
@@ -65,10 +65,10 @@ class AuthController extends Controller
 
         } catch (ModelNotFoundException $e) {
             Log::error("User not found after registration: " . $e->getMessage());
-            return response()->json(['error' => 'User not found. Please try again.'], 404);
+            return response()->json(['error' => 'Korisnik nije pronađen. Pokušajte ponovo kasnije'], 404);
         }catch (Exception $e) {
             Log::error("Registration error: " . $e->getMessage());
-            return response()->json(["error" => "User registration failed.", "message" => $e->getMessage()], 500);
+            return response()->json(["error" => "Registracija korisnika neuspješna", "message" => $e->getMessage()], 500);
         }
     }
 
@@ -95,7 +95,7 @@ public function login(Request $request)
                 ->first();
 
     if (!$user || !Hash::check($request->password, $user->password)) {
-        return response()->json(['message' => 'Neispravni pristupni podaci.'], 401);
+        return response()->json(['message' => 'Neispravni pristupni podaci'], 401);
     }
 
     // Log in via session (for web routes)
@@ -122,7 +122,7 @@ public function login(Request $request)
     $redirectUrl = ($user->role === 'superadmin') ? '/home' : '/';
 
     return response()->json([
-        'message' => $isFromRegistration ? 'Registration and Login successful.' : 'Login successful',
+        'message' => $isFromRegistration ? 'Registracija i prijava uspješne' : 'Prijava uspješna',
         'token' => $token,
         'macAddress' => $macAddress,
         'user' => $user->only(['id', 'username', 'role', 'email', 'avatar']),
@@ -165,11 +165,11 @@ public function login(Request $request)
             $currentToken = PersonalAccessToken::findToken($token);
             if ($currentToken) {
                 $currentToken->delete();
-                return response()->json(['message' => 'Odjavljeni ste iz API dijela.']);
+                return response()->json(['message' => 'Odjavljeni ste iz API dijela']);
             }
         }
 
-        return response()->json(['message' => 'Nije pronađen važeći token.'], 400);
+        return response()->json(['message' => 'Nije pronađen važeći token'], 400);
     }
 
     public function myToken(Request $request)
@@ -177,13 +177,13 @@ public function login(Request $request)
         $token = $request->bearerToken();
 
         if (!$token) {
-            return response()->json(['message' => 'Token nije pronađen u zahtjevu.'], 400);
+            return response()->json(['message' => 'Token nije pronađen u zahtjevu'], 400);
         }
 
         $currentToken = PersonalAccessToken::findToken($token);
 
         if (!$currentToken) {
-            return response()->json(['message' => 'Token nije pronađen ili je nevažeći.'], 401);
+            return response()->json(['message' => 'Token nije pronađen ili je nevažeći'], 401);
         }
 
         return response()->json(['token_data' => $currentToken, 'current_token' => $token]);
@@ -195,7 +195,7 @@ public function login(Request $request)
         $currentToken = PersonalAccessToken::findToken($token);
 
         if ($currentToken) {
-            return response()->json(['message' => 'Već ste prijavljeni.'], 401);
+            return response()->json(['message' => 'Već ste prijavljeni'], 401);
         }
 
         return null;
@@ -224,7 +224,7 @@ public function login(Request $request)
 
         if ($existingToken) {
             return response()->json([
-                'message' => 'Korisnik je već prijavljen sa ovog uređaja.',
+                'message' => 'Korisnik je već prijavljen sa ovog uređaja',
                 'device' => $macAddress
             ], 409);
         }

@@ -15,11 +15,11 @@ class PackageController extends Controller
         try {
             $packages = Package::all()->makeHidden(['created_at', 'updated_at']);
             return response()->json([
-                'message' => 'Packages retrieved successfully.',
+                'message' => 'Paketi uspješno preuzeti',
                 'data' => $packages
             ]);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno preuzimanje paketa. Pokušajte ponovo kasnije.'], 500);
+            return response()->json(['error' => 'Neuspješno preuzimanje paketa. Pokušajte ponovo kasnije'], 500);
         }
     }
 
@@ -35,7 +35,7 @@ class PackageController extends Controller
 
             $package = Package::create($data);
             return response()->json([
-                'message' => 'The package has been stored successfully.',
+                'message' => 'Paket uspješno spremljen',
                 'data' => $package
             ], 201);
         } catch (Exception $e) {
@@ -49,9 +49,9 @@ class PackageController extends Controller
             $package = Package::findOrFail($packageId);
             return response()->json($package);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Paket s unesenim ID-om nije pronađen.'], 404);
+            return response()->json(['error' => 'Paket s unesenim ID-om nije pronađen'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno preuzimanje paketa. Pokušajte ponovo kasnije.'], 500);
+            return response()->json(['error' => 'Neuspješno preuzimanje paketa. Pokušajte ponovo kasnije'], 500);
         }
 
     }
@@ -62,13 +62,13 @@ class PackageController extends Controller
             $package = Package::findOrFail($packageId);
             $package->update($request->all());
             return response()->json([
-                'message' => 'Package updated successfully.',
+                'message' => 'Paket uspješno ažuriran',
                 'data' => $package
             ]);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Paket s unesenim ID-om nije pronađen.'], 404);
+            return response()->json(['error' => 'Paket s unesenim ID-om nije pronađen'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno ažuriranje paketa. Provjerite podatke i pokušajte ponovo.'], 500);
+            return response()->json(['error' => 'Neuspješno ažuriranje paketa. Provjerite podatke i pokušajte ponovo'], 500);
         }
 
     }
@@ -78,11 +78,11 @@ class PackageController extends Controller
         try {
             $package = Package::findOrFail($packageId);
             $package->delete();
-            return response()->json(['message' => 'Package deleted successfully.']);
+            return response()->json(['message' => 'Paket uspješno izbrisan']);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Paket s unesenim ID-om nije pronađen.'], 404);
+            return response()->json(['error' => 'Paket s unesenim ID-om nije pronađen'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno brisanje paketa. Pokušajte ponovo kasnije.'], 500);
+            return response()->json(['error' => 'Neuspješno brisanje paketa. Pokušajte ponovo kasnije'], 500);
         }
 
     }

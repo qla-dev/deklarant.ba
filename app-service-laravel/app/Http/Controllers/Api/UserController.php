@@ -20,12 +20,12 @@ class UserController extends Controller
             $users = User::all();
 
             return response()->json([
-                'message' => 'Users retrieved successfully',
+                'message' => 'Korisnici uspješno preuzeti',
                 'users' => $users
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'error' => 'Neuspješno preuzimanje korisnika.',
+                'error' => 'Neuspješno preuzimanje korisnika',
                 'message' => $e->getMessage()
             ], 500);
         }
@@ -40,17 +40,17 @@ class UserController extends Controller
             $user = User::findOrFail($id);
 
             return response()->json([
-                'message' => 'User retrieved successfully',
+                'message' => 'Korisnici uspješno preuzeti',
                 'user' => $user
             ], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json([
-                'error' => 'Korisnik nije pronađen.',
+                'error' => 'Korisnik nije pronađen',
                 'message' => $e->getMessage()
             ], 404);
         } catch (Exception $e) {
             return response()->json([
-                'error' => 'Neuspješno preuzimanje korisnika.',
+                'error' => 'Neuspješno preuzimanje korisnika',
                 'message' => $e->getMessage()
             ], 500);
         }
@@ -100,22 +100,22 @@ class UserController extends Controller
             $user->update($validatedData);
 
             return response()->json([
-                'message' => 'User updated successfully',
+                'message' => 'Korisnik uspješno ažuriran',
                 'user' => $user
             ], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json([
-                'error' => 'Korisnik nije pronađen.',
+                'error' => 'Korisnik nije pronađen',
                 'message' => $e->getMessage()
             ], 404);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
-                'error' => 'Validacija nije uspjela.',
+                'error' => 'Validacija neuspješna',
                 'message' => $e->errors()
             ], 422);
         } catch (Exception $e) {
             return response()->json([
-                'error' => 'Neuspješno ažuriranje korisnika.',
+                'error' => 'Neuspješno ažuriranje korisnika',
                 'message' => $e->getMessage()
             ], 500);
         }
@@ -131,16 +131,16 @@ class UserController extends Controller
             $user->delete();
 
             return response()->json([
-                'message' => 'User deleted successfully'
+                'message' => 'Korisnik uspješno izbrisan'
             ], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json([
-                'error' => 'Korisnik nije pronađen.',
+                'error' => 'Korisnik nije pronađen',
                 'message' => $e->getMessage()
             ], 404);
         } catch (Exception $e) {
             return response()->json([
-                'error' => 'Neuspješno brisanje korisnika.',
+                'error' => 'Neuspješno brisanje korisnika',
                 'message' => $e->getMessage()
             ], 500);
         }
