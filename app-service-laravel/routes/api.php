@@ -113,8 +113,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/invoices/{id}/scan/result', [InvoiceController::class, 'getScanResult']);
     Route::get('/invoices/{id}/scan/parties', [InvoiceController::class, 'getScanParties']);
 });
-
-    Route::post('/logoutUser', [AuthController::class, 'logoutUser']);
+ Route::post('/loginUser', [AuthController::class, 'login']);
+ Route::post('/logoutUser', [AuthController::class, 'logoutUser']);
 
 // LOGIN AND REGISTER ROUTES
 Route::prefix('auth')->middleware('web')->group(function () {
