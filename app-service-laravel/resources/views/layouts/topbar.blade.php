@@ -734,6 +734,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         // Sigurno dohvaćanje vrijednosti
         const fields = {
             totalSuppliers: stats.supplier_stats?.total_suppliers ?? 0,
+            totalImporters: stats.importer_stats?.total_importers ?? 0,
             suppliers: stats.supplier_stats?.suppliers ?? 0,
             totalInvoices: stats.total_invoices ?? 0,
             usedScans: stats.used_scans ?? 0,
