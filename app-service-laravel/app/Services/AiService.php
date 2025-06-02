@@ -17,24 +17,27 @@ class AiService
 
     public function uploadDocument(string $filePath, string $originalName): array|null
     {
-        $response = Http::attach(
-            'file',
-            file_get_contents($filePath),
-            $originalName
-        )->post("{$this->baseUrl}/api/upload");
+        $response = Http::withOptions(['verify' => false])->
+            attach(
+                'file',
+                file_get_contents($filePath),
+                $originalName
+            )->post("{$this->baseUrl}/api/upload");
 
         return $this->handleResponse($response);
     }
 
     public function getTaskStatus(string $taskId): array|null
     {
-        $response = Http::get("{$this->baseUrl}/api/tasks/{$taskId}");
+        $response = Http::withOptions(['verify' => false])->
+            get("{$this->baseUrl}/api/tasks/{$taskId}");
         return $this->handleResponse($response);
     }
 
     public function getTaskResult(string $taskId): array|null
     {
-        $response = Http::get("{$this->baseUrl}/api/tasks/{$taskId}/result");
+        $response = Http::withOptions(['verify' => false])->
+            get("{$this->baseUrl}/api/tasks/{$taskId}/result");
         return $this->handleResponse($response);
     }
 
