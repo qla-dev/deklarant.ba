@@ -116,7 +116,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logoutUser', [AuthController::class, 'logoutUser']);
 
 // LOGIN AND REGISTER ROUTES
-Route::prefix('auth')->group(function () {
+Route::prefix('auth')->middleware('web')->group(function () {
     Route::post('/register', [AuthController::class, 'registerUser']);
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/logout', [AuthController::class, 'logout']);
