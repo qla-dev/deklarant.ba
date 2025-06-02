@@ -38,7 +38,7 @@ Route::apiResource('tariff-rates', TariffRateController::class);
 Route::middleware('auth:sanctum')->group(function () {
 
     // INVOICE ROUTES
-    Route::prefix('deta')->group(function () {
+    Route::prefix('invoices')->group(function () {
         Route::get('/', [InvoiceController::class, 'index']); // Get all invoices
         Route::get('/{id}', [InvoiceController::class, 'show']); // Get invoice by invoice ID
         Route::get('/users/{userId}', [InvoiceController::class, 'getInvoicesByUser']); // Get invoices by user ID
