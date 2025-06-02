@@ -6,145 +6,7 @@
 <link href="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
 <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css" rel="stylesheet">
-<style>
-    #invoiceTable_wrapper .dataTables_paginate {
-        overflow-x: hidden;
-        /* enable scrolling only if needed */
-        flex-wrap: nowrap;
-        /* prevent wrapping */
-        white-space: nowrap;
-        display: flex;
-        /* enable flex layout */
-        justify-content: end;
-        align-items: center;
-        margin-top: 4px !important;
-        padding-top: 0 !important;
-        padding-right: 0px;
-        /* option
-        
-        /* Optional: space between buttons */
 
-
-
-    }
-
-    #invoiceTable_wrapper .dataTables_paginate .paginate_button {
-        background-color: #fff;
-        color: #299cdb !important;
-        border: 1px solid #dee2e6;
-        border-radius: 0.375rem;
-        margin: 0 2px;
-        font-size: 0.8125rem;
-        width: 38px;
-        height: 38px;
-
-        display: inline-flex;
-        /* ← fixes stacking + centers content */
-        align-items: center;
-        justify-content: center;
-
-        padding: 0;
-        transition: all 0.2s ease-in-out;
-        margin-top: 4px !important;
-        /* reduce top gap */
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-
-    }
-
-    #invoiceTable_wrapper .table {
-        margin-bottom: 0 !important;
-    }
-
-
-    #invoiceTable_wrapper .dataTables_paginate .paginate_button:hover {
-        background-color: #eff2f7;
-
-        color: #299cdb !important;
-        cursor: pointer;
-    }
-
-    #invoiceTable_wrapper .dataTables_paginate .paginate_button.current {
-        background-color: #299cdb !important;
-        color: #fff !important;
-        border-color: #299cdb;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
-
-    }
-
-    #invoiceTable_wrapper .dataTables_paginate .paginate_button:focus {
-        outline: none;
-        box-shadow: none;
-    }
-
-    #invoiceTable_wrapper .dataTables_paginate .paginate_button.disabled {
-        background-color: #eff2f7;
-        color: #adb5bd !important;
-        /* light gray text */
-        border-color: #dee2e6;
-        cursor: not-allowed;
-        pointer-events: none;
-        font-weight: bold;
-
-        cursor: pointer;
-    }
-
-    #invoiceTable_wrapper .dataTables_paginate .paginate_button.previous,
-    #invoiceTable_wrapper .dataTables_paginate .paginate_button.next,
-    #invoiceTable_wrapper .dataTables_paginate .paginate_button.first,
-    #invoiceTable_wrapper .dataTables_paginate .paginate_button.last {
-        width: 50px;
-        /* or whatever width you want */
-    }
-
-    #invoiceTable_wrapper .dataTables_info {
-        margin-top: 0 !important;
-        padding-top: 0 !important;
-    }
-
-    #invoiceTable_wrapper .dataTables_paginate {
-        margin-top: 4px !important;
-        /* reduce from default ~16px */
-        padding-top: 0 !important;
-    }
-
-    #invoiceTable_wrapper .dataTables_length,
-    #invoiceTable_wrapper .dataTables_filter {
-        margin-bottom: 4px !important;
-        padding-bottom: 0 !important;
-
-    }
-
-    .table-card .dataTables_filter {
-        padding: 0 !important;
-        margin: 0 !important;
-        /* optional for tighter alignment */
-    }
-
-    #invoiceTable_wrapper .dataTables_filter input {
-        margin-left: 0 !important;
-    }
-
-    #invoiceList {
-    --vz-card-spacer-y: 10px; /* or any smaller value you want */
-    }
-    .table-card .dataTables_info{
-        padding-left: 0 !important;
-    }
-
-
-
-
-
-
-    .modal-dialog.modal-xl {
-        max-width: 75vw;
-        /* or set fixed px: 1200px, 1400px */
-    }
-
-   
-
-</style>
 @endsection
 @section('content')
 @component('components.breadcrumb')
@@ -204,7 +66,7 @@ Moje spašene deklaracije <span class="counter-value-invoice" id="invoice-count"
 
                 <div class="noresult " style="display: none">
                     <div class="text-center py-4">
-                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#121331,secondary:#08a88a" style="width:75px;height:75px"></lord-icon>
+                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#299cdb,secondary:#121331" style="width:75px;height:75px" delay="2000"></lord-icon>
                         <h5 class="mt-3">Nažalost! Nema rezultata</h5>
                         <p class="text-muted mb-0">Nismo pronašli nijednu fakturu prema vašem upitu.</p>
                     </div>

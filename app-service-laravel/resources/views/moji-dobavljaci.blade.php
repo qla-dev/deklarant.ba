@@ -339,33 +339,33 @@ Lista dobavljača
 
                     buttons: [{
                             extend: 'csv',
-                            text: 'Export u CSV',
-                            className: 'btn btn-info me-1 ms-1 rounded-1'
+                            text: '<i class="ri-file-code-line align-bottom me-1"></i> Export u CSV',
+                            className: 'btn btn-soft-info me-1 rounded-1'
                         },
                         {
                             extend: 'excelHtml5',
-                            text: 'Export u Excel',
-                            className: 'btn btn-info me-1 ms-1 rounded-1'
+                            text: '<i class="ri-file-excel-line align-bottom me-1"></i> Export u Excel',
+                            className: 'btn btn-soft-info me-1 ms-1 rounded-1'
                         },
                         {
                             extend: 'pdf',
-                            text: 'Export u PDF',
-                            className: 'btn btn-info me-1 ms-1 rounded-1'
+                            text: '<i class="ri-file-pdf-2-line align-bottom me-1"></i> Export u PDF',
+                            className: 'btn btn-soft-info me-1 ms-1 rounded-1'
                         },
                         {
                             extend: 'print',
-                            text: 'Štampa',
-                            className: 'btn btn-info me-1 ms-1 rounded-1'
+                            text: '<i class="ri-printer-line align-bottom me-1"></i> Print',
+                            className: 'btn btn-soft-info me-1 ms-1 rounded-1'
                         },
                         {
                             extend: 'colvis',
                             text: 'Kolone',
-                            className: 'btn btn-info me-1 ms-1 rounded-1'
+                            className: 'btn btn-soft-info me-1 ms-1 rounded-1'
                         },
                         {
                             extend: 'pageLength',
                             text: 'Prikaži redova',
-                            className: 'btn-info me-1 ms-1 rounded-1'
+                            className: 'btn-soft-info me-1 ms-1 rounded-1'
                         }
                     ],
                     language: {

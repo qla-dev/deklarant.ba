@@ -706,64 +706,54 @@
 
 
 <!-- Statistics API -->
- <script>
-                            document.addEventListener("DOMContentLoaded", async function() {
-                                // Removed old localStorage user check, now only use backend user
-                         
-                                 
+<script>
+document.addEventListener("DOMContentLoaded", async function () {
+    console.log("[INIT] Provjera lokalne pohrane...");
+    console.log(" Korisnik:", user);
+    console.log(" Token:", token?.substring(0, 25) + "...");
 
-                                console.log("[INIT] Provjera lokalne pohrane...");
-                                console.log(" Korisnik:", user);
-                                console.log(" Token:", token?.substring(0, 25) + "...");
+    if (!user || !token) {
+        if (!user) console.warn("[TOPBAR] Backend user missing!");
+        if (!token) console.warn("[TOPBAR] Auth token missing in localStorage.");
+        return;
+    }
 
-                                if (!user || !token) {
-                                    // Only warn if user is actually missing (should not happen)
-                                    if (!user) {
-                                        console.warn("[TOPBAR] Backend user missing!");
-                                    }
-                                    if (!token) {
-                                        console.warn("[TOPBAR] Auth token missing in localStorage.");
-                                    }
-                                    return;
-                                }
+    const API_URL = `/api/statistics/users/${user.id}`;
+    console.log(`📡 Pozivam API: ${API_URL}`);
 
-                                const API_URL = `/api/statistics/users/${user.id}`;
-                                console.log(` Pozivam API: ${API_URL}`);
+    try {
+        const response = await axios.get(API_URL, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
 
-                                try {
-                                    const response = await axios.get(API_URL, {
-                                        headers: {
-                                            Authorization: `Bearer ${token}`
-                                        }
-                                    });
+        console.log("✅ API response:", response);
+        const stats = response.data || {};
 
-                                    console.log(" API response:", response);
-                                    const stats = response.data || {};
+        // Sigurno dohvaćanje vrijednosti
+        const fields = {
+            totalSuppliers: stats.supplier_stats?.total_suppliers ?? 0,
+            suppliers: stats.supplier_stats?.suppliers ?? 0,
+            totalInvoices: stats.total_invoices ?? 0,
+            usedScans: stats.used_scans ?? 0,
+            remainScansTopbar: stats.remaining_scans ?? 0
+        };
 
-                                    console.log(" Parsed statistike:", stats);
+        console.log("📌 Vrijednosti za prikaz u DOM-u:", fields);
 
-                                    const fields = {
-                                        totalSuppliers: stats.supplier_stats?.total_suppliers ?? 0,
-                                        suppliers = stats.supplier_stats?.latest_suppliers
-                                        totalInvoices: stats.total_invoices ?? 0,
-                                        usedScans: stats.total_invoices ?? 0,
-                                        remainScansTopbar: stats.remaining_scans ?? 0
-                                    };
+        Object.entries(fields).forEach(([id, value]) => {
+            const el = document.getElementById(id);
+            if (el) {
+                console.log(`➡️ Ažuriram #${id} na:`, value);
+                el.innerText = value;
+            } else {
+                console.warn(`⚠️ Element s ID '${id}' nije pronađen u DOM-u.`);
+            }
+        });
 
-                                    console.log("📌 Vrijednosti za prikaz u DOM-u:", fields);
-
-                                    Object.entries(fields).forEach(([id, value]) => {
-                                        const el = document.getElementById(id);
-                                        if (el) {
-                                            console.log(`➡️ Ažuriram #${id} na:`, value);
-                                            el.innerText = value;
-                                        } else {
-                                            console.warn(`⚠️ Element s ID '${id}' nije pronađen u DOM-u.`);
-                                        }
-                                    });
-
-                                } catch (error) {
-                                    console.error("❌ Greška pri dohvaćanju statistike:", error);
-                                }
-                            });
-                        </script>
+    } catch (error) {
+        console.error("❌ Greška pri dohvaćanju statistike:", error);
+    }
+});
+</script>
