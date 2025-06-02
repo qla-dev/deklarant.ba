@@ -5,8 +5,8 @@
         <div class="col-lg-12">
             <div class="row justify-content-evenly mb-4">
                 <div class="col-lg-4">
-                    <div class="mt-3">
-                        <div class="d-flex align-items-center mb-2">
+                    <div class="">
+                        <div class="d-flex align-items-center mb-3">
                             <div class="flex-shrink-0 me-1">
                                 <i class="ri-information-line fs-24 align-middle text-info me-1"></i>
                             </div>
@@ -80,8 +80,8 @@
                 </div>
 
                 <div class="col-lg-4">
-                    <div class="mt-3">
-                        <div class="d-flex align-items-center mb-2">
+                    <div class="">
+                        <div class="d-flex align-items-center mb-3">
                             <div class="flex-shrink-0 me-1">
                                 <i class="ri-tools-line fs-24 align-middle text-info me-1"></i>
                             </div>
@@ -155,8 +155,8 @@
                 </div>
 
                 <div class="col-lg-4">
-                    <div class="mt-3">
-                        <div class="d-flex align-items-center mb-2">
+                    <div class="">
+                        <div class="d-flex align-items-center mb-3">
                             <div class="flex-shrink-0 me-1">
                                 <i class="ri-lock-line fs-24 align-middle text-info me-1"></i>
                             </div>
