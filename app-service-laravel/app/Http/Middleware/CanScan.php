@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Models\UserPackage;
+use Carbon\Carbon;
 
 class CanScan
 {
@@ -15,14 +16,23 @@ class CanScan
     public function handle(Request $request, Closure $next): Response
     {
         $user = $request->user();
-        if (!$user) {
-            return response()->json(['message' => 'Unauthorized.'], 401);
-        }
 
         $userPackage = UserPackage::where('user_id', $user->id)->first();
 
-        if (!$userPackage || $userPackage->remaining_scans < 1) {
-            return response()->json(['message' => 'No remaining scans available.'], 403);
+        if (!$userPackage) {
+            return response()->json(['message' => 'Nažalost, pretplata nije aktivna'], 405);
+        }
+
+        if ($userPackage->expiration_date) {
+            $expirationDate = Carbon::parse($userPackage->expiration_date)->startOfDay();
+            $yesterday = now()->subDay()->startOfDay();
+            if ($expirationDate->eq($yesterday)) {
+                return response()->json(['message' => 'Nažalost, pretplata je istekla'], 403);
+            }
+        }
+
+        if ($userPackage->remaining_scans < 1) {
+            return response()->json(['message' => 'Nažalost, nema dostupnih AI skeniranja'], 403);
         }
 
         return $next($request);

@@ -79,8 +79,17 @@
                             <div id="avatar-middle-fallback" class="rounded-circle bg-info d-flex justify-content-center align-items-center text-white" style="width: 50px; height: 50px;"></div>
                         </div>
                         <h6 class="fw-bold mb-1 mt-1">Dobrodošli na deklarant.ba {{ Auth::user()->username ?? '' }}</h6>
-                        <p class="fw-semibold fs-7 mb-1 text-info" id="user-package-display">
-                            Učitavanje paketa...
+                        <p class="fs-7 mb-1 text-info" id="user-package-display">
+                                 @php
+                                            $packageName = Auth::user()->getActivePackageName();
+                                        @endphp
+
+                                        @if ($packageName)
+                                            Aktivna pretplata: <strong>{{ $packageName }}</strong>
+                                        @else
+                                            <a class="text-info" style="white-space:nowrap; cursor:pointer;"
+                                                onclick="window.location.href='{{ url('cijene-paketa') }}'">Pretplata nije aktivna. <strong class=" text-decoration-underline">Odaberi paket po svojim potrebama!</strong></a>
+                                        @endif
                         </p>
                     </div>
                     <div class="card-footer bg-transparent border-0 w-100 p-0 p-lg-1">
@@ -1276,41 +1285,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
 <!-- user package -->
-<script>
-    document.addEventListener("DOMContentLoaded", async function() {
-         
-        if (!token) return console.warn("Nedostaje auth token");
 
-        try {
-            const res = await axios.get("/api/user-packages", {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                }
-            });
-
-            const userPackages = res.data?.data || [];
-            const displayElement = document.getElementById("user-package-display");
-
-            if (!displayElement) return;
-
-            if (userPackages.length > 0) {
-                const userPackage = userPackages.find(p => p.active) || userPackages[0];
-                const packageName = userPackage?.package?.name || "Nepoznat";
-
-                displayElement.innerHTML = `Tvoj trenutni paket je <b>${packageName}</b>`;
-            } else {
-                displayElement.innerHTML = `Još uvijek nisi odabrao paket? <a href="/cijene-paketa" class="fw-bold text-decoration-underline text-info">Odaberi ovdje</a>`;
-            }
-
-        } catch (err) {
-            console.error("Greška pri dohvaćanju paketa korisnika:", err);
-            const displayElement = document.getElementById("user-package-display");
-            if (displayElement) {
-                displayElement.innerHTML = `Greška prilikom dohvaćanja paketa.`;
-            }
-        }
-    });
-</script>
 
 
 
