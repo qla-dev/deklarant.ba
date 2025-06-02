@@ -70,10 +70,10 @@ class UserPackageController extends Controller
         }
     }
 
-    public function update(Request $request, $userPackageId)
+    public function update(Request $request, $userId)
     {
         try {
-            $userPackage = UserPackage::findOrFail($userPackageId);
+            $userPackage = UserPackage::where('user_id', $userId)->firstOrFail();
             $userPackage->update($request->all());
             return response()->json([
                 'message' => 'Korisnički paket uspješno ažuriran',

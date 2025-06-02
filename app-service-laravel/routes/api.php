@@ -72,8 +72,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // USER PACKAGES ROUTES
     Route::apiResource('user-packages', UserPackageController::class);
     Route::post('user-packages/users/{userId}/packages/{packageId}', [UserPackageController::class, 'store']);
+    Route::put('user-packages/users/{userId}', [UserPackageController::class, 'update']);
     Route::delete('user-packages/users/{userId}/packages/{packageId}', [UserPackageController::class, 'destroy']);
-
 
     // STATISTICS ROUTES
     Route::get('/statistics', [StatsController::class, 'getStatistics']);
