@@ -40,7 +40,7 @@ Moje spašene deklaracije <span class="counter-value-invoice">0</span><span
                     <i class="mdi mdi-loading mdi-spin fs-24 text-info"></i>
                     <p class="text-muted">Učitavanje rezultata</p>
                 </div>
-                <div class="table-responsive table-card ms-1 me-1 mb-0" style="display:none" id="invoice-table-container">
+                <div class="table-responsive table-card ms-1 me-1 mb-2" style="display:none" id="invoice-table-container">
                     <table id="invoiceTable" class="table  w-100">
                         <thead class="custom-table">
                             <tr>

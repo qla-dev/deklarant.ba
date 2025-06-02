@@ -42,8 +42,8 @@ Lista klijenata
                     <i class="mdi mdi-loading mdi-spin fs-24 text-info"></i>
                     <p class="text-muted">Učitavanje rezultata</p>
                 </div>
-                <div class="table-responsive table-card ms-1 me-1 mb-2">
-                    <table id="suppliersTable" class="table mb-2 w-100">
+                <div class="table-responsive table-card ms-1 me-1 mb-2" style="display:none">
+                    <table id="suppliersTable" class="table w-100">
                         <thead class="custom-table">
                             <tr>
                                 <th>ID</th>
