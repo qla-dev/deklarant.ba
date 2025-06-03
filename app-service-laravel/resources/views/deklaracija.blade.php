@@ -700,7 +700,7 @@
 
             }
 
-            
+
 
             row.innerHTML = `
           <td style="width: 50px;">${index + 1}</td>
@@ -1500,27 +1500,77 @@
 
             // Handler for new supplier
             $(document).on('click', '#add-new-supplier', function() {
-                window.skipPrefillParties = true; // Prevent prefill after clearing
-                // Only clear and unlock supplier fields
-                $("#billing-name, #billing-address-line-1, #billing-phone-no, #billing-tax-no, #email, #supplier-owner").val("").prop('readonly', false).removeClass("is-invalid");
-                // Set select2 to empty
-                $("#supplier-select2").val(null).trigger('change');
-                // Remove 'Novi dobavljač' option if present
-                $("#supplier-select2 option[value='new']").remove();
-                // Do NOT call fetchAndPrefillParties or touch importer fields
+                if (window.isResetConfirmed) return;
+
+                Swal.fire({
+                    title: 'Jesi li siguran/na?',
+                    text: 'Ova radnja će izbrisati sve podatke za dobavljača i omogućiti ručni unos.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Da',
+                    cancelButtonText: 'Ne',
+                    reverseButtons: true,
+                    focusCancel: true,
+                    confirmButtonColor: '#299dcb',
+                    cancelButtonColor: '#6c757d'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.skipPrefillParties = true;
+
+                        // Clear all supplier input fields and unlock them
+                        $("#billing-name, #billing-address-line-1, #billing-phone-no, #billing-tax-no, #email, #supplier-owner")
+                            .val("")
+                            .prop('readonly', false)
+                            .removeClass("is-invalid");
+
+                        // Clear and reset supplier-select2, keeping only 'Novi dobavljač'
+                        const select = $("#supplier-select2");
+                        select.empty(); // remove all options
+
+                        const newOption = new Option('Novi dobavljač', 'new', true, true);
+                        select.append(newOption).trigger('change'); // add and select it
+                    }
+                });
             });
+
+
+
 
             // Handler for new importer
             $(document).on('click', '#add-new-importer', function() {
-                window.skipPrefillParties = true; // Prevent prefill after clearing
-                // Only clear and unlock importer fields
-                $("#carrier-name, #carrier-address, #carrier-tel, #carrier-tax, #carrier-email, #carrier-owner").val("").prop('readonly', false).removeClass("is-invalid");
-                // Set select2 to empty
-                $("#importer-select2").val(null).trigger('change');
-                // Remove 'Novi uvoznik' option if present
-                $("#importer-select2 option[value='new']").remove();
-                // Do NOT call fetchAndPrefillParties or touch supplier fields
+                if (window.isResetConfirmed) return;
+
+                Swal.fire({
+                    title: 'Jesi li siguran/na?',
+                    text: 'Ova radnja će izbrisati sve podatke za uvoznika i omogućiti ručni unos.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Da',
+                    cancelButtonText: 'Ne',
+                    reverseButtons: true,
+                    focusCancel: true,
+                    confirmButtonColor: '#299dcb',
+                    cancelButtonColor: '#6c757d'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.skipPrefillParties = true;
+
+                        // Clear all importer input fields and unlock them
+                        $("#carrier-name, #carrier-address, #carrier-tel, #carrier-tax, #carrier-email, #carrier-owner")
+                            .val("")
+                            .prop('readonly', false)
+                            .removeClass("is-invalid");
+
+                        // Clear and reset importer-select2, keeping only 'Novi uvoznik'
+                        const select = $("#importer-select2");
+                        select.empty(); // remove all options
+
+                        const newOption = new Option('Novi uvoznik', 'new', true, true);
+                        select.append(newOption).trigger('change'); // add and select it
+                    }
+                });
             });
+
         });
 
 
@@ -1663,64 +1713,28 @@
             });
         });
 
-      
+
 
 
     }
-   
 </script>
 
 
 <!-- btn add item logic -->
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-    const addItemBtn = document.getElementById("add-item");
-    if (addItemBtn) {
-        addItemBtn.addEventListener("click", () => addRowToInvoice());
-    } else {
-        console.warn("[add-item] button not found.");
-    }
-});
+    document.addEventListener("DOMContentLoaded", () => {
+        const addItemBtn = document.getElementById("add-item");
+        if (addItemBtn) {
+            addItemBtn.addEventListener("click", () => addRowToInvoice());
+        } else {
+            console.warn("[add-item] button not found.");
+        }
+    });
 </script>
 
-<script>
-    document.getElementById('reset-form').addEventListener('click', function(e) {
-                e.preventDefault();
 
-                Swal.fire({
-                    title: 'Jesi li siguran/na?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Da',
-                    cancelButtonText: 'Ne',
-                    reverseButtons: true,
-                    focusCancel: true,
-                    confirmButtonColor: '#299dcb', // info color
-                    cancelButtonColor: '#6c757d' // bootstrap secondary gray
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.skipPrefillParties = true; // NEW: skip prefill after clear
-                        // Clear all supplier and importer fields and selects
-                        $("#supplier-select2").val(null).trigger('change');
-                        $("#importer-select2").val(null).trigger('change');
-                        $("#billing-name, #billing-address-line-1, #billing-phone-no, #billing-tax-no, #email, #supplier-owner").val("").prop('readonly', false);
-                        $("#carrier-name, #carrier-address, #carrier-tel, #carrier-tax, #carrier-email, #carrier-owner").val("").prop('readonly', false);
-                        // Remove 'Novi dobavljač' and 'Novi uvoznik' options if present
-                        $("#supplier-select2 option[value='new']").remove();
-                        $("#importer-select2 option[value='new']").remove();
-                        // Remove all product rows
-                        const table = document.getElementById('products-table');
-                        if (table) {
-                            const tbody = table.querySelector('tbody');
-                            if (tbody) {
-                                tbody.innerHTML = '';
-                            }
-                        }
-                    }
-                    // If cancelled, just closes and does nothing (no reopening)
-                });
-            });
-</script>
+
+
 
 
 <!-- Google search -->
