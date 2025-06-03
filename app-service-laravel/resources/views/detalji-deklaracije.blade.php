@@ -4,8 +4,6 @@
 @endsection
 @section('css')
 <style>
-
-
     .table> :not(caption)>*>* {
         color: inherit !important;
         background-color: transparent !important;
@@ -85,7 +83,7 @@
                                         <h6 class="text-muted text-uppercase fw-semibold mt-1">Broj fakture</h6>
                                         <h5 class="fs-14 mb-0"><span id="invoice-no"></span></h5>
                                     </div>
-                                    
+
                                 </div>
                             </div>
 
@@ -108,7 +106,7 @@
                                 <p class="text-muted mb-1"><span>Email: </span><span id="supplier-email"></span></p>
                                 <p class="text-muted mb-1"><span>Vlasnik: </span><span id="supplier-owner"></span></p>
                                 <p class="text-muted mb-0"><span>JIB/VAT: </span><span id="supplier-tax"></span></p>
-                               
+
                             </div>
                             <!--end col-->
                             <div class="col-4 text-end">
@@ -119,9 +117,9 @@
                                 <p class="text-muted mb-1"><span>Email: </span><span id="carrier-email"></span></p>
                                 <p class="text-muted mb-1"><span>Vlasnik: </span><span id="carrier-owner"></span></p>
                                 <p class="text-muted mb-1"><span>JIB/VAT: </span><span id="carrier-tax"></span></p>
-                                
+
                                 <!-- Add incoterm here, top right -->
-                                
+
                             </div>
                             <!--end col-->
                         </div>
@@ -129,7 +127,7 @@
                     </div>
                     <!--end card-body-->
                 </div>
-              
+
                 <!--end col-->
 
                 <!--end col-->
@@ -150,9 +148,9 @@
                                         <th>Cijena</th>
                                         <th>Količina</th>
                                         <th>Broj paketa</th>
-                                         
+
                                         <th style="border-right: 1px solid gray;">Ukupno</th>
-                                        
+
                                     </tr>
                                 </thead>
                                 <tbody id="products-list">
@@ -160,8 +158,8 @@
                                 </tbody>
                             </table>
                         </div>
-                        
-                    
+
+
                     </div>
                     <!--end card-body-->
                 </div>
@@ -173,8 +171,8 @@
 
         <!--end card-->
     </div>
-    
-@include('components.fixed-sidebar')
+
+    @include('components.fixed-sidebar')
 
 </div>
 
@@ -208,7 +206,23 @@
 <script>
     document.addEventListener('DOMContentLoaded', async () => {
         const invoiceId = window.location.pathname.split('/').pop();
-        
+
+        function waitForEl(selector, callback, interval = 50, timeout = 5000) {
+            const startTime = Date.now();
+
+            (function check() {
+                const el = document.querySelector(selector);
+                if (el) return callback(el);
+
+                if (Date.now() - startTime > timeout) {
+                    console.warn(`[waitForEl] Timeout waiting for ${selector}`);
+                    return;
+                }
+
+                setTimeout(check, interval);
+            })();
+        }
+
 
         console.log("%c[DEBUG] invoiceId:", "color: #1e90ff", invoiceId);
         console.log("%c[DEBUG] token present:", "color: #1e90ff", !!token);
@@ -235,6 +249,12 @@
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
+            });
+            waitForEl("#uredi", el => {
+                el.disabled = false;
+                el.addEventListener("click", () => {
+                    window.location.href = `/deklaracija/${invoice.id}`;
+                });
             });
 
             console.log("%c[DEBUG] invoiceRes.ok:", "color: orange", invoiceRes.ok);
@@ -445,52 +465,52 @@
 </script>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const totalIznos = document.querySelector(".total-iznos");
+    document.addEventListener("DOMContentLoaded", function() {
+        const totalIznos = document.querySelector(".total-iznos");
 
-    function hasVerticalScrollbar() {
-        return document.documentElement.scrollHeight > window.innerHeight;
-    }
-
-    function toggleFixed() {
-        const scrollBottom = window.scrollY + window.innerHeight;
-        const pageHeight = document.documentElement.scrollHeight;
-
-        if (pageHeight - scrollBottom <= 80) {
-            totalIznos.classList.add("static");
-        } else {
-            totalIznos.classList.remove("static");
+        function hasVerticalScrollbar() {
+            return document.documentElement.scrollHeight > window.innerHeight;
         }
 
-        updateRightMargin();
-    }
+        function toggleFixed() {
+            const scrollBottom = window.scrollY + window.innerHeight;
+            const pageHeight = document.documentElement.scrollHeight;
 
-    function updateRightMargin() {
-        const container = document.querySelector(".page-content .container-fluid");
-
-        if (container && totalIznos) {
-            const viewportWidth = window.innerWidth;
-            const containerRight = container.offsetLeft + container.offsetWidth;
-            let rightSpace = Math.max(0, viewportWidth - containerRight);
-
-            // If scrollbar is present, decrease margin by 5px
-            if (hasVerticalScrollbar()) {
-                rightSpace = Math.max(0, rightSpace -20);
+            if (pageHeight - scrollBottom <= 80) {
+                totalIznos.classList.add("static");
+            } else {
+                totalIznos.classList.remove("static");
             }
 
-            totalIznos.style.marginRight = `${rightSpace}px`;
-            totalIznos.classList.add("visible");
+            updateRightMargin();
         }
-    }
 
-    // Initial run
-    toggleFixed();
-    updateRightMargin();
+        function updateRightMargin() {
+            const container = document.querySelector(".page-content .container-fluid");
 
-    // Watch scroll and resize
-    window.addEventListener("scroll", toggleFixed);
-    window.addEventListener("resize", updateRightMargin);
-});
+            if (container && totalIznos) {
+                const viewportWidth = window.innerWidth;
+                const containerRight = container.offsetLeft + container.offsetWidth;
+                let rightSpace = Math.max(0, viewportWidth - containerRight);
+
+                // If scrollbar is present, decrease margin by 5px
+                if (hasVerticalScrollbar()) {
+                    rightSpace = Math.max(0, rightSpace - 20);
+                }
+
+                totalIznos.style.marginRight = `${rightSpace}px`;
+                totalIznos.classList.add("visible");
+            }
+        }
+
+        // Initial run
+        toggleFixed();
+        updateRightMargin();
+
+        // Watch scroll and resize
+        window.addEventListener("scroll", toggleFixed);
+        window.addEventListener("resize", updateRightMargin);
+    });
 </script>
 
 
