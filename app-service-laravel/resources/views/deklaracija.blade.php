@@ -8,6 +8,7 @@
 <link href="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet">
 
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <style>
     /* Ensures the selected text is truncated with ellipsis and tooltip works */
     .select2-container--default .select2-results__options {
@@ -340,7 +341,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="{{ URL::asset('build/libs/dropzone/dropzone-min.js') }}"></script>
 <script src="{{ URL::asset('build/libs/cleave.js/cleave.min.js') }}"></script>
 <script src="{{ URL::asset('build/js/pages/invoicecreate.init.js') }}"></script>
@@ -348,7 +349,7 @@
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/bs.js"></script>
 <!-- Scan and other logic script -->
 <script>
     const editModeMatch = window.location.pathname.match(/\/deklaracija\/(\d+)/);
@@ -1488,6 +1489,13 @@
                 updateTotalAmount();
             });
 
+            function formattedToDDMMYYYY(date = new Date()) {
+                const day = String(date.getDate()).padStart(2, "0");
+                const month = String(date.getMonth() + 1).padStart(2, "0");
+                const year = date.getFullYear();
+                return `${day}-${month}-${year}`;
+            }
+
 
 
 
@@ -1755,9 +1763,15 @@
 <!-- Save logic script final -->
 <script>
     function getInvoiceId() {
-        const id = localStorage.getItem("scan_invoice_id");
-        console.log(" Invoice ID:", id);
-        return id;
+        const scanId = localStorage.getItem("scan_invoice_id");
+        if (scanId) {
+            console.log("Using scanned invoice ID:", scanId);
+            return scanId;
+        }
+        const match = window.location.pathname.match(/\/deklaracija\/(\d+)/);
+        const urlId = match ? match[1] : null;
+        console.log("Using URL invoice ID:", urlId);
+        return urlId;
     }
     async function getInvoice() {
         const id = getInvoiceId();
@@ -1922,15 +1936,21 @@
                 });
             });
 
+            function toISODate(dmy) {
+                const [day, month, year] = dmy.split("-");
+                return `${year}-${month}-${day}`;
+            }
+
             // Use the existing invoice file name and ID from upload
             const invoiceId = getInvoiceId();
+            console.log("💾 Saving to invoice ID:", invoiceId);
             const invoiceData = await getInvoice();
             const fileName = invoiceData.file_name || "invoice.pdf";
 
             const payload = {
                 file_name: fileName, // use the file name from the uploaded invoice
                 total_price: parseFloat(document.getElementById("total-amount")?.value || "0"),
-                date_of_issue: document.getElementById("invoice-date")?.value,
+                date_of_issue: toISODate(document.getElementById("invoice-date")?.value),
                 country_of_origin: document.getElementById("shipping-country")?.value || "Germany",
                 items,
                 supplier_id: supplierId,
@@ -2083,6 +2103,11 @@
         const match = window.location.pathname.match(/\/deklaracija\/(\d+)/);
         const invoiceId = match ? match[1] : null;
         if (!invoiceId) return console.log("No ID in URL — skipping load-invoice script.");
+        const scanId = localStorage.getItem("scan_invoice_id");
+        if (scanId && scanId !== invoiceId) {
+            console.warn(`Clearing scan_invoice_id (${scanId}) because it does not match invoiceId (${invoiceId})`);
+            localStorage.removeItem("scan_invoice_id");
+        }
 
         Swal.fire({
             title: 'Učitavanje fakture...',
@@ -2199,18 +2224,24 @@
                 }
             });
 
+            function formatDateToDDMMYYYY(dateString) {
+                if (!dateString) return '';
+                const [year, month, day] = dateString.split('-'); // expects YYYY-MM-DD
+                return `${day}-${month}-${year}`;
+            }
+
             // --- Prefill invoice fields
             setField("#invoice_number", invoice.invoice_number);
             setField("#date", invoice.date_of_issue);
             setField("#total-amount", `${invoice.total_price} `);
             setText("#modal-total-amount", `${invoice.total_price} ${invoice.items?.[0]?.currency || "EUR"}`);
             setText("#invoice-id1", invoice.id);
-            setText("#invoice-date-text", invoice.date_of_issue);
+            setText("#invoice-date-text", formatDateToDDMMYYYY(invoice.date_of_issue));
             setText("#total-edit", `${invoice.total_price} ${invoice.items?.[0]?.currency || "EUR"}`);
             setField("#invoice-no", invoice.invoice_number);
             setField("#invoice-no1", invoice.id);
             setField("#incoterm", (invoice.incoterm || "").split(" ")[0]);
-            setField("#invoice-date", invoice.date_of_issue);
+            setField("#invoice-date", formatDateToDDMMYYYY(invoice.date_of_issue));
 
             // --- Prefill selected supplier/importer
             if (invoice.supplier_id) {
@@ -2323,8 +2354,8 @@
             "la", "lv", "lb", "ls", "lr", "ly", "li", "lt", "lu",
             "mo", "mk", "mg", "mw", "my", "mv", "ml", "mt", "mh", "mq", "mr", "mu", "yt", "mx", "fm", "md", "mc", "mn", "me", "ms", "ma", "mz", "mm",
             "na", "nr", "np", "nl", "nc", "nz", "ni", "ne", "ng", "nu", "nf", "mp", "no",
-            "om","pk", "pw", "ps", "pa", "pg", "py", "pe", "ph", "pn", "pl", "pt", "pr",
-            "qa","re", "ro", "ru", "rw","bl", "sh", "kn", "lc", "mf", "pm", "vc", "ws", "sm", "st", "sa", "sn", "rs", "sc", "sl", "sg", "sx", "sk", "si", "sb", "so", "za", "gs", "ss", "es", "lk", "sd", "sr", "sj", "se", "ch", "sy",
+            "om", "pk", "pw", "ps", "pa", "pg", "py", "pe", "ph", "pn", "pl", "pt", "pr",
+            "qa", "re", "ro", "ru", "rw", "bl", "sh", "kn", "lc", "mf", "pm", "vc", "ws", "sm", "st", "sa", "sn", "rs", "sc", "sl", "sg", "sx", "sk", "si", "sb", "so", "za", "gs", "ss", "es", "lk", "sd", "sr", "sj", "se", "ch", "sy",
             "tw", "tj", "tz", "th", "tl", "tg", "tk", "to", "tt", "tn", "tr", "tm", "tc", "tv",
             "ug", "ua", "ae", "gb", "us", "um", "uy", "uz",
             "vu", "ve", "vn", "vg", "vi",
@@ -2344,6 +2375,61 @@
         const flagUrl = `https://flagcdn.com/w40/${state.id.toLowerCase()}.png`;
         return $(`<span><img src="${flagUrl}" class="me-2" width="20" /> ${state.text}</span>`);
     }
+
+    function formatToDMY(isoDate) {
+        if (!isoDate) return "";
+        const [year, month, day] = isoDate.split("-");
+        return `${day}-${month}-${year}`;
+    }
+
+    // Reformat existing value BEFORE flatpickr init
+    const input1 = document.querySelector("#date");
+    if (input1 && input1.value.includes("-") && input1.value.length === 10) {
+        input1.value = formatToDMY(input1.value);
+    }
+
+    const input2 = document.querySelector("#invoice-date");
+    if (input2 && input2.value.includes("-") && input2.value.length === 10) {
+        input2.value = formatToDMY(input2.value);
+    }
+
+    // Now initialize Flatpickr
+    flatpickr("#date", {
+        locale: "bs",
+        dateFormat: "d-m-Y"
+    });
+
+    flatpickr("#invoice-date", {
+        locale: "bs",
+        dateFormat: "d-m-Y"
+    });
+
+
+    //Remove button logic 
+    document.addEventListener("click", function(e) {
+        if (e.target.closest(".remove-row")) {
+            const button = e.target.closest(".remove-row");
+            const row = button.closest("tr");
+
+            Swal.fire({
+                title: "Jesi li siguran/na?",
+                text: "Ovaj produkt će biti uklonjen.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Da, ukloni",
+                cancelButtonText: "Odustani",
+                customClass: {
+                    confirmButton: "btn btn-danger me-2",
+                    cancelButton: "btn btn-secondary"
+                },
+                buttonsStyling: false
+            }).then((result) => {
+                if (result.isConfirmed && row) {
+                    row.remove();
+                }
+            });
+        }
+    });
 </script>
 
 
