@@ -43,11 +43,11 @@ Kalendarni prikaz mojih faktura
                 </div>
                 <div class="card card-h-100">
                     <div class="card-body">
-                        <a href="{{ url('moje-fakture') }}" class="btn btn-info w-100" id="btn-new-event">
-                            <i class="fa fa-file fs-6"></i> <span class="fs-6">Sve fakture</span>
+                        <a href="{{ url('moje-deklaracije') }}" class="btn btn-info w-100" id="btn-new-event">
+                            <i class="fa fa-file fs-6"></i> <span class="fs-6">Sve deklaracije</span>
                         </a>
                         <div id="external-events" class="mt-3">
-                            <p class="text-muted w-100 text-center mb-0">Klikni da pogledaš sve fakture!</p>
+                            <p class="text-muted w-100 text-center mb-0">Klikni da pogledaš sve deklaracije!</p>
                         </div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@ Kalendarni prikaz mojih faktura
 
 
                 <div class="flex-grow-1 d-flex flex-column mb-2 overflow-hidden">
-                    <h5 class="mb-3">Zadnje skenirane fakture</h5>
+                    <h5 class="mb-3">Zadnje skenirane deklaracije</h5>
                     <div id="latest-invoices-list" class="pe-2 me-n1 flex-grow-1 overflow-auto">
                         <!-- Invoice cards will be inserted here -->
                     </div>
@@ -91,7 +91,7 @@ Kalendarni prikaz mojih faktura
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title text-center w-100"><i class="fas fa-file-alt"
-                        style="font-size:14px;margin-top:-7px!important"></i> Pregled fakture</h5>
+                        style="font-size:14px;margin-top:-7px!important"></i> Pregled deklaracije</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
             </div>
             <div class="modal-body p-0">
@@ -158,7 +158,7 @@ Kalendarni prikaz mojih faktura
                                     <div class="row g-3">
                                         <div class="col-6">
                                             <h6 class="text-muted text-uppercase fw-semibold mb-3">
-                                                Dobavljač</h6>
+                                                klijent</h6>
                                             <p class="fw-medium mb-2" id="billing-name">--</p>
                                             <p class="text-muted mb-1" id="billing-address-line-1">--
                                             </p>
@@ -251,48 +251,6 @@ Kalendarni prikaz mojih faktura
 
                         </div> <!-- row -->
                     </div> <!-- card -->
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="scanModal" tabindex="-1" aria-labelledby="scanModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header text-center">
-                <h5 class="modal-title w-100" id="scanModalLabel"><i class="fas fa-wand-magic-sparkles fs-6 me-1"
-                        style="font-size:10px;"></i>Skeniraj deklaraciju sa AI</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
-            </div>
-            <div class="modal-body d-flex justify-content-center">
-                <div class="dropzone" id="dropzone">
-                    <input type="file" id="fileInput" multiple>
-                    <div class="corner corner-top-left"></div>
-                    <div class="corner corner-top-right"></div>
-                    <div class="corner corner-bottom-left"></div>
-                    <div class="corner corner-bottom-right"></div>
-
-                    <div class="text-center" id="dropzone-content">
-                        <i class="ri-file-2-line text-info fs-1"></i>
-                        <p class="mt-3">Prevucite dokument ovdje ili kliknite kako bi uploadali i skenirali vašu fakturu
-                        </p>
-                    </div>
-
-                    <div class="file-list" id="fileList" style="display: none;"></div>
-
-                    <div class="progress mt-3 w-100" id="uploadProgressContainer" style="display: none;">
-                        <div id="uploadProgressBar" class="progress-bar bg-info" role="progressbar" style="width: 0%">0%
-                        </div>
-                    </div>
-
-                    <div id="scanningLoader" class="mt-4 text-center d-none">
-                        <div class="spinner-border text-info" role="status" style="width: 3rem; height: 3rem;"></div>
-                        <p class="mt-3 fw-semibold" id="scanningText">Skeniranje fakture...</p>
-                        <div id="successCheck" class="d-none mt-3">
-                            <i class="ri-checkbox-circle-fill text-success fs-1 animate__animated animate__zoomIn"></i>
-                            <p class="text-success fw-semibold mt-2">Uspješno skenirano!</p>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -475,9 +433,9 @@ Kalendarni prikaz mojih faktura
                     events: events,
                     eventDidMount: function(info) {
                         const invoice = info.event.extendedProps.invoiceData;
-                        const supplierName = invoice.supplier?.name || 'Nepoznat dobavljač';
+                        const supplierName = invoice.supplier?.name || 'Nepoznat klijent';
                         const price = invoice.total_price || 'N/A';
-                        info.el.setAttribute('title', `Fajl: ${invoice.file_name}\nDobavljač: ${supplierName}\nCijena: ${price} KM`);
+                        info.el.setAttribute('title', `Fajl: ${invoice.file_name}\nklijent: ${supplierName}\nCijena: ${price} KM`);
                         info.el.style.cursor = 'pointer';
                     },
                     eventClick: function(info) {
@@ -517,7 +475,7 @@ Kalendarni prikaz mojih faktura
             container.innerHTML = "";
 
             latestTen.forEach(invoice => {
-                const supplierName = invoice.supplier?.name || "Nepoznat dobavljač";
+                const supplierName = invoice.supplier?.name || "Nepoznat klijent";
                 const fileName = invoice.file_name || "Nepoznat naziv";
                 const totalPrice = parseFloat(invoice.total_price || 0).toFixed(2);
                 const date = new Date(invoice.created_at).toLocaleDateString("hr", {
@@ -557,150 +515,6 @@ Kalendarni prikaz mojih faktura
         });
     });
 </script>
-
-<!-- Scan upload old
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const token = localStorage.getItem("auth_token");
-        if (!token) {
-            alert("Niste prijavljeni. Molimo ulogujte se.");
-            window.location.href = "/login";
-            return;
-        }
-
-        const dropzone = document.getElementById("dropzone");
-        const fileInput = document.getElementById("fileInput");
-        const fileList = document.getElementById("fileList");
-        const dropzoneContent = document.getElementById("dropzone-content");
-        const progressContainer = document.getElementById("uploadProgressContainer");
-        const progressBar = document.getElementById("uploadProgressBar");
-        const scanButton = document.getElementById("startScanBtn"); // new
-
-        if (scanButton) {
-            scanButton.addEventListener("click", function() {
-                fileInput.click(); // trigger the file input
-            });
-        }
-
-        function updateFileList(files) {
-            fileList.innerHTML = "";
-            if (files.length > 0) {
-                fileList.style.display = "block";
-                dropzoneContent.style.display = "none";
-            } else {
-                fileList.style.display = "none";
-                dropzoneContent.style.display = "block";
-            }
-
-            Array.from(files).forEach((file, index) => {
-                const fileItem = document.createElement("div");
-                fileItem.classList.add("file-item");
-
-                const fileName = document.createElement("span");
-                fileName.textContent = file.name;
-
-                const removeBtn = document.createElement("span");
-                removeBtn.textContent = "×";
-                removeBtn.classList.add("remove-file");
-                removeBtn.dataset.index = index;
-
-                removeBtn.addEventListener("click", function() {
-                    let dt = new DataTransfer();
-                    let fileArray = Array.from(fileInput.files);
-                    fileArray.splice(index, 1);
-                    fileArray.forEach(f => dt.items.add(f));
-                    fileInput.files = dt.files;
-                    updateFileList(fileInput.files);
-                });
-
-                fileItem.appendChild(fileName);
-                fileItem.appendChild(removeBtn);
-                fileList.appendChild(fileItem);
-            });
-        }
-
-        function uploadFiles(files) {
-            const formData = new FormData();
-            Array.from(files).forEach(file => formData.append('file', file));
-
-            progressContainer.style.display = "block";
-            progressBar.style.width = "0%";
-            progressBar.innerText = "0%";
-
-            let fakeProgress = 0;
-            const fakeInterval = setInterval(() => {
-                fakeProgress += 5;
-                if (fakeProgress > 100) fakeProgress = 100;
-
-                progressBar.style.width = fakeProgress + "%";
-                progressBar.innerText = fakeProgress + "%";
-
-                if (fakeProgress === 100) {
-                    clearInterval(fakeInterval);
-                }
-            }, 150);
-
-            fetch('/api/storage/invoice-uploads', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                })
-                .then(response => {
-                    if (!response.ok) throw new Error("Upload failed");
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Upload successful:', data);
-                    Swal.fire({
-                        icon: "success",
-                        title: "Dokument uspješno uploadan!",
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(() => {
-                        if (data.invoice_id) {
-                            localStorage.setItem("scan_invoice_id", data.invoice_id);
-                        }
-                        window.location.href = "/apps-invoices-create";
-                    });
-                })
-                .catch(error => {
-                    console.error('Upload error:', error);
-                    alert('Greška prilikom uploada.');
-                    progressContainer.style.display = "none";
-                });
-        }
-
-        dropzone.addEventListener("dragover", e => {
-            e.preventDefault();
-            dropzone.classList.add("bg-light");
-        });
-
-        dropzone.addEventListener("dragleave", () => {
-            dropzone.classList.remove("bg-light");
-        });
-
-        dropzone.addEventListener("drop", e => {
-            e.preventDefault();
-            dropzone.classList.remove("bg-light");
-            let dt = new DataTransfer();
-            Array.from(fileInput.files).forEach(f => dt.items.add(f));
-            Array.from(e.dataTransfer.files).forEach(f => dt.items.add(f));
-            fileInput.files = dt.files;
-            updateFileList(fileInput.files);
-            uploadFiles(fileInput.files);
-        });
-
-
-
-
-        fileInput.addEventListener("change", () => {
-            updateFileList(fileInput.files);
-            uploadFiles(fileInput.files);
-        });
-    });
-</script> -->
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
