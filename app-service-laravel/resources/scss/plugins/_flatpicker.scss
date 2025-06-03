@@ -152,10 +152,10 @@
         bottom: 100%;
     }
     &.arrowTop::before {
-        border-bottom-color: $primary;
+        border-bottom-color: $info;
     }
     &.arrowTop::after {
-        border-bottom-color: $primary;
+        border-bottom-color: $info;
     }
 
     &.arrowBottom::before,
@@ -163,10 +163,10 @@
         top: 100%;
     }
     &.arrowBottom::before {
-        border-top-color: $primary;
+        border-top-color: $info;
     }
     &.arrowBottom::after {
-        border-top-color: $primary;
+        border-top-color: $info;
     }
     &:focus {
         outline: 0;
@@ -180,8 +180,9 @@
 
 .flatpickr-months {
     display: flex;
-    background-color: $primary;
+    background-color: $info;
     border-radius: 5px 5px 0px 0px;
+    padding-bottom: 0!important;
 
     .flatpickr-month {
         background: transparent;
@@ -473,7 +474,7 @@
 
 
 .flatpickr-weekdays {
-    background-color: $primary;
+    background-color: $info;
     text-align: center;
     overflow: hidden;
     width: 100%;
@@ -490,7 +491,7 @@
 span.flatpickr-weekday {
     cursor: default;
     font-size: 90%;
-    background: $primary;
+    background: $info;
     color: $white;
     line-height: 1;
     margin: 0;
@@ -577,14 +578,14 @@ span.flatpickr-weekday {
     }
 
     &.today {
-        border-color: $primary;
-        background-color: rgba($primary, 0.1);
+        border-color: $info;
+        background-color: rgba($info, 0.1);
         box-shadow: $element-shadow;
 
         &:hover,
         &:focus {
-            border-color: $primary;
-            background-color: rgba($primary, 0.15);
+            border-color: $info;
+            background-color: rgba($info, 0.15);
             color: var(--#{$prefix}body-color);
         }
     }
@@ -607,10 +608,10 @@ span.flatpickr-weekday {
     &.selected.nextMonthDay,
     &.startRange.nextMonthDay,
     &.endRange.nextMonthDay {
-        background: $primary;
+        background: $info;
         box-shadow: $element-shadow;
         color: $white;
-        border-color: $primary;
+        border-color: $info;
     }
 
     &.selected,
@@ -619,7 +620,7 @@ span.flatpickr-weekday {
         &.startRange {
             border-radius: 50px 0 0 50px;
             + .endRange:not(:nth-child(7n+1)) {
-                box-shadow: -10px 0 0 $primary;
+                box-shadow: -10px 0 0 $info;
             }
 
             .endRange{
@@ -662,7 +663,7 @@ span.flatpickr-weekday {
 
     &.week.selected {
         border-radius: 0;
-        box-shadow: -5px 0 0 $primary, 5px 0 0 $primary;
+        box-shadow: -5px 0 0 $info, 5px 0 0 $info;
     }
 
     &.hidden {
@@ -808,7 +809,7 @@ span.flatpickr-weekday {
 
     input, .flatpickr-am-pm{
         &:hover, &:focus{
-            background: rgba($primary, 0.04);
+            background: rgba($info, 0.04);
         }
     }
 }

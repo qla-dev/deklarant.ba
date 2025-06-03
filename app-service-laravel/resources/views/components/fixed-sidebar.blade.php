@@ -2,7 +2,7 @@
      <div id="fixed-buttons" class="d-flex flex-column gap-3">
 
          <a href="javascript:window.print()" class="btn btn-soft-info">
-             <i class="ri-printer-line align-bottom me-1"></i> Isprintaj deklaraciju
+             <i class="ri-printer-line align-bottom me-1"></i> Isprintaj
          </a>
          <a href="javascript:void(0);" class="btn btn-soft-info">
              <i class="ri-download-2-line align-bottom me-1"></i> Preuzmi
@@ -11,9 +11,9 @@
              <i class="ri-file-3-line align-bottom me-1"></i> Originalni dokument
          </a>
 
-         <button class="btn btn-soft-info" onclick="exportTableToCustomCSV()"><i class="ri-file-excel-line align-bottom me-1"></i> Export tabele u CSV</button>
+         <button class="btn btn-soft-info" onclick="exportTableToCustomCSV()"><i class="ri-file-excel-line align-bottom me-1"></i> Export u CSV</button>
          <a href="" class="btn btn-soft-info">
-             <i class="ri-file-code-line align-bottom me-1"></i> Export tabele u XML
+             <i class="ri-file-code-line align-bottom me-1"></i> Export u XML
          </a>
          @php
          $isDeklaracija = Request::is('deklaracija') || Request::is('deklaracija/*');
@@ -53,7 +53,7 @@
      <div class="floatbar-nav-item w-100">
          <p class="text-info fs-13 mb-0 text-uppercase fw-semibold me-2">Datum :</p>
          <h5 class="fs-13 mb-0">
-             <span id="{{ $isDeklaracija ? 'invoice-date-text' : 'invoice-date' }}">Učitavanje...</span> godine
+             <span id="{{ $isDeklaracija ? 'invoice-date-text' : 'invoice-date' }}">Učitavanje...</span>
          </h5>
      </div>
 

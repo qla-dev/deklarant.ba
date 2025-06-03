@@ -33,7 +33,7 @@ Kalendarni prikaz mojih faktura
                     <div class="card-body">
                         <button class="btn btn-info w-100" id="btn-new-event" data-bs-toggle="modal"
                             data-bs-target="#scanModal">
-                            <i class="fas fa-wand-magic-sparkles fs-6 me-1"></i><span class="fs-6">Skeniraj deklaraciju s
+                            <i class="fa-regular fa-wand-magic-sparkles fs-6 me-1"></i><span class="fs-6">Skeniraj deklaraciju s
                                 AI</span>
                         </button>
                         <div id="external-events d-flex justify-content-center" class="mt-3">

@@ -152,8 +152,8 @@
 @section('content')
 
 <div class="row justify-content-center mt-0 mb-3">
-    <div class="col-xxl-10">
-        <div class="card" id="invoice-form">
+    <div class="col card paper-layout">
+        <div id="invoice-form">
             <div class="card-header border-0 p-4 d-flex justify-content-between align-items-start">
                 <div>
                     <img src="{{ URL::asset('build/images/logo-dek.png') }}" class="card-logo" alt="logo" height="34">
@@ -198,9 +198,12 @@
                         <h6 class="text-muted text-uppercase fw-semibold mb-3">Podaci o dobavljaču</h6>
 
                         <div class="mb-2">
-                            <button type="button" class="btn btn-outline-info mb-2" id="add-new-supplier">Obriši AI podatke i unesi ručno</button>
-                            <button type="button" class="btn btn-info mb-2" id="refill-supplier-ai">Populiši ponovo s AI</button>
-                            <select id="supplier-select2" class="form-select"></select>
+                            <div style="justify-content: space-between; display: flex;">
+                             <button type="button" class="btn btn-sm btn-info mb-2 deklaracija-action-buttons" id="refill-supplier-ai"><i class="fa-regular fa-wand-magic-sparkles fs-6 me-1"></i>Detektovani dobavljač</button>
+                            <button type="button" class="btn btn-sm btn-soft-info mb-2 deklaracija-action-buttons" id="add-new-supplier"><i class="fa-regular fa-wand-magic-sparkles align-top me-1 korpica" ></i>Skenirani AI podaci</button>
+                              <button type="button" class="btn btn-sm btn-soft-info mb-2 deklaracija-action-buttons" id="add-new-importer"><i class="fa-regular fa-trash align-top me-1 korpica" ></i>Obriši i unesi ručno</button>
+                              </div>
+                              <select id="supplier-select2" class="form-select"></select>
                         </div>
                         <input type="text" class="form-control mb-2" id="billing-name" name="supplier_name" placeholder="Naziv dobavljača">
 
@@ -214,8 +217,12 @@
                         <h6 class="text-muted text-uppercase fw-semibold mb-3 text-end">Podaci o uvozniku</h6>
 
                         <div class="mb-2">
-                            <button type="button" class="btn btn-outline-info mb-2" id="add-new-importer">Obriši AI podatke i unesi ručno</button>
-                            <button type="button" class="btn btn-info mb-2" id="refill-importer-ai">Populiši ponovo s AI</button>
+                            <div style="justify-content: space-between; display: flex;">
+                             <button type="button" class="btn btn-sm btn-soft-info mb-2 me-1 deklaracija-action-buttons" id="add-new-importer"><i class="fa-regular fa-trash align-top me-1 korpica" ></i>Obriši i unesi ručno</button>
+                               <button type="button" class="btn btn-sm btn-soft-info mb-2 me-1 deklaracija-action-buttons" id="refill-importer-ai"><i class="fa-regular fa-wand-magic-sparkles fs-6 me-1"></i>Skenirani AI podaci</button>
+                             <button type="button" class="btn btn-sm btn-info mb-2 deklaracija-action-buttons" id="refill-importer-ai"><i class="fa-regular fa-wand-magic-sparkles fs-6 me-1"></i>Detektovani uvoznik</button>
+                           </div>
+                           
                             <select id="importer-select2" class="form-select"></select>
                         </div>
 
@@ -313,7 +320,7 @@
         <div class="modal-content border-0 shadow-lg">
             <div class="modal-header bg-info text-white">
                 <h5 class="modal-title d-flex align-items-center gap-2 text-white" id="aiSuggestionModalLabel">
-                    <i class="fas fa-wand-magic-sparkles text-white"></i> Najbolji AI Prijedlozi
+                    <i class="fa-regular fa-wand-magic-sparkles text-white"></i> Najbolji AI Prijedlozi
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Zatvori"></button>
             </div>
@@ -754,7 +761,7 @@
                 
                 title="Prikaži AI prijedloge"
               >
-                <i class="fas fa-wand-magic-sparkles" style="font-size: 16px;"></i>
+                <i class="fa-regular fa-wand-magic-sparkles" style="font-size: 16px;"></i>
               </button>
             </div>
           </td>
@@ -2461,15 +2468,15 @@
             const row = button.closest("tr");
 
             Swal.fire({
-                title: "Jesi li siguran/na?",
-                text: "Ovaj produkt će biti uklonjen.",
+                title: "Oprez!",
+                text: "Odabrani proizvod će biti trajno uklonjen sa popisa trenutne deklaracije. Ova radnja nije ireverzibilna!",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: "Da, ukloni",
                 cancelButtonText: "Odustani",
+                confirmButtonText: "Da, ukloni",
                 customClass: {
-                    confirmButton: "btn btn-danger me-2",
-                    cancelButton: "btn btn-secondary"
+                    confirmButton: "btn btn-soft-info me-2",
+                    cancelButton: "btn btn-info"
                 },
                 buttonsStyling: false
             }).then((result) => {

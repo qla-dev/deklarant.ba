@@ -45,7 +45,7 @@ return [
     "basic-auth"=>"Sleep",
 
     "details"=>"Pregled deklaracije",
-    "create-invoice"=>"Kreiraj fakturu",
+    "create-invoice"=>"AI Deklaracija",
     "dobavljaci"=>"Dobavljači",
     "tarife"=>"Tarifne oznake",
     "kurs"=>"Kursna lista",
