@@ -117,7 +117,7 @@
     </li>
     <li class="nav-item me-1">
         <a class="nav-link menu-link" href="moji-klijenti">
-            <i class="ri-user-line text-info fs-4"></i> <span>Distribrateri</span>
+            <i class="ri-user-line text-info fs-4"></i> <span>Uvoznici</span>
         </a>
     </li>
     <li class="nav-item me-1">

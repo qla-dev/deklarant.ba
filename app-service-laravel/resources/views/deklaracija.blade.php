@@ -302,25 +302,7 @@
 
         </div>
     </div>
-    <div class="col-2 d-print-none" id="sidebar-buttons-container">
-        <div id="fixed-buttons" class="d-flex flex-column gap-2">
-            <a href="javascript:window.print()" class="btn btn-info">
-                <i class="ri-printer-line align-bottom me-1"></i> Isprintaj deklaraciju
-            </a>
-            <a href="javascript:void(0);" class="btn btn-info">
-                <i class="ri-download-2-line align-bottom me-1"></i> Preuzmi
-            </a>
-            <button type="button" id="save-invoice-btn" class="btn btn-info">
-                <i class="ri-save-line align-bottom me-1"></i> Sačuvaj
-            </button>
-            <a href="javascript:void(0);" id="export-xml" class="btn btn-info">
-                <i class="ri-file-code-line align-bottom me-1"></i> Exportuj u XML
-            </a>
-            <a href="javascript:void(0);" id="reset-form" class="btn btn-info text-truncate">
-                <i class="ri-delete-bin-line align-bottom me-1"></i> Obriši proizvode
-            </a>
-        </div>
-    </div>
+    @include('components.fixed-sidebar')
 </div>
 
 
@@ -429,6 +411,8 @@
             }
             return _invoice_data;
         }
+
+
 
         async function startAiScan() {
             const taskId = getInvoiceId();
@@ -1018,6 +1002,21 @@
 
         async function fillInvoiceData() {
             const invoice = await getInvoice();
+            waitForEl("#invoice-id1", el => el.textContent = invoice.id || "—");
+            waitForEl("#invoice-date-text", el => el.textContent = invoice.date_of_issue || "—");
+            waitForEl("#pregled", el => {
+                el.addEventListener("click", () => {
+                    window.location.href = `/detalji-deklaracije/${invoice.id}`;
+                });
+            });
+
+
+
+            waitForEl("#total-edit", el => {
+                const currency = invoice.items?.[0]?.currency || "EUR";
+                el.textContent = `${invoice.total_price} ${currency}`;
+
+            });
             const items = invoice.items || [];
             console.log(" Invoice items:", items);
 
@@ -1938,7 +1937,7 @@
                 importer_id: importerId // always send both
             };
 
-            console.log("📦 Sending payload (update):", payload);
+            console.log(" Sending payload (update):", payload);
 
             // Update the existing invoice instead of creating a new one
             const res = await fetch(`/api/invoices/${invoiceId}`, {
@@ -2078,20 +2077,34 @@
 <!-- edit fill -->
 
 <script>
+    const tariffJsonPromise = fetch("{{ URL::asset('build/json/tariff.json') }}").then(res => res.json());
+
     document.addEventListener("DOMContentLoaded", async () => {
         const match = window.location.pathname.match(/\/deklaracija\/(\d+)/);
         const invoiceId = match ? match[1] : null;
+        if (!invoiceId) return console.log("No ID in URL — skipping load-invoice script.");
 
-        if (!invoiceId) {
-            console.log(" No ID in URL — skipping load-invoice script.");
-            return;
-        }
+        Swal.fire({
+            title: 'Učitavanje fakture...',
+            icon: null, // Disable any built-in icon
+            html: `<div class="custom-swal-spinner mb-3"></div><div id="swal-status-message">Molimo sačekajte</div>`,
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            didOpen: () => {
+                const spinner = document.querySelector(".custom-swal-spinner");
 
-        console.log(" Deklaracija edit mode detected — fetching invoice:", invoiceId);
+
+                // 🔥 Also remove SweetAlert2’s default icon area if still rendered
+                const icon = Swal.getHtmlContainer()?.previousElementSibling;
+                if (icon?.classList.contains('swal2-icon')) {
+                    icon.remove();
+                }
+            }
+        });
 
         try {
-            const [tariffRes, invoiceRes, suppliersRes, importersRes] = await Promise.all([
-                fetch("{{ URL::asset('build/json/tariff.json') }}"),
+            const [tariffJson, invoiceRes, suppliersRes, importersRes] = await Promise.all([
+                tariffJsonPromise,
                 fetch(`/api/invoices/${invoiceId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -2109,15 +2122,9 @@
                 })
             ]);
 
-            const [tariffJson, invoice, suppliersJson, importersJson] = [
-                await tariffRes.json(),
-                await invoiceRes.json(),
-                await suppliersRes.json(),
-                await importersRes.json()
-            ];
-
-            console.log(" Invoice loaded:", invoice);
-            console.log(" Tariff data loaded:", tariffJson);
+            const invoice = await invoiceRes.json();
+            const suppliersJson = await suppliersRes.json();
+            const importersJson = await importersRes.json();
 
             const processedTariffData = tariffJson
                 .filter(item => item["Tarifna oznaka"])
@@ -2138,12 +2145,12 @@
                 full: i
             }));
 
+            // --- Supplier Select2
             $('#supplier-select2').select2({
                 placeholder: "Pretraži dobavljača",
                 width: '100%',
                 data: supplierOptions
             });
-            // ✅ Prefill fields when supplier changes
             $('#supplier-select2').on('change', async function() {
                 const supplierId = $(this).val();
                 if (!supplierId) return;
@@ -2153,23 +2160,19 @@
                             Authorization: `Bearer ${token}`
                         }
                     });
-                    const supplier = await res.json();
-                    console.log("🔄 Selected supplier loaded:", supplier);
-                    waitForEl("#billing-name", el => el.value = supplier.name || "");
-                    waitForEl("#billing-address-line-1", el => el.value = supplier.address || "");
-                    waitForEl("#billing-phone-no", el => el.value = supplier.contact_phone || "");
-                    waitForEl("#billing-tax-no", el => el.value = supplier.tax_id || "");
-                    waitForEl("#email", el => el.value = supplier.contact_email || "");
-                    waitForEl("#supplier-owner", el => el.value = supplier.owner || "");
+                    const s = await res.json();
+                    setField("#billing-name", s.name);
+                    setField("#billing-address-line-1", s.address);
+                    setField("#billing-phone-no", s.contact_phone);
+                    setField("#billing-tax-no", s.tax_id);
+                    setField("#email", s.contact_email);
+                    setField("#supplier-owner", s.owner);
                 } catch (err) {
-                    console.warn("⚠️ Failed to load selected supplier:", err);
+                    console.warn("Failed to load supplier:", err);
                 }
             });
 
-            // ✅ Prefill fields when importer changes
-
-
-
+            // --- Importer Select2
             $('#importer-select2').select2({
                 placeholder: "Pretraži uvoznika",
                 width: '100%',
@@ -2184,192 +2187,152 @@
                             Authorization: `Bearer ${token}`
                         }
                     });
-                    const importer = await res.json();
-                    console.log("🔄 Selected importer loaded:", importer);
-                    waitForEl("#carrier-name", el => el.value = importer.name || "");
-                    waitForEl("#carrier-address", el => el.value = importer.address || "");
-                    waitForEl("#carrier-tel", el => el.value = importer.contact_phone || "");
-                    waitForEl("#carrier-tax", el => el.value = importer.tax_id || "");
-                    waitForEl("#carrier-email", el => el.value = importer.contact_email || "");
-                    waitForEl("#carrier-owner", el => el.value = importer.owner || "");
+                    const i = await res.json();
+                    setField("#carrier-name", i.name);
+                    setField("#carrier-address", i.address);
+                    setField("#carrier-tel", i.contact_phone);
+                    setField("#carrier-tax", i.tax_id);
+                    setField("#carrier-email", i.contact_email);
+                    setField("#carrier-owner", i.owner);
                 } catch (err) {
-                    console.warn("⚠️ Failed to load selected importer:", err);
+                    console.warn("Failed to load importer:", err);
                 }
             });
 
-            // Prefill selected supplier
+            // --- Prefill invoice fields
+            setField("#invoice_number", invoice.invoice_number);
+            setField("#date", invoice.date_of_issue);
+            setField("#total-amount", `${invoice.total_price} `);
+            setText("#modal-total-amount", `${invoice.total_price} ${invoice.items?.[0]?.currency || "EUR"}`);
+            setText("#invoice-id1", invoice.id);
+            setText("#invoice-date-text", invoice.date_of_issue);
+            setText("#total-edit", `${invoice.total_price} ${invoice.items?.[0]?.currency || "EUR"}`);
+            setField("#invoice-no", invoice.invoice_number);
+            setField("#invoice-no1", invoice.id);
+            setField("#incoterm", (invoice.incoterm || "").split(" ")[0]);
+            setField("#invoice-date", invoice.date_of_issue);
+
+            // --- Prefill selected supplier/importer
             if (invoice.supplier_id) {
-                const selectedSupplier = supplierOptions.find(s => s.id === invoice.supplier_id);
-                if (selectedSupplier) {
-                    const newOption = new Option(selectedSupplier.text, selectedSupplier.id, true, true);
-                    $('#supplier-select2').append(newOption).trigger('change');
-                }
-            }
-
-            // Prefill selected importer
-            if (invoice.importer_id) {
-                const selectedImporter = importerOptions.find(i => i.id === invoice.importer_id);
-                if (selectedImporter) {
-                    const newOption = new Option(selectedImporter.text, selectedImporter.id, true, true);
-                    $('#importer-select2').append(newOption).trigger('change');
-                }
-            }
-
-            waitForEl("#invoice_number", el => el.value = invoice.invoice_number || "");
-            waitForEl("#date", el => el.value = invoice.date_of_issue || "");
-            waitForEl("#total-amount", el => el.value = `${invoice.total_price} `);
-            waitForEl("#invoice-no", el => el.value = `${invoice.invoice_number} `);
-            waitForEl("#invoice-no1", el => el.value = `${invoice.id}`);
-            waitForEl("#incoterm", el => el.value = (invoice.incoterm || "").split(" ")[0]);
-            waitForEl("#invoice-date", el => el.value = invoice.date_of_issue || "");
-
-            if (invoice.supplier_id) {
-                try {
-                    const sres = await fetch(`/api/suppliers/${invoice.supplier_id}`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    });
-                    const supplier = await sres.json();
-                    console.log(" Supplier loaded:", supplier);
-                    waitForEl("#billing-name", el => el.value = supplier.name || "");
-                    waitForEl("#billing-address-line-1", el => el.value = supplier.address || "");
-                    waitForEl("#billing-phone-no", el => el.value = supplier.contact_phone || "");
-                    waitForEl("#billing-tax-no", el => el.value = supplier.tax_id || "");
-                    waitForEl("#email", el => el.value = supplier.contact_email || "");
-                    waitForEl("#supplier-owner", el => el.value = supplier.owner || "");
-                } catch (e) {
-                    console.warn(" Failed to load supplier:", e);
+                const selected = supplierOptions.find(s => s.id === invoice.supplier_id);
+                if (selected) {
+                    $('#supplier-select2').append(new Option(selected.text, selected.id, true, true)).trigger('change');
                 }
             }
 
             if (invoice.importer_id) {
-                try {
-                    const ires = await fetch(`/api/importers/${invoice.importer_id}`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    });
-                    const importer = await ires.json();
-                    console.log("📦 Importer loaded:", importer);
-                    waitForEl("#carrier-name", el => el.value = importer.name || "");
-                    waitForEl("#carrier-address", el => el.value = importer.address || "");
-                    waitForEl("#carrier-tel", el => el.value = importer.contact_phone || "");
-                    waitForEl("#carrier-tax", el => el.value = importer.tax_id || "");
-                    waitForEl("#carrier-email", el => el.value = importer.contact_email || "");
-                    waitForEl("#carrier-owner", el => el.value = importer.owner || "");
-                } catch (e) {
-                    console.warn("⚠️ Failed to load importer:", e);
+                const selected = importerOptions.find(i => i.id === invoice.importer_id);
+                if (selected) {
+                    $('#importer-select2').append(new Option(selected.text, selected.id, true, true)).trigger('change');
                 }
             }
 
-            waitForTableBody((tbody) => {
-                console.log("✅ tbody found, filling invoice items...");
-                tbody.innerHTML = "";
+            // --- Table rendering
+            const tbody = document.querySelector("#newlink");
+            tbody.innerHTML = "";
 
-                invoice.items.forEach((item, index) => {
-                    let tarifnaOznaka = item.item_code?.trim();
-                    if (!tarifnaOznaka && Array.isArray(item.best_customs_code_matches) && item.best_customs_code_matches.length > 0) {
-                        tarifnaOznaka = item.best_customs_code_matches[0]?.entry?.["Tarifna oznaka"]?.trim() || "";
-                    }
+            invoice.items.forEach((item, index) => {
+                const tarifnaOznaka = item.item_code?.trim() || item.best_customs_code_matches?.[0]?.entry?.["Tarifna oznaka"]?.trim() || "";
+                const row = document.createElement("tr");
+                row.classList.add("product");
+                row.innerHTML = `
+<td>${index + 1}</td>
+<td colspan="2">
+    <div class="input-group" style="display: flex; gap: 0.25rem;">
+        <input type="text" class="form-control item-name" name="item_name[]" placeholder="Naziv proizvoda" value="${item.item_description_original || ''}" style="flex:1;">
+        <button class="btn btn-outline-info rounded" type="button" onclick="searchFromInputs(this)"><i class="fa-brands fa-google"></i></button>
+        <input type="text" class="form-control item-desc" name="item_desc[]" placeholder="Opis proizvoda" value="${item.item_description || ''}" style="flex:1;">
+    </div>
+    <input type="text" class="form-control form-control-sm mt-1" name="item_prev[]" placeholder="Prevod" value="${item.translation || ''}">
+</td>
+<td>
+    <select class="form-control select2-tariff" name="item_code[]">
+        <option value="${tarifnaOznaka}" selected>${tarifnaOznaka}</option>
+    </select>
+</td>
+<td><input type="text" class="form-control" name="quantity_type[]" value="${item.quantity_type || ''}"></td>
+<td>
+    <select class="form-select select2-country" name="origin[]">${generateCountryOptions(item.country_of_origin)}</select>
+</td>
+<td><input type="number" class="form-control" name="price[]" value="${item.base_price || ''}"></td>
+<td style="width: 60px;">
+    <div class="input-group input-group-sm">
+        <button class="btn btn-outline-info btn-sm" type="button" style="height:30px;padding:0 5px;font-size:10px;">−</button>
+        <input type="number" class="form-control text-center" name="quantity[]" value="${item.quantity || 0}" min="0" style="padding: 0 5px;">
+        <button class="btn btn-outline-info btn-sm" type="button" style="height:30px;padding:0 5px;font-size:10px;">+</button>
+    </div>
+    <div class="input-group input-group-sm mt-1">
+        <button class="btn btn-outline-info btn-sm" type="button" style="height:30px;padding:0 5px;font-size:10px;">−</button>
+        <input type="number" class="form-control text-center" name="kolata[]" value="${item.num_packages || 0}" min="0">
+        <button class="btn btn-outline-info btn-sm" type="button" style="height:30px;padding:0 5px;font-size:10px;">+</button>
+    </div>
+</td>
+<td><input type="text" class="form-control" name="total[]" value="${item.total_price || (item.base_price * item.quantity).toFixed(2)}"></td>
+<td style="width: 20px; text-align: center;">
+    <div style="display: flex; flex-direction: column; align-items: end; gap: 2px;">
+        <button type="button" class="btn btn-danger btn-sm remove-row text-center" style="width: 30px;" title="Ukloni red"><i class="fas fa-times"></i></button>
+        <input type="checkbox" class="form-check-input" style="width: 30px; height: 26.66px;" title="Povlastica DA/NE" />
+    </div>
+</td>`;
+                tbody.appendChild(row);
+            });
 
-                    const name = item.item_description_original || "";
-                    const desc = item.item_description || "";
-                    const qtype = item.quantity_type || "";
-                    const origin = item.country_of_origin || "";
-                    const price = item.base_price || "";
-                    const quantity = item.quantity || "";
-                    const total = item.total_price || (item.base_price * item.quantity).toFixed(2);
-                    const package_num = item.num_packages || "";
-
-                    tbody.innerHTML += `
-<tr class="product">
-    <td>${index + 1}</td>
-    <td colspan="2">
-        <div class="input-group" style="display: flex; gap: 0.25rem;">
-            <input type="text" class="form-control item-name" name="item_name[]" placeholder="Naziv proizvoda" value="${name}" style="flex:1;">
-            <button class="btn btn-outline-info rounded" type="button" onclick="searchFromInputs(this)">
-                <i class="fa-brands fa-google"></i>
-            </button>
-            <input type="text" class="form-control item-desc" name="item_desc[]" placeholder="Opis proizvoda" value="${desc}" style="flex:1;">
-        </div>
-        <input type="text" class="form-control form-control-sm mt-1" name="item_prev[]" placeholder="Prevod" value="${item.translation || ''}">
-    </td>
-    <td>
-        <div style="position: relative;">
-            <select class="form-control select2-tariff" name="item_code[]">
-               <option value="${tarifnaOznaka}" selected>${tarifnaOznaka}</option>
-            </select>
-        </div>
-    </td>
-    <td><input type="text" class="form-control" name="quantity_type[]" value="${qtype}"></td>
-    <td>
-        <select class="form-select select2-country" name="origin[]">
-            ${generateCountryOptions(origin)}
-        </select>
-    </td>
-    <td><input type="number" class="form-control" name="price[]" value="${price}"></td>
-    <td>
-        <div class="input-group input-group-sm">
-            <button class="btn btn-outline-info btn-sm" type="button">−</button>
-            <input type="number" class="form-control text-center" name="quantity[]" value="${quantity}" min="0" style="padding: 0 5px;">
-            <button class="btn btn-outline-info btn-sm" type="button">+</button>
-        </div>
-        <div class="input-group input-group-sm mt-1">
-            <button class="btn btn-outline-info btn-sm" type="button">−</button>
-            <input type="number" class="form-control text-center" name="kolata[]" value="${package_num}" min="0">
-            <button class="btn btn-outline-info btn-sm" type="button">+</button>
-        </div>
-    </td>
-    <td><input type="text" class="form-control" name="total[]" value="${total}"></td>
-    <td>
-        <button class="btn btn-danger btn-sm remove-row"><i class="fas fa-times"></i></button>
-    </td>
-</tr>`;
+            // --- Select2 init
+            queueMicrotask(() => {
+                $('.select2-country').select2({
+                    templateResult: formatCountryWithFlag,
+                    templateSelection: formatCountryWithFlag,
+                    width: 'resolve',
+                    minimumResultsForSearch: Infinity
                 });
-
-                setTimeout(() => {
-                    $('.select2-country').select2({
-                        templateResult: formatCountryWithFlag,
-                        templateSelection: formatCountryWithFlag,
-                        width: 'resolve',
-                        minimumResultsForSearch: Infinity
-                    });
-                    $('.select2-tariff').select2({
-                        data: processedTariffData,
-                        width: 'resolve'
-                    });
-                }, 100);
+                $('.select2-tariff').select2({
+                    data: processedTariffData,
+                    width: 'resolve'
+                });
             });
 
+            // Done loading
+            Swal.close();
         } catch (e) {
-            console.error("❌ Error loading invoice:", e);
+            console.error("Error loading invoice:", e);
             Swal.fire("Greška", "Nije moguće učitati deklaraciju.", "error");
         }
     });
 
-    function waitForEl(selector, callback) {
-        const interval = setInterval(() => {
-            const el = document.querySelector(selector);
-            if (el) {
-                clearInterval(interval);
-                callback(el);
-            }
-        }, 100);
+    function setField(selector, value) {
+        const el = document.querySelector(selector);
+        if (el) el.value = value || "";
     }
 
-    function waitForTableBody(callback) {
-        const interval = setInterval(() => {
-            const tbody = document.querySelector("#newlink");
-            if (tbody) {
-                clearInterval(interval);
-                callback(tbody);
-            }
-        }, 100);
+    function setText(selector, value) {
+        const el = document.querySelector(selector);
+        if (el) el.textContent = value || "";
     }
 
     function generateCountryOptions(selectedCode = "") {
-        const countries = ["ba", "hr", "rs", "de", "fr", "us", "gb", "it", "es", "cn", "jp", "in"];
+        const countries = [
+            "af", "al", "dz", "as", "ad", "ao", "ai", "aq", "ag", "ar", "am", "aw", "au", "at", "az",
+            "bs", "bh", "bd", "bb", "by", "be", "bz", "bj", "bm", "bt", "bo", "ba", "bw", "bv", "br", "io", "bn", "bg", "bf", "bi",
+            "kh", "cm", "ca", "cv", "ky", "cf", "td", "cl", "cn", "cx", "cc", "co", "km", "cg", "cd", "ck", "cr", "ci", "hr", "cu", "cy", "cz",
+            "dk", "dj", "dm", "do", "ec", "eg", "sv", "gq", "er", "ee", "et",
+            "fk", "fo", "fj", "fi", "fr", "gf", "pf", "tf", "ga", "gm", "ge", "de", "gh", "gi", "gr", "gl", "gd", "gp", "gu", "gt", "gg", "gn", "gw", "gy",
+            "ht", "hm", "va", "hn", "hk", "hu",
+            "is", "in", "id", "ir", "iq", "ie", "im", "il", "it",
+            "jm", "jp", "je", "jo",
+            "kz", "ke", "ki", "kp", "kr", "kw", "kg",
+            "la", "lv", "lb", "ls", "lr", "ly", "li", "lt", "lu",
+            "mo", "mk", "mg", "mw", "my", "mv", "ml", "mt", "mh", "mq", "mr", "mu", "yt", "mx", "fm", "md", "mc", "mn", "me", "ms", "ma", "mz", "mm",
+            "na", "nr", "np", "nl", "nc", "nz", "ni", "ne", "ng", "nu", "nf", "mp", "no",
+            "om","pk", "pw", "ps", "pa", "pg", "py", "pe", "ph", "pn", "pl", "pt", "pr",
+            "qa","re", "ro", "ru", "rw","bl", "sh", "kn", "lc", "mf", "pm", "vc", "ws", "sm", "st", "sa", "sn", "rs", "sc", "sl", "sg", "sx", "sk", "si", "sb", "so", "za", "gs", "ss", "es", "lk", "sd", "sr", "sj", "se", "ch", "sy",
+            "tw", "tj", "tz", "th", "tl", "tg", "tk", "to", "tt", "tn", "tr", "tm", "tc", "tv",
+            "ug", "ua", "ae", "gb", "us", "um", "uy", "uz",
+            "vu", "ve", "vn", "vg", "vi",
+            "wf", "eh",
+            "ye",
+            "zm", "zw"
+        ];
+
         return countries.map(code => {
             const selected = selectedCode?.toLowerCase() === code ? "selected" : "";
             return `<option value="${code.toUpperCase()}" ${selected}>${code.toUpperCase()}</option>`;
@@ -2382,7 +2345,6 @@
         return $(`<span><img src="${flagUrl}" class="me-2" width="20" /> ${state.text}</span>`);
     }
 </script>
-
 
 
 
