@@ -369,7 +369,6 @@
 
 <!-- Scan and other logic script -->
 <script>
-
     const editModeMatch = window.location.pathname.match(/\/deklaracija\/(\d+)/);
     const isEditMode = !!editModeMatch;
 
@@ -379,379 +378,379 @@
         // Note: Wrap the entire content below inside an IIFE or block
         // Or better – put all scan logic inside a condition
     } else {
-    console.log(' Custom invoice JS loaded');
-    let _invoice_data = null;
-    let processedTariffData = [];
-    let globalAISuggestions = [];
+        console.log(' Custom invoice JS loaded');
+        let _invoice_data = null;
+        let processedTariffData = [];
+        let globalAISuggestions = [];
 
-    // Add global flags
-    window.forceNewSupplier = false;
-    window.forceNewImporter = false;
-    window.skipPrefillParties = false; // NEW: skip prefill after manual clear
+        // Add global flags
+        window.forceNewSupplier = false;
+        window.forceNewImporter = false;
+        window.skipPrefillParties = false; // NEW: skip prefill after manual clear
 
-    function getInvoiceId() {
-        const id = localStorage.getItem("scan_invoice_id");
-        console.log(" Invoice ID:", id);
-        return id;
-    }
+        function getInvoiceId() {
+            const id = localStorage.getItem("scan_invoice_id");
+            console.log(" Invoice ID:", id);
+            return id;
+        }
 
-    function updateTotalAmount() {
-        let total = 0;
+        function updateTotalAmount() {
+            let total = 0;
 
-        // Loop through all invoice rows
-        document.querySelectorAll("#newlink tr.product").forEach(function(row) {
-            const price = parseFloat(row.querySelector('input[name="price[]"]')?.value || 0);
-            const quantity = parseFloat(row.querySelector('input[name="quantity[]"]')?.value || 0);
-            total += price * quantity;
-        });
-
-        // Format as currency
-        const formatted = `${total.toFixed(2)} KM`;
-
-        // Set values in both places
-        document.getElementById("total-amount").value = formatted;
-        document.getElementById("modal-total-amount").textContent = formatted;
-    }
-
-
-    async function getInvoice() {
-        if (!_invoice_data) {
-            console.log(" Fetching invoice...");
-            const res = await fetch(`/api/invoices/${getInvoiceId()}`, {
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    Authorization: `Bearer ${token}`
-                }
+            // Loop through all invoice rows
+            document.querySelectorAll("#newlink tr.product").forEach(function(row) {
+                const price = parseFloat(row.querySelector('input[name="price[]"]')?.value || 0);
+                const quantity = parseFloat(row.querySelector('input[name="quantity[]"]')?.value || 0);
+                total += price * quantity;
             });
-            _invoice_data = await res.json();
-            console.log(" Invoice data fetched:", _invoice_data);
-        } else {
-            console.log(" Using cached invoice data:", _invoice_data);
-        }
-        return _invoice_data;
-    }
 
-    async function startAiScan() {
-        const taskId = getInvoiceId();
-        
-        if (!taskId) {
-            console.warn(" No task ID found in localStorage.");
-            return false;
+            // Format as currency
+            const formatted = `${total.toFixed(2)} KM`;
+
+            // Set values in both places
+            document.getElementById("total-amount").value = formatted;
+            document.getElementById("modal-total-amount").textContent = formatted;
         }
 
-        console.log(" Starting AI scan for task ID:", taskId);
-        const response = await fetch(`/api/invoices/${taskId}/scan`, {
-            method: "POST",
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                Authorization: `Bearer ${token}`
+
+        async function getInvoice() {
+            if (!_invoice_data) {
+                console.log(" Fetching invoice...");
+                const res = await fetch(`/api/invoices/${getInvoiceId()}`, {
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                _invoice_data = await res.json();
+                console.log(" Invoice data fetched:", _invoice_data);
+            } else {
+                console.log(" Using cached invoice data:", _invoice_data);
             }
-        });
-
-        if (!response.ok) {
-            const err = await response.json();
-            console.error(" AI scan error:", err);
-            Swal.fire("Greška", err?.error || "Nepoznata greška", "error");
-            return false;
+            return _invoice_data;
         }
 
-        console.log(" AI scan started successfully");
-        return true;
-    }
+        async function startAiScan() {
+            const taskId = getInvoiceId();
 
-    async function waitForAIResult(showLoader = true) {
-        const invoice_id = getInvoiceId();
-        if (!invoice_id) return;
+            if (!taskId) {
+                console.warn(" No task ID found in localStorage.");
+                return false;
+            }
 
-        if (showLoader) {
-            Swal.fire({
-                title: 'Skeniranje ',
-                html: `<div class="custom-swal-spinner mb-3"></div><div id="swal-status-message">Čeka na obradu</div>`,
-                showConfirmButton: false,
-                allowOutsideClick: false
-            });
-        }
-
-        const stepTextMap = {
-            null: "Čeka na početak obrade",
-            conversion: "Konvertovanje dokumenta",
-            extraction: "Ekstrakcija podataka",
-            enrichment: "Obogaćivanje podataka"
-        };
-
-        while (true) {
-            const res = await fetch(`/api/invoices/${invoice_id}/scan`, {
+            console.log(" Starting AI scan for task ID:", taskId);
+            const response = await fetch(`/api/invoices/${taskId}/scan`, {
+                method: "POST",
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                     Authorization: `Bearer ${token}`
                 }
             });
 
-            const json = await res.json();
-            const status = json?.status?.status;
-            const step = json?.status?.processing_step;
-            const errorMsg = json?.status?.error_message;
-
-            console.log(" Scan status:", status, "| Step:", step, "| Error:", errorMsg);
-
-            const el = document.getElementById("swal-status-message");
-            if (el) {
-                if (status === "failed" || status === "error") {
-                    el.innerHTML = `<span class='text-danger'>Greška: ${errorMsg || 'Nepoznata greška'}</span><br><span class='text-muted'>Korak: ${stepTextMap[step] || step || ''}</span>`;
-                } else {
-                    const message = stepTextMap[step] || "Obrađujemo podatke";
-                    el.textContent = message;
-                }
+            if (!response.ok) {
+                const err = await response.json();
+                console.error(" AI scan error:", err);
+                Swal.fire("Greška", err?.error || "Nepoznata greška", "error");
+                return false;
             }
 
-            if (status === "completed") {
-                if (el) el.textContent = "Završeno";
-                await new Promise(r => setTimeout(r, 1000));
-                Swal.close();
-                _invoice_data = null;
-                break;
-            }
-
-            if (status === "failed" || status === "error") {
-                await new Promise(r => setTimeout(r, 1000));
-                Swal.close();
-                console.error("Scan error:", errorMsg);
-                Swal.fire("Greška", errorMsg || "Greška pri skeniranju", "error");
-                break;
-            }
-
-            await new Promise(r => setTimeout(r, 2000));
-        }
-    }
-
-
-
-    function initializeTariffSelects() {
-        $('.select2-tariff').each(function() {
-            const select = $(this);
-            const prefillValue = select.data("prefill");
-
-            select.select2({
-                placeholder: "Pretraži tarifne stavke...",
-                width: '100%',
-                minimumInputLength: 1,
-                ajax: {
-                    transport: function(params, success, failure) {
-                        const term = params.data.q?.toLowerCase() || "";
-                        const filtered = processedTariffData.filter(item => item.search.includes(term));
-                        success({
-                            results: filtered
-                        });
-                    },
-                    delay: 200
-                },
-                templateResult: function(item) {
-                    if (!item.id && !item.text) return null;
-                    const icon = item.isLeaf ? "•" : "▶";
-                    return $(`<div style="padding-left:${item.depth * 20}px;" title="${item.display}">${icon} ${item.display}</div>`);
-                },
-                templateSelection: function(item) {
-                    return item.id || "";
-                }
-            });
-
-            // Programmatically set prefill value, only with Tarifna oznaka
-            if (prefillValue) {
-                const matched = processedTariffData.find(item => item.id === prefillValue);
-                if (matched) {
-                    const option = new Option(matched.id, matched.id, true, true);
-                    select.append(option).trigger('change');
-                }
-            }
-        });
-    }
-
-
-
-    function addRowToInvoice(item = {}, suggestions = []) {
-        const tbody = document.getElementById("newlink");
-        const index = tbody.children.length;
-
-        globalAISuggestions.push(suggestions);
-
-        const name = item.name || item.item_description_original || "";
-        const tariff = item.tariff_code || "";
-        const price = item.base_price || 0;
-        const quantity = item.quantity || 0;
-        const origin = item.country_of_origin || "DE";
-        const total = (price * quantity).toFixed(2);
-        const desc = item.item_description;
-        const package_num = item.num_packages || 0;
-        const qtype = item.quantity_type || "";
-
-        console.log(` Adding row ${index + 1}:`, item, suggestions);
-
-        const row = document.createElement("tr");
-        row.classList.add("product");
-
-        function generateCountryOptions(selectedCode = "") {
-            // ISO country codes + names (lowercase for flag URL)
-            const countries = [{
-                    code: "af",
-                    name: "Afghanistan"
-                }, {
-                    code: "al",
-                    name: "Albania"
-                }, {
-                    code: "dz",
-                    name: "Algeria"
-                },
-                {
-                    code: "ad",
-                    name: "Andorra"
-                }, {
-                    code: "ao",
-                    name: "Angola"
-                }, {
-                    code: "ag",
-                    name: "Antigua and Barbuda"
-                },
-                {
-                    code: "ar",
-                    name: "Argentina"
-                }, {
-                    code: "am",
-                    name: "Armenia"
-                }, {
-                    code: "au",
-                    name: "Australia"
-                },
-                {
-                    code: "at",
-                    name: "Austria"
-                }, {
-                    code: "az",
-                    name: "Azerbaijan"
-                }, {
-                    code: "bs",
-                    name: "Bahamas"
-                },
-                {
-                    code: "bh",
-                    name: "Bahrain"
-                }, {
-                    code: "bd",
-                    name: "Bangladesh"
-                }, {
-                    code: "bb",
-                    name: "Barbados"
-                },
-                {
-                    code: "by",
-                    name: "Belarus"
-                }, {
-                    code: "be",
-                    name: "Belgium"
-                }, {
-                    code: "bz",
-                    name: "Belize"
-                },
-                {
-                    code: "ba",
-                    name: "Bosnia and Herzegovina"
-                }, {
-                    code: "hr",
-                    name: "Croatia"
-                }, {
-                    code: "rs",
-                    name: "Serbia"
-                },
-                {
-                    code: "me",
-                    name: "Montenegro"
-                }, {
-                    code: "si",
-                    name: "Slovenia"
-                }, {
-                    code: "mk",
-                    name: "North Macedonia"
-                },
-                {
-                    code: "de",
-                    name: "Germany"
-                }, {
-                    code: "fr",
-                    name: "France"
-                }, {
-                    code: "us",
-                    name: "United States"
-                },
-                {
-                    code: "gb",
-                    name: "United Kingdom"
-                }, {
-                    code: "it",
-                    name: "Italy"
-                }, {
-                    code: "es",
-                    name: "Spain"
-                },
-                {
-                    code: "cn",
-                    name: "China"
-                }, {
-                    code: "jp",
-                    name: "Japan"
-                }, {
-                    code: "in",
-                    name: "India"
-                }
-                // Add more if needed (or I can give you all 195 full set)
-            ];
-            return countries.map(({
-                code,
-                name
-            }) => {
-                const flagUrl = `https://flagcdn.com/w40/${code}.png`;
-                const isSelected = selectedCode?.toLowerCase() === code ? "selected" : "";
-                return `<option value="${code.toUpperCase()}" ${isSelected} data-flag="${flagUrl}">${code.toUpperCase()}</option>`;
-            }).join("");
-
+            console.log(" AI scan started successfully");
+            return true;
         }
 
-        document.getElementById('reset-form').addEventListener('click', function(e) {
-            e.preventDefault();
+        async function waitForAIResult(showLoader = true) {
+            const invoice_id = getInvoiceId();
+            if (!invoice_id) return;
 
-            Swal.fire({
-                title: 'Jesi li siguran/na?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Da',
-                cancelButtonText: 'Ne',
-                reverseButtons: true,
-                focusCancel: true,
-                confirmButtonColor: '#299dcb', // info color
-                cancelButtonColor: '#6c757d' // bootstrap secondary gray
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.skipPrefillParties = true; // NEW: skip prefill after clear
-                    // Clear all supplier and importer fields and selects
-                    $("#supplier-select2").val(null).trigger('change');
-                    $("#importer-select2").val(null).trigger('change');
-                    $("#billing-name, #billing-address-line-1, #billing-phone-no, #billing-tax-no, #email, #supplier-owner").val("").prop('readonly', false);
-                    $("#carrier-name, #carrier-address, #carrier-tel, #carrier-tax, #carrier-email, #carrier-owner").val("").prop('readonly', false);
-                    // Remove 'Novi dobavljač' and 'Novi uvoznik' options if present
-                    $("#supplier-select2 option[value='new']").remove();
-                    $("#importer-select2 option[value='new']").remove();
-                    // Remove all product rows
-                    const table = document.getElementById('products-table');
-                    if (table) {
-                        const tbody = table.querySelector('tbody');
-                        if (tbody) {
-                            tbody.innerHTML = '';
-                        }
+            if (showLoader) {
+                Swal.fire({
+                    title: 'Skeniranje ',
+                    html: `<div class="custom-swal-spinner mb-3"></div><div id="swal-status-message">Čeka na obradu</div>`,
+                    showConfirmButton: false,
+                    allowOutsideClick: false
+                });
+            }
+
+            const stepTextMap = {
+                null: "Čeka na početak obrade",
+                conversion: "Konvertovanje dokumenta",
+                extraction: "Ekstrakcija podataka",
+                enrichment: "Obogaćivanje podataka"
+            };
+
+            while (true) {
+                const res = await fetch(`/api/invoices/${invoice_id}/scan`, {
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                const json = await res.json();
+                const status = json?.status?.status;
+                const step = json?.status?.processing_step;
+                const errorMsg = json?.status?.error_message;
+
+                console.log(" Scan status:", status, "| Step:", step, "| Error:", errorMsg);
+
+                const el = document.getElementById("swal-status-message");
+                if (el) {
+                    if (status === "failed" || status === "error") {
+                        el.innerHTML = `<span class='text-danger'>Greška: ${errorMsg || 'Nepoznata greška'}</span><br><span class='text-muted'>Korak: ${stepTextMap[step] || step || ''}</span>`;
+                    } else {
+                        const message = stepTextMap[step] || "Obrađujemo podatke";
+                        el.textContent = message;
                     }
                 }
-                // If cancelled, just closes and does nothing (no reopening)
-            });
-        });
 
-        row.innerHTML = `
+                if (status === "completed") {
+                    if (el) el.textContent = "Završeno";
+                    await new Promise(r => setTimeout(r, 1000));
+                    Swal.close();
+                    _invoice_data = null;
+                    break;
+                }
+
+                if (status === "failed" || status === "error") {
+                    await new Promise(r => setTimeout(r, 1000));
+                    Swal.close();
+                    console.error("Scan error:", errorMsg);
+                    Swal.fire("Greška", errorMsg || "Greška pri skeniranju", "error");
+                    break;
+                }
+
+                await new Promise(r => setTimeout(r, 2000));
+            }
+        }
+
+
+
+        function initializeTariffSelects() {
+            $('.select2-tariff').each(function() {
+                const select = $(this);
+                const prefillValue = select.data("prefill");
+
+                select.select2({
+                    placeholder: "Pretraži tarifne stavke...",
+                    width: '100%',
+                    minimumInputLength: 1,
+                    ajax: {
+                        transport: function(params, success, failure) {
+                            const term = params.data.q?.toLowerCase() || "";
+                            const filtered = processedTariffData.filter(item => item.search.includes(term));
+                            success({
+                                results: filtered
+                            });
+                        },
+                        delay: 200
+                    },
+                    templateResult: function(item) {
+                        if (!item.id && !item.text) return null;
+                        const icon = item.isLeaf ? "•" : "▶";
+                        return $(`<div style="padding-left:${item.depth * 20}px;" title="${item.display}">${icon} ${item.display}</div>`);
+                    },
+                    templateSelection: function(item) {
+                        return item.id || "";
+                    }
+                });
+
+                // Programmatically set prefill value, only with Tarifna oznaka
+                if (prefillValue) {
+                    const matched = processedTariffData.find(item => item.id === prefillValue);
+                    if (matched) {
+                        const option = new Option(matched.id, matched.id, true, true);
+                        select.append(option).trigger('change');
+                    }
+                }
+            });
+        }
+
+
+
+        function addRowToInvoice(item = {}, suggestions = []) {
+            const tbody = document.getElementById("newlink");
+            const index = tbody.children.length;
+
+            globalAISuggestions.push(suggestions);
+
+            const name = item.name || item.item_description_original || "";
+            const tariff = item.tariff_code || "";
+            const price = item.base_price || 0;
+            const quantity = item.quantity || 0;
+            const origin = item.country_of_origin || "DE";
+            const total = (price * quantity).toFixed(2);
+            const desc = item.item_description;
+            const package_num = item.num_packages || 0;
+            const qtype = item.quantity_type || "";
+
+            console.log(` Adding row ${index + 1}:`, item, suggestions);
+
+            const row = document.createElement("tr");
+            row.classList.add("product");
+
+            function generateCountryOptions(selectedCode = "") {
+                // ISO country codes + names (lowercase for flag URL)
+                const countries = [{
+                        code: "af",
+                        name: "Afghanistan"
+                    }, {
+                        code: "al",
+                        name: "Albania"
+                    }, {
+                        code: "dz",
+                        name: "Algeria"
+                    },
+                    {
+                        code: "ad",
+                        name: "Andorra"
+                    }, {
+                        code: "ao",
+                        name: "Angola"
+                    }, {
+                        code: "ag",
+                        name: "Antigua and Barbuda"
+                    },
+                    {
+                        code: "ar",
+                        name: "Argentina"
+                    }, {
+                        code: "am",
+                        name: "Armenia"
+                    }, {
+                        code: "au",
+                        name: "Australia"
+                    },
+                    {
+                        code: "at",
+                        name: "Austria"
+                    }, {
+                        code: "az",
+                        name: "Azerbaijan"
+                    }, {
+                        code: "bs",
+                        name: "Bahamas"
+                    },
+                    {
+                        code: "bh",
+                        name: "Bahrain"
+                    }, {
+                        code: "bd",
+                        name: "Bangladesh"
+                    }, {
+                        code: "bb",
+                        name: "Barbados"
+                    },
+                    {
+                        code: "by",
+                        name: "Belarus"
+                    }, {
+                        code: "be",
+                        name: "Belgium"
+                    }, {
+                        code: "bz",
+                        name: "Belize"
+                    },
+                    {
+                        code: "ba",
+                        name: "Bosnia and Herzegovina"
+                    }, {
+                        code: "hr",
+                        name: "Croatia"
+                    }, {
+                        code: "rs",
+                        name: "Serbia"
+                    },
+                    {
+                        code: "me",
+                        name: "Montenegro"
+                    }, {
+                        code: "si",
+                        name: "Slovenia"
+                    }, {
+                        code: "mk",
+                        name: "North Macedonia"
+                    },
+                    {
+                        code: "de",
+                        name: "Germany"
+                    }, {
+                        code: "fr",
+                        name: "France"
+                    }, {
+                        code: "us",
+                        name: "United States"
+                    },
+                    {
+                        code: "gb",
+                        name: "United Kingdom"
+                    }, {
+                        code: "it",
+                        name: "Italy"
+                    }, {
+                        code: "es",
+                        name: "Spain"
+                    },
+                    {
+                        code: "cn",
+                        name: "China"
+                    }, {
+                        code: "jp",
+                        name: "Japan"
+                    }, {
+                        code: "in",
+                        name: "India"
+                    }
+                    // Add more if needed (or I can give you all 195 full set)
+                ];
+                return countries.map(({
+                    code,
+                    name
+                }) => {
+                    const flagUrl = `https://flagcdn.com/w40/${code}.png`;
+                    const isSelected = selectedCode?.toLowerCase() === code ? "selected" : "";
+                    return `<option value="${code.toUpperCase()}" ${isSelected} data-flag="${flagUrl}">${code.toUpperCase()}</option>`;
+                }).join("");
+
+            }
+
+            document.getElementById('reset-form').addEventListener('click', function(e) {
+                e.preventDefault();
+
+                Swal.fire({
+                    title: 'Jesi li siguran/na?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Da',
+                    cancelButtonText: 'Ne',
+                    reverseButtons: true,
+                    focusCancel: true,
+                    confirmButtonColor: '#299dcb', // info color
+                    cancelButtonColor: '#6c757d' // bootstrap secondary gray
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.skipPrefillParties = true; // NEW: skip prefill after clear
+                        // Clear all supplier and importer fields and selects
+                        $("#supplier-select2").val(null).trigger('change');
+                        $("#importer-select2").val(null).trigger('change');
+                        $("#billing-name, #billing-address-line-1, #billing-phone-no, #billing-tax-no, #email, #supplier-owner").val("").prop('readonly', false);
+                        $("#carrier-name, #carrier-address, #carrier-tel, #carrier-tax, #carrier-email, #carrier-owner").val("").prop('readonly', false);
+                        // Remove 'Novi dobavljač' and 'Novi uvoznik' options if present
+                        $("#supplier-select2 option[value='new']").remove();
+                        $("#importer-select2 option[value='new']").remove();
+                        // Remove all product rows
+                        const table = document.getElementById('products-table');
+                        if (table) {
+                            const tbody = table.querySelector('tbody');
+                            if (tbody) {
+                                tbody.innerHTML = '';
+                            }
+                        }
+                    }
+                    // If cancelled, just closes and does nothing (no reopening)
+                });
+            });
+
+            row.innerHTML = `
           <td style="width: 50px;">${index + 1}</td>
 
           <td colspan="2" style="width: 340px;">
@@ -909,514 +908,514 @@
         `;
 
 
-        $(row).find('select[name="origin[]"]').select2({
-            templateResult: formatFlag,
-            templateSelection: formatFlag,
-            placeholder: "Select a country",
-            width: 'style',
-            language: {
-                noResults: function() {
-                    return "Nisu pronađeni rezultati";
-                },
-                searching: function() {
-                    return "Pretraga…";
-                },
-                inputTooShort: function() {
-                    return "Unesite još znakova…";
+            $(row).find('select[name="origin[]"]').select2({
+                templateResult: formatFlag,
+                templateSelection: formatFlag,
+                placeholder: "Select a country",
+                width: 'style',
+                language: {
+                    noResults: function() {
+                        return "Nisu pronađeni rezultati";
+                    },
+                    searching: function() {
+                        return "Pretraga…";
+                    },
+                    inputTooShort: function() {
+                        return "Unesite još znakova…";
+                    }
                 }
+            });
+
+            function formatFlag(state) {
+                if (!state.id) return state.text;
+                const flagUrl = $(state.element).data('flag');
+                return $(`<span class="flag-option"><img src="${flagUrl}" width="20" style="margin-right: 10px;" /> ${state.text}</span>`);
             }
-        });
 
-        function formatFlag(state) {
-            if (!state.id) return state.text;
-            const flagUrl = $(state.element).data('flag');
-            return $(`<span class="flag-option"><img src="${flagUrl}" width="20" style="margin-right: 10px;" /> ${state.text}</span>`);
-        }
+            tbody.appendChild(row);
+            initializeTariffSelects();
 
-        tbody.appendChild(row);
-        initializeTariffSelects();
-
-        updateTotalAmount();
-    }
-    $(document).on('click', '.increment-qty', function() {
-        const input = $(this).siblings('input[name="quantity[]"]');
-        input.val(parseInt(input.val() || 0) + 1).trigger('input');
-        updateTotalAmount();
-    });
-
-    $(document).on('click', '.decrement-qty', function() {
-        const input = $(this).siblings('input[name="quantity[]"]');
-        const current = parseInt(input.val() || 0);
-        if (current > 0) {
-            input.val(current - 1).trigger('input');
             updateTotalAmount();
         }
-    });
-    $(document).on('input', 'input[name="price[]"], input[name="quantity[]"]', function() {
-        const row = $(this).closest('tr');
-        const price = parseFloat(row.find('input[name="price[]"]').val()) || 0;
-        const quantity = parseInt(row.find('input[name="quantity[]"]').val()) || 0;
-        const total = (price * quantity).toFixed(2);
-        row.find('input[name="total[]"]').val(total);
+        $(document).on('click', '.increment-qty', function() {
+            const input = $(this).siblings('input[name="quantity[]"]');
+            input.val(parseInt(input.val() || 0) + 1).trigger('input');
+            updateTotalAmount();
+        });
 
-        // Optional: update global total as well
-        updateTotalAmount();
-    });
+        $(document).on('click', '.decrement-qty', function() {
+            const input = $(this).siblings('input[name="quantity[]"]');
+            const current = parseInt(input.val() || 0);
+            if (current > 0) {
+                input.val(current - 1).trigger('input');
+                updateTotalAmount();
+            }
+        });
+        $(document).on('input', 'input[name="price[]"], input[name="quantity[]"]', function() {
+            const row = $(this).closest('tr');
+            const price = parseFloat(row.find('input[name="price[]"]').val()) || 0;
+            const quantity = parseInt(row.find('input[name="quantity[]"]').val()) || 0;
+            const total = (price * quantity).toFixed(2);
+            row.find('input[name="total[]"]').val(total);
 
-    document.addEventListener('click', (event) => {
-        // Handle decrement button click
-        if (event.target.closest('.decrement-kolata')) {
-            const container = event.target.closest('div'); // or closest input group wrapper
-            const input = container.querySelector('input[name="kolata[]"]');
-            if (input) {
-                let currentValue = parseInt(input.value) || 0;
-                if (currentValue > 0) {
-                    input.value = currentValue - 1;
-                    input.dispatchEvent(new Event('change')); // if you listen for changes
+            // Optional: update global total as well
+            updateTotalAmount();
+        });
+
+        document.addEventListener('click', (event) => {
+            // Handle decrement button click
+            if (event.target.closest('.decrement-kolata')) {
+                const container = event.target.closest('div'); // or closest input group wrapper
+                const input = container.querySelector('input[name="kolata[]"]');
+                if (input) {
+                    let currentValue = parseInt(input.value) || 0;
+                    if (currentValue > 0) {
+                        input.value = currentValue - 1;
+                        input.dispatchEvent(new Event('change')); // if you listen for changes
+                    }
                 }
             }
-        }
 
-        // Handle increment button click
-        if (event.target.closest('.increment-kolata')) {
-            const container = event.target.closest('div'); // or closest input group wrapper
-            const input = container.querySelector('input[name="kolata[]"]');
-            if (input) {
-                let currentValue = parseInt(input.value) || 0;
-                input.value = currentValue + 1;
-                input.dispatchEvent(new Event('change'));
+            // Handle increment button click
+            if (event.target.closest('.increment-kolata')) {
+                const container = event.target.closest('div'); // or closest input group wrapper
+                const input = container.querySelector('input[name="kolata[]"]');
+                if (input) {
+                    let currentValue = parseInt(input.value) || 0;
+                    input.value = currentValue + 1;
+                    input.dispatchEvent(new Event('change'));
+                }
             }
-        }
 
-        // Initialize all tooltips once
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        tooltipTriggerList.forEach(function(tooltipTriggerEl) {
-            if (!bootstrap.Tooltip.getInstance(tooltipTriggerEl)) { // avoid re-init
-                new bootstrap.Tooltip(tooltipTriggerEl, {
-                    trigger: 'hover',
-                    delay: {
-                        show: 100,
-                        hide: 100
+            // Initialize all tooltips once
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+                if (!bootstrap.Tooltip.getInstance(tooltipTriggerEl)) { // avoid re-init
+                    new bootstrap.Tooltip(tooltipTriggerEl, {
+                        trigger: 'hover',
+                        delay: {
+                            show: 100,
+                            hide: 100
+                        }
+                    });
+                }
+            });
+
+            // Add a single click listener outside to hide tooltips on outside click
+            document.addEventListener('click', function(e) {
+                tooltipTriggerList.forEach(function(el) {
+                    var tooltip = bootstrap.Tooltip.getInstance(el);
+                    if (tooltip && e.target !== el && !el.contains(e.target)) {
+                        tooltip.hide();
                     }
                 });
-            }
-        });
-
-        // Add a single click listener outside to hide tooltips on outside click
-        document.addEventListener('click', function(e) {
-            tooltipTriggerList.forEach(function(el) {
-                var tooltip = bootstrap.Tooltip.getInstance(el);
-                if (tooltip && e.target !== el && !el.contains(e.target)) {
-                    tooltip.hide();
-                }
-            });
-        });
-
-
-
-    });
-
-
-    async function fillInvoiceData() {
-        const invoice = await getInvoice();
-        const items = invoice.items || [];
-        console.log(" Invoice items:", items);
-
-        items.forEach((item, index) => {
-            const matches = item.best_customs_code_matches || [];
-
-            const bestMatch = matches.reduce((best, current) => {
-                return !best || current.closeness < best.closeness ? current : best;
-            }, null);
-
-            const bestTariffCode = bestMatch?.entry?.["Tarifna oznaka"] || "";
-
-            const suggestions = matches.map(code => ({
-                entry: {
-                    "Tarifna oznaka": code.entry?.["Tarifna oznaka"],
-                    "Naziv": code.entry?.["Naziv"]
-                },
-                closeness: code.closeness
-            }));
-
-            addRowToInvoice({
-                ...item,
-                tariff_code: bestTariffCode
-            }, suggestions);
-        });
-        if (invoice.incoterm) {
-            // Extract only the code (first word) for the select
-            const incotermCode = invoice.incoterm.split(' ')[0];
-            document.getElementById("incoterm").value = incotermCode;
-        }
-        if (invoice.invoice_number) {
-            const cleaned = invoice.invoice_number.replaceAll("/", "");
-            document.getElementById("invoice-no").value = cleaned;
-        }
-
-
-
-    }
-
-
-    async function fetchAndPrefillParties() {
-        const taskId = localStorage.getItem("scan_invoice_id");
-        if (!taskId || !token) return;
-
-        try {
-            const res = await fetch(`/api/invoices/${taskId}/scan/parties`, {
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    Authorization: `Bearer ${token}`
-                }
             });
 
-            const data = await res.json();
-            if (!res.ok) throw new Error("Greška u AI response");
 
-            const {
-                supplier,
-                importer,
-                supplier_id,
-                importer_id
-            } = data;
-            // Get invoice data for IDs
+
+        });
+
+
+        async function fillInvoiceData() {
             const invoice = await getInvoice();
+            const items = invoice.items || [];
+            console.log(" Invoice items:", items);
 
-            // --- SUPPLIER LOGIC ---
-            let supplierId = invoice.supplier_id || supplier_id;
-            if (window.forceNewSupplier) {
-                // Always remove any previous 'Novi dobavljač' option
-                $("#supplier-select2 option[value='new']").remove();
-                // Add and select 'Novi dobavljač'
-                const newOption = new Option('Novi dobavljač', 'new', true, true);
-                $("#supplier-select2").append(newOption).trigger('change');
-                if (supplier) {
+            items.forEach((item, index) => {
+                const matches = item.best_customs_code_matches || [];
+
+                const bestMatch = matches.reduce((best, current) => {
+                    return !best || current.closeness < best.closeness ? current : best;
+                }, null);
+
+                const bestTariffCode = bestMatch?.entry?.["Tarifna oznaka"] || "";
+
+                const suggestions = matches.map(code => ({
+                    entry: {
+                        "Tarifna oznaka": code.entry?.["Tarifna oznaka"],
+                        "Naziv": code.entry?.["Naziv"]
+                    },
+                    closeness: code.closeness
+                }));
+
+                addRowToInvoice({
+                    ...item,
+                    tariff_code: bestTariffCode
+                }, suggestions);
+            });
+            if (invoice.incoterm) {
+                // Extract only the code (first word) for the select
+                const incotermCode = invoice.incoterm.split(' ')[0];
+                document.getElementById("incoterm").value = incotermCode;
+            }
+            if (invoice.invoice_number) {
+                const cleaned = invoice.invoice_number.replaceAll("/", "");
+                document.getElementById("invoice-no").value = cleaned;
+            }
+
+
+
+        }
+
+
+        async function fetchAndPrefillParties() {
+            const taskId = localStorage.getItem("scan_invoice_id");
+            if (!taskId || !token) return;
+
+            try {
+                const res = await fetch(`/api/invoices/${taskId}/scan/parties`, {
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                const data = await res.json();
+                if (!res.ok) throw new Error("Greška u AI response");
+
+                const {
+                    supplier,
+                    importer,
+                    supplier_id,
+                    importer_id
+                } = data;
+                // Get invoice data for IDs
+                const invoice = await getInvoice();
+
+                // --- SUPPLIER LOGIC ---
+                let supplierId = invoice.supplier_id || supplier_id;
+                if (window.forceNewSupplier) {
+                    // Always remove any previous 'Novi dobavljač' option
+                    $("#supplier-select2 option[value='new']").remove();
+                    // Add and select 'Novi dobavljač'
+                    const newOption = new Option('Novi dobavljač', 'new', true, true);
+                    $("#supplier-select2").append(newOption).trigger('change');
+                    if (supplier) {
+                        $("#billing-name").val(supplier.name || "").prop('readonly', false);
+                        $("#billing-address-line-1").val(supplier.address || "").prop('readonly', false);
+                        $("#billing-phone-no").val(supplier.phone_number || "").prop('readonly', false);
+                        $("#billing-tax-no").val(supplier.vat_number || "").prop('readonly', false);
+                        $("#email").val(supplier.email || "").prop('readonly', false);
+                        $("#supplier-owner").val(supplier.owner || "").prop('readonly', false);
+                    } else {
+                        $("#billing-name, #billing-address-line-1, #billing-phone-no, #billing-tax-no, #email, #supplier-owner").val("").prop('readonly', false);
+                    }
+                    const label = document.getElementById("billing-name-ai-label");
+                    if (label) label.classList.remove("d-none");
+                    window.forceNewSupplier = false;
+                } else if (supplierId) {
+                    // Ensure the option exists before setting value
+                    if ($(`#supplier-select2 option[value='${supplierId}']`).length === 0) {
+                        const text = supplier?.name ? `${supplier.name} – ${supplier.address || ''}` : supplierId;
+                        const newOption = new Option(text, supplierId, true, true);
+                        $("#supplier-select2").append(newOption);
+                    }
+                    console.log("[SUPPLIER] Prefilling from ID:", supplierId, invoice.supplier_id ? 'invoice.supplier_id' : 'parties.supplier_id');
+                    $("#supplier-select2").val(supplierId).trigger("change");
+                    $.ajax({
+                        url: `/api/suppliers/${supplierId}`,
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            Authorization: `Bearer ${token}`
+                        },
+                        success: function(dbSupplier) {
+                            console.log("[SUPPLIER] Prefilling textboxes from DB for ID:", supplierId, dbSupplier);
+                            $("#billing-name").val(dbSupplier.name || "").prop('readonly', true);
+                            $("#billing-address-line-1").val(dbSupplier.address || "").prop('readonly', true);
+                            $("#billing-phone-no").val(dbSupplier.contact_phone || "").prop('readonly', true);
+                            $("#billing-tax-no").val(dbSupplier.tax_id || "").prop('readonly', true);
+                            $("#email").val(dbSupplier.contact_email || "").prop('readonly', true);
+                            $("#supplier-owner").val(dbSupplier.owner || "").prop('readonly', true);
+                            const label = document.getElementById("billing-name-ai-label");
+                            if (label) label.classList.add("d-none");
+                        },
+                        error: function() {
+                            if (supplier) {
+                                // Not found in DB, add 'Novi dobavljač' to select2
+                                const newOption = new Option('Novi dobavljač', 'new', true, true);
+                                $("#supplier-select2").append(newOption).trigger('change');
+                                $("#billing-name").val(supplier.name || "").prop('readonly', false);
+                                $("#billing-address-line-1").val(supplier.address || "").prop('readonly', false);
+                                $("#billing-phone-no").val(supplier.phone_number || "").prop('readonly', false);
+                                $("#billing-tax-no").val(supplier.vat_number || "").prop('readonly', false);
+                                $("#email").val(supplier.email || "").prop('readonly', false);
+                                $("#supplier-owner").val(supplier.owner || "").prop('readonly', false);
+                                const label = document.getElementById("billing-name-ai-label");
+                                if (label) label.classList.remove("d-none");
+                            }
+                        }
+                    });
+                } else if (supplier) {
+                    // Not found in DB, add 'Novi dobavljač' to select2
+                    const newOption = new Option('Novi dobavljač', 'new', true, true);
+                    $("#supplier-select2").append(newOption).trigger('change');
                     $("#billing-name").val(supplier.name || "").prop('readonly', false);
                     $("#billing-address-line-1").val(supplier.address || "").prop('readonly', false);
                     $("#billing-phone-no").val(supplier.phone_number || "").prop('readonly', false);
                     $("#billing-tax-no").val(supplier.vat_number || "").prop('readonly', false);
                     $("#email").val(supplier.email || "").prop('readonly', false);
                     $("#supplier-owner").val(supplier.owner || "").prop('readonly', false);
-                } else {
-                    $("#billing-name, #billing-address-line-1, #billing-phone-no, #billing-tax-no, #email, #supplier-owner").val("").prop('readonly', false);
+                    const label = document.getElementById("billing-name-ai-label");
+                    if (label) label.classList.remove("d-none");
                 }
-                const label = document.getElementById("billing-name-ai-label");
-                if (label) label.classList.remove("d-none");
-                window.forceNewSupplier = false;
-            } else if (supplierId) {
-                // Ensure the option exists before setting value
-                if ($(`#supplier-select2 option[value='${supplierId}']`).length === 0) {
-                    const text = supplier?.name ? `${supplier.name} – ${supplier.address || ''}` : supplierId;
-                    const newOption = new Option(text, supplierId, true, true);
-                    $("#supplier-select2").append(newOption);
-                }
-                console.log("[SUPPLIER] Prefilling from ID:", supplierId, invoice.supplier_id ? 'invoice.supplier_id' : 'parties.supplier_id');
-                $("#supplier-select2").val(supplierId).trigger("change");
-                $.ajax({
-                    url: `/api/suppliers/${supplierId}`,
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                        Authorization: `Bearer ${token}`
-                    },
-                    success: function(dbSupplier) {
-                        console.log("[SUPPLIER] Prefilling textboxes from DB for ID:", supplierId, dbSupplier);
-                        $("#billing-name").val(dbSupplier.name || "").prop('readonly', true);
-                        $("#billing-address-line-1").val(dbSupplier.address || "").prop('readonly', true);
-                        $("#billing-phone-no").val(dbSupplier.contact_phone || "").prop('readonly', true);
-                        $("#billing-tax-no").val(dbSupplier.tax_id || "").prop('readonly', true);
-                        $("#email").val(dbSupplier.contact_email || "").prop('readonly', true);
-                        $("#supplier-owner").val(dbSupplier.owner || "").prop('readonly', true);
-                        const label = document.getElementById("billing-name-ai-label");
-                        if (label) label.classList.add("d-none");
-                    },
-                    error: function() {
-                        if (supplier) {
-                            // Not found in DB, add 'Novi dobavljač' to select2
-                            const newOption = new Option('Novi dobavljač', 'new', true, true);
-                            $("#supplier-select2").append(newOption).trigger('change');
-                            $("#billing-name").val(supplier.name || "").prop('readonly', false);
-                            $("#billing-address-line-1").val(supplier.address || "").prop('readonly', false);
-                            $("#billing-phone-no").val(supplier.phone_number || "").prop('readonly', false);
-                            $("#billing-tax-no").val(supplier.vat_number || "").prop('readonly', false);
-                            $("#email").val(supplier.email || "").prop('readonly', false);
-                            $("#supplier-owner").val(supplier.owner || "").prop('readonly', false);
-                            const label = document.getElementById("billing-name-ai-label");
-                            if (label) label.classList.remove("d-none");
-                        }
-                    }
-                });
-            } else if (supplier) {
-                // Not found in DB, add 'Novi dobavljač' to select2
-                const newOption = new Option('Novi dobavljač', 'new', true, true);
-                $("#supplier-select2").append(newOption).trigger('change');
-                $("#billing-name").val(supplier.name || "").prop('readonly', false);
-                $("#billing-address-line-1").val(supplier.address || "").prop('readonly', false);
-                $("#billing-phone-no").val(supplier.phone_number || "").prop('readonly', false);
-                $("#billing-tax-no").val(supplier.vat_number || "").prop('readonly', false);
-                $("#email").val(supplier.email || "").prop('readonly', false);
-                $("#supplier-owner").val(supplier.owner || "").prop('readonly', false);
-                const label = document.getElementById("billing-name-ai-label");
-                if (label) label.classList.remove("d-none");
-            }
 
-            // --- IMPORTER LOGIC ---
-            let importerId = invoice.importer_id || importer_id;
-            if (window.forceNewImporter) {
-                $("#importer-select2 option[value='new']").remove();
-                const newOption = new Option('Novi uvoznik', 'new', true, true);
-                $("#importer-select2").append(newOption).trigger('change');
-                if (importer) {
+                // --- IMPORTER LOGIC ---
+                let importerId = invoice.importer_id || importer_id;
+                if (window.forceNewImporter) {
+                    $("#importer-select2 option[value='new']").remove();
+                    const newOption = new Option('Novi uvoznik', 'new', true, true);
+                    $("#importer-select2").append(newOption).trigger('change');
+                    if (importer) {
+                        $("#carrier-name").val(importer.name || "").prop('readonly', false);
+                        $("#carrier-address").val(importer.address || "").prop('readonly', false);
+                        $("#carrier-tel").val(importer.phone_number || "").prop('readonly', false);
+                        $("#carrier-tax").val(importer.vat_number || "").prop('readonly', false);
+                        $("#carrier-email").val(importer.email || "").prop('readonly', false);
+                        $("#carrier-owner").val(importer.owner || "").prop('readonly', false);
+                    } else {
+                        $("#carrier-name, #carrier-address, #carrier-tel, #carrier-tax, #carrier-email, #carrier-owner").val("").prop('readonly', false);
+                    }
+                    const label = document.getElementById("carrier-name-ai-label");
+                    if (label) label.classList.remove("d-none");
+                    window.forceNewImporter = false;
+                } else if (importerId) {
+                    // Ensure the option exists before setting value
+                    if ($(`#importer-select2 option[value='${importerId}']`).length === 0) {
+                        const text = importer?.name ? `${importer.name} – ${importer.address || ''}` : importerId;
+                        const newOption = new Option(text, importerId, true, true);
+                        $("#importer-select2").append(newOption);
+                    }
+                    console.log("[IMPORTER] Prefilling from ID:", importerId, invoice.importer_id ? 'invoice.importer_id' : 'parties.importer_id');
+                    $("#importer-select2").val(importerId).trigger("change");
+                    $.ajax({
+                        url: `/api/importers/${importerId}`,
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            Authorization: `Bearer ${token}`
+                        },
+                        success: function(dbImporter) {
+                            console.log("[IMPORTER] Prefilling textboxes from DB for ID:", importerId, dbImporter);
+                            $("#carrier-name").val(dbImporter.name || "").prop('readonly', true);
+                            $("#carrier-address").val(dbImporter.address || "").prop('readonly', true);
+                            $("#carrier-tel").val(dbImporter.contact_phone || "").prop('readonly', true);
+                            $("#carrier-tax").val(dbImporter.tax_id || "").prop('readonly', true);
+                            $("#carrier-email").val(dbImporter.contact_email || "").prop('readonly', true);
+                            $("#carrier-owner").val(dbImporter.owner || "").prop('readonly', true);
+                            const label = document.getElementById("carrier-name-ai-label");
+                            if (label) label.classList.add("d-none");
+                        },
+                        error: function() {
+                            if (importer) {
+                                // Not found in DB, add 'Novi uvoznik' to select2
+                                const newOption = new Option('Novi uvoznik', 'new', true, true);
+                                $("#importer-select2").append(newOption).trigger('change');
+                                $("#carrier-name").val(importer.name || "").prop('readonly', false);
+                                $("#carrier-address").val(importer.address || "").prop('readonly', false);
+                                $("#carrier-tel").val(importer.phone_number || "").prop('readonly', false);
+                                $("#carrier-tax").val(importer.vat_number || "").prop('readonly', false);
+                                $("#carrier-email").val(importer.email || "").prop('readonly', false);
+                                $("#carrier-owner").val(importer.owner || "").prop('readonly', false);
+                                const label = document.getElementById("carrier-name-ai-label");
+                                if (label) label.classList.remove("d-none");
+                            }
+                        }
+                    });
+                } else if (importer) {
+                    // Always remove any previous 'Novi uvoznik' option
+                    $("#importer-select2 option[value='new']").remove();
+                    // Add and select 'Novi uvoznik'
+                    const newOption = new Option('Novi uvoznik', 'new', true, true);
+                    $("#importer-select2").append(newOption).trigger('change');
                     $("#carrier-name").val(importer.name || "").prop('readonly', false);
                     $("#carrier-address").val(importer.address || "").prop('readonly', false);
                     $("#carrier-tel").val(importer.phone_number || "").prop('readonly', false);
                     $("#carrier-tax").val(importer.vat_number || "").prop('readonly', false);
                     $("#carrier-email").val(importer.email || "").prop('readonly', false);
                     $("#carrier-owner").val(importer.owner || "").prop('readonly', false);
-                } else {
-                    $("#carrier-name, #carrier-address, #carrier-tel, #carrier-tax, #carrier-email, #carrier-owner").val("").prop('readonly', false);
+                    const label = document.getElementById("carrier-name-ai-label");
+                    if (label) label.classList.remove("d-none");
                 }
-                const label = document.getElementById("carrier-name-ai-label");
-                if (label) label.classList.remove("d-none");
-                window.forceNewImporter = false;
-            } else if (importerId) {
-                // Ensure the option exists before setting value
-                if ($(`#importer-select2 option[value='${importerId}']`).length === 0) {
-                    const text = importer?.name ? `${importer.name} – ${importer.address || ''}` : importerId;
-                    const newOption = new Option(text, importerId, true, true);
-                    $("#importer-select2").append(newOption);
+
+            } catch (err) {
+                console.error("Greška u fetchAndPrefillParties:", err);
+                Swal.fire("Greška", err.message || "Neuspješno dohvaćanje podataka", "error");
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            window.skipPrefillParties = false; // Always allow prefill on page load/scan
+            console.log(" Page loaded. Starting init process...");
+
+            // Parallelize tariff and invoice fetch for faster load
+            const [tariffRes, invoice] = await Promise.all([
+                fetch("{{ URL::asset('build/json/tariff.json') }}"),
+                getInvoice()
+            ]);
+            const tariffData = await tariffRes.json();
+            console.log(" Tariff data loaded:", tariffData);
+
+            processedTariffData = tariffData
+                .filter(item => item["Tarifna oznaka"] && item["Naziv"] && item["Puni Naziv"])
+                .map(item => ({
+                    id: item["Tarifna oznaka"],
+                    text: item["Puni Naziv"].split(">>>").pop().trim(),
+                    display: `${item["Tarifna oznaka"]} – ${item["Naziv"]}`,
+                    depth: item["Puni Naziv"].split(">>>").length - 1,
+                    isLeaf: item["Tarifna oznaka"].replace(/\s/g, '').length === 10,
+                    search: [item["Naziv"], item["Puni Naziv"], item["Tarifna oznaka"]].join(" ").toLowerCase()
+                }));
+            console.log(" Processed tariff data:", processedTariffData);
+
+            // Only show loader and run scan if needed
+            let scanNeeded = false;
+            if (invoice.task_id == null) scanNeeded = true;
+            else if (!invoice.items?.length) scanNeeded = true;
+
+            if (scanNeeded) {
+                Swal.fire({
+                    title: 'Skeniranje',
+                    html: `<div class=\"custom-swal-spinner mb-3\"></div><div id=\"swal-status-message\">Čeka na obradu</div>`,
+                    showConfirmButton: false,
+                    allowOutsideClick: false
+                });
+                if (invoice.task_id == null && await startAiScan()) {
+                    await waitForAIResult();
+                } else if (!invoice.items?.length) {
+                    await waitForAIResult();
                 }
-                console.log("[IMPORTER] Prefilling from ID:", importerId, invoice.importer_id ? 'invoice.importer_id' : 'parties.importer_id');
-                $("#importer-select2").val(importerId).trigger("change");
-                $.ajax({
-                    url: `/api/importers/${importerId}`,
+                Swal.close();
+            }
+
+            _invoice_data = null;
+
+            await fillInvoiceData();
+            if (!window.skipPrefillParties) {
+                await fetchAndPrefillParties();
+            }
+            window.skipPrefillParties = false; // reset after use
+            $("#supplier-select2").select2({
+                placeholder: "Pretraži dobavljača",
+                allowClear: true,
+                ajax: {
+                    url: "/api/suppliers",
+                    dataType: "json",
+                    delay: 250,
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                         Authorization: `Bearer ${token}`
                     },
-                    success: function(dbImporter) {
-                        console.log("[IMPORTER] Prefilling textboxes from DB for ID:", importerId, dbImporter);
-                        $("#carrier-name").val(dbImporter.name || "").prop('readonly', true);
-                        $("#carrier-address").val(dbImporter.address || "").prop('readonly', true);
-                        $("#carrier-tel").val(dbImporter.contact_phone || "").prop('readonly', true);
-                        $("#carrier-tax").val(dbImporter.tax_id || "").prop('readonly', true);
-                        $("#carrier-email").val(dbImporter.contact_email || "").prop('readonly', true);
-                        $("#carrier-owner").val(dbImporter.owner || "").prop('readonly', true);
-                        const label = document.getElementById("carrier-name-ai-label");
-                        if (label) label.classList.add("d-none");
-                    },
-                    error: function() {
-                        if (importer) {
-                            // Not found in DB, add 'Novi uvoznik' to select2
-                            const newOption = new Option('Novi uvoznik', 'new', true, true);
-                            $("#importer-select2").append(newOption).trigger('change');
-                            $("#carrier-name").val(importer.name || "").prop('readonly', false);
-                            $("#carrier-address").val(importer.address || "").prop('readonly', false);
-                            $("#carrier-tel").val(importer.phone_number || "").prop('readonly', false);
-                            $("#carrier-tax").val(importer.vat_number || "").prop('readonly', false);
-                            $("#carrier-email").val(importer.email || "").prop('readonly', false);
-                            $("#carrier-owner").val(importer.owner || "").prop('readonly', false);
-                            const label = document.getElementById("carrier-name-ai-label");
-                            if (label) label.classList.remove("d-none");
-                        }
-                    }
-                });
-            } else if (importer) {
-                // Always remove any previous 'Novi uvoznik' option
-                $("#importer-select2 option[value='new']").remove();
-                // Add and select 'Novi uvoznik'
-                const newOption = new Option('Novi uvoznik', 'new', true, true);
-                $("#importer-select2").append(newOption).trigger('change');
-                $("#carrier-name").val(importer.name || "").prop('readonly', false);
-                $("#carrier-address").val(importer.address || "").prop('readonly', false);
-                $("#carrier-tel").val(importer.phone_number || "").prop('readonly', false);
-                $("#carrier-tax").val(importer.vat_number || "").prop('readonly', false);
-                $("#carrier-email").val(importer.email || "").prop('readonly', false);
-                $("#carrier-owner").val(importer.owner || "").prop('readonly', false);
-                const label = document.getElementById("carrier-name-ai-label");
-                if (label) label.classList.remove("d-none");
-            }
-
-        } catch (err) {
-            console.error("Greška u fetchAndPrefillParties:", err);
-            Swal.fire("Greška", err.message || "Neuspješno dohvaćanje podataka", "error");
-        }
-    }
-
-    document.addEventListener("DOMContentLoaded", async () => {
-        window.skipPrefillParties = false; // Always allow prefill on page load/scan
-        console.log(" Page loaded. Starting init process...");
-
-        // Parallelize tariff and invoice fetch for faster load
-        const [tariffRes, invoice] = await Promise.all([
-            fetch("{{ URL::asset('build/json/tariff.json') }}"),
-            getInvoice()
-        ]);
-        const tariffData = await tariffRes.json();
-        console.log(" Tariff data loaded:", tariffData);
-
-        processedTariffData = tariffData
-            .filter(item => item["Tarifna oznaka"] && item["Naziv"] && item["Puni Naziv"])
-            .map(item => ({
-                id: item["Tarifna oznaka"],
-                text: item["Puni Naziv"].split(">>>").pop().trim(),
-                display: `${item["Tarifna oznaka"]} – ${item["Naziv"]}`,
-                depth: item["Puni Naziv"].split(">>>").length - 1,
-                isLeaf: item["Tarifna oznaka"].replace(/\s/g, '').length === 10,
-                search: [item["Naziv"], item["Puni Naziv"], item["Tarifna oznaka"]].join(" ").toLowerCase()
-            }));
-        console.log(" Processed tariff data:", processedTariffData);
-
-        // Only show loader and run scan if needed
-        let scanNeeded = false;
-        if (invoice.task_id == null) scanNeeded = true;
-        else if (!invoice.items?.length) scanNeeded = true;
-
-        if (scanNeeded) {
-            Swal.fire({
-                title: 'Skeniranje',
-                html: `<div class=\"custom-swal-spinner mb-3\"></div><div id=\"swal-status-message\">Čeka na obradu</div>`,
-                showConfirmButton: false,
-                allowOutsideClick: false
+                    data: params => ({
+                        search: params.term
+                    }),
+                    processResults: data => ({
+                        results: data.data.map(s => ({
+                            id: s.id,
+                            text: `${s.name} – ${s.address}`,
+                            full: s
+                        }))
+                    }),
+                    cache: true
+                },
+                tags: true,
+                allowClear: false
             });
-            if (invoice.task_id == null && await startAiScan()) {
-                await waitForAIResult();
-            } else if (!invoice.items?.length) {
-                await waitForAIResult();
-            }
-            Swal.close();
-        }
 
-        _invoice_data = null;
-
-        await fillInvoiceData();
-        if (!window.skipPrefillParties) {
-            await fetchAndPrefillParties();
-        }
-        window.skipPrefillParties = false; // reset after use
-        $("#supplier-select2").select2({
-            placeholder: "Pretraži dobavljača",
-            allowClear: true,
-            ajax: {
-                url: "/api/suppliers",
-                dataType: "json",
-                delay: 250,
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    Authorization: `Bearer ${token}`
-                },
-                data: params => ({
-                    search: params.term
-                }),
-                processResults: data => ({
-                    results: data.data.map(s => ({
-                        id: s.id,
-                        text: `${s.name} – ${s.address}`,
-                        full: s
-                    }))
-                }),
-                cache: true
-            },
-            tags: true,
-            allowClear: false
-        });
-
-        $('#supplier-select2').on('select2:select', function(e) {
-            const data = e.params.data.full;
-            if (data) {
-                $('#billing-name').val(data.name || "");
-                $('#billing-address-line-1').val(data.address || "");
-                $('#billing-phone-no').val(data.contact_phone || "");
-                $('#billing-tax-no').val(data.tax_id || "");
-                $('#email').val(data.contact_email || "");
-                $('#supplier-owner').val(data.owner || ""); // Fill owner field
-            }
-        });
-
-        $("#importer-select2").select2({
-            placeholder: "Pretraži uvoznika",
-            allowClear: true,
-            ajax: {
-                url: "/api/importers",
-                dataType: "json",
-                delay: 250,
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    Authorization: `Bearer ${token}`
-                },
-                data: params => ({
-                    search: params.term
-                }),
-                processResults: data => ({
-                    results: data.data.map(s => ({
-                        id: s.id,
-                        text: `${s.name} – ${s.address}`,
-                        full: s
-                    }))
-                }),
-                cache: true
-            },
-            tags: true,
-            allowClear: false
-        });
-
-        $('#importer-select2').on('select2:select', function(e) {
-            const data = e.params.data.full;
-            if (data) {
-
-                $('#carrier-address').val(data.address || "");
-                $('#carrier-name').val(data.name || "");
-                $('#carrier-phone').val(data.contact_phone || "");
-                $('#carrier-tax').val(data.tax_id || "");
-                $('#carrier-email').val(data.contact_email || "");
-                $('#carrier-owner').val(data.owner || ""); // Fill owner field
-            }
-        });
-
-
-        // await promptForSupplierAfterScan();
-        $(document).on('click', '.show-ai-btn', function() {
-            console.log("✅ AI button clicked");
-
-            const select = $(this).closest('td').find('select.select2-tariff');
-            console.log("🔎 Found select element:", select);
-
-            let rawSuggestions = select.data("suggestions");
-            try {
-                if (typeof rawSuggestions === "string") {
-                    rawSuggestions = JSON.parse(rawSuggestions);
+            $('#supplier-select2').on('select2:select', function(e) {
+                const data = e.params.data.full;
+                if (data) {
+                    $('#billing-name').val(data.name || "");
+                    $('#billing-address-line-1').val(data.address || "");
+                    $('#billing-phone-no').val(data.contact_phone || "");
+                    $('#billing-tax-no').val(data.tax_id || "");
+                    $('#email').val(data.contact_email || "");
+                    $('#supplier-owner').val(data.owner || ""); // Fill owner field
                 }
-            } catch (err) {
-                console.error("❌ Failed to parse suggestions JSON:", err);
-                return;
-            }
+            });
 
-            console.log("📦 Raw suggestions:", rawSuggestions);
+            $("#importer-select2").select2({
+                placeholder: "Pretraži uvoznika",
+                allowClear: true,
+                ajax: {
+                    url: "/api/importers",
+                    dataType: "json",
+                    delay: 250,
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        Authorization: `Bearer ${token}`
+                    },
+                    data: params => ({
+                        search: params.term
+                    }),
+                    processResults: data => ({
+                        results: data.data.map(s => ({
+                            id: s.id,
+                            text: `${s.name} – ${s.address}`,
+                            full: s
+                        }))
+                    }),
+                    cache: true
+                },
+                tags: true,
+                allowClear: false
+            });
 
-            if (!rawSuggestions) {
-                console.warn(" No suggestions found on data attribute.");
-                return;
-            }
+            $('#importer-select2').on('select2:select', function(e) {
+                const data = e.params.data.full;
+                if (data) {
 
-            if (!Array.isArray(rawSuggestions)) {
-                console.warn(" Suggestions are not an array:", typeof rawSuggestions);
-                return;
-            }
+                    $('#carrier-address').val(data.address || "");
+                    $('#carrier-name').val(data.name || "");
+                    $('#carrier-phone').val(data.contact_phone || "");
+                    $('#carrier-tax').val(data.tax_id || "");
+                    $('#carrier-email').val(data.contact_email || "");
+                    $('#carrier-owner').val(data.owner || ""); // Fill owner field
+                }
+            });
 
-            const sorted = [...rawSuggestions].sort((a, b) => a.closeness - b.closeness).slice(0, 10);
-            console.log(" Sorted suggestions:", sorted);
 
-            const container = document.getElementById("aiSuggestionsBody");
-            if (!container) {
-                console.error(" aiSuggestionsBody not found in DOM");
-                return;
-            }
+            // await promptForSupplierAfterScan();
+            $(document).on('click', '.show-ai-btn', function() {
+                console.log("✅ AI button clicked");
 
-            if (!sorted.length) {
-                container.innerHTML = `<div class="text-muted">Nema prijedloga.</div>`;
-                console.log("ℹ️ No sorted suggestions to show.");
-            } else {
-                container.innerHTML = sorted.map((s, i) => `
+                const select = $(this).closest('td').find('select.select2-tariff');
+                console.log("🔎 Found select element:", select);
+
+                let rawSuggestions = select.data("suggestions");
+                try {
+                    if (typeof rawSuggestions === "string") {
+                        rawSuggestions = JSON.parse(rawSuggestions);
+                    }
+                } catch (err) {
+                    console.error("❌ Failed to parse suggestions JSON:", err);
+                    return;
+                }
+
+                console.log("📦 Raw suggestions:", rawSuggestions);
+
+                if (!rawSuggestions) {
+                    console.warn(" No suggestions found on data attribute.");
+                    return;
+                }
+
+                if (!Array.isArray(rawSuggestions)) {
+                    console.warn(" Suggestions are not an array:", typeof rawSuggestions);
+                    return;
+                }
+
+                const sorted = [...rawSuggestions].sort((a, b) => a.closeness - b.closeness).slice(0, 10);
+                console.log(" Sorted suggestions:", sorted);
+
+                const container = document.getElementById("aiSuggestionsBody");
+                if (!container) {
+                    console.error(" aiSuggestionsBody not found in DOM");
+                    return;
+                }
+
+                if (!sorted.length) {
+                    container.innerHTML = `<div class="text-muted">Nema prijedloga.</div>`;
+                    console.log("ℹ️ No sorted suggestions to show.");
+                } else {
+                    container.innerHTML = sorted.map((s, i) => `
             <div class="mb-2">
                 <div><strong>${i + 1}. Tarifna oznaka:</strong> ${s.entry["Tarifna oznaka"]}</div>
                 <div><strong>Naziv:</strong> ${s.entry["Naziv"]}</div>
@@ -1426,268 +1425,268 @@
                 <hr>
             </div>
         `).join("");
-                console.log(" Inserted suggestions into modal body.");
-            }
+                    console.log(" Inserted suggestions into modal body.");
+                }
 
-            $('#aiSuggestionModal').data('target-select', select);
-            console.log(" Set data-target-select on modal.");
+                $('#aiSuggestionModal').data('target-select', select);
+                console.log(" Set data-target-select on modal.");
 
-            const modalEl = document.getElementById("aiSuggestionModal");
-            if (!modalEl) {
-                console.error(" Modal element not found with ID aiSuggestionModal");
-                return;
-            }
+                const modalEl = document.getElementById("aiSuggestionModal");
+                if (!modalEl) {
+                    console.error(" Modal element not found with ID aiSuggestionModal");
+                    return;
+                }
 
-            let modal = bootstrap.Modal.getInstance(modalEl);
-            console.log(" Existing modal instance:", modal);
+                let modal = bootstrap.Modal.getInstance(modalEl);
+                console.log(" Existing modal instance:", modal);
 
-            if (!modal) {
-                modal = new bootstrap.Modal(modalEl, {
-                    backdrop: 'static',
-                    keyboard: true
-                });
-                console.log(" Modal instance created.");
-            }
+                if (!modal) {
+                    modal = new bootstrap.Modal(modalEl, {
+                        backdrop: 'static',
+                        keyboard: true
+                    });
+                    console.log(" Modal instance created.");
+                }
 
-            modal.show();
-            console.log(" Bootstrap modal should be showing now.");
-        });
+                modal.show();
+                console.log(" Bootstrap modal should be showing now.");
+            });
 
-        $(document).on('click', '.use-tariff', function() {
-            const code = $(this).data('value');
-            console.log(" User selected code:", code);
+            $(document).on('click', '.use-tariff', function() {
+                const code = $(this).data('value');
+                console.log(" User selected code:", code);
 
-            const select = $('#aiSuggestionModal').data('target-select');
-            console.log(" Target select:", select);
+                const select = $('#aiSuggestionModal').data('target-select');
+                console.log(" Target select:", select);
 
-            if (select && code) {
-                const matched = processedTariffData.find(item => item.id === code);
-                console.log("🔍 Matched tariff code:", matched);
+                if (select && code) {
+                    const matched = processedTariffData.find(item => item.id === code);
+                    console.log("🔍 Matched tariff code:", matched);
 
-                if (matched) {
-                    const option = new Option(matched.id, matched.id, true, true);
-                    select.find('option').remove();
-                    select.append(option).trigger('change');
-                    console.log(" Code applied to select2 field.");
+                    if (matched) {
+                        const option = new Option(matched.id, matched.id, true, true);
+                        select.find('option').remove();
+                        select.append(option).trigger('change');
+                        console.log(" Code applied to select2 field.");
+                    } else {
+                        console.warn(" No match found in processedTariffData.");
+                    }
                 } else {
-                    console.warn(" No match found in processedTariffData.");
+                    console.warn(" Select or code not defined properly.");
                 }
-            } else {
-                console.warn(" Select or code not defined properly.");
-            }
 
-            const modal = bootstrap.Modal.getInstance(document.getElementById("aiSuggestionModal"));
-            if (modal) {
-                modal.hide();
-                console.log(" Modal closed.");
-            } else {
-                console.warn(" No modal instance to close.");
-            }
-        });
-
-        $(document).on('click', '.remove-row', function() {
-            $(this).closest('tr').remove();
-            updateTotalAmount();
-        });
-
-
-
-
-        const invNo = getInvoiceId();
-        if (invNo) document.getElementById("invoice-no1").value = invNo;
-
-        document.getElementById("invoice-date").value = new Date().toISOString().split("T")[0];
-        console.log(" Invoice date and number set.");
-
-        document.getElementById("company-address").value = "Vilsonovo, 9, Sarajevo ";
-        document.getElementById("company-zip").value = "71000";
-        document.getElementById("company-email").value = "business@deklarant.ba";
-
-
-        document.getElementById("billing-name")?.addEventListener("input", () => {
-            const label = document.getElementById("billing-name-ai-label");
-            if (label) label.classList.add("d-none");
-        });
-
-        // Hide AI label when user types in importer name
-        document.getElementById("carrier-name")?.addEventListener("input", () => {
-            const label = document.getElementById("carrier-name-ai-label");
-            if (label) label.classList.add("d-none");
-        });
-
-
-    });
-
-
-    // Add buttons above supplier and importer fields
-    $(document).ready(function() {
-
-        // Handler for new supplier
-        $(document).on('click', '#add-new-supplier', function() {
-            window.skipPrefillParties = true; // Prevent prefill after clearing
-            // Only clear and unlock supplier fields
-            $("#billing-name, #billing-address-line-1, #billing-phone-no, #billing-tax-no, #email, #supplier-owner").val("").prop('readonly', false).removeClass("is-invalid");
-            // Set select2 to empty
-            $("#supplier-select2").val(null).trigger('change');
-            // Remove 'Novi dobavljač' option if present
-            $("#supplier-select2 option[value='new']").remove();
-            // Do NOT call fetchAndPrefillParties or touch importer fields
-        });
-
-        // Handler for new importer
-        $(document).on('click', '#add-new-importer', function() {
-            window.skipPrefillParties = true; // Prevent prefill after clearing
-            // Only clear and unlock importer fields
-            $("#carrier-name, #carrier-address, #carrier-tel, #carrier-tax, #carrier-email, #carrier-owner").val("").prop('readonly', false).removeClass("is-invalid");
-            // Set select2 to empty
-            $("#importer-select2").val(null).trigger('change');
-            // Remove 'Novi uvoznik' option if present
-            $("#importer-select2 option[value='new']").remove();
-            // Do NOT call fetchAndPrefillParties or touch supplier fields
-        });
-    });
-
-
-    $(document).ready(function() {
-        // Add SweetAlert confirmation for supplier manual entry
-        $('#add-new-supplier').off('click').on('click', function(e) {
-            e.preventDefault();
-            Swal.fire({
-                title: 'Jesi li siguran/na?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Da',
-                cancelButtonText: 'Ne',
-                reverseButtons: true,
-                focusCancel: true,
-                confirmButtonColor: '#299dcb',
-                cancelButtonColor: '#6c757d'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.skipPrefillParties = true;
-                    // Only clear and unlock supplier fields
-                    $("#billing-name, #billing-address-line-1, #billing-phone-no, #billing-tax-no, #email, #supplier-owner").val("").prop('readonly', false).removeClass("is-invalid");
-                    // Remove and add 'Novi dobavljač' option, then select it
-                    $("#supplier-select2 option[value='new']").remove();
-                    var newOption = new Option('Novi dobavljač', 'new', true, true);
-                    $("#supplier-select2").append(newOption).val('new').trigger('change');
+                const modal = bootstrap.Modal.getInstance(document.getElementById("aiSuggestionModal"));
+                if (modal) {
+                    modal.hide();
+                    console.log(" Modal closed.");
+                } else {
+                    console.warn(" No modal instance to close.");
                 }
             });
-        });
-        // Add SweetAlert confirmation for importer manual entry
-        $('#add-new-importer').off('click').on('click', function(e) {
-            e.preventDefault();
-            Swal.fire({
-                title: 'Jesi li siguran/na?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Da',
-                cancelButtonText: 'Ne',
-                reverseButtons: true,
-                focusCancel: true,
-                confirmButtonColor: '#299dcb',
-                cancelButtonColor: '#6c757d'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.skipPrefillParties = true;
-                    // Only clear and unlock importer fields
-                    $("#carrier-name, #carrier-address, #carrier-tel, #carrier-tax, #carrier-email, #carrier-owner").val("").prop('readonly', false).removeClass("is-invalid");
-                    // Remove and add 'Novi uvoznik' option, then select it
-                    $("#importer-select2 option[value='new']").remove();
-                    var newOption = new Option('Novi uvoznik', 'new', true, true);
-                    $("#importer-select2").append(newOption).val('new').trigger('change');
-                }
-            });
-        });
-    });
 
-    // 1. Add buttons in the DOM (jQuery, after DOMContentLoaded)
-$(document).ready(function() {
-    // Add 'Popuni ponovo s AI' button next to 'Obriši' for supplier
-    if ($('#add-new-supplier').length && !$('#refill-supplier-ai').length) {
-        $('<button type="button" id="refill-supplier-ai" class="btn btn-info btn-sm ms-2">Populiši ponovo s AI</button>')
-            .insertAfter('#add-new-supplier');
-    }
-    // Add 'Popuni ponovo s AI' button next to 'Obriši' for importer
-    if ($('#add-new-importer').length && !$('#refill-importer-ai').length) {
-        $('<button type="button" id="refill-importer-ai" class="btn btn-info btn-sm ms-2">Populiši ponovo s AI</button>')
-            .insertAfter('#add-new-importer');
-    }
-
-    // Handler for supplier AI refill
-    $(document).on('click', '#refill-supplier-ai', async function() {
-        const taskId = localStorage.getItem("scan_invoice_id");
-        if (!taskId || !window.token) return;
-        try {
-            const res = await fetch(`/api/invoices/${taskId}/scan/parties`, {
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    Authorization: `Bearer ${token}`
-                }
+            $(document).on('click', '.remove-row', function() {
+                $(this).closest('tr').remove();
+                updateTotalAmount();
             });
-            const data = await res.json();
-            if (!res.ok) throw new Error("Greška u AI response");
-            const supplier = data.supplier;
-            if (supplier) {
-                // Set select2 to 'Novi dobavljač'
-                $("#supplier-select2 option[value='new']").remove();
-                var newOption = new Option('Novi dobavljač', 'new', true, true);
-                $("#supplier-select2").append(newOption).val('new').trigger('change');
-                // Fill fields
-                $("#billing-name").val(supplier.name || "").prop('readonly', false);
-                $("#billing-address-line-1").val(supplier.address || "").prop('readonly', false);
-                $("#billing-phone-no").val(supplier.phone_number || "").prop('readonly', false);
-                $("#billing-tax-no").val(supplier.vat_number || "").prop('readonly', false);
-                $("#email").val(supplier.email || "").prop('readonly', false);
-                $("#supplier-owner").val(supplier.owner || "").prop('readonly', false);
+
+
+
+
+            const invNo = getInvoiceId();
+            if (invNo) document.getElementById("invoice-no1").value = invNo;
+
+            document.getElementById("invoice-date").value = new Date().toISOString().split("T")[0];
+            console.log(" Invoice date and number set.");
+
+            document.getElementById("company-address").value = "Vilsonovo, 9, Sarajevo ";
+            document.getElementById("company-zip").value = "71000";
+            document.getElementById("company-email").value = "business@deklarant.ba";
+
+
+            document.getElementById("billing-name")?.addEventListener("input", () => {
                 const label = document.getElementById("billing-name-ai-label");
-                if (label) label.classList.remove("d-none");
-            } else {
-                Swal.fire("Greška", "Nema AI podataka za dobavljača", "error");
-            }
-        } catch (err) {
-            Swal.fire("Greška", err.message || "Neuspješno dohvaćanje podataka", "error");
-        }
-    });
+                if (label) label.classList.add("d-none");
+            });
 
-    // Handler for importer AI refill
-    $(document).on('click', '#refill-importer-ai', async function() {
-        const taskId = localStorage.getItem("scan_invoice_id");
-        if (!taskId || !window.token) return;
-        try {
-            const res = await fetch(`/api/invoices/${taskId}/scan/parties`, {
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    Authorization: `Bearer ${token}`
+            // Hide AI label when user types in importer name
+            document.getElementById("carrier-name")?.addEventListener("input", () => {
+                const label = document.getElementById("carrier-name-ai-label");
+                if (label) label.classList.add("d-none");
+            });
+
+
+        });
+
+
+        // Add buttons above supplier and importer fields
+        $(document).ready(function() {
+
+            // Handler for new supplier
+            $(document).on('click', '#add-new-supplier', function() {
+                window.skipPrefillParties = true; // Prevent prefill after clearing
+                // Only clear and unlock supplier fields
+                $("#billing-name, #billing-address-line-1, #billing-phone-no, #billing-tax-no, #email, #supplier-owner").val("").prop('readonly', false).removeClass("is-invalid");
+                // Set select2 to empty
+                $("#supplier-select2").val(null).trigger('change');
+                // Remove 'Novi dobavljač' option if present
+                $("#supplier-select2 option[value='new']").remove();
+                // Do NOT call fetchAndPrefillParties or touch importer fields
+            });
+
+            // Handler for new importer
+            $(document).on('click', '#add-new-importer', function() {
+                window.skipPrefillParties = true; // Prevent prefill after clearing
+                // Only clear and unlock importer fields
+                $("#carrier-name, #carrier-address, #carrier-tel, #carrier-tax, #carrier-email, #carrier-owner").val("").prop('readonly', false).removeClass("is-invalid");
+                // Set select2 to empty
+                $("#importer-select2").val(null).trigger('change');
+                // Remove 'Novi uvoznik' option if present
+                $("#importer-select2 option[value='new']").remove();
+                // Do NOT call fetchAndPrefillParties or touch supplier fields
+            });
+        });
+
+
+        $(document).ready(function() {
+            // Add SweetAlert confirmation for supplier manual entry
+            $('#add-new-supplier').off('click').on('click', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Jesi li siguran/na?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Da',
+                    cancelButtonText: 'Ne',
+                    reverseButtons: true,
+                    focusCancel: true,
+                    confirmButtonColor: '#299dcb',
+                    cancelButtonColor: '#6c757d'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.skipPrefillParties = true;
+                        // Only clear and unlock supplier fields
+                        $("#billing-name, #billing-address-line-1, #billing-phone-no, #billing-tax-no, #email, #supplier-owner").val("").prop('readonly', false).removeClass("is-invalid");
+                        // Remove and add 'Novi dobavljač' option, then select it
+                        $("#supplier-select2 option[value='new']").remove();
+                        var newOption = new Option('Novi dobavljač', 'new', true, true);
+                        $("#supplier-select2").append(newOption).val('new').trigger('change');
+                    }
+                });
+            });
+            // Add SweetAlert confirmation for importer manual entry
+            $('#add-new-importer').off('click').on('click', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Jesi li siguran/na?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Da',
+                    cancelButtonText: 'Ne',
+                    reverseButtons: true,
+                    focusCancel: true,
+                    confirmButtonColor: '#299dcb',
+                    cancelButtonColor: '#6c757d'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.skipPrefillParties = true;
+                        // Only clear and unlock importer fields
+                        $("#carrier-name, #carrier-address, #carrier-tel, #carrier-tax, #carrier-email, #carrier-owner").val("").prop('readonly', false).removeClass("is-invalid");
+                        // Remove and add 'Novi uvoznik' option, then select it
+                        $("#importer-select2 option[value='new']").remove();
+                        var newOption = new Option('Novi uvoznik', 'new', true, true);
+                        $("#importer-select2").append(newOption).val('new').trigger('change');
+                    }
+                });
+            });
+        });
+
+        // 1. Add buttons in the DOM (jQuery, after DOMContentLoaded)
+        $(document).ready(function() {
+            // Add 'Popuni ponovo s AI' button next to 'Obriši' for supplier
+            if ($('#add-new-supplier').length && !$('#refill-supplier-ai').length) {
+                $('<button type="button" id="refill-supplier-ai" class="btn btn-info btn-sm ms-2">Populiši ponovo s AI</button>')
+                    .insertAfter('#add-new-supplier');
+            }
+            // Add 'Popuni ponovo s AI' button next to 'Obriši' for importer
+            if ($('#add-new-importer').length && !$('#refill-importer-ai').length) {
+                $('<button type="button" id="refill-importer-ai" class="btn btn-info btn-sm ms-2">Populiši ponovo s AI</button>')
+                    .insertAfter('#add-new-importer');
+            }
+
+            // Handler for supplier AI refill
+            $(document).on('click', '#refill-supplier-ai', async function() {
+                const taskId = localStorage.getItem("scan_invoice_id");
+                if (!taskId || !window.token) return;
+                try {
+                    const res = await fetch(`/api/invoices/${taskId}/scan/parties`, {
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+                    const data = await res.json();
+                    if (!res.ok) throw new Error("Greška u AI response");
+                    const supplier = data.supplier;
+                    if (supplier) {
+                        // Set select2 to 'Novi dobavljač'
+                        $("#supplier-select2 option[value='new']").remove();
+                        var newOption = new Option('Novi dobavljač', 'new', true, true);
+                        $("#supplier-select2").append(newOption).val('new').trigger('change');
+                        // Fill fields
+                        $("#billing-name").val(supplier.name || "").prop('readonly', false);
+                        $("#billing-address-line-1").val(supplier.address || "").prop('readonly', false);
+                        $("#billing-phone-no").val(supplier.phone_number || "").prop('readonly', false);
+                        $("#billing-tax-no").val(supplier.vat_number || "").prop('readonly', false);
+                        $("#email").val(supplier.email || "").prop('readonly', false);
+                        $("#supplier-owner").val(supplier.owner || "").prop('readonly', false);
+                        const label = document.getElementById("billing-name-ai-label");
+                        if (label) label.classList.remove("d-none");
+                    } else {
+                        Swal.fire("Greška", "Nema AI podataka za dobavljača", "error");
+                    }
+                } catch (err) {
+                    Swal.fire("Greška", err.message || "Neuspješno dohvaćanje podataka", "error");
                 }
             });
-            const data = await res.json();
-            if (!res.ok) throw new Error("Greška u AI response");
-            const importer = data.importer;
-            if (importer) {
-                // Set select2 to 'Novi uvoznik'
-                $("#importer-select2 option[value='new']").remove();
-                var newOption = new Option('Novi uvoznik', 'new', true, true);
-                $("#importer-select2").append(newOption).val('new').trigger('change');
-                // Fill fields
-                $("#carrier-name").val(importer.name || "").prop('readonly', false);
-                $("#carrier-address").val(importer.address || "").prop('readonly', false);
-                $("#carrier-tel").val(importer.phone_number || "").prop('readonly', false);
-                $("#carrier-tax").val(importer.vat_number || "").prop('readonly', false);
-                $("#carrier-email").val(importer.email || "").prop('readonly', false);
-                $("#carrier-owner").val(importer.owner || "").prop('readonly', false);
-                const label = document.getElementById("carrier-name-ai-label");
-                if (label) label.classList.remove("d-none");
-            } else {
-                Swal.fire("Greška", "Nema AI podataka za uvoznika", "error");
-            }
-        } catch (err) {
-            Swal.fire("Greška", err.message || "Neuspješno dohvaćanje podataka", "error");
-        }
-    });
-    });
 
- }
+            // Handler for importer AI refill
+            $(document).on('click', '#refill-importer-ai', async function() {
+                const taskId = localStorage.getItem("scan_invoice_id");
+                if (!taskId || !window.token) return;
+                try {
+                    const res = await fetch(`/api/invoices/${taskId}/scan/parties`, {
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+                    const data = await res.json();
+                    if (!res.ok) throw new Error("Greška u AI response");
+                    const importer = data.importer;
+                    if (importer) {
+                        // Set select2 to 'Novi uvoznik'
+                        $("#importer-select2 option[value='new']").remove();
+                        var newOption = new Option('Novi uvoznik', 'new', true, true);
+                        $("#importer-select2").append(newOption).val('new').trigger('change');
+                        // Fill fields
+                        $("#carrier-name").val(importer.name || "").prop('readonly', false);
+                        $("#carrier-address").val(importer.address || "").prop('readonly', false);
+                        $("#carrier-tel").val(importer.phone_number || "").prop('readonly', false);
+                        $("#carrier-tax").val(importer.vat_number || "").prop('readonly', false);
+                        $("#carrier-email").val(importer.email || "").prop('readonly', false);
+                        $("#carrier-owner").val(importer.owner || "").prop('readonly', false);
+                        const label = document.getElementById("carrier-name-ai-label");
+                        if (label) label.classList.remove("d-none");
+                    } else {
+                        Swal.fire("Greška", "Nema AI podataka za uvoznika", "error");
+                    }
+                } catch (err) {
+                    Swal.fire("Greška", err.message || "Neuspješno dohvaćanje podataka", "error");
+                }
+            });
+        });
+
+    }
 </script>
 
 
@@ -1730,7 +1729,6 @@ $(document).ready(function() {
             });
         }
     }
-}
 </script>
 
 
@@ -1757,6 +1755,22 @@ $(document).ready(function() {
 
 <!-- Save logic script final -->
 <script>
+    function getInvoiceId() {
+        const id = localStorage.getItem("scan_invoice_id");
+        console.log(" Invoice ID:", id);
+        return id;
+    }
+    async function getInvoice() {
+        const id = getInvoiceId();
+        if (!id) return {};
+        const res = await fetch(`/api/invoices/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return await res.json();
+    }
+
     document.getElementById("save-invoice-btn").addEventListener("click", async function(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -1905,7 +1919,7 @@ $(document).ready(function() {
                     total_price,
                     currency: "EUR",
                     version: new Date().getFullYear(),
-                    best_customs_code_matches: globalAISuggestions[index]?.map(s => s.entry?.["Tarifna oznaka"])?.slice(0, 10) || []
+
                 });
             });
 
@@ -2079,13 +2093,19 @@ $(document).ready(function() {
             const [tariffRes, invoiceRes, suppliersRes, importersRes] = await Promise.all([
                 fetch("{{ URL::asset('build/json/tariff.json') }}"),
                 fetch(`/api/invoices/${invoiceId}`, {
-                    headers: { Authorization: `Bearer ${token}` }
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
                 }),
                 fetch("/api/suppliers", {
-                    headers: { Authorization: `Bearer ${token}` }
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
                 }),
                 fetch("/api/importers", {
-                    headers: { Authorization: `Bearer ${token}` }
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
                 })
             ]);
 
@@ -2123,11 +2143,58 @@ $(document).ready(function() {
                 width: '100%',
                 data: supplierOptions
             });
+            // ✅ Prefill fields when supplier changes
+            $('#supplier-select2').on('change', async function() {
+                const supplierId = $(this).val();
+                if (!supplierId) return;
+                try {
+                    const res = await fetch(`/api/suppliers/${supplierId}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+                    const supplier = await res.json();
+                    console.log("🔄 Selected supplier loaded:", supplier);
+                    waitForEl("#billing-name", el => el.value = supplier.name || "");
+                    waitForEl("#billing-address-line-1", el => el.value = supplier.address || "");
+                    waitForEl("#billing-phone-no", el => el.value = supplier.contact_phone || "");
+                    waitForEl("#billing-tax-no", el => el.value = supplier.tax_id || "");
+                    waitForEl("#email", el => el.value = supplier.contact_email || "");
+                    waitForEl("#supplier-owner", el => el.value = supplier.owner || "");
+                } catch (err) {
+                    console.warn("⚠️ Failed to load selected supplier:", err);
+                }
+            });
+
+            // ✅ Prefill fields when importer changes
+
+
 
             $('#importer-select2').select2({
                 placeholder: "Pretraži uvoznika",
                 width: '100%',
                 data: importerOptions
+            });
+            $('#importer-select2').on('change', async function() {
+                const importerId = $(this).val();
+                if (!importerId) return;
+                try {
+                    const res = await fetch(`/api/importers/${importerId}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+                    const importer = await res.json();
+                    console.log("🔄 Selected importer loaded:", importer);
+                    waitForEl("#carrier-name", el => el.value = importer.name || "");
+                    waitForEl("#carrier-address", el => el.value = importer.address || "");
+                    waitForEl("#carrier-tel", el => el.value = importer.contact_phone || "");
+                    waitForEl("#carrier-tax", el => el.value = importer.tax_id || "");
+                    waitForEl("#carrier-email", el => el.value = importer.contact_email || "");
+                    waitForEl("#carrier-owner", el => el.value = importer.owner || "");
+                } catch (err) {
+                    console.warn("⚠️ Failed to load selected importer:", err);
+                }
             });
 
             // Prefill selected supplier
@@ -2159,7 +2226,9 @@ $(document).ready(function() {
             if (invoice.supplier_id) {
                 try {
                     const sres = await fetch(`/api/suppliers/${invoice.supplier_id}`, {
-                        headers: { Authorization: `Bearer ${token}` }
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
                     });
                     const supplier = await sres.json();
                     console.log(" Supplier loaded:", supplier);
@@ -2177,7 +2246,9 @@ $(document).ready(function() {
             if (invoice.importer_id) {
                 try {
                     const ires = await fetch(`/api/importers/${invoice.importer_id}`, {
-                        headers: { Authorization: `Bearer ${token}` }
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
                     });
                     const importer = await ires.json();
                     console.log("📦 Importer loaded:", importer);
