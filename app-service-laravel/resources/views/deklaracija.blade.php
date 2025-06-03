@@ -198,10 +198,9 @@
                         <h6 class="text-muted text-uppercase fw-semibold mb-3">Podaci o dobavljaču</h6>
 
                         <div class="mb-2">
-                            <div style="justify-content: space-between; display: flex;">
-                             <button type="button" class="btn btn-sm btn-info mb-2 deklaracija-action-buttons" id="refill-supplier-ai"><i class="fa-regular fa-wand-magic-sparkles fs-6 me-1"></i>Detektovani dobavljač</button>
-                            <button type="button" class="btn btn-sm btn-soft-info mb-2 deklaracija-action-buttons" id="add-new-supplier"><i class="fa-regular fa-wand-magic-sparkles align-top me-1 korpica" ></i>Skenirani AI podaci</button>
-                              <button type="button" class="btn btn-sm btn-soft-info mb-2 deklaracija-action-buttons" id="add-new-importer"><i class="fa-regular fa-trash align-top me-1 korpica" ></i>Obriši i unesi ručno</button>
+                            <div style="display: flex;">
+                             <button type="button" class="btn btn-sm btn-info mb-2 me-2 deklaracija-action-buttons" id="refill-supplier-ai"><i class="fa-regular fa-wand-magic-sparkles fs-6 me-1"></i>Detektovani dobavljač iz baze</button>
+                            <button type="button" class="btn btn-sm btn-soft-info mb-2 deklaracija-action-buttons" id="add-new-supplier"><i class="fa-regular fa-hand align-top me-1 korpica" ></i>Ručni unos dobavljača</button>
                               </div>
                               <select id="supplier-select2" class="form-select"></select>
                         </div>
@@ -217,10 +216,10 @@
                         <h6 class="text-muted text-uppercase fw-semibold mb-3 text-end">Podaci o uvozniku</h6>
 
                         <div class="mb-2">
-                            <div style="justify-content: space-between; display: flex;">
-                             <button type="button" class="btn btn-sm btn-soft-info mb-2 me-1 deklaracija-action-buttons" id="add-new-importer"><i class="fa-regular fa-trash align-top me-1 korpica" ></i>Obriši i unesi ručno</button>
-                               <button type="button" class="btn btn-sm btn-soft-info mb-2 me-1 deklaracija-action-buttons" id="refill-importer-ai"><i class="fa-regular fa-wand-magic-sparkles fs-6 me-1"></i>Skenirani AI podaci</button>
-                             <button type="button" class="btn btn-sm btn-info mb-2 deklaracija-action-buttons" id="refill-importer-ai"><i class="fa-regular fa-wand-magic-sparkles fs-6 me-1"></i>Detektovani uvoznik</button>
+                            <div style="justify-content: end; display: flex;">
+                              <button type="button" class="btn btn-sm btn-soft-info mb-2  me-2  deklaracija-action-buttons" id="add-new-importer"><i class="fa-regular fa-hand align-top me-1 korpica" ></i>Ručni unos dobavljača</button>
+                               <button type="button" class="btn btn-sm btn-info mb-2 deklaracija-action-buttons" id="refill-importer-ai"><i class="fa-regular fa-wand-magic-sparkles fs-6 me-1"></i>Detektovani dobavljač iz baze</button>
+                           
                            </div>
                            
                             <select id="importer-select2" class="form-select"></select>
