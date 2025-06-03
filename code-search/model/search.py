@@ -71,13 +71,7 @@ def search_faiss_index(query, indices, data):
 
     for model_name in MODEL_NAMES:
         model = MODELS[model_name]
-        device = "cuda" if torch.cuda.is_available() else "cpu"
-        model = model.to(device)
-
-        query_embeddings[model_name] = model.encode([query], device=device)
-
-        model = model.to("cpu")
-        MODELS[model_name] = model
+        query_embeddings[model_name] = model.encode([query], device="cpu")
 
     for model_name, index in indices.items():
         distances, indices_array = index.search(query_embeddings[model_name], len(data))
