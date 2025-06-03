@@ -573,6 +573,8 @@
             const row = document.createElement("tr");
             row.classList.add("product");
 
+
+
             function generateCountryOptions(selectedCode = "") {
                 // ISO country codes + names (lowercase for flag URL)
                 const countries = [{
@@ -698,42 +700,7 @@
 
             }
 
-            document.getElementById('reset-form').addEventListener('click', function(e) {
-                e.preventDefault();
-
-                Swal.fire({
-                    title: 'Jesi li siguran/na?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Da',
-                    cancelButtonText: 'Ne',
-                    reverseButtons: true,
-                    focusCancel: true,
-                    confirmButtonColor: '#299dcb', // info color
-                    cancelButtonColor: '#6c757d' // bootstrap secondary gray
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.skipPrefillParties = true; // NEW: skip prefill after clear
-                        // Clear all supplier and importer fields and selects
-                        $("#supplier-select2").val(null).trigger('change');
-                        $("#importer-select2").val(null).trigger('change');
-                        $("#billing-name, #billing-address-line-1, #billing-phone-no, #billing-tax-no, #email, #supplier-owner").val("").prop('readonly', false);
-                        $("#carrier-name, #carrier-address, #carrier-tel, #carrier-tax, #carrier-email, #carrier-owner").val("").prop('readonly', false);
-                        // Remove 'Novi dobavljač' and 'Novi uvoznik' options if present
-                        $("#supplier-select2 option[value='new']").remove();
-                        $("#importer-select2 option[value='new']").remove();
-                        // Remove all product rows
-                        const table = document.getElementById('products-table');
-                        if (table) {
-                            const tbody = table.querySelector('tbody');
-                            if (tbody) {
-                                tbody.innerHTML = '';
-                            }
-                        }
-                    }
-                    // If cancelled, just closes and does nothing (no reopening)
-                });
-            });
+            
 
             row.innerHTML = `
           <td style="width: 50px;">${index + 1}</td>
@@ -946,6 +913,8 @@
             // Optional: update global total as well
             updateTotalAmount();
         });
+
+
 
         document.addEventListener('click', (event) => {
             // Handle decrement button click
@@ -1243,6 +1212,7 @@
         }
 
         document.addEventListener("DOMContentLoaded", async () => {
+
             window.skipPrefillParties = false; // Always allow prefill on page load/scan
             console.log(" Page loaded. Starting init process...");
 
@@ -1693,7 +1663,63 @@
             });
         });
 
+      
+
+
     }
+   
+</script>
+
+
+<!-- btn add item logic -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const addItemBtn = document.getElementById("add-item");
+    if (addItemBtn) {
+        addItemBtn.addEventListener("click", () => addRowToInvoice());
+    } else {
+        console.warn("[add-item] button not found.");
+    }
+});
+</script>
+
+<script>
+    document.getElementById('reset-form').addEventListener('click', function(e) {
+                e.preventDefault();
+
+                Swal.fire({
+                    title: 'Jesi li siguran/na?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Da',
+                    cancelButtonText: 'Ne',
+                    reverseButtons: true,
+                    focusCancel: true,
+                    confirmButtonColor: '#299dcb', // info color
+                    cancelButtonColor: '#6c757d' // bootstrap secondary gray
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.skipPrefillParties = true; // NEW: skip prefill after clear
+                        // Clear all supplier and importer fields and selects
+                        $("#supplier-select2").val(null).trigger('change');
+                        $("#importer-select2").val(null).trigger('change');
+                        $("#billing-name, #billing-address-line-1, #billing-phone-no, #billing-tax-no, #email, #supplier-owner").val("").prop('readonly', false);
+                        $("#carrier-name, #carrier-address, #carrier-tel, #carrier-tax, #carrier-email, #carrier-owner").val("").prop('readonly', false);
+                        // Remove 'Novi dobavljač' and 'Novi uvoznik' options if present
+                        $("#supplier-select2 option[value='new']").remove();
+                        $("#importer-select2 option[value='new']").remove();
+                        // Remove all product rows
+                        const table = document.getElementById('products-table');
+                        if (table) {
+                            const tbody = table.querySelector('tbody');
+                            if (tbody) {
+                                tbody.innerHTML = '';
+                            }
+                        }
+                    }
+                    // If cancelled, just closes and does nothing (no reopening)
+                });
+            });
 </script>
 
 
@@ -1742,23 +1768,7 @@
 
 
 <!-- Fixed side buttons -->
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const container = document.getElementById('sidebar-buttons-container');
-        const fixedButtons = document.getElementById('fixed-buttons');
-        const topBarHeight = 70.8; // exact topbar height
 
-        window.addEventListener('scroll', () => {
-            if (window.scrollY >= topBarHeight) {
-                fixedButtons.classList.add('detached-fixed-buttons');
-            } else {
-                fixedButtons.classList.remove('detached-fixed-buttons');
-            }
-        });
-
-        document.getElementById("add-item")?.addEventListener("click", () => addRowToInvoice())
-    });
-</script>
 
 <!-- Save logic script final -->
 <script>
@@ -2099,6 +2109,24 @@
 <script>
     const tariffJsonPromise = fetch("{{ URL::asset('build/json/tariff.json') }}").then(res => res.json());
 
+    function waitForEl(selector, callback) {
+        const el = document.querySelector(selector);
+        if (el) return callback(el);
+
+        const observer = new MutationObserver(() => {
+            const el = document.querySelector(selector);
+            if (el) {
+                observer.disconnect();
+                callback(el);
+            }
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    }
+
     document.addEventListener("DOMContentLoaded", async () => {
         const match = window.location.pathname.match(/\/deklaracija\/(\d+)/);
         const invoiceId = match ? match[1] : null;
@@ -2148,6 +2176,12 @@
             ]);
 
             const invoice = await invoiceRes.json();
+            waitForEl("#pregled", (el) => {
+                el.addEventListener("click", () => {
+                    window.location.href = `/detalji-deklaracije/${invoice.id}`;
+                });
+            });
+
             const suppliersJson = await suppliersRes.json();
             const importersJson = await importersRes.json();
 
@@ -2196,6 +2230,7 @@
                     console.warn("Failed to load supplier:", err);
                 }
             });
+
 
             // --- Importer Select2
             $('#importer-select2').select2({

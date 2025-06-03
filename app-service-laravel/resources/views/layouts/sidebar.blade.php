@@ -69,32 +69,32 @@
         </div>
     </li>
     <li class="nav-item me-1">
-        <a class="nav-link menu-link" href="kalendar">
+        <a class="nav-link menu-link" href="/kalendar">
             <i class="ri-calendar-line text-info"></i> <span>@lang('translation.statistic')</span>
         </a>
     </li>
     <li class="nav-item me-1">
-        <a class="nav-link menu-link" href="moje-deklaracije">
+        <a class="nav-link menu-link" href="/moje-deklaracije">
             <i class="ri-file-line text-info"></i> <span>@lang('translation.myorder')</span>
         </a>
     </li>
     <li class="nav-item me-1">
-        <a class="nav-link menu-link" href="moji-klijenti">
+        <a class="nav-link menu-link" href="/moji-klijenti">
             <i class="ri-user-line text-info fs-4"></i> <span>@lang('translation.clients')</span>
         </a>
     </li>
     <li class="nav-item me-1">
-        <a class="nav-link menu-link" href="moji-dobavljaci">
+        <a class="nav-link menu-link" href="/moji-dobavljaci">
             <i class="ri-truck-line text-info fs-4"></i> <span>@lang('translation.importers')</span>
         </a>
     </li>
     <li class="nav-item me-1">
-        <a class="nav-link menu-link" href="tarifne-oznake">
+        <a class="nav-link menu-link" href="/tarifne-oznake">
             <i class="mdi mdi-sticker-text-outline text-info"></i> <span>@lang('translation.declarant')</span>
         </a>
     </li>
     <li class="nav-item me-1">
-        <a class="nav-link menu-link" href="cijene-paketa">
+        <a class="nav-link menu-link" href="/cijene-paketa">
             <i class="ri-price-tag-3-line text-info"></i> <span>@lang('translation.pricing')</span>
         </a>
     </li>
@@ -111,17 +111,17 @@
 @if(Auth::user()->role == 'superadmin')
 <ul class="navbar-nav user-nav" id="navbar-nav-admin" style="justify-content: unset!important; gap: 10px!important;">
     <li class="nav-item me-1">
-        <a class="nav-link menu-link" href="moji-korisnici">
+        <a class="nav-link menu-link" href="/moji-korisnici">
             <i class="ri-user-line text-info fs-4"></i> <span>Korisnici aplikacije</span>
         </a>
     </li>
     <li class="nav-item me-1">
-        <a class="nav-link menu-link" href="moji-klijenti">
+        <a class="nav-link menu-link" href="/moji-klijenti">
             <i class="ri-user-line text-info fs-4"></i> <span>Uvoznici</span>
         </a>
     </li>
     <li class="nav-item me-1">
-        <a class="nav-link menu-link" href="moji-dobavljaci">
+        <a class="nav-link menu-link" href="/moji-dobavljaci">
             <i class="ri-truck-line text-info fs-4"></i> <span>@lang('translation.importers')</span>
         </a>
     </li>
