@@ -191,7 +191,7 @@ Moje spašene deklaracije <span class="counter-value-invoice">0</span><span
                         </button>`
                 }
             ],
-            dom: '<"datatable-topbar d-flex justify-content-between align-items-center mb-3"Bf>rt<"d-flex justify-content-between align-items-center mt-4 px-0"i p>',
+            dom: '<"datatable-topbar d-flex justify-content-between align-items-center mb-4"Bf>rt<"d-flex justify-content-between align-items-center mt-4 px-0"i p>',
 
                     buttons: [{
                             extend: 'csv',

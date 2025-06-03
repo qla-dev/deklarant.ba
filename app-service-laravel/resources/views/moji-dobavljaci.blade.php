@@ -230,7 +230,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     }
                 }
             ],
-            dom: '<"datatable-topbar d-flex justify-content-between align-items-center mb-3"Bf>rt<"d-flex justify-content-between align-items-center mt-4 px-0"i p>',
+            dom: '<"datatable-topbar d-flex justify-content-between align-items-center mb-4"Bf>rt<"d-flex justify-content-between align-items-center mt-4 px-0"i p>',
            buttons: [{
                             extend: 'csv',
                             text: '<i class="ri-file-code-line align-bottom me-1"></i> Export u CSV',

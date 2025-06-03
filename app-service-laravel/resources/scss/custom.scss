@@ -677,3 +677,8 @@ thead.custom-table th:last-child {
 
 .profile-wid-bg {height: 290px!important;}
 
+@media (min-width: 1024.1px) {
+    [data-layout=horizontal] .page-title-box {
+        margin: -18px 0 0!important;
+    }
+}
