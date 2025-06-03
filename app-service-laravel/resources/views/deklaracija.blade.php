@@ -199,10 +199,10 @@
 
                         <div class="mb-2">
                             <div style="display: flex;">
-                             <button type="button" class="btn btn-sm btn-info mb-2 me-2 deklaracija-action-buttons" id="refill-supplier-ai"><i class="fa-regular fa-wand-magic-sparkles fs-6 me-1"></i>Detektovani dobavljač iz baze</button>
-                            <button type="button" class="btn btn-sm btn-soft-info mb-2 deklaracija-action-buttons" id="add-new-supplier"><i class="fa-regular fa-hand align-top me-1 korpica" ></i>Ručni unos dobavljača</button>
-                              </div>
-                              <select id="supplier-select2" class="form-select"></select>
+                                <button type="button" class="btn btn-sm btn-info mb-2 me-2 deklaracija-action-buttons" id="refill-supplier-ai"><i class="fa-regular fa-wand-magic-sparkles fs-6 me-1"></i>Detektovani dobavljač iz baze</button>
+                                <button type="button" class="btn btn-sm btn-soft-info mb-2 deklaracija-action-buttons" id="add-new-supplier"><i class="fa-regular fa-hand align-top me-1 korpica"></i>Ručni unos dobavljača</button>
+                            </div>
+                            <select id="supplier-select2" class="form-select"></select>
                         </div>
                         <input type="text" class="form-control mb-2" id="billing-name" name="supplier_name" placeholder="Naziv dobavljača">
 
@@ -217,11 +217,11 @@
 
                         <div class="mb-2">
                             <div style="justify-content: end; display: flex;">
-                              <button type="button" class="btn btn-sm btn-soft-info mb-2  me-2  deklaracija-action-buttons" id="add-new-importer"><i class="fa-regular fa-hand align-top me-1 korpica" ></i>Ručni unos dobavljača</button>
-                               <button type="button" class="btn btn-sm btn-info mb-2 deklaracija-action-buttons" id="refill-importer-ai"><i class="fa-regular fa-wand-magic-sparkles fs-6 me-1"></i>Detektovani dobavljač iz baze</button>
-                           
-                           </div>
-                           
+                                <button type="button" class="btn btn-sm btn-soft-info mb-2  me-2  deklaracija-action-buttons" id="add-new-importer"><i class="fa-regular fa-hand align-top me-1 korpica"></i>Ručni unos dobavljača</button>
+                                <button type="button" class="btn btn-sm btn-info mb-2 deklaracija-action-buttons" id="refill-importer-ai"><i class="fa-regular fa-wand-magic-sparkles fs-6 me-1"></i>Detektovani dobavljač iz baze</button>
+
+                            </div>
+
                             <select id="importer-select2" class="form-select"></select>
                         </div>
 
@@ -276,7 +276,11 @@
                                 </th>
 
                                 <th style="width:70px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Ukupno</th>
-                                <th style="width:20px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Akcija</th>
+                                <th style="width:20px;vertical-align: middle; text-align: end;">Ukloni <br>
+                                    <small style="font-weight: normal; font-size: 0.75rem; color: #666;">
+                                        Povlastica
+                                    </small>
+                                </th>
                             </tr>
                         </thead>
                         <tbody id="newlink">
@@ -371,6 +375,11 @@
         let _invoice_data = null;
         let processedTariffData = [];
         let globalAISuggestions = [];
+        const remaining_scans = @json(Auth::user()->getRemainingScans());
+
+
+
+
 
         // Add global flags
         window.forceNewSupplier = false;
@@ -382,6 +391,44 @@
             console.log(" Invoice ID:", id);
             return id;
         }
+        async function updateRemainingScans() {
+            console.log(" updateRemainingScans() called ");
+
+            if (!user?.id || !token) {
+                console.warn("Missing user or token in updateRemainingScans");
+                return;
+            }
+
+            // Use global value and decrease it
+            const newRemaining = Math.max(0, remaining_scans - 1); // safe fallback to 0
+
+            try {
+                const response = await fetch(`/api/user-packages/users/${user.id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    },
+                    body: JSON.stringify({
+                        remaining_scans: newRemaining
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`PUT failed with status ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log(" Scan count updated in backend:", data);
+
+            } catch (err) {
+                console.error(" Failed to update scan count:", err);
+            }
+        }
+
+
+
 
         function updateTotalAmount() {
             let total = 0;
@@ -399,6 +446,8 @@
             // Set values in both places
             document.getElementById("total-amount").value = formatted;
             document.getElementById("modal-total-amount").textContent = formatted;
+            document.getElementById("total-edit").textContent = formatted;
+
         }
 
 
@@ -513,6 +562,7 @@
                 await new Promise(r => setTimeout(r, 2000));
             }
         }
+        //await updateRemainingScans();
 
 
 
@@ -988,11 +1038,7 @@
 
 
 
-            waitForEl("#total-edit", el => {
-                const currency = invoice.items?.[0]?.currency || "EUR";
-                el.textContent = `${invoice.total_price} ${currency}`;
 
-            });
             const items = invoice.items || [];
             console.log(" Invoice items:", items);
 
@@ -1027,6 +1073,9 @@
                 const cleaned = invoice.invoice_number.replaceAll("/", "");
                 document.getElementById("invoice-no").value = cleaned;
             }
+
+            await updateRemainingScans();
+
 
 
 
@@ -1465,12 +1514,27 @@
                 updateTotalAmount();
             });
 
-            function formattedToDDMMYYYY(date = new Date()) {
-                const day = String(date.getDate()).padStart(2, "0");
-                const month = String(date.getMonth() + 1).padStart(2, "0");
-                const year = date.getFullYear();
-                return `${day}-${month}-${year}`;
+
+            function formatDateToDDMMYYYY(dateString) {
+                if (!dateString) return '';
+                if (typeof dateString === 'string') {
+                    const [year, month, day] = dateString.split('-');
+                    return `${day}.${month}.${year}`;
+                } else if (dateString instanceof Date) {
+                    const d = dateString;
+                    const day = String(d.getDate()).padStart(2, '0');
+                    const month = String(d.getMonth() + 1).padStart(2, '0');
+                    const year = d.getFullYear();
+                    return `${day}.${month}.${year}`;
+                }
+                return '';
             }
+
+            flatpickr("#invoice-date", {
+                locale: "bs",
+                dateFormat: "d-m-Y"
+            });
+
 
 
 
@@ -1478,7 +1542,8 @@
             const invNo = getInvoiceId();
             if (invNo) document.getElementById("invoice-no1").value = invNo;
 
-            document.getElementById("invoice-date").value = new Date().toISOString().split("T")[0];
+            document.getElementById("invoice-date").value = formatDateToDDMMYYYY(new Date());
+
             console.log(" Invoice date and number set.");
 
             document.getElementById("company-address").value = "Vilsonovo, 9, Sarajevo ";
@@ -2147,6 +2212,49 @@
         });
     }
 
+    function updateTotalAmount() {
+        let total = 0;
+
+        // Loop through all invoice rows
+        document.querySelectorAll("#newlink tr.product").forEach(function(row) {
+            const price = parseFloat(row.querySelector('input[name="price[]"]')?.value || 0);
+            const quantity = parseFloat(row.querySelector('input[name="quantity[]"]')?.value || 0);
+            total += price * quantity;
+        });
+
+        // Format as currency
+        const formatted = `${total.toFixed(2)} KM`;
+
+        // Set values in both places
+        document.getElementById("total-amount").value = formatted;
+        document.getElementById("modal-total-amount").textContent = formatted;
+        document.getElementById("total-edit").textContent = formatted;
+
+    }
+
+    function setupIncrementDecrementButtons() {
+        document.querySelectorAll("td .input-group").forEach(group => {
+            const minusBtn = group.querySelector("button:first-child");
+            const plusBtn = group.querySelector("button:last-child");
+            const input = group.querySelector("input");
+
+            if (!input || !minusBtn || !plusBtn) return;
+
+            minusBtn.addEventListener("click", () => {
+                const val = parseInt(input.value) || 0;
+                input.value = Math.max(val - 1, parseInt(input.min) || 0);
+                updateTotalAmount();
+            });
+
+            plusBtn.addEventListener("click", () => {
+                const val = parseInt(input.value) || 0;
+                input.value = val + 1;
+                updateTotalAmount();
+            });
+        });
+    }
+
+
     document.addEventListener("DOMContentLoaded", async () => {
         const match = window.location.pathname.match(/\/deklaracija\/(\d+)/);
         const invoiceId = match ? match[1] : null;
@@ -2281,18 +2389,40 @@
 
             function formatDateToDDMMYYYY(dateString) {
                 if (!dateString) return '';
-                const [year, month, day] = dateString.split('-'); // expects YYYY-MM-DD
-                return `${day}-${month}-${year}`;
+                if (typeof dateString === 'string') {
+                    const [year, month, day] = dateString.split('-');
+                    return `${day}.${month}.${year}`;
+                } else if (dateString instanceof Date) {
+                    const d = dateString;
+                    const day = String(d.getDate()).padStart(2, '0');
+                    const month = String(d.getMonth() + 1).padStart(2, '0');
+                    const year = d.getFullYear();
+                    return `${day}.${month}.${year}`;
+                }
+                return '';
             }
+
+
+            function calculateTotal(items) {
+                return items.reduce((sum, item) => {
+                    const price = parseFloat(item.base_price) || 0;
+                    const quantity = parseFloat(item.quantity) || 0;
+                    return sum + (price * quantity);
+                }, 0).toFixed(2);
+            }
+
+            const calculatedTotal = calculateTotal(invoice.items);
+            const currency = invoice.items?.[0]?.currency || "EUR";
+            console.log("💰 Calculated Total:", calculateTotal(invoice.items));
+
 
             // --- Prefill invoice fields
             setField("#invoice_number", invoice.invoice_number);
             setField("#date", invoice.date_of_issue);
-            setField("#total-amount", `${invoice.total_price} `);
-            setText("#modal-total-amount", `${invoice.total_price} ${invoice.items?.[0]?.currency || "EUR"}`);
+
             setText("#invoice-id1", invoice.id);
             setText("#invoice-date-text", formatDateToDDMMYYYY(invoice.date_of_issue));
-            setText("#total-edit", `${invoice.total_price} ${invoice.items?.[0]?.currency || "EUR"}`);
+
             setField("#invoice-no", invoice.invoice_number);
             setField("#invoice-no1", invoice.id);
             setField("#incoterm", (invoice.incoterm || "").split(" ")[0]);
@@ -2360,8 +2490,13 @@
         <input type="checkbox" class="form-check-input" style="width: 30px; height: 26.66px;" title="Povlastica DA/NE" />
     </div>
 </td>`;
+                updateTotalAmount();
+
                 tbody.appendChild(row);
+                setupIncrementDecrementButtons();
             });
+
+
 
             // --- Select2 init
             queueMicrotask(() => {

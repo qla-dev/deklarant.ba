@@ -79,6 +79,8 @@ class UserPackageController extends Controller
                 'message' => 'Korisnički paket uspješno ažuriran',
                 'data' => $userPackage
             ]);
+
+            
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Korisnički paket s unesenim ID-om nije pronađen'], 404);
         } catch (Exception $e) {
