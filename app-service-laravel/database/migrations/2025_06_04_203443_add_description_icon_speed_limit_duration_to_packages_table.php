@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('packages', function (Blueprint $table) {
-            // Make sure `document_history` already exists before running this
+            // Ensure 'document_history' exists before using 'after'
             $table->text('description')->nullable()->after('document_history');
             $table->text('icon')->nullable()->after('description');
             $table->string('speed_limit')->nullable()->after('icon');
