@@ -65,7 +65,7 @@ jobs:
             exit 1
           fi
 
-          curl -f "https://deklarant.zavlan.org/download-deploy.php?artifact=$ARTIFACT_ID&dest=."
+          curl --fail-with-body "https://deklarant.zavlan.org/download-deploy.php?artifact=$ARTIFACT_ID&dest=."
 
   prepare-resources-artifact:
     name: Prepare Resources Artifact
@@ -109,7 +109,7 @@ jobs:
             exit 1
           fi
 
-          curl -f "https://deklarant.zavlan.org/download-deploy.php?artifact=$ARTIFACT_ID&dest=."
+          curl --fail-with-body "https://deklarant.zavlan.org/download-deploy.php?artifact=$ARTIFACT_ID&dest=."
 
   run-composer-install:
     name: Run Composer Install
@@ -118,7 +118,7 @@ jobs:
     steps:
       - name: Trigger remote composer install
         run: |
-          curl -f "https://deklarant.zavlan.org/run-composer-install.php"
+          curl --fail-with-body "https://deklarant.zavlan.org/run-composer-install.php"
 
   run-migrations:
     name: Run Laravel Migrations
@@ -127,7 +127,7 @@ jobs:
     steps:
       - name: Trigger remote migrations
         run: |
-          curl -f "https://deklarant.zavlan.org/run-migrations.php"
+          curl --fail-with-body "https://deklarant.zavlan.org/run-migrations.php"
 
   prepare-js-artifact:
     name: Prepare JS Artifact
@@ -181,4 +181,4 @@ jobs:
             exit 1
           fi
 
-          curl -f "https://deklarant.zavlan.org/download-deploy.php?artifact=$ARTIFACT_ID&dest=./app-service-laravel/public"
+          curl --fail-with-body "https://deklarant.zavlan.org/download-deploy.php?artifact=$ARTIFACT_ID&dest=./app-service-laravel/public"
