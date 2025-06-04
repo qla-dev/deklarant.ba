@@ -101,6 +101,14 @@ class User extends Authenticatable
 }
 
 
+    public function getOtherActivePackageStats(): ?UserPackage
+{
+    $userPackage = $this->userPackages()->first();
+    return $userPackage;
+}
+
+
+
 
       public function getRemainingScans(): ?int
         {

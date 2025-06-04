@@ -35,10 +35,7 @@
             <div class="col-md-2 col-6 border-end border-0 order-2 order-md-0 bg-white card-animate mt-lg-0 mt-md-0 mt-3">
              <a href="cijene-paketa">  
             <div class="d-flex card  rounded-0 m-0 flex-column h-100">
-                    <div class="bg-danger text-white text-center py-1 rounded-0">
-                        <i class="ri-alert-line me-1"></i>
-                        <span><b>{{ Auth::user()->getRemainingScans() ?? '0' }}</b> dostupna/ih. Nadopuni!</span>
-                    </div>
+                     @include('components.package-statusbar')
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
                         <h6 class="text-muted text-uppercase fs-11 mb-1" style="margin-top: -10px;">Dostupna AI
                             skeniranja</h6>
