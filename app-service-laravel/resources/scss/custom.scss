@@ -702,3 +702,24 @@ thead.custom-table th:last-child {
     
 }
 
+ .card.pricing-box {
+        box-shadow: 0 15px 35px rgba(0, 123, 255, 0.15), 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 0.75rem;
+    }
+
+    .card.pricing-box:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 45px rgba(0, 123, 255, 0.2), 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card.pricing-box.ribbon-box {
+        box-shadow: 0 25px 55px rgba(13, 110, 253, 0.35), 0 10px 30px rgba(0, 0, 0, 0.1);
+        transform: scale(1.02);
+        z-index: 1;
+    }
+    .card.pricing-box.ribbon-box:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 45px rgba(0, 123, 255, 0.2), 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+

@@ -13,13 +13,13 @@
     $iconHTML = '';
     switch (strtolower($packageName)) {
         case 'gobig':
-            $iconHTML = '<i class="ri-medal-line text-info fs-3 me-2 position-absolute" style="margin-top:-6px!important;margin-left: 45px;"></i>';
+            $iconHTML = '<i class="ri-medal-line text-info fs-4 me-2 position-absolute" style="margin-top:-3px!important;margin-left: 45px;"></i>';
             break;
         case 'startup':
-            $iconHTML = '<i class="ri-star-s-fill text-info fs-3 me-2 position-absolute" style="margin-top:-2px!important;margin-left: 60px;"></i>';
+            $iconHTML = '<i class="ri-star-s-fill text-info fs-4 me-2 position-absolute" style="margin-top:-4px!important;margin-left: 58px;"></i>';
             break;
         case 'business':
-            $iconHTML = '<i class="ri-shield-star-line text-info fs-3 me-2 position-absolute" style="margin-top:-8px!important;margin-left: 68px;"></i>';
+            $iconHTML = '<i class="ri-shield-star-line text-info fs-4 me-2 position-absolute" style="margin-top:-4px!important;margin-left: 68px;"></i>';
             break;
     }
 @endphp
