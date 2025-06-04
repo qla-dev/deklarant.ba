@@ -49,7 +49,7 @@
                 <div class="card-header border-0  p-4">
                     <div class="d-flex">
                         <div class="flex-grow-1">
-                            <img src="{{ URL::asset('build/images/logo-dek.png') }}" class="card-logo card-logo-dark" alt="logo dark" height="34">
+                            <img src="{{ URL::asset('build/images/logo-dark-ai.png') }}" class="card-logo card-logo-dark" alt="logo dark" height="34">
                             <img src="{{ URL::asset('build/images/logo-light.png') }}" class="card-logo card-logo-light" alt="logo light" height="17">
 
                         </div>

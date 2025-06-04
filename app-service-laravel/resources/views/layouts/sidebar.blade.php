@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header text-center">
-                <h5 class="modal-title w-100" id="scanModalLabel"><i class="fa-regular fa-wand-magic-sparkles fs-6 me-1" style="font-size:10px;"></i>Skeniraj deklaraciju sa AI</h5>
+                <h5 class="modal-title w-100" id="scanModalLabel"><i class="fas fa-wand-magic-sparkles fs-6 me-1" style="font-size:10px;"></i>Skeniraj deklaraciju sa AI</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
             </div>
             <div class="modal-body d-flex justify-content-center">
@@ -100,7 +100,7 @@
     </li>
     <li class="nav-item">
         <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#scanModal" class="btn btn-info btn-sm ms-5 text-white py-0 d-flex align-items-center justify-content-center" style="width: 190px; height:28px;">
-            <i class="fa-regular fa-wand-magic-sparkles fs-6 me-1"></i>
+            <i class="fas fa-wand-magic-sparkles fs-6 me-1"></i>
             <span class="fs-6"> Skeniraj deklaraciju sa AI</span>
         </a>
     </li>

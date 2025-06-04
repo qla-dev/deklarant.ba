@@ -156,7 +156,7 @@
         <div id="invoice-form">
             <div class="card-header border-0 p-4 d-flex justify-content-between align-items-start">
                 <div>
-                    <img src="{{ URL::asset('build/images/logo-dek.png') }}" class="card-logo" alt="logo" height="34">
+                    <img src="{{ URL::asset('build/images/logo-dark-ai.png') }}" class="card-logo" alt="logo" height="34">
                     <div class="mt-4">
                         <h6 class="text-muted text-uppercase fw-semibold">Osnovni podaci</h6>
                         <input type="text" class="form-control mb-2" id="company-address" name="address" placeholder="Unesite adresu">
@@ -199,7 +199,7 @@
 
                         <div class="mb-2">
                             <div style="display: flex;">
-                                <button type="button" class="btn btn-sm btn-info mb-2 me-2 deklaracija-action-buttons" id="refill-supplier-ai"><i class="fa-regular fa-wand-magic-sparkles fs-6 me-1"></i>Detektovani dobavljač iz baze</button>
+                                <button type="button" class="btn btn-sm btn-info mb-2 me-2 deklaracija-action-buttons" id="refill-supplier-ai"><i class="fas fa-wand-magic-sparkles fs-6 me-1"></i>Detektovani dobavljač iz baze</button>
                                 <button type="button" class="btn btn-sm btn-soft-info mb-2 deklaracija-action-buttons" id="add-new-supplier"><i class="fa-regular fa-hand align-top me-1 korpica"></i>Ručni unos dobavljača</button>
                             </div>
                             <select id="supplier-select2" class="form-select"></select>
@@ -218,7 +218,7 @@
                         <div class="mb-2">
                             <div style="justify-content: end; display: flex;">
                                 <button type="button" class="btn btn-sm btn-soft-info mb-2  me-2  deklaracija-action-buttons" id="add-new-importer"><i class="fa-regular fa-hand align-top me-1 korpica"></i>Ručni unos dobavljača</button>
-                                <button type="button" class="btn btn-sm btn-info mb-2 deklaracija-action-buttons" id="refill-importer-ai"><i class="fa-regular fa-wand-magic-sparkles fs-6 me-1"></i>Detektovani dobavljač iz baze</button>
+                                <button type="button" class="btn btn-sm btn-info mb-2 deklaracija-action-buttons" id="refill-importer-ai"><i class="fas fa-wand-magic-sparkles fs-6 me-1"></i>Detektovani dobavljač iz baze</button>
 
                             </div>
 
@@ -323,7 +323,7 @@
         <div class="modal-content border-0 shadow-lg">
             <div class="modal-header bg-info text-white">
                 <h5 class="modal-title d-flex align-items-center gap-2 text-white" id="aiSuggestionModalLabel">
-                    <i class="fa-regular fa-wand-magic-sparkles text-white"></i> Najbolji AI Prijedlozi
+                    <i class="fas fa-wand-magic-sparkles text-white"></i> Najbolji AI Prijedlozi
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Zatvori"></button>
             </div>
@@ -810,7 +810,7 @@
                 
                 title="Prikaži AI prijedloge"
               >
-                <i class="fa-regular fa-wand-magic-sparkles" style="font-size: 16px;"></i>
+                <i class="fas fa-wand-magic-sparkles" style="font-size: 16px;"></i>
               </button>
             </div>
           </td>

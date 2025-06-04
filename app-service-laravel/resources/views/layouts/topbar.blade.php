@@ -6,19 +6,19 @@
                 <div class="navbar-box horizontal-logo me-lg-5 d-flex align-items-center">
                     <a href="/" class="logo logo-dark">
                         <span class="logo-sm">
-                            <img src="{{ URL::asset('build/images/logo-dek.png') }}" alt="" height="17">
+                            <img src="{{ URL::asset('build/images/logo-light-ai.png') }}" alt="" height="17">
                         </span>
                         <span class="logo-lg">
-                            <img src="{{ URL::asset('build/images/logo-dek.png') }}" alt="" height="22">
+                            <img src="{{ URL::asset('build/images/logo-light-ai.png') }}" alt="" height="22">
                         </span>
                     </a>
 
                     <a href="/" class="logo logo-light">
                         <span class="logo-sm">
-                            <img src="{{ URL::asset('build/images/logo-dek-white.png') }}" alt="" height="17">
+                            <img src="{{ URL::asset('build/images/logo-dark-ai.png') }}" alt="" height="17">
                         </span>
                         <span class="logo-lg">
-                            <img src="{{ URL::asset('build/images/logo-dek-white.png') }}" alt="" height="22">
+                            <img src="{{ URL::asset('build/images/logo-dark-ai.png') }}" alt="" height="22">
                         </span>
                     </a>
                 </div>
@@ -154,7 +154,7 @@
                                 <div class="col-12 text-center">
                                     <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#scanModal"
                                         class="btn btn-info btn-sm text-white w-100 d-flex align-items-center justify-content-center">
-                                        <i class="fa-regular fa-wand-magic-sparkles fs-6 me-1"></i>
+                                        <i class="fas fa-wand-magic-sparkles fs-6 me-1"></i>
                                         <span>Skeniraj deklaraciju sa AI</span>
                                     </a>
                                 </div>
@@ -241,7 +241,7 @@
                                 class="align-middle">Pomoć</span></a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="cijene-paketa"><i
-                                class="fa-regular fa-wand-magic-sparkles fs-12 text-muted me-1"></i> <span
+                                class="fas fa-wand-magic-sparkles fs-12 text-muted me-1"></i> <span
                                 class="align-middle">Dostupna skeniranja :
                                 <b>{{ Auth::user()->getRemainingScans() ?? '0' }}</b></span></a>
 

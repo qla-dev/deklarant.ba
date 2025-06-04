@@ -25,7 +25,7 @@
                     <div class="text-center mt-sm-5 mb-4 text-info">
                         <div>
                             <a href="index" class="d-inline-block auth-logo">
-                                <img src="{{ URL::asset('build/images/logo-dek-white.png') }}" alt="" height="35">
+                                <img src="{{ URL::asset('build/images/logo-dark-ai.png') }}" alt="" height="35">
                             </a>
                         </div>
 

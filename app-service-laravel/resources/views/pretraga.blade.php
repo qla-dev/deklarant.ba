@@ -161,7 +161,7 @@ Rezultati pretrage za "<span class="text-info fw-medium ml-0 pl-0">{{ request('k
               <div class="col-lg-12">
                 <div class="card-header border-bottom-dashed p-4 d-flex justify-content-between">
                   <div>
-                    <img src="{{ URL::asset('build/images/logo-dek.png') }}" class="card-logo" alt="logo" height="30">
+                    <img src="{{ URL::asset('build/images/logo-dark-ai.png') }}" class="card-logo" alt="logo" height="30">
                     <div class="mt-4">
                       <h6 class="text-muted text-uppercase fw-semibold">Adresa</h6>
                       <p class="text-muted mb-1" id="address-details">--</p>

@@ -40,7 +40,7 @@
                         <h6 class="text-muted text-uppercase fs-11 mb-1" style="margin-top: -10px;">Dostupna AI
                             skeniranja</h6>
                         <div class="d-flex align-items-center justify-content-center" style="margin-top: 20px;">
-                            <i class="fa-regular fa-wand-magic-sparkles text-info mb-1" style="font-size: 35px;"></i>
+                            <i class="fas fa-wand-magic-sparkles text-info mb-1" style="font-size: 35px;"></i>
                             <h3 class="mb-0 ms-2"><span class="counter-value">{{ Auth::user()->getRemainingScans() ?? '0' }}</span></h3>
                         </div>
                     </div>
@@ -98,7 +98,7 @@
                             </a>
                             <button type="button" data-bs-toggle="modal" data-bs-target="#scanModal"
                                 class="btn btn-info w-50 animated-btn btn-sm d-flex align-items-center justify-content-center">
-                                <i class="fa-regular fa-wand-magic-sparkles fs-6 me-1" style="font-size:10px;"></i>
+                                <i class="fas fa-wand-magic-sparkles fs-6 me-1" style="font-size:10px;"></i>
                                 <span class="fs-6"> Skeniraj deklaraciju sa AI</span>
                             </button>
                         </div>
@@ -448,7 +448,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header text-center">
-                <h5 class="modal-title w-100" id="scanModalLabel"><i class="fa-regular fa-wand-magic-sparkles fs-6 me-1"
+                <h5 class="modal-title w-100" id="scanModalLabel"><i class="fas fa-wand-magic-sparkles fs-6 me-1"
                         style="font-size:10px;"></i>Skeniraj deklaraciju sa AI</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
             </div>

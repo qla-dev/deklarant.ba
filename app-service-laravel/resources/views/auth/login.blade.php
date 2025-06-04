@@ -20,7 +20,7 @@ Prijava
             <div class="row">
                 <div class="col-lg-12 text-center mt-sm-5 mb-4">
                     <a href="/" class="d-inline-block auth-logo">
-                        <img src="{{ URL::asset('build/images/logo-dek-white.png')}}" alt="Logo" height="35">
+                        <img src="{{ URL::asset('build/images/logo-dark-ai.png')}}" alt="Logo" height="35">
                     </a>
 
                 </div>

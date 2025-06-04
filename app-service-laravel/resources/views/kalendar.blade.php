@@ -33,7 +33,7 @@ Kalendarni prikaz mojih faktura
                     <div class="card-body">
                         <button class="btn btn-info w-100" id="btn-new-event" data-bs-toggle="modal"
                             data-bs-target="#scanModal">
-                            <i class="fa-regular fa-wand-magic-sparkles fs-6 me-1"></i><span class="fs-6">Skeniraj deklaraciju s
+                            <i class="fas fa-wand-magic-sparkles fs-6 me-1"></i><span class="fs-6">Skeniraj deklaraciju s
                                 AI</span>
                         </button>
                         <div id="external-events d-flex justify-content-center" class="mt-3">
@@ -101,7 +101,7 @@ Kalendarni prikaz mojih faktura
                             <div class="col-lg-12">
                                 <div class="card-header border-bottom-dashed p-4 d-flex justify-content-between">
                                     <div>
-                                        <img src="{{ URL::asset('build/images/logo-dek.png') }}" class="card-logo"
+                                        <img src="{{ URL::asset('build/images/logo-dark-ai.png') }}" class="card-logo"
                                             alt="logo" height="30">
                                         <div class="mt-4">
                                             <h6 class="text-muted text-uppercase fw-semibold">Adresa
