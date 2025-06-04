@@ -156,7 +156,7 @@
         <div id="invoice-form">
             <div class="card-header border-0 p-4 d-flex justify-content-between align-items-start">
                 <div>
-                    <img src="{{ URL::asset('build/images/logo-dark-ai.png') }}" class="card-logo" alt="logo" height="34">
+                    <img src="{{ URL::asset('build/images/logo-light-ai.png') }}" class="card-logo" alt="logo" height="34">
                     <div class="mt-4">
                         <h6 class="text-muted text-uppercase fw-semibold">Osnovni podaci</h6>
                         <input type="text" class="form-control mb-2" id="company-address" name="address" placeholder="Unesite adresu">
@@ -1548,7 +1548,7 @@
 
             document.getElementById("company-address").value = "Vilsonovo, 9, Sarajevo ";
             document.getElementById("company-zip").value = "71000";
-            document.getElementById("company-email").value = "business@deklarant.ba";
+            document.getElementById("company-email").value = "business@deklarant.ai";
 
 
             document.getElementById("billing-name")?.addEventListener("input", () => {

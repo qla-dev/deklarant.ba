@@ -20,9 +20,9 @@
 
 <head>
     <meta charset="utf-8" />
-    <title> deklarant.ba | Dashboard</title>
+    <title> deklarant.ai | Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="deklarant.ba - Napredni AI skener deklaracija" name="description" />
+    <meta content="deklarant.ai - Napredni AI skener deklaracija" name="description" />
     <meta content="qla.dev" name="author" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- App favicon -->

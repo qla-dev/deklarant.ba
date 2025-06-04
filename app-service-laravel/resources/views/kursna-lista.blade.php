@@ -22,7 +22,7 @@
 @section('content')
     @component('components.breadcrumb')
     @slot('li_1')
-        deklarant.ba
+        deklarant.ai
     @endslot
     @slot('title')
         Kursna lista za dan {{ date('d.m.Y') }}

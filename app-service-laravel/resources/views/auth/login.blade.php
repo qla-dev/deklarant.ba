@@ -82,7 +82,7 @@ Prijava
                     <div class="text-center">
                         <script>
                             document.write(new Date().getFullYear())
-                        </script> deklarant.ba <i class="mdi mdi-heart text-info"></i> Razvijeno od strane <span class="logo-lg">
+                        </script> deklarant.ai <i class="mdi mdi-heart text-info"></i> Razvijeno od strane <span class="logo-lg">
                             <img src="{{ URL::asset('build/images/logo-qla.png') }}" alt="" height="17" style="margin-top:-3px">
                         </span>
                     </div>

@@ -11,7 +11,7 @@
 @section('content')
 @component('components.breadcrumb')
 @slot('li_1')
-deklarant.ba
+deklarant.ai
 @endslot
 @slot('title')
 Moje spašene deklaracije <span class="counter-value-invoice">0</span><span

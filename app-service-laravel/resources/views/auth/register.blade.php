@@ -39,7 +39,7 @@
                     <div class="card mt-4">
                         <div class="card-body p-4">
                             <div class="text-center mt-2">
-                                <h5 class="text-info fw-bold">Kreiraj novi deklarant.ba račun</h5>
+                                <h5 class="text-info fw-bold">Kreiraj novi deklarant.ai račun</h5>
                                 <p class="text-muted">Napravite svoj besplatni nalog</p>
                             </div>
                             <div class="p-2 mt-4">
@@ -86,7 +86,7 @@
                     <div class="text-center">
                         <script>
                             document.write(new Date().getFullYear())
-                        </script> deklarant.ba <i class="mdi mdi-heart text-info"></i> Razvijeno od strane <span class="logo-lg">
+                        </script> deklarant.ai <i class="mdi mdi-heart text-info"></i> Razvijeno od strane <span class="logo-lg">
                             <img src="{{ URL::asset('build/images/logo-qla.png') }}" alt="" height="17" style="margin-top:-3px">
                         </span>
                     </div>

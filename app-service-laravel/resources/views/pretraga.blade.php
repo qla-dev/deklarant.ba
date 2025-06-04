@@ -17,7 +17,7 @@ a:hover + .border {
 @section('content')
 @component('components.breadcrumb')
 @slot('li_1')
-deklarant.ba
+deklarant.ai
 @endslot
 @slot('title')
 Rezultati pretrage za "<span class="text-info fw-medium ml-0 pl-0">{{ request('keyword') }}</span>"

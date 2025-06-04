@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title') Česta pitanja - deklarant.ba @endsection
+@section('title') Česta pitanja - deklarant.ai @endsection
 @section('content')
     <div class="row">
         <div class="col-lg-12">
@@ -18,19 +18,19 @@
                             <div class="accordion-item shadow">
                                 <h2 class="accordion-header" id="genques-headingOne">
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#genques-collapseOne" aria-expanded="true" aria-controls="genques-collapseOne">
-                                        Šta je deklarant.ba?
+                                        Šta je deklarant.ai?
                                     </button>
                                 </h2>
                                 <div id="genques-collapseOne" class="accordion-collapse collapse show" aria-labelledby="genques-headingOne" data-bs-parent="#genques-accordion">
                                     <div class="accordion-body">
-                                        deklarant.ba je digitalna platforma za izradu, upravljanje i praćenje carinskih deklaracija i prateće dokumentacije. Omogućava automatsko prepoznavanje podataka iz faktura i drugih dokumenata, te značajno ubrzava i pojednostavljuje carinske procedure za firme i fizička lica.
+                                        deklarant.ai je digitalna platforma za izradu, upravljanje i praćenje carinskih deklaracija i prateće dokumentacije. Omogućava automatsko prepoznavanje podataka iz faktura i drugih dokumenata, te značajno ubrzava i pojednostavljuje carinske procedure za firme i fizička lica.
                                     </div>
                                 </div>
                             </div>
                             <div class="accordion-item shadow">
                                 <h2 class="accordion-header" id="genques-headingTwo">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#genques-collapseTwo" aria-expanded="false" aria-controls="genques-collapseTwo">
-                                        Koje probleme rješava deklarant.ba?
+                                        Koje probleme rješava deklarant.ai?
                                     </button>
                                 </h2>
                                 <div id="genques-collapseTwo" class="accordion-collapse collapse" aria-labelledby="genques-headingTwo" data-bs-parent="#genques-accordion">
@@ -54,7 +54,7 @@
                             <div class="accordion-item shadow">
                                 <h2 class="accordion-header" id="genques-headingFour">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#genques-collapseFour" aria-expanded="false" aria-controls="genques-collapseFour">
-                                        Ko može koristiti deklarant.ba?
+                                        Ko može koristiti deklarant.ai?
                                     </button>
                                 </h2>
                                 <div id="genques-collapseFour" class="accordion-collapse collapse" aria-labelledby="genques-headingFour" data-bs-parent="#genques-accordion">
@@ -71,7 +71,7 @@
                                 </h2>
                                 <div id="genques-collapseFive" class="accordion-collapse collapse" aria-labelledby="genques-headingFive" data-bs-parent="#genques-accordion">
                                     <div class="accordion-body">
-                                        Da, deklarant.ba je usklađen sa zakonima o zaštiti podataka i carinskim propisima Bosne i Hercegovine.
+                                        Da, deklarant.ai je usklađen sa zakonima o zaštiti podataka i carinskim propisima Bosne i Hercegovine.
                                     </div>
                                 </div>
                             </div>
@@ -93,7 +93,7 @@
                             <div class="accordion-item shadow">
                                 <h2 class="accordion-header" id="manageaccount-headingOne">
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#manageaccount-collapseOne" aria-expanded="true" aria-controls="manageaccount-collapseOne">
-                                        Kako započeti korištenje deklarant.ba?
+                                        Kako započeti korištenje deklarant.ai?
                                     </button>
                                 </h2>
                                 <div id="manageaccount-collapseOne" class="accordion-collapse collapse show" aria-labelledby="manageaccount-headingOne" data-bs-parent="#manageaccount-accordion">
@@ -168,7 +168,7 @@
                             <div class="accordion-item shadow">
                                 <h2 class="accordion-header" id="privacy-headingOne">
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#privacy-collapseOne" aria-expanded="true" aria-controls="privacy-collapseOne">
-                                        Kako deklarant.ba štiti moje podatke?
+                                        Kako deklarant.ai štiti moje podatke?
                                     </button>
                                 </h2>
                                 <div id="privacy-collapseOne" class="accordion-collapse collapse show" aria-labelledby="privacy-headingOne" data-bs-parent="#privacy-accordion">

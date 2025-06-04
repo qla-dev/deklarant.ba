@@ -879,7 +879,7 @@
                                 <img src="{{ URL::asset('build/images/giftbox.png') }}" alt="">
                                 <div class="mt-4">
                                     <h5>Pozovi prijatelja</h5>
-                                    <p class="text-muted lh-base">Preporuči deklarant.ba platformu svom prijatelju i osvoji 50 besplatnih skeniranja.</p>
+                                    <p class="text-muted lh-base">Preporuči deklarant.ai platformu svom prijatelju i osvoji 50 besplatnih skeniranja.</p>
                                     <button type="button" class="btn btn-info btn-label rounded-pill"><i
                                             class="ri-mail-fill label-icon align-middle rounded-pill fs-16 me-2"></i>
                                         Pozovi sada</button>

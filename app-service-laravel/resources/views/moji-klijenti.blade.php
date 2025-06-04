@@ -14,7 +14,7 @@
 @section('content')
 @component('components.breadcrumb')
 @slot('li_1')
-deklarant.ba
+deklarant.ai
 @endslot
 @slot('title')
 Lista klijenata
