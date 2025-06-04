@@ -277,6 +277,7 @@
 
             const res = await fetch(`/api/user-packages/users/${userId}/packages/${selectedPackageId}`, {
                 method: "POST",
+                credentials: "include", // 👈 this line is essential
                 headers: {
                     "X-CSRF-TOKEN": csrfToken,
                     "X-Requested-With": "XMLHttpRequest",
