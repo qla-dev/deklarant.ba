@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('packages', function (Blueprint $table) {
             // Make sure `document_history` already exists before running this
             $table->text('description')->nullable()->after('document_history');
-            $table->text('icon')->nullable()->after('document_history');
+            $table->text('icon')->nullable()->after('description');
             $table->string('speed_limit')->nullable()->after('icon');
             $table->integer('duration')->nullable()->after('speed_limit');
         });
