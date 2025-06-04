@@ -75,7 +75,7 @@
                             <img id="user-avatar-middle" class="img-thumbnail rounded-circle d-none"  style="object-fit: cover; aspect-ratio: 1/1; max-width: 50px; max-height: 50px; min-width: 50px; min-height: 50px; display: block;padding-right: 0px; padding-left: 0px; padding: 0.15rem; border: 0; background-color: transparent;">
                             <div id="avatar-middle-fallback" class="rounded-circle bg-info d-flex justify-content-center align-items-center text-white" style="width: 50px; height: 50px;"></div>
                         </div>
-                        <h6 class="fw-bold mb-1 mt-1">Dobrodošli na deklarant.ai {{ Auth::user()->username ?? '' }}</h6>
+                        <h6 class="fw-bold mb-1 mt-1">Dobrodošli na deklarant<span style="color:#299cdb!important">.ai</span> {{ Auth::user()->username ?? '' }}</h6>
                         <p class="fs-7 mb-1 text-info" id="user-package-display">
                                  @php
                                             $packageName = Auth::user()->getActivePackageName();
