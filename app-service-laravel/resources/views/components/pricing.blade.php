@@ -237,85 +237,93 @@
 
 
 <script>
-    let selectedPackageId = null;
-    const userId = {{ Auth::id() }};
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    document.addEventListener("DOMContentLoaded", function () {
+        const userId = {{ Auth::id() }};
+        let selectedPackageId = null;
 
-    // Track selected package from the "Započni" button
-    document.querySelectorAll('[id^="btnAction-"]').forEach(btn => {
-        btn.addEventListener('click', () => {
-            selectedPackageId = btn.getAttribute("data-package-id");
+        const token = localStorage.getItem("auth_token") || '{{ auth()->user()?->currentAccessToken()?->plainTextToken ?? '' }}';
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+        // Listen to Započni button clicks to set selected package
+        document.querySelectorAll('[id^="btnAction-"]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                selectedPackageId = btn.getAttribute("data-package-id");
+            });
         });
-    });
 
-    document.getElementById("btnActivatePackage").addEventListener("click", async () => {
-        if (!selectedPackageId || !userId) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Greška',
-                text: 'Nije moguće aktivirati pretplatu.',
-            });
-            return;
-        }
-
-        try {
-            // Get duration & available scans from button
-            const btnEl = document.querySelector(`#btnAction-${selectedPackageId}`);
-            const duration = parseInt(btnEl.getAttribute("data-duration")) || 30;
-            const availableScans = parseInt(btnEl.getAttribute("data-available-scans")) || 100;
-
-            // Calculate expiration date
-            const expirationDate = new Date();
-            expirationDate.setDate(expirationDate.getDate() + duration);
-            const expirationISO = expirationDate.toISOString().split('T')[0];
-
-            const body = {
-                active: true,
-                expiration_date: expirationISO,
-                remaining_scans: availableScans
-            };
-
-            const res = await fetch(`/api/user-packages/users/${userId}/packages/${selectedPackageId}`, {
-                method: "POST",
-                credentials: "include", // 👈 this line is essential
-                headers: {
-                    "X-CSRF-TOKEN": csrfToken,
-                    "X-Requested-With": "XMLHttpRequest",
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(body)
-            });
-
-            if (!res.ok) throw new Error("Neuspješna aktivacija.");
-
-            // ✅ CLOSE modal BEFORE showing toast
-            const modal = bootstrap.Modal.getInstance(document.getElementById("paymentChoiceModal"));
-            modal.hide();
-
-            // ✅ Show success toast after modal is closed
-            setTimeout(() => {
+        document.getElementById("btnActivatePackage").addEventListener("click", async () => {
+            if (!selectedPackageId || !userId) {
                 Swal.fire({
-                    icon: 'success',
-                    title: 'Pretplata aktivirana!',
-                    text: 'Uspješno ste aktivirali paket.',
-                    timer: 2000,
-                    showConfirmButton: false
+                    icon: 'error',
+                    title: 'Greška',
+                    text: 'Nije moguće aktivirati pretplatu.',
+                });
+                return;
+            }
+
+            try {
+                const btnEl = document.querySelector(`#btnAction-${selectedPackageId}`);
+                const duration = parseInt(btnEl.getAttribute("data-duration")) || 30;
+                const availableScans = parseInt(btnEl.getAttribute("data-available-scans")) || 100;
+
+                // Calculate expiration date
+                const expirationDate = new Date();
+                expirationDate.setDate(expirationDate.getDate() + duration);
+                const expirationISO = expirationDate.toISOString().split('T')[0];
+
+                const body = {
+                    active: true,
+                    expiration_date: expirationISO,
+                    remaining_scans: availableScans
+                };
+
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': csrfToken
+                };
+
+                if (token) {
+                    headers['Authorization'] = `Bearer ${token}`;
+                }
+
+                const res = await fetch(`/api/user-packages/users/${userId}/packages/${selectedPackageId}`, {
+                    method: "POST",
+                    headers: headers,
+                    body: JSON.stringify(body),
+                    credentials: "include"
                 });
 
-                setTimeout(() => location.reload(), 2000);
-            }, 300);
+                if (!res.ok) throw new Error("Neuspješna aktivacija.");
 
-        } catch (err) {
-            console.error(err);
-            Swal.fire({
-                icon: 'error',
-                title: 'Greška!',
-                text: 'Došlo je do problema pri aktivaciji paketa.',
-            });
-        }
+                // Close modal first
+                const modal = bootstrap.Modal.getInstance(document.getElementById("paymentChoiceModal"));
+                modal.hide();
+
+                setTimeout(() => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Pretplata aktivirana!',
+                        text: 'Uspješno ste aktivirali paket.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+
+                    setTimeout(() => location.reload(), 2000);
+                }, 300);
+
+            } catch (err) {
+                console.error("Greška:", err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Greška!',
+                    text: 'Došlo je do problema pri aktivaciji paketa.',
+                });
+            }
+        });
     });
 </script>
-
 
 
 
