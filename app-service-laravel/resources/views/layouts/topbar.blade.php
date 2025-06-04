@@ -195,24 +195,28 @@
                                     id="topbar-username">
                                     {{ Auth::user()->username ?? 'Korisnik' }}
                                 </span>
-                                <span class="d-none d-xl-block fs-12 user-name-sub-text text-end">
-                                    @if (Auth::user()->role == 'superadmin')
-                                        Superadmin
-                                    @elseif (Auth::user()->role == 'user')
-                                        @php
-                                            $packageName = Auth::user()->getActivePackageName();
-                                        @endphp
+                               <span class="d-none d-xl-block fs-12 user-name-sub-text text-end">
+    @if (Auth::user()->role === 'superadmin')
+        Superadmin
+    @elseif (Auth::user()->role === 'user')
+        @if (
+            !Auth::user()->getActivePackageName() ||
+            !Auth::user()->getOtherActivePackageStats() ||
+            Auth::user()->getOtherActivePackageStats()->active == 0 ||
+            (Auth::user()->getRemainingScans() ?? 0) == 0 ||
+            (Auth::user()->getOtherActivePackageStats()->expiration_date &&
+             \Carbon\Carbon::parse(Auth::user()->getOtherActivePackageStats()->expiration_date)->isPast())
+        )
+            <a class="text-info" style="white-space:nowrap; cursor:pointer;" onclick="window.location.href='{{ url('cijene-paketa') }}'">Odaberi paket</a>
+        @else
+            {{ Auth::user()->getActivePackageName() }}
+        @endif
+    @else
+        {{ ucfirst(Auth::user()->role) }}
+    @endif
+</span>
 
-                                        @if ($packageName)
-                                            {{ $packageName }}
-                                        @else
-                                            <a class="text-info" style="white-space:nowrap; cursor:pointer;"
-                                                onclick="window.location.href='{{ url('cijene-paketa') }}'">Odaberi paket</a>
-                                        @endif
-                                    @else
-                                        {{ Auth::user()->role }}
-                                    @endif
-                                </span>
+
                             </span>
 
                             <img id="topbar-avatar" class="rounded-circle header-profile-user d-none" width="32"
