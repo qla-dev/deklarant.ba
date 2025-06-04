@@ -241,16 +241,17 @@
         const userId = {{ Auth::id() }};
         let selectedPackageId = null;
 
-        const token = localStorage.getItem("auth_token") || '{{ auth()->user()?->currentAccessToken()?->plainTextToken ?? '' }}';
+        const token = @json(session('auth_token')); 
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
-        // Listen to Započni button clicks to set selected package
+        // Track selected package from "Započni" buttons
         document.querySelectorAll('[id^="btnAction-"]').forEach(btn => {
             btn.addEventListener('click', () => {
                 selectedPackageId = btn.getAttribute("data-package-id");
             });
         });
 
+        // Handle "Aktiviraj pretplatu" click
         document.getElementById("btnActivatePackage").addEventListener("click", async () => {
             if (!selectedPackageId || !userId) {
                 Swal.fire({
@@ -297,7 +298,6 @@
 
                 if (!res.ok) throw new Error("Neuspješna aktivacija.");
 
-                // Close modal first
                 const modal = bootstrap.Modal.getInstance(document.getElementById("paymentChoiceModal"));
                 modal.hide();
 
@@ -324,6 +324,7 @@
         });
     });
 </script>
+
 
 
 
