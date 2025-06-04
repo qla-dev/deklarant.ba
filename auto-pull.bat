@@ -9,7 +9,7 @@ REM ─────────────────────────�
     git pull
     cd app-service-laravel
     php artisan migrate
-    php artisan db:seed
+    php artisan db:seed --force
     cd ..
     node clear_routes.js
     echo.
