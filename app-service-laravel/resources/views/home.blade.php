@@ -35,7 +35,7 @@
             <div class="col-md-2 col-6 border-end border-0 order-2 order-md-0 bg-white card-animate mt-lg-0 mt-md-0 mt-3">
              <a href="cijene-paketa">  
             <div class="d-flex card  rounded-0 m-0 flex-column h-100">
-                     @include('components.package-statusbar')
+                     @include('components.package-card-statusbar')
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
                         <h6 class="text-muted text-uppercase fs-11 mb-1" style="margin-top: -10px;">Dostupna AI
                             skeniranja</h6>
@@ -77,25 +77,14 @@
                         </div>
                         <h6 class="fw-bold mb-1 mt-1">Dobrodošli na deklarant<span style="color:#299cdb!important">.ai</span> {{ Auth::user()->username ?? '' }}</h6>
                         <p class="fs-7 mb-1 text-info" id="user-package-display">
-                                 @php
-                                            $packageName = Auth::user()->getActivePackageName();
-                                        @endphp
-
-                                        @if ($packageName)
-                                            Aktivna pretplata: <strong>{{ $packageName }}</strong>
-                                        @else
-                                            <a class="text-info" style="white-space:nowrap; cursor:pointer;"
-                                                onclick="window.location.href='{{ url('cijene-paketa') }}'">Pretplata nije aktivna. <strong class=" text-decoration-underline">Odaberi paket po svojim potrebama!</strong></a>
-                                        @endif
+    @include('components.package-dashboard-statusbar')
                         </p>
                     </div>
                     <div class="card-footer bg-transparent border-0 w-100 p-0 p-lg-1">
                         <div class="d-flex justify-content-center gap-2 w-100">
-                            <a href="cijene-paketa"
-                                class="btn btn-info text-white w-50 btn-sm d-flex align-items-center justify-content-center">
-                                <i class="fas fa-circle-chevron-up fs-6 me-1"></i> <span class="fs-6">Nadogradi
-                                    paket</span>
-                            </a>
+                              <div class="w-50">
+                              @include('components.upgrade-button')
+                              </div>
                             <button type="button" data-bs-toggle="modal" data-bs-target="#scanModal"
                                 class="btn btn-info w-50 animated-btn btn-sm d-flex align-items-center justify-content-center">
                                 <i class="fas fa-wand-magic-sparkles fs-6 me-1" style="font-size:10px;"></i>

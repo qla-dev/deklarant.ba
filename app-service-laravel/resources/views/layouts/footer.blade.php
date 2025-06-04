@@ -11,7 +11,7 @@
     <div class="container-fluid">
         <div class="row ">
             <div class="col-sm-6">
-                <script>document.write(new Date().getFullYear())</script> © deklarant.ai
+                <script>document.write(new Date().getFullYear())</script> © deklarant<span style="color:#299cdb!important">.ai</span>
             </div>
             <div class="col-sm-6">
                 <div class="text-sm-end d-none d-sm-block fs-6">

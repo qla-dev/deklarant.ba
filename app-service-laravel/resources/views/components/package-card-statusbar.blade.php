@@ -25,7 +25,7 @@
 
 @elseif (
     $otherPackage->expiration_date &&
-    abs(\Carbon\Carbon::parse($otherPackage->expiration_date)->startOfDay()->diffInDays($now->startOfDay(), false)) <= 5 &&
+    abs(\Carbon\Carbon::parse($otherPackage->expiration_date)->startOfDay()->diffInDays($now->startOfDay(), false)) <= 10 &&
     \Carbon\Carbon::parse($otherPackage->expiration_date)->gt($now)
 )
     @php
@@ -39,7 +39,7 @@
 
 
 
-@elseif ($remainingScans < 5)
+@elseif ($remainingScans < 10)
     <div class="bg-danger text-white text-center py-1 rounded-0">
         <i class="ri-alert-line me-1"></i>
         <span><b>{{ $remainingScans }}</b> dostupno. <b>Nadopuni!</b></span>

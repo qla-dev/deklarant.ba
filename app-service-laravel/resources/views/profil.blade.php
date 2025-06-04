@@ -353,17 +353,11 @@
                     <div class="col-xxl-4 d-flex flex-column rounded-0">
                         <div class="card mb-3 d-flex flex-column align-items-center justify-content-center rounded-0">
                             <div class="card-body d-flex align-items-center w-100 justify-content-between" style="min-height: 60px;">
-                                <!-- Loader (shown initially) -->
-                                <div class="w-100 d-flex justify-content-center" id="user-package-loader">
-                                    <div class="spinner-border text-info" role="status"></div>
-                                </div>
-                                <!-- Package text (hidden initially) -->
-                                <p class="fw-semibold mb-0 d-none d-flex" id="user-package-text" style="justify-content: space-between;"></p>
-
+                             @include('components.package-profilebar')
                                 <!-- Upgrade button (hidden initially) -->
-                                <a href="cijene-paketa" id="upgrade-btn" class="btn btn-info text-white btn-sm d-none fs-6">
-                                    <i class="ri-arrow-up-circle-line"></i> Nadogradi paket
-                                </a>
+                                 <div>
+                              @include('components.upgrade-button')
+                              </div>
                             </div>
 
                         </div>
@@ -1617,117 +1611,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
 
-<!-- Dynamical Package update -->
-<script>
-    document.addEventListener("DOMContentLoaded", async function() {
 
-
-        const loader = document.getElementById("user-package-loader");
-        const packageText = document.getElementById("user-package-text");
-        const upgradeBtn = document.getElementById("upgrade-btn");
-
-        // Declare packageName here so it is visible after try/catch
-        let packageName = null;
-
-        try {
-            const res = await axios.get("/api/user-packages", {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                }
-            });
-
-            const userPackages = res.data?.data || [];
-
-
-            if (userPackages.length > 0) {
-                const userPackage = userPackages.find(p => p.active) || userPackages[0];
-                packageName = userPackage?.package?.name || null;
-                packageValid = userPackage?.expiration_date || null;
-
-
-                // Format packageValid date from yyyy-mm-dd to dd.mm.yyyy
-                let formattedDate = packageValid;
-                if (packageValid) {
-                    const parts = packageValid.split("-");
-                    formattedDate = `${parts[2]}.${parts[1]}.${parts[0]}`;
-                }
-
-
-                if (packageText && packageName) {
-                    let iconHTML = "";
-
-                    switch (packageName.toLowerCase()) {
-                        case "gobig":
-                            iconHTML = `<i class="ri-medal-line text-info fs-3 me-2 position-absolute" style="margin-top:-6px!important;margin-left: 45px;"></i>`;
-                            break;
-                        case "startup":
-                            iconHTML = `<i class="ri-star-s-fill text-info fs-3 me-2 position-absolute" style="margin-top:-2px!important;margin-left: 60px;"></i>`;
-                            break;
-                        case "business":
-                            iconHTML = `<i class="ri-shield-star-line text-info fs-3 me-2 position-absolute" style="margin-top:-8px!important;margin-left: 68px;"></i>`;
-                            break;
-                        default:
-                            iconHTML = "";
-                    }
-
-                    packageText.innerHTML = `
-            <span class="d-inline-flex align-items-center gap-1 fs-15">
-                <h5 class="card-title mb-0">Tvoj aktivni paket je</h5>
-                <b class="d-inline-flex gap-1 text-info mb-0 me-4" style="margin-bottom:-1px!important">
-                    ${packageName}
-                    ${iconHTML}
-                </b>
-            </span>`;
-
-                    // Replace all .date-valid elements with the formatted date
-                    document.querySelectorAll('.date-valid').forEach(el => {
-                        el.textContent = formattedDate;
-                    });
-                }
-            } else {
-                packageText.textContent = "Nema aktivnog paketa.";
-            }
-
-
-
-        } catch (err) {
-            console.error("Greška pri dohvaćanju paketa korisnika:", err);
-            packageText.textContent = "Greška pri učitavanju paketa.";
-        }
-
-        // Hide loader, show text and button
-        loader.classList.add("d-none");
-        packageText.classList.remove("d-none");
-        upgradeBtn.classList.remove("d-none");
-
-        // Normalize packageName to lowercase for comparison
-        const normalizedPackage = packageName?.toLowerCase();
-
-        // Show the "Aktivan do" button for the active package only
-        normalizedPackage === 'gobig' && document.getElementById('btn-GoBig')?.classList.remove('d-none');
-        normalizedPackage === 'startup' && document.getElementById('btn-StartUp')?.classList.remove('d-none');
-        normalizedPackage === 'business' && document.getElementById('btn-Business')?.classList.remove('d-none');
-
-        // Update action buttons text individually without loop
-        const btnActionGoBig = document.getElementById('btnAction-GoBig');
-        const btnActionStartUp = document.getElementById('btnAction-StartUp');
-        const btnActionBusiness = document.getElementById('btnAction-Business');
-
-        if (btnActionGoBig) {
-            btnActionGoBig.textContent = (normalizedPackage === 'gobig') ? 'Produži' : 'Započni';
-        }
-        if (btnActionStartUp) {
-            btnActionStartUp.textContent = (normalizedPackage === 'startup') ? 'Produži' : 'Započni';
-        }
-        if (btnActionBusiness) {
-            btnActionBusiness.textContent = (normalizedPackage === 'business') ? 'Produži' : 'Započni';
-        }
-
-        // Debug logs (optional)
-        console.log('Active package:', packageName);
-        console.log('btn-GoBig element:', document.getElementById('btn-GoBig'));
-    });
-</script>
 
 
 
