@@ -10,6 +10,7 @@ REM ─────────────────────────�
     cd app-service-laravel
     php artisan migrate
     php artisan db:seed --force
+    php artisan db:seed --class=PackageSeeder --force
     cd ..
     node clear_routes.js
     echo.
