@@ -13,12 +13,25 @@ class Package extends Model
     protected $fillable = [
         'name', 
         'price', 
-        'available_scans'
-    ];
+        'available_scans',
+        'page_limit',
+        'document_history',
+        'description' ,
+        'icon',
+    'speed_limit',
+'duration'
+];
 
     public function userPackages()
     {
         return $this->hasMany(UserPackage::class);
     }
+
+
+    public static function getAllPackages()
+{
+    return self::all();
+}
+
 }
 

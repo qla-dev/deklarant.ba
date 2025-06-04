@@ -26,16 +26,34 @@ class UserPackageController extends Controller
     }
 
     public function store(Request $request, $userId, $packageId)
-    {
-        try {
-            $request->validate([
-                'active' => 'required|boolean',
-                'expiration_date' => 'required|date'
+{
+    try {
+        $request->validate([
+            'active' => 'required|boolean',
+            'expiration_date' => 'required|date'
+        ]);
+
+        $user = User::findOrFail($userId);
+        $package = Package::findOrFail($packageId);
+
+        // Check if UserPackage already exists
+        $userPackage = UserPackage::where('user_id', $user->id)->first();
+
+        if ($userPackage) {
+            // Update existing package
+            $userPackage->update([
+                'package_id' => $package->id,
+                'active' => $request->input('active'),
+                'expiration_date' => $request->input('expiration_date'),
+                'remaining_scans' => $package->available_scans,
             ]);
-    
-            $user = User::findOrFail($userId);
-            $package = Package::findOrFail($packageId);
-    
+
+            return response()->json([
+                'message' => 'Postojeći korisnički paket je ažuriran.',
+                'data' => $userPackage
+            ], 200);
+        } else {
+            // Create new package
             $userPackage = UserPackage::create([
                 'user_id' => $user->id,
                 'package_id' => $package->id,
@@ -43,15 +61,36 @@ class UserPackageController extends Controller
                 'expiration_date' => $request->input('expiration_date'),
                 'remaining_scans' => $package->available_scans,
             ]);
-    
+
             return response()->json([
-                'message' => 'Korisnički paket uspješno dodijeljen',
+                'message' => 'Korisnički paket uspješno dodijeljen.',
                 'data' => $userPackage
             ], 201);
+        }
+
+    } catch (ModelNotFoundException $e) {
+        return response()->json(['error' => 'Korisnik ili paket nije pronađen. Provjerite ID-ove i pokušajte ponovo'], 404);
+    } catch (Exception $e) {
+        return response()->json(['error' => 'Neuspješno dodjeljivanje korisničkog paketa: ' . $e->getMessage()], 500);
+    }
+}
+
+
+      public function update(Request $request, $userId)
+    {
+        try {
+            $userPackage = UserPackage::where('user_id', $userId)->firstOrFail();
+            $userPackage->update($request->all());
+            return response()->json([
+                'message' => 'Korisnički paket uspješno ažuriran',
+                'data' => $userPackage
+            ]);
+
+            
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Korisnik ili paket nije pronađen. Provjerite ID-ove i pokušajte ponovo'], 404);
+            return response()->json(['error' => 'Korisnički paket s unesenim ID-om nije pronađen'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno dodjeljivanje korisničkog paketa: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Neuspješno ažuriranje korisničkog paketa. Provjerite podatke i pokušajte ponovo'], 500);
         }
     }
 
@@ -70,23 +109,7 @@ class UserPackageController extends Controller
         }
     }
 
-    public function update(Request $request, $userId)
-    {
-        try {
-            $userPackage = UserPackage::where('user_id', $userId)->firstOrFail();
-            $userPackage->update($request->all());
-            return response()->json([
-                'message' => 'Korisnički paket uspješno ažuriran',
-                'data' => $userPackage
-            ]);
-
-            
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Korisnički paket s unesenim ID-om nije pronađen'], 404);
-        } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno ažuriranje korisničkog paketa. Provjerite podatke i pokušajte ponovo'], 500);
-        }
-    }
+  
 
     public function destroy($userPackageId)
     {

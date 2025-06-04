@@ -258,7 +258,7 @@
                     <div class="flex-grow-1 overflow-hidden">
                         <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Prosječna brzina skeniranja</p>
                         <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                            <span class="counter-value" id="scanSpeedValue">0.00</span>
+                            {{ Auth::user()->getActivePackageStats()->speed_limit ?? 'Nije definisano' }}
                         </h4>
                     </div>
                     <div style="width: 80px; height: 80px;" class="d-flex align-items-center justify-content-center">
@@ -673,7 +673,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                 const dataset = chart.data.datasets[0];
                 const total = dataset.data.reduce((acc, val) => acc + val, 0);
-                const percentage = total > 0 ? Math.round((dataset.data[0] / total) * 100) : 0;
+                const percentage = Math.round((dataset.data[0] / total) * 100);
 
                 const text = percentage + "%";
                 const textX = Math.round(width / 2);
@@ -687,12 +687,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         let chartInstance = null;
 
-        function createDoughnutChart(canvasId) {
+        function createDoughnutChart(canvasId, usedPercentage) {
             const ctx = document.getElementById(canvasId).getContext("2d");
-
-            const remaining = parseInt(document.getElementById("remainingScans").textContent) || 0;
-            const total = parseInt(document.getElementById("totalScans").textContent) || 0;
-            const used = total - remaining;
+            const remaining = 100 - usedPercentage;
 
             if (chartInstance) {
                 chartInstance.destroy();
@@ -703,7 +700,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 data: {
                     labels: ["Iskorišteno", "Preostalo"],
                     datasets: [{
-                        data: [used, remaining],
+                        data: [usedPercentage, remaining],
                         backgroundColor: ["#299cdb", "#d6f0fa"],
                     }]
                 },
@@ -713,16 +710,27 @@ document.addEventListener("DOMContentLoaded", async function () {
                     cutout: "70%",
                     plugins: {
                         legend: { display: false },
-                        tooltip: { enabled: false }
+                        tooltip: { enabled: true }
                     }
                 },
                 plugins: [centerTextPlugin]
             });
         }
 
-        createDoughnutChart("doughnut1");
+        // 👇 Fetch values directly from DOM
+        const remaining = parseInt(document.getElementById("remainingScans")?.textContent || "0");
+        const total = parseInt(document.getElementById("totalScans")?.textContent || "0");
+
+        let usedPercentage = 0;
+        if (total > 0) {
+            usedPercentage = Math.min((total - remaining) / total * 100, 100);
+        }
+
+        createDoughnutChart("doughnut1", Math.round(usedPercentage));
     });
 </script>
+
+
 
 
 
@@ -767,7 +775,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                             display: false
                         },
                         tooltip: {
-                            enabled: false
+                            enabled: true
                         },
                     },
                 },
@@ -868,23 +876,14 @@ document.addEventListener("DOMContentLoaded", async function () {
             const userPackage = userPackages.find(p => p.active);
             const packageName = userPackage?.package?.name?.toLowerCase();
 
-            const scanSpeedEl = document.getElementById("scanSpeedValue");
+          const scanSpeedEl = document.getElementById("scanSpeedValue");
 
-            if (scanSpeedEl) {
-                let speed = "N/A";
-                switch (packageName) {
-                    case "startup":
-                        speed = "20 sekundi";
-                        break;
-                    case "gobig":
-                        speed = "10 sekundi";
-                        break;
-                    case "business":
-                        speed = "4 sekunde";
-                        break;
-                }
-                scanSpeedEl.innerText = speed;
-            }
+if (scanSpeedEl) {
+    let speed = "Nije definisano";
+    const invoiceLimit = @json(Auth::user()?->getActivePackageStats()?->speed_limit ?? 0);
+    scanSpeedEl.innerText = speed;
+}
+
 
         } catch (err) {
             console.error("Greška prilikom dohvaćanja paketa:", err);

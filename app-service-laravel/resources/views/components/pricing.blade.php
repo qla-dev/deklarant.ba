@@ -1,53 +1,9 @@
 <div class="container">
     <div class="row justify-content-center">
 @php
-    $packages = [
-        [
-            'id' => 1,
-            'name' => 'StartUp',
-            'price' => 500,
-            'description' => 'Za manja preduzeća',
-            'features' => [
-                '100 AI Skeniranih Deklaracija',
-                '50 strana po Deklaraciji',
-                '200 Deklaracija u historiji',
-                'Prosječna brzina skeniranja: 20 s',
-                '30 dana',
-                '24/7 Support'
-            ],
-            'icon' => 'ri-star-s-fill'
-        ],
-        [
-            'id' => 2,
-            'name' => 'GoBig',
-            'price' => 850,
-            'description' => 'Idealno za biznise u razvoju',
-            'features' => [
-                '200 AI Skeniranih Deklaracija',
-                '150 strana po Deklaraciji',
-                '500 Deklaracija u historiji',
-                'Prosječna brzina skeniranja: 10 s',
-                '120 dana',
-                '24/7 Support'
-            ],
-            'icon' => 'ri-medal-line'
-        ],
-        [
-            'id' => 3,
-            'name' => 'Business',
-            'price' => 2000,
-            'description' => 'Skrojeno za velike biznise',
-            'features' => [
-                '500 AI Skeniranih Deklaracija',
-                'Neograničeno strana po Deklaraciji',
-                'Neograničeno Deklaracija u historiji',
-                'Prosječna brzina skeniranja: 4 s',
-                '365 dana',
-                '24/7 Support'
-            ],
-            'icon' => 'ri-shield-star-line'
-        ],
-    ];
+    use App\Models\Package;
+     $packages = Package::getAllPackages() ?? [];
+
 
     $stats = Auth::user()->getOtherActivePackageStats();
     $anyActive = $stats &&
@@ -60,7 +16,7 @@
 @foreach ($packages as $package)
     @php
         $isActive = $stats &&
-            $stats->package_id === $package['id'] &&
+            $stats->package_id === $package->id &&
             $stats->expiration_date &&
             !\Carbon\Carbon::parse($stats->expiration_date)->isPast() &&
             $stats->active == 1 &&
@@ -68,49 +24,63 @@
     @endphp
 
     <div class="col-lg-4 mb-4">
-        <div class="card pricing-box border-0 rounded-0 h-100 {{ $isActive || (!$anyActive && $package['id'] === 2) ? 'ribbon-box right' : '' }}">
+        <div class="card pricing-box border-0 rounded-0 h-100 {{ $isActive || (!$anyActive && $package->id === 2) ? 'ribbon-box right' : '' }}">
             <div class="card-body p-4 m-2 d-flex flex-column">
                 @if ($isActive)
                     <div class="ribbon-two ribbon-two-info"><span>Aktivan</span></div>
-                @elseif (!$anyActive && $package['id'] === 2)
+                @elseif (!$anyActive && $package->id === 2)
                     <div class="ribbon-two ribbon-two-info"><span>Popularno</span></div>
                 @endif
 
                 <div class="d-flex align-items-center mb-3">
                     <div class="flex-grow-1">
-                        <h5 class="fw-semibold mb-1">{{ $package['name'] }}</h5>
-                        <p class="text-muted mb-0">{{ $package['description'] }}</p>
+                        <h5 class="fw-semibold mb-1">{{ $package->name }}</h5>
+                        <p class="text-muted mb-0">{{ $package->description }}</p>
                     </div>
                     <div class="avatar-sm">
                         <div class="avatar-title bg-light rounded-circle text-info">
-                            <i class="{{ $package['icon'] }} text-info fs-4"></i>
+                            <i class="{{ $package->icon }} text-info fs-4"></i>
                         </div>
                     </div>
                 </div>
 
                 <div class="pt-2 pb-3">
-                    <h2>{{ $package['price'] }} <small class="fs-5">KM</small></h2>
+                    <h2>{{ $package->price }} <small class="fs-5">KM</small></h2>
                 </div>
 
                 <hr class="my-3 text-muted">
 
                 <ul class="list-unstyled text-muted vstack gap-3 mb-3">
-                    @foreach ($package['features'] as $feature)
-                        <li><i class="ri-checkbox-circle-fill text-info me-2"></i>{{ $feature }}</li>
-                    @endforeach
+                    <li><i class="ri-checkbox-circle-fill text-info me-2"></i>{{ $package->available_scans }} AI Skeniranih Deklaracija</li>
+                    <li><i class="ri-checkbox-circle-fill text-info me-2"></i>{{ $package->page_limit }} strana po Deklaraciji</li>
+                    <li><i class="ri-checkbox-circle-fill text-info me-2"></i>{{ $package->document_history }} Deklaracija u historiji</li>
+                    <li><i class="ri-checkbox-circle-fill text-info me-2"></i>Prosječna brzina skeniranja: {{ $package->speed_limit }}</li>
+                    <li><i class="ri-checkbox-circle-fill text-info me-2"></i>{{ $package->duration }} dana</li>
+                    <li><i class="ri-checkbox-circle-fill text-info me-2"></i>24/7 Support</li>
                 </ul>
 
-                <a id="btnAction-{{ $package['name'] }}" href="javascript:void(0);" class="btn btn-info w-100 mt-auto text-white" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal">
+               
                     @if ($isActive)
+                    <a href="#" class="btn btn-info w-100 mt-auto text-white disabled" data-bs-toggle="modal" data-bs-target="#paymentChoiceModal">
                         Traje još: {{ ceil(\Carbon\Carbon::now()->floatDiffInDays(\Carbon\Carbon::parse($stats->expiration_date))) }} dana • Produži
+                        </a>
                     @else
-                        Započni
+                  <a id="btnAction-{{ $package->id }}"
+   href="javascript:void(0);"
+   class="btn btn-info w-100 mt-auto text-white"
+   data-package-id="{{ $package->id }}"
+   data-bs-toggle="modal"
+   data-bs-target="#paymentChoiceModal">
+   Započni
+</a>
+
                     @endif
-                </a>
+               
             </div>
         </div>
     </div>
 @endforeach
+
 
 
 
@@ -189,32 +159,7 @@
     </div>
 </div>
 
-<!-- Modal za izbor načina plaćanja -->
-<div class="modal fade" id="paymentChoiceModal" tabindex="-1" aria-labelledby="paymentChoiceModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-info  shadow">
-            <div class="d-flex justify-content-between bg-info py-1 px-1 text-white">
 
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                    aria-label="Zatvori"></button>
-            </div>
-            <div class="modal-body text-center">
-                <p class="mb-4">Molimo odaberite način na koji želite izvršiti uplatu:</p>
-                <div class="d-grid gap-3">
-                    <button class="btn btn-info text-white" data-bs-dismiss="modal" data-bs-toggle="modal"
-                        data-bs-target="#paymentModal">
-                        💳 Kartično plaćanje
-                    </button>
-                    <button class="btn btn-outline-info" data-bs-dismiss="modal" data-bs-toggle="modal"
-                        data-bs-target="#virmanModal">
-                        🧾 Plaćanje virmanom
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Modal za plaćanje virmanom -->
 <div class="modal fade" id="virmanModal" tabindex="-1" aria-labelledby="virmanModalLabel"
@@ -257,6 +202,122 @@
         </div>
     </div>
 </div>
+
+
+<!-- Modal za izbor načina plaćanja -->
+<div class="modal fade" id="paymentChoiceModal" tabindex="-1" aria-labelledby="paymentChoiceModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-info shadow">
+            <div class="d-flex justify-content-between bg-info py-1 px-1 text-white">
+                <h5 class="modal-title px-2">Izaberite način plaćanja</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Zatvori"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p class="mb-4">Molimo odaberite način na koji želite izvršiti uplatu:</p>
+                <div class="d-grid gap-3">
+                    <button class="btn btn-info text-white" data-bs-dismiss="modal" data-bs-toggle="modal"
+                        data-bs-target="#paymentModal">
+                        💳 Kartično plaćanje
+                    </button>
+                    <button class="btn btn-outline-info" data-bs-dismiss="modal" data-bs-toggle="modal"
+                        data-bs-target="#virmanModal">
+                        🧾 Plaćanje virmanom
+                    </button>
+                    <!-- ✅ NEW Button -->
+                    <button id="btnActivatePackage" class="btn btn-outline-success">
+                        ✅ Aktiviraj pretplatu
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    let selectedPackageId = null;
+    const userId = {{ Auth::id() }};
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    // Track selected package from the "Započni" button
+    document.querySelectorAll('[id^="btnAction-"]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            selectedPackageId = btn.getAttribute("data-package-id");
+        });
+    });
+
+    document.getElementById("btnActivatePackage").addEventListener("click", async () => {
+        if (!selectedPackageId || !userId) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Greška',
+                text: 'Nije moguće aktivirati pretplatu.',
+            });
+            return;
+        }
+
+        try {
+            // Get duration & available scans from button
+            const btnEl = document.querySelector(`#btnAction-${selectedPackageId}`);
+            const duration = parseInt(btnEl.getAttribute("data-duration")) || 30;
+            const availableScans = parseInt(btnEl.getAttribute("data-available-scans")) || 100;
+
+            // Calculate expiration date
+            const expirationDate = new Date();
+            expirationDate.setDate(expirationDate.getDate() + duration);
+            const expirationISO = expirationDate.toISOString().split('T')[0];
+
+            const body = {
+                active: true,
+                expiration_date: expirationISO,
+                remaining_scans: availableScans
+            };
+
+            const res = await fetch(`/api/user-packages/users/${userId}/packages/${selectedPackageId}`, {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": csrfToken,
+                    "X-Requested-With": "XMLHttpRequest",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(body)
+            });
+
+            if (!res.ok) throw new Error("Neuspješna aktivacija.");
+
+            // ✅ CLOSE modal BEFORE showing toast
+            const modal = bootstrap.Modal.getInstance(document.getElementById("paymentChoiceModal"));
+            modal.hide();
+
+            // ✅ Show success toast after modal is closed
+            setTimeout(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Pretplata aktivirana!',
+                    text: 'Uspješno ste aktivirali paket.',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+
+                setTimeout(() => location.reload(), 2000);
+            }, 300);
+
+        } catch (err) {
+            console.error(err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Greška!',
+                text: 'Došlo je do problema pri aktivaciji paketa.',
+            });
+        }
+    });
+</script>
+
+
+
+
 
 
 
