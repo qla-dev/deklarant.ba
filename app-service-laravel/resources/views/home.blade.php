@@ -1011,33 +1011,33 @@ if (scanSpeedEl) {
             let suppliers = Array.isArray(response.data) ? response.data : response.data.data || [];
 
             const fallbackSuppliers = [{
-                    name: "Generic Co.",
-                    owner: "N/A",
+                    name: "Prima Co.",
+                    owner: "Asim Delić",
                     address: "Sarajevo"
                 },
                 {
-                    name: "Example Inc.",
-                    owner: "N/A",
+                    name: "Mostar Export Inc.",
+                    owner: "Alma Mujić",
                     address: "Mostar"
                 },
                 {
-                    name: "Placeholder Ltd.",
-                    owner: "N/A",
+                    name: "Trade Centar d.o.o.",
+                    owner: "Nasim Ljubić",
                     address: "Tuzla"
                 },
                 {
-                    name: "Test Supplier",
-                    owner: "N/A",
+                    name: "Quick Rent d.o.o.",
+                    owner: "Azra Kovačević",
                     address: "Zenica"
                 },
                 {
                     name: "Demo Group",
-                    owner: "N/A",
+                    owner: "Malik Hadžić",
                     address: "Bihać"
                 },
                 {
                     name: "ACME Corp",
-                    owner: "N/A",
+                    owner: "Amir Begić",
                     address: "Travnik"
                 }
             ];

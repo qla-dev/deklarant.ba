@@ -250,24 +250,24 @@
 <div class="mobile-sidebar mobile-sidebar2">
   <div class="logosicon-area">
     <div class="logos">
-      <img src="{{ URL::asset('build/images/homepage/logo/logo-dek.png') }}" alt="" style="width: 60%">
+      <img src="{{ URL::asset('build/images/homepage/logo/logo1.png') }}" alt="" style="width: 50%">
     </div>
     <div class="menu-close">
       <i class="fa-solid fa-xmark"></i>
     </div>
    </div>
   <div class="mobile-nav mobile-nav2">
-    <ul class="mobile-nav-list nav-list2">
+    <ul class="mobile-nav-list nav-list2 ps-0">
       
       <li><a href="cjenovnik.html">Cjenovnik</a></li>
       <li><a href="kontakt.html">Kontakt</a></li>
       </ul>
   </div>
-    <footer class="footer" style="position: fixed; bottom: 0; left: 0; width: 100%">
+    <footer class="footer" style="position: fixed; bottom: 0; left: 0; width: 100%;background: #262a2f!important;">
     <div class="container-fluid">
         <div class="row ">
           
-                <div class="text-center d-flex w-100 fs-6 justify-content-center justify-center mb-3">
+                <div class="text-center d-flex w-100 fs-6 justify-content-center align-center mb-3">
                 <span class="me-2">Razvijeno od strane  </span>
 
                   <a hrf="http://qla.dev/"><img src="{{ URL::asset('build/images/homepage/logo/logo-qla-dark.png') }}" alt="" style="width: 100px"></a>
@@ -309,7 +309,7 @@
 </h2>
                         <div class="header-images-area">
                     <div class="header-elements1 reveal h-100 w-100">
-                        <img src="{{ URL::asset('build/images/homepage/img/Screenshot%202025-05-17%20210219.png') }}" alt="">
+                        <img src="{{ URL::asset('build/images/homepage/img/home.png') }}" alt="">
                     </div>
                     <div class="header-elements2" data-aos="zoom-out" data-aos-duration="1000">
                         <img src="{{ URL::asset('build/images/homepage/elements/scan.png') }}" alt="" class="aniamtion-key-3">
@@ -326,7 +326,7 @@
             <div class="col-lg-6  ps-lg-0 d-none d-lg-block" id="appImage">
                 <div class="header-images-area">
                     <div class="header-elements1 reveal h-100 w-100">
-                        <img src="{{ URL::asset('build/images/homepage/img/Screenshot%202025-05-17%20210219.png') }}" alt="">
+                        <img src="{{ URL::asset('build/images/homepage/img/home.png') }}" alt="">
                     </div>
                     <div class="header-elements2" data-aos="zoom-out" data-aos-duration="1000">
                         <img src="{{ URL::asset('build/images/homepage/elements/scan.png') }}" alt="" class="aniamtion-key-3">
