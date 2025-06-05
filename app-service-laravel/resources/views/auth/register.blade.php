@@ -427,7 +427,7 @@ overflow-y: hidden;
 
       <button type="submit" class="header-btn2 rounded-1 w-100 mt-3 text-white" style="border:unset">Napravi račun</button>
 
-      <div class="text-center mb-2 mt-1">
+      <div class="text-center mb-3 mt-2">
         <small class="text-muted form-label">Imate svoj račun?
           <a href="#" class="back-link" id="backToLogin">Prijavite se</a>
         </small>
