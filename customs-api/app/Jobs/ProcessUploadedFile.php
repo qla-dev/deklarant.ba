@@ -152,19 +152,31 @@ class ProcessUploadedFile implements ShouldQueue
 
     private function extractWithLLM(string $markdown): array
     {
-        $response = $this->client->post(getenv('OLLAMA_URL') . '/api/generate', [
-            'json' => [
-                'model' => getenv('OLLAMA_MODEL'),
-                'prompt' => 
-                    "Here's the markdown of invoice:\n\n```md\n$markdown\n```\n\n"
-                    . file_get_contents(base_path("app/Jobs/prompt-markdown-to-json.txt")),
-                'stream' => false,
-                'options' => [
-                    'temperature' => 0.1,
-                    'num_predict' => 10000
-                ]
-            ]
-        ]);
+        $maxRetries = 3;
+
+        for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
+            try {
+                $response = $this->client->post(getenv('OLLAMA_URL') . '/api/generate', [
+                    'json' => [
+                        'model' => getenv('OLLAMA_MODEL'),
+                        'prompt' =>
+                            "Here's the markdown of invoice:\n\n```md\n$markdown\n```\n\n"
+                            . file_get_contents(base_path("app/Jobs/prompt-markdown-to-json.txt")),
+                        'stream' => false,
+                        'options' => [
+                            'temperature' => 0.1,
+                            'num_predict' => 10000
+                        ]
+                    ]
+                ]);
+                break;
+            } catch (Exception $e) {
+                \Log::error('Error in OLLAMA. Retrying: ' . $e->getMessage());
+                if ($attempt === $maxRetries) {
+                    throw $e;
+                }
+            }
+        }
 
         $responseData = json_decode($response->getBody()->getContents(), true);
         // check if response data contains "error" key. If it does then raise exception with "message" key
