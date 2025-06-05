@@ -175,6 +175,7 @@ class ProcessUploadedFile implements ShouldQueue
                 if ($attempt === $maxRetries) {
                     throw $e;
                 }
+                sleep(2);
             }
         }
 
