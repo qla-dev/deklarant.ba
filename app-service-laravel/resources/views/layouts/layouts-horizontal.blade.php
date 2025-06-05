@@ -26,7 +26,7 @@
     <meta content="qla.dev" name="author" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ URL::asset('build/images/favicon.ico')}}">
+    <link rel="shortcut icon" href="{{ URL::asset('build/images/homepage/logo/fav-logo-2.png?v=4')}}">
     @include('layouts.head-css')
 </head>
 <body>
