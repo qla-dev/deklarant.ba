@@ -173,6 +173,8 @@ height: 100vh;
 
           margin-top: 0px!important;
         }
+
+        .mobile-haeder2 {position: fixed!important;}
  
     
 }
@@ -373,7 +375,7 @@ height: 100vh;
 
       <div class="divider">ili</div>
 
-      <a href="#" class="btn btn-soft-info w-100 mb-3 openRegister">Registruj se</a>
+      <a href="#" class="header-btn2 btn-soft-info rounded-1 w-100 mb-3 openRegister">Registruj se</a>
 
       <div class="text-center">
         <small class="text-muted back-link fs-17">
