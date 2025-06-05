@@ -375,6 +375,14 @@ color: #299cdb ;
     }
 
     .konverzija {font-size: 23px!important; margin-top: -3px;}
+
+    #scanModal .modal-content {
+        width: 100%!important;
+        max-width: 100%!important;
+        margin: 0 auto!important;
+    }
+
+    .dropzone {height: 200px!important;}
    
 }
 
@@ -495,6 +503,11 @@ color: #299cdb ;
 
 [data-bs-theme=dark] .dataTable .custom-table th{
   background-color: rgba(41, 156, 219, 0.15) !important;
+  color: white;
+  vertical-align: middle!important;
+}
+
+[data-bs-theme=dark] .mobile-footer-scan { background-color:#212529 !important;
   color: white;
   vertical-align: middle!important;
 }

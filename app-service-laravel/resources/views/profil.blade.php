@@ -1378,18 +1378,33 @@ document.addEventListener("DOMContentLoaded", async function () {
                     const growthClass = isPositive ? "text-success" : "text-danger";
                     const arrow = isPositive ? "ri-arrow-up-line" : "ri-arrow-down-line";
 
-                    supplierContainer.innerHTML += `
+                         supplierContainer.innerHTML += `
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <div>
-                                <div class="fw-semibold">${supplier.name}</div>
+                                <div class="fw-semibold">
+  ${supplier.name.length > 20 ? supplier.name.substring(0, 20) + "…" : supplier.name}
+</div>
                                 <div class="text-muted fs-12">${supplier.owner ?? "Nepoznat vlasnik"}</div>
                             </div>
-                            <div class="text-info fs-12">
-                                ${!supplier.address ? "Nije definisano" : supplier.address}
-                            </div>
+                           <div class="text-info fs-12" style="white-space: nowrap;">
+  ${!supplier.address 
+    ? "Nije definisano" 
+    : (supplier.address.length > 20 
+        ? supplier.address.substring(0, 20) + "…" 
+        : supplier.address)
+  }
+  <i class="ri-map-pin-line text-info ms-1"></i>
+</div>
+
                         </div>
                     `;
                 });
+
+                supplierContainer.innerHTML += `
+                    <div class="card-footer p-0 pb-0 pt-0 d-flex justify-content-end pregledaj-vise-bottom-right">
+                        <a href="moji-klijenti" class="text-info fs-6 " style="margin:1rem">Pregledaj sve</a>
+                    </div>
+                `;
 
                
             }

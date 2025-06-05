@@ -17,6 +17,13 @@
     .mySwiper .swiper-slide:last-child {
         margin-right: 0;
     }
+
+   @media (max-width: 1453.98px) {
+  .deklaraciju {
+    display: none !important;
+  }
+}
+
 </style>
 
 
@@ -88,7 +95,7 @@
                             <button type="button" data-bs-toggle="modal" data-bs-target="#scanModal"
                                 class="btn btn-info w-50 animated-btn btn-sm d-flex align-items-center justify-content-center">
                                 <i class="fas fa-wand-magic-sparkles fs-6 me-1" style="font-size:10px;"></i>
-                                <span class="fs-6"> Skeniraj deklaraciju sa AI</span>
+                                <p class="fs-6 mb-0"> Skeniraj <span class="deklaraciju">deklaraciju</span> sa AI</p>
                             </button>
                         </div>
                     </div>
@@ -433,48 +440,7 @@
     </div>
 </div>
 </div>
-<div class="modal fade" id="scanModal" tabindex="-1" aria-labelledby="scanModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header text-center">
-                <h5 class="modal-title w-100" id="scanModalLabel"><i class="fas fa-wand-magic-sparkles fs-6 me-1"
-                        style="font-size:10px;"></i>Skeniraj deklaraciju sa AI</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
-            </div>
-            <div class="modal-body d-flex justify-content-center">
-                <div class="dropzone" id="dropzone">
-                    <input type="file" id="fileInput" multiple>
-                    <div class="corner corner-top-left"></div>
-                    <div class="corner corner-top-right"></div>
-                    <div class="corner corner-bottom-left"></div>
-                    <div class="corner corner-bottom-right"></div>
 
-                    <div class="text-center" id="dropzone-content">
-                        <i class="ri-file-2-line text-info fs-1"></i>
-                        <p class="mt-3">Prevucite dokument ovdje ili kliknite kako bi uploadali i skenirali vašu deklaraciju
-                        </p>
-                    </div>
-
-                    <div class="file-list" id="fileList" style="display: none;"></div>
-
-                    <div class="progress mt-3 w-100" id="uploadProgressContainer" style="display: none;">
-                        <div id="uploadProgressBar" class="progress-bar bg-info" role="progressbar" style="width: 0%">0%
-                        </div>
-                    </div>
-
-                    <div id="scanningLoader" class="mt-4 text-center d-none">
-                        <div class="spinner-border text-info" role="status" style="width: 3rem; height: 3rem;"></div>
-                        <p class="mt-3 fw-semibold" id="scanningText">Skeniranje deklaracije...</p>
-                        <div id="successCheck" class="d-none mt-3">
-                            <i class="ri-checkbox-circle-fill text-success fs-1 animate__animated animate__zoomIn"></i>
-                            <p class="text-success fw-semibold mt-2">Uspješno skenirano!</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 
@@ -557,12 +523,21 @@ document.addEventListener("DOMContentLoaded", async function () {
                     supplierContainer.innerHTML += `
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <div>
-                                <div class="fw-semibold">${supplier.name}</div>
+                                <div class="fw-semibold">
+  ${supplier.name.length > 17 ? supplier.name.substring(0, 17) + "…" : supplier.name}
+</div>
                                 <div class="text-muted fs-12">${supplier.owner ?? "Nepoznat vlasnik"}</div>
                             </div>
-                            <div class="text-info fs-12">
-                                ${!supplier.address ? "Nije definisano" : supplier.address}<i class="ri-map-pin-line text-info ms-1"></i>
-                            </div>
+                           <div class="text-info fs-12" style="white-space: nowrap;">
+  ${!supplier.address 
+    ? "Nije definisano" 
+    : (supplier.address.length > 17 
+        ? supplier.address.substring(0, 17) + "…" 
+        : supplier.address)
+  }
+  <i class="ri-map-pin-line text-info ms-1"></i>
+</div>
+
                         </div>
                     `;
                 });

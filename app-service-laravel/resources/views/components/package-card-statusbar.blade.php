@@ -51,6 +51,6 @@
     @endphp
     <div class="bg-info text-white text-center py-1 rounded-0">
         <i class="ri-pulse-ai-line me-1"></i>
-        <span>Pretplata traje još {{ $daysLeft }} dana</span>
+        <span>Ističe za {{ $daysLeft }} dana</span>
     </div>
 @endif
