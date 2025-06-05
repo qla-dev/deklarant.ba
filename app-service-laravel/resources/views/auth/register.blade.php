@@ -147,13 +147,21 @@
     
     @media (max-width: 991.98px) {
   .content-height {
-    height: 100vh;
+    height: unset;
     padding: 1rem;
   }
         
         .naslov {
             
             font-size: 2rem!important;
+        }
+
+        #loginForm, #registerForm {
+height: 100vh;  
+
+        }
+        .kartica{
+          margin-top: 4rem!important;
         }
 
  
