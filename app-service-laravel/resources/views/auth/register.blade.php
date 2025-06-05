@@ -1,159 +1,532 @@
-@extends('layouts.master-without-nav')
-@section('title')
-@lang('translation.signup')
+@extends('layouts.login-master')
+@section('css')
+<link href="https://db.onlinewebfonts.com/c/b05a654a86637945b4997a378a5181fe?family=Facebook+Sans+Bold" rel="stylesheet">
+<link href="{{ URL::asset('build/css/landing.min.css') }}"  rel="stylesheet" type="text/css" />
+    <style>
+        #loginForm {
+  animation: fadeIn 0.5s ease;
+}
+    
+    #registerForm, #appImage, #mobileFirstContent {
+  animation: fadeIn 0.5s ease;
+}
+
+  body {
+      background-color: #f5f5f5;
+    }
+
+    .form-section {
+      width: 100%;
+      max-width: 420px;
+      padding: 2rem 1rem;
+    }
+    .form-control::placeholder {
+      color: #b0b0b0;
+    }
+    .password-wrapper {
+      position: relative;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      z-index: 10;
+      color: #888;
+    }
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 1.5rem 0;
+    }
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid #ccc;
+    }
+    .divider::before {
+      margin-right: .75em;
+    }
+    .divider::after {
+      margin-left: .75em;
+    }    
+    
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+    
+    .ai-span {
+        
+        color: #289cdb!important;
+        padding: unset!Important;
+        background: unset!Important;
+            font-size: inherit!important;
+    font-style: normal!important;
+    font-weight: bolder!important;
+        margin-bottom: unset!important;
+        padding-bottom: !important;
+         font-family: 'Facebook Sans Bold', sans-serif!important;
+    }
+    
+    .logo-span {
+        font-family: 'Facebook Sans Bold', sans-serif!important;
+         font-weight: bolder!important;
+    }
+    
+    .form-label {
+        
+        font-family: 'Facebook Sans', sans-serif; font-size: 0.8rem;
+        margin-bottom: 0;
+    }
+    
+    .back-link { color: #289cdb!important; }
+    .btn-soft-info {
+            background: #dff0fa;
+    color: #299cdb;
+         font-weight: 700!important;
+    }
+    
+    .btn-soft-info:focus, .btn-soft-info:hover {
+            background: #299cdb;
+    color: white;
+       
+        
+    }
+    .header-elements {
+        padding-top: 10px!important;
+        padding-bottom: 10px!important;
+    }
+    
+    .form-control {
+        background: #f3f3f9!important;
+    }
+    .form-control:active,  .form-control:focus {
+        box-shadow: unset!important;
+        border-color: #299cdb!important;
+    }
+    
+    .kartica {
+        border: unset!important;
+            margin-top:1rem;
+         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* lagana siva sjena */
+        padding-bottom: 1rem!important;
+    }
+    
+    .welcome2-section-area {padding: 0!important}
+    
+    .loader {
+    width: 48px;
+    height: 48px;
+    border: 5px solid #299cdb;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -25px;
+    margin-top: -25px;
+    }
+
+    @keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+    } 
+    
+    
+    
+    @media (max-width: 991.98px) {
+  .content-height {
+    height: 100vh;
+    padding: 1rem;
+  }
+        
+        .naslov {
+            
+            font-size: 2rem!important;
+        }
+
+ 
+    
+}
+
+    
+    
+    
+    @media (min-width: 992px) {
+  .content-height {
+    height: 90vh; /* ili neka specifična visina */
+    padding: 3rem;
+  }
+
+
+}
+    
+    .mobile-sidebar2 {
+        background: #262a2f!important;
+        color: white!important;
+        border: 2px solid #262a2f!important;
+    
+    }
+
+
+    </style>
+  
 @endsection
 @section('content')
 
-<div class="auth-page-wrapper pt-5">
-    <!-- auth page bg -->
-    <div class="auth-one-bg-position auth-one-bg" id="auth-particles">
-        <div class="bg-overlay" style="opacity:.3!important"></div>
-
-        <div class="shape">
-            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
-                viewBox="0 0 1440 120">
-                <path d="M 0,36 C 144,53.6 432,123.2 720,124 C 1008,124.8 1296,56.8 1440,40L1440 140L0 140z"></path>
-            </svg>
-        </div>
+  <!--===== PRELOADER STARTS =======-->
+  <div id="preloader">
+    <div class="loader"></div>
+  </div>
+ <!--===== PRELOADER ENDS =======-->
+ 
+  <!--===== PAGE PROGRESS START=======-->
+  <div class="paginacontainer">
+    <div class="progress-wrap">
+      <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+      </svg>
     </div>
+  </div>
+<!--===== PAGE PROGRESS END=======-->
 
-    <!-- auth page content -->
-    <div class="auth-page-content">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="text-center mt-sm-5 mb-4 text-info">
-                        <div>
-                            <a href="index" class="d-inline-block auth-logo">
-                                <img src="{{ URL::asset('build/images/logo-dark-ai.png') }}" alt="" height="35">
-                            </a>
-                        </div>
-
-                    </div>
-                </div>
+  <!--=====HEADER START=======-->
+  <header>
+    <div class="header-area homepage2 header header-sticky d-none d-lg-block " id="header" style="position: relative!important">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="header-elements">
+              <div class="site-logo">
+                <a href="index.html"><img src="{{ URL::asset('build/images/homepage/logo/logo-dek.png') }}" alt="" width="180"></a>
+              </div>
+              <div class="main-menu">
+                <ul class="mb-0">
+                     
+      <li><a href="cjenovnik.html">Cjenovnik</a></li>
+      <li><a href="kontakt.html">Kontakt</a></li>
+                </ul>
+                <a href="#" class="header-btn2 rounded-1 loginFormShow">Prijava</a>
+                <a href="#" class="header-btn2 rounded-1 ms-0 openRegister">Isprobaj besplatno</a>
+              </div>
             </div>
-            <!-- end row -->
-
-            <div class="row justify-content-center">
-                <div class="col-md-8 col-lg-6 col-xl-5">
-                    <div class="card mt-4">
-                        <div class="card-body p-4">
-                            <div class="text-center mt-2">
-                                <h5 class="text-info fw-bold">Kreiraj novi deklarant.ai račun</h5>
-                                <p class="text-muted">Napravite svoj besplatni nalog</p>
-                            </div>
-                            <div class="p-2 mt-4">
-                                <form id="registerForm" enctype="multipart/form-data">
-                                    <div class="mb-3">
-                                        <label for="useremail" class="form-label text-info">Email <span class="text-danger">*</span></label>
-                                        <input type="email" class="form-control" name="email" id="useremail" placeholder="Unesite email adresu" required>
-                                        <div class="invalid-feedback">Please enter email</div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="username" class="form-label text-info">Username <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" name="username" id="username" placeholder="Unesite korisničko ime" required>
-                                        <div class="invalid-feedback">Please enter username</div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="userpassword" class="form-label text-info">Password <span class="text-danger">*</span></label>
-                                        <input type="password" class="form-control" name="password" id="userpassword" placeholder="Unesite password" required>
-                                        <div class="invalid-feedback">Please enter password</div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="input-password" class="text-info">Potvrdite password <span class="text-danger">*</span></label>
-                                        <input type="password" class="form-control" name="confirm_password" id="input-password" placeholder="Ponovo unesite password" required>
-                                    </div>
-
-
-                                    <div class="mt-3">
-                                        <button class="btn btn-info w-100 fw-bold" type="submit">Registrujte se</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-4 text-center ">
-                        <p class="text-info mb-0">Već imate nalog? <a href="{{ route('login') }}" class="fw-semibold text-info text-decoration-underline"> Prijava </a></p>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
+      </div>
     </div>
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="text-center">
-                        <script>
-                            document.write(new Date().getFullYear())
-                        </script> deklarant.ai <i class="mdi mdi-heart text-info"></i> Razvijeno od strane <span class="logo-lg">
-                            <img src="{{ URL::asset('build/images/logo-qla.png') }}" alt="" height="17" style="margin-top:-3px">
-                        </span>
-                    </div>
-                </div>
-            </div>
+  </header>
+  <!--=====HEADER END =======-->
+
+  <!--===== MOBILE HEADER STARTS =======-->
+ <div class="mobile-header mobile-haeder2 d-block d-lg-none">
+  <div class="container-fluid">
+    <div class="col-12">
+      <div class="mobile-header-elements">
+        <div class="mobile-logo">
+          <a href="index.html"><img src="{{ URL::asset('build/images/homepage/logo/logo-dek.png') }}" alt="" width="200px"></a>
         </div>
-    </footer>
+          <div class="main-menu">
+                <a href="#" class="header-btn2 rounded-1 loginFormShow">Prijava</a>
+              </div>
+        <div class="mobile-nav-icon dots-menu">
+          <i class="fa-solid fa-bars"></i>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<div class="mobile-sidebar mobile-sidebar2">
+  <div class="logosicon-area">
+    <div class="logos">
+      <img src="{{ URL::asset('build/images/homepage/logo/logo-dek.png') }}" alt="" style="width: 60%">
+    </div>
+    <div class="menu-close">
+      <i class="fa-solid fa-xmark"></i>
+    </div>
+   </div>
+  <div class="mobile-nav mobile-nav2">
+    <ul class="mobile-nav-list nav-list2">
+      
+      <li><a href="cjenovnik.html">Cjenovnik</a></li>
+      <li><a href="kontakt.html">Kontakt</a></li>
+      </ul>
+  </div>
+    <footer class="footer" style="position: fixed; bottom: 0; left: 0; width: 100%">
+    <div class="container-fluid">
+        <div class="row ">
+          
+                <div class="text-center d-flex w-100 fs-6 justify-content-center justify-center mb-3">
+                <span class="me-2">Razvijeno od strane  </span>
+
+                  <a hrf="http://qla.dev/"><img src="{{ URL::asset('build/images/homepage/logo/logo-qla-dark.png') }}" alt="" style="width: 100px"></a>
+
+
+                </div>
+            
+        </div> 
+    </div>
+</footer>
+</div>
+  <!--===== MOBILE HEADER STARTS =======-->
+
+<!--===== WELCOME STARTS =======-->
+<div class="welcome2-section-area content-height" style="background-image: url({{ URL::asset('build/images/homepage/background/header-bg.png') }}); background-position: center; background-repeat: no-repeat; background-size: cover; display: flex;align-items: center;">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 ps-lg-0 ps-lg-0 d-none d-lg-block">
+                <div class="welcome2-header heading3">
+                    <span data-aos="fade-up" data-aos-duration="600">Oslobodite potencijal AI tehnologije</span>
+                    <h2 data-aos="fade-up" data-aos-duration="800" style="font-family: 'Facebook Sans', sans-serif; font-size: 3.5rem" class="naslov">
+  Obrađuj <b style="color: #289cdb;  font-family: 'Facebook Sans Bold', sans-serif;">deklaracije</b> do <b style="color: #289cdb;  font-family: 'Facebook Sans Bold', sans-serif;">11X brže</b> i uštedi
+</h2>
+                     
+
+                    <p data-aos="fade-up" data-aos-duration="1000">Automatsko skeniranje carinskih deklaracija uz pomoć AI – bez čekanja. <br>Uz <strong class="logo-span">deklarant<span class="ai-span">.ai</span></strong>, svaki unos postaje jednostavan, precizan i odmah dostupan u nekoliko sekundi – oslobodite se ručne obrade i fokusirajte se na ono što je važno.</p>
+                    <div data-aos="fade-up" data-aos-duration="1200">
+                      <a href="#" class="header-btn2 rounded-1 openRegister">Započni </a>
+                    <a href="#" class="header-btn2 ms-2 rounded-1">Provjeri funkcionalnosti</a>
+                    </div>
+                </div>
+            </div>
+             <div class="col-lg-6 ps-lg-0 d-block d-lg-none" id="mobileFirstContent">
+                <div class="welcome2-header heading3">
+                    <span data-aos="fade-up" data-aos-duration="600" style="margin-top: 3.7rem;
+    margin-bottom: 2rem;">Oslobodite potencijal AI tehnologije</span>
+                    <h2 data-aos="fade-up" data-aos-duration="800" style="font-family: 'Facebook Sans', sans-serif; font-size: 3.5rem" class="naslov">
+  Obrađuj <b style="color: #289cdb;  font-family: 'Facebook Sans Bold', sans-serif;">deklaracije</b> do <b style="color: #289cdb;  font-family: 'Facebook Sans Bold', sans-serif;">11X brže</b> i uštedi
+</h2>
+                        <div class="header-images-area">
+                    <div class="header-elements1 reveal h-100 w-100">
+                        <img src="{{ URL::asset('build/images/homepage/img/Screenshot%202025-05-17%20210219.png') }}" alt="">
+                    </div>
+                    <div class="header-elements2" data-aos="zoom-out" data-aos-duration="1000">
+                        <img src="{{ URL::asset('build/images/homepage/elements/scan.png') }}" alt="" class="aniamtion-key-3">
+                    </div>
+                </div>
+
+                    <p data-aos="fade-up" data-aos-duration="1000">Automatsko skeniranje carinskih deklaracija uz pomoć AI – bez čekanja. <br>Uz <strong class="logo-span">deklarant<span class="ai-span">.ai</span></strong>, svaki unos postaje jednostavan, precizan i odmah dostupan u nekoliko sekundi – oslobodite se ručne obrade i fokusirajte se na ono što je važno.</p>
+                    <div data-aos="fade-up" data-aos-duration="1200">
+                      <a href="#" class="header-btn2 rounded-1 openRegister">Započni </a>
+                    <a href="#" class="header-btn2 ms-2 rounded-1">Provjeri funkcionalnosti</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6  ps-lg-0 d-none d-lg-block" id="appImage">
+                <div class="header-images-area">
+                    <div class="header-elements1 reveal h-100 w-100">
+                        <img src="{{ URL::asset('build/images/homepage/img/Screenshot%202025-05-17%20210219.png') }}" alt="">
+                    </div>
+                    <div class="header-elements2" data-aos="zoom-out" data-aos-duration="1000">
+                        <img src="{{ URL::asset('build/images/homepage/elements/scan.png') }}" alt="" class="aniamtion-key-3">
+                    </div>
+                </div>
+            </div>
+            <!-- Desna forma -->
+      <!-- LOGIN FORMA -->
+<div class="col-lg-6 d-flex align-items-center justify-content-center d-none" id="loginForm">
+  <div class="form-section card bg-white kartica">
+       <div class="text-center mb-2">
+      <h5 class="fw-bold pb-2" style="font-family: 'Facebook Sans', sans-serif; font-size: 16px">
+       Prijavi se na <span class="logo-span">deklarant<span class="ai-span">.ai</span></span> platformu
+      </h5>
+      <p class="text-muted form-label" style="margin-top: -10px;">Koristi svoje postojeće podatke</p>
+    </div>
+    <form>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email ili broj telefona</label>
+        <input type="email" class="form-control" id="email" placeholder="Unesite email ili broj">
+      </div>
+      <div class="mb-3">
+        <label for="passwordLogin" class="form-label">Lozinka</label>
+        <div class="password-wrapper">
+          <input type="password" class="form-control" id="passwordLogin" placeholder="Unesite lozinku">
+          <i class="fa-solid fa-eye toggle-password" onclick="togglePassword('passwordLogin', this)"></i>
+        </div>
+        <div class="text-end mt-1">
+          <a href="#" class="small password back-link form-label">Zaboravljena lozinka?</a>
+        </div>
+      </div>
+
+      <button type="submit" class="header-btn2 rounded-1 w-100 text-white" style="border:unset">Prijavi se</button>
+
+      <div class="divider">ili</div>
+
+      <a href="#" class="btn btn-soft-info w-100 mb-3 openRegister">Registruj se</a>
+
+      <div class="text-center">
+        <small class="text-muted back-link fs-17">
+          <a href="#" class="back-link form-label back-home-mobile  d-block d-lg-none"><i class="fa fa-chevron-left me-1"></i> Povratak na početnu stranicu</a>
+          <a href="#" class="back-link form-label back-home  d-none d-lg-block"><i class="fa fa-chevron-left me-1"></i> Povratak na početnu stranicu</a>
+        </small>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- REGISTRACIJA FORMA -->
+<div class="col-lg-6 d-flex align-items-center justify-content-center d-none" id="registerForm">
+  <div class="form-section card bg-white kartica">
+    <div class="text-center mb-2">
+      <h5 class="fw-bold pb-2" style="font-family: 'Facebook Sans', sans-serif; font-size: 16px">
+        Kreiraj novi <span class="logo-span">deklarant<span class="ai-span">.ai</span></span> račun
+      </h5>
+      <p class="text-muted form-label" style="margin-top: -10px;">Napravite svoj besplatni nalog</p>
+    </div>
+    <form>
+      <div class="mb-3">
+        <label for="registerEmail" class="form-label">Email adresa <span class="text-danger">*</span></label>
+        <input type="email" class="form-control" id="registerEmail" placeholder="Unesite email adresu" required>
+      </div>
+      <div class="mb-3">
+        <label for="registerUsername" class="form-label">Username <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="registerUsername" placeholder="Unesite korisničko ime" required>
+      </div>
+      <div class="mb-3">
+        <label for="registerPassword" class="form-label">Lozinka <span class="text-danger">*</span></label>
+        <div class="password-wrapper">
+          <input type="password" class="form-control" id="registerPassword" placeholder="Unesite lozinku" required>
+          <i class="fa-solid fa-eye toggle-password" onclick="togglePassword('registerPassword', this)"></i>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="passwordRegisterConfirm" class="form-label">Potvrdite lozinku <span class="text-danger">*</span></label>
+        <div class="password-wrapper">
+          <input type="password" class="form-control" id="passwordRegisterConfirm" placeholder="Potvrdi lozinku">
+          <i class="fa-solid fa-eye toggle-password" onclick="togglePassword('passwordRegisterConfirm', this)"></i>
+        </div>
+      </div>
+
+      <button type="submit" class="header-btn2 rounded-1 w-100 mt-3 text-white" style="border:unset">Napravi račun</button>
+
+      <div class="text-center mb-2">
+        <small class="text-muted form-label">Imate svoj račun?
+          <a href="#" class="back-link" id="backToLogin">Prijavite se</a>
+        </small>
+      </div>
+
+      <div class="text-center">
+        <small class="text-muted back-link fs-17">
+             <a href="#" class="back-link form-label back-home-mobile  d-block d-lg-none"><i class="fa fa-chevron-left me-1"></i> Povratak na početnu stranicu</a>
+          <a href="#" class="back-link form-label back-home  d-none d-lg-block"><i class="fa fa-chevron-left me-1"></i> Povratak na početnu stranicu</a>
+        </small>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+        </div>
+    </div>
+</div>
+<!--===== WELCOME ENDS =======-->
+
+ 
+
 @endsection
+
 @section('script')
-<script src="{{ URL::asset('build/libs/particles.js/particles.js') }}"></script>
-<script src="{{ URL::asset('build/js/pages/particles.app.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!--=====JS=======-->
+ 
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+ <script src="{{ URL::asset('build/js/login-js/plugins/jquery-3-6-0.min.js') }}"></script>
 
+    <script>
+  $(document).ready(function () {
+    // Otvori login formu
+    $(".loginFormShow").on("click", function (e) {
+      e.preventDefault();
+      $("#appImage").removeClass("d-lg-block");
+      $("#registerForm").addClass("d-none");
+      $("#mobileFirstContent").addClass("d-none");
+      $("#loginForm").removeClass("d-none").hide().fadeIn(400);
+    });
+
+    // Otvori registraciju
+    $(".openRegister").on("click", function (e) {
+      e.preventDefault();
+      $("#loginForm").addClass("d-none");
+      $("#appImage").removeClass("d-lg-block");
+      $("#mobileFirstContent").addClass("d-none");
+      $("#registerForm").removeClass("d-none").hide().fadeIn(400);
+    });
+
+    // Povratak na login iz registracije
+    $("#backToLogin").on("click", function (e) {
+      e.preventDefault();
+      $("#registerForm").addClass("d-none");
+      $("#loginForm").removeClass("d-none").hide().fadeIn(400);
+    });
+
+    // Povratak na početnu
+    $(".back-home").on("click", function (e) {
+      e.preventDefault();
+      $("#loginForm").addClass("d-none");
+      $("#registerForm").addClass("d-none");
+      $("#appImage").addClass("d-lg-block");
+      $("#mobileFirstContent").removeClass("d-none");
+        
+    });
+      
+      // Povratak na početnu mobile
+    $(".back-home-mobile").on("click", function (e) {
+      e.preventDefault();
+      $("#loginForm").addClass("d-none");
+      $("#registerForm").addClass("d-none");
+      $("#mobileFirstContent").removeClass("d-none");
+        
+    });
+
+    // Globalna funkcija za prikaz/skrivanje lozinki
+    window.togglePassword = function (id, el) {
+      const input = document.getElementById(id);
+      if (!input) return;
+      const icon = el;
+      if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+      } else {
+        input.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+      }
+    }
+  });
+</script>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const form = document.getElementById("registerForm");
-
-        form.addEventListener("submit", async function (e) {
-            e.preventDefault();
-
-            const macAddress = '11:22:33:44:55'; // optional: make dynamic later
-
-            try {
-                const formData = new FormData(form);
-
-                const registerResponse = await axios.post("/api/auth/register", formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                        "MAC-Address": macAddress
-                    }
-                });
-
-                const { token, user, message } = registerResponse.data;
-
-                // Save token & user info
-                localStorage.setItem("auth_token", token);
-                localStorage.setItem("user", JSON.stringify(user));
-                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Registracija uspješna!',
-                    text: message || 'Uspješno ste registrovani',
-                    showConfirmButton: false,
-                    timer: 1500
-                }).then(() => {
-                    window.location.href = "/";
-                });
-
-            } catch (error) {
-                console.error("Registration failed:", error);
-                const msg = error.response?.data?.message || "Došlo je do greške prilikom registracije";
-
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Greška',
-                    text: msg
-                });
-            }
+    $(window).on('load', function () {
+        $('#preloader').fadeOut('slow', function () {
+            $(this).remove();
         });
     });
 </script>
 
 
+
+<script src="{{ URL::asset('build/js/login-js/plugins/aos.js') }}"></script>
+<script src="{{ URL::asset('build/js/login-js/plugins/bootstrap.min.js') }}"></script>
+<script src="{{ URL::asset('build/js/login-js/plugins/counter.js') }}"></script>
+<script src="{{ URL::asset('build/js/login-js/plugins/gsap.min.js') }}"></script>
+<script src="{{ URL::asset('build/js/login-js/plugins/magnific-popup.js') }}"></script>
+<script src="{{ URL::asset('build/js/login-js/plugins/mobilemenu.js') }}"></script>
+<script src="{{ URL::asset('build/js/login-js/plugins/owlcarousel.min.js') }}"></script>
+<script src="{{ URL::asset('build/js/login-js/plugins/ScrollTrigger.min.js') }}"></script>
+<script src="{{ URL::asset('build/js/login-js/plugins/slick-slider.js') }}"></script>
+<script src="{{ URL::asset('build/js/login-js/plugins/swiper.bundle.js') }}"></script>
+<script src="{{ URL::asset('build/js/login-js/plugins/waypoints.js') }}"></script>
+
+<script src="{{ URL::asset('build/js/login-js/main.js') }}"></script>
 
 @endsection

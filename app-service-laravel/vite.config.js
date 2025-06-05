@@ -12,6 +12,21 @@ const folder = {
     dist_assets: "public/build/" //build assets files
 };
 
+function getAllJsFiles(dirPath, arrayOfFiles = []) {
+    const files = fs.readdirSync(dirPath);
+
+    files.forEach(function (file) {
+        const fullPath = path.join(dirPath, file);
+        if (fs.statSync(fullPath).isDirectory()) {
+            arrayOfFiles = getAllJsFiles(fullPath, arrayOfFiles);
+        } else if (file.endsWith(".js")) {
+            arrayOfFiles.push(fullPath.replace(/\\/g, '/')); // Normalize Windows slashes
+        }
+    });
+
+    return arrayOfFiles;
+}
+
 export default defineConfig({
     build: {
         manifest: true,
@@ -39,6 +54,8 @@ export default defineConfig({
                     'resources/scss/icons.scss',
                     'resources/scss/app.scss',
                     'resources/scss/custom.scss',
+                    'resources/scss/landing.scss',
+                    ...getAllJsFiles('resources/js/login-js') 
                 ],
                 refresh: [
                     ...refreshPaths,
