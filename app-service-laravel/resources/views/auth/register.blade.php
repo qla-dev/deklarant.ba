@@ -9,6 +9,7 @@
     
     #registerForm, #appImage, #mobileFirstContent {
   animation: fadeIn 0.5s ease;
+  margin-top: 3rem;
 }
 
   body {
@@ -164,6 +165,14 @@ height: 100vh;
           margin-top: 4rem!important;
         }
 
+        .bottom-buttons {
+          margin-bottom: 32px!important;
+        }
+
+        .header-images-area {
+
+          margin-top: 0px!important;
+        }
  
     
 }
@@ -199,15 +208,7 @@ height: 100vh;
   </div>
  <!--===== PRELOADER ENDS =======-->
  
-  <!--===== PAGE PROGRESS START=======-->
-  <div class="paginacontainer">
-    <div class="progress-wrap">
-      <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
-        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
-      </svg>
-    </div>
-  </div>
-<!--===== PAGE PROGRESS END=======-->
+
 
   <!--=====HEADER START=======-->
   <header>
@@ -325,10 +326,10 @@ height: 100vh;
                     </div>
                 </div>
 
-                    <p data-aos="fade-up" data-aos-duration="1000">Automatsko skeniranje carinskih deklaracija uz pomoć AI – bez čekanja. <br>Uz <strong class="logo-span">deklarant<span class="ai-span">.ai</span></strong>, svaki unos postaje jednostavan, precizan i odmah dostupan u nekoliko sekundi – oslobodite se ručne obrade i fokusirajte se na ono što je važno.</p>
+                    <p class="mb-0" data-aos="fade-up" data-aos-duration="1000">Automatsko skeniranje carinskih deklaracija uz pomoć AI – bez čekanja. <br>Uz <strong class="logo-span">deklarant<span class="ai-span">.ai</span></strong>, svaki unos postaje jednostavan, precizan i odmah dostupan u nekoliko sekundi – oslobodite se ručne obrade i fokusirajte se na ono što je važno.</p>
                     <div data-aos="fade-up" data-aos-duration="1200">
-                      <a href="#" class="header-btn2 rounded-1 openRegister">Započni </a>
-                    <a href="#" class="header-btn2 ms-2 rounded-1">Provjeri funkcionalnosti</a>
+                      <a href="#" class="header-btn2 rounded-1 openRegister  bottom-buttons">Započni </a>
+                    <a href="#" class="header-btn2 ms-2 rounded-1  bottom-buttons">Provjeri funkcionalnosti</a>
                     </div>
                 </div>
             </div>
