@@ -171,7 +171,7 @@ overflow-y: hidden;
         }
 
         .bottom-buttons {
-          margin-bottom: 32px!important;
+          margin-bottom: 36px!important;
         }
 
         .header-images-area {
@@ -384,8 +384,8 @@ overflow-y: hidden;
 
       <div class="text-center">
         <small class="text-muted back-link fs-17">
-          <a href="#" class="back-link form-label back-home-mobile  d-block d-lg-none"><i class="fa fa-chevron-left me-1"></i> Povratak na početnu stranicu</a>
-          <a href="#" class="back-link form-label back-home  d-none d-lg-block"><i class="fa fa-chevron-left me-1"></i> Povratak na početnu stranicu</a>
+          <a href="#" class="back-link form-label back-home-mobile  d-block d-lg-none"><i class="fa fa-chevron-left me-1 mt-2"></i> Povratak na početnu stranicu</a>
+          <a href="#" class="back-link form-label back-home  d-none d-lg-block"><i class="fa fa-chevron-left me-1 mt-2"></i> Povratak na početnu stranicu</a>
         </small>
       </div>
     </form>
@@ -427,7 +427,7 @@ overflow-y: hidden;
 
       <button type="submit" class="header-btn2 rounded-1 w-100 mt-3 text-white" style="border:unset">Napravi račun</button>
 
-      <div class="text-center mb-2">
+      <div class="text-center mb-2 mt-1">
         <small class="text-muted form-label">Imate svoj račun?
           <a href="#" class="back-link" id="backToLogin">Prijavite se</a>
         </small>
@@ -435,8 +435,8 @@ overflow-y: hidden;
 
       <div class="text-center">
         <small class="text-muted back-link fs-17">
-             <a href="#" class="back-link form-label back-home-mobile  d-block d-lg-none"><i class="fa fa-chevron-left me-1"></i> Povratak na početnu stranicu</a>
-          <a href="#" class="back-link form-label back-home  d-none d-lg-block"><i class="fa fa-chevron-left me-1"></i> Povratak na početnu stranicu</a>
+             <a href="#" class="back-link form-label back-home-mobile  d-block d-lg-none"><i class="fa fa-chevron-left me-1 mt-2"></i> Povratak na početnu stranicu</a>
+          <a href="#" class="back-link form-label back-home  d-none d-lg-block"><i class="fa fa-chevron-left me-1 mt-2"></i> Povratak na početnu stranicu</a>
         </small>
       </div>
     </form>
