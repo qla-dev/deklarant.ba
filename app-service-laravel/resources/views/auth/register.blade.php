@@ -12,6 +12,10 @@
 
 }
 
+#mobileFirstContent  {
+  margin-top: 3rem;
+}
+
   body {
       background-color: #f5f5f5;
     }
