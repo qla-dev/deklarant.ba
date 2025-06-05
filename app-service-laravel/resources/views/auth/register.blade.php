@@ -237,7 +237,7 @@
           <a href="index.html"><img src="{{ URL::asset('build/images/homepage/logo/logo-dek.png') }}" alt="" height="17px"></a>
         </div>
           <div class="main-menu d-flex">
-                <a href="#" class="header-btn2 rounded-1 loginFormShow me-2">Prijava</a>
+                <a href="#" class="header-btn2 rounded-1 loginFormShow me-3">Prijava</a>
                  <div class="mobile-nav-icon dots-menu">
           <i class="fa-solid fa-bars"></i>
         </div>
