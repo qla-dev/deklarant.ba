@@ -209,7 +209,7 @@
           <div class="col-lg-12">
             <div class="header-elements">
               <div class="site-logo">
-                <a href="index.html"><img src="{{ URL::asset('build/images/homepage/logo/logo-dek.png') }}" alt="" width="180"></a>
+                <a href="index.html"><img src="{{ URL::asset('build/images/homepage/logo/logo-dek.png') }}" alt="" width="200"></a>
               </div>
               <div class="main-menu">
                 <ul class="mb-0">
@@ -234,14 +234,15 @@
     <div class="col-12">
       <div class="mobile-header-elements">
         <div class="mobile-logo">
-          <a href="index.html"><img src="{{ URL::asset('build/images/homepage/logo/logo-dek.png') }}" alt="" width="200px"></a>
+          <a href="index.html"><img src="{{ URL::asset('build/images/homepage/logo/logo-dek.png') }}" alt="" height="17px"></a>
         </div>
-          <div class="main-menu">
-                <a href="#" class="header-btn2 rounded-1 loginFormShow">Prijava</a>
-              </div>
-        <div class="mobile-nav-icon dots-menu">
+          <div class="main-menu d-flex">
+                <a href="#" class="header-btn2 rounded-1 loginFormShow me-2">Prijava</a>
+                 <div class="mobile-nav-icon dots-menu">
           <i class="fa-solid fa-bars"></i>
         </div>
+              </div>
+       
       </div>
     </div>
   </div>
@@ -267,7 +268,7 @@
     <div class="container-fluid">
         <div class="row ">
           
-                <div class="text-center d-flex w-100 fs-6 justify-content-center align-center mb-3">
+                <div class="text-center d-flex w-100 fs-6 justify-content-center align-items-center mb-3">
                 <span class="me-2">Razvijeno od strane  </span>
 
                   <a hrf="http://qla.dev/"><img src="{{ URL::asset('build/images/homepage/logo/logo-qla-dark.png') }}" alt="" style="width: 100px"></a>
