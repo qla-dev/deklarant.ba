@@ -162,7 +162,7 @@ height: 100vh;
 
         }
         .kartica{
-          margin-top: 4rem!important;
+          margin-top: 2rem!important;
         }
 
         .bottom-buttons {
