@@ -9,7 +9,7 @@
     
     #registerForm, #appImage, #mobileFirstContent {
   animation: fadeIn 0.5s ease;
-  margin-top: 3rem;
+
 }
 
   body {
@@ -158,7 +158,8 @@
         }
 
         #loginForm, #registerForm {
-height: 100vh;  
+height: 100vh;
+overflow-y: hidden;  
 
         }
         .kartica{
