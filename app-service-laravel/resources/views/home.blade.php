@@ -39,7 +39,7 @@
     <div class="card border-0 rounded-0 shadow-0 h-100 mt-1 mobile-shadow-remove">
         <div class="row g-0">
             <!-- Left Columns -->
-            <div class="col-md-2 col-6 border-end border-0 order-2 order-md-0 bg-white card-animate mt-lg-0 mt-md-0 mt-3">
+            <div class="col-md-2 col-6 border-end border-0 order-2 order-md-0 card-animate mt-lg-0 mt-md-0 mt-3">
              <a href="cijene-paketa">  
             <div class="d-flex card  rounded-0 m-0 flex-column h-100">
                      @include('components.package-card-statusbar')
@@ -55,7 +55,7 @@
                 </a>  
             </div>
 
-            <div class="col-md-2 col-6 border-0 order-3 order-md-0 bg-white card-animate mt-lg-0 mt-md-0 mt-3">
+            <div class="col-md-2 col-6 border-0 order-3 order-md-0 card-animate mt-lg-0 mt-md-0 mt-3">
                 <a href="moje-deklaracije">
                     <div class="d-flex card m-0  rounded-0 flex-column h-100">
                         <div class="bg-info text-white text-center py-1 rounded-0">
@@ -83,9 +83,9 @@
                             <div id="avatar-middle-fallback" class="rounded-circle bg-info d-flex justify-content-center align-items-center text-white" style="width: 50px; height: 50px;"></div>
                         </div>
                         <h6 class="fw-bold mb-1 mt-1">Dobrodošli na deklarant<span style="color:#299cdb!important">.ai</span> {{ Auth::user()->username ?? '' }}</h6>
-                        <p class="fs-7 mb-1 text-info" id="user-package-display">
+                        <p class="fs-7 mb-1 text-info" id="user-package-display"></p>
     @include('components.package-dashboard-statusbar')
-                        </p>
+                        
                     </div>
                     <div class="card-footer bg-transparent border-0 w-100 p-0 p-lg-1">
                         <div class="d-flex justify-content-center gap-2 w-100">
@@ -104,7 +104,7 @@
 
             <!-- Right Columns remain unchanged -->
 
-            <div class="col-md-2 col-6 border-end border-0 order-4 order-md-0 bg-white card-animate mt-lg-0 mt-md-0 mt-4">
+            <div class="col-md-2 col-6 border-end border-0 order-4 order-md-0 card-animate mt-lg-0 mt-md-0 mt-4">
                 <a href="moji-klijenti">
                     <div class="d-flex card  rounded-0 m-0 flex-column h-100">
                         <div class="bg-info text-white text-center py-1 rounded-0">
@@ -123,7 +123,7 @@
             </div>
 
 
-            <div class="col-md-2 col-6 border-0 order-5 order-md-0 bg-white card-animate mt-lg-0 mt-md-0 mt-4">
+            <div class="col-md-2 col-6 border-0 order-5 order-md-0 card-animate mt-lg-0 mt-md-0 mt-4">
                 <a href="moji-dobavljaci">
                     <div class="d-flex card  rounded-0 m-0 flex-column h-100">
                         <div class="bg-info text-white text-center py-1 rounded-0">
