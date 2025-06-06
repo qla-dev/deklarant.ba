@@ -125,7 +125,7 @@
                                     </a>
                                 </div>
                                 <div class="col-6">
-                                    <a class="dropdown-icon-item" href="moje-fakture">
+                                    <a class="dropdown-icon-item" href="moje-deklaracije">
                                         <i class="ri-file-line text-info fs-4 d-block mb-1"></i>
                                         <span>@lang('translation.myorder')</span>
                                     </a>

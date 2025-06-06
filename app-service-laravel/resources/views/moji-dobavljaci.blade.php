@@ -123,7 +123,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         const stats = response.data || {};
         const suppliers = stats.importer_stats?.importers ?? [];
 
-        // Ažuriraj info brojeve (topbar itd.)
         const fields = {
             totalSuppliers: stats.supplier_stats?.total_suppliers ?? 0,
             totalInvoices: stats.total_invoices ?? 0,
@@ -136,19 +135,15 @@ document.addEventListener("DOMContentLoaded", async function () {
             if (el) el.innerText = value;
         });
 
-
         loader?.remove();
         tableContainer.style.display = 'block';
-
 
         const table = $('#suppliersTable').DataTable({
             data: suppliers,
             scrollX: true,
             autoWidth: true,
             lengthChange: false,
-            fixedColumns: {
-                leftColumns: 1
-            },
+            fixedColumns: { leftColumns: 1 },
             drawCallback: function () {
                 $('.dataTables_paginate ul.pagination')
                     .addClass('pagination-separated pagination-sm justify-content-center mb-0');
@@ -171,40 +166,27 @@ document.addEventListener("DOMContentLoaded", async function () {
                             avatarHTML = `<img src="${avatar}" alt="avatar" class="rounded-circle me-2" width="40" height="40" style="object-fit: cover;">`;
                         } else {
                             const firstLetter = row.name?.[0]?.toUpperCase() || "?";
-                            avatarHTML = `
-                                <div class="rounded-circle d-flex align-items-center justify-content-center text-white shadow-sm me-2"
-                                     style="width: 30px; height: 30px; background-color: #299cdb; font-size: 14px;">
-                                     ${firstLetter}
-                                </div>`;
+                            avatarHTML = `<div class="rounded-circle d-flex align-items-center justify-content-center text-white shadow-sm me-2"
+                                style="width: 30px; height: 30px; background-color: #299cdb; font-size: 14px;">${firstLetter}</div>`;
                         }
-                        return `
-                            <div class="d-flex align-items-center">
-                                ${avatarHTML}
-                                <span>${data}</span>
-                            </div>`;
+                        return `<div class="d-flex align-items-center">${avatarHTML}<span>${data}</span></div>`;
                     }
                 },
                 { data: 'owner', title: 'Vlasnik' },
-                  {
+                {
                     data: null,
                     title: 'Adresa',
-                    render: (data, type, row) => {
-                        return row.contact_email ? row.address : 'Nepoznato';
-                    }
+                    render: (data, type, row) => row.contact_email ? row.address : 'Nepoznato'
                 },
                 {
                     data: null,
                     title: 'Email',
-                    render: (data, type, row) => {
-                        return row.contact_email ? row.contact_email : 'Nepoznato';
-                    }
+                    render: (data, type, row) => row.contact_email || 'Nepoznato'
                 },
                 {
                     data: null,
                     title: 'Telefon',
-                    render: (data, type, row) => {
-                        return row.contact_phone ? row.contact_phone : 'Nepoznato';
-                    }
+                    render: (data, type, row) => row.contact_phone || 'Nepoznato'
                 },
                 {
                     data: null,
@@ -213,55 +195,50 @@ document.addEventListener("DOMContentLoaded", async function () {
                     searchable: false,
                     className: 'text-center',
                     render: row => {
-                        let callBtn = '';
-                        if (row.contact_phone) {
-                            callBtn = `
-                                <a href="tel:${row.contact_phone}" class="btn btn-sm btn-soft-success me-1" title="Pozovi dobavljača">
-                                    <i class="ri-phone-line"></i>
-                                </a>`;
-                        }
-                        return `
-                          ${callBtn}
+                        let callBtn = row.contact_phone ? `
+                            <a href="tel:${row.contact_phone}" class="btn btn-sm btn-soft-success me-1" title="Pozovi dobavljača">
+                                <i class="ri-phone-line"></i>
+                            </a>` : '';
+                        return `${callBtn}
                             <button class="btn btn-sm btn-soft-danger delete-invoice" data-id="${row.id}" title="Obriši dobavljača">
-                            <i class="ri-delete-bin-line"></i>
-                        </button>
-                          
-                        `;
+                                <i class="ri-delete-bin-line"></i>
+                            </button>`;
                     }
                 }
             ],
-            dom: '<"datatable-topbar d-flex justify-content-between align-items-center mb-4"Bf>rt<"d-flex justify-content-between align-items-center mt-4 px-0"i p>',
-           buttons: [{
-                            extend: 'csv',
-                            text: '<i class="ri-file-code-line align-bottom me-1"></i> Export u CSV',
-                            className: 'btn btn-soft-info me-1 rounded-1'
-                        },
-                        {
-                            extend: 'excelHtml5',
-                            text: '<i class="ri-file-excel-line align-bottom me-1"></i> Export u Excel',
-                            className: 'btn btn-soft-info me-1 ms-1 rounded-1'
-                        },
-                        {
-                            extend: 'pdf',
-                            text: '<i class="ri-file-pdf-2-line align-bottom me-1"></i> Export u PDF',
-                            className: 'btn btn-soft-info me-1 ms-1 rounded-1'
-                        },
-                        {
-                            extend: 'print',
-                            text: '<i class="ri-printer-line align-bottom me-1"></i> Print',
-                            className: 'btn btn-soft-info me-1 ms-1 rounded-1'
-                        },
-                        {
-                            extend: 'colvis',
-                            text: 'Kolone',
-                            className: 'btn btn-soft-info me-1 ms-1 rounded-1'
-                        },
-                        {
-                            extend: 'pageLength',
-                            text: 'Prikaži redova',
-                            className: 'btn-soft-info me-1 ms-1 rounded-1'
-                        }
-                    ],
+            dom: '<"datatable-topbar d-flex flex-column flex-lg-row justify-content-between align-items-center mb-0 mb-md-4"fB>rt<"d-flex justify-content-between align-items-center mt-4 px-0"ip>',
+            buttons: [
+                {
+                    extend: 'csv',
+                    text: '<i class="ri-file-code-line align-bottom me-1"></i> Export u CSV',
+                    className: 'btn btn-soft-info me-1 rounded-1'
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="ri-file-excel-line align-bottom me-1"></i> Export u Excel',
+                    className: 'btn btn-soft-info me-1 ms-1 rounded-1'
+                },
+                {
+                    extend: 'pdf',
+                    text: '<i class="ri-file-pdf-2-line align-bottom me-1"></i> Export u PDF',
+                    className: 'btn btn-soft-info me-1 ms-1 rounded-1'
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="ri-printer-line align-bottom me-1"></i> Print',
+                    className: 'btn btn-soft-info me-1 ms-1 rounded-1'
+                },
+                {
+                    extend: 'colvis',
+                    text: 'Kolone',
+                    className: 'btn btn-soft-info me-1 ms-1 rounded-1'
+                },
+                {
+                    extend: 'pageLength',
+                    text: 'Prikaži redova',
+                    className: 'btn-soft-info me-1 ms-1 rounded-1'
+                }
+            ],
             language: {
                 paginate: { first: "←", last: "→", next: "→", previous: "←" },
                 info: "Prikazivanje _START_ do _END_ od _TOTAL_ stavki",
@@ -272,18 +249,21 @@ document.addEventListener("DOMContentLoaded", async function () {
             },
             initComplete: function () {
                 const api = this.api();
+
                 $('#suppliersTable_filter')
-                    .addClass('flex-grow-1 me-0')
+                    .addClass('flex-grow-1 me-0 order-0 order-lg-1')
                     .css('max-width', '400px')
                     .html(`
                         <div class="position-relative w-100">
                             <input type="text" class="form-control" placeholder="Pretraga..." autocomplete="off"
-                                id="supplier-search-input" style="width: 100%; padding-left: 2rem;">
+                                   id="supplier-search-input" style="width: 100%; padding-left: 2rem;">
                             <span class="mdi mdi-magnify text-info fs-5 ps-2 position-absolute top-50 start-0 translate-middle-y"></span>
                             <span class="mdi mdi-close-circle position-absolute top-50 end-0 translate-middle-y me-2 d-none"
-                                id="supplier-search-clear" style="cursor:pointer;"></span>
+                                  id="supplier-search-clear" style="cursor:pointer;"></span>
                         </div>
                     `);
+
+                $('.dt-buttons').addClass('order-1 order-lg-0');
 
                 const input = $('#supplier-search-input');
                 const clear = $('#supplier-search-clear');
@@ -307,6 +287,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 });
 </script>
+
 
 
 

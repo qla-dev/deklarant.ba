@@ -106,10 +106,6 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-       
-
-        
-
         if (!token || !user) {
             alert("Niste prijavljeni.");
             return;
@@ -161,10 +157,8 @@
             'serbia': 'Srbija'
         };
 
-        // ✅ Correction map for known misspellings
         const countryCorrections = {
             'dennmark': 'denmark'
-            // Add more corrections as needed
         };
 
         fetch("/api/exchange-rates", {
@@ -183,15 +177,6 @@
                         const flagCode = countryFlagMap[corrected] || 'un';
                         const displayName = countryNameBS[corrected] || original;
 
-                        if (flagCode === 'un') {
-                            console.warn("⚠️ Country not mapped:", original);
-                        }
-                        const tableContainer = document.getElementById('invoice-table-container');
-                        const loader = document.getElementById('invoice-loading');
-                        loader && loader.remove();
-                        tableContainer && (tableContainer.style.display = 'block');
-                        console.log("Fetched invoice data:", data);
-
                         return {
                             ...item,
                             Code: item.NumCode,
@@ -199,6 +184,11 @@
                             CountryBS: displayName
                         };
                     });
+
+                const tableContainer = document.getElementById('invoice-table-container');
+                const loader = document.getElementById('invoice-loading');
+                loader && loader.remove();
+                tableContainer && (tableContainer.style.display = 'block');
 
                 $('#exchangeTable').DataTable({
                     data: items,
@@ -233,8 +223,9 @@
                         { data: 'Middle', title: 'Srednji kurs' },
                         { data: 'Sell', title: 'Prodajni kurs' }
                     ],
-                    dom: '<"datatable-topbar d-flex justify-content-between align-items-center mb-4"Bf>rt<"d-flex justify-content-between align-items-center mt-4 px-0"i p>',
-                     buttons: [{
+                    dom: '<"datatable-topbar d-flex flex-column flex-lg-row justify-content-between align-items-center mb-0 mb-md-4"fB>rt<"d-flex justify-content-between align-items-center mt-4 px-0"ip>',
+                    buttons: [
+                        {
                             extend: 'csv',
                             text: '<i class="ri-file-code-line align-bottom me-1"></i> Export u CSV',
                             className: 'btn btn-soft-info me-1 rounded-1'
@@ -282,7 +273,7 @@
                         const api = this.api();
 
                         $('#exchangeTable_filter')
-                            .addClass('flex-grow-1 me-0')
+                            .addClass('flex-grow-1 me-0 order-0 order-lg-1')
                             .css('max-width', '400px')
                             .html(`
                                 <div class="position-relative w-100">
@@ -293,6 +284,8 @@
                                           id="exchange-search-clear" style="cursor:pointer;"></span>
                                 </div>
                             `);
+
+                        $('.dt-buttons').addClass('order-1 order-lg-0');
 
                         const input = $('#exchange-search-input');
                         const clear = $('#exchange-search-clear');
