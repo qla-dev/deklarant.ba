@@ -807,7 +807,7 @@ thead.custom-table th:last-child {
     .dataTables_paginate .previous,
     .dataTables_paginate .next,
     .dataTables_paginate .current {
-        display: inline-block!important;
+        display: inline-flex!important;
     }
 
     .table-footer {
