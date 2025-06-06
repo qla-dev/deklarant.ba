@@ -1295,10 +1295,10 @@
             try {
                 const response = await fetch(`/api/users/${user.id}`, {
                     method: "PUT",
-                    headers: {
+                     headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                         "Content-Type": "application/json",
-
-                        'X-CSRF-TOKEN': csrftoken
+                        Authorization: `Bearer ${token}`
                     },
                     body: JSON.stringify(getPayload())
                 });
