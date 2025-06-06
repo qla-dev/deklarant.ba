@@ -48,11 +48,12 @@ Lista klijenata
                             <tr>
                                 <th>ID</th>
                                 <th>Naziv firme</th>
+                                <th>ID broj</th>
                                 <th>Vlasnik</th>
                                 <th>Adresa</th>
                                 <th>Email</th>
                                 <th>Telefon</th>
-                                <th>Akcija</th>
+                                <th class="text-center">Akcija</th>
 
                             </tr>
                         </thead>
@@ -175,37 +176,52 @@ document.addEventListener("DOMContentLoaded", async function () {
                     }
                 },
                 { data: 'owner', title: 'Vlasnik' },
-                {
+             { 
+    data: 'tax_id', 
+    title: 'ID broj',
+    render: function (data) {
+        return data && data.trim() !== '' ? data : '<span class="text-muted">Nepoznato</span>';
+    }
+},
+
+                 {
                     data: null,
                     title: 'Adresa',
-                    render: (data, type, row) => row.contact_email ? row.address : 'Nepoznato'
+                    render: (data, type, row) => row.contact_email ? row.address : '<span class="text-muted">Nepoznato</span>'
                 },
                 {
                     data: null,
                     title: 'Email',
-                    render: (data, type, row) => row.contact_email || 'Nepoznato'
+                    render: (data, type, row) => row.contact_email || '<span class="text-muted">Nepoznato</span>'
                 },
                 {
                     data: null,
                     title: 'Telefon',
-                    render: (data, type, row) => row.contact_phone || 'Nepoznato'
+                    render: (data, type, row) => row.contact_phone || '<span class="text-muted">Nepoznato</span>'
                 },
                 {
                     data: null,
                     title: 'Akcija',
                     orderable: false,
                     searchable: false,
-                    className: 'text-center',
-                    render: row => {
-                        let callBtn = row.contact_phone ? `
-                            <a href="tel:${row.contact_phone}" class="btn btn-sm btn-soft-success me-1" title="Pozovi klijenta">
-                                <i class="ri-phone-line"></i>
-                            </a>` : '';
-                        return `${callBtn}
-                            <button class="btn btn-sm btn-soft-danger delete-invoice" data-id="${row.id}" title="Obriši klijenta">
-                                <i class="ri-delete-bin-line"></i>
-                            </button>`;
-                    }
+                    className: 'text-end',
+                  render: row => {
+    let callBtn = row.contact_phone ? `
+        <a href="tel:${row.contact_phone}" class="btn btn-sm btn-soft-success me-1" title="Pozovi klijenta">
+            <i class="ri-phone-line"></i>
+        </a>` : '';
+
+    let emailBtn = row.contact_email ? `
+        <a href="mailto:${row.contact_email}" class="btn btn-sm btn-soft-warning me-1" title="Pošalji e-mail">
+            <i class="ri-mail-line"></i>
+        </a>` : '';
+
+    return `${callBtn}${emailBtn}
+        <button class="btn btn-sm btn-soft-danger delete-invoice me-2" data-id="${row.id}" title="Obriši klijenta">
+            <i class="ri-delete-bin-line"></i>
+        </button>`;
+}
+
                 }
             ],
             dom: '<"datatable-topbar d-flex flex-column flex-lg-row justify-content-between align-items-center mb-0 mb-md-4"fB>rt<"d-flex justify-content-between align-items-center mt-4 px-0"ip>',

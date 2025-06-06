@@ -480,7 +480,7 @@ Kalendarni prikaz mojih faktura
                 const totalPrice = parseFloat(invoice.total_price || 0).toFixed(2);
                 const date = new Date(invoice.created_at).toLocaleDateString("hr", {
                     day: "numeric",
-                    month: "long",
+                    month: "numeric",
                     year: "numeric"
                 });
 
@@ -490,7 +490,7 @@ Kalendarni prikaz mojih faktura
                     <div class='d-flex mb-4'>
                         <div class='flex-grow-1'>
                         <i class='mdi mdi-file-document-outline me-2 text-info'></i>
-                        <span class='fw-medium text-info'>${date}</span>
+                        <span class='fw-medium text-info'>${date} godine</span>
                         </div>
                         <div class='flex-shrink-0'>
                         <small class='badge bg-info-subtle text-info ms-auto'>${totalPrice} KM</small>
