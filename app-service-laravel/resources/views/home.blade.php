@@ -293,7 +293,7 @@
             <div class="col-xl-6">
                 <div class="row g-1 mx-0">
                     <!-- 4 cards in 2 rows -->
-                    <div class="col-md-6">
+                    <div class="col-md-6  mb-3 mb-md-0">
                         <div class="card rounded-0 h-100 ">
                             <div class="card-header d-flex justify-content-between">
                                 <h5 class="card-title mb-0 fs-6">Zahtjevi za inspekcijski nadzor</h5>
@@ -320,7 +320,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-6  mb-3 mb-md-0">
                         <div class="card rounded-0 h-100">
                             <div class="card-header d-flex justify-content-between">
                                 <h5 class="card-title mb-0 fs-6">Carinjenje po nepotpunoj izjavi</h5>
@@ -346,7 +346,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6  mb-3 mb-md-0">
                         <div class="card rounded-0 h-100">
                             <div class="card-header d-flex justify-content-between">
                                 <h5 class="card-title mb-0 fs-6">Izjave za carinjenje pošiljki</h5>
@@ -372,7 +372,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6  mb-3 mb-md-0">
                         <div class="card rounded-0 h-100">
                             <div class="card-header d-flex justify-content-between">
                                 <h5 class="card-title mb-0 fs-6">Obrasci</h5>
@@ -405,7 +405,7 @@
             <div class="col-xl-6 d-flex flex-column">
                 <div class="row g-1 flex-fill mx-0">
                     <!-- First column: Zadnje korištene tarife -->
-                    <div class="col-md-6">
+                    <div class="col-md-6  mb-3 mb-md-0">
                         <div class="card rounded-0 w-100 h-100 card-animate mb-0">
                             <div class="card-header">
                                 <h5 class="mb-0">Nedavne tarife</h5>
@@ -420,7 +420,7 @@
                     </div>
 
                     <!-- Second column: Zadnje korišteni dobavljači -->
-                                       <div class="col-md-6 d-flex card-animate">
+                                       <div class="col-md-6 d-flex ">
                         <div class="card rounded-0 w-100 h-100 mb-0">
                             <div class="card-header">
                                 <h5 class="mb-0">Nedavni klijenti</h5>
@@ -1063,7 +1063,7 @@ if (scanSpeedEl) {
             renderScanCharts();
 
             new Swiper(".mySwiper", {
-                slidesPerView: 6,
+                slidesPerView: 2,
                 spaceBetween: 4,
                 autoplay: {
                     delay: 2000,
