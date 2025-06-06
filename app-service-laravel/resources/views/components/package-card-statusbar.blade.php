@@ -8,19 +8,19 @@
 @if (!$package || $otherPackage->active == 0)
     <div class="bg-danger text-white text-center py-1 rounded-0">
         <i class="ri-alert-line me-1 d-none d-md-inline"></i> 
-        <span>Pretplata neaktivna. <b class="d-none d-md-inline">Aktiviraj!</b></span>
+        <span>Pretplata neaktivna<span class="d-none d-md-inline">. </span><b class="d-none d-md-inline">Aktiviraj!</b></span>
     </div>
 
 @elseif ($remainingScans == 0)
     <div class="bg-danger text-white text-center py-1 rounded-0">
            <i class="ri-alert-line me-1 d-none d-md-inline"></i> 
-        <span>Nema dostupnih.<b class="d-none d-md-inline" >Nadopuni!</b></span>
+        <span>Nema dostupnih<span class="d-none d-md-inline">. </span><b class="d-none d-md-inline" >Nadopuni!</b></span>
     </div>
 
 @elseif ($otherPackage->expiration_date && \Carbon\Carbon::parse($otherPackage->expiration_date)->lt($now))
     <div class="bg-danger text-white text-center py-1 rounded-0">
            <i class="ri-alert-line me-1 d-none d-md-inline"></i> 
-        <span>Pretplata je istekla. <b class="d-none d-md-inline">Aktiviraj!</b></span>
+        <span>Pretplata je istekla<span class="d-none d-md-inline">. </span><b class="d-none d-md-inline">Aktiviraj!</b></span>
     </div>
 
 @elseif (
@@ -33,7 +33,7 @@
     @endphp
     <div class="bg-danger text-white text-center py-1 rounded-0">
            <i class="ri-alert-line me-1 d-none d-md-inline"></i> 
-        <span>Traje {{ $daysLeft }} dana. <b class="d-none d-md-inline">Produži!</b></span>
+        <span>Traje {{ $daysLeft }} dana<span class="d-none d-md-inline">. </span><b class="d-none d-md-inline">Produži!</b></span>
     </div>
 
 
