@@ -36,7 +36,7 @@ class ProcessUploadedFile implements ShouldQueue
 
             // Step 1: Convert to markdown
             $this->task->update(['processing_step' => 'conversion']);
-            $markdown = $this->convertToMarkdown();
+            $markdown = $this->convertToLLM();
 
             // Step 2: Extract data with LLM
             $this->task->update(['processing_step' => 'extraction']);
@@ -54,18 +54,18 @@ class ProcessUploadedFile implements ShouldQueue
         }
     }
 
-    public function convertToMarkdown(): string
+    public function convertToLLM(): string
     {
         $markerUrl = getenv('MARKER_URL');
 
         if (empty($markerUrl)) {
-            return $this->convertToMarkdownViaCli();
+            return $this->convertToLLMViaCli();
         }
 
-        return $this->convertToMarkdownViaHttp();
+        return $this->convertToLLMViaHttp();
     }
 
-    protected function convertToMarkdownViaHttp(): string
+    protected function convertToLLMViaHttp(): string
     {
         $fileContent = Storage::get($this->task->file_path);
 
@@ -113,7 +113,7 @@ class ProcessUploadedFile implements ShouldQueue
         };
     }
 
-    protected function convertToMarkdownViaCli(): string
+    protected function convertToLLMViaCli(): string
     {
         $filePath = Storage::path($this->task->file_path);
         $tempDir = sys_get_temp_dir();

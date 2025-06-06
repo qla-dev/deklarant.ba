@@ -210,7 +210,7 @@ class ProcessUploadedFileTest extends TestCase
         }
         file_put_contents($outputFile, '# CLI Markdown content');
 
-        $markdown = $job->convertToMarkdown();
+        $markdown = $job->convertToLLM();
 
         $this->assertEquals('# CLI Markdown content', $markdown);
         $this->assertEquals('test content', Storage::disk('local')->get($filePath));
@@ -233,11 +233,11 @@ class ProcessUploadedFileTest extends TestCase
 
         $job = $this->getMockBuilder(ProcessUploadedFile::class)
             ->setConstructorArgs([$task])
-            ->onlyMethods(['convertToMarkdownViaCli'])
+            ->onlyMethods(['convertToLLMViaCli'])
             ->getMock();
 
         $job->expects($this->once())
-            ->method('convertToMarkdownViaCli')
+            ->method('convertToLLMViaCli')
             ->willThrowException(new \RuntimeException('Marker CLI failed: Marker CLI error'));
 
         $job->setProcessFactory(function ($command) use ($mockProcess) {
@@ -246,7 +246,7 @@ class ProcessUploadedFileTest extends TestCase
 
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Marker CLI failed: Marker CLI error');
-        $job->convertToMarkdown();
+        $job->convertToLLM();
     }
 
     public function test_http_path_via_valid_url()
@@ -266,7 +266,7 @@ class ProcessUploadedFileTest extends TestCase
         putenv('MARKER_URL=http://example.com');
         $client = new \GuzzleHttp\Client(['handler' => HandlerStack::create($mock)]);
         $job = new ProcessUploadedFile($task, $client);
-        $markdown = $job->convertToMarkdown();
+        $markdown = $job->convertToLLM();
 
         $this->assertEquals('# HTTP Markdown content', $markdown);
     }
