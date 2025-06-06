@@ -36,7 +36,7 @@
 <!-- Top part -->
 
 <div class="col-xl-12">
-    <div class="card border-0 rounded-0 shadow-0 h-100 mt-1">
+    <div class="card border-0 rounded-0 shadow-0 h-100 mt-1 mobile-shadow-remove">
         <div class="row g-0">
             <!-- Left Columns -->
             <div class="col-md-2 col-6 border-end border-0 order-2 order-md-0 bg-white card-animate mt-lg-0 mt-md-0 mt-3">
@@ -75,7 +75,7 @@
             </div>
 
             <!-- Middle Avatar Section -->
-            <div class="col-md-4 border-start border-end order-1 order-md-0 d-flex align-items-center border-0 rounded-0 alert alert-light p-1 mb-2 m-lg-0">
+            <div class="col-md-4 border-start border-end order-1 order-md-0 d-flex align-items-center border-0 rounded-0 alert alert-light p-1 mb-2 m-lg-0 main-card-dashboard">
                 <div class="p-2 text-center d-flex flex-column h-100 w-100 justify-content-center align-items-center">
                     <div class="card-body text-center p-2">
                         <div class="row d-flex text-center mb-3 fs-4" style="justify-content: center!important; height: 50px;">
@@ -673,7 +673,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             chartInstance = new Chart(ctx, {
                 type: "doughnut",
                 data: {
-                    labels: ["Iskorišteno", "Preostalo"],
+                    labels: ["Iskorišteno %", "Preostalo %"],
                     datasets: [{
                         data: [usedPercentage, remaining],
                         backgroundColor: ["#299cdb", "#d6f0fa"],
@@ -735,7 +735,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             chartInstance = new Chart(ctx, {
                 type: "doughnut",
                 data: {
-                    labels: ["Iskorišteno", "Preostalo"],
+                    labels: ["Iskorišteno %", "Preostalo %"],
                     datasets: [{
                         data: [usedPercentage, remaining],
                         backgroundColor: ["#299cdb", "#d6f0fa"],

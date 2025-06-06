@@ -803,6 +803,12 @@ thead.custom-table th:last-child {
 
 
 @media (max-width: 768px) {
+
+    #user-package-display {
+        font-size: 11px!important;
+    }
+
+    .main-card-dashboard {border: unset!important;}
     /* Keep only active, previous, next buttons */
     .dataTables_paginate .paginate_button  {
         display: none!important;
@@ -822,6 +828,11 @@ thead.custom-table th:last-child {
 
 [data-bs-theme=dark] .fc .fc-day-today {
     background-color: #1f2b33 !important; /* a soft dark-blue gray */
+}
+
+.mobile-shadow-remove {
+    box-shadow: none!important;
+    background: unset!important;
 }
 
 
