@@ -793,5 +793,30 @@ thead.custom-table th:last-child {
     padding: 15px;
 }
 
+.dataTables_paginate .current:hover {
+    background-color: #299cdb!important;
+    }
+
+
+
+@media (max-width: 768px) {
+    /* Keep only active, previous, next buttons */
+    .dataTables_paginate .paginate_button  {
+        display: none!important;
+    }
+    .dataTables_paginate .previous,
+    .dataTables_paginate .next,
+    .dataTables_paginate .current {
+        display: inline-block!important;
+    }
+
+    .table-footer {
+        display: flex;
+        flex-direction: column;
+ 
+    }
+}
+
+
 
 

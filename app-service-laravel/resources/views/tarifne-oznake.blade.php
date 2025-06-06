@@ -261,7 +261,7 @@ Baza tarifnih oznaka
                         { data: 'ISL', title: 'ISL' },
                         { data: 'NOR', title: 'NOR' }
                     ],
-                    dom: '<"datatable-topbar d-flex flex-column flex-lg-row justify-content-between align-items-center mb-3"fB>rt<"d-flex justify-content-between align-items-center mt-4 px-0"ip>',
+                    dom: '<"datatable-topbar d-flex flex-column flex-lg-row justify-content-between align-items-center mb-0 mb-md-4"fB>rt<"d-flex justify-content-between align-items-center mt-4 px-0 table-footer"ip>',
                      buttons: [
                 {
                     extend: 'csv',
