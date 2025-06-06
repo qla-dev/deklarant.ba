@@ -131,8 +131,8 @@
                                     </a>
                                 </div>
                                 <div class="col-6">
-                                    <a class="dropdown-icon-item" href="moji-dobavljaci">
-                                        <i class="ri-truck-line text-info fs-4 d-block mb-1"></i>
+                                    <a class="dropdown-icon-item" href="moji-klijenti">
+                                        <i class="ri-user-line text-info fs-4 d-block mb-1"></i>
                                         <span>@lang('translation.clients')</span>
                                     </a>
                                 </div>

@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                             avatarHTML = `<img src="${avatar}" alt="avatar" class="rounded-circle me-2" width="40" height="40" style="object-fit: cover;">`;
                         } else {
                             const firstLetter = row.name?.[0]?.toUpperCase() || "?";
-                            avatarHTML = `<div class="rounded-circle d-flex align-items-center justify-content-center text-white shadow-sm me-2"
+                            avatarHTML = `<div class="rounded-circle avatar-initials d-flex align-items-center justify-content-center text-white shadow-sm me-2"
                                 style="width: 30px; height: 30px; background-color: #299cdb; font-size: 14px;">${firstLetter}</div>`;
                         }
                         return `<div class="d-flex align-items-center">${avatarHTML}<span>${data}</span></div>`;
