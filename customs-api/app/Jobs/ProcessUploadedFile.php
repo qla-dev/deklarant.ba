@@ -171,9 +171,9 @@ class ProcessUploadedFile implements ShouldQueue
                 ]);
                 break;
             } catch (Exception $e) {
-                \Log::error('Error in OLLAMA. Retrying: ' . $e->getMessage());
+                \Illuminate\Support\Facades\Log::error('Error in OLLAMA. Retrying: ' . $e->getMessage());
                 if ($attempt === $maxRetries) {
-                    throw $e;
+                    throw new Exception('Ollama service error: ' . $e->getMessage());
                 }
                 sleep(2);
             }

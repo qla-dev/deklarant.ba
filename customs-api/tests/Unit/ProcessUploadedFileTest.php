@@ -127,6 +127,52 @@ class ProcessUploadedFileTest extends TestCase
         }
     }
 
+    public function test_ollama_retry_success()
+    {
+        Storage::fake('local');
+        Storage::disk('local')->put('uploads/test.pdf', 'test content');
+
+        $task = Task::factory()->create([
+            'file_path' => 'uploads/test.pdf'
+        ]);
+
+        // First attempt fails, second attempt succeeds
+        $mock = new MockHandler([
+            new Response(200, [], json_encode(['output' => '# Markdown content'])),
+            new Response(500, [], 'Ollama service error'),
+            new Response(200, [], json_encode([
+                'response' => json_encode([
+                    'items' => [
+                        [
+                            'item_name' => 'Test Item',
+                            'original_name' => 'TEST-001',
+                            'quantity' => 1,
+                            'unit_price' => 10.99,
+                            'currency' => 'USD'
+                        ]
+                    ]
+                ]),
+                'done' => true
+            ])),
+            new Response(200, [], json_encode([
+                ['entry' => ['code' => 'HS123'], 'closeness' => 0.9]
+            ]))
+        ]);
+
+        $client = new \GuzzleHttp\Client(['handler' => HandlerStack::create($mock)]);
+        $job = new ProcessUploadedFile($task, $client);
+        $job->handle();
+
+        $task->refresh();
+        $this->assertEquals(Task::STATUS_COMPLETED, $task->status);
+        $this->assertArrayHasKey('items', $task->result);
+        $this->assertIsArray($task->result['items']);
+        $this->assertCount(1, $task->result['items']);
+        $this->assertEquals('Test Item', $task->result['items'][0]['item_name']);
+        $this->assertArrayHasKey('detected_codes', $task->result['items'][0]);
+        $this->assertCount(1, $task->result['items'][0]['detected_codes']);
+    }
+
     public function test_cli_path_via_invalid_url()
     {
         Storage::fake('local');
