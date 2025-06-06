@@ -6,139 +6,7 @@
 <link href="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
 <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css" rel="stylesheet">
-<style>
-    #tariffTable_wrapper .dataTables_paginate {
-        overflow-x: hidden;
-        /* enable scrolling only if needed */
-        flex-wrap: nowrap;
-        /* prevent wrapping */
-        white-space: nowrap;
-        display: flex;
-        /* enable flex layout */
-        justify-content: end;
-        align-items: center;
-        margin-top: 4px !important;
-        padding-top: 0 !important;
-        padding-right: 0px;
-        /* option
-        
-        /* Optional: space between buttons */
 
-
-
-    }
-
-    #tariffTable_wrapper .dataTables_paginate .paginate_button {
-        background-color: #fff;
-        color: #299cdb !important;
-        border: 1px solid #dee2e6;
-        border-radius: 0.375rem;
-        margin: 0 2px;
-        font-size: 0.8125rem;
-        width: 38px;
-        height: 38px;
-
-        display: inline-flex;
-        /* ← fixes stacking + centers content */
-        align-items: center;
-        justify-content: center;
-
-        padding: 0;
-        transition: all 0.2s ease-in-out;
-        margin-top: 4px !important;
-        /* reduce top gap */
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-
-    }
-
-    #tariffTable_wrapper .table {
-        margin-bottom: 0 !important;
-    }
-
-
-    
-
-    #tariffTable_wrapper .dataTables_paginate .paginate_button.current {
-        background-color: #299cdb !important;
-        color: #fff !important;
-        border-color: #299cdb;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
-
-    }
-
-    #tariffTable_wrapper .dataTables_paginate .paginate_button:focus {
-        outline: none;
-        box-shadow: none;
-    }
-
-    #tariffTable_wrapper .dataTables_paginate .paginate_button.disabled {
-        background-color: #eff2f7;
-        color: #adb5bd !important;
-        /* light gray text */
-        border-color: #dee2e6;
-        cursor: not-allowed;
-        pointer-events: none;
-        font-weight: bold;
-
-        cursor: pointer;
-    }
-
-    #tariffTable_wrapper .dataTables_paginate .paginate_button.previous,
-    #tariffTable_wrapper .dataTables_paginate .paginate_button.next,
-    #tariffTable_wrapper .dataTables_paginate .paginate_button.first,
-    #tariffTable_wrapper .dataTables_paginate .paginate_button.last {
-        width: 50px;
-        /* or whatever width you want */
-    }
-
-    #tariffTable_wrapper .dataTables_info {
-        margin-top: 0 !important;
-        padding-top: 0 !important;
-    }
-
-    #tariffTable_wrapper .dataTables_paginate {
-        margin-top: 4px !important;
-        /* reduce from default ~16px */
-        padding-top: 0 !important;
-    }
-
-    #tariffTable_wrapper .dataTables_length,
-    #tariffTable_wrapper .dataTables_filter {
-        margin-bottom: 4px !important;
-        padding-bottom: 0 !important;
-
-    }
-
-    .table-card .dataTables_filter {
-        padding: 0 !important;
-        margin: 0 !important;
-        /* optional for tighter alignment */
-    }
-
-    #tariffTable_wrapper .dataTables_filter input {
-        margin-left: 0 !important;
-    }
-    .table-card .dataTables_info{
-        padding-left: 0 !important;
-    }
-
-
-    #invoiceList {
-        --vz-card-spacer-y: 10px;
-        /* or any smaller value you want */
-    }
-
-
-
-
-
-
-    .modal-dialog.modal-xl {
-        max-width: 75vw;
-        /* or set fixed px: 1200px, 1400px */
-    }
-</style>
 @endsection
 @section('content')
 @component('components.breadcrumb')
@@ -261,7 +129,7 @@ Baza tarifnih oznaka
                         { data: 'ISL', title: 'ISL' },
                         { data: 'NOR', title: 'NOR' }
                     ],
-                    dom: '<"datatable-topbar d-flex flex-column flex-lg-row justify-content-between align-items-center mb-0 mb-md-4"fB>rt<"d-flex justify-content-between align-items-center mt-4 px-0 table-footer"ip>',
+                    dom: '<"datatable-topbar d-flex flex-column flex-lg-row justify-content-between align-items-center mb-0 mb-md-4"fB>rt<"d-flex justify-content-between align-items-center mt-4 px-0"ip>',
                      buttons: [
                 {
                     extend: 'csv',

@@ -779,22 +779,25 @@ thead.custom-table th:last-child {
  
     
     
-#tariffTable_wrapper .dataTables_paginate .paginate_button:hover {
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover:hover {
         background-color: rgba(0, 0, 0, 0.07)!important;
         cursor: pointer;
+        color: gray!important;
     }
 
-[data-bs-theme=dark] #tariffTable_wrapper .dataTables_paginate .paginate_button:hover {
+[data-bs-theme=dark] .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
         background-color: rgba(255, 255, 255, 0.07)!important;
         cursor: pointer;
+        color: white!important;
     }
 
 .avatar-initials {
     padding: 15px;
 }
 
-.dataTables_paginate .current:hover {
+.dataTables_wrapper .dataTables_paginate .current:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
     background-color: #299cdb!important;
+    color: white!important;
     }
 
 
