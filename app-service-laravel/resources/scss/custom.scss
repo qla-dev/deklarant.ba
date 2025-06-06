@@ -371,7 +371,7 @@ color: #299cdb ;
 
 @media (max-width: 767.98px) {
 
-    [data-layout=horizontal] .page-title-box {padding-top: 0.5rem!important;}
+   .page-title-box {padding-top: 0rem!important;}
 
     .datatable-topbar {
         gap:20px!important;
@@ -777,7 +777,17 @@ thead.custom-table th:last-child {
     }
 
  
+    
+    
+#tariffTable_wrapper .dataTables_paginate .paginate_button:hover {
+        background-color: rgba(0, 0, 0, 0.07)!important;
+        cursor: pointer;
+    }
 
+[data-bs-theme=dark] #tariffTable_wrapper .dataTables_paginate .paginate_button:hover {
+        background-color: rgba(255, 255, 255, 0.07)!important;
+        cursor: pointer;
+    }
 
 
 

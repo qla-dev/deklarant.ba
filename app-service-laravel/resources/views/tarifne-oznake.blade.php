@@ -57,12 +57,7 @@
     }
 
 
-    #tariffTable_wrapper .dataTables_paginate .paginate_button:hover {
-        background-color: #eff2f7;
-
-        color: #299cdb !important;
-        cursor: pointer;
-    }
+    
 
     #tariffTable_wrapper .dataTables_paginate .paginate_button.current {
         background-color: #299cdb !important;
@@ -172,9 +167,13 @@ Baza tarifnih oznaka
             </div>
 
             <div class="card-body">
-                <div class="table-responsive table-card ms-1 me-1 mb-2">
+                 <div id="tariff-loading" class="text-center my-4 mb-5">
+                    <i class="mdi mdi-loading mdi-spin fs-24 text-info"></i>
+                    <p class="text-muted">Učitavanje rezultata</p>
+                </div>
+                <div class="table-responsive table-card ms-1 me-1 mb-2" style="display:none">
                     <table id="tariffTable" class="table mb-2 w-100">
-                        <thead class="table-info">
+                        <thead class="custom-table">
                             <tr>
                                 <th>ID</th>
                                 <th>Tarifna oznaka</th>
@@ -208,184 +207,6 @@ Baza tarifnih oznaka
     </div>
 </div>
 
-<div class="modal fade" id="invoiceDetailsModal" tabindex="-1" aria-labelledby="invoiceDetailsModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Pregled fakture</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                    aria-label="Zatvori"></button>
-            </div>
-            <div class="modal-body p-0">
-                <div class="row justify-content-center">
-                    <div class="col-xxl-9">
-                        <div class="card" id="demo">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div
-                                        class="card-header border-bottom-dashed p-4 d-flex justify-content-between">
-                                        <div>
-                                            <img src="{{ URL::asset('build/images/logo.svg') }}"
-                                                class="card-logo" alt="logo" height="30">
-                                            <div class="mt-4">
-                                                <h6 class="text-muted text-uppercase fw-semibold">Adresa
-                                                </h6>
-                                                <p class="text-muted mb-1" id="address-details">--</p>
-                                                <p class="text-muted mb-0" id="zip-code"><span>Poštanski
-                                                        broj:</span> --</p>
-                                            </div>
-                                        </div>
-                                        <div class="text-end">
-
-                                            <h6><span class="text-muted fw-normal">Email:</span> <span
-                                                    id="email">--</span></h6>
-                                            <h6><span class="text-muted fw-normal">Web:</span> <a href="#"
-                                                    class="link-primary" target="_blank" id="website">--</a>
-                                            </h6>
-                                            <h6 class="mb-0"><span
-                                                    class="text-muted fw-normal">Telefon:</span> <span
-                                                    id="contact-no">--</span></h6>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-12">
-                                    <div class="card-body p-4">
-                                        <div class="row g-3">
-                                            <div class="col-lg-3 col-6">
-                                                <p class="text-muted mb-2 text-uppercase fw-semibold">
-                                                    Faktura #</p>
-                                                <h5 class="fs-14 mb-0">#<span id="invoice-no">--</span></h5>
-                                            </div>
-                                            <div class="col-lg-3 col-6">
-                                                <p class="text-muted mb-2 text-uppercase fw-semibold">Datum
-                                                </p>
-                                                <h5 class="fs-14 mb-0"><span id="invoice-date">--</span>
-                                                </h5>
-                                            </div>
-                                            <div class="col-lg-3 col-6">
-                                                <p class="text-muted mb-2 text-uppercase fw-semibold">
-                                                    Skenirana</p>
-                                                <span class="badge bg-light text-dark fs-11"
-                                                    id="payment-status">--</span>
-                                            </div>
-                                            <div class="col-lg-3 col-6">
-                                                <p class="text-muted mb-2 text-uppercase fw-semibold">Ukupan
-                                                    iznos</p>
-                                                <h5 class="fs-14 mb-0"><span id="total-amount">--</span>
-                                                </h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-12">
-                                    <div class="card-body p-4 border-top border-top-dashed">
-                                        <div class="row g-3">
-                                            <div class="col-6">
-                                                <h6 class="text-muted text-uppercase fw-semibold mb-3">
-                                                    Dobavljač</h6>
-                                                <p class="fw-medium mb-2" id="billing-name">--</p>
-                                                <p class="text-muted mb-1" id="billing-address-line-1">--
-                                                </p>
-                                                <p class="text-muted mb-1"><span>Telefon: </span><span
-                                                        id="billing-phone-no">--</span></p>
-                                                <p class="text-muted mb-0"><span>PIB: </span><span
-                                                        id="billing-tax-no">--</span></p>
-                                            </div>
-                                            <div class="col-6">
-                                                <h6 class="text-muted text-uppercase fw-semibold mb-3">
-                                                    Zemlja porijekla</h6>
-                                                <p class="fw-medium mb-2" id="shipping-country">--</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Invoice Items -->
-                                <div class="col-lg-12">
-                                    <div class="card-body p-4">
-                                        <div class="table-responsive">
-                                            <table
-                                                class="table table-borderless text-center table-nowrap align-middle mb-0">
-                                                <thead>
-                                                    <tr class="table-active">
-                                                        <th>#</th>
-                                                        <th>Artikal</th>
-                                                        <th>Opis</th>
-                                                        <th>Cijena</th>
-                                                        <th>Količina</th>
-                                                        <th>Ukupno</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="products-list">
-                                                    <!-- Dynamic rows will be inserted here -->
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Totals -->
-                                <div class="col-lg-12">
-                                    <div class="card-body pt-0">
-                                        <div class="border-top border-top-dashed mt-2">
-                                            <table
-                                                class="table table-borderless table-nowrap align-middle mb-0 ms-auto"
-                                                style="width:250px">
-                                                <tbody>
-                                                    <tr class="border-top border-top-dashed fs-15">
-                                                        <th scope="row">Ukupno</th>
-                                                        <th class="text-end"><span id="modal-total-amount">
-                                                            </span> EUR </th>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="mt-4">
-                                            <h6 class="text-muted text-uppercase fw-semibold mb-3">Detalji
-                                                plaćanja:</h6>
-                                            <p class="text-muted mb-1">Način plaćanja: <span
-                                                    class="fw-medium">Kartica</span></p>
-                                            <p class="text-muted mb-1">Ime vlasnika kartice: <span
-                                                    class="fw-medium">Tin Tomić</span></p>
-                                            <p class="text-muted mb-1">Broj kartice: <span
-                                                    class="fw-medium">xxxx xxxx xxxx 1234</span></p>
-                                            <p class="text-muted">Ukupno za platiti: <span
-                                                    class="fw-medium"><span
-                                                        id="payment-method-amount">755.96</span> KM</span>
-                                            </p>
-                                        </div>
-
-                                        <div class="mt-4">
-                                            <div class="alert alert-info">
-                                                <p class="mb-0"><span class="fw-semibold">Napomena:</span>
-                                                    <span id="note">Račun je informativnog karaktera.
-                                                        Provjerite detalje prije plaćanja.</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-                                            <a href="javascript:window.print()" class="btn btn-success">
-                                                <i class="ri-printer-line align-bottom me-1"></i> Print
-                                            </a>
-                                            <a href="javascript:void(0);" class="btn btn-primary">
-                                                <i class="ri-download-2-line align-bottom me-1"></i>
-                                                Download
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div> <!-- row -->
-                        </div> <!-- card -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <!--end row-->
@@ -408,10 +229,16 @@ Baza tarifnih oznaka
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        fetch('/storage/data/tariff.json')
+    document.addEventListener("DOMContentLoaded", function () {
+        const loader = document.getElementById('tariff-loading');
+        const tableContainer = document.querySelector('.table-responsive');
+
+        fetch('/build/json/tariff.json')
             .then(response => response.json())
             .then(data => {
+                loader?.remove();
+                tableContainer && (tableContainer.style.display = 'block');
+
                 const table = $('#tariffTable').DataTable({
                     data: data,
                     scrollX: true,
@@ -420,89 +247,53 @@ Baza tarifnih oznaka
                     fixedColumns: {
                         leftColumns: 1
                     },
-                    columns: [{
-                            data: null,
-                            title: 'ID',
-                            render: (data, type, row, meta) => meta.row + 1
-                        },
-                        {
-                            data: 'Tarifna oznaka',
-                            title: 'Tarifna oznaka'
-                        },
-                        {
-                            data: 'Naziv',
-                            title: 'Naziv'
-                        },
-                        {
-                            data: 'Dopunska jedinica',
-                            title: 'Jedinica'
-                        },
-                        {
-                            data: 'Carinska stopa (%)',
-                            title: 'Stopa (%)'
-                        },
-                        {
-                            data: 'EU',
-                            title: 'EU'
-                        },
-                        {
-                            data: 'CEFTA',
-                            title: 'CEFTA'
-                        },
-                        {
-                            data: 'IRN',
-                            title: 'IRN'
-                        },
-                        {
-                            data: 'TUR',
-                            title: 'TUR'
-                        },
-                        {
-                            data: 'CHE, LIE',
-                            title: 'CHE, LIE'
-                        },
-                        {
-                            data: 'ISL',
-                            title: 'ISL'
-                        },
-                        {
-                            data: 'NOR',
-                            title: 'NOR'
-                        }
+                    columns: [
+                        { data: null, title: 'ID', render: (data, type, row, meta) => meta.row + 1 },
+                        { data: 'Tarifna oznaka', title: 'Tarifna oznaka' },
+                        { data: 'Naziv', title: 'Naziv' },
+                        { data: 'Dopunska jedinica', title: 'Jedinica' },
+                        { data: 'Carinska stopa (%)', title: 'Stopa (%)' },
+                        { data: 'EU', title: 'EU' },
+                        { data: 'CEFTA', title: 'CEFTA' },
+                        { data: 'IRN', title: 'IRN' },
+                        { data: 'TUR', title: 'TUR' },
+                        { data: 'CHE, LIE', title: 'CHE, LIE' },
+                        { data: 'ISL', title: 'ISL' },
+                        { data: 'NOR', title: 'NOR' }
                     ],
-                    dom: '<"datatable-topbar d-flex justify-content-between align-items-center mb-3"Bf>rt<"d-flex justify-content-between align-items-center mt-4 px-0"i p>',
-
-                    buttons: [{
-                            extend: 'csv',
-                            text: 'Export u CSV',
-                            className: 'btn btn-info me-1 ms-1 rounded-1'
-                        },
-                        {
-                            extend: 'excelHtml5',
-                            text: 'Export u Excel',
-                            className: 'btn btn-info me-1 ms-1 rounded-1'
-                        },
-                        {
-                            extend: 'pdf',
-                            text: 'Export u PDF',
-                            className: 'btn btn-info me-1 ms-1 rounded-1'
-                        },
-                        {
-                            extend: 'print',
-                            text: 'Štampa',
-                            className: 'btn btn-info me-1 ms-1 rounded-1'
-                        },
-                        {
-                            extend: 'colvis',
-                            text: 'Kolone',
-                            className: 'btn btn-info me-1 ms-1 rounded-1'
-                        },
-                        {
-                            extend: 'pageLength',
-                            text: 'Prikaži redova',
-                            className: 'btn-info me-1 ms-1 rounded-1'
-                        }
-                    ],
+                    dom: '<"datatable-topbar d-flex flex-column flex-lg-row justify-content-between align-items-center mb-3"fB>rt<"d-flex justify-content-between align-items-center mt-4 px-0"ip>',
+                     buttons: [
+                {
+                    extend: 'csv',
+                    text: '<i class="ri-file-code-line align-bottom me-1"></i> Export u CSV',
+                    className: 'btn btn-soft-info me-1 rounded-1'
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="ri-file-excel-line align-bottom me-1"></i> Export u Excel',
+                    className: 'btn btn-soft-info me-1 ms-1 rounded-1'
+                },
+                {
+                    extend: 'pdf',
+                    text: '<i class="ri-file-pdf-2-line align-bottom me-1"></i> Export u PDF',
+                    className: 'btn btn-soft-info me-1 ms-1 rounded-1'
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="ri-printer-line align-bottom me-1"></i> Print',
+                    className: 'btn btn-soft-info me-1 ms-1 rounded-1'
+                },
+                {
+                    extend: 'colvis',
+                    text: 'Kolone',
+                    className: 'btn btn-soft-info me-1 ms-1 rounded-1'
+                },
+                {
+                    extend: 'pageLength',
+                    text: 'Prikaži redova',
+                    className: 'btn-soft-info me-1 ms-1 rounded-1'
+                }
+            ],
                     language: {
                         paginate: {
                             first: "←",
@@ -516,12 +307,11 @@ Baza tarifnih oznaka
                         search: "",
                         zeroRecords: "Nema pronađenih stavki"
                     },
-                    initComplete: function() {
+                    initComplete: function () {
                         const api = this.api();
 
-                        // Inject custom styled search field
                         $('#tariffTable_filter')
-                            .addClass('flex-grow-1 me-0')
+                            .addClass('flex-grow-1 me-0 order-0 order-lg-1')
                             .css('max-width', '400px')
                             .html(`
                                 <div class="position-relative w-100">
@@ -533,105 +323,38 @@ Baza tarifnih oznaka
                                 </div>
                             `);
 
+                        $('.dt-buttons').addClass('order-1 order-lg-0');
+
                         const input = $('#tariff-search-input');
                         const clear = $('#tariff-search-clear');
 
-                        input.on('input', function() {
+                        input.on('input', function () {
                             const val = $(this).val();
                             api.search(val).draw();
                             clear.toggleClass('d-none', val.length === 0);
                         });
 
-                        clear.on('click', function() {
+                        clear.on('click', function () {
                             input.val('');
                             api.search('').draw();
                             $(this).addClass('d-none');
                         });
 
-                        console.log(" Tariff search field initialized.");
+                        console.log("✅ Tariff search field initialized.");
                     }
                 });
             })
             .catch(err => {
-                console.error(" Greška pri učitavanju podataka o tarifnim oznakama:", err);
+                loader?.remove();
+                console.error("❌ Greška pri učitavanju podataka o tarifnim oznakama:", err);
             });
     });
 </script>
 
 
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        $(document).on('click', '.view-invoice', function(e) {
-            e.preventDefault();
-            const invoiceId = $(this).data('id');
-            
 
-            fetch(`/api/invoices/${invoiceId}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                })
-                .then(response => response.json())
-                .then(invoice => {
-                    // Fetch supplier details
-                    fetch(`/api/suppliers/${invoice.supplier_id}`, {
-                            headers: {
-                                'Authorization': `Bearer ${token}`
-                            }
-                        })
-                        .then(res => res.json())
-                        .then(supplier => {
-                            // Fill invoice data
-                            $('#invoice-no').text(invoice.id);
-                            $('#invoice-date').text(new Date(invoice.date_of_issue).toLocaleDateString('hr'));
-                            $('#total-amount').text(`${parseFloat(invoice.total_price).toFixed(2)} KM`);
-                            $('#card-total-amount').text(`${parseFloat(invoice.total_price).toFixed(2)}`);
-                            $('#address-details').text(invoice.country_of_origin || '-');
-                            $('#payment-status').text(invoice.scanned === 1 ? 'Skenirano' : 'Nije skenirano');
-                            $('#shipping-country').text(invoice.country_of_origin || '--');
 
-                            // Supplier info
-                            $('#billing-name').text(supplier.name || '--');
-                            $('#billing-address-line-1').text(supplier.address || '--');
-                            $('#billing-phone-no').text(supplier.contact_phone || '--');
-                            $('#billing-tax-no').text(supplier.tax_id || '--');
-                            $('#email').text(supplier.contact_email || '--');
-
-                            // Fill invoice items and calculate total
-                            let itemsHTML = '';
-                            let totalSum = 0;
-
-                            invoice.items.forEach((item, index) => {
-                                const price = parseFloat(item.total_price || 0);
-                                totalSum += price;
-
-                                itemsHTML += `
-                                        <tr>
-                                            <th scope="row">${index + 1}</th>
-                                            <td class="text-start fw-medium">${item.item_description_original}</td> <!-- Artikal -->
-                                            <td class="text-muted text-wrap" style="white-space: normal; word-break: break-word; max-width: 500px;">${item.item_description}</td> <!-- Opis -->
-                                            <td>${item.base_price} ${item.currency}</td> <!-- Cijena -->
-                                            <td>${item.quantity}</td> <!-- Količina -->
-                                            <td class="text-end">${item.total_price} ${item.currency}</td> <!-- Ukupno -->
-                                        </tr>`;
-                            });
-
-                            $('#products-list').html(itemsHTML);
-                            $('#modal-total-amount').text(totalSum.toFixed(2));
-
-                            // Show modal
-                            const modal = new bootstrap.Modal(document.getElementById('invoiceDetailsModal'));
-                            modal.show();
-                        });
-                })
-                .catch(err => {
-                    console.error('Greška pri učitavanju fakture:', err);
-                    alert('Greška pri učitavanju fakture.');
-                });
-        });
-    });
-</script>
 
 
 @endsection

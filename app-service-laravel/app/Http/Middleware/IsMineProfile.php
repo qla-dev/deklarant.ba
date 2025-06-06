@@ -11,14 +11,17 @@ class IsMineProfile
     /**
      * Handle an incoming request.
      */
-    public function handle(Request $request, Closure $next): Response
-    {
-        $user = $request->user();
-        $routeUserId = $request->route('id');
-        if ((string)$user->id !== (string)$routeUserId) {
-            return response()->json(['message' => 'Forbidden. You can only update your own profile.'], 403);
-        }
+   public function handle(Request $request, Closure $next): Response
+{
+    $user = $request->user();
 
-        return $next($request);
+    $routeUserId = $request->route('userId') ?? $request->route('id');
+
+    if ((string)$user->id !== (string)$routeUserId) {
+        return response()->json(['message' => 'Forbidden. You can only update your own profile.'], 403);
     }
+
+    return $next($request);
+}
+
 }

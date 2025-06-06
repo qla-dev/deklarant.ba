@@ -73,9 +73,9 @@ Route::apiResource('tariff-rates', TariffRateController::class);
 
     // USER PACKAGES ROUTES
     Route::apiResource('user-packages', UserPackageController::class);
-    Route::post('user-packages/users/{userId}/packages/{packageId}', [UserPackageController::class, 'store']);
-    Route::put('user-packages/users/{userId}', [UserPackageController::class, 'update']);
-    Route::delete('user-packages/users/{userId}/packages/{packageId}', [UserPackageController::class, 'destroy']);
+    Route::post('user-packages/users/{userId}/packages/{packageId}', [UserPackageController::class, 'store'])->middleware(IsMineProfile::class);
+    Route::put('user-packages/users/{userId}', [UserPackageController::class, 'update'])->middleware(IsMineProfile::class);
+    Route::delete('user-packages/users/{userId}/packages/{packageId}', [UserPackageController::class, 'destroy'])->middleware(IsMineProfile::class);
 
     // STATISTICS ROUTES
     Route::get('/statistics', [StatsController::class, 'getStatistics']);
@@ -97,7 +97,7 @@ Route::apiResource('tariff-rates', TariffRateController::class);
     Route::get('/users', [UserController::class, 'getAllUsers']);
     Route::get('/users/{id}', [UserController::class, 'getUserById']);
     Route::put('/users/{id}', [UserController::class, 'updateUser'])->middleware(IsMineProfile::class);
-    Route::delete('/users/{id}', [UserController::class, 'deleteUser']);
+    Route::delete('/users/{id}', [UserController::class, 'deleteUser'])->middleware(IsAdmin::class);
 
 
     // FILE MANAGER ROUTES
