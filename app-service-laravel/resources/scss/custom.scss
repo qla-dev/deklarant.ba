@@ -355,9 +355,19 @@ color: #299cdb ;
     left: 0;
     top: 71px;
 }
+   @media (max-width: 767.98px) {
 
+.card-title {
+    font-size: 14px!important;}
+
+  .mobile-hide {
+    display: none !important;
+  } }
 
 @media (min-width: 768px) {
+
+       .mobile-show {
+        display: none!important;}
     #menuDropdown {
         display: none !important;
     }
@@ -800,6 +810,12 @@ thead.custom-table th:last-child {
     color: white!important;
     }
 
+
+@media (max-width: 1024.1px) {
+    [data-layout=horizontal] .page-content {
+        padding: calc(45px + 1.5rem) .75rem 60px .75rem!important;
+    }
+}
 
 
 @media (max-width: 768px) {

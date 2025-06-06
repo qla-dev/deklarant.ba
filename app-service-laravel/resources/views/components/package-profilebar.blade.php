@@ -27,7 +27,7 @@
 @if ($otherPackage && $otherPackage->active == 1)
     <div class="d-flex" style="flex-direction: column;">
         <span class="d-inline-flex align-items-center gap-1 fs-15">
-            <h5 class="card-title mb-0">Tvoj aktivni paket je</h5>
+            <h5 class="card-title mb-0"><span class="mobile-hide">Tvoj aktivni</span><span class="mobile-show">Aktivni</span> paket je</h5>
             <b class="d-inline-flex gap-1 text-info mb-0 me-4" style="margin-bottom:-1px!important">
                 {{ $packageName }}
                 {!! $iconHTML !!}
