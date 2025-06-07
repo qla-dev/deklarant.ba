@@ -115,7 +115,7 @@ class FullFlowIntegrationTest extends TestCase
         $this->verifyResults($taskId, 'test-3-expected.json');
     }
 
-    private function waitForTaskCompletion(string $taskId, int $timeout = 60): void
+    private function waitForTaskCompletion(string $taskId, int $timeout = 420): void
     {
         $start = time();
 

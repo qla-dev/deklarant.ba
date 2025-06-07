@@ -12,12 +12,13 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
+use Psr\Http\Message\ResponseInterface;
 
 class ProcessUploadedFile implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private ?Client $client = null;
+    protected ?Client $client = null;
 
     public function __construct(public Task $task, Client $client = null)
     {
@@ -34,13 +35,13 @@ class ProcessUploadedFile implements ShouldQueue
         try {
             $this->task->markAsProcessing();
 
-            // Step 1: Convert to markdown
+            // Step 1: Preprocess
             $this->task->update(['processing_step' => 'conversion']);
-            $markdown = $this->convertToLLM();
+            $preprocessedData = $this->convertToLLM();
 
             // Step 2: Extract data with LLM
             $this->task->update(['processing_step' => 'extraction']);
-            $result = $this->extractWithLLM($markdown);
+            $result = $this->extractWithLLM($preprocessedData);
 
             // Step 3: Enrich with search API
             $this->task->update(['processing_step' => 'enrichment']);
@@ -54,7 +55,7 @@ class ProcessUploadedFile implements ShouldQueue
         }
     }
 
-    public function convertToLLM(): string
+    public function convertToLLM()
     {
         $markerUrl = getenv('MARKER_URL');
 
@@ -150,25 +151,31 @@ class ProcessUploadedFile implements ShouldQueue
         return $output;
     }
 
-    private function extractWithLLM(string $markdown): array
+    protected function extractWithLLM($markdown): array
+    {
+        $responseData = $this->callOllama([
+            'json' => [
+                'model' => getenv('OLLAMA_MODEL'),
+                'prompt' =>
+                    "Here's the markdown of invoice:\n\n```md\n$markdown\n```\n\n"
+                    . file_get_contents(base_path("app/Jobs/prompt-markdown-to-json.txt")),
+                'stream' => false,
+                'options' => [
+                    'temperature' => 0.1,
+                    'num_predict' => 10000
+                ]
+            ]
+        ]);
+        return $this->parseOllamaResponse($responseData);
+    }
+
+    protected function callOllama(array $body): ResponseInterface
     {
         $maxRetries = 3;
 
         for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
             try {
-                $response = $this->client->post(getenv('OLLAMA_URL') . '/api/generate', [
-                    'json' => [
-                        'model' => getenv('OLLAMA_MODEL'),
-                        'prompt' =>
-                            "Here's the markdown of invoice:\n\n```md\n$markdown\n```\n\n"
-                            . file_get_contents(base_path("app/Jobs/prompt-markdown-to-json.txt")),
-                        'stream' => false,
-                        'options' => [
-                            'temperature' => 0.1,
-                            'num_predict' => 10000
-                        ]
-                    ]
-                ]);
+                $response = $this->client->post(getenv('OLLAMA_URL') . '/api/generate', $body);
                 break;
             } catch (Exception $e) {
                 \Illuminate\Support\Facades\Log::error('Error in OLLAMA. Retrying: ' . $e->getMessage());
@@ -179,6 +186,11 @@ class ProcessUploadedFile implements ShouldQueue
             }
         }
 
+        return $response;
+    }
+
+    protected function parseOllamaResponse(ResponseInterface $response): array
+    {
         $responseData = json_decode($response->getBody()->getContents(), true);
         // check if response data contains "error" key. If it does then raise exception with "message" key
         // if "message" key is unavailable then raise exception with generic message text
