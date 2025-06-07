@@ -28,7 +28,11 @@
                    
 
                     <a href="/" class="logo-light">
-                        <span >
+                        <span class="d-inline d-md-none">
+                            <img src="{{ URL::asset('build/images/logo-qla-dark.png') }}" alt=""  style="width:55px; margin-left: 3px;">
+                        </span>
+
+                        <span class="d-none d-md-inline">
                             <img src="{{ URL::asset('build/images/logo-qla-dark.png') }}" alt=""  style="width:60px; margin-top: -3px; margin-left: 2px;">
                         </span>
                        

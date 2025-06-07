@@ -33,6 +33,16 @@
          font-family: 'Facebook Sans Bold', sans-serif!important;
     }
 
+    @media (max-width: 768px) {
+
+  
+
+    .tariff-list, .suppliers-list {
+        max-height: 150px!important;
+        overflow-y: auto!important;
+    }
+    }
+
 
     /* Optional: Remove the margin-right for the last slide to avoid overflow */
     .mySwiper .swiper-slide:last-child {
