@@ -376,7 +376,7 @@
         <h5 class="mb-0">Moje deklaracije</h5>
         <a href="moje-deklaracije" class="text-info text-end fs-13">Pregledaj sve</a>
     </div>
-    <div class="card-body d-flex justify-content-center align-items-center flex-column pb-0 pt-0 position-relative" style="min-height: 180px;">
+    <div class="card-body d-flex justify-content-center align-items-center flex-column pb-0 pt-0 position-relative" style="min-height: 250px;">
         <!-- Centered loader -->
         <div class="position-absolute top-50 start-50 translate-middle">
             <div class="user-documents-loader spinner-border text-info" role="status"></div>
@@ -390,7 +390,7 @@
 </div>
 
 <!-- MOJI KLIJENTI -->
-<div class="card rounded-0 w-100 mb-5">
+<div class="card rounded-0 w-100 mb-5 mb-md-2 pb-2 pb-md-0">
      <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Moji klijenti</h5>
         <a href="moji-klijenti" class="text-info text-end fs-13">Pregledaj sve</a>
@@ -1490,7 +1490,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     }
 
                     return `
-                    <div class="col-4 col-md-6 text-center">
+                    <div class="col-4 text-center">
                         <a href="#" class="text-decoration-none view-invoice" data-id="${inv.id}" title="Pregled Deklaracije">
                             <i class="${icon} fs-24 text-info"></i>
                             <p class="fs-13 text-muted mt-1 mb-0" style="white-space:nowrap!important">${file}</p>
