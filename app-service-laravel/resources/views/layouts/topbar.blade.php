@@ -273,7 +273,7 @@
                         <div class="dropdown-divider"></div>
 
 
-                        <form method="POST" action="/custom-logout">
+                        <form method="POST" action="/custom-logout" style="margin-bottom: 0!important;">
                             @csrf
                             <button class="dropdown-item" type="submit"><i
                                     class="bx bx-power-off text-muted fs-16 align-middle me-1"
