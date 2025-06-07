@@ -234,7 +234,7 @@
                     <div class="flex-grow-1 overflow-hidden">
                         <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Carinskih tarifa</p>
                         <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                            <span class="counter-value" data-target="19.542">19.542</span>
+                            <span class="counter-value" data-target="14.1082">14.108</span>
                         </h4>
                     </div>
                     <div style="width: 80px; height: 80px;" class="d-flex align-items-center justify-content-center">
@@ -500,7 +500,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const stats = res.data || {};
         console.log("Stats response:", stats);
 
-        // --- Suppliers Section ---
+        // --- SUPPLIERS SECTION ---
         const suppliers = stats.supplier_stats?.latest_suppliers || [];
         const lastSuppliers = suppliers.slice(-5);
 
@@ -511,7 +511,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             if (lastSuppliers.length === 0) {
                 supplierContainer.innerHTML = `
-                    <div class="text-muted text-center position-absolute translate-middle top-50 start-50">Nema podataka o dobavljačima</div>
+                    <div class="text-muted text-center position-absolute translate-middle top-50 start-50">
+                        Nema podataka o dobavljačima
+                    </div>
                 `;
             } else {
                 lastSuppliers.forEach((supplier) => {
@@ -524,86 +526,73 @@ document.addEventListener("DOMContentLoaded", async function () {
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <div>
                                 <div class="fw-semibold">
-  ${supplier.name.length > 17 ? supplier.name.substring(0, 17) + "…" : supplier.name}
-</div>
+                                    ${supplier.name.length > 17 ? supplier.name.substring(0, 17) + "…" : supplier.name}
+                                </div>
                                 <div class="text-muted fs-12">${supplier.owner ?? "Nepoznat vlasnik"}</div>
                             </div>
-                           <div class="text-info fs-12" style="white-space: nowrap;">
-  ${!supplier.address 
-    ? "Nije definisano" 
-    : (supplier.address.length > 17 
-        ? supplier.address.substring(0, 17) + "…" 
-        : supplier.address)
-  }
-  <i class="ri-map-pin-line text-info ms-1"></i>
-</div>
-
+                            <div class="text-info fs-12" style="white-space: nowrap;">
+                                ${!supplier.address 
+                                    ? "Nije definisano" 
+                                    : (supplier.address.length > 17 
+                                        ? supplier.address.substring(0, 17) + "…" 
+                                        : supplier.address)}
+                                <i class="ri-map-pin-line text-info ms-1"></i>
+                            </div>
                         </div>
                     `;
                 });
 
                 supplierContainer.innerHTML += `
                     <div class="card-footer p-0 pb-0 pt-0 d-flex justify-content-end pregledaj-vise-bottom-right">
-                        <a href="moji-klijenti" class="text-info fs-6 " style="margin:1rem">Pregledaj sve</a>
+                        <a href="moji-klijenti" class="text-info fs-13 mb-2" style="margin:.5rem!important;">
+                            Pregledaj sve
+                        </a>
                     </div>
                 `;
             }
         }
 
-        // --- Tariff Section ---
-        const allInvoices = stats.invoices || [];
-        console.log("All invoices:", allInvoices);
-
-        const validItems = [];
-
-        allInvoices.forEach((inv) => {
-            if (Array.isArray(inv.items) && inv.items.length > 0) {
-                inv.items.forEach((item) => {
-                    console.log("Checking item:", item);
-
-                    const code =
-                        item.best_customs_code_matches?.[0] || "Nepoznat kod";
-                    const name =
-                        item.item_description_original ||
-                        item.item_description ||
-                        "Nepoznat naziv";
-
-                    validItems.push({ code, name });
-                });
-            }
-        });
-
-        const recentItems = validItems.slice(0, 5);
-        console.log("Valid tariff items:", recentItems);
+        // --- TARIFF SECTION ---
+        const latestTariffs = stats.latest_tariffs || [];
+        const topTariffs = latestTariffs.slice(0, 5);
 
         if (tariffLoader) tariffLoader.classList.add("d-none");
         if (tariffContainer) {
             tariffContainer.classList.remove("d-none");
             tariffContainer.innerHTML = "";
 
-            if (recentItems.length === 0) {
+            if (topTariffs.length === 0) {
                 tariffContainer.innerHTML = `
-                    <div class="text-muted text-center position-absolute translate-middle top-50 start-50">Nema nedavnih tarifa</div>
+                    <div class="text-muted text-center position-absolute translate-middle top-50 start-50">
+                        Nema nedavnih tarifa
+                    </div>
                 `;
             } else {
-                recentItems.forEach((item) => {
+                topTariffs.forEach((item) => {
                     tariffContainer.innerHTML += `
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <div>
-                                <div class="fw-semibold">${item.code}</div>
-                                <div class="text-muted fs-12">${item.name}</div>
+                                <div class="fw-semibold">${item.item_code}</div>
+                                <div class="text-muted fs-12" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px;">
+    ${item.name}
+</div>
+
                             </div>
+                            <div class="fs-12 text-info">${item.tariff_rate ?? '-'}%</div>
                         </div>
                     `;
                 });
 
                 tariffContainer.innerHTML += `
-                    <div class="card-footer p-0 pb-0 pt-0 d-flex justify-content-end  pregledaj-vise-bottom-right">
-                        <a href="moje-tarife" class="text-info fs-13 mb-2" style="margin-top:.2rem!important;margin-right:1rem">Pregledaj sve</a>
+                    <div class="card-footer p-0 pb-0 pt-0 d-flex justify-content-end pregledaj-vise-bottom-right">
+                        <a href="moje-tarife" class="text-info fs-13 mb-2" style="margin:.5rem!important">
+                            Pregledaj sve
+                        </a>
                     </div>
                 `;
             }
         }
+
     } catch (err) {
         console.error("Greška pri dohvaćanju statistike:", err);
 
@@ -622,6 +611,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 });
 </script>
+
 
 
 
