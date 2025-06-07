@@ -4,6 +4,9 @@ namespace Tests\Unit;
 
 use App\Jobs\ProcessUploadedFile;
 use App\Models\Task;
+use App\Interfaces\LLMCaller;
+use App\Services\OllamaLLMService;
+use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -20,6 +23,11 @@ class ProcessUploadedFileTest extends TestCase
         parent::setUp();
         putenv('MARKER_URL=http://example.com');
         putenv('HTTP_RETRY_DELAY=0');
+    }
+
+    protected function createOllamaService(Client $client): OllamaLLMService
+    {
+        return new OllamaLLMService($client);
     }
 
     public function test_file_processing_pipeline()
@@ -58,7 +66,8 @@ class ProcessUploadedFileTest extends TestCase
         ]);
 
         $client = new \GuzzleHttp\Client(['handler' => HandlerStack::create($mock)]);
-        $job = new ProcessUploadedFile($task, $client);
+        $ollamaService = $this->createOllamaService($client);
+        $job = new ProcessUploadedFile($task, $client, $ollamaService);
         $job->handle();
 
         $task->refresh();
@@ -89,7 +98,8 @@ class ProcessUploadedFileTest extends TestCase
         ]);
 
         $client = new \GuzzleHttp\Client(['handler' => HandlerStack::create($mock)]);
-        $job = new ProcessUploadedFile($task, $client);
+        $ollamaService = $this->createOllamaService($client);
+        $job = new ProcessUploadedFile($task, $client, $ollamaService);
 
         try {
             $job->handle();
@@ -118,7 +128,8 @@ class ProcessUploadedFileTest extends TestCase
         ]);
 
         $client = new \GuzzleHttp\Client(['handler' => HandlerStack::create($mock)]);
-        $job = new ProcessUploadedFile($task, $client);
+        $ollamaService = $this->createOllamaService($client);
+        $job = new ProcessUploadedFile($task, $client, $ollamaService);
 
         try {
             $job->handle();
@@ -157,13 +168,15 @@ class ProcessUploadedFileTest extends TestCase
                 ]),
                 'done' => true
             ])),
+            // Search API response
             new Response(200, [], json_encode([
                 ['entry' => ['code' => 'HS123'], 'closeness' => 0.9]
             ]))
         ]);
 
         $client = new \GuzzleHttp\Client(['handler' => HandlerStack::create($mock)]);
-        $job = new ProcessUploadedFile($task, $client);
+        $ollamaService = $this->createOllamaService($client);
+        $job = new ProcessUploadedFile($task, $client, $ollamaService);
         $job->handle();
 
         $task->refresh();
@@ -194,7 +207,9 @@ class ProcessUploadedFileTest extends TestCase
         $mockProcess->method('run')->willReturn(0);
 
         // Set up the process factory
-        $job = new ProcessUploadedFile($task);
+        $client = new \GuzzleHttp\Client();
+        $ollamaService = $this->createOllamaService($client);
+        $job = new ProcessUploadedFile($task, null, $ollamaService);
         $job->setProcessFactory(function ($command) use ($mockProcess) {
             $this->assertContains('marker_single', $command);
             $this->assertContains('--output_format=markdown', $command);
@@ -235,7 +250,7 @@ class ProcessUploadedFileTest extends TestCase
         $mockProcess->method('getErrorOutput')->willReturn('Marker CLI error');
 
         $job = $this->getMockBuilder(ProcessUploadedFile::class)
-            ->setConstructorArgs([$task])
+            ->setConstructorArgs([$task, null, $this->createOllamaService(new \GuzzleHttp\Client())])
             ->onlyMethods(['convertToLLMViaCli'])
             ->getMock();
 
@@ -268,7 +283,8 @@ class ProcessUploadedFileTest extends TestCase
 
         putenv('MARKER_URL=http://example.com');
         $client = new \GuzzleHttp\Client(['handler' => HandlerStack::create($mock)]);
-        $job = new ProcessUploadedFile($task, $client);
+        $ollamaService = $this->createOllamaService($client);
+        $job = new ProcessUploadedFile($task, $client, $ollamaService);
         $markdown = $job->convertToLLM();
 
         $this->assertEquals('# HTTP Markdown content', $markdown);

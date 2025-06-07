@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Task;
 use App\Http\Clients\MockableHttpClient;
+use App\Interfaces\LLMCaller;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
@@ -19,12 +20,14 @@ class ProcessUploadedFile implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected ?Client $client = null;
+    protected LLMCaller $llmCaller;
 
-    public function __construct(public Task $task, Client $client = null)
+    public function __construct(public Task $task, Client $client = null, LLMCaller $llmCaller)
     {
         if ($client !== null) {
             $this->client = $client;
         }
+        $this->llmCaller = $llmCaller;
     }
 
     public function handle()
@@ -153,50 +156,11 @@ class ProcessUploadedFile implements ShouldQueue
 
     protected function extractWithLLM($markdown): array
     {
-        $responseData = $this->callLLM(
+        $responseData = $this->llmCaller->callLLM(
             "Here's the markdown of invoice:\n\n```md\n$markdown\n```\n\n"
                 . file_get_contents(base_path("app/Jobs/prompt-markdown-to-json.txt")),
         );
         return $this->parseOllamaResponse($responseData);
-    }
-
-    protected function callLLM(string $prompt, ?array $images = null): ResponseInterface
-    {
-        $maxRetries = 3;
-
-        for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
-            try {
-                $body = [
-                    'json' => [
-                        'model' => getenv('OLLAMA_MODEL'),
-                        'prompt' => $prompt,
-                        'stream' => false,
-                        'options' => [
-                            'temperature' => 0.1,
-                            'num_predict' => 10000
-                        ]
-                    ]
-                ];
-
-                if ($images !== null) {
-                    $body['json']['images'] = $images;
-                }
-
-                $response = $this->client->post(getenv('OLLAMA_URL') . '/api/generate', $body);
-                break;
-            } catch (Exception $e) {
-                \Illuminate\Support\Facades\Log::error('Error in LLM. Retrying: ' . $e->getMessage());
-                if ($attempt === $maxRetries) {
-                    throw new Exception('LLM service error: ' . $e->getMessage());
-                }
-                $delayMs = (int) getenv('HTTP_RETRY_DELAY', 2000);
-                if ($delayMs > 0) {
-                    usleep($delayMs * 1000);
-                }
-            }
-        }
-
-        return $response;
     }
     protected function parseOllamaResponse(ResponseInterface $response): array
     {
