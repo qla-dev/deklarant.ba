@@ -11,25 +11,25 @@
 <footer class="footer main-footer">
     <div class="container-fluid">
         <div class="row ">
-            <div class="col-5 col-sm-6 footer-label" style="margin-top:-3px">
+            <div class="col-6 col-sm-6 footer-label">
                 <script>document.write(new Date().getFullYear())</script> © <strong class="logo-span logo-text">deklarant<span class="ai-span">.ai</span></strong>
             </div>
-            <div class="col-7 col-sm-6 footer-label">
-                <div class="text-end d-flex d-md-block fs-6 justify-content-center logo-span">
-                Razvijeno od strane  
+            <div class="col-6 col-sm-6 footer-label">
+                <div class="text-end d-flex d-md-block fs-6 justify-content-end logo-span">
+                Razvili  
 
                   <a href="/" class="logo-dark">
                         <span class="d-inline d-md-none">
                             <img src="{{ URL::asset('build/images/logo-qla.png') }}" alt="" style="width:55px; margin-left: 3px;">
                         </span>
-                         <span class="d-none d-md-inline"> <img src="{{ URL::asset('build/images/logo-qla.png') }}" alt="" style="width:60px; margin-top: -2px; margin-left: 2px;"></span>
+                         <span class="d-none d-md-inline"> <img src="{{ URL::asset('build/images/logo-qla.png') }}" alt="" style="width:60px; margin-top: -3px; margin-left: 2px;"></span>
                  
                     </a>
                    
 
                     <a href="/" class="logo-light">
                         <span >
-                            <img src="{{ URL::asset('build/images/logo-qla-dark.png') }}" alt=""  style="width:60px">
+                            <img src="{{ URL::asset('build/images/logo-qla-dark.png') }}" alt=""  style="width:60px; margin-top: -3px; margin-left: 2px;">
                         </span>
                        
                         
