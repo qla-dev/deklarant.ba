@@ -816,6 +816,8 @@ thead.custom-table th:last-child {
 
 @media (max-width: 768px) {
 
+    .fo
+
     .tariff-list, .suppliers-list {
         max-height: 150px!important;
         overflow-y: auto!important;
@@ -852,7 +854,27 @@ thead.custom-table th:last-child {
     background: unset!important;
 }
 
+@media (max-width: 576.98px) {
+.main-content {
+    padding-bottom: 50px!important;
+}
+.footer {bottom: 50px; background-color: unset!important; margin-bottom: unset!important;}
+}
 
 
+.dropdown-menu {border-radius: 0!important;}
 
+#global-mobile-search {
+    border-top-right-radius: 0!important;
+    border-bottom-right-radius: 0!important;
+}
+
+
+.logo-text {
+    color: black!important;
+}
+
+[data-bs-theme=dark] .logo-text {
+    color: white!important;
+}
 

@@ -11,6 +11,10 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 <style>
+
+    .main-footer {
+       margin-bottom: -10px!important;
+    }
     @media (max-width: 1024.1px) {
     [data-layout=horizontal] .page-content {
         padding: calc(45px + 1.5rem) .75rem 60px .75rem!important;
@@ -253,7 +257,7 @@
 </div>
 
 <!-- Profile Header -->
-<div class="pt-4 mb-4 profile-wrapper pb-lg-4">
+<div class="pt-4 mb-0 mb-md-4 profile-wrapper pb-lg-4 pt-5 pt-md-0">
     <div class="row g-4 align-items-center">
         <div class="col-auto">
             <div class="avatar-lg position-relative" id="avatar-wrapper">
@@ -386,7 +390,7 @@
 </div>
 
 <!-- MOJI KLIJENTI -->
-<div class="card rounded-0 w-100 mb-0">
+<div class="card rounded-0 w-100 mb-5">
      <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Moji klijenti</h5>
         <a href="moji-klijenti" class="text-info text-end fs-13">Pregledaj sve</a>
@@ -409,7 +413,7 @@
                     </div>
 
                     <!-- Right Form with Tabs -->
-                    <div class="col-xxl-8 d-flex order-1 order-md-1 order-lg-2 flex-column">
+                    <div class="col-xxl-8 d-flex order-1 order-md-1 order-lg-2 flex-column mb-3 mb-md-0">
                          <div class="card mb-3 d-flex flex-column align-items-center justify-content-center rounded-0 d-flex d-md-none">
                             <div class="card-body d-flex align-items-center w-100 justify-content-between" style="min-height: 60px;">
                              @include('components.package-profilebar')
@@ -1459,7 +1463,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                 if (lastFour.length === 0) {
                     docsContainer.innerHTML = `
-                    <div class="text-muted text-center position-absolute translate-middle top-50 start-50">Nema dostupnih dokumenata</div>
+                    <div class="text-muted text-center position-absolute translate-middle top-50 start-50 mt-0">Nema dostupnih dokumenata</div>
                 `;
                     return;
                 }
@@ -1486,7 +1490,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     }
 
                     return `
-                    <div class="col-6 col-sm-3 text-center">
+                    <div class="col-4 col-md-6 text-center">
                         <a href="#" class="text-decoration-none view-invoice" data-id="${inv.id}" title="Pregled Deklaracije">
                             <i class="${icon} fs-24 text-info"></i>
                             <p class="fs-13 text-muted mt-1 mb-0" style="white-space:nowrap!important">${file}</p>

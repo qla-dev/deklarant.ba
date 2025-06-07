@@ -87,9 +87,7 @@
                 <input id="global-mobile-search" type="text" class="form-control border border-2"
                        placeholder="Pretraga po broju deklaracije, imenu dokumenta, dobavljaču, zemlji porijekla..."
                        aria-label="Pretraga">
-                <button type="button" class="btn btn-light d-none" id="search-mobile-clear" tabindex="-1">
-                    <i class="mdi mdi-close"></i>
-                </button>
+              
                 <button class="btn btn-info" type="submit">
                     <i class="mdi mdi-magnify"></i>
                 </button>
@@ -183,17 +181,7 @@
                                 </div>
                             </div>
 
-                            <div class="row mt-2">
-                                <div class="col-12 text-center">
-                                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#scanModal"
-                                        class="btn btn-info btn-sm text-white w-100 d-flex align-items-center justify-content-center">
-                                        <i class="fas fa-wand-magic-sparkles fs-6 me-1"></i>
-                                        <span>Skeniraj deklaraciju sa AI</span>
-                                    </a>
-                                </div>
-
-
-                            </div>
+                     
                         </div>
                     </div>
                 </div>
@@ -266,7 +254,7 @@
                         </span>
                     </button>
 
-                    <div class="dropdown-menu dropdown-menu-end border">
+                    <div class="dropdown-menu dropdown-menu-end">
                         <!-- item-->
                         <h6 class="dropdown-header" id="dropdownWelcome">Dobrodošli
                             {{ Auth::user()->username ?? 'Korisnik' }}</h6>

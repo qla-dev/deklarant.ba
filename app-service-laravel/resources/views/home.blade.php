@@ -11,8 +11,29 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+<link href="https://db.onlinewebfonts.com/c/b05a654a86637945b4997a378a5181fe?family=Facebook+Sans+Bold" rel="stylesheet">
 
 <style>
+
+     .logo-span {
+        font-family: 'Facebook Sans Bold', sans-serif!important;
+         font-weight: bolder!important;
+    }
+
+    .ai-span {
+        
+        color: #289cdb!important;
+        padding: unset!Important;
+        background: unset!Important;
+            font-size: inherit!important;
+    font-style: normal!important;
+    font-weight: bolder!important;
+        margin-bottom: unset!important;
+        padding-bottom: !important;
+         font-family: 'Facebook Sans Bold', sans-serif!important;
+    }
+
+
     /* Optional: Remove the margin-right for the last slide to avoid overflow */
     .mySwiper .swiper-slide:last-child {
         margin-right: 0;
@@ -82,7 +103,7 @@
                             <img id="user-avatar-middle" class="img-thumbnail rounded-circle d-none"  style="object-fit: cover; aspect-ratio: 1/1; max-width: 50px; max-height: 50px; min-width: 50px; min-height: 50px; display: block;padding-right: 0px; padding-left: 0px; padding: 0.15rem; border: 0; background-color: transparent;">
                             <div id="avatar-middle-fallback" class="rounded-circle bg-info d-flex justify-content-center align-items-center text-white" style="width: 50px; height: 50px;"></div>
                         </div>
-                        <h6 class="fw-bold mb-1 mt-1">Dobrodošli na deklarant<span style="color:#299cdb!important">.ai</span> {{ Auth::user()->username ?? '' }}</h6>
+                        <h6 class="fw-bold mb-1 mt-1 logo-span">Dobrodošli na <strong class="logo-span">deklarant<span class="ai-span">.ai</span></strong> {{ Auth::user()->username ?? '' }}</h6>
                         <p class="fs-7 mb-1 text-info" id="user-package-display"></p>
     @include('components.package-dashboard-statusbar')
                         
