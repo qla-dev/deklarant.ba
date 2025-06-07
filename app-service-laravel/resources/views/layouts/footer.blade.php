@@ -1,32 +1,4 @@
-@section('css')
-<style>
 
-     .logo-span {
-        font-family: 'Facebook Sans Bold', sans-serif!important;
-         font-weight: bolder!important;
-    }
-
-    .ai-span {
-        
-        color: #289cdb!important;
-        padding: unset!Important;
-        background: unset!Important;
-            font-size: inherit!important;
-    font-style: normal!important;
-    font-weight: bolder!important;
-        margin-bottom: unset!important;
-        padding-bottom: !important;
-         font-family: 'Facebook Sans Bold', sans-serif!important;
-    }
-
-
-  
-
-</style>
-
-
-
-@endsection
 <div class="mobile-footer-scan d-sm-none">
     <button type="button"
         class="btn btn-info btn-sm text-white w-100 d-flex align-items-center justify-content-center"
