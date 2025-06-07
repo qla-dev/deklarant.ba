@@ -73,56 +73,45 @@
                     </a>
                 </div>
 
-                <div class="dropdown d-md-none topbar-head-dropdown header-item">
-                    <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none"
-                        id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false">
-                        <i class="bx bx-search fs-22"></i>
+              <div class="dropdown d-md-none topbar-head-dropdown header-item">
+    <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none"
+        id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
+        aria-expanded="false">
+        <i class="bx bx-search fs-22"></i>
+    </button>
+
+    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
+        aria-labelledby="page-header-search-dropdown">
+        <form class="p-3" id="global-mobile-search-form">
+            <div class="form-group m-0">
+                <div class="input-group">
+                    <input id="global-mobile-search" type="text" class="form-control border border-2"
+                        placeholder="Pretraga po broju deklaracije, imenu dokumenta, dobavljaču, zemlji porijekla..."
+                        aria-label="Pretraga">
+                    <button class="btn btn-info" type="submit">
+                        <i class="mdi mdi-magnify"></i>
                     </button>
-                  <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
-     aria-labelledby="page-header-search-dropdown">
-    <form class="p-3" id="global-mobile-search-form">
-        <div class="form-group m-0">
-            <div class="input-group">
-                <input id="global-mobile-search" type="text" class="form-control border border-2"
-                       placeholder="Pretraga po broju deklaracije, imenu dokumenta, dobavljaču, zemlji porijekla..."
-                       aria-label="Pretraga">
-              
-                <button class="btn btn-info" type="submit">
-                    <i class="mdi mdi-magnify"></i>
-                </button>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const input = document.getElementById("global-mobile-search");
-            const clear = document.getElementById("search-mobile-clear");
-            const form = document.getElementById("global-mobile-search-form");
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const input = document.getElementById("global-mobile-search");
+                const form = document.getElementById("global-mobile-search-form");
 
-            input.addEventListener("input", function () {
-                clear.classList.toggle("d-none", this.value.trim().length === 0);
+                form.addEventListener("submit", function (e) {
+                    e.preventDefault();
+                    const keyword = input.value.trim();
+                    if (keyword.length > 0) {
+                        window.location.href = `/pretraga?keyword=${encodeURIComponent(keyword)}`;
+                    }
+                });
             });
-
-            clear.addEventListener("click", function () {
-                input.value = "";
-                clear.classList.add("d-none");
-                input.focus();
-            });
-
-            form.addEventListener("submit", function (e) {
-                e.preventDefault();
-                const keyword = input.value.trim();
-                if (keyword.length > 0) {
-                    window.location.href = `/pretraga?keyword=${encodeURIComponent(keyword)}`;
-                }
-            });
-        });
-    </script>
+        </script>
+    </div>
 </div>
 
-                </div>
 
 
 
