@@ -247,6 +247,7 @@ return [
     "exclist" => "Kursna lista",
     "myorder" => "Deklaracije",
     "clients" => "Klijenti",
+    "users" => "Korisnici",
     "importers" => "Dobavljači",
     "declarant" => "Tarifne oznake",
 

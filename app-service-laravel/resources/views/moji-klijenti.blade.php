@@ -44,7 +44,7 @@ Lista klijenata
                 </div>
                 <div class="table-responsive table-card ms-1 me-1 mb-2" style="display:none">
                     <table id="suppliersTable" class="table w-100">
-                        <thead class="custom-table">
+                        <thead class="custom-table  has-action">
                             <tr>
                                 <th>ID</th>
                                 <th>Naziv firme</th>

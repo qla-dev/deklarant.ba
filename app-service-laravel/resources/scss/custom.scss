@@ -610,11 +610,12 @@ thead.custom-table + tbody tr > td:last-child {
 }
 
 
-thead.custom-table th:last-child {
+thead.has-action + tbody tr > td:last-child, thead.has-action + tbody tr > th:last-child{
     width: 130px;
     min-width: 130px;
     max-width: 130px;
 }
+
 
 .custom-table td {
 

@@ -370,33 +370,63 @@ public function getAllUserStatistics()
     $users = User::all();
 
     $response = $users->map(function ($user) {
+        // Count total invoices
         $totalInvoices = Invoice::where('user_id', $user->id)->count();
 
+        // Get latest user package with package details
         $userPackage = UserPackage::with('package')
             ->where('user_id', $user->id)
             ->orderByDesc('created_at')
             ->first();
 
-        
         $package = $userPackage?->package;
 
+        // Return clean structured data
         return [
-            'user_id' => $user->id,
-            'total_invoices' => $totalInvoices,
-            'used_scans' => $userPackage?->used_scans ?? 0,
-            'remaining_scans' => $userPackage?->remaining_scans ?? 0,
-            'expiration_date' => $userPackage?->expiration_date,
-            'active' => $userPackage?->active ?? 0,
-            'assigned_at' => $userPackage?->created_at,
-            'package_name' => $package?->name ?? null,
-            'package_description' => $package?->description ?? null,
-            'page_limit' => $package?->page_limit ?? 0,
-            'document_history' => $package?->document_history ?? 0,
+            'id' => $user->id,
+            'username' => $user->username,
+            'email' => $user->email,
+            'name' => trim("{$user->first_name} {$user->last_name}"),
+            'avatar' => $user->avatar,
+            'role' => $user->role,
+            'phone_number' => $user->phone_number,
+            'location' => [
+                'city' => $user->city,
+                'country' => $user->country,
+            ],
+            'joining_date' => $user->joining_date,
+            'created_at' => $user->created_at,
+            'company' => [
+                'name' => $user->company['name'] ?? null,
+                'address' => $user->company['address'] ?? null,
+                'id' => $user->company['id'] ?? null,
+                'pdv' => $user->company['pdv'] ?? null,
+                'owner' => $user->company['owner'] ?? null,
+                'contact_person' => $user->company['contact_person'] ?? null,
+                'contact_number' => $user->company['contact_number'] ?? null,
+            ],
+            'statistics' => [
+                'total_invoices' => $totalInvoices,
+                'used_scans' => $userPackage?->used_scans ?? 0,
+                'remaining_scans' => $userPackage?->remaining_scans ?? 0,
+                'expiration_date' => $userPackage?->expiration_date,
+                'active' => (bool) ($userPackage?->active ?? 0),
+                'assigned_at' => $userPackage?->created_at,
+            ],
+            'package' => [
+                'name' => $package?->name,
+                'description' => $package?->description,
+                'page_limit' => $package?->page_limit ?? 0,
+                'document_history' => $package?->document_history ?? 0,
+            ]
         ];
     });
 
     return response()->json($response);
 }
+
+
+
 
 
 

@@ -35,10 +35,16 @@ class HomeController extends Controller
     }
 
 
-    public function root()
-    {
-        return view('home');
+  public function root()
+{
+    if (!Auth::check()) {
+        abort(403, 'Neautorizovan pristup.');
     }
+
+    return Auth::user()->role === 'superadmin'
+        ? view('moji-korisnici')
+        : view('home');
+}
 
     /*Language Translation*/
     public function lang($locale)
