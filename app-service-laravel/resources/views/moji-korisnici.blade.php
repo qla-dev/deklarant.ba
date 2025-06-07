@@ -10,6 +10,12 @@
 <link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ URL::asset('build/css/table.min.css') }}"  rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/airbnb.css">
+<style>.flatpickr-calendar {
+  z-index: 10000 !important; /* above SweetAlert2 */
+  visibility: visible !important;
+  opacity: 1 !important;
+}</style>
 @endsection
 @section('content')
 @component('components.breadcrumb')
@@ -64,6 +70,8 @@ Lista korisnika
                 <th>Aktivna pretplata</th>
                 <th>Naziv paketa</th>
                 <th>Datum isteka</th>
+                <th class="text-center">Akcija</th>
+
             </tr>
         </thead>
         <tbody class="table-light">
@@ -91,9 +99,6 @@ Lista korisnika
 <!--end row-->
 @endsection
 @section('script')
-
-
-
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
@@ -106,27 +111,35 @@ Lista korisnika
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/bs.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/customParseFormat.js"></script>
+<script>
+    dayjs.extend(dayjs_plugin_customParseFormat);
+</script>
+
 
 <script>
-document.addEventListener("DOMContentLoaded", async function () {
-    const API_URL = "/api/statistics/users";
-    const token = localStorage.getItem("auth_token");
+let availablePackages = [];
 
-    if (!token) {
-        console.warn("Token nije pronađen.");
-        return;
-    }
+document.addEventListener("DOMContentLoaded", async function () {
+    const token = localStorage.getItem("auth_token");
+    const API_URL = "/api/statistics/users";
+
+    if (!token) return console.warn("Token nije pronađen.");
 
     try {
-        const response = await axios.get(API_URL, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
+        const packageRes = await axios.get("/api/packages", {
+            headers: { Authorization: `Bearer ${token}` }
         });
+        availablePackages = packageRes.data.data || [];
 
+        const response = await axios.get(API_URL, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
         const users = response.data || [];
 
-        // Remove loader and show table
         document.getElementById('supplier-loader')?.remove();
         document.getElementById('userStatsContainer').style.display = 'block';
 
@@ -143,47 +156,39 @@ document.addEventListener("DOMContentLoaded", async function () {
                 { data: 'phone_number', render: d => d || '<span class="text-muted">Nepoznato</span>' },
                 { data: 'location.city', render: d => d || '<span class="text-muted">Nepoznato</span>' },
                 { data: 'location.country', render: d => d || '<span class="text-muted">Nepoznato</span>' },
-                { data: 'joining_date' },
+                { data: 'joining_date', render: d => d ? dayjs(d).format('DD.MM.YYYY') : '<span class="text-muted">Nepoznato</span>' },
                 { data: 'company.name', render: d => d || '<span class="text-muted">Nepoznato</span>' },
                 { data: 'company.address', render: d => d || '<span class="text-muted">Nepoznato</span>' },
                 { data: 'statistics.total_invoices' },
                 { data: 'statistics.remaining_scans' },
                 { data: 'statistics.active', render: d => d ? 'Da' : 'Ne' },
                 { data: 'package.name', render: d => d || '<span class="text-muted">Neaktivno</span>' },
-                { data: 'statistics.expiration_date', render: d => d || '<span class="text-muted">Neaktivno</span>' }
+                { data: 'statistics.expiration_date', render: d => d ? dayjs(d).format('DD.MM.YYYY') : '<span class="text-muted">Neaktivno</span>' },
+                {
+                    data: null,
+                    title: 'Akcija',
+                    orderable: false,
+                    searchable: false,
+                    className: 'text-center',
+                    render: row => `
+                        <button class="btn btn-sm btn-soft-info edit-user-package" 
+                            data-id="${row.id}" 
+                            data-package-id="${row.package?.id ?? ''}" 
+                            data-active="${row.statistics.active ? 1 : 0}"
+                            data-expiration="${row.statistics.expiration_date ?? ''}"
+                            data-remaining="${row.statistics.remaining_scans ?? ''}">
+                            <i class="ri-edit-line"></i> Uredi
+                        </button>`
+                }
             ],
             dom: '<"datatable-topbar d-flex flex-column flex-lg-row justify-content-between align-items-center mb-0 mb-md-4"fB>rt<"d-flex justify-content-between align-items-center mt-4 px-0"ip>',
             buttons: [
-                {
-                    extend: 'csv',
-                    text: '<i class="ri-file-code-line align-bottom me-1"></i> Export u CSV',
-                    className: 'btn btn-soft-info me-1 rounded-1'
-                },
-                {
-                    extend: 'excelHtml5',
-                    text: '<i class="ri-file-excel-line align-bottom me-1"></i> Export u Excel',
-                    className: 'btn btn-soft-info me-1 ms-1 rounded-1'
-                },
-                {
-                    extend: 'pdf',
-                    text: '<i class="ri-file-pdf-2-line align-bottom me-1"></i> Export u PDF',
-                    className: 'btn btn-soft-info me-1 ms-1 rounded-1'
-                },
-                {
-                    extend: 'print',
-                    text: '<i class="ri-printer-line align-bottom me-1"></i> Print',
-                    className: 'btn btn-soft-info me-1 ms-1 rounded-1'
-                },
-                {
-                    extend: 'colvis',
-                    text: 'Kolone',
-                    className: 'btn btn-soft-info me-1 ms-1 rounded-1'
-                },
-                {
-                    extend: 'pageLength',
-                    text: 'Prikaži redova',
-                    className: 'btn-soft-info me-1 ms-1 rounded-1'
-                }
+                { extend: 'csv', text: '<i class="ri-file-code-line me-1"></i> CSV', className: 'btn btn-soft-info me-1 rounded-1' },
+                { extend: 'excelHtml5', text: '<i class="ri-file-excel-line me-1"></i> Excel', className: 'btn btn-soft-info me-1 rounded-1' },
+                { extend: 'pdf', text: '<i class="ri-file-pdf-2-line me-1"></i> PDF', className: 'btn btn-soft-info me-1 rounded-1' },
+                { extend: 'print', text: '<i class="ri-printer-line me-1"></i> Print', className: 'btn btn-soft-info me-1 rounded-1' },
+                { extend: 'colvis', text: 'Kolone', className: 'btn btn-soft-info me-1 rounded-1' },
+                { extend: 'pageLength', text: 'Prikaži redova', className: 'btn-soft-info me-1 rounded-1' }
             ],
             language: {
                 paginate: { first: "←", last: "→", next: "→", previous: "←" },
@@ -195,7 +200,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             },
             initComplete: function () {
                 const api = this.api();
-
                 $('#userStatsTable_filter')
                     .addClass('flex-grow-1 me-0 order-0 order-lg-1')
                     .css('max-width', '400px')
@@ -229,16 +233,153 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
 
     } catch (err) {
-        console.error("❌ Greška pri dohvaćanju korisničkih podataka:", err);
+        console.error("❌ Greška pri učitavanju:", err);
+    }
+});
+
+document.addEventListener("click", async function (e) {
+    if (e.target.closest(".edit-user-package")) {
+        const btn = e.target.closest(".edit-user-package");
+        const userId = btn.dataset.id;
+        const currentPackageId = btn.dataset.packageId;
+        const active = btn.dataset.active;
+        const expiration = btn.dataset.expiration;
+        const remaining = btn.dataset.remaining;
+
+        const packageOptions = availablePackages.map(pkg => `
+            <option value="${pkg.id}" ${pkg.id == currentPackageId ? 'selected' : ''}>${pkg.name}</option>
+        `).join("");
+
+        Swal.fire({
+            title: 'Uredi korisnički paket',
+            html: `
+                <div class="mb-3 text-start">
+                    <label class="form-label">Paket:</label>
+                    <select id="swal-package" class="form-select">${packageOptions}</select>
+                </div>
+                <div class="mb-3 text-start">
+                    <label class="form-label">Aktivan:</label><br/>
+                    <label class="form-check form-switch">
+                        <input type="checkbox" id="swal-active" class="form-check-input" ${active == 1 ? 'checked' : ''}>
+                    </label>
+                </div>
+                <div class="mb-3 text-start">
+                    <label class="form-label">Preostali skenovi:</label>
+                    <input type="number" id="swal-remaining" class="form-control" value="${remaining}">
+                </div>
+                <div class="mb-3 text-start">
+                    <label class="form-label">Datum isteka:</label>
+                    <input type="text" id="swal-expiration" class="form-control" value="${expiration ? dayjs(expiration).format('DD.MM.YYYY') : ''}">
+                </div>
+            `,
+            showCancelButton: true,
+            confirmButtonText: 'Spasi',
+            cancelButtonText: 'Otkaži',
+            customClass: {
+                confirmButton: 'btn btn-info me-2',
+                cancelButton: 'btn btn-light'
+            },
+            buttonsStyling: false,
+            didOpen: () => {
+                const toggle = document.getElementById('swal-active');
+                const expirationInput = document.getElementById('swal-expiration');
+                const select = document.getElementById('swal-package');
+
+                select.focus();
+                select.classList.add('border-info');
+                select.style.boxShadow = '0 0 0 0.2rem rgba(61,213,243,0.25)';
+
+                const parsedExpiration = expirationInput.value
+                    ? dayjs(expirationInput.value, "DD.MM.YYYY").format("YYYY-MM-DD")
+                    : "";
+
+                try {
+                    flatpickr(expirationInput, {
+                        dateFormat: "d.m.Y",
+                        defaultDate: parsedExpiration || null,
+                        locale: "bs",
+                        allowInput: true,
+                        appendTo: Swal.getPopup(),
+                        onReady: function () {
+                            expirationInput.setAttribute("maxlength", "10");
+                            expirationInput.setAttribute("placeholder", "DD.MM.GGGG");
+                            expirationInput.style.cursor = "pointer";
+
+                            expirationInput.addEventListener("keypress", function (e) {
+                                if (!/[\d.]/.test(e.key)) {
+                                    e.preventDefault();
+                                }
+                            });
+                        }
+                    });
+                } catch (e) {
+                    console.error("❌ flatpickr initialization failed:", e);
+                }
+
+                toggle.addEventListener('change', function () {
+                    toggle.classList.toggle('bg-info', this.checked);
+                    toggle.classList.toggle('border-info', this.checked);
+                });
+
+                if (toggle.checked) {
+                    toggle.classList.add('bg-info', 'border-info');
+                }
+            },
+            preConfirm: async () => {
+                const packageId = document.getElementById('swal-package').value;
+                const newActive = document.getElementById('swal-active').checked ? 1 : 0;
+                const rawExpiration = document.getElementById('swal-expiration').value;
+                const newRemaining = document.getElementById('swal-remaining').value;
+
+                if (!rawExpiration) {
+                    Swal.showValidationMessage("Datum isteka je obavezan.");
+                    return false;
+                }
+
+                const parsed = dayjs(rawExpiration, "DD.MM.YYYY", true);
+                if (!parsed.isValid()) {
+                    Swal.showValidationMessage("Neispravan format datuma.");
+                    return false;
+                }
+
+                const newExpiration = parsed.format("YYYY-MM-DD");
+
+                try {
+                    const token = localStorage.getItem("auth_token");
+                    const response = await axios.post(
+                        `/api/user-packages/users/${userId}/packages/${packageId}`,
+                        {
+                            active: newActive,
+                            expiration_date: newExpiration,
+                            remaining_scans: newRemaining
+                        },
+                        {
+                            headers: { Authorization: `Bearer ${token}` }
+                        }
+                    );
+                    return response.data;
+                } catch (error) {
+                    console.error("Greška:", error);
+                    Swal.showValidationMessage("Greška pri spremanju podataka.");
+                    return false;
+                }
+            }
+        }).then(result => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Uspješno ažurirano!',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+
+                $('#userStatsTable').DataTable().clear().destroy();
+                document.dispatchEvent(new Event("DOMContentLoaded"));
+            }
+        });
     }
 });
 </script>
-
-
-
-
-
-
 
 
 
