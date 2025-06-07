@@ -816,6 +816,11 @@ thead.custom-table th:last-child {
 
 @media (max-width: 768px) {
 
+    .tariff-list, .supplier-list {
+        max-height: 150px!important;
+        overflow-y: auto!important;
+    }
+
     #user-package-display, .status-text {
         font-size: 10px!important;
     }

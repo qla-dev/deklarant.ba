@@ -585,7 +585,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                 tariffContainer.innerHTML += `
                     <div class="card-footer p-0 pb-0 pt-0 d-flex justify-content-end pregledaj-vise-bottom-right">
-                        <a href="moje-tarife" class="text-info fs-13 mb-2" style="margin:.5rem!important">
+                        <a href="moje-deklaracije" class="text-info fs-13 mb-2" style="margin:.5rem!important">
                             Pregledaj sve
                         </a>
                     </div>
