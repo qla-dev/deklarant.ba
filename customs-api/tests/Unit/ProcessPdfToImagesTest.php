@@ -15,6 +15,12 @@ class ProcessPdfToImagesTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        putenv('HTTP_RETRY_DELAY=0');
+    }
+
     public function test_file_processing_pipeline()
     {
         Storage::fake('local');

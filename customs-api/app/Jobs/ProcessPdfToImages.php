@@ -67,24 +67,12 @@ class ProcessPdfToImages extends ProcessUploadedFile
 
     protected function extractWithLLM($images): array
     {
-        $responseData = $this->callOllama([
-            'json' => [
-                'model' => getenv('OLLAMA_MODEL'),
-                'prompt' =>
-                    file_get_contents(base_path("app/Jobs/prompt-markdown-to-json.txt"))
-                    . "\n\nInvoices are given in order as image attachments."
-                    . "\nCarefully examine every letter and punctation."
-                    . " Keep in mind that document origin is international and decimal places could be represented with comma (`,`) as well as dot (`.`)."
-                    . " Precision is very important, your text must match exactly what's seen in invoice image. Do not hallucinate.",
-                'stream' => false,
-                'images' => $images,
-                'options' => [
-                    'temperature' => 0.02,
-                    'num_ctx' => 7000,
-                    'num_predict' => 3000
-                ]
-            ]
-        ]);
+        $prompt = file_get_contents(base_path("app/Jobs/prompt-markdown-to-json.txt"))
+                . "\n\nInvoices are given in order as image attachments."
+                . "\nCarefully examine every letter and punctation."
+                . " Keep in mind that document origin is international and decimal places could be represented with comma (`,`) as well as dot (`.`)."
+                . " Precision is very important, your text must match exactly what's seen in invoice image. Do not hallucinate.";
+        $responseData = $this->callLLM($prompt, getenv('OLLAMA_MODEL'), $images);
         return $this->parseOllamaResponse($responseData);
     }
 }

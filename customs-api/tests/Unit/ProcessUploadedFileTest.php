@@ -19,6 +19,7 @@ class ProcessUploadedFileTest extends TestCase
     {
         parent::setUp();
         putenv('MARKER_URL=http://example.com');
+        putenv('HTTP_RETRY_DELAY=0');
     }
 
     public function test_file_processing_pipeline()
@@ -111,6 +112,8 @@ class ProcessUploadedFileTest extends TestCase
 
         $mock = new MockHandler([
             new Response(200, [], json_encode(['output' => '# Markdown content'])),
+            new Response(500, [], 'Ollama service error'),
+            new Response(500, [], 'Ollama service error'),
             new Response(500, [], 'Ollama service error')
         ]);
 
