@@ -357,6 +357,9 @@ color: #299cdb ;
 }
    @media (max-width: 767.98px) {
 
+     .footer-label {
+    font-size: 12px!important;}
+
 .card-title {
     font-size: 14px!important;}
 
@@ -855,6 +858,11 @@ thead.custom-table th:last-child {
 }
 
 @media (max-width: 576.98px) {
+
+    .welcome {
+
+    font-size: 0.8rem!important;
+}
 .main-content {
     padding-bottom: 50px!important;
 }
@@ -894,11 +902,14 @@ thead.custom-table th:last-child {
     font-style: normal!important;
     font-weight: bolder!important;
         margin-bottom: unset!important;
-        padding-bottom: !important;
          font-family: 'Facebook Sans Bold', sans-serif!important;
     }
 
 
+.welcome {
+
+    font-size: 1rem;
+}
   
 
 

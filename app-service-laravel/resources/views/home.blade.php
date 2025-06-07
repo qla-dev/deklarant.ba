@@ -64,7 +64,7 @@
              <a href="cijene-paketa">  
             <div class="d-flex card  rounded-0 m-0 flex-column h-100">
                      @include('components.package-card-statusbar')
-                    <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
+                    <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center text-center p-2">
                         <h6 class="text-muted text-uppercase fs-11 mb-1" style="margin-top: -10px;">Dostupna AI
                             skeniranja</h6>
                         <div class="d-flex align-items-center justify-content-center" style="margin-top: 20px;">
@@ -103,7 +103,7 @@
                             <img id="user-avatar-middle" class="img-thumbnail rounded-circle d-none"  style="object-fit: cover; aspect-ratio: 1/1; max-width: 50px; max-height: 50px; min-width: 50px; min-height: 50px; display: block;padding-right: 0px; padding-left: 0px; padding: 0.15rem; border: 0; background-color: transparent;">
                             <div id="avatar-middle-fallback" class="rounded-circle bg-info d-flex justify-content-center align-items-center text-white" style="width: 50px; height: 50px;"></div>
                         </div>
-                        <h6 class="fw-bold mb-1 mt-1 logo-span">Dobrodošli na <strong class="logo-span">deklarant<span class="ai-span">.ai</span></strong> {{ Auth::user()->username ?? '' }}</h6>
+                        <h6 class="fw-bold mb-1 mt-1 logo-span welcome">Dobrodošli na <strong class="logo-span">deklarant<span class="ai-span">.ai</span></strong> {{ Auth::user()->username ?? '' }}</h6>
                         <p class="fs-7 mb-1 text-info" id="user-package-display"></p>
     @include('components.package-dashboard-statusbar')
                         

@@ -11,10 +11,10 @@
 <footer class="footer main-footer">
     <div class="container-fluid">
         <div class="row ">
-            <div class="col-5 col-sm-6" style="margin-top:-3px">
+            <div class="col-5 col-sm-6 footer-label" style="margin-top:-3px">
                 <script>document.write(new Date().getFullYear())</script> © <strong class="logo-span logo-text">deklarant<span class="ai-span">.ai</span></strong>
             </div>
-            <div class="col-7 col-sm-6">
+            <div class="col-7 col-sm-6 footer-label">
                 <div class="text-end d-flex d-md-block fs-6 justify-content-center logo-span">
                 Razvijeno od strane  
 

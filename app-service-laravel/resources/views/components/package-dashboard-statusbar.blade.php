@@ -18,7 +18,7 @@
 
 
 @else
-    <span class="text-info  status-text">Aktivna pretplata: <strong>{{ Auth::user()->getActivePackageName() }}</strong>. Preostalo skeniranja: <strong>{{ Auth::user()->getRemainingScans() }}</strong>.</span>
+    <div class="text-info  status-text">Aktivna pretplata: <strong>{{ Auth::user()->getActivePackageName() }}</strong>. Preostalo skeniranja: <strong>{{ Auth::user()->getRemainingScans() }}</strong>.</div>
 @endif
 
 
