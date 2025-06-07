@@ -911,5 +911,24 @@ thead.has-action + tbody tr > td:last-child, thead.has-action + tbody tr > th:la
 }
   
 
+/* Light & default background */
+table.dataTable tbody td.dtfc-fixed-left,
+table.dataTable thead th.dtfc-fixed-left,
+table.dataTable tbody td.dtfc-fixed-right,
+table.dataTable thead th.dtfc-fixed-right {
+    background-color: var(--bs-table-bg, #fff) !important;
+    z-index: 2;
+}
+
+/* Optional dark mode override */
+[data-bs-theme=dark] table.dataTable tbody td.dtfc-fixed-left,
+[data-bs-theme=dark] table.dataTable tbody td.dtfc-fixed-right,
+[data-bs-theme=dark] table.dataTable thead th.dtfc-fixed-right {
+    background-color: #212529 !important;
+}
+
+[data-bs-theme=dark] table.dataTable thead th.dtfc-fixed-right,[data-bs-theme=dark] table.dataTable thead th.dtfc-fixed-left {
+    background-color: #223644 !important;
+}
 
 

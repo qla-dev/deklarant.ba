@@ -11,6 +11,7 @@
 <link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ URL::asset('build/css/table.min.css') }}"  rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/airbnb.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/4.3.0/css/fixedColumns.dataTables.min.css">
 <style>.flatpickr-calendar {
   z-index: 10000 !important; /* above SweetAlert2 */
   visibility: visible !important;
@@ -115,6 +116,8 @@ Lista korisnika
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/bs.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/customParseFormat.js"></script>
+
+<script src="https://cdn.datatables.net/fixedcolumns/4.3.0/js/dataTables.fixedColumns.min.js"></script>
 <script>
     dayjs.extend(dayjs_plugin_customParseFormat);
 </script>
@@ -148,6 +151,10 @@ document.addEventListener("DOMContentLoaded", async function () {
             scrollX: true,
             autoWidth: false,
             lengthChange: false,
+            fixedColumns: {
+                leftColumns: 2,
+                rightColumns: 1
+            },
             columns: [
                 { data: null, render: (data, type, row, meta) => meta.row + 1 },
                 { data: 'username' },
@@ -380,6 +387,7 @@ document.addEventListener("click", async function (e) {
     }
 });
 </script>
+
 
 
 
