@@ -156,13 +156,11 @@ class ProcessUploadedFile implements ShouldQueue
         $responseData = $this->callLLM(
             "Here's the markdown of invoice:\n\n```md\n$markdown\n```\n\n"
                 . file_get_contents(base_path("app/Jobs/prompt-markdown-to-json.txt")),
-            getenv('OLLAMA_MODEL'),
-            null
         );
         return $this->parseOllamaResponse($responseData);
     }
 
-    protected function callLLM(string $prompt, string $model, ?array $images = null): ResponseInterface
+    protected function callLLM(string $prompt, ?array $images = null): ResponseInterface
     {
         $maxRetries = 3;
 
@@ -170,7 +168,7 @@ class ProcessUploadedFile implements ShouldQueue
             try {
                 $body = [
                     'json' => [
-                        'model' => $model,
+                        'model' => getenv('OLLAMA_MODEL'),
                         'prompt' => $prompt,
                         'stream' => false,
                         'options' => [
