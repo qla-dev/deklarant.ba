@@ -1,5 +1,15 @@
  <div class="d-print-none" id="sidebar-buttons-container">
      <div id="fixed-buttons" class="d-flex flex-column gap-3">
+        @php
+         $isDeklaracija = Request::is('deklaracija') || Request::is('deklaracija/*');
+         $isPregled = Request::segment(1) === 'detalji-deklaracije';
+         @endphp
+
+         @if($isDeklaracija)
+        <button type="button" id="save-invoice-btn" class="btn btn-info">
+             <i class="ri-save-line align-bottom me-1"></i> Spremi promjene
+         </button>
+         @endif
 
          <a href="javascript:window.print()" class="btn btn-soft-info">
              <i class="ri-printer-line align-bottom me-1"></i> Isprintaj
@@ -15,16 +25,11 @@
          <a href="" class="btn btn-soft-info">
              <i class="ri-file-code-line align-bottom me-1"></i> Export u XML
          </a>
-         @php
-         $isDeklaracija = Request::is('deklaracija') || Request::is('deklaracija/*');
-         $isPregled = Request::segment(1) === 'detalji-deklaracije';
-         @endphp
+         
 
          @if($isDeklaracija)
          <!-- Only for /deklaracija/* -->
-         <button type="button" id="save-invoice-btn" class="btn btn-soft-info">
-             <i class="ri-save-line align-bottom me-1"></i> Spasi
-         </button>
+         
          <button type="button" id="pregled" class="btn btn-soft-info">
              <i class="ri-eye-line align-bottom me-1"></i> Pregled
          </button>
