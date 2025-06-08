@@ -69,7 +69,7 @@ Lista korisnika
                 <th>Ukupno faktura</th>
                 <th>Preostali skenovi</th>
                 <th>Aktivna pretplata</th>
-                <th>Naziv paketa</th>
+                <th>Aktivni paket</th>
                 <th>Datum isteka</th>
                 <th class="text-center">Akcija</th>
 
@@ -184,19 +184,43 @@ document.addEventListener("DOMContentLoaded", async function () {
                             data-active="${row.statistics.active ? 1 : 0}"
                             data-expiration="${row.statistics.expiration_date ?? ''}"
                             data-remaining="${row.statistics.remaining_scans ?? ''}">
-                            <i class="ri-edit-line"></i> Uredi
+                            <i class="ri-instance-line"></i> Pretplata
                         </button>`
                 }
             ],
             dom: '<"datatable-topbar d-flex flex-column flex-lg-row justify-content-between align-items-center mb-0 mb-md-4"fB>rt<"d-flex justify-content-between align-items-center mt-4 px-0"ip>',
-            buttons: [
-                { extend: 'csv', text: '<i class="ri-file-code-line me-1"></i> CSV', className: 'btn btn-soft-info me-1 rounded-1' },
-                { extend: 'excelHtml5', text: '<i class="ri-file-excel-line me-1"></i> Excel', className: 'btn btn-soft-info me-1 rounded-1' },
-                { extend: 'pdf', text: '<i class="ri-file-pdf-2-line me-1"></i> PDF', className: 'btn btn-soft-info me-1 rounded-1' },
-                { extend: 'print', text: '<i class="ri-printer-line me-1"></i> Print', className: 'btn btn-soft-info me-1 rounded-1' },
-                { extend: 'colvis', text: 'Kolone', className: 'btn btn-soft-info me-1 rounded-1' },
-                { extend: 'pageLength', text: 'Prikaži redova', className: 'btn-soft-info me-1 rounded-1' }
-            ],
+           buttons: [
+            {
+                extend: 'csv',
+                text: '<i class="ri-file-code-line align-bottom me-1"></i> Export u CSV',
+                className: 'btn btn-soft-info me-1 rounded-1'
+            },
+            {
+                extend: 'excelHtml5',
+                text: '<i class="ri-file-excel-line align-bottom me-1"></i> Export u Excel',
+                className: 'btn btn-soft-info me-1 ms-1 rounded-1'
+            },
+            {
+                extend: 'pdf',
+                text: '<i class="ri-file-pdf-2-line align-bottom me-1"></i> Export u PDF',
+                className: 'btn btn-soft-info me-1 ms-1 rounded-1'
+            },
+            {
+                extend: 'print',
+                text: '<i class="ri-printer-line align-bottom me-1"></i> Print',
+                className: 'btn btn-soft-info me-1 ms-1 rounded-1'
+            },
+            {
+                extend: 'colvis',
+                text: 'Kolone',
+                className: 'btn btn-soft-info me-1 ms-1 rounded-1'
+            },
+            {
+                extend: 'pageLength',
+                text: 'Prikaži redova',
+                className: 'btn-soft-info me-1 ms-1 rounded-1'
+            }
+        ],
             language: {
                 paginate: { first: "←", last: "→", next: "→", previous: "←" },
                 info: "Prikaz _START_ do _END_ od _TOTAL_ korisnika",
@@ -258,7 +282,7 @@ document.addEventListener("click", async function (e) {
         `).join("");
 
         Swal.fire({
-            title: 'Uredi korisnički paket',
+            title: 'Uredi korisničku pretplatu',
             html: `
                 <div class="mb-3 text-start">
                     <label class="form-label">Paket:</label>
