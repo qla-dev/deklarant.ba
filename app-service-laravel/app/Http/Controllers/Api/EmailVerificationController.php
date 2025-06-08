@@ -42,8 +42,13 @@ class EmailVerificationController extends Controller
 
             return response()->json(['message' => 'Email za verifikaciju poslan']);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Greška pri slanju emaila: ' . $e->getMessage()], 500);
+            \Log::error("Greška pri slanju emaila: " . $e->getMessage());
+
+            return response()->json([
+                'error' => 'Došlo je do greške prilikom slanja emaila. Molimo pokušajte ponovo.'
+            ], 500);
         }
+
     }
 
     // Step 2: Verify the email

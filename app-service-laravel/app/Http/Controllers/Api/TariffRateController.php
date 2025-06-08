@@ -50,7 +50,7 @@ class TariffRateController extends Controller
                 'data' => $tariffRate
             ], 201);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno kreiranje carinske stope: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Neuspješno kreiranje carinske stope. Pokušajte ponovo kasnije'], 500);
         }
     }
 

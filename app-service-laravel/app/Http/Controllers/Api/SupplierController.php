@@ -7,6 +7,9 @@ use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Exception;
+use Illuminate\Support\Facades\App;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Log;
 
 class SupplierController extends Controller
 {
@@ -31,14 +34,15 @@ class SupplierController extends Controller
 
     public function store(Request $request)
     {
+        App::setLocale('bs'); 
         try {
             $data = $request->validate([
                 'name' => 'required|string',
-                'owner' => 'required|string',
-                'address' => 'required|string',
+                'owner' => 'nullable|string',
+                'address' => 'nullable|string',
                 'avatar' => 'nullable|string',
                 'tax_id' => 'required|string|unique:suppliers,tax_id',
-                'contact_email' => 'required|email|unique:suppliers,contact_email',
+                'contact_email' => 'nullable|email|unique:suppliers,contact_email',
                 'contact_phone' => 'required|string|unique:suppliers,contact_phone',
                 'synonyms' => 'nullable|array',
             ]);
@@ -48,8 +52,19 @@ class SupplierController extends Controller
                 'message' => ucfirst("{$this->label} uspješno sačuvan"),
                 'data' => $supplier
             ], 201);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'error' => "Neuspješno sačuvan {$this->label}",
+                // ukloniti uglaste zagrade ako treba ispisati sve errore a ne samo prvi
+                'message' => $e->errors()[array_key_first($e->errors())][0] 
+            ], 422);
         } catch (Exception $e) {
-            return response()->json(['error' => "Neuspješno sačuvan {$this->label}: " . $e->getMessage()], 500);
+            Log::error("Greška pri spremanju {$this->label}: " . $e->getMessage());
+            
+            return response()->json([
+                'error' => "Neuspješno sačuvan {$this->label}",
+                'message' => "Dogodila se greška prilikom spremanja. Molimo pokušajte ponovo"
+            ], 500);
         }
     }
 

@@ -50,7 +50,7 @@ class InvoiceItemController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Deklaracija nije pronađena. Provjerite ID deklaracije i pokušajte ponovo'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno kreiranje stavke deklaracije: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Neuspješno kreiranje stavke deklaracije. Pokušajte ponovo kasnije'], 500);
 }
 
     }
@@ -97,7 +97,7 @@ class InvoiceItemController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Stavka deklaracije nije pronađena. Provjerite ID stavke i pokušajte ponovo'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno ažuriranje stavke deklaracije: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Neuspješno ažuriranje stavke deklaracije. Pokušajte ponovo kasnije'], 500);
         }
 
     }

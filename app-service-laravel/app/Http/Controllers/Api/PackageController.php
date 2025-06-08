@@ -39,7 +39,7 @@ class PackageController extends Controller
                 'data' => $package
             ], 201);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno spremanje paketa: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Neuspješno spremanje paketa. Pokušajte ponovo kasnije'], 500);
         }
     }
 
