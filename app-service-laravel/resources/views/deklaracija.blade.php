@@ -159,9 +159,9 @@
                     <img src="{{ URL::asset('build/images/logo-light-ai.png') }}" class="card-logo" alt="logo" height="34">
                     <div class="mt-4">
                         <h6 class="text-muted text-uppercase fw-semibold">Osnovni podaci</h6>
-                        <input type="text" class="form-control mb-2" id="company-address" name="address" placeholder="Unesite adresu">
-                        <input type="text" class="form-control mb-2" id="company-zip" name="zip" placeholder="Poštanski broj">
-                        <input type="email" class="form-control" id="company-email" name="email" placeholder="Email">
+                        <input type="text" class="form-control mb-2" id="company-address" name="address" placeholder="Unesite adresu" value="{{ Auth::user()->company['address'] ?? '' }}">
+                        <input type="text" class="form-control mb-2" id="company-id" name="zip" placeholder="ID kompanije" value="{{ Auth::user()->company['id'] ?? '' }}">
+                        <input type="email" class="form-control" id="company-tel" name="tel" placeholder="Kontakt telefon" value="{{ Auth::user()->company['contact_number'] ?? '' }}">
                     </div>
 
                     <!-- Incoterm Dropdown Section -->
@@ -361,7 +361,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/bs.js"></script>
 <!-- Scan and other logic script -->
- <script>
+<script>
     const editModeMatch = window.location.pathname.match(/\/deklaracija\/(\d+)/);
     const isEditMode = !!editModeMatch;
 
@@ -1402,10 +1402,10 @@
 
             // await promptForSupplierAfterScan();
             $(document).on('click', '.show-ai-btn', function() {
-                console.log("✅ AI button clicked");
+                console.log(" AI button clicked");
 
                 const select = $(this).closest('td').find('select.select2-tariff');
-                console.log("🔎 Found select element:", select);
+                console.log(" Found select element:", select);
 
                 let rawSuggestions = select.data("suggestions");
                 try {
@@ -1413,11 +1413,11 @@
                         rawSuggestions = JSON.parse(rawSuggestions);
                     }
                 } catch (err) {
-                    console.error("❌ Failed to parse suggestions JSON:", err);
+                    console.error(" Failed to parse suggestions JSON:", err);
                     return;
                 }
 
-                console.log("📦 Raw suggestions:", rawSuggestions);
+                console.log(" Raw suggestions:", rawSuggestions);
 
                 if (!rawSuggestions) {
                     console.warn(" No suggestions found on data attribute.");
@@ -1440,7 +1440,7 @@
 
                 if (!sorted.length) {
                     container.innerHTML = `<div class="text-muted">Nema prijedloga.</div>`;
-                    console.log("ℹ️ No sorted suggestions to show.");
+                    console.log("ℹ No sorted suggestions to show.");
                 } else {
                     container.innerHTML = sorted.map((s, i) => `
             <div class="mb-2">
@@ -1488,7 +1488,7 @@
 
                 if (select && code) {
                     const matched = processedTariffData.find(item => item.id === code);
-                    console.log("🔍 Matched tariff code:", matched);
+                    console.log(" Matched tariff code:", matched);
 
                     if (matched) {
                         const option = new Option(matched.id, matched.id, true, true);
@@ -1511,9 +1511,30 @@
                 }
             });
 
-            $(document).on('click', '.remove-row', function() {
-                $(this).closest('tr').remove();
-                updateTotalAmount();
+            document.addEventListener("click", function(e) {
+                if (e.target.closest(".remove-row")) {
+                    const button = e.target.closest(".remove-row");
+                    const row = button.closest("tr");
+
+                    Swal.fire({
+                        title: "Oprez!",
+                        text: "Odabrani proizvod će biti trajno uklonjen sa popisa trenutne deklaracije. Ova radnja nije ireverzibilna!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        cancelButtonText: "Odustani",
+                        confirmButtonText: "Da, ukloni",
+                        customClass: {
+                            confirmButton: "btn btn-soft-info me-2",
+                            cancelButton: "btn btn-info"
+                        },
+                        buttonsStyling: false
+                    }).then((result) => {
+                        if (result.isConfirmed && row) {
+                            row.remove();
+                            updateTotalAmount();
+                        }
+                    });
+                }
             });
 
 
@@ -1548,7 +1569,7 @@
 
             console.log(" Invoice date and number set.");
 
-            document.getElementById("company-address").value = "Vilsonovo, 9, Sarajevo ";
+            //document.getElementById("company-address").value = "Vilsonovo, 9, Sarajevo ";
             document.getElementById("company-zip").value = "71000";
             document.getElementById("company-email").value = "business@deklarant.ai";
 
@@ -2283,7 +2304,7 @@
                 const spinner = document.querySelector(".custom-swal-spinner");
 
 
-                // 🔥 Also remove SweetAlert2’s default icon area if still rendered
+                //  Also remove SweetAlert2’s default icon area if still rendered
                 const icon = Swal.getHtmlContainer()?.previousElementSibling;
                 if (icon?.classList.contains('swal2-icon')) {
                     icon.remove();
@@ -2624,6 +2645,7 @@
             }).then((result) => {
                 if (result.isConfirmed && row) {
                     row.remove();
+                    updateTotalAmount();
                 }
             });
         }
