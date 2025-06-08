@@ -127,7 +127,7 @@ Lista korisnika
 let availablePackages = [];
 
 document.addEventListener("DOMContentLoaded", async function () {
-    const token = localStorage.getItem("auth_token");
+
     const API_URL = "/api/statistics/users";
 
     if (!token) return console.warn("Token nije pronađen.");
@@ -376,7 +376,6 @@ document.addEventListener("click", async function (e) {
                 const newExpiration = parsed.format("YYYY-MM-DD");
 
                 try {
-                    const token = localStorage.getItem("auth_token");
                     const response = await axios.post(
                         `/api/user-packages/users/${userId}/packages/${packageId}`,
                         {
