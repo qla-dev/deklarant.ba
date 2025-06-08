@@ -953,3 +953,47 @@ table.dataTable thead th.dtfc-fixed-right {
 [data-bs-theme=dark] .table-active {
     --vz-table-bg-state: #282c30!important;
 }
+
+.swal2-close:hover {color:gray!important}
+
+   @media (min-height: 535.8px) {
+
+   
+ #vise-opcija-btn {
+    display: none !important;
+  } }
+
+
+   @media (max-height: 535.7px) {
+
+   
+ .pc-opcije-button {
+    display: none !important;
+  } }
+
+
+
+@media screen and (max-width: 767px) and (orientation: portrait) {
+    .content-desktop {
+        display: none !important;
+    }
+
+    .content-mobile-warning {
+        display: flex !important;
+    }
+}
+
+@media screen and (max-width: 767px) and (orientation: landscape) {
+    .content-desktop {
+        display: block !important;
+    }
+
+    .content-mobile-warning {
+        display: none !important;
+    }
+}
+
+
+
+
+

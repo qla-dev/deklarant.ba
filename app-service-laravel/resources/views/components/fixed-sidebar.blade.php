@@ -1,3 +1,13 @@
+<style>
+
+    .swal2-modal {
+
+        padding-bottom: .7rem !important;
+    }
+
+    .swal2-title {padding-top: 20px!important;}
+</style> 
+ 
  <div class="d-print-none" id="sidebar-buttons-container">
      <div id="fixed-buttons" class="d-flex flex-column gap-3">
         @php
@@ -14,15 +24,15 @@
          <a href="javascript:window.print()" class="btn btn-soft-info">
              <i class="ri-printer-line align-bottom me-1"></i> Isprintaj
          </a>
-         <a href="javascript:void(0);" class="btn btn-soft-info">
+         <a href="javascript:void(0);" class="btn btn-soft-info pc-opcije-button">
              <i class="ri-download-2-line align-bottom me-1"></i> Preuzmi
          </a>
-         <a href="" class="btn btn-soft-info">
+         <a href="" class="btn btn-soft-info pc-opcije-button">
              <i class="ri-file-3-line align-bottom me-1"></i> Originalni dokument
          </a>
 
-         <button class="btn btn-soft-info" onclick="exportTableToCustomCSV()"><i class="ri-file-excel-line align-bottom me-1"></i> Export u CSV</button>
-         <a href="" class="btn btn-soft-info">
+         <button class="btn btn-soft-info pc-opcije-button" onclick="exportTableToCustomCSV()"><i class="ri-file-excel-line align-bottom me-1"></i> Export u CSV</button>
+         <a href="" class="btn btn-soft-info pc-opcije-button">
              <i class="ri-file-code-line align-bottom me-1"></i> Export u XML
          </a>
          
@@ -30,20 +40,25 @@
          @if($isDeklaracija)
          <!-- Only for /deklaracija/* -->
          
-         <button type="button" id="pregled" class="btn btn-soft-info">
+         <button type="button" id="pregled" class="btn btn-soft-info pc-opcije-button">
              <i class="ri-eye-line align-bottom me-1"></i> Pregled
          </button>
-         <button type="button" id="brisanje" class="btn btn-soft-info">
+         <button type="button" id="brisanje" class="btn btn-soft-info pc-opcije-button">
              <i class="ri-delete-bin-line align-bottom me-1"></i> Obriši proizvode
          </button>
          @endif
 
          @if($isPregled)
          <!-- Only for /detalji-deklaracije/* -->
-         <button type="button" id="uredi" class="btn btn-soft-info">
+         <button type="button" id="uredi" class="btn btn-soft-info pc-opcije-button">
              <i class="ri-edit-line align-bottom me-1"></i> Uredi
          </button>
          @endif
+
+         <button type="button" id="vise-opcija-btn" class="btn btn-soft-info">
+    <i class="ri-more-line align-bottom me-1"></i> Više opcija
+</button>
+
      </div>
  </div>
  <div class="text-start total-iznos">
@@ -155,4 +170,65 @@
  </script>
 
 
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const viseOpcijaBtn = document.getElementById("vise-opcija-btn");
+
+    if (viseOpcijaBtn) {
+        viseOpcijaBtn.addEventListener("click", function () {
+            Swal.fire({
+                title: "Više opcija",
+                html: `
+                <div class="d-flex flex-column text-start">
+                    @if($isDeklaracija)
+                    <button class="btn btn-info w-100 mb-2" onclick="document.getElementById('save-invoice-btn')?.click()">
+                        <i class="ri-save-line align-bottom me-1"></i> Spremi promjene
+                    </button>
+                    @endif
+
+                    <button class="btn btn-soft-info w-100 mb-2" onclick="window.print()">
+                        <i class="ri-printer-line align-bottom me-1"></i> Isprintaj
+                    </button>
+
+                    <button class="btn btn-soft-info w-100 mb-2" onclick="document.querySelector('.pc-opcije-button[href^=\'javascript:void\']')?.click()">
+                        <i class="ri-download-2-line align-bottom me-1"></i> Preuzmi
+                    </button>
+
+                    <button class="btn btn-soft-info w-100 mb-2" onclick="document.querySelector('.pc-opcije-button[href*=\'file-3\']')?.click()">
+                        <i class="ri-file-3-line align-bottom me-1"></i> Originalni dokument
+                    </button>
+
+                    <button class="btn btn-soft-info w-100 mb-2" onclick="exportTableToCustomCSV()">
+                        <i class="ri-file-excel-line align-bottom me-1"></i> Export u CSV
+                    </button>
+
+                    <button class="btn btn-soft-info w-100 mb-2" onclick="document.querySelector('.pc-opcije-button[href*=\'file-code\']')?.click()">
+                        <i class="ri-file-code-line align-bottom me-1"></i> Export u XML
+                    </button>
+
+                    @if($isDeklaracija)
+                    <button class="btn btn-soft-info w-100 mb-2" onclick="document.getElementById('pregled')?.click()">
+                        <i class="ri-eye-line align-bottom me-1"></i> Pregled
+                    </button>
+
+                    <button class="btn btn-soft-info w-100 mb-2" onclick="document.getElementById('brisanje')?.click()">
+                        <i class="ri-delete-bin-line align-bottom me-1"></i> Obriši proizvode
+                    </button>
+                    @endif
+
+                    @if($isPregled)
+                    <button class="btn btn-soft-info w-100 mb-2" onclick="document.getElementById('uredi')?.click()">
+                        <i class="ri-edit-line align-bottom me-1"></i> Uredi
+                    </button>
+                    @endif
+                </div>`,
+                showCancelButton: false,
+                showConfirmButton: false,
+                showCloseButton: true,
+            });
+        });
+    }
+});
+</script>
 
