@@ -119,7 +119,7 @@ public function login(Request $request)
     $isFromRegistration = $request->input('from_registration', false);
 
     // Determine redirect URL based on user role
-    $redirectUrl = ($user->role === 'superadmin') ? '/home' : '/';
+    $redirectUrl = ($user->role === 'superadmin') ? '/' : '/';
 
     return response()->json([
         'message' => $isFromRegistration ? 'Registracija i prijava uspješne' : 'Prijava uspješna',
