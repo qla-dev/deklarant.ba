@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Laravel\Sanctum\PersonalAccessToken;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Exception;
 
 class AuthController extends Controller
@@ -64,12 +65,23 @@ class AuthController extends Controller
             return $this->login($loginRequest);
 
         } catch (ModelNotFoundException $e) {
-            Log::error("User not found after registration: " . $e->getMessage());
+            Log::error("Korisnik nije pronađen nakon registracije: " . $e->getMessage());
             return response()->json(['error' => 'Korisnik nije pronađen. Pokušajte ponovo kasnije'], 404);
+        }catch (ValidationException $e) {
+            return response()->json([
+                'error' => "Registracija korisnika neuspješna.",
+                // ukloniti uglaste zagrade ako treba ispisati sve errore a ne samo prvi
+                'message' => $e->errors()[array_key_first($e->errors())][0] 
+            ], 422);
         }catch (Exception $e) {
-            Log::error("Registration error: " . $e->getMessage());
-            return response()->json(["error" => "Registracija korisnika neuspješna", "message" => $e->getMessage()], 500);
+            Log::error("Greška pri registraciji korisnika: " . $e->getMessage());
+
+            return response()->json([
+                'error' => 'Registracija korisnika neuspješna.',
+                'message' => 'Došlo je do greške prilikom registracije. Molimo pokušajte ponovo.'
+            ], 500);
         }
+
     }
 
 
