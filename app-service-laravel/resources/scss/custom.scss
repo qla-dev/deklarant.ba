@@ -985,7 +985,7 @@ table.dataTable thead th.dtfc-fixed-right {
 
 @media screen and (max-width: 767px) and (orientation: landscape) {
     .content-desktop {
-        display: block !important;
+        display: flex !important;
     }
 
     .content-mobile-warning {
