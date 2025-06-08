@@ -65,7 +65,7 @@ deklarant.ai
                                 <th>Adresa</th>
                                 <th>Email</th>
                                 <th>Telefon</th>
-                                <th class="text-center">Akcija</th>
+                                <th class="text-end">Akcija</th>
 
                             </tr>
                         </thead>
