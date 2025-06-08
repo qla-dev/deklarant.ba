@@ -1,7 +1,12 @@
 @extends('layouts.master')
 @section('title')
-@lang('translation.clients')
+    @if(Auth::user()->role === 'superadmin')
+        Globalni Uvoznici
+    @else
+       @lang('translation.clients') 
+    @endif
 @endsection
+
 @section('css')
 <link href="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
 <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
@@ -16,9 +21,18 @@
 @slot('li_1')
 deklarant.ai
 @endslot
-@slot('title')
-Lista klijenata
-@endslot
+@auth
+    @if(Auth::user()->role === 'superadmin')
+        @slot('title')
+            Lista globalnih uvoznika
+        @endslot
+    @else
+        @slot('title')
+            Lista klijenata
+        @endslot
+    @endif
+@endauth
+
 @endcomponent
 
 
