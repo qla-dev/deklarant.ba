@@ -46,7 +46,7 @@
         <div class="row">
 
             <div class="col-lg-12">
-                <div class="card-header border-0  p-4">
+                <div class="card-header border-0  p-4 pb-0">
                     <div class="d-flex">
                         <div class="flex-grow-1">
                             <img src="{{ URL::asset('build/images/logo-light-ai.png') }}" class="card-logo card-logo-dark" alt="logo dark" height="34">
@@ -65,8 +65,8 @@
                             <!--end col-->
                             <div class="row">
                                 <!-- LEFT: Osnovni podaci -->
-                                <div class="col-md-8">
-                                    <h6 class="text-muted text-uppercase fw-semibold mb-3 mt-2">Osnovni podaci</h6>
+                                <div class="col-md-8 col-8">
+                                    <h6 class="text-uppercase fw-semibold mb-3 mt-3">Osnovni podaci</h6>
                                     <p class="text-muted mb-1"><span>E-mail: </span><span id="shipping-email">deklarant@skeniraj.ba</span></p>
                                     <p class="text-muted mb-1"><span>Tel: </span><span id="shipping-phone">+(387) 63974234</span></p>
                                     <p class="text-muted mb-1"><span>VAT: </span><span id="shipping-vat">BA12314519</span></p>
@@ -74,14 +74,14 @@
                                 </div>
 
                                 <!-- RIGHT: Incoterm and Broj fakture stacked -->
-                                <div class="col-md-4 text-end" style="padding-right: 0px;">
+                                <div class="col-md-4 col-4 text-end" style="padding-right: 0px;">
                                     <div class="mb-3">
-                                        <h6 class="text-muted text-uppercase fw-semibold mt-1">Incoterm</h6>
-                                        <h5 class="fs-14 mb-0"><span id="incoterm"></span></h5>
+                                        <h6 class="text-uppercase fw-semibold mt-3">Incoterm</h6>
+                                        <h5 class="fs-14 mb-0 text-muted "><span id="incoterm" class=" text-muted" style="background: unset!important;"></span></h5>
                                     </div>
                                     <div class="mb-3">
-                                        <h6 class="text-muted text-uppercase fw-semibold mt-1">Broj fakture</h6>
-                                        <h5 class="fs-14 mb-0"><span id="invoice-no"></span></h5>
+                                        <h6 class="text-uppercase fw-semibold">Broj fakture</h6>
+                                        <h5 class="fs-14 mb-0 text-muted "><span id="invoice-no"></span></h5>
                                     </div>
 
                                 </div>
@@ -99,7 +99,7 @@
                     <div class="card-body p-4 border-top border-top-dashed ">
                         <div class="row pt-1">
                             <div class="col-8 text-start">
-                                <h6 class="text-muted text-uppercase fw-semibold mb-3">Podaci o dobavljaču</h6>
+                                <h6 class="text-uppercase fw-semibold mb-3">Podaci o klijentu</h6>
                                 <p class="fw-medium mb-2" id="supplier-name"></p>
                                 <p class="text-muted mb-1" id="supplier-address"></p>
                                 <p class="text-muted mb-1"><span>Tel: </span><span id="supplier-phone"></span></p>
@@ -110,10 +110,10 @@
                             </div>
                             <!--end col-->
                             <div class="col-4 text-end">
-                                <h6 class="text-muted text-uppercase fw-semibold mb-3">Podaci o uvozniku</h6>
-                                <p class="fw-medium mb-2" id="carrier-name">SCHENKER</p>
-                                <p class="text-muted mb-1" id="carrier-address-line-1">305 S San Gabriel Blvd</p>
-                                <p class="text-muted mb-1"><span>Tel:</span><span id="carrier-phone">(123) 456-7890</span></p>
+                                <h6 class="text-uppercase fw-semibold mb-3">Podaci o dobavljaču</h6>
+                                <p class="fw-medium mb-2" id="carrier-name"></p>
+                                <p class="text-muted mb-1" id="carrier-address-line-1"></p>
+                                <p class="text-muted mb-1"><span>Tel:</span><span id="carrier-phone"></span></p>
                                 <p class="text-muted mb-1"><span>Email: </span><span id="carrier-email"></span></p>
                                 <p class="text-muted mb-1"><span>Vlasnik: </span><span id="carrier-owner"></span></p>
                                 <p class="text-muted mb-1"><span>JIB/VAT: </span><span id="carrier-tax"></span></p>
