@@ -213,47 +213,11 @@
 <script src="{{ URL::asset('build/js/pages/invoicedetails.js') }}"></script>
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="{{ URL::asset('build/js/declaration/fix-sidebar.js') }}"></script>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const html = document.documentElement;
-    const lightIcon = document.getElementById("rotate-icon-light");
-    const darkIcon = document.getElementById("rotate-icon-dark");
 
-    function updateIconTheme() {
-        const isDark = html.getAttribute("data-bs-theme") === "dark";
-        if (isDark) {
-            lightIcon.style.display = "none";
-            darkIcon.style.display = "block";
-        } else {
-            lightIcon.style.display = "block";
-            darkIcon.style.display = "none";
-        }
-    }
 
-    updateIconTheme(); // Run on load
 
-    // Optional: watch for dynamic theme changes
-    const observer = new MutationObserver(updateIconTheme);
-    observer.observe(html, { attributes: true, attributeFilter: ['data-bs-theme'] });
-});
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const container = document.getElementById('sidebar-buttons-container');
-        const fixedButtons = document.getElementById('fixed-buttons');
-        const topBarHeight = 70.8; // exact topbar height
-
-        window.addEventListener('scroll', () => {
-            if (window.scrollY >= topBarHeight) {
-                fixedButtons.classList.add('detached-fixed-buttons');
-            } else {
-                fixedButtons.classList.remove('detached-fixed-buttons');
-            }
-        });
-    });
-</script>
 
 
 <!-- Declaration fill logic -->
@@ -518,54 +482,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 </script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const totalIznos = document.querySelector(".total-iznos");
 
-        function hasVerticalScrollbar() {
-            return document.documentElement.scrollHeight > window.innerHeight;
-        }
-
-        function toggleFixed() {
-            const scrollBottom = window.scrollY + window.innerHeight;
-            const pageHeight = document.documentElement.scrollHeight;
-
-            if (pageHeight - scrollBottom <= 80) {
-                totalIznos.classList.add("static");
-            } else {
-                totalIznos.classList.remove("static");
-            }
-
-            updateRightMargin();
-        }
-
-        function updateRightMargin() {
-            const container = document.querySelector(".page-content .container-fluid");
-
-            if (container && totalIznos) {
-                const viewportWidth = window.innerWidth;
-                const containerRight = container.offsetLeft + container.offsetWidth;
-                let rightSpace = Math.max(0, viewportWidth - containerRight);
-
-                // If scrollbar is present, decrease margin by 5px
-                if (hasVerticalScrollbar()) {
-                    rightSpace = Math.max(0, rightSpace - 20);
-                }
-
-                totalIznos.style.marginRight = `${rightSpace}px`;
-                totalIznos.classList.add("visible");
-            }
-        }
-
-        // Initial run
-        toggleFixed();
-        updateRightMargin();
-
-        // Watch scroll and resize
-        window.addEventListener("scroll", toggleFixed);
-        window.addEventListener("resize", updateRightMargin);
-    });
-</script>
 
 
 

@@ -3,7 +3,7 @@
 @lang('translation.create-invoice')
 @endsection
 @section('css')
-<link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
+<!-- <link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
 <!-- Sweet Alert css-->
 <link href="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet">
 
@@ -317,20 +317,8 @@
     @include('components.fixed-sidebar')
 </div>
 
-<div class="modal fade" id="originalDocumentModal" style="z-index: 999;" tabindex="-1" aria-labelledby="originalDocLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered modal-fullscreen-sm-down">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="originalDocLabel">Originalni dokument</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
-            </div>
-            <div class="modal-body p-0" style="height: 80vh;">
-                <iframe id="originalDocFrame" src="" width="100%" height="100%" frameborder="0"></iframe>
-            </div>
-        </div>
-    </div>
-</div>
 
+ 
 
 
 <div class="modal fade" id="aiSuggestionModal" tabindex="-1" aria-labelledby="aiSuggestionModalLabel" aria-hidden="true">
@@ -363,34 +351,20 @@
 @endsection
 @section('script')
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script src="{{ URL::asset('build/libs/dropzone/dropzone-min.js') }}"></script>
+<!-- <script src="{{ URL::asset('build/libs/dropzone/dropzone-min.js') }}"></script>-->
 <script src="{{ URL::asset('build/libs/cleave.js/cleave.min.js') }}"></script>
-<script src="{{ URL::asset('build/js/pages/invoicecreate.init.js') }}"></script>
+<!-- <script src="{{ URL::asset('build/js/pages/invoicecreate.init.js') }}"></script> -->
 <script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
+<script src="{{ URL::asset('build/js/declaration/fix-sidebar.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/bs.js"></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const container = document.getElementById('sidebar-buttons-container');
-        const fixedButtons = document.getElementById('fixed-buttons');
-        const topBarHeight = 70.8; // exact topbar height
 
-        window.addEventListener('scroll', () => {
-            if (window.scrollY >= topBarHeight) {
-                fixedButtons.classList.add('detached-fixed-buttons');
-            } else {
-                fixedButtons.classList.remove('detached-fixed-buttons');
-            }
-        });
-    });
-</script>
 <!-- Scan and other logic script -->
 <script>
     const editModeMatch = window.location.pathname.match(/\/deklaracija\/(\d+)/);
@@ -2240,12 +2214,6 @@
 </script>
 
 
-
-
-
-
-
-
 <!-- Google search -->
 
 <script>
@@ -2287,10 +2255,6 @@
     }
 </script>
 
-
-
-
-<!-- Fixed side buttons -->
 
 
 <!-- Save logic script final -->
@@ -2476,8 +2440,10 @@
             });
 
             function toISODate(dmy) {
-                const [day, month, year] = dmy.split("-");
-                return `${year}-${month}-${day}`;
+                if (!dmy) return null;
+                const [day, month, year] = dmy.split(".");
+                if (!day || !month || !year) return null;
+                return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
             }
 
             // Use the existing invoice file name and ID from upload
@@ -2489,7 +2455,13 @@
             const payload = {
                 file_name: fileName, // use the file name from the uploaded invoice
                 total_price: parseFloat(document.getElementById("total-amount")?.value || "0"),
-                date_of_issue: toISODate(document.getElementById("invoice-date")?.value),
+                date_of_issue: (() => {
+                    const dateValue = document.getElementById("invoice-date")?.value;
+                    console.log("Raw date value:", dateValue);
+                    const isoDate = toISODate(dateValue);
+                    console.log("Converted to ISO:", isoDate);
+                    return isoDate;
+                })(),
                 country_of_origin: document.getElementById("shipping-country")?.value || "Germany",
                 items,
                 supplier_id: supplierId,
@@ -2791,7 +2763,7 @@
                 const spinner = document.querySelector(".custom-swal-spinner");
 
 
-                //  Also remove SweetAlert2’s default icon area if still rendered
+                //  Also remove SweetAlert2's default icon area if still rendered
                 const icon = Swal.getHtmlContainer()?.previousElementSibling;
                 if (icon?.classList.contains('swal2-icon')) {
                     icon.remove();

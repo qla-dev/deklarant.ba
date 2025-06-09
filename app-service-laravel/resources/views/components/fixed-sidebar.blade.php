@@ -2,7 +2,7 @@
 
     .swal2-modal {
 
-        padding-bottom: .8rem !important;
+        padding-bottom: 1rem !important;
     }
 
     .swal2-title {padding-top: 20px!important;}
@@ -94,6 +94,20 @@
  
 
 <!-- original document modal -->
+
+<div class="modal fade" id="originalDocumentModal" style="z-index: 999;" tabindex="-1" aria-labelledby="originalDocLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-fullscreen-sm-down">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="originalDocLabel">Originalni dokument</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
+            </div>
+            <div class="modal-body p-0" style="height: 80vh;">
+                <iframe id="originalDocFrame" src="" width="100%" height="100%" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -259,7 +273,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     @if($isDeklaracija)
                 
 
-                    <button class="btn btn-soft-info w-100 mb-3 mt-3 p-0" onclick="document.getElementById('brisanje')?.click()" style="height: 28px !important;">
+                    <button class="btn btn-soft-info w-100  mt-3 p-0" onclick="document.getElementById('brisanje')?.click()" style="height: 28px !important;">
                         <i class="ri-delete-bin-line align-bottom me-1 fs-5"></i>Obriši proizvode
                     </button>
                     @endif

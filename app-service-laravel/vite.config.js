@@ -55,7 +55,8 @@ export default defineConfig({
                     'resources/scss/app.scss',
                     'resources/scss/custom.scss',
                     'resources/scss/landing.scss',
-                    ...getAllJsFiles('resources/js/login-js') 
+                    ...getAllJsFiles('resources/js/login-js'),
+                    ...getAllJsFiles('resources/js/declaration')  
                 ],
                 refresh: [
                     ...refreshPaths,
