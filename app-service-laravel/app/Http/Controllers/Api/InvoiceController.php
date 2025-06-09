@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Exception;
 use App\Jobs\StoreInvoiceItemsJob;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Log; // At the top of your controller
 
 use Illuminate\Support\Facades\DB;
 
@@ -120,27 +121,37 @@ class InvoiceController extends Controller
 
     }
 
-    public function update(Request $request, $invoiceId)
-    {
-        try {
-            $invoice = Invoice::findOrFail($invoiceId);
-            $data = $request->all();
-            if (isset($data['importer_id'])) {
-                $invoice->importer_id = $data['importer_id'];
-            }
-            $invoice->update($data);
-
-            return response()->json([
-                'message' => 'Deklaracija uspješno ažurirana',
-                'data' => $invoice
-            ]);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Deklaracija s unesenim ID-om nije pronađena'], 404);
-        } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno ažuriranje deklaracije. Provjerite podatke i pokušajte ponovo'], 500);
+public function update(Request $request, $invoiceId)
+{
+    try {
+        $invoice = Invoice::findOrFail($invoiceId);
+        $data = $request->all();
+        if (isset($data['importer_id'])) {
+            $invoice->importer_id = $data['importer_id'];
         }
+        $invoice->update($data);
 
+        return response()->json([
+            'message' => 'Deklaracija uspješno ažurirana',
+            'data' => $invoice
+        ]);
+    } catch (ModelNotFoundException $e) {
+        Log::warning("Deklaracija nije pronađena. ID: $invoiceId", [
+            'exception' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ]);
+
+        return response()->json(['error' => 'Deklaracija s unesenim ID-om nije pronađena'], 404);
+    } catch (Exception $e) {
+        Log::error("Greška pri ažuriranju deklaracije. ID: $invoiceId", [
+            'request_data' => $request->all(),
+            'exception' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ]);
+
+        return response()->json(['error' => 'Neuspješno ažuriranje deklaracije. Provjerite podatke i pokušajte ponovo'], 500);
     }
+}
 
     public function destroy($invoiceId)
     {

@@ -79,7 +79,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4">
+                <div class="col-lg-4 mt-3 mt-md-0">
                     <div class="">
                         <div class="d-flex align-items-center mb-3">
                             <div class="flex-shrink-0 me-1">
@@ -154,7 +154,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4">
+                <div class="col-lg-4 mt-3 mt-md-0">
                     <div class="">
                         <div class="d-flex align-items-center mb-3">
                             <div class="flex-shrink-0 me-1">
