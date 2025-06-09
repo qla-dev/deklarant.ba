@@ -998,4 +998,21 @@ table.dataTable thead th.dtfc-fixed-right {
     border-color: #32383e!important;
 }
 
+.payment-option {
+    background-color: white;
+    transition: all 0.2s ease-in-out;
+}
+
+.payment-option:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-color: #0d6efd;
+    cursor: pointer;
+}
+
+   .form-check-input:checked {
+        background-color: #299cdb!important; /* Bootstrap 'info' color */
+        border-color: #299cdb   !important; /* Ensure border matches */
+    }
+
+
 

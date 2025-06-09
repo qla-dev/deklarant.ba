@@ -95,8 +95,8 @@
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-info  rounded-0 shadow">
-            <div class=" d-flex align-items-center justify-content-between bg-info text-white py-1">
-                <h5 class="modal-title d-flex align-items-center  ms-1 me-1 text-white"
+            <div class=" d-flex align-items-center justify-content-between bg-info text-white p-3">
+                <h5 class="modal-title d-flex align-items-center  ms-1 me-1 text-white "
                     id="paymentModalLabel">Unesite vaše podatke</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Zatvori"></button>
@@ -105,15 +105,15 @@
                 <form>
                     <div class="mb-3">
                         <label for="cardName" class="form-label">Ime i prezime vlasnika kartice</label>
-                        <input type="text" class="form-control border-info rounded-0" id="cardName"
+                        <input type="text" class="form-control rounded-0" id="cardName"
                             placeholder="Ime i Prezime">
                     </div>
                     <div class="mb-3">
                         <label for="cardNumber" class="form-label">Broj kartice</label>
                         <div class="input-group">
-                            <input type="text" class="form-control border-info rounded-0" id="cardNumber"
-                                placeholder="0000 0000 0000 0000">
-                            <span class="input-group-text bg-white border-info rounded-0">
+                            <input type="text" class="form-control rounded-0" id="cardNumber"
+                                placeholder="0000 0000 0000 0000" style="border-bottom-right-radius: 0!important; border-top-right-radius: 0!important;">
+                            <span class="input-group-text bg-white rounded-0">
                                 <img src="https://img.icons8.com/color/32/000000/mastercard-logo.png"
                                     id="cardLogo" alt="Mastercard" height="20">
                             </span>
@@ -123,12 +123,12 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="expiry" class="form-label">Datum isteka</label>
-                            <input type="text" class="form-control border-info rounded-0" id="expiry"
+                            <input type="text" class="form-control rounded-0" id="expiry"
                                 placeholder="MM/GG">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="cvc" class="form-label">CVC kod</label>
-                            <input type="text" class="form-control border-info rounded-0" id="cvc"
+                            <input type="text" class="form-control rounded-0" id="cvc"
                                 placeholder="123">
                         </div>
                     </div>
@@ -144,13 +144,15 @@
                         <input class="form-check-input border-info rounded-0" type="checkbox"
                             id="termsCheck">
                         <label class="form-check-label" for="termsCheck">
-                            Prihvatam <a href="#">uslove korištenja</a> i <a href="#">politiku
+                            Prihvatam <a href="#" class=" text-info" >uslove korištenja</a> i <a href="#" class=" text-info">politiku
                                 privatnosti</a>
                         </label>
                     </div>
                 </form>
             </div>
-            <div class="modal-footer d-flex justify-content-center align-items center ">
+            <img src="https://avatars.githubusercontent.com/u/59373352?s=280&v=4"
+                class="img-fluid mx-auto d-block mb-3" alt="Visa Card" style="max-width: 100px;">
+            <div class="modal-footer d-flex justify-content-center align-items-center " style="flex-direction: row; flex-wrap: nowrap!important;">
                 <button type="button" class="btn btn-outline-info w-50"
                     data-bs-dismiss="modal">Otkaži</button>
                 <button type="submit" class="btn btn-info text-white w-50">Plati</button>
@@ -166,15 +168,23 @@
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-info ">
-            <div class="modal-header bg-info text-white">
-                <h5 class="modal-title" id="virmanModalLabel">Upute za plaćanje virmanom</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+            <div class="modal-header p-3 bg-info text-white">
+                <h5 class="modal-title text-white" id="virmanModalLabel">Upute za plaćanje virmanom</h5>
+                <button type="button" class="btn-close text-white" data-bs-dismiss="modal"
                     aria-label="Zatvori"></button>
             </div>
             <div class="modal-body">
                 <div class="mb-3">
                     <label class="form-label fw-bold">Naziv primaoca:</label>
-                    <p class="mb-0">Qla Dev d.o.o. Sarajevo</p>
+                    <p class="mb-0">"qla.dev"</p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Adresa primaoca:</label>
+                    <p class="mb-0">Vilsonovo šetalište 9</p>
+                </div>
+                 <div class="mb-3">
+                    <label class="form-label fw-bold">ID broj:</label>
+                    <p class="mb-0">485004586212</p>
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold">Broj računa (IBAN):</label>
@@ -182,7 +192,7 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold">Svrha uplate:</label>
-                    <p class="mb-0">Uplata paketa usluga – <span class="text-info fw-semibold">[StartUp /
+                    <p class="mb-0">Uplata za deklarant.ai paket usluga – <span class="text-info fw-semibold">[StartUp /
                             GoBig / Business]</span></p>
                 </div>
                 <div class="mb-3">
@@ -196,8 +206,7 @@
                 </p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Zatvori</button>
-                <button type="button" class="btn btn-info text-white">Uredu</button>
+                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Uredu</button>
             </div>
         </div>
     </div>
@@ -205,35 +214,42 @@
 
 
 <!-- Modal za izbor načina plaćanja -->
-<div class="modal fade" id="paymentChoiceModal" tabindex="-1" aria-labelledby="paymentChoiceModalLabel"
-    aria-hidden="true">
+<div class="modal fade" id="paymentChoiceModal" tabindex="-1" aria-labelledby="paymentChoiceModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-info shadow">
-            <div class="d-flex justify-content-between bg-info py-1 px-1 text-white">
-                <h5 class="modal-title px-2">Izaberite način plaćanja</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                    aria-label="Zatvori"></button>
+        <div class="modal-content border-0 shadow-lg">
+            <div class="d-flex justify-content-between bg-info py-2 px-3 text-white align-items-center rounded-top">
+                <h5 class="modal-title mb-0 text-white">Izaberi način plaćanja</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Zatvori"></button>
             </div>
-            <div class="modal-body text-center">
-                <p class="mb-4">Molimo odaberite način na koji želite izvršiti uplatu:</p>
-                <div class="d-grid gap-3">
-                    <button class="btn btn-info text-white" data-bs-dismiss="modal" data-bs-toggle="modal"
-                        data-bs-target="#paymentModal">
-                        💳 Kartično plaćanje
-                    </button>
-                    <button class="btn btn-outline-info" data-bs-dismiss="modal" data-bs-toggle="modal"
-                        data-bs-target="#virmanModal">
-                        🧾 Plaćanje virmanom
-                    </button>
-                    <!-- ✅ NEW Button -->
-                    <button id="btnActivatePackage" class="btn btn-outline-success">
-                        ✅ Aktiviraj pretplatu
-                    </button>
+            <div class="modal-body text-center bg-white p-4">
+                <p class="mb-4">Odaberi način na koji želiš izvršiti uplatu</p>
+                <div class="row g-3 justify-content-center">
+                    <div class="col-12 col-md-6">
+                        <button class="w-100 border border-2 rounded-3 py-4 d-flex flex-column align-items-center justify-content-center payment-option"
+                                data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#paymentModal">
+                            <div class="fs-1">💳</div>
+                            <div class="fw-bold mt-2">Kartično plaćanje</div>
+                        </button>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <button class="w-100 border border-2 rounded-3 py-4 d-flex flex-column align-items-center justify-content-center payment-option"
+                                data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#virmanModal">
+                            <div class="fs-1">🧾</div>
+                            <div class="fw-bold mt-2">Plaćanje virmanom</div>
+                        </button>
+                    </div>
+                    <div class="col-12">
+                       <button id="btnActivatePackage" class="w-100 btn btn-md btn-success fw-bold">
+    <i class="fa fa-check-circle me-1"></i> Aktiviraj trial
+</button>
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 
 
 <script>
@@ -296,7 +312,7 @@
                     credentials: "include"
                 });
 
-                if (!res.ok) throw new Error("Neuspješna aktivacija.");
+                if (!res.ok) throw new Error("Neuspješna aktivacija");
 
                 const modal = bootstrap.Modal.getInstance(document.getElementById("paymentChoiceModal"));
                 modal.hide();
@@ -305,7 +321,7 @@
                     Swal.fire({
                         icon: 'success',
                         title: 'Pretplata aktivirana!',
-                        text: 'Uspješno ste aktivirali paket.',
+                        text: 'Uspješno ste aktivirali paket',
                         timer: 2000,
                         showConfirmButton: false
                     });
@@ -318,7 +334,8 @@
                 Swal.fire({
                     icon: 'error',
                     title: 'Greška!',
-                    text: 'Došlo je do problema pri aktivaciji paketa.',
+                    text: 'Došlo je do problema pri aktivaciji paketa. Obratite se administratoru.',
+                    footer: '<a href="/contact">Kontaktirajte podršku</a>'
                 });
             }
         });
