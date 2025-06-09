@@ -16,42 +16,42 @@
          @endphp
 
          @if($isDeklaracija)
-        <button type="button" id="save-invoice-btn" class="btn btn-info btn-sm" style="height: 28px !important; width: 190 px !important;">
-             <i class="ri-save-line align-bottom me-1"></i> Spremi promjene
+        <button type="button" id="save-invoice-btn" class="btn btn-info btn-sm fs-6" style="height: 28px !important; width: 190 px !important;">
+             <i class="ri-save-line align-bottom me-1 fs-3"></i> Spremi promjene
          </button>
          @endif
 
-         <a href="javascript:window.print()" class="btn btn-soft-info btn-sm" style="height: 28px !important; width: 190 px !important;">
-             <i class="ri-printer-line align-bottom me-1"></i> Isprintaj
+         <a href="javascript:window.print()" class="btn btn-soft-info btn-sm fs-6" style="height: 28px !important; width: 190 px !important;">
+             <i class="ri-printer-line align-bottom me-1 fs-3"></i> Isprintaj
          </a>
-         <a href="javascript:void(0);" class="btn btn-soft-info pc-opcije-button">
-             <i class="ri-download-2-line align-bottom me-1"></i> Preuzmi
+         <a href="javascript:void(0);" class="btn btn-soft-info btn-sm fs-6 pc-opcije-button" style="height: 28px !important; width: 190x !important;">
+             <i class="ri-download-2-line align-bottom me-1 fs-3"></i> Preuzmi
          </a>
-         <a href="" class="btn btn-soft-info pc-opcije-button">
-             <i class="ri-file-3-line align-bottom me-1"></i> Originalni dokument
+         <a href="#" class="btn btn-soft-info btn-sm btn-original-doc fs-6 pc-opcije-button" style="height: 28px !important; width: 190 px!important;">
+             <i class="ri-file-3-line align-bottom me-1 fs-3"></i> Originalni dokument
          </a>
 
-         <button class="btn btn-soft-info pc-opcije-button" onclick="exportTableToCustomCSV()"><i class="ri-file-excel-line align-bottom me-1"></i> Export u CSV</button>
-         <a href="" class="btn btn-soft-info pc-opcije-button">
-             <i class="ri-file-code-line align-bottom me-1"></i> Export u XML
+         <button class="btn btn-soft-info btn-sm fs-6 pc-opcije-button" onclick="exportTableToCustomCSV()" style="height: 28px !important; width: 190 px !important;"><i class="ri-file-excel-line align-bottom me-1 fs-3"></i> Export u CSV</button>
+         <a href="" class="btn btn-soft-info btn-sm fs-6" style="height: 28px !important; width: 190 px !important;">
+             <i class="ri-file-code-line align-bottom me-1 fs-3"></i> Export u XML
          </a>
          
 
          @if($isDeklaracija)
          <!-- Only for /deklaracija/* -->
          
-         <button type="button" id="pregled" class="btn btn-soft-info pc-opcije-button">
-             <i class="ri-eye-line align-bottom me-1"></i> Pregled
+         <button type="button" id="pregled" class="btn btn-soft-info btn-sm fs-6 pc-opcije-button" style="height: 28px !important; width: 190 px !important;">
+             <i class="ri-eye-line align-bottom me-1 fs-3"></i> Pregled
          </button>
-         <button type="button" id="brisanje" class="btn btn-soft-info pc-opcije-button">
-             <i class="ri-delete-bin-line align-bottom me-1"></i> Obriši proizvode
+         <button type="button" id="brisanje" class="btn btn-soft-info btn-sm fs-6 pc-opcije-button" style="height: 28px !important; width: 190 px !important;">
+             <i class="ri-delete-bin-line align-bottom me-1 fs-3"></i> Obriši proizvode
          </button>
          @endif
 
          @if($isPregled)
          <!-- Only for /detalji-deklaracije/* -->
-         <button type="button" id="uredi" class="btn btn-soft-info btn-sm pc-opcije-button" style="height: 28px !important; width: 190 px !important;">
-             <i class="ri-edit-line align-bottom me-1"></i> Uredi
+         <button type="button" id="uredi" class="btn btn-soft-info btn-sm fs-6 pc-opcije-button" style="height: 28px !important; width: 190 px !important;">
+             <i class="ri-edit-line align-bottom me-1 fs-3 "></i> Uredi
          </button>
          @endif
 
