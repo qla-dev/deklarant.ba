@@ -19,4 +19,15 @@ runOrFail('php artisan config:cache');
 runOrFail('php artisan route:cache');
 runOrFail('php artisan view:cache');
 
+chdir(__DIR__ . '/customs-api');
+
+runOrFail('php artisan migrate --force');
+runOrFail('php artisan config:clear');
+runOrFail('php artisan cache:clear');
+runOrFail('php artisan view:clear');
+runOrFail('php artisan route:clear');
+runOrFail('php artisan config:cache');
+runOrFail('php artisan route:cache');
+runOrFail('php artisan view:cache');
+
 http_response_code(200);
