@@ -37,7 +37,6 @@ class Supplier extends Model
 {
     $now = Carbon::now();
     $created = Carbon::parse($this->created_at);
-    Log::info('Supplier created_at:', ['supplier_id' => $this->id, 'created_at' => $created->toDateTimeString()]);
 
     $yearsActive = max($created->diffInYears($now), 1);
 
