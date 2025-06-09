@@ -2,7 +2,7 @@
 
     .swal2-modal {
 
-        padding-bottom: .7rem !important;
+        padding-bottom: .8rem !important;
     }
 
     .swal2-title {padding-top: 20px!important;}
@@ -34,7 +34,7 @@
          <a href="javascript:window.print()" class="btn btn-soft-info pc-opcije-button" style="height: 28px !important; ">
              <i class="ri-printer-line align-bottom me-1 fs-5"></i> Isprintaj
          </a>
-         <a href="javascript:void(0);" class="btn btn-soft-info" style="height: 28px !important;">
+         <a href="javascript:void(0);" class="btn btn-soft-info pc-opcije-button" style="height: 28px !important;">
              <i class="ri-download-2-line align-bottom me-1 fs-5"></i> Preuzmi
          </a>
          <a href="#" class="btn btn-soft-info  btn-original-doc pc-opcije-button" style="height: 28px !important;">
@@ -230,32 +230,37 @@ document.addEventListener("DOMContentLoaded", function () {
             Swal.fire({
                 title: "Više opcija",
                 html: `
-                <div class="d-flex flex-column text-start">
+                <div class="d-flex flex-column text-start mt-1 mb-1">
             
-
-                    <button class="btn btn-soft-info w-100 mb-2" onclick="document.querySelector('.pc-opcije-button[href^=\'javascript:void\']')?.click()">
-                        <i class="ri-download-2-line align-bottom me-1 fs-5"></i> Preuzmi
+                    @if($isDeklaracija)
+                    <button class="btn btn-soft-info w-100 mb-3 p-0" onclick="document.getElementById('pregled')?.click()" style="height: 28px !important;">
+                        <i class="ri-eye-line align-bottom me-1 fs-5"></i>Pregled
                     </button>
 
-                    <button class="btn btn-soft-info w-100 mb-2" onclick="document.querySelector('.pc-opcije-button[href*=\'file-3\']')?.click()">
-                        <i class="ri-file-3-line align-bottom me-1 fs-5"></i> Originalni dokument
+        
+                    @endif
+
+                    <button class="btn btn-soft-info w-100 mb-3 p-0" onclick="document.querySelector('.pc-opcije-button[href^=\'javascript:void\']')?.click()"  style="height: 28px !important;">
+                        <i class="ri-download-2-line align-bottom me-1 fs-5"></i>Preuzmi
                     </button>
 
-                    <button class="btn btn-soft-info w-100 mb-2" onclick="exportTableToCustomCSV()">
-                        <i class="ri-file-excel-line align-bottom me-1 fs-5"></i> Export u CSV
+                    <button class="btn btn-soft-info w-100 mb-3 p-0" onclick="document.querySelector('.pc-opcije-button[href*=\'file-3\']')?.click()"  style="height: 28px !important;">
+                        <i class="ri-file-3-line align-bottom me-1 fs-5"></i>Originalni dokument
                     </button>
 
-                    <button class="btn btn-soft-info w-100 mb-2" onclick="document.querySelector('.pc-opcije-button[href*=\'file-code\']')?.click()">
-                        <i class="ri-file-code-line align-bottom me-1 fs-5"></i> Export u XML
+                    <button class="btn btn-soft-info w-100 mb-3 p-0" onclick="exportTableToCustomCSV()"  style="height: 28px !important;">
+                        <i class="ri-file-excel-line align-bottom me-1 fs-5"></i>Export u CSV
+                    </button>
+
+                    <button class="btn btn-soft-info w-100 p-0" onclick="document.querySelector('.pc-opcije-button[href*=\'file-code\']')?.click()" style="height: 28px !important;">
+                        <i class="ri-file-code-line align-bottom me-1 fs-5"></i>Export u XML
                     </button>
 
                     @if($isDeklaracija)
-                    <button class="btn btn-soft-info w-100 mb-2" onclick="document.getElementById('pregled')?.click()">
-                        <i class="ri-eye-line align-bottom me-1 fs-5"></i> Pregled
-                    </button>
+                
 
-                    <button class="btn btn-soft-info w-100 mb-2" onclick="document.getElementById('brisanje')?.click()">
-                        <i class="ri-delete-bin-line align-bottom me-1 fs-5"></i> Obriši proizvode
+                    <button class="btn btn-soft-info w-100 mb-3 mt-3 p-0" onclick="document.getElementById('brisanje')?.click()" style="height: 28px !important;">
+                        <i class="ri-delete-bin-line align-bottom me-1 fs-5"></i>Obriši proizvode
                     </button>
                     @endif
 
