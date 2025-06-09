@@ -769,9 +769,42 @@ document.addEventListener("DOMContentLoaded", async function () {
     console.log(" Korisnik:", user);
     console.log(" Token:", token?.substring(0, 25) + "...");
 
+    function handleSessionExpired() {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Oprez',
+            text: 'Sesija istekla ili je izvršena prijava sa drugog uređaja, molimo prijavite se ponovo',
+            confirmButtonText: 'Prijavi se ponovo',
+            customClass: {
+                    confirmButton: "btn btn-info"
+                },
+            allowOutsideClick: false,
+            allowEscapeKey: false
+        }).then(() => {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/custom-logout';
+            form.style.marginBottom = '0';
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            if (csrfToken) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = '_token';
+                input.value = csrfToken;
+                form.appendChild(input);
+            }
+
+            document.body.appendChild(form);
+            form.submit();
+        });
+    }
+
     if (!user || !token) {
         if (!user) console.warn("[TOPBAR] Backend user missing!");
-        if (!token) console.warn("[TOPBAR] Auth token missing in localStorage.");
+        if (!token) console.warn("[TOPBAR] Auth token missing in session.");
+
+        handleSessionExpired();
         return;
     }
 
@@ -788,7 +821,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         console.log("✅ API response:", response);
         const stats = response.data || {};
 
-        // Sigurno dohvaćanje vrijednosti
         const fields = {
             totalSuppliers: stats.supplier_stats?.total_suppliers ?? 0,
             totalImporters: stats.importer_stats?.total_importers ?? 0,
@@ -810,13 +842,14 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         });
 
-        // Update all .counter-value-invoice elements to total invoice
         document.querySelectorAll('.counter-value-invoice').forEach(function(el) {
             el.textContent = fields.totalInvoices;
         });
 
     } catch (error) {
         console.error("❌ Greška pri dohvaćanju statistike:", error);
+        handleSessionExpired(); // Fire SweetAlert on error
     }
 });
 </script>
+

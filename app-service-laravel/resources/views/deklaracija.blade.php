@@ -34,9 +34,7 @@
 
     }
 
-    .select2-container--default .select2-selection--single {
-        background-color: #f4f4fc !important;
-    }
+  
 
     .select2-container--default .select2-results>.select2-results__options {
 
@@ -154,9 +152,11 @@
 <div class="row justify-content-center mt-0 mb-3">
     <div class="col card paper-layout">
         <div id="invoice-form">
-            <div class="card-header border-0 p-4 d-flex justify-content-between align-items-start">
-                <div>
-                    <img src="{{ URL::asset('build/images/logo-light-ai.png') }}" class="card-logo" alt="logo" height="34">
+            <div class="card-header border-0 p-4 pb-0">
+                <img src="{{ URL::asset('build/images/logo-light-ai.png') }}" class="card-logo card-logo-dark" alt="logo dark" height="34">
+                            <img src="{{ URL::asset('build/images/logo-dark-ai.png') }}" class="card-logo card-logo-light" alt="logo light" height="17">
+                <div class="d-flex flex-row justify-content-between py-4">
+                     
                     <div class="mt-4">
                         <h6 class="text-muted text-uppercase fw-semibold">Osnovni podaci</h6>
                         <input type="text" class="form-control mb-2" id="company-address" name="name" placeholder="Ime kompanije" value="{{ Auth::user()->company['name'] ?? '' }}">
@@ -165,12 +165,9 @@
                     </div>
 
                     <!-- Incoterm Dropdown Section -->
-
-                </div>
-
-                <div style="min-width: 200px;">
+                       <div style="min-width: 200px;" class="mt-4">
                     <h6 class="text-muted text-uppercase fw-semibold mt-1 ">Incoterm</h6>
-                    <select class="form-select mb-2 custom-select-icon" style="background: #f4f4fc;" name="incoterm" id="incoterm" placeholder="Odaberite incoterm">
+                    <select class="form-select mb-2 custom-select-icon incoterm2" name="incoterm" id="incoterm" placeholder="Odaberite incoterm">
 
                         <option value="EXW">EXW</option>
                         <option value="FCA">FCA</option>
@@ -189,6 +186,10 @@
                         <input type="text" class="form-control" id="invoice-no" name="invoice_no" placeholder="Unesite broj fakture">
                     </div>
                 </div>
+
+                </div>
+
+              
 
             </div>
             <div class="card-body p-4 border-top border-top-dashed">
