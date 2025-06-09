@@ -71,7 +71,7 @@ class UserPackageController extends Controller
     } catch (ModelNotFoundException $e) {
         return response()->json(['error' => 'Korisnik ili paket nije pronađen. Provjerite ID-ove i pokušajte ponovo'], 404);
     } catch (Exception $e) {
-        return response()->json(['error' => 'Neuspješno dodjeljivanje korisničkog paketa: ' . $e->getMessage()], 500);
+        return response()->json(['error' => 'Neuspješno dodjeljivanje korisničkog paketa. Pokušajte ponovo kasnije'], 500);
     }
 }
 

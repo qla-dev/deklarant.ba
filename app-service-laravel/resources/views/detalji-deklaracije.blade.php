@@ -39,7 +39,7 @@
 
 
 
-<div class="row justify-content-center mt-0 mb-3">
+<div class="row justify-content-center mt-0 mb-3 content-desktop">
 
 
     <div class="card col paper-layout">
@@ -176,6 +176,36 @@
 
 </div>
 
+<!-- Centered fullscreen warning message for mobile -->
+<div class="content-mobile-warning d-none d-flex flex-column align-items-center justify-content-center text-center" style="height: 70vh;">
+    <!-- Light theme icon -->
+    <lord-icon
+        id="rotate-icon-light"
+        src="/build/images/rotate-phone.json"
+        trigger="loop"
+        colors="secondary:#299cdb"
+        style="width:80px;height:80px;margin-bottom: 1rem;">
+    </lord-icon>
+
+    <!-- Dark theme icon -->
+    <lord-icon
+        id="rotate-icon-dark"
+        src="/build/images/rotate-phone-dark.json"
+        trigger="loop"
+        colors="secondary:#299cdb"
+        style="width:80px;height:80px;margin-bottom: 1rem; display: none;">
+    </lord-icon>
+
+    <div>
+        <strong class="d-block mb-1">Molimo okreni uređaj horizontalno</strong>
+        <span class="text-muted">da bi pristupio prikazu deklaracije</span>
+    </div>
+</div>
+
+
+
+
+
 
 <!--end row-->
 @endsection
@@ -184,6 +214,30 @@
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const html = document.documentElement;
+    const lightIcon = document.getElementById("rotate-icon-light");
+    const darkIcon = document.getElementById("rotate-icon-dark");
+
+    function updateIconTheme() {
+        const isDark = html.getAttribute("data-bs-theme") === "dark";
+        if (isDark) {
+            lightIcon.style.display = "none";
+            darkIcon.style.display = "block";
+        } else {
+            lightIcon.style.display = "block";
+            darkIcon.style.display = "none";
+        }
+    }
+
+    updateIconTheme(); // Run on load
+
+    // Optional: watch for dynamic theme changes
+    const observer = new MutationObserver(updateIconTheme);
+    observer.observe(html, { attributes: true, attributeFilter: ['data-bs-theme'] });
+});
+</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
