@@ -994,6 +994,8 @@ table.dataTable thead th.dtfc-fixed-right {
 }
 
 
-
+[data-bs-theme=dark] .dataTables_wrapper .dataTables_paginate .paginate_button {
+    border-color: #32383e!important;
+}
 
 
