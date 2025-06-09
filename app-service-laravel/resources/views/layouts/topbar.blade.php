@@ -775,7 +775,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             title: 'Oprez',
             text: 'Sesija istekla ili je izvršena prijava sa drugog uređaja, molimo prijavite se ponovo',
             confirmButtonText: 'Prijavi se ponovo',
-            confirmButtonColor: '#0dcaf0',
+            customClass: {
+                    confirmButton: "btn btn-info"
+                },
             allowOutsideClick: false,
             allowEscapeKey: false
         }).then(() => {
