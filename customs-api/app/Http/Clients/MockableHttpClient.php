@@ -16,7 +16,7 @@ class MockableHttpClient extends Client
 
     public function request(string $method, $uri = '', array $options = []): ResponseInterface
     {
-        Log::info("Requesting {$method} to {$uri}", ['options' => $options]); // Added logging
+        Log::info("Requesting {$method} to {$uri}"); // Added logging
 
         if (!$this->shouldUseRealAi()) {
             $request = new \GuzzleHttp\Psr7\Request($method, $uri);
