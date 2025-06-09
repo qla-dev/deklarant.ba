@@ -16,12 +16,12 @@
          @endphp
 
          @if($isDeklaracija)
-        <button type="button" id="save-invoice-btn" class="btn btn-info">
+        <button type="button" id="save-invoice-btn" class="btn btn-info btn-sm" style="height: 28px !important; width: 190 px !important;">
              <i class="ri-save-line align-bottom me-1"></i> Spremi promjene
          </button>
          @endif
 
-         <a href="javascript:window.print()" class="btn btn-soft-info">
+         <a href="javascript:window.print()" class="btn btn-soft-info btn-sm" style="height: 28px !important; width: 190 px !important;">
              <i class="ri-printer-line align-bottom me-1"></i> Isprintaj
          </a>
          <a href="javascript:void(0);" class="btn btn-soft-info pc-opcije-button">
@@ -50,7 +50,7 @@
 
          @if($isPregled)
          <!-- Only for /detalji-deklaracije/* -->
-         <button type="button" id="uredi" class="btn btn-soft-info pc-opcije-button">
+         <button type="button" id="uredi" class="btn btn-soft-info btn-sm pc-opcije-button" style="height: 28px !important; width: 190 px !important;">
              <i class="ri-edit-line align-bottom me-1"></i> Uredi
          </button>
          @endif
@@ -85,7 +85,55 @@
              <span id="{{ $isDeklaracija ? 'total-edit' : 'total-1' }}">Učitavanje...</span>
          </h5>
      </div>
+
+
+
  </div>
+ 
+
+<!-- original document modal -->
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelector(".btn-original-doc")?.addEventListener("click", async function (e) {
+        e.preventDefault();
+
+        const invoiceId = localStorage.getItem("scan_invoice_id");
+        if (!invoiceId) {
+            Swal.fire("Greška", "Fajl nije pronađen", "error");
+            return;
+        }
+
+        try {
+            const res = await fetch(`/api/invoices/${invoiceId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!res.ok) throw new Error("Neuspješno dohvaćanje fajla");
+
+            const data = await res.json();
+            const fileName = data?.file_name;
+
+            if (!fileName || !fileName.endsWith(".pdf")) {
+                Swal.fire("Greška", "Fajl nije PDF ili nije pronađen", "error");
+                return;
+            }
+
+            const fileUrl = `/storage/uploads/${fileName}`;
+            document.getElementById("originalDocFrame").src = fileUrl;
+            const modal = new bootstrap.Modal(document.getElementById("originalDocumentModal"));
+            modal.show();
+
+        } catch (err) {
+            console.error("Greška pri otvaranju originalnog dokumenta:", err);
+            Swal.fire("Greška", err.message || "Nepoznata greška", "error");
+        }
+    });
+});
+</script>
+
 
 
  <script>

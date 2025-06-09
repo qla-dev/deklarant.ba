@@ -159,9 +159,9 @@
                     <img src="{{ URL::asset('build/images/logo-light-ai.png') }}" class="card-logo" alt="logo" height="34">
                     <div class="mt-4">
                         <h6 class="text-muted text-uppercase fw-semibold">Osnovni podaci</h6>
-                        <input type="text" class="form-control mb-2" id="company-address" name="address" placeholder="Unesite adresu" value="{{ Auth::user()->company['address'] ?? '' }}">
+                        <input type="text" class="form-control mb-2" id="company-address" name="name" placeholder="Ime kompanije" value="{{ Auth::user()->company['name'] ?? '' }}">
                         <input type="text" class="form-control mb-2" id="company-id" name="zip" placeholder="ID kompanije" value="{{ Auth::user()->company['id'] ?? '' }}">
-                        <input type="email" class="form-control" id="company-tel" name="tel" placeholder="Kontakt telefon" value="{{ Auth::user()->company['contact_number'] ?? '' }}">
+                        <input type="email" class="form-control" id="company-tel" name="tel" placeholder="Adresa" value="{{ Auth::user()->company['address'] ?? '' }}">
                     </div>
 
                     <!-- Incoterm Dropdown Section -->
@@ -316,6 +316,20 @@
     @include('components.fixed-sidebar')
 </div>
 
+<div class="modal fade" id="originalDocumentModal" style="z-index: 999;"tabindex="-1" aria-labelledby="originalDocLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-fullscreen-sm-down">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="originalDocLabel">Originalni dokument</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
+      </div>
+      <div class="modal-body p-0" style="height: 80vh;">
+        <iframe id="originalDocFrame" src="" width="100%" height="100%" frameborder="0"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 <div class="modal fade" id="aiSuggestionModal" tabindex="-1" aria-labelledby="aiSuggestionModalLabel" aria-hidden="true">
@@ -360,6 +374,22 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/bs.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const container = document.getElementById('sidebar-buttons-container');
+        const fixedButtons = document.getElementById('fixed-buttons');
+        const topBarHeight = 70.8; // exact topbar height
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY >= topBarHeight) {
+                fixedButtons.classList.add('detached-fixed-buttons');
+            } else {
+                fixedButtons.classList.remove('detached-fixed-buttons');
+            }
+        });
+    });
+</script>
 <!-- Scan and other logic script -->
 <script>
     const editModeMatch = window.location.pathname.match(/\/deklaracija\/(\d+)/);
@@ -372,10 +402,29 @@
         // Or better – put all scan logic inside a condition
     } else {
         console.log(' Custom invoice JS loaded');
+
+        function showRetryError(title, message, retryCallback) {
+            Swal.fire({
+                title: title,
+                html: `<div class="text-danger mb-2">${message}</div>`,
+                icon: "error",
+                showCancelButton: true,
+                confirmButtonText: "Pokušaj ponovo",
+                cancelButtonText: "Odustani",
+                customClass: {
+                    confirmButton: "btn btn-soft-info me-2",
+                    cancelButton: "btn btn-info"
+                },
+                buttonsStyling: false
+            }).then((result) => {
+                if (result.isConfirmed) retryCallback();
+            });
+        }
+
         let _invoice_data = null;
         let processedTariffData = [];
         let globalAISuggestions = [];
-        const remaining_scans = @json(Auth::user()->getRemainingScans());
+        const remaining_scans = @json(Auth::user() -> getRemainingScans());
 
 
 
@@ -474,41 +523,130 @@
             const taskId = getInvoiceId();
 
             if (!taskId) {
-                console.warn(" No task ID found in localStorage.");
+                console.warn("No task ID found in localStorage.");
                 return false;
             }
 
-            console.log(" Starting AI scan for task ID:", taskId);
-            const response = await fetch(`/api/invoices/${taskId}/scan`, {
-                method: "POST",
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    Authorization: `Bearer ${token}`
-                }
+            console.log("Starting AI scan for task ID:", taskId);
+
+            //  Show loader inside scan function
+            Swal.fire({
+                title: 'Skeniranje',
+                html: `
+                    <div class="custom-swal-spinner mb-3"></div>
+                    <div id="swal-status-message">Čeka na obradu</div>
+                    <div class="mt-3 w-100">
+                        <div class="progress" style="height: 8px;">
+                            <div id="scan-progress-bar" class="progress-bar bg-info" role="progressbar" style="width: 0%; transition: width 0.6s;"></div>
+                        </div>
+                        <div class="text-muted mt-1" style="font-size: 0.8rem;">
+                            Preostalo vrijeme: <span id="scan-timer">30s</span>
+                        </div>
+                    </div>
+                `,
+                showConfirmButton: false,
+                allowOutsideClick: false
             });
 
-            if (!response.ok) {
-                const err = await response.json();
-                console.error(" AI scan error:", err);
-                Swal.fire("Greška", err?.error || "Nepoznata greška", "error");
+            try {
+                const response = await fetch(`/api/invoices/${taskId}/scan`, {
+                    method: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    let errorText = "Nepoznata greška";
+                    try {
+                        const err = await response.json();
+                        errorText = err?.error || errorText;
+                    } catch (jsonErr) {
+                        console.warn("Response nije u JSON formatu", jsonErr);
+                    }
+
+                    console.error("AI scan response greška:", errorText);
+                    Swal.close();
+
+                    showRetryError(
+                        "Greška pri pokretanju skeniranja",
+                        errorText,
+                        () => startAiScan()
+                    );
+
+                    return false;
+                }
+
+                console.log("AI scan started successfully");
+                return true;
+
+            } catch (error) {
+                console.error("AI scan fetch failed:", error);
+                Swal.close();
+
+                showRetryError(
+                    "Greška pri komunikaciji",
+                    error.message || "Nepoznata greška",
+                    () => startAiScan()
+                );
+
                 return false;
             }
-
-            console.log(" AI scan started successfully");
-            return true;
         }
+
+
 
         async function waitForAIResult(showLoader = true) {
             const invoice_id = getInvoiceId();
             if (!invoice_id) return;
 
+            let progress = 0;
+            let countdown = 30;
+            let progressBar = null;
+            let timerText = null;
+            let fakeInterval = null;
+            let countdownInterval = null;
+
             if (showLoader) {
                 Swal.fire({
-                    title: 'Skeniranje ',
-                    html: `<div class="custom-swal-spinner mb-3"></div><div id="swal-status-message">Čeka na obradu</div>`,
+                    title: 'Skeniranje',
+                    html: `
+                <div class="custom-swal-spinner mb-3"></div>
+                <div id="swal-status-message">Čeka na obradu</div>
+                <div class="mt-3 w-100">
+                    <div class="progress" style="height: 8px;">
+                        <div id="scan-progress-bar" class="progress-bar bg-info" role="progressbar" style="width: 0%; transition: width 0.6s;"></div>
+                    </div>
+                    <div class="text-muted mt-1" style="font-size: 0.8rem;">
+                        Preostalo vrijeme: <span id="scan-timer">30s</span>
+                    </div>
+                </div>
+            `,
                     showConfirmButton: false,
                     allowOutsideClick: false
                 });
+
+                // Čekaj da se DOM renderuje u SweetAlert-u
+                await new Promise(r => setTimeout(r, 50));
+
+                progressBar = document.getElementById("scan-progress-bar");
+                timerText = document.getElementById("scan-timer");
+
+                // Fake progress do 35%
+                fakeInterval = setInterval(() => {
+                    if (progress < 35) {
+                        progress += 0.5;
+                        if (progressBar) progressBar.style.width = `${progress}%`;
+                    }
+                }, 200);
+
+                // Odbrojavanje
+                countdownInterval = setInterval(() => {
+                    countdown--;
+                    if (timerText) timerText.textContent = `${countdown}s`;
+                    if (countdown <= 0) clearInterval(countdownInterval);
+                }, 1000);
             }
 
             const stepTextMap = {
@@ -519,19 +657,49 @@
             };
 
             while (true) {
-                const res = await fetch(`/api/invoices/${invoice_id}/scan`, {
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                        Authorization: `Bearer ${token}`
+                let json = null;
+                let status = null;
+                let step = null;
+                let errorMsg = null;
+
+                try {
+                    const res = await fetch(`/api/invoices/${invoice_id}/scan`, {
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+
+                    if (!res.ok) {
+                        throw new Error(`Greška kod API poziva: ${res.status} ${res.statusText}`);
                     }
-                });
 
-                const json = await res.json();
-                const status = json?.status?.status;
-                const step = json?.status?.processing_step;
-                const errorMsg = json?.status?.error_message;
+                    json = await res.json();
+                    status = json?.status?.status;
+                    step = json?.status?.processing_step;
+                    errorMsg = json?.status?.error_message;
 
-                console.log(" Scan status:", status, "| Step:", step, "| Error:", errorMsg);
+                    // Ažuriraj progress prema step-u
+                    if (step === "conversion") progress = Math.max(progress, 40);
+                    if (step === "extraction") progress = Math.max(progress, 70);
+                    if (step === "enrichment") progress = Math.max(progress, 90);
+                    if (progressBar) progressBar.style.width = `${progress}%`;
+
+                } catch (err) {
+                    console.error("Greška u waitForAIResult:", err);
+                    clearInterval(fakeInterval);
+                    clearInterval(countdownInterval);
+                    Swal.close();
+
+                    showRetryError(
+                        "Greška pri skeniranju",
+                        err.message || "Nepoznata greška",
+                        () => waitForAIResult()
+                    );
+                    break;
+                }
+
+                console.log("Scan status:", status, "| Step:", step, "| Error:", errorMsg);
 
                 const el = document.getElementById("swal-status-message");
                 if (el) {
@@ -544,6 +712,9 @@
                 }
 
                 if (status === "completed") {
+                    clearInterval(fakeInterval);
+                    clearInterval(countdownInterval);
+                    if (progressBar) progressBar.style.width = "100%";
                     if (el) el.textContent = "Završeno";
                     await new Promise(r => setTimeout(r, 1000));
                     if (el) el.textContent = "Faktura spremljena u draft";
@@ -554,16 +725,26 @@
                 }
 
                 if (status === "failed" || status === "error") {
+                    clearInterval(fakeInterval);
+                    clearInterval(countdownInterval);
                     await new Promise(r => setTimeout(r, 1000));
                     Swal.close();
                     console.error("Scan error:", errorMsg);
-                    Swal.fire("Greška", errorMsg || "Greška pri skeniranju", "error");
+
+                    showRetryError(
+                        "Greška pri skeniranju",
+                        `${errorMsg || "Nepoznata greška"}<br><span class="text-muted">${stepTextMap[step] || step || ""}</span>`,
+                        () => waitForAIResult()
+                    );
+
                     break;
                 }
 
                 await new Promise(r => setTimeout(r, 2000));
             }
         }
+
+
         //await updateRemainingScans();
 
 
@@ -1264,8 +1445,16 @@
 
             } catch (err) {
                 console.error("Greška u fetchAndPrefillParties:", err);
-                Swal.fire("Greška", err.message || "Neuspješno dohvaćanje podataka", "error");
+                showRetryError(
+                    "Greška pri dohvaćanju podataka",
+                    err.message || "Neuspješno dohvaćanje podataka",
+                    () => fetchAndPrefillParties()
+                );
+
+
             }
+
+
         }
 
         document.addEventListener("DOMContentLoaded", async () => {
@@ -1301,17 +1490,32 @@
             if (scanNeeded) {
                 Swal.fire({
                     title: 'Skeniranje',
-                    html: `<div class=\"custom-swal-spinner mb-3\"></div><div id=\"swal-status-message\">Čeka na obradu</div>`,
+                    html: `<div class="custom-swal-spinner mb-3"></div><div id="swal-status-message">Čeka na obradu</div>`,
                     showConfirmButton: false,
                     allowOutsideClick: false
                 });
-                if (invoice.task_id == null && await startAiScan()) {
-                    await waitForAIResult();
-                } else if (!invoice.items?.length) {
+
+                let scanStarted = true;
+
+                // Start scan only if task_id is null
+                if (invoice.task_id == null) {
+                    scanStarted = await startAiScan();
+                }
+
+                // Only continue if scan actually started or items are already being processed
+                if (!scanStarted) {
+                    // Stop further steps like waitForAIResult/fetchParties
+                    return;
+                }
+
+                if (!invoice.items?.length) {
                     await waitForAIResult();
                 }
+
+
                 Swal.close();
             }
+
 
             _invoice_data = null;
 
@@ -1698,7 +1902,7 @@
             $('#add-new-importer').off('click').on('click', function(e) {
                 e.preventDefault();
                 Swal.fire({
-                    title: 'Jesi li siguran/na?',
+                    title: 'Oprez!',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Da',
@@ -1745,6 +1949,7 @@
                             Authorization: `Bearer ${token}`
                         }
                     });
+
                     const data = await res.json();
                     if (!res.ok) throw new Error("Greška u AI response");
                     const supplier = data.supplier;
@@ -2261,27 +2466,57 @@
 
     }
 
-    function setupIncrementDecrementButtons() {
-        document.querySelectorAll("td .input-group").forEach(group => {
-            const minusBtn = group.querySelector("button:first-child");
-            const plusBtn = group.querySelector("button:last-child");
-            const input = group.querySelector("input");
+    document.addEventListener("click", function(e) {
+        const btn = e.target.closest("button");
+        if (!btn) return;
 
-            if (!input || !minusBtn || !plusBtn) return;
+        const group = btn.closest(".input-group");
+        const input = group?.querySelector("input");
 
-            minusBtn.addEventListener("click", () => {
-                const val = parseInt(input.value) || 0;
-                input.value = Math.max(val - 1, parseInt(input.min) || 0);
-                updateTotalAmount();
+        if (!input) return;
+
+        const isMinus = btn.textContent.trim() === "−";
+        const isPlus = btn.textContent.trim() === "+";
+
+        if (isMinus || isPlus) {
+            const val = parseInt(input.value) || 0;
+            const min = parseInt(input.min) || 0;
+            input.value = isMinus ? Math.max(min, val - 1) : val + 1;
+            updateTotalAmount();
+        }
+    });
+
+
+    document.addEventListener("click", function(e) {
+        const button = e.target.closest(".remove-row");
+        if (!button) return;
+
+        const row = button.closest("tr");
+
+        // Short delay to let the browser fully handle prior UI rendering
+        setTimeout(() => {
+            Swal.fire({
+                title: "Oprez!",
+                text: "Odabrani proizvod će biti trajno uklonjen...",
+                icon: "warning",
+                showCancelButton: true,
+                cancelButtonText: "Odustani",
+                confirmButtonText: "Da, ukloni",
+                customClass: {
+                    confirmButton: "btn btn-soft-info me-2",
+                    cancelButton: "btn btn-info"
+                },
+                buttonsStyling: false
+            }).then((result) => {
+                if (result.isConfirmed && row) {
+                    row.remove();
+                    updateTotalAmount();
+                }
             });
+        }, 10);
+    });
 
-            plusBtn.addEventListener("click", () => {
-                const val = parseInt(input.value) || 0;
-                input.value = val + 1;
-                updateTotalAmount();
-            });
-        });
-    }
+
 
 
     document.addEventListener("DOMContentLoaded", async () => {
@@ -2476,6 +2711,12 @@
             const tbody = document.querySelector("#newlink");
             tbody.innerHTML = "";
 
+            // Clear previous rows
+            tbody.innerHTML = "";
+
+            // Use DocumentFragment for fast DOM appending
+            const fragment = document.createDocumentFragment();
+
             invoice.items.forEach((item, index) => {
                 const tarifnaOznaka = item.item_code?.trim() || item.best_customs_code_matches?.[0]?.entry?.["Tarifna oznaka"]?.trim() || "";
                 const row = document.createElement("tr");
@@ -2519,30 +2760,33 @@
         <input type="checkbox" class="form-check-input" style="width: 30px; height: 26.66px;" title="Povlastica DA/NE" />
     </div>
 </td>`;
-                updateTotalAmount();
-
-                tbody.appendChild(row);
-                setupIncrementDecrementButtons();
+                fragment.appendChild(row);
             });
 
+            // Append all rows in one operation
+            tbody.appendChild(fragment);
 
+            // Update totals only once
+            updateTotalAmount();
 
-            // --- Select2 init
-            queueMicrotask(() => {
+            // Close loading UI ASAP to unblock interaction
+            Swal.close();
+
+            // Defer Select2 initialization to next event loop tick
+            setTimeout(() => {
                 $('.select2-country').select2({
                     templateResult: formatCountryWithFlag,
                     templateSelection: formatCountryWithFlag,
                     width: 'resolve',
                     minimumResultsForSearch: Infinity
                 });
+
                 $('.select2-tariff').select2({
                     data: processedTariffData,
                     width: 'resolve'
                 });
-            });
+            }, 0);
 
-            // Done loading
-            Swal.close();
         } catch (e) {
             console.error("Error loading invoice:", e);
             Swal.fire("Greška", "Nije moguće učitati deklaraciju.", "error");
@@ -2625,31 +2869,6 @@
 
 
     //Remove button logic 
-    document.addEventListener("click", function(e) {
-        if (e.target.closest(".remove-row")) {
-            const button = e.target.closest(".remove-row");
-            const row = button.closest("tr");
-
-            Swal.fire({
-                title: "Oprez!",
-                text: "Odabrani proizvod će biti trajno uklonjen sa popisa trenutne deklaracije. Ova radnja nije ireverzibilna!",
-                icon: "warning",
-                showCancelButton: true,
-                cancelButtonText: "Odustani",
-                confirmButtonText: "Da, ukloni",
-                customClass: {
-                    confirmButton: "btn btn-soft-info me-2",
-                    cancelButton: "btn btn-info"
-                },
-                buttonsStyling: false
-            }).then((result) => {
-                if (result.isConfirmed && row) {
-                    row.remove();
-                    updateTotalAmount();
-                }
-            });
-        }
-    });
 </script>
 
 
