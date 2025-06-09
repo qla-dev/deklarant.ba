@@ -27,7 +27,7 @@
 @if ($otherPackage && $otherPackage->active == 1)
     <div class="d-flex" style="flex-direction: column;">
         <span class="d-inline-flex align-items-center gap-1 fs-15">
-            <h5 class="card-title mb-0">Tvoj aktivni paket je</h5>
+            <h5 class="card-title mb-0 mobile-hide"><span >Tvoj aktivni paket je</span></h5>
             <b class="d-inline-flex gap-1 text-info mb-0 me-4" style="margin-bottom:-1px!important">
                 {{ $packageName }}
                 {!! $iconHTML !!}
@@ -56,8 +56,8 @@
     </div>
 @else
     {{-- Fallback if no active package or package is not active --}}
-    <a class="text-info" style="white-space:nowrap; cursor:pointer;"
+    <a class="text-danger" style="white-space:nowrap; cursor:pointer;"
         onclick="window.location.href='{{ url('cijene-paketa') }}'">
-        Pretplata nije aktivna. <br><strong class="text-decoration-underline">Odaberi paket po svojim potrebama!</strong>
+        Pretplata nije aktivna. <br><strong class="text-decoration-underline mobile-hide">Odaberi paket po svojim potrebama!</strong>
     </a>
 @endif

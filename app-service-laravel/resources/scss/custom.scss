@@ -355,9 +355,20 @@ color: #299cdb ;
     left: 0;
     top: 71px;
 }
+   @media (max-width: 767.98px) {
 
+
+.card-title {
+    font-size: 14px!important;}
+
+  .mobile-hide {
+    display: none !important;
+  } }
 
 @media (min-width: 768px) {
+
+       .mobile-show {
+        display: none!important;}
     #menuDropdown {
         display: none !important;
     }
@@ -599,11 +610,12 @@ thead.custom-table + tbody tr > td:last-child {
 }
 
 
-thead.custom-table th:last-child {
+thead.has-action + tbody tr > td:last-child, thead.has-action + tbody tr > th:last-child{
     width: 130px;
     min-width: 130px;
     max-width: 130px;
 }
+
 
 .custom-table td {
 
@@ -779,19 +791,211 @@ thead.custom-table th:last-child {
  
     
     
-#tariffTable_wrapper .dataTables_paginate .paginate_button:hover {
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover:hover {
         background-color: rgba(0, 0, 0, 0.07)!important;
         cursor: pointer;
+        color: gray!important;
     }
 
-[data-bs-theme=dark] #tariffTable_wrapper .dataTables_paginate .paginate_button:hover {
+[data-bs-theme=dark] .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
         background-color: rgba(255, 255, 255, 0.07)!important;
         cursor: pointer;
+        color: white!important;
     }
 
 .avatar-initials {
     padding: 15px;
 }
 
+.dataTables_wrapper .dataTables_paginate .current:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    background-color: #299cdb!important;
+    color: white!important;
+    }
+
+
+
+
+
+@media (max-width: 768px) {
+
+  
+
+    .tariff-list, .suppliers-list {
+        max-height: 150px!important;
+        overflow-y: auto!important;
+    }
+
+    #user-package-display, .status-text {
+        font-size: 10px!important;
+    }
+
+    .main-card-dashboard {border: unset!important;}
+    /* Keep only active, previous, next buttons */
+    .dataTables_paginate .paginate_button  {
+        display: none!important;
+    }
+    .dataTables_paginate .previous,
+    .dataTables_paginate .next,
+    .dataTables_paginate .current {
+        display: inline-flex!important;
+    }
+
+    .table-footer {
+        display: flex;
+        flex-direction: column;
+ 
+    }
+}
+
+[data-bs-theme=dark] .fc .fc-day-today {
+    background-color: #1f2b33 !important; /* a soft dark-blue gray */
+}
+
+.mobile-shadow-remove {
+    box-shadow: none!important;
+    background: unset!important;
+}
+
+@media (max-width: 576.98px) {
+
+    .welcome {
+
+    font-size: 0.8rem!important;
+}
+.main-content {
+    padding-bottom: 50px!important;
+}
+.footer {bottom: 50px; background-color: unset!important; margin-bottom: unset!important;}
+}
+
+
+.dropdown-menu {border-radius: 0!important;}
+
+#global-mobile-search {
+    border-top-right-radius: 0!important;
+    border-bottom-right-radius: 0!important;
+}
+
+
+.logo-text {
+    color: black!important;
+}
+
+[data-bs-theme=dark] .logo-text {
+    color: white!important;
+}
+
+
+
+     .logo-span {
+        font-family: 'Facebook Sans Bold', sans-serif!important;
+         font-weight: bolder!important;
+    }
+
+    .ai-span {
+        
+        color: #289cdb!important;
+        padding: unset!Important;
+        background: unset!Important;
+            font-size: inherit!important;
+    font-style: normal!important;
+    font-weight: bolder!important;
+        margin-bottom: unset!important;
+         font-family: 'Facebook Sans Bold', sans-serif!important;
+    }
+
+
+.welcome {
+
+    font-size: 1rem;
+}
+  
+
+/* Light & default background */
+table.dataTable tbody td.dtfc-fixed-left,
+table.dataTable thead th.dtfc-fixed-left,
+table.dataTable tbody td.dtfc-fixed-right,
+table.dataTable thead th.dtfc-fixed-right {
+    background-color: var(--bs-table-bg, #fff) !important;
+    z-index: 2;
+}
+
+/* Optional dark mode override */
+[data-bs-theme=dark] table.dataTable tbody td.dtfc-fixed-left,
+[data-bs-theme=dark] table.dataTable tbody td.dtfc-fixed-right,
+[data-bs-theme=dark] table.dataTable thead th.dtfc-fixed-right {
+    background-color: #212529 !important;
+}
+
+[data-bs-theme=dark] table.dataTable thead th.dtfc-fixed-right,[data-bs-theme=dark] table.dataTable thead th.dtfc-fixed-left {
+    background-color: #223644 !important;
+}
+
+/* Sticky first column (row number in tbody is <th>) */
+[data-bs-theme=dark] .tabel-layout th:first-child,
+[data-bs-theme=dark] .tabel-layout td:first-child {
+  background-color: #282c30!important;
+}
+
+/* Sticky last column: "Ukupno" */
+[data-bs-theme=dark] .tabel-layout th:last-child,
+[data-bs-theme=dark] .tabel-layout td:last-child {
+
+   background-color: #282c30!important;
+
+}
+
+[data-bs-theme=dark] .tabel-layout th, 
+[data-bs-theme=dark] .tabel-layout td {
+    border-color: #343a40!important; /* Darker border for contrast */
+}
+
+[data-bs-theme=dark] .table-active {
+    --vz-table-bg-state: #282c30!important;
+}
+
+.swal2-close:hover {color:gray!important}
+
+   @media (min-height: 535.8px) {
+
+   
+ #vise-opcija-btn {
+    display: none !important;
+  } }
+
+
+   @media (max-height: 535.7px) {
+
+   
+ .pc-opcije-button {
+    display: none !important;
+  } }
+
+
+
+@media screen and (max-width: 767px) and (orientation: portrait) {
+    .content-desktop {
+        display: none !important;
+    }
+
+    .content-mobile-warning {
+        display: flex !important;
+    }
+}
+
+@media screen and (max-width: 767px) and (orientation: landscape) {
+    .content-desktop {
+        display: flex !important;
+    }
+
+    .content-mobile-warning {
+        display: none !important;
+    }
+}
+
+
+[data-bs-theme=dark] .dataTables_wrapper .dataTables_paginate .paginate_button {
+    border-color: #32383e!important;
+}
 
 

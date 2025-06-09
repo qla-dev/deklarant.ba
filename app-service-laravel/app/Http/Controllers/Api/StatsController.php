@@ -77,11 +77,12 @@ class StatsController extends Controller
     /**
      * Get statistics for a specific user by ID.
      */
-    public function getUserStatisticsById($id)
+  public function getUserStatisticsById($id)
 {
     try {
         $user = $this->modelUser::findOrFail($id);
 
+        // Basic stats
         $invoiceCount = $this->modelInvoice::where('user_id', $user->id)->count();
 
         $invoicesByCountry = $this->modelInvoice::where('user_id', $user->id)
@@ -92,12 +93,14 @@ class StatsController extends Controller
         $usedScans = $this->modelInvoice::where('user_id', $user->id)
             ->whereNotNull('task_id')
             ->count();
+
         $totalScans = $this->modelPackage::whereIn('id', function ($query) use ($user) {
             $query->select('package_id')->from('user_packages')->where('user_id', $user->id);
         })->sum('available_scans');
 
         $remainingScans = $user->getRemainingScans();
 
+        // Item codes
         $itemCodes = $this->modelInvoice::where('user_id', $user->id)
             ->orderByDesc('created_at')
             ->with('items')
@@ -107,24 +110,31 @@ class StatsController extends Controller
             ->filter()
             ->values();
 
+        // Usage count by item code
         $itemCodeCounts = $this->modelInvoiceItem::whereIn('item_code', $itemCodes)
             ->selectRaw('item_code, COUNT(*) as total')
             ->groupBy('item_code')
             ->pluck('total', 'item_code');
 
-        $latestTariffs = $this->modelTariffRate::whereIn('item_code', $itemCodes)
-            ->get(['id', 'item_code', 'name', 'tariff_rate'])
-            ->map(function ($tariff) use ($itemCodeCounts) {
-                return [
-                    'id' => $tariff->id,
-                    'name' => $tariff->name,
-                    'tariff_rate' => $tariff->tariff_rate,
-                    'item_usage_count' => $itemCodeCounts[$tariff->item_code] ?? 0
-                ];
-            })
-            ->values();
+        // Load tariffs from public JSON
+        $tariffPath = public_path('build/json/tariff.json');
+        $tariffJson = file_exists($tariffPath) ? json_decode(file_get_contents($tariffPath), true) : [];
+        $tariffCollection = collect($tariffJson);
 
-        // Generate stats for suppliers and importers
+        // Latest tariffs used by user
+        $latestTariffs = collect($itemCodes)->map(function ($code) use ($tariffCollection, $itemCodeCounts) {
+            $match = $tariffCollection->firstWhere('Tarifna oznaka', $code);
+            if (!$match) return null;
+
+            return [
+                'item_code' => $code,
+                'name' => $match['Naziv'] ?? '',
+                'tariff_rate' => $match['Carinska stopa (%)'] ?? null,
+                'item_usage_count' => $itemCodeCounts[$code] ?? 0,
+            ];
+        })->filter()->values();
+
+        // Supplier and importer stats
         $supplierStats = $this->getEntityStats($user, Supplier::class, 'supplier_id');
         $importerStats = $this->getEntityStats($user, Importer::class, 'importer_id');
 
@@ -135,24 +145,21 @@ class StatsController extends Controller
             'used_scans' => $usedScans,
             'remaining_scans' => $remainingScans,
             'latest_tariffs' => $latestTariffs,
-
-            // Both entity stats
             'supplier_stats' => $supplierStats,
             'importer_stats' => $importerStats,
         ], 200);
 
     } catch (ModelNotFoundException $e) {
-    return response()->json([
-        'error' => 'Korisnik nije pronađen',
-        'message' => $e->getMessage()
-    ], 404);
+        return response()->json([
+            'error' => 'Korisnik nije pronađen',
+            'message' => $e->getMessage()
+        ], 404);
     } catch (Exception $e) {
         return response()->json([
             'error' => 'Neuspješno preuzimanje statistike korisnika',
             'message' => $e->getMessage()
         ], 500);
     }
-
 }
 
 private function getEntityStats($user, string $modelClass, string $foreignKey)
@@ -363,33 +370,63 @@ public function getAllUserStatistics()
     $users = User::all();
 
     $response = $users->map(function ($user) {
+        // Count total invoices
         $totalInvoices = Invoice::where('user_id', $user->id)->count();
 
+        // Get latest user package with package details
         $userPackage = UserPackage::with('package')
             ->where('user_id', $user->id)
             ->orderByDesc('created_at')
             ->first();
 
-        
         $package = $userPackage?->package;
 
+        // Return clean structured data
         return [
-            'user_id' => $user->id,
-            'total_invoices' => $totalInvoices,
-            'used_scans' => $userPackage?->used_scans ?? 0,
-            'remaining_scans' => $userPackage?->remaining_scans ?? 0,
-            'expiration_date' => $userPackage?->expiration_date,
-            'active' => $userPackage?->active ?? 0,
-            'assigned_at' => $userPackage?->created_at,
-            'package_name' => $package?->name ?? null,
-            'package_description' => $package?->description ?? null,
-            'page_limit' => $package?->page_limit ?? 0,
-            'document_history' => $package?->document_history ?? 0,
+            'id' => $user->id,
+            'username' => $user->username,
+            'email' => $user->email,
+            'name' => trim("{$user->first_name} {$user->last_name}"),
+            'avatar' => $user->avatar,
+            'role' => $user->role,
+            'phone_number' => $user->phone_number,
+            'location' => [
+                'city' => $user->city,
+                'country' => $user->country,
+            ],
+            'joining_date' => $user->joining_date,
+            'created_at' => $user->created_at,
+            'company' => [
+                'name' => $user->company['name'] ?? null,
+                'address' => $user->company['address'] ?? null,
+                'id' => $user->company['id'] ?? null,
+                'pdv' => $user->company['pdv'] ?? null,
+                'owner' => $user->company['owner'] ?? null,
+                'contact_person' => $user->company['contact_person'] ?? null,
+                'contact_number' => $user->company['contact_number'] ?? null,
+            ],
+            'statistics' => [
+                'total_invoices' => $totalInvoices,
+                'used_scans' => $userPackage?->used_scans ?? 0,
+                'remaining_scans' => $userPackage?->remaining_scans ?? 0,
+                'expiration_date' => $userPackage?->expiration_date,
+                'active' => (bool) ($userPackage?->active ?? 0),
+                'assigned_at' => $userPackage?->created_at,
+            ],
+            'package' => [
+                'name' => $package?->name,
+                'description' => $package?->description,
+                'page_limit' => $package?->page_limit ?? 0,
+                'document_history' => $package?->document_history ?? 0,
+            ]
         ];
     });
 
     return response()->json($response);
 }
+
+
+
 
 
 

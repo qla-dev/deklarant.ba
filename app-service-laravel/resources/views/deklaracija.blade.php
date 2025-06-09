@@ -159,9 +159,9 @@
                     <img src="{{ URL::asset('build/images/logo-light-ai.png') }}" class="card-logo" alt="logo" height="34">
                     <div class="mt-4">
                         <h6 class="text-muted text-uppercase fw-semibold">Osnovni podaci</h6>
-                        <input type="text" class="form-control mb-2" id="company-address" name="address" placeholder="Unesite adresu">
-                        <input type="text" class="form-control mb-2" id="company-zip" name="zip" placeholder="Poštanski broj">
-                        <input type="email" class="form-control" id="company-email" name="email" placeholder="Email">
+                        <input type="text" class="form-control mb-2" id="company-address" name="name" placeholder="Ime kompanije" value="{{ Auth::user()->company['name'] ?? '' }}">
+                        <input type="text" class="form-control mb-2" id="company-id" name="zip" placeholder="ID kompanije" value="{{ Auth::user()->company['id'] ?? '' }}">
+                        <input type="email" class="form-control" id="company-tel" name="tel" placeholder="Adresa" value="{{ Auth::user()->company['address'] ?? '' }}">
                     </div>
 
                     <!-- Incoterm Dropdown Section -->
@@ -195,25 +195,25 @@
                 <div class="row g-4">
                     <div class="col-6 text-start">
 
-                        <h6 class="text-muted text-uppercase fw-semibold mb-3">Podaci o dobavljaču</h6>
+                        <h6 class="text-muted text-uppercase fw-semibold mb-3">Podaci o klijentu</h6>
 
                         <div class="mb-2">
                             <div style="display: flex;">
-                                <button type="button" class="btn btn-sm btn-info mb-2 me-2 deklaracija-action-buttons" id="refill-supplier-ai"><i class="fas fa-wand-magic-sparkles fs-6 me-1"></i>Detektovani dobavljač iz baze</button>
-                                <button type="button" class="btn btn-sm btn-soft-info mb-2 deklaracija-action-buttons" id="add-new-supplier"><i class="fa-regular fa-hand align-top me-1 korpica"></i>Ručni unos dobavljača</button>
+                                <button type="button" class="btn btn-sm btn-info mb-2 me-2 deklaracija-action-buttons" id="refill-supplier-ai"><i class="fas fa-wand-magic-sparkles fs-6 me-1"></i>Detektovani klijent iz baze</button>
+                                <button type="button" class="btn btn-sm btn-soft-info mb-2 deklaracija-action-buttons" id="add-new-supplier"><i class="fa-regular fa-hand align-top me-1 korpica"></i>Ručni unos klijenta</button>
                             </div>
                             <select id="supplier-select2" class="form-select"></select>
                         </div>
-                        <input type="text" class="form-control mb-2" id="billing-name" name="supplier_name" placeholder="Naziv dobavljača">
+                        <input type="text" class="form-control mb-2" id="billing-name" name="supplier_name" placeholder="Naziv klijenta">
 
-                        <input type="text" class="form-control mb-2" id="billing-address-line-1" name="supplier_address" placeholder="Adresa dobavljača">
+                        <input type="text" class="form-control mb-2" id="billing-address-line-1" name="supplier_address" placeholder="Adresa klijenta">
                         <input type="text" class="form-control mb-2" id="billing-phone-no" name="supplier_phone" placeholder="Telefon">
                         <input type="text" class="form-control mb-2" id="billing-tax-no" name="supplier_tax" placeholder="VAT">
                         <input type="email" class="form-control mb-2" id="email" name="email" placeholder="Email">
                         <input type="email" class="form-control" id="supplier-owner" name="supplierOwner" placeholder="Vlasnik">
                     </div>
                     <div class="col-6 text-end">
-                        <h6 class="text-muted text-uppercase fw-semibold mb-3 text-end">Podaci o uvozniku</h6>
+                        <h6 class="text-muted text-uppercase fw-semibold mb-3 text-end">Podaci o dobavljaču</h6>
 
                         <div class="mb-2">
                             <div style="justify-content: end; display: flex;">
@@ -225,12 +225,12 @@
                             <select id="importer-select2" class="form-select"></select>
                         </div>
 
-                        <input type="text" class="form-control mb-2 text-end" id="carrier-name" name="uvoznikime" placeholder="Uvoznik">
+                        <input type="text" class="form-control mb-2 text-end" id="carrier-name" name="dobavljačime" placeholder="dobavljač">
 
-                        <input type="text" class="form-control mb-2 text-end" id="carrier-address" name="uvoznikadresa" placeholder="Adresa">
-                        <input type="text" class="form-control mb-2 text-end" id="carrier-tel" name="uvozniktel" placeholder="Telefon">
-                        <input type="text" class="form-control mb-2 text-end" id="carrier-tax" name="uvozniktel" placeholder="JIB">
-                        <input type="text" class="form-control mb-2 text-end" id="carrier-email" name="uvozniktel" placeholder="Email">
+                        <input type="text" class="form-control mb-2 text-end" id="carrier-address" name="dobavljačadresa" placeholder="Adresa">
+                        <input type="text" class="form-control mb-2 text-end" id="carrier-tel" name="dobavljačtel" placeholder="Telefon">
+                        <input type="text" class="form-control mb-2 text-end" id="carrier-tax" name="dobavljačtel" placeholder="JIB">
+                        <input type="text" class="form-control mb-2 text-end" id="carrier-email" name="dobavljačtel" placeholder="Email">
                         <input type="text" class="form-control mb-2 text-end" id="carrier-owner" name="carrierOwner" placeholder="Vlasnik">
 
                     </div>
@@ -316,6 +316,20 @@
     @include('components.fixed-sidebar')
 </div>
 
+<div class="modal fade" id="originalDocumentModal" style="z-index: 999;"tabindex="-1" aria-labelledby="originalDocLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-fullscreen-sm-down">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="originalDocLabel">Originalni dokument</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
+      </div>
+      <div class="modal-body p-0" style="height: 80vh;">
+        <iframe id="originalDocFrame" src="" width="100%" height="100%" frameborder="0"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 <div class="modal fade" id="aiSuggestionModal" tabindex="-1" aria-labelledby="aiSuggestionModalLabel" aria-hidden="true">
@@ -360,6 +374,22 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/bs.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const container = document.getElementById('sidebar-buttons-container');
+        const fixedButtons = document.getElementById('fixed-buttons');
+        const topBarHeight = 70.8; // exact topbar height
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY >= topBarHeight) {
+                fixedButtons.classList.add('detached-fixed-buttons');
+            } else {
+                fixedButtons.classList.remove('detached-fixed-buttons');
+            }
+        });
+    });
+</script>
 <!-- Scan and other logic script -->
 <script>
     const editModeMatch = window.location.pathname.match(/\/deklaracija\/(\d+)/);
@@ -372,10 +402,29 @@
         // Or better – put all scan logic inside a condition
     } else {
         console.log(' Custom invoice JS loaded');
+
+        function showRetryError(title, message, retryCallback) {
+            Swal.fire({
+                title: title,
+                html: `<div class="text-danger mb-2">${message}</div>`,
+                icon: "error",
+                showCancelButton: true,
+                confirmButtonText: "Pokušaj ponovo",
+                cancelButtonText: "Odustani",
+                customClass: {
+                    confirmButton: "btn btn-soft-info me-2",
+                    cancelButton: "btn btn-info"
+                },
+                buttonsStyling: false
+            }).then((result) => {
+                if (result.isConfirmed) retryCallback();
+            });
+        }
+
         let _invoice_data = null;
         let processedTariffData = [];
         let globalAISuggestions = [];
-        const remaining_scans = @json(Auth::user()->getRemainingScans());
+        const remaining_scans = @json(Auth::user() -> getRemainingScans());
 
 
 
@@ -474,41 +523,130 @@
             const taskId = getInvoiceId();
 
             if (!taskId) {
-                console.warn(" No task ID found in localStorage.");
+                console.warn("No task ID found in localStorage.");
                 return false;
             }
 
-            console.log(" Starting AI scan for task ID:", taskId);
-            const response = await fetch(`/api/invoices/${taskId}/scan`, {
-                method: "POST",
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    Authorization: `Bearer ${token}`
-                }
+            console.log("Starting AI scan for task ID:", taskId);
+
+            //  Show loader inside scan function
+            Swal.fire({
+                title: 'Skeniranje',
+                html: `
+                    <div class="custom-swal-spinner mb-3"></div>
+                    <div id="swal-status-message">Čeka na obradu</div>
+                    <div class="mt-3 w-100">
+                        <div class="progress" style="height: 8px;">
+                            <div id="scan-progress-bar" class="progress-bar bg-info" role="progressbar" style="width: 0%; transition: width 0.6s;"></div>
+                        </div>
+                        <div class="text-muted mt-1" style="font-size: 0.8rem;">
+                            Preostalo vrijeme: <span id="scan-timer">30s</span>
+                        </div>
+                    </div>
+                `,
+                showConfirmButton: false,
+                allowOutsideClick: false
             });
 
-            if (!response.ok) {
-                const err = await response.json();
-                console.error(" AI scan error:", err);
-                Swal.fire("Greška", err?.error || "Nepoznata greška", "error");
+            try {
+                const response = await fetch(`/api/invoices/${taskId}/scan`, {
+                    method: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    let errorText = "Nepoznata greška";
+                    try {
+                        const err = await response.json();
+                        errorText = err?.error || errorText;
+                    } catch (jsonErr) {
+                        console.warn("Response nije u JSON formatu", jsonErr);
+                    }
+
+                    console.error("AI scan response greška:", errorText);
+                    Swal.close();
+
+                    showRetryError(
+                        "Greška pri pokretanju skeniranja",
+                        errorText,
+                        () => startAiScan()
+                    );
+
+                    return false;
+                }
+
+                console.log("AI scan started successfully");
+                return true;
+
+            } catch (error) {
+                console.error("AI scan fetch failed:", error);
+                Swal.close();
+
+                showRetryError(
+                    "Greška pri komunikaciji",
+                    error.message || "Nepoznata greška",
+                    () => startAiScan()
+                );
+
                 return false;
             }
-
-            console.log(" AI scan started successfully");
-            return true;
         }
+
+
 
         async function waitForAIResult(showLoader = true) {
             const invoice_id = getInvoiceId();
             if (!invoice_id) return;
 
+            let progress = 0;
+            let countdown = 30;
+            let progressBar = null;
+            let timerText = null;
+            let fakeInterval = null;
+            let countdownInterval = null;
+
             if (showLoader) {
                 Swal.fire({
-                    title: 'Skeniranje ',
-                    html: `<div class="custom-swal-spinner mb-3"></div><div id="swal-status-message">Čeka na obradu</div>`,
+                    title: 'Skeniranje',
+                    html: `
+                <div class="custom-swal-spinner mb-3"></div>
+                <div id="swal-status-message">Čeka na obradu</div>
+                <div class="mt-3 w-100">
+                    <div class="progress" style="height: 8px;">
+                        <div id="scan-progress-bar" class="progress-bar bg-info" role="progressbar" style="width: 0%; transition: width 0.6s;"></div>
+                    </div>
+                    <div class="text-muted mt-1" style="font-size: 0.8rem;">
+                        Preostalo vrijeme: <span id="scan-timer">30s</span>
+                    </div>
+                </div>
+            `,
                     showConfirmButton: false,
                     allowOutsideClick: false
                 });
+
+                // Čekaj da se DOM renderuje u SweetAlert-u
+                await new Promise(r => setTimeout(r, 50));
+
+                progressBar = document.getElementById("scan-progress-bar");
+                timerText = document.getElementById("scan-timer");
+
+                // Fake progress do 35%
+                fakeInterval = setInterval(() => {
+                    if (progress < 35) {
+                        progress += 0.5;
+                        if (progressBar) progressBar.style.width = `${progress}%`;
+                    }
+                }, 200);
+
+                // Odbrojavanje
+                countdownInterval = setInterval(() => {
+                    countdown--;
+                    if (timerText) timerText.textContent = `${countdown}s`;
+                    if (countdown <= 0) clearInterval(countdownInterval);
+                }, 1000);
             }
 
             const stepTextMap = {
@@ -519,19 +657,49 @@
             };
 
             while (true) {
-                const res = await fetch(`/api/invoices/${invoice_id}/scan`, {
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                        Authorization: `Bearer ${token}`
+                let json = null;
+                let status = null;
+                let step = null;
+                let errorMsg = null;
+
+                try {
+                    const res = await fetch(`/api/invoices/${invoice_id}/scan`, {
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+
+                    if (!res.ok) {
+                        throw new Error(`Greška kod API poziva: ${res.status} ${res.statusText}`);
                     }
-                });
 
-                const json = await res.json();
-                const status = json?.status?.status;
-                const step = json?.status?.processing_step;
-                const errorMsg = json?.status?.error_message;
+                    json = await res.json();
+                    status = json?.status?.status;
+                    step = json?.status?.processing_step;
+                    errorMsg = json?.status?.error_message;
 
-                console.log(" Scan status:", status, "| Step:", step, "| Error:", errorMsg);
+                    // Ažuriraj progress prema step-u
+                    if (step === "conversion") progress = Math.max(progress, 40);
+                    if (step === "extraction") progress = Math.max(progress, 70);
+                    if (step === "enrichment") progress = Math.max(progress, 90);
+                    if (progressBar) progressBar.style.width = `${progress}%`;
+
+                } catch (err) {
+                    console.error("Greška u waitForAIResult:", err);
+                    clearInterval(fakeInterval);
+                    clearInterval(countdownInterval);
+                    Swal.close();
+
+                    showRetryError(
+                        "Greška pri skeniranju",
+                        err.message || "Nepoznata greška",
+                        () => waitForAIResult()
+                    );
+                    break;
+                }
+
+                console.log("Scan status:", status, "| Step:", step, "| Error:", errorMsg);
 
                 const el = document.getElementById("swal-status-message");
                 if (el) {
@@ -544,7 +712,12 @@
                 }
 
                 if (status === "completed") {
+                    clearInterval(fakeInterval);
+                    clearInterval(countdownInterval);
+                    if (progressBar) progressBar.style.width = "100%";
                     if (el) el.textContent = "Završeno";
+                    await new Promise(r => setTimeout(r, 1000));
+                    if (el) el.textContent = "Faktura spremljena u draft";
                     await new Promise(r => setTimeout(r, 1000));
                     Swal.close();
                     _invoice_data = null;
@@ -552,16 +725,26 @@
                 }
 
                 if (status === "failed" || status === "error") {
+                    clearInterval(fakeInterval);
+                    clearInterval(countdownInterval);
                     await new Promise(r => setTimeout(r, 1000));
                     Swal.close();
                     console.error("Scan error:", errorMsg);
-                    Swal.fire("Greška", errorMsg || "Greška pri skeniranju", "error");
+
+                    showRetryError(
+                        "Greška pri skeniranju",
+                        `${errorMsg || "Nepoznata greška"}<br><span class="text-muted">${stepTextMap[step] || step || ""}</span>`,
+                        () => waitForAIResult()
+                    );
+
                     break;
                 }
 
                 await new Promise(r => setTimeout(r, 2000));
             }
         }
+
+
         //await updateRemainingScans();
 
 
@@ -772,7 +955,7 @@
             <input 
               type="text" 
               class="form-control form-control-sm mt-1" 
-              style="font-size: 0.85rem;" 
+              style="font-size: 0.85rem; padding-left:14.4px; height:37.1px;" 
               name="item_prev[]" 
               placeholder="Prevod"
             >
@@ -909,7 +1092,7 @@
                   <i class="fas fa-times"></i>
                 </button>
                 
-                <input type="checkbox" class="form-check-input " data-bs-toggle="tooltip"  style="width: 30px; height: 26.66px;" title="Povlastica DA/NE" />
+                <input type="checkbox" class="form-check-input " data-bs-toggle="tooltip"  style="width: 30px; height: 26.66px; cursor: pointer;" title="Povlastica DA/NE" />
               </div>
             </td>
 
@@ -1109,10 +1292,10 @@
                 // --- SUPPLIER LOGIC ---
                 let supplierId = invoice.supplier_id || supplier_id;
                 if (window.forceNewSupplier) {
-                    // Always remove any previous 'Novi dobavljač' option
+                    // Always remove any previous 'Novi klijent' option
                     $("#supplier-select2 option[value='new']").remove();
-                    // Add and select 'Novi dobavljač'
-                    const newOption = new Option('Novi dobavljač', 'new', true, true);
+                    // Add and select 'Novi klijent'
+                    const newOption = new Option('Novi klijent', 'new', true, true);
                     $("#supplier-select2").append(newOption).trigger('change');
                     if (supplier) {
                         $("#billing-name").val(supplier.name || "").prop('readonly', false);
@@ -1155,8 +1338,8 @@
                         },
                         error: function() {
                             if (supplier) {
-                                // Not found in DB, add 'Novi dobavljač' to select2
-                                const newOption = new Option('Novi dobavljač', 'new', true, true);
+                                // Not found in DB, add 'Novi klijent' to select2
+                                const newOption = new Option('Novi klijent', 'new', true, true);
                                 $("#supplier-select2").append(newOption).trigger('change');
                                 $("#billing-name").val(supplier.name || "").prop('readonly', false);
                                 $("#billing-address-line-1").val(supplier.address || "").prop('readonly', false);
@@ -1170,8 +1353,8 @@
                         }
                     });
                 } else if (supplier) {
-                    // Not found in DB, add 'Novi dobavljač' to select2
-                    const newOption = new Option('Novi dobavljač', 'new', true, true);
+                    // Not found in DB, add 'Novi klijent' to select2
+                    const newOption = new Option('Novi klijent', 'new', true, true);
                     $("#supplier-select2").append(newOption).trigger('change');
                     $("#billing-name").val(supplier.name || "").prop('readonly', false);
                     $("#billing-address-line-1").val(supplier.address || "").prop('readonly', false);
@@ -1187,7 +1370,7 @@
                 let importerId = invoice.importer_id || importer_id;
                 if (window.forceNewImporter) {
                     $("#importer-select2 option[value='new']").remove();
-                    const newOption = new Option('Novi uvoznik', 'new', true, true);
+                    const newOption = new Option('Novi dobavljač', 'new', true, true);
                     $("#importer-select2").append(newOption).trigger('change');
                     if (importer) {
                         $("#carrier-name").val(importer.name || "").prop('readonly', false);
@@ -1230,8 +1413,8 @@
                         },
                         error: function() {
                             if (importer) {
-                                // Not found in DB, add 'Novi uvoznik' to select2
-                                const newOption = new Option('Novi uvoznik', 'new', true, true);
+                                // Not found in DB, add 'Novi dobavljač' to select2
+                                const newOption = new Option('Novi dobavljač', 'new', true, true);
                                 $("#importer-select2").append(newOption).trigger('change');
                                 $("#carrier-name").val(importer.name || "").prop('readonly', false);
                                 $("#carrier-address").val(importer.address || "").prop('readonly', false);
@@ -1245,10 +1428,10 @@
                         }
                     });
                 } else if (importer) {
-                    // Always remove any previous 'Novi uvoznik' option
+                    // Always remove any previous 'Novi dobavljač' option
                     $("#importer-select2 option[value='new']").remove();
-                    // Add and select 'Novi uvoznik'
-                    const newOption = new Option('Novi uvoznik', 'new', true, true);
+                    // Add and select 'Novi dobavljač'
+                    const newOption = new Option('Novi dobavljač', 'new', true, true);
                     $("#importer-select2").append(newOption).trigger('change');
                     $("#carrier-name").val(importer.name || "").prop('readonly', false);
                     $("#carrier-address").val(importer.address || "").prop('readonly', false);
@@ -1262,8 +1445,16 @@
 
             } catch (err) {
                 console.error("Greška u fetchAndPrefillParties:", err);
-                Swal.fire("Greška", err.message || "Neuspješno dohvaćanje podataka", "error");
+                showRetryError(
+                    "Greška pri dohvaćanju podataka",
+                    err.message || "Neuspješno dohvaćanje podataka",
+                    () => fetchAndPrefillParties()
+                );
+
+
             }
+
+
         }
 
         document.addEventListener("DOMContentLoaded", async () => {
@@ -1299,17 +1490,32 @@
             if (scanNeeded) {
                 Swal.fire({
                     title: 'Skeniranje',
-                    html: `<div class=\"custom-swal-spinner mb-3\"></div><div id=\"swal-status-message\">Čeka na obradu</div>`,
+                    html: `<div class="custom-swal-spinner mb-3"></div><div id="swal-status-message">Čeka na obradu</div>`,
                     showConfirmButton: false,
                     allowOutsideClick: false
                 });
-                if (invoice.task_id == null && await startAiScan()) {
-                    await waitForAIResult();
-                } else if (!invoice.items?.length) {
+
+                let scanStarted = true;
+
+                // Start scan only if task_id is null
+                if (invoice.task_id == null) {
+                    scanStarted = await startAiScan();
+                }
+
+                // Only continue if scan actually started or items are already being processed
+                if (!scanStarted) {
+                    // Stop further steps like waitForAIResult/fetchParties
+                    return;
+                }
+
+                if (!invoice.items?.length) {
                     await waitForAIResult();
                 }
+
+
                 Swal.close();
             }
+
 
             _invoice_data = null;
 
@@ -1319,7 +1525,7 @@
             }
             window.skipPrefillParties = false; // reset after use
             $("#supplier-select2").select2({
-                placeholder: "Pretraži dobavljača",
+                placeholder: "Pretraži klijenta",
                 allowClear: true,
                 ajax: {
                     url: "/api/suppliers",
@@ -1358,7 +1564,7 @@
             });
 
             $("#importer-select2").select2({
-                placeholder: "Pretraži uvoznika",
+                placeholder: "Pretraži dobavljača",
                 allowClear: true,
                 ajax: {
                     url: "/api/importers",
@@ -1400,10 +1606,10 @@
 
             // await promptForSupplierAfterScan();
             $(document).on('click', '.show-ai-btn', function() {
-                console.log("✅ AI button clicked");
+                console.log(" AI button clicked");
 
                 const select = $(this).closest('td').find('select.select2-tariff');
-                console.log("🔎 Found select element:", select);
+                console.log(" Found select element:", select);
 
                 let rawSuggestions = select.data("suggestions");
                 try {
@@ -1411,11 +1617,11 @@
                         rawSuggestions = JSON.parse(rawSuggestions);
                     }
                 } catch (err) {
-                    console.error("❌ Failed to parse suggestions JSON:", err);
+                    console.error(" Failed to parse suggestions JSON:", err);
                     return;
                 }
 
-                console.log("📦 Raw suggestions:", rawSuggestions);
+                console.log(" Raw suggestions:", rawSuggestions);
 
                 if (!rawSuggestions) {
                     console.warn(" No suggestions found on data attribute.");
@@ -1438,7 +1644,7 @@
 
                 if (!sorted.length) {
                     container.innerHTML = `<div class="text-muted">Nema prijedloga.</div>`;
-                    console.log("ℹ️ No sorted suggestions to show.");
+                    console.log("ℹ No sorted suggestions to show.");
                 } else {
                     container.innerHTML = sorted.map((s, i) => `
             <div class="mb-2">
@@ -1486,7 +1692,7 @@
 
                 if (select && code) {
                     const matched = processedTariffData.find(item => item.id === code);
-                    console.log("🔍 Matched tariff code:", matched);
+                    console.log(" Matched tariff code:", matched);
 
                     if (matched) {
                         const option = new Option(matched.id, matched.id, true, true);
@@ -1509,9 +1715,30 @@
                 }
             });
 
-            $(document).on('click', '.remove-row', function() {
-                $(this).closest('tr').remove();
-                updateTotalAmount();
+            document.addEventListener("click", function(e) {
+                if (e.target.closest(".remove-row")) {
+                    const button = e.target.closest(".remove-row");
+                    const row = button.closest("tr");
+
+                    Swal.fire({
+                        title: "Oprez!",
+                        text: "Odabrani proizvod će biti trajno uklonjen sa popisa trenutne deklaracije. Ova radnja nije ireverzibilna!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        cancelButtonText: "Odustani",
+                        confirmButtonText: "Da, ukloni",
+                        customClass: {
+                            confirmButton: "btn btn-soft-info me-2",
+                            cancelButton: "btn btn-info"
+                        },
+                        buttonsStyling: false
+                    }).then((result) => {
+                        if (result.isConfirmed && row) {
+                            row.remove();
+                            updateTotalAmount();
+                        }
+                    });
+                }
             });
 
 
@@ -1532,7 +1759,7 @@
 
             flatpickr("#invoice-date", {
                 locale: "bs",
-                dateFormat: "d-m-Y"
+                dateFormat: "d.m.Y"
             });
 
 
@@ -1546,7 +1773,7 @@
 
             console.log(" Invoice date and number set.");
 
-            document.getElementById("company-address").value = "Vilsonovo, 9, Sarajevo ";
+            //document.getElementById("company-address").value = "Vilsonovo, 9, Sarajevo ";
             document.getElementById("company-zip").value = "71000";
             document.getElementById("company-email").value = "business@deklarant.ai";
 
@@ -1575,7 +1802,7 @@
 
                 Swal.fire({
                     title: 'Jesi li siguran/na?',
-                    text: 'Ova radnja će izbrisati sve podatke za dobavljača i omogućiti ručni unos.',
+                    text: 'Ova radnja će izbrisati sve podatke za klijenta i omogućiti ručni unos.',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Da',
@@ -1594,11 +1821,11 @@
                             .prop('readonly', false)
                             .removeClass("is-invalid");
 
-                        // Clear and reset supplier-select2, keeping only 'Novi dobavljač'
+                        // Clear and reset supplier-select2, keeping only 'Novi klijent'
                         const select = $("#supplier-select2");
                         select.empty(); // remove all options
 
-                        const newOption = new Option('Novi dobavljač', 'new', true, true);
+                        const newOption = new Option('Novi klijent', 'new', true, true);
                         select.append(newOption).trigger('change'); // add and select it
                     }
                 });
@@ -1613,7 +1840,7 @@
 
                 Swal.fire({
                     title: 'Jesi li siguran/na?',
-                    text: 'Ova radnja će izbrisati sve podatke za uvoznika i omogućiti ručni unos.',
+                    text: 'Ova radnja će izbrisati sve podatke za dobavljača i omogućiti ručni unos.',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Da',
@@ -1632,11 +1859,11 @@
                             .prop('readonly', false)
                             .removeClass("is-invalid");
 
-                        // Clear and reset importer-select2, keeping only 'Novi uvoznik'
+                        // Clear and reset importer-select2, keeping only 'Novi dobavljač'
                         const select = $("#importer-select2");
                         select.empty(); // remove all options
 
-                        const newOption = new Option('Novi uvoznik', 'new', true, true);
+                        const newOption = new Option('Novi dobavljač', 'new', true, true);
                         select.append(newOption).trigger('change'); // add and select it
                     }
                 });
@@ -1664,9 +1891,9 @@
                         window.skipPrefillParties = true;
                         // Only clear and unlock supplier fields
                         $("#billing-name, #billing-address-line-1, #billing-phone-no, #billing-tax-no, #email, #supplier-owner").val("").prop('readonly', false).removeClass("is-invalid");
-                        // Remove and add 'Novi dobavljač' option, then select it
+                        // Remove and add 'Novi klijent' option, then select it
                         $("#supplier-select2 option[value='new']").remove();
-                        var newOption = new Option('Novi dobavljač', 'new', true, true);
+                        var newOption = new Option('Novi klijent', 'new', true, true);
                         $("#supplier-select2").append(newOption).val('new').trigger('change');
                     }
                 });
@@ -1675,7 +1902,7 @@
             $('#add-new-importer').off('click').on('click', function(e) {
                 e.preventDefault();
                 Swal.fire({
-                    title: 'Jesi li siguran/na?',
+                    title: 'Oprez!',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Da',
@@ -1689,9 +1916,9 @@
                         window.skipPrefillParties = true;
                         // Only clear and unlock importer fields
                         $("#carrier-name, #carrier-address, #carrier-tel, #carrier-tax, #carrier-email, #carrier-owner").val("").prop('readonly', false).removeClass("is-invalid");
-                        // Remove and add 'Novi uvoznik' option, then select it
+                        // Remove and add 'Novi dobavljač' option, then select it
                         $("#importer-select2 option[value='new']").remove();
-                        var newOption = new Option('Novi uvoznik', 'new', true, true);
+                        var newOption = new Option('Novi dobavljač', 'new', true, true);
                         $("#importer-select2").append(newOption).val('new').trigger('change');
                     }
                 });
@@ -1722,13 +1949,14 @@
                             Authorization: `Bearer ${token}`
                         }
                     });
+
                     const data = await res.json();
                     if (!res.ok) throw new Error("Greška u AI response");
                     const supplier = data.supplier;
                     if (supplier) {
-                        // Set select2 to 'Novi dobavljač'
+                        // Set select2 to 'Novi klijent'
                         $("#supplier-select2 option[value='new']").remove();
-                        var newOption = new Option('Novi dobavljač', 'new', true, true);
+                        var newOption = new Option('Novi klijent', 'new', true, true);
                         $("#supplier-select2").append(newOption).val('new').trigger('change');
                         // Fill fields
                         $("#billing-name").val(supplier.name || "").prop('readonly', false);
@@ -1740,7 +1968,7 @@
                         const label = document.getElementById("billing-name-ai-label");
                         if (label) label.classList.remove("d-none");
                     } else {
-                        Swal.fire("Greška", "Nema AI podataka za dobavljača", "error");
+                        Swal.fire("Greška", "Nema AI podataka za klijenta", "error");
                     }
                 } catch (err) {
                     Swal.fire("Greška", err.message || "Neuspješno dohvaćanje podataka", "error");
@@ -1762,9 +1990,9 @@
                     if (!res.ok) throw new Error("Greška u AI response");
                     const importer = data.importer;
                     if (importer) {
-                        // Set select2 to 'Novi uvoznik'
+                        // Set select2 to 'Novi dobavljač'
                         $("#importer-select2 option[value='new']").remove();
-                        var newOption = new Option('Novi uvoznik', 'new', true, true);
+                        var newOption = new Option('Novi dobavljač', 'new', true, true);
                         $("#importer-select2").append(newOption).val('new').trigger('change');
                         // Fill fields
                         $("#carrier-name").val(importer.name || "").prop('readonly', false);
@@ -1776,7 +2004,7 @@
                         const label = document.getElementById("carrier-name-ai-label");
                         if (label) label.classList.remove("d-none");
                     } else {
-                        Swal.fire("Greška", "Nema AI podataka za uvoznika", "error");
+                        Swal.fire("Greška", "Nema AI podataka za dobavljača", "error");
                     }
                 } catch (err) {
                     Swal.fire("Greška", err.message || "Neuspješno dohvaćanje podataka", "error");
@@ -1883,8 +2111,14 @@
         e.preventDefault();
         e.stopPropagation();
         const btn = this;
-        btn.disabled = true;
-        btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Spašavanje...`;
+        btn.setAttribute("data-disabled", "true"); // custom attribute
+        btn.classList.add("position-relative");
+        btn.innerHTML = `
+        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" style="vertical-align: text-bottom;"></span>
+        Spašavanje...
+    `;
+        btn.classList.remove("btn-secondary"); // In case it gets changed
+        btn.classList.add("btn-info"); // Force blue color
 
         let missingFields = [];
 
@@ -1899,18 +2133,18 @@
         }
 
         // Check all required fields
-        checkRequired("billing-name", "Naziv dobavljača");
-        checkRequired("billing-address-line-1", "Adresa dobavljača");
-        checkRequired("billing-tax-no", "PIB dobavljača");
-        checkRequired("billing-phone-no", "Telefon dobavljača");
-        checkRequired("email", "Email dobavljača");
+        checkRequired("billing-name", "Naziv klijenta");
+        checkRequired("billing-address-line-1", "Adresa klijenta");
+        checkRequired("billing-tax-no", "PIB klijenta");
+        checkRequired("billing-phone-no", "Telefon klijenta");
+        checkRequired("email", "Email klijenta");
         checkRequired("supplier-owner", "Vlasnik");
 
-        checkRequired("carrier-name", "Naziv uvoznika");
-        checkRequired("carrier-address", "Adresa uvoznika");
-        checkRequired("carrier-tax", "PIB uvoznika");
-        checkRequired("carrier-tel", "Telefon uvoznika");
-        checkRequired("carrier-email", "Email uvoznika");
+        checkRequired("carrier-name", "Naziv dobavljača");
+        checkRequired("carrier-address", "Adresa dobavljača");
+        checkRequired("carrier-tax", "PIB dobavljača");
+        checkRequired("carrier-tel", "Telefon dobavljača");
+        checkRequired("carrier-email", "Email dobavljača");
         checkRequired("carrier-owner", "Vlasnik");
 
         if (missingFields.length > 0) {
@@ -1929,7 +2163,7 @@
 
         async function ensureEntity(endpoint, data, select2Id) {
             const selectedId = $(select2Id).val();
-            // If 'Novi dobavljač' or 'Novi uvoznik' is selected, create new
+            // If 'Novi klijent' or 'Novi dobavljač' is selected, create new
             if (selectedId === 'new') {
                 const res = await fetch(`/api/${endpoint}`, {
                     method: "POST",
@@ -1984,13 +2218,13 @@
 
             // If still not valid, show error and abort
             if (!isValidId(supplierId)) {
-                Swal.fire("Greška", "Molimo odaberite ili unesite validnog dobavljača.", "error");
+                Swal.fire("Greška", "Molimo odaberite ili unesite validnog klijenta.", "error");
                 btn.disabled = false;
                 btn.innerHTML = `<i class=\"ri-save-line align-bottom me-1\"></i> Sačuvaj`;
                 return;
             }
             if (!isValidId(importerId)) {
-                Swal.fire("Greška", "Molimo odaberite ili unesite validnog uvoznika.", "error");
+                Swal.fire("Greška", "Molimo odaberite ili unesite validnog dobavljača.", "error");
                 btn.disabled = false;
                 btn.innerHTML = `<i class=\"ri-save-line align-bottom me-1\"></i> Sačuvaj`;
                 return;
@@ -2232,27 +2466,57 @@
 
     }
 
-    function setupIncrementDecrementButtons() {
-        document.querySelectorAll("td .input-group").forEach(group => {
-            const minusBtn = group.querySelector("button:first-child");
-            const plusBtn = group.querySelector("button:last-child");
-            const input = group.querySelector("input");
+    document.addEventListener("click", function(e) {
+        const btn = e.target.closest("button");
+        if (!btn) return;
 
-            if (!input || !minusBtn || !plusBtn) return;
+        const group = btn.closest(".input-group");
+        const input = group?.querySelector("input");
 
-            minusBtn.addEventListener("click", () => {
-                const val = parseInt(input.value) || 0;
-                input.value = Math.max(val - 1, parseInt(input.min) || 0);
-                updateTotalAmount();
+        if (!input) return;
+
+        const isMinus = btn.textContent.trim() === "−";
+        const isPlus = btn.textContent.trim() === "+";
+
+        if (isMinus || isPlus) {
+            const val = parseInt(input.value) || 0;
+            const min = parseInt(input.min) || 0;
+            input.value = isMinus ? Math.max(min, val - 1) : val + 1;
+            updateTotalAmount();
+        }
+    });
+
+
+    document.addEventListener("click", function(e) {
+        const button = e.target.closest(".remove-row");
+        if (!button) return;
+
+        const row = button.closest("tr");
+
+        // Short delay to let the browser fully handle prior UI rendering
+        setTimeout(() => {
+            Swal.fire({
+                title: "Oprez!",
+                text: "Odabrani proizvod će biti trajno uklonjen...",
+                icon: "warning",
+                showCancelButton: true,
+                cancelButtonText: "Odustani",
+                confirmButtonText: "Da, ukloni",
+                customClass: {
+                    confirmButton: "btn btn-soft-info me-2",
+                    cancelButton: "btn btn-info"
+                },
+                buttonsStyling: false
+            }).then((result) => {
+                if (result.isConfirmed && row) {
+                    row.remove();
+                    updateTotalAmount();
+                }
             });
+        }, 10);
+    });
 
-            plusBtn.addEventListener("click", () => {
-                const val = parseInt(input.value) || 0;
-                input.value = val + 1;
-                updateTotalAmount();
-            });
-        });
-    }
+
 
 
     document.addEventListener("DOMContentLoaded", async () => {
@@ -2275,7 +2539,7 @@
                 const spinner = document.querySelector(".custom-swal-spinner");
 
 
-                // 🔥 Also remove SweetAlert2’s default icon area if still rendered
+                //  Also remove SweetAlert2’s default icon area if still rendered
                 const icon = Swal.getHtmlContainer()?.previousElementSibling;
                 if (icon?.classList.contains('swal2-icon')) {
                     icon.remove();
@@ -2334,7 +2598,7 @@
 
             // --- Supplier Select2
             $('#supplier-select2').select2({
-                placeholder: "Pretraži dobavljača",
+                placeholder: "Pretraži klijenta",
                 width: '100%',
                 data: supplierOptions
             });
@@ -2362,7 +2626,7 @@
 
             // --- Importer Select2
             $('#importer-select2').select2({
-                placeholder: "Pretraži uvoznika",
+                placeholder: "Pretraži dobavljača",
                 width: '100%',
                 data: importerOptions
             });
@@ -2447,6 +2711,12 @@
             const tbody = document.querySelector("#newlink");
             tbody.innerHTML = "";
 
+            // Clear previous rows
+            tbody.innerHTML = "";
+
+            // Use DocumentFragment for fast DOM appending
+            const fragment = document.createDocumentFragment();
+
             invoice.items.forEach((item, index) => {
                 const tarifnaOznaka = item.item_code?.trim() || item.best_customs_code_matches?.[0]?.entry?.["Tarifna oznaka"]?.trim() || "";
                 const row = document.createElement("tr");
@@ -2459,7 +2729,7 @@
         <button class="btn btn-outline-info rounded" type="button" onclick="searchFromInputs(this)"><i class="fa-brands fa-google"></i></button>
         <input type="text" class="form-control item-desc" name="item_desc[]" placeholder="Opis proizvoda" value="${item.item_description || ''}" style="flex:1;">
     </div>
-    <input type="text" class="form-control form-control-sm mt-1" name="item_prev[]" placeholder="Prevod" value="${item.translation || ''}">
+    <input type="text" class="form-control form-control-sm mt-1" name="item_prev[]" style="padding-left:14.4px; height: 37.1px;" placeholder="Prevod" value="${item.translation || ''}">
 </td>
 <td>
     <select class="form-control select2-tariff" name="item_code[]">
@@ -2490,30 +2760,33 @@
         <input type="checkbox" class="form-check-input" style="width: 30px; height: 26.66px;" title="Povlastica DA/NE" />
     </div>
 </td>`;
-                updateTotalAmount();
-
-                tbody.appendChild(row);
-                setupIncrementDecrementButtons();
+                fragment.appendChild(row);
             });
 
+            // Append all rows in one operation
+            tbody.appendChild(fragment);
 
+            // Update totals only once
+            updateTotalAmount();
 
-            // --- Select2 init
-            queueMicrotask(() => {
+            // Close loading UI ASAP to unblock interaction
+            Swal.close();
+
+            // Defer Select2 initialization to next event loop tick
+            setTimeout(() => {
                 $('.select2-country').select2({
                     templateResult: formatCountryWithFlag,
                     templateSelection: formatCountryWithFlag,
                     width: 'resolve',
                     minimumResultsForSearch: Infinity
                 });
+
                 $('.select2-tariff').select2({
                     data: processedTariffData,
                     width: 'resolve'
                 });
-            });
+            }, 0);
 
-            // Done loading
-            Swal.close();
         } catch (e) {
             console.error("Error loading invoice:", e);
             Swal.fire("Greška", "Nije moguće učitati deklaraciju.", "error");
@@ -2586,40 +2859,16 @@
     // Now initialize Flatpickr
     flatpickr("#date", {
         locale: "bs",
-        dateFormat: "d-m-Y"
+        dateFormat: "d.m.Y"
     });
 
     flatpickr("#invoice-date", {
         locale: "bs",
-        dateFormat: "d-m-Y"
+        dateFormat: "d.m.Y"
     });
 
 
     //Remove button logic 
-    document.addEventListener("click", function(e) {
-        if (e.target.closest(".remove-row")) {
-            const button = e.target.closest(".remove-row");
-            const row = button.closest("tr");
-
-            Swal.fire({
-                title: "Oprez!",
-                text: "Odabrani proizvod će biti trajno uklonjen sa popisa trenutne deklaracije. Ova radnja nije ireverzibilna!",
-                icon: "warning",
-                showCancelButton: true,
-                cancelButtonText: "Odustani",
-                confirmButtonText: "Da, ukloni",
-                customClass: {
-                    confirmButton: "btn btn-soft-info me-2",
-                    cancelButton: "btn btn-info"
-                },
-                buttonsStyling: false
-            }).then((result) => {
-                if (result.isConfirmed && row) {
-                    row.remove();
-                }
-            });
-        }
-    });
 </script>
 
 

@@ -73,25 +73,45 @@
                     </a>
                 </div>
 
-                <div class="dropdown d-md-none topbar-head-dropdown header-item">
-                    <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none"
-                        id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false">
-                        <i class="bx bx-search fs-22"></i>
+              <div class="dropdown d-md-none topbar-head-dropdown header-item">
+    <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none"
+        id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
+        aria-expanded="false">
+        <i class="bx bx-search fs-22"></i>
+    </button>
+
+    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
+        aria-labelledby="page-header-search-dropdown">
+        <form class="p-3" id="global-mobile-search-form">
+            <div class="form-group m-0">
+                <div class="input-group">
+                    <input id="global-mobile-search" type="text" class="form-control border border-2"
+                        placeholder="Pretraga po broju deklaracije, imenu dokumenta, dobavljaču, zemlji porijekla..."
+                        aria-label="Pretraga">
+                    <button class="btn btn-info" type="submit">
+                        <i class="mdi mdi-magnify"></i>
                     </button>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
-                        aria-labelledby="page-header-search-dropdown">
-                        <form class="p-3">
-                            <div class="form-group m-0">
-                                <div class="input-group">
-                                    <input type="text" class="form-control border border-2" placeholder="Pretraga ..."
-                                        aria-label="Recipient's username">
-                                    <button class="btn btn-info" type="submit"><i class="mdi mdi-magnify"></i></button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
                 </div>
+            </div>
+        </form>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const input = document.getElementById("global-mobile-search");
+                const form = document.getElementById("global-mobile-search-form");
+
+                form.addEventListener("submit", function (e) {
+                    e.preventDefault();
+                    const keyword = input.value.trim();
+                    if (keyword.length > 0) {
+                        window.location.href = `/pretraga?keyword=${encodeURIComponent(keyword)}`;
+                    }
+                });
+            });
+        </script>
+    </div>
+</div>
+
 
 
 
@@ -113,12 +133,6 @@
                         <div class="p-2">
                             <div class="row g-0">
                                 <div class="col-6">
-                                    <a class="dropdown-icon-item" href="/">
-                                        <i class="ri-home-line text-info fs-4 d-block mb-1"></i>
-                                        <span>@lang('translation.home')</span>
-                                    </a>
-                                </div>
-                                <div class="col-6">
                                     <a class="dropdown-icon-item" href="kalendar">
                                         <i class="ri-calendar-line text-info fs-4 d-block mb-1"></i>
                                         <span>@lang('translation.statistic')</span>
@@ -137,6 +151,12 @@
                                     </a>
                                 </div>
                                 <div class="col-6">
+                                    <a class="dropdown-icon-item" href="moji-dobavljaci">
+                                        <i class="ri-truck-line text-info fs-4 d-block mb-1"></i>
+                                        <span>@lang('translation.importers')</span>
+                                    </a>
+                                </div>
+                                <div class="col-6">
                                     <a class="dropdown-icon-item" href="tarifne-oznake">
                                         <i class="mdi mdi-sticker-text-outline text-info fs-4 d-block mb-1"></i>
                                         <span>@lang('translation.declarant')</span>
@@ -150,17 +170,7 @@
                                 </div>
                             </div>
 
-                            <div class="row mt-2">
-                                <div class="col-12 text-center">
-                                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#scanModal"
-                                        class="btn btn-info btn-sm text-white w-100 d-flex align-items-center justify-content-center">
-                                        <i class="fas fa-wand-magic-sparkles fs-6 me-1"></i>
-                                        <span>Skeniraj deklaraciju sa AI</span>
-                                    </a>
-                                </div>
-
-
-                            </div>
+                     
                         </div>
                     </div>
                 </div>
@@ -233,28 +243,27 @@
                         </span>
                     </button>
 
-                    <div class="dropdown-menu dropdown-menu-end border">
+                    <div class="dropdown-menu dropdown-menu-end">
                         <!-- item-->
                         <h6 class="dropdown-header" id="dropdownWelcome">Dobrodošli
                             {{ Auth::user()->username ?? 'Korisnik' }}</h6>
+                            @if(Auth::user()->role !== 'superadmin')
                         <a class="dropdown-item" href="profil"><i
                                 class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">Moj nalog</span></a>
                         <a class="dropdown-item" href="faqs"><i
                                 class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">Pomoć</span></a>
-                        <div class="dropdown-divider"></div>
+                       
                         <a class="dropdown-item" href="cijene-paketa"><i
                                 class="fas fa-wand-magic-sparkles fs-12 text-muted me-1"></i> <span
                                 class="align-middle">Dostupna skeniranja :
                                 <b>{{ Auth::user()->getRemainingScans() ?? '0' }}</b></span></a>
-
-                        <a class="dropdown-item" href="auth-lockscreen-basic"><i
-                                class="mdi mdi-sleep text-muted fs-16 align-middle me-1"></i> <span
-                                class="align-middle">Sleep</span></a>
+ @endif
+                        <div class="dropdown-divider"></div>
 
 
-                        <form method="POST" action="/custom-logout">
+                        <form method="POST" action="/custom-logout" style="margin-bottom: 0!important;">
                             @csrf
                             <button class="dropdown-item" type="submit"><i
                                     class="bx bx-power-off text-muted fs-16 align-middle me-1"

@@ -11,6 +11,15 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 <style>
+
+    .main-footer {
+       margin-bottom: -10px!important;
+    }
+    @media (max-width: 1024.1px) {
+    [data-layout=horizontal] .page-content {
+        padding: calc(45px + 1.5rem) .75rem 60px .75rem!important;
+    }
+}
     .avatar-overlay {
         position: absolute;
         top: 0;
@@ -235,7 +244,7 @@
 <!-- Profile Foreground -->
 <div class="profile-foreground position-relative mx-n4 mt-n4">
     <div class="profile-wid-bg">
-        <div class="text-end p-4" style="position: absolute; right: 0;">
+        <div class="text-end p-1 pt-2 p-md-4" style="position: absolute; right: 0;">
             <div class="p-0 ms-auto rounded-circle profile-photo-edit">
                 <input id="background-img-input" type="file" class="profile-foreground-img-file-input d-none">
                 <label for="background-img-input" class="profile-photo-edit btn btn-light w-100" style="padding-left: 10px; padding-right: 10px; padding-top: 6px; padding-bottom: 6px;">
@@ -248,7 +257,7 @@
 </div>
 
 <!-- Profile Header -->
-<div class="pt-4 mb-4 profile-wrapper pb-lg-4">
+<div class="pt-4 mb-0 mb-md-4 profile-wrapper pb-lg-4 pt-5 pt-md-0">
     <div class="row g-4 align-items-center">
         <div class="col-auto">
             <div class="avatar-lg position-relative" id="avatar-wrapper">
@@ -350,8 +359,8 @@
             <div class="tab-pane fade show active mb-0" id="overview-tab">
                 <div class="row h-100 align-items-stretch">
                     <!-- Left Side Cards -->
-                    <div class="col-xxl-4 d-flex flex-column rounded-0">
-                        <div class="card mb-3 d-flex flex-column align-items-center justify-content-center rounded-0">
+                    <div class="col-xxl-4 d-flex flex-column order-2 order-md-2 order-lg-1 rounded-0">
+                        <div class="card mb-3 d-flex flex-column align-items-center justify-content-center rounded-0 d-none d-md-flex">
                             <div class="card-body d-flex align-items-center w-100 justify-content-between" style="min-height: 60px;">
                              @include('components.package-profilebar')
                                 <!-- Upgrade button (hidden initially) -->
@@ -367,21 +376,21 @@
         <h5 class="mb-0">Moje deklaracije</h5>
         <a href="moje-deklaracije" class="text-info text-end fs-13">Pregledaj sve</a>
     </div>
-    <div class="card-body d-flex justify-content-center align-items-center flex-column pb-0 pt-0 position-relative" style="min-height: 180px;">
+    <div class="card-body d-flex justify-content-center align-items-center flex-column pb-0 pt-0 position-relative" style="min-height: 250px;">
         <!-- Centered loader -->
         <div class="position-absolute top-50 start-50 translate-middle">
             <div class="user-documents-loader spinner-border text-info" role="status"></div>
         </div>
 
         <!-- Content hidden initially -->
-        <div class="row g-3 user-documents d-none w-100 text-center" id="user-documents">
+        <div class="row g-3 user-documents d-none w-100 text-center pt-3 pb-3" id="user-documents">
             <div class="col-12 text-muted"></div>
         </div>
     </div>
 </div>
 
 <!-- MOJI KLIJENTI -->
-<div class="card rounded-0 w-100 mb-0">
+<div class="card rounded-0 w-100 mb-3 mb-md-2 pb-2 pb-md-0">
      <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Moji klijenti</h5>
         <a href="moji-klijenti" class="text-info text-end fs-13">Pregledaj sve</a>
@@ -404,8 +413,18 @@
                     </div>
 
                     <!-- Right Form with Tabs -->
-                    <div class="col-xxl-8 d-flex flex-column">
-                        <div class="card d-flex flex-column rounded-0">
+                    <div class="col-xxl-8 d-flex order-1 order-md-1 order-lg-2 flex-column mb-3 mb-md-0">
+                         <div class="card mb-3 d-flex flex-column align-items-center justify-content-center rounded-0 d-flex d-md-none">
+                            <div class="card-body d-flex align-items-center w-100 justify-content-between" style="min-height: 60px;">
+                             @include('components.package-profilebar')
+                                <!-- Upgrade button (hidden initially) -->
+                                 <div>
+                              @include('components.upgrade-button')
+                              </div>
+                            </div>
+ </div>
+                       
+                        <div class="card d-flex flex-column rounded-0 mb-0 mb-md-3">
                             <!-- Nav Tabs -->
                             <div class="card-header" style="margin-bottom: 0;">
                                 <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
@@ -1285,10 +1304,10 @@
             try {
                 const response = await fetch(`/api/users/${user.id}`, {
                     method: "PUT",
-                    headers: {
+                     headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                         "Content-Type": "application/json",
-
-                        'X-CSRF-TOKEN': csrftoken
+                        Authorization: `Bearer ${token}`
                     },
                     body: JSON.stringify(getPayload())
                 });
@@ -1400,11 +1419,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                     `;
                 });
 
-                supplierContainer.innerHTML += `
-                    <div class="card-footer p-0 pb-0 pt-0 d-flex justify-content-end pregledaj-vise-bottom-right">
-                        <a href="moji-klijenti" class="text-info fs-6 " style="margin:1rem">Pregledaj sve</a>
-                    </div>
-                `;
 
                
             }
@@ -1416,7 +1430,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         if (supplierContainer) {
             supplierContainer.classList.remove("d-none");
-            supplierContainer.innerHTML = `<div class="text-danger">Greška pri dohvaćanju dobavljača.</div>`;
+            supplierContainer.innerHTML = `<div class="text-danger row w-100 text-center">Greška pri dohvaćanju dobavljača.</div>`;
         }
     }
 });
@@ -1449,7 +1463,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                 if (lastFour.length === 0) {
                     docsContainer.innerHTML = `
-                    <div class="text-muted text-center position-absolute translate-middle top-50 start-50">Nema dostupnih dokumenata</div>
+                    <div class="text-muted text-center position-absolute translate-middle top-50 start-50 mt-0">Nema dostupnih dokumenata</div>
                 `;
                     return;
                 }
@@ -1476,7 +1490,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     }
 
                     return `
-                    <div class="col-6 col-sm-3 text-center">
+                    <div class="col-4 text-center">
                         <a href="#" class="text-decoration-none view-invoice" data-id="${inv.id}" title="Pregled Deklaracije">
                             <i class="${icon} fs-24 text-info"></i>
                             <p class="fs-13 text-muted mt-1 mb-0" style="white-space:nowrap!important">${file}</p>
@@ -1490,7 +1504,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 loader.classList.add("d-none");
                 docsContainer.classList.remove("d-none");
                 docsContainer.innerHTML = `
-                <div class="col-12 text-center text-danger">Greška pri učitavanju dokumenata.</div>
+                <div class="col-12 text-center text-danger ">Greška pri učitavanju dokumenata.</div>
             `;
             });
     });

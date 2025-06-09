@@ -11,9 +11,14 @@ class IsMineProfile
     /**
      * Handle an incoming request.
      */
-   public function handle(Request $request, Closure $next): Response
+ public function handle(Request $request, Closure $next): Response
 {
     $user = $request->user();
+
+    // Allow if user is admin
+    if ($user && $user->role === 'superadmin') {
+        return $next($request);
+    }
 
     $routeUserId = $request->route('userId') ?? $request->route('id');
 
@@ -23,5 +28,6 @@ class IsMineProfile
 
     return $next($request);
 }
+
 
 }

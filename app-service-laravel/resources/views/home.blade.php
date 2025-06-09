@@ -12,7 +12,38 @@
 <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
+
 <style>
+
+     .logo-span {
+        font-family: 'Facebook Sans Bold', sans-serif!important;
+         font-weight: bolder!important;
+    }
+
+    .ai-span {
+        
+        color: #289cdb!important;
+        padding: unset!Important;
+        background: unset!Important;
+            font-size: inherit!important;
+    font-style: normal!important;
+    font-weight: bolder!important;
+        margin-bottom: unset!important;
+        padding-bottom: !important;
+         font-family: 'Facebook Sans Bold', sans-serif!important;
+    }
+
+    @media (max-width: 768px) {
+
+  
+
+    .tariff-list, .suppliers-list {
+        max-height: 150px!important;
+        overflow-y: auto!important;
+    }
+    }
+
+
     /* Optional: Remove the margin-right for the last slide to avoid overflow */
     .mySwiper .swiper-slide:last-child {
         margin-right: 0;
@@ -36,14 +67,14 @@
 <!-- Top part -->
 
 <div class="col-xl-12">
-    <div class="card border-0 rounded-0 shadow-0 h-100 mt-1">
+    <div class="card border-0 rounded-0 shadow-0 h-100 mt-1 mobile-shadow-remove">
         <div class="row g-0">
             <!-- Left Columns -->
-            <div class="col-md-2 col-6 border-end border-0 order-2 order-md-0 bg-white card-animate mt-lg-0 mt-md-0 mt-3">
+            <div class="col-md-2 col-6 border-end border-0 order-2 order-md-0 card-animate mt-lg-0 mt-md-0 mt-3">
              <a href="cijene-paketa">  
             <div class="d-flex card  rounded-0 m-0 flex-column h-100">
                      @include('components.package-card-statusbar')
-                    <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
+                    <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center text-center p-2">
                         <h6 class="text-muted text-uppercase fs-11 mb-1" style="margin-top: -10px;">Dostupna AI
                             skeniranja</h6>
                         <div class="d-flex align-items-center justify-content-center" style="margin-top: 20px;">
@@ -55,7 +86,7 @@
                 </a>  
             </div>
 
-            <div class="col-md-2 col-6 border-0 order-3 order-md-0 bg-white card-animate mt-lg-0 mt-md-0 mt-3">
+            <div class="col-md-2 col-6 border-0 order-3 order-md-0 card-animate mt-lg-0 mt-md-0 mt-3">
                 <a href="moje-deklaracije">
                     <div class="d-flex card m-0  rounded-0 flex-column h-100">
                         <div class="bg-info text-white text-center py-1 rounded-0">
@@ -75,17 +106,17 @@
             </div>
 
             <!-- Middle Avatar Section -->
-            <div class="col-md-4 border-start border-end order-1 order-md-0 d-flex align-items-center border-0 rounded-0 alert alert-light p-1 mb-2 m-lg-0">
+            <div class="col-md-4 border-start border-end order-1 order-md-0 d-flex align-items-center border-0 rounded-0 alert alert-light p-1 mb-2 m-lg-0 main-card-dashboard">
                 <div class="p-2 text-center d-flex flex-column h-100 w-100 justify-content-center align-items-center">
                     <div class="card-body text-center p-2">
                         <div class="row d-flex text-center mb-3 fs-4" style="justify-content: center!important; height: 50px;">
                             <img id="user-avatar-middle" class="img-thumbnail rounded-circle d-none"  style="object-fit: cover; aspect-ratio: 1/1; max-width: 50px; max-height: 50px; min-width: 50px; min-height: 50px; display: block;padding-right: 0px; padding-left: 0px; padding: 0.15rem; border: 0; background-color: transparent;">
                             <div id="avatar-middle-fallback" class="rounded-circle bg-info d-flex justify-content-center align-items-center text-white" style="width: 50px; height: 50px;"></div>
                         </div>
-                        <h6 class="fw-bold mb-1 mt-1">Dobrodošli na deklarant<span style="color:#299cdb!important">.ai</span> {{ Auth::user()->username ?? '' }}</h6>
-                        <p class="fs-7 mb-1 text-info" id="user-package-display">
+                        <h6 class="fw-bold mb-1 mt-1 logo-span welcome">Dobrodošli na <strong class="logo-span">deklarant<span class="ai-span">.ai</span></strong> {{ Auth::user()->username ?? '' }}</h6>
+                        <p class="fs-7 mb-1 text-info" id="user-package-display"></p>
     @include('components.package-dashboard-statusbar')
-                        </p>
+                        
                     </div>
                     <div class="card-footer bg-transparent border-0 w-100 p-0 p-lg-1">
                         <div class="d-flex justify-content-center gap-2 w-100">
@@ -104,7 +135,7 @@
 
             <!-- Right Columns remain unchanged -->
 
-            <div class="col-md-2 col-6 border-end border-0 order-4 order-md-0 bg-white card-animate mt-lg-0 mt-md-0 mt-4">
+            <div class="col-md-2 col-6 border-end border-0 order-4 order-md-0 card-animate mt-lg-0 mt-md-0 mt-4">
                 <a href="moji-klijenti">
                     <div class="d-flex card  rounded-0 m-0 flex-column h-100">
                         <div class="bg-info text-white text-center py-1 rounded-0">
@@ -114,7 +145,7 @@
                         <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
                             <h6 class="text-muted text-uppercase fs-11 mb-1">Moji klijenti</h6>
                             <div class="d-flex align-items-center justify-content-center">
-                                <i class="ri-user-line text-info" style="font-size: 45px"></i>
+                                <i class="ri-user-line text-info" style="font-size: 38px"></i>
                                 <h3 class="mb-0 ms-2"><span class="counter-value" id="totalSuppliers">0</span></h3>
                             </div>
                         </div>
@@ -123,7 +154,7 @@
             </div>
 
 
-            <div class="col-md-2 col-6 border-0 order-5 order-md-0 bg-white card-animate mt-lg-0 mt-md-0 mt-4">
+            <div class="col-md-2 col-6 border-0 order-5 order-md-0 card-animate mt-lg-0 mt-md-0 mt-4">
                 <a href="moji-dobavljaci">
                     <div class="d-flex card  rounded-0 m-0 flex-column h-100">
                         <div class="bg-info text-white text-center py-1 rounded-0">
@@ -234,7 +265,7 @@
                     <div class="flex-grow-1 overflow-hidden">
                         <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Carinskih tarifa</p>
                         <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                            <span class="counter-value" data-target="19.542">19.542</span>
+                            <span class="counter-value" data-target="14.1082">14.108</span>
                         </h4>
                     </div>
                     <div style="width: 80px; height: 80px;" class="d-flex align-items-center justify-content-center">
@@ -293,7 +324,7 @@
             <div class="col-xl-6">
                 <div class="row g-1 mx-0">
                     <!-- 4 cards in 2 rows -->
-                    <div class="col-md-6">
+                    <div class="col-md-6  mb-3 mb-md-0">
                         <div class="card rounded-0 h-100 ">
                             <div class="card-header d-flex justify-content-between">
                                 <h5 class="card-title mb-0 fs-6">Zahtjevi za inspekcijski nadzor</h5>
@@ -320,7 +351,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-6  mb-3 mb-md-0">
                         <div class="card rounded-0 h-100">
                             <div class="card-header d-flex justify-content-between">
                                 <h5 class="card-title mb-0 fs-6">Carinjenje po nepotpunoj izjavi</h5>
@@ -346,7 +377,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6  mb-3 mb-md-0">
                         <div class="card rounded-0 h-100">
                             <div class="card-header d-flex justify-content-between">
                                 <h5 class="card-title mb-0 fs-6">Izjave za carinjenje pošiljki</h5>
@@ -372,7 +403,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6  mb-3 mb-md-0">
                         <div class="card rounded-0 h-100">
                             <div class="card-header d-flex justify-content-between">
                                 <h5 class="card-title mb-0 fs-6">Obrasci</h5>
@@ -405,7 +436,7 @@
             <div class="col-xl-6 d-flex flex-column">
                 <div class="row g-1 flex-fill mx-0">
                     <!-- First column: Zadnje korištene tarife -->
-                    <div class="col-md-6">
+                    <div class="col-md-6  mb-3 mb-md-0">
                         <div class="card rounded-0 w-100 h-100 card-animate mb-0">
                             <div class="card-header">
                                 <h5 class="mb-0">Nedavne tarife</h5>
@@ -420,7 +451,7 @@
                     </div>
 
                     <!-- Second column: Zadnje korišteni dobavljači -->
-                                       <div class="col-md-6 d-flex card-animate">
+                                       <div class="col-md-6 d-flex ">
                         <div class="card rounded-0 w-100 h-100 mb-0">
                             <div class="card-header">
                                 <h5 class="mb-0">Nedavni klijenti</h5>
@@ -500,7 +531,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const stats = res.data || {};
         console.log("Stats response:", stats);
 
-        // --- Suppliers Section ---
+        // --- SUPPLIERS SECTION ---
         const suppliers = stats.supplier_stats?.latest_suppliers || [];
         const lastSuppliers = suppliers.slice(-5);
 
@@ -511,7 +542,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             if (lastSuppliers.length === 0) {
                 supplierContainer.innerHTML = `
-                    <div class="text-muted text-center position-absolute translate-middle top-50 start-50">Nema podataka o dobavljačima</div>
+                    <div class="text-muted text-center position-absolute translate-middle top-50 start-50">
+                        Nema podataka o dobavljačima
+                    </div>
                 `;
             } else {
                 lastSuppliers.forEach((supplier) => {
@@ -524,86 +557,73 @@ document.addEventListener("DOMContentLoaded", async function () {
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <div>
                                 <div class="fw-semibold">
-  ${supplier.name.length > 17 ? supplier.name.substring(0, 17) + "…" : supplier.name}
-</div>
+                                    ${supplier.name.length > 17 ? supplier.name.substring(0, 17) + "…" : supplier.name}
+                                </div>
                                 <div class="text-muted fs-12">${supplier.owner ?? "Nepoznat vlasnik"}</div>
                             </div>
-                           <div class="text-info fs-12" style="white-space: nowrap;">
-  ${!supplier.address 
-    ? "Nije definisano" 
-    : (supplier.address.length > 17 
-        ? supplier.address.substring(0, 17) + "…" 
-        : supplier.address)
-  }
-  <i class="ri-map-pin-line text-info ms-1"></i>
-</div>
-
+                            <div class="text-info fs-12" style="white-space: nowrap;">
+                                ${!supplier.address 
+                                    ? "Nije definisano" 
+                                    : (supplier.address.length > 17 
+                                        ? supplier.address.substring(0, 17) + "…" 
+                                        : supplier.address)}
+                                <i class="ri-map-pin-line text-info ms-1"></i>
+                            </div>
                         </div>
                     `;
                 });
 
                 supplierContainer.innerHTML += `
                     <div class="card-footer p-0 pb-0 pt-0 d-flex justify-content-end pregledaj-vise-bottom-right">
-                        <a href="moji-klijenti" class="text-info fs-6 " style="margin:1rem">Pregledaj sve</a>
+                        <a href="moji-klijenti" class="text-info fs-13 mb-2" style="margin:.5rem!important;">
+                            Pregledaj sve
+                        </a>
                     </div>
                 `;
             }
         }
 
-        // --- Tariff Section ---
-        const allInvoices = stats.invoices || [];
-        console.log("All invoices:", allInvoices);
-
-        const validItems = [];
-
-        allInvoices.forEach((inv) => {
-            if (Array.isArray(inv.items) && inv.items.length > 0) {
-                inv.items.forEach((item) => {
-                    console.log("Checking item:", item);
-
-                    const code =
-                        item.best_customs_code_matches?.[0] || "Nepoznat kod";
-                    const name =
-                        item.item_description_original ||
-                        item.item_description ||
-                        "Nepoznat naziv";
-
-                    validItems.push({ code, name });
-                });
-            }
-        });
-
-        const recentItems = validItems.slice(0, 5);
-        console.log("Valid tariff items:", recentItems);
+        // --- TARIFF SECTION ---
+        const latestTariffs = stats.latest_tariffs || [];
+        const topTariffs = latestTariffs.slice(0, 5);
 
         if (tariffLoader) tariffLoader.classList.add("d-none");
         if (tariffContainer) {
             tariffContainer.classList.remove("d-none");
             tariffContainer.innerHTML = "";
 
-            if (recentItems.length === 0) {
+            if (topTariffs.length === 0) {
                 tariffContainer.innerHTML = `
-                    <div class="text-muted text-center position-absolute translate-middle top-50 start-50">Nema nedavnih tarifa</div>
+                    <div class="text-muted text-center position-absolute translate-middle top-50 start-50">
+                        Nema nedavnih tarifa
+                    </div>
                 `;
             } else {
-                recentItems.forEach((item) => {
+                topTariffs.forEach((item) => {
                     tariffContainer.innerHTML += `
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <div>
-                                <div class="fw-semibold">${item.code}</div>
-                                <div class="text-muted fs-12">${item.name}</div>
+                                <div class="fw-semibold">${item.item_code}</div>
+                                <div class="text-muted fs-12" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px;">
+    ${item.name}
+</div>
+
                             </div>
+                            <div class="fs-12 text-info">${item.tariff_rate ?? '-'}%</div>
                         </div>
                     `;
                 });
 
                 tariffContainer.innerHTML += `
-                    <div class="card-footer p-0 pb-0 pt-0 d-flex justify-content-end  pregledaj-vise-bottom-right">
-                        <a href="moje-tarife" class="text-info fs-13 mb-2" style="margin-top:.2rem!important;margin-right:1rem">Pregledaj sve</a>
+                    <div class="card-footer p-0 pb-0 pt-0 d-flex justify-content-end pregledaj-vise-bottom-right">
+                        <a href="moje-deklaracije" class="text-info fs-13 mb-2" style="margin:.5rem!important">
+                            Pregledaj sve
+                        </a>
                     </div>
                 `;
             }
         }
+
     } catch (err) {
         console.error("Greška pri dohvaćanju statistike:", err);
 
@@ -622,6 +642,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 });
 </script>
+
 
 
 
@@ -673,7 +694,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             chartInstance = new Chart(ctx, {
                 type: "doughnut",
                 data: {
-                    labels: ["Iskorišteno", "Preostalo"],
+                    labels: ["Iskorišteno %", "Preostalo %"],
                     datasets: [{
                         data: [usedPercentage, remaining],
                         backgroundColor: ["#299cdb", "#d6f0fa"],
@@ -735,7 +756,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             chartInstance = new Chart(ctx, {
                 type: "doughnut",
                 data: {
-                    labels: ["Iskorišteno", "Preostalo"],
+                    labels: ["Iskorišteno %", "Preostalo %"],
                     datasets: [{
                         data: [usedPercentage, remaining],
                         backgroundColor: ["#299cdb", "#d6f0fa"],
@@ -1063,7 +1084,7 @@ if (scanSpeedEl) {
             renderScanCharts();
 
             new Swiper(".mySwiper", {
-                slidesPerView: 6,
+                slidesPerView: 2,
                 spaceBetween: 4,
                 autoplay: {
                     delay: 2000,

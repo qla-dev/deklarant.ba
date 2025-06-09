@@ -57,7 +57,8 @@ class FileManagerController extends Controller
     public function uploadInvoiceFile(Request $request)
     {
         // Handle file upload and get file data
-        $fileData = $this->handleFileUpload($request, "local");
+        $fileData = $this->handleFileUpload($request, "public");
+
 
         // Extract file information from the response
         $originalName = $fileData['stored_as'];

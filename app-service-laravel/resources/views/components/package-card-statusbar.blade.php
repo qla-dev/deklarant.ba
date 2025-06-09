@@ -7,20 +7,20 @@
 
 @if (!$package || $otherPackage->active == 0)
     <div class="bg-danger text-white text-center py-1 rounded-0">
-        <i class="ri-alert-line me-1"></i> 
-        <span>Pretplata neaktivna. <b>Aktiviraj!</b></span>
+        <i class="ri-alert-line me-1 d-none d-md-inline"></i> 
+        <span>Pretplata neaktivna<span class="d-none d-md-inline">. </span><b class="d-none d-md-inline">Aktiviraj!</b></span>
     </div>
 
 @elseif ($remainingScans == 0)
     <div class="bg-danger text-white text-center py-1 rounded-0">
-        <i class="ri-alert-line me-1"></i>
-        <span><b>Nema dostupnih.</b> Nadopuni!</span>
+           <i class="ri-alert-line me-1 d-none d-md-inline"></i> 
+        <span>Nema dostupnih<span class="d-none d-md-inline">. </span><b class="d-none d-md-inline" >Nadopuni!</b></span>
     </div>
 
 @elseif ($otherPackage->expiration_date && \Carbon\Carbon::parse($otherPackage->expiration_date)->lt($now))
     <div class="bg-danger text-white text-center py-1 rounded-0">
-        <i class="ri-alert-line me-1"></i>
-        <span>Pretplata je istekla. <b>Aktiviraj!</b></span>
+           <i class="ri-alert-line me-1 d-none d-md-inline"></i> 
+        <span>Pretplata je istekla<span class="d-none d-md-inline">. </span><b class="d-none d-md-inline">Aktiviraj!</b></span>
     </div>
 
 @elseif (
@@ -32,8 +32,8 @@
         $daysLeft = abs(\Carbon\Carbon::parse($otherPackage->expiration_date)->startOfDay()->diffInDays($now->startOfDay(), false));
     @endphp
     <div class="bg-danger text-white text-center py-1 rounded-0">
-        <i class="ri-alert-line me-1"></i>
-        <span>Ističe za {{ $daysLeft }} dana. <b>Produži!</b></span>
+           <i class="ri-alert-line me-1 d-none d-md-inline"></i> 
+        <span>Traje {{ $daysLeft }} dana<span class="d-none d-md-inline">. </span><b class="d-none d-md-inline">Produži!</b></span>
     </div>
 
 
@@ -51,6 +51,6 @@
     @endphp
     <div class="bg-info text-white text-center py-1 rounded-0">
         <i class="ri-pulse-ai-line me-1"></i>
-        <span>Ističe za {{ $daysLeft }} dana</span>
+        <span>Traje {{ $daysLeft }} dana</span>
     </div>
 @endif

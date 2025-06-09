@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Exception;
 use App\Jobs\StoreInvoiceItemsJob;
+use Illuminate\Validation\ValidationException;
+
 use Illuminate\Support\Facades\DB;
 
 
@@ -73,7 +75,7 @@ class InvoiceController extends Controller
 
             return response()->json($invoices);
         } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500); // for debugging
+            return response()->json(['error' => 'Neuspješno preuzimanje deklaracija. Pokušajte ponovo kasnije'], 500);
         }
     }
 
@@ -104,8 +106,16 @@ class InvoiceController extends Controller
             ], 201);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Dobavljač nije pronađen. Provjerite ID dobavljača i pokušajte ponovo'], 404);
-        } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno kreiranje deklaracije. ' . $e->getMessage()], 500);
+        } 
+        catch (ValidationException $e) {
+            return response()->json([
+                'error' => "Neuspješno kreiranje deklaracije",
+                // ukloniti uglaste zagrade ako treba ispisati sve errore a ne samo prvi
+                'message' => $e->errors()[array_key_first($e->errors())][0] 
+            ], 422);
+        }
+        catch (Exception $e) {
+            return response()->json(['error' => 'Neuspješno kreiranje deklaracije. Pokušajte ponovo kasnije'], 500);
         }
 
     }
@@ -186,7 +196,7 @@ class InvoiceController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Deklaracija s unesenim ID-om nije pronađena'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno skeniranje deklaracije: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Neuspješno skeniranje deklaracije. Pokušajte ponovo kasnije'], 500);
         }
 
     }
@@ -260,7 +270,7 @@ class InvoiceController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Deklaracija nije pronađena'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno dohvaćanje statusa skeniranja: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Neuspješno dohvaćanje statusa skeniranja. Pokušajte ponovo kasnije'], 500);
         }
     }
 
@@ -307,7 +317,7 @@ class InvoiceController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Deklaracija nije pronađena'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno dohvaćanje statusa skeniranja: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Neuspješno dohvaćanje statusa skeniranja. Pokušajte ponovo kasnije'], 500);
         }
     }
 
@@ -335,7 +345,7 @@ class InvoiceController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Deklaracija nije pronađena'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno dohvaćanje statusa skeniranja: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Neuspješno dohvaćanje statusa skeniranja. Pokušajte ponovo kasnije'], 500);
         }
     }
 
@@ -396,7 +406,7 @@ class InvoiceController extends Controller
             
         } catch (Exception $e) {
             // Log error but don't fail the request
-            \Log::error("Neuspješno popunjavanje deklaracije AI podacima:" . $e->getMessage());
+            \Log::error("Neuspješno popunjavanje deklaracije AI podacima. Pokušajte ponovo kasnije" );
         }
     }
 
@@ -466,7 +476,7 @@ class InvoiceController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Dobavljač ili korisnik nije pronađen. Provjerite ID-ove i pokušajte ponovo'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno kreiranje deklaracije. ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Neuspješno kreiranje deklaracije. Pokušajte ponovo kasnije'], 500);
         }
 
     }

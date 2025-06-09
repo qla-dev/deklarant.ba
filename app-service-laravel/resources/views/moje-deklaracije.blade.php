@@ -42,7 +42,7 @@ Moje spašene deklaracije <span class="counter-value-invoice">0</span><span
                 </div>
                 <div class="table-responsive table-card ms-1 me-1 mb-2" style="display:none" id="invoice-table-container">
                     <table id="invoiceTable" class="table  w-100">
-                        <thead class="custom-table">
+                        <thead class="custom-table has-action">
                             <tr>
                                 <th>ID</th>
                                 <th>Ime dokumenta</th>
@@ -55,7 +55,7 @@ Moje spašene deklaracije <span class="counter-value-invoice">0</span><span
                                  <th>Originalni dokument</th>
 
                                 <th>Vlasnik</th>
-                                <th>Akcija</th>
+                                <th style="padding-right: 20px!important;">Akcija</th>
                             </tr>
                         </thead>
                         <tbody class="table-light mb-1">
@@ -224,7 +224,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 title: 'Akcija',
                 orderable: false,
                 searchable: false,
-                className: 'text-center',
+                className: 'text-end',
                 render: row => `
                     <a class="btn btn-sm btn-soft-info me-1 view-invoice" href="/detalji-deklaracije/${row.id}" title="Pregledaj deklaraciju">
                         <i class="ri-eye-line"></i>

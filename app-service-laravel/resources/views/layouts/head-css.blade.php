@@ -10,6 +10,8 @@
 <!-- custom Css-->
 <link href="{{ URL::asset('build/css/custom.min.css') }}"  rel="stylesheet" type="text/css" />
 
+<link href="https://db.onlinewebfonts.com/c/b05a654a86637945b4997a378a5181fe?family=Facebook+Sans+Bold" rel="stylesheet">
+
 
     <link rel="stylesheet" data-purpose="Layout StyleSheet" title="Web Awesome" href="/css/app-wa-86cd56275caec687041f80b17dc62e32.css?vsn=d">
 
