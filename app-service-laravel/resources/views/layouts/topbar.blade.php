@@ -769,15 +769,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     console.log(" Korisnik:", user);
     console.log(" Token:", token?.substring(0, 25) + "...");
 
-    if (!user || !token) {
-        if (!user) console.warn("[TOPBAR] Backend user missing!");
-        if (!token) console.warn("[TOPBAR] Auth token missing in session.");
-
-        // Show SweetAlert warning and logout on confirmation
+    function handleSessionExpired() {
         Swal.fire({
             icon: 'warning',
             title: 'Oprez',
-            text: 'Sesija istekla, molimo prijavite se ponovo',
+            text: 'Sesija istekla ili je izvršena prijava sa drugog uređaja, molimo prijavite se ponovo',
             confirmButtonText: 'Prijavi se ponovo',
             confirmButtonColor: '#0dcaf0',
             allowOutsideClick: false,
@@ -800,8 +796,14 @@ document.addEventListener("DOMContentLoaded", async function () {
             document.body.appendChild(form);
             form.submit();
         });
+    }
 
-        return; 
+    if (!user || !token) {
+        if (!user) console.warn("[TOPBAR] Backend user missing!");
+        if (!token) console.warn("[TOPBAR] Auth token missing in session.");
+
+        handleSessionExpired();
+        return;
     }
 
     const API_URL = `/api/statistics/users/${user.id}`;
@@ -817,7 +819,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         console.log("✅ API response:", response);
         const stats = response.data || {};
 
-        // Sigurno dohvaćanje vrijednosti
         const fields = {
             totalSuppliers: stats.supplier_stats?.total_suppliers ?? 0,
             totalImporters: stats.importer_stats?.total_importers ?? 0,
@@ -839,13 +840,14 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         });
 
-        // Update all .counter-value-invoice elements to total invoice
         document.querySelectorAll('.counter-value-invoice').forEach(function(el) {
             el.textContent = fields.totalInvoices;
         });
 
     } catch (error) {
         console.error("❌ Greška pri dohvaćanju statistike:", error);
+        handleSessionExpired(); // Fire SweetAlert on error
     }
 });
 </script>
+
