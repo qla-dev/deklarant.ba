@@ -771,8 +771,37 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     if (!user || !token) {
         if (!user) console.warn("[TOPBAR] Backend user missing!");
-        if (!token) console.warn("[TOPBAR] Auth token missing in localStorage.");
-        return;
+        if (!token) console.warn("[TOPBAR] Auth token missing in session.");
+
+        // Show SweetAlert warning and logout on confirmation
+        Swal.fire({
+            icon: 'warning',
+            title: 'Oprez',
+            text: 'Sesija istekla, molimo prijavite se ponovo',
+            confirmButtonText: 'Prijavi se ponovo',
+            confirmButtonColor: '#0dcaf0',
+            allowOutsideClick: false,
+            allowEscapeKey: false
+        }).then(() => {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/custom-logout';
+            form.style.marginBottom = '0';
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            if (csrfToken) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = '_token';
+                input.value = csrfToken;
+                form.appendChild(input);
+            }
+
+            document.body.appendChild(form);
+            form.submit();
+        });
+
+        return; 
     }
 
     const API_URL = `/api/statistics/users/${user.id}`;
