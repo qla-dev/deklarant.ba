@@ -116,6 +116,7 @@ class InvoiceController extends Controller
             ], 422);
         }
         catch (Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Neuspješno kreiranje deklaracije. Pokušajte ponovo kasnije: ' . $e->getMessage());
             return response()->json(['error' => 'Neuspješno kreiranje deklaracije. Pokušajte ponovo kasnije'], 500);
         }
 
@@ -487,7 +488,8 @@ public function update(Request $request, $invoiceId)
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Dobavljač ili korisnik nije pronađen. Provjerite ID-ove i pokušajte ponovo'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno kreiranje deklaracije. Pokušajte ponovo kasnije'], 500);
+            \Illuminate\Support\Facades\Log::error('Neuspješno preuzimanje AI podataka. Pokušajte ponovo kasnije: ' . $e->getMessage());
+            return response()->json(['error' => 'Neuspješno preuzimanje AI podataka. Pokušajte ponovo kasnije'], 500);
         }
 
     }
