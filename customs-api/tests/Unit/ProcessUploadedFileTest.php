@@ -4,6 +4,9 @@ namespace Tests\Unit;
 
 use App\Jobs\ProcessUploadedFile;
 use App\Models\Task;
+use App\Interfaces\LLMCaller;
+use App\Services\OllamaLLMService;
+use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -19,6 +22,12 @@ class ProcessUploadedFileTest extends TestCase
     {
         parent::setUp();
         putenv('MARKER_URL=http://example.com');
+        putenv('HTTP_RETRY_DELAY=0');
+    }
+
+    protected function createOllamaService(Client $client): OllamaLLMService
+    {
+        return new OllamaLLMService($client);
     }
 
     public function test_file_processing_pipeline()
@@ -57,7 +66,8 @@ class ProcessUploadedFileTest extends TestCase
         ]);
 
         $client = new \GuzzleHttp\Client(['handler' => HandlerStack::create($mock)]);
-        $job = new ProcessUploadedFile($task, $client);
+        $ollamaService = $this->createOllamaService($client);
+        $job = new ProcessUploadedFile($task, $ollamaService, $client);
         $job->handle();
 
         $task->refresh();
@@ -88,7 +98,8 @@ class ProcessUploadedFileTest extends TestCase
         ]);
 
         $client = new \GuzzleHttp\Client(['handler' => HandlerStack::create($mock)]);
-        $job = new ProcessUploadedFile($task, $client);
+        $ollamaService = $this->createOllamaService($client);
+        $job = new ProcessUploadedFile($task, $ollamaService, $client);
 
         try {
             $job->handle();
@@ -111,11 +122,14 @@ class ProcessUploadedFileTest extends TestCase
 
         $mock = new MockHandler([
             new Response(200, [], json_encode(['output' => '# Markdown content'])),
+            new Response(500, [], 'Ollama service error'),
+            new Response(500, [], 'Ollama service error'),
             new Response(500, [], 'Ollama service error')
         ]);
 
         $client = new \GuzzleHttp\Client(['handler' => HandlerStack::create($mock)]);
-        $job = new ProcessUploadedFile($task, $client);
+        $ollamaService = $this->createOllamaService($client);
+        $job = new ProcessUploadedFile($task, $ollamaService, $client);
 
         try {
             $job->handle();
@@ -125,6 +139,54 @@ class ProcessUploadedFileTest extends TestCase
             $this->assertEquals(Task::STATUS_FAILED, $task->status);
             $this->assertStringContainsString('Ollama service error', $task->error_message);
         }
+    }
+
+    public function test_ollama_retry_success()
+    {
+        Storage::fake('local');
+        Storage::disk('local')->put('uploads/test.pdf', 'test content');
+
+        $task = Task::factory()->create([
+            'file_path' => 'uploads/test.pdf'
+        ]);
+
+        // First attempt fails, second attempt succeeds
+        $mock = new MockHandler([
+            new Response(200, [], json_encode(['output' => '# Markdown content'])),
+            new Response(500, [], 'Ollama service error'),
+            new Response(200, [], json_encode([
+                'response' => json_encode([
+                    'items' => [
+                        [
+                            'item_name' => 'Test Item',
+                            'original_name' => 'TEST-001',
+                            'quantity' => 1,
+                            'unit_price' => 10.99,
+                            'currency' => 'USD'
+                        ]
+                    ]
+                ]),
+                'done' => true
+            ])),
+            // Search API response
+            new Response(200, [], json_encode([
+                ['entry' => ['code' => 'HS123'], 'closeness' => 0.9]
+            ]))
+        ]);
+
+        $client = new \GuzzleHttp\Client(['handler' => HandlerStack::create($mock)]);
+        $ollamaService = $this->createOllamaService($client);
+        $job = new ProcessUploadedFile($task, $ollamaService, $client);
+        $job->handle();
+
+        $task->refresh();
+        $this->assertEquals(Task::STATUS_COMPLETED, $task->status);
+        $this->assertArrayHasKey('items', $task->result);
+        $this->assertIsArray($task->result['items']);
+        $this->assertCount(1, $task->result['items']);
+        $this->assertEquals('Test Item', $task->result['items'][0]['item_name']);
+        $this->assertArrayHasKey('detected_codes', $task->result['items'][0]);
+        $this->assertCount(1, $task->result['items'][0]['detected_codes']);
     }
 
     public function test_cli_path_via_invalid_url()
@@ -145,7 +207,9 @@ class ProcessUploadedFileTest extends TestCase
         $mockProcess->method('run')->willReturn(0);
 
         // Set up the process factory
-        $job = new ProcessUploadedFile($task);
+        $client = new \GuzzleHttp\Client();
+        $ollamaService = $this->createOllamaService($client);
+        $job = new ProcessUploadedFile($task, null, $ollamaService);
         $job->setProcessFactory(function ($command) use ($mockProcess) {
             $this->assertContains('marker_single', $command);
             $this->assertContains('--output_format=markdown', $command);
@@ -164,7 +228,7 @@ class ProcessUploadedFileTest extends TestCase
         }
         file_put_contents($outputFile, '# CLI Markdown content');
 
-        $markdown = $job->convertToMarkdown();
+        $markdown = $job->convertToLLM();
 
         $this->assertEquals('# CLI Markdown content', $markdown);
         $this->assertEquals('test content', Storage::disk('local')->get($filePath));
@@ -186,12 +250,12 @@ class ProcessUploadedFileTest extends TestCase
         $mockProcess->method('getErrorOutput')->willReturn('Marker CLI error');
 
         $job = $this->getMockBuilder(ProcessUploadedFile::class)
-            ->setConstructorArgs([$task])
-            ->onlyMethods(['convertToMarkdownViaCli'])
+            ->setConstructorArgs([$task, null, $this->createOllamaService(new \GuzzleHttp\Client())])
+            ->onlyMethods(['convertToLLMViaCli'])
             ->getMock();
 
         $job->expects($this->once())
-            ->method('convertToMarkdownViaCli')
+            ->method('convertToLLMViaCli')
             ->willThrowException(new \RuntimeException('Marker CLI failed: Marker CLI error'));
 
         $job->setProcessFactory(function ($command) use ($mockProcess) {
@@ -200,7 +264,7 @@ class ProcessUploadedFileTest extends TestCase
 
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Marker CLI failed: Marker CLI error');
-        $job->convertToMarkdown();
+        $job->convertToLLM();
     }
 
     public function test_http_path_via_valid_url()
@@ -219,8 +283,9 @@ class ProcessUploadedFileTest extends TestCase
 
         putenv('MARKER_URL=http://example.com');
         $client = new \GuzzleHttp\Client(['handler' => HandlerStack::create($mock)]);
-        $job = new ProcessUploadedFile($task, $client);
-        $markdown = $job->convertToMarkdown();
+        $ollamaService = $this->createOllamaService($client);
+        $job = new ProcessUploadedFile($task, $ollamaService, $client);
+        $markdown = $job->convertToLLM();
 
         $this->assertEquals('# HTTP Markdown content', $markdown);
     }

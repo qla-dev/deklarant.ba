@@ -1,5 +1,9 @@
 from flask import Flask, request, jsonify, render_template_string
 from model.search import perform_search
+import os
+import sys
+import threading
+import time
 
 # Define the "search" function
 def search(query):
@@ -77,5 +81,22 @@ def search_page():
     results = search(query) if query else None
     return render_template_string(HTML_TEMPLATE, query=query, results=results)
 
+def monitor_restart_file():
+    restart_file = ".restart-requested"
+    while True:
+        if os.path.exists(restart_file):
+            print("Restart requested via .restart-requested file")
+            os.remove(restart_file)
+            sys.exit(0)
+        time.sleep(2)
+
 if __name__ == "__main__":
+    # Cleanup restart flag if it exists
+    if os.path.exists(".restart-requested"):
+        os.remove(".restart-requested")
+
+    # Start monitoring restart file in a background thread
+    threading.Thread(target=monitor_restart_file, daemon=True).start()
+
+    # Start Flask app
     app.run(port=9124, host="0.0.0.0")

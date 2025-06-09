@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Task;
 use App\Jobs\ProcessUploadedFile;
+use App\Jobs\ProcessPdfToImages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -27,7 +28,10 @@ class UploadController extends Controller
         ]);
 
         // Dispatch processing job
-        ProcessUploadedFile::dispatch($task);
+        // Text based processor
+        // ProcessUploadedFile::dispatch($task);
+        // Image based processor
+        ProcessPdfToImages::dispatch($task);
 
         return response()->json([
             'message' => 'File uploaded successfully',

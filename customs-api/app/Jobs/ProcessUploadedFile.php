@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Task;
 use App\Http\Clients\MockableHttpClient;
+use App\Interfaces\LLMCaller;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
@@ -12,12 +13,14 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
+use Psr\Http\Message\ResponseInterface;
 
 class ProcessUploadedFile implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private ?Client $client = null;
+    protected ?Client $client = null;
+    protected LLMCaller $llmCaller;
 
     public function __construct(public Task $task, Client $client = null)
     {
@@ -26,21 +29,22 @@ class ProcessUploadedFile implements ShouldQueue
         }
     }
 
-    public function handle()
+    public function handle(LLMCaller $llmCaller)
     {
+        $this->llmCaller = $llmCaller;
         if ($this->client === null) {
             $this->client = new MockableHttpClient();
         }
         try {
             $this->task->markAsProcessing();
 
-            // Step 1: Convert to markdown
+            // Step 1: Preprocess
             $this->task->update(['processing_step' => 'conversion']);
-            $markdown = $this->convertToMarkdown();
+            $preprocessedData = $this->convertToLLM();
 
             // Step 2: Extract data with LLM
             $this->task->update(['processing_step' => 'extraction']);
-            $result = $this->extractWithLLM($markdown);
+            $result = $this->extractWithLLM($preprocessedData);
 
             // Step 3: Enrich with search API
             $this->task->update(['processing_step' => 'enrichment']);
@@ -54,18 +58,18 @@ class ProcessUploadedFile implements ShouldQueue
         }
     }
 
-    public function convertToMarkdown(): string
+    public function convertToLLM()
     {
         $markerUrl = getenv('MARKER_URL');
 
         if (empty($markerUrl)) {
-            return $this->convertToMarkdownViaCli();
+            return $this->convertToLLMViaCli();
         }
 
-        return $this->convertToMarkdownViaHttp();
+        return $this->convertToLLMViaHttp();
     }
 
-    protected function convertToMarkdownViaHttp(): string
+    protected function convertToLLMViaHttp(): string
     {
         $fileContent = Storage::get($this->task->file_path);
 
@@ -113,7 +117,7 @@ class ProcessUploadedFile implements ShouldQueue
         };
     }
 
-    protected function convertToMarkdownViaCli(): string
+    protected function convertToLLMViaCli(): string
     {
         $filePath = Storage::path($this->task->file_path);
         $tempDir = sys_get_temp_dir();
@@ -150,42 +154,17 @@ class ProcessUploadedFile implements ShouldQueue
         return $output;
     }
 
-    private function extractWithLLM(string $markdown): array
+    protected function extractWithLLM($markdown): array
     {
-        $maxRetries = 3;
-
-        for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
-            try {
-                $response = $this->client->post(getenv('OLLAMA_URL') . '/api/generate', [
-                    'json' => [
-                        'model' => getenv('OLLAMA_MODEL'),
-                        'prompt' =>
-                            "Here's the markdown of invoice:\n\n```md\n$markdown\n```\n\n"
-                            . file_get_contents(base_path("app/Jobs/prompt-markdown-to-json.txt")),
-                        'stream' => false,
-                        'options' => [
-                            'temperature' => 0.1,
-                            'num_predict' => 10000
-                        ]
-                    ]
-                ]);
-                break;
-            } catch (Exception $e) {
-                \Log::error('Error in OLLAMA. Retrying: ' . $e->getMessage());
-                if ($attempt === $maxRetries) {
-                    throw $e;
-                }
-                sleep(2);
-            }
-        }
-
-        $responseData = json_decode($response->getBody()->getContents(), true);
-        // check if response data contains "error" key. If it does then raise exception with "message" key
-        // if "message" key is unavailable then raise exception with generic message text
-        if (isset($responseData['error'])) {
-            throw new Exception($responseData['error']);
-        }
-        $ollamaResponse = $responseData['response'] ?? '';
+        $responseData = $this->llmCaller->callLLM(
+            $this->client,
+            "Here's the markdown of invoice:\n\n```md\n$markdown\n```\n\n"
+                . file_get_contents(base_path("app/Jobs/prompt-markdown-to-json.txt")),
+        );
+        return $this->parseOllamaResponse($responseData);
+    }
+    protected function parseOllamaResponse(string $ollamaResponse): array
+    {
         // Ensure ollamaResponse is a string between ```json and ```
         if (preg_match('/```json(.*?)```/s', $ollamaResponse, $matches)) {
             $ollamaResponse = trim($matches[1]);

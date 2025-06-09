@@ -19,6 +19,8 @@ MODELS = {}
 for model_name in MODEL_NAMES:
     MODELS[model_name] = SentenceTransformer(model_name, device="cpu")
 
+result_caches = {}
+
 def preprocess_csv(file_path):
     df = pd.read_csv(file_path)
     df = df[df['Tarifna oznaka'].apply(lambda x: str(x).replace(' ', '').isdigit() and len(str(x).replace(' ', '')) == 10)]
@@ -66,6 +68,8 @@ def build_faiss_index(embeddings):
     return indices
 
 def search_faiss_index(query, indices, data):
+    if query in result_caches:
+        return result_caches[query]
     results = []
     query_embeddings = {}
 
@@ -86,6 +90,7 @@ def search_faiss_index(query, indices, data):
                 aggregated_results[idx] = dist
 
     sorted_results = sorted(aggregated_results.items(), key=lambda x: x[1])
+    result_caches[query] = sorted_results
     return sorted_results
 
 file_path = "assets/extracted_table.csv"

@@ -1,2 +1,4 @@
 __pycache__
 debug_assets
+venv
+.restart-requested

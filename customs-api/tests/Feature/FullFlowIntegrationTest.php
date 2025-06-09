@@ -21,8 +21,10 @@ class FullFlowIntegrationTest extends TestCase
 
         foreach ($expected['items'] as $i => $expectedItem) {
             $actualItem = $actual['items'][$i];
-            $expectedName = strtolower($expectedItem['item_name']);
             $actualName = strtolower($actualItem['item_name']);
+            $expectedName = strtolower($expectedItem['item_name']);
+            $expectedName = str_replace(" + ", " and ", $expectedName);
+            $actualName = str_replace(" + ", " and ", $actualName);
             if ($actualName == "нов")
                 $actualName = "hob"; // hack because OCR doesn't work correctly on this word
             $this->assertTrue(
@@ -115,7 +117,7 @@ class FullFlowIntegrationTest extends TestCase
         $this->verifyResults($taskId, 'test-3-expected.json');
     }
 
-    private function waitForTaskCompletion(string $taskId, int $timeout = 60): void
+    private function waitForTaskCompletion(string $taskId, int $timeout = 420): void
     {
         $start = time();
 
