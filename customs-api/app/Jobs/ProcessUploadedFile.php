@@ -22,16 +22,16 @@ class ProcessUploadedFile implements ShouldQueue
     protected ?Client $client = null;
     protected LLMCaller $llmCaller;
 
-    public function __construct(public Task $task, Client $client = null, LLMCaller $llmCaller)
+    public function __construct(public Task $task, Client $client = null)
     {
         if ($client !== null) {
             $this->client = $client;
         }
-        $this->llmCaller = $llmCaller;
     }
 
-    public function handle()
+    public function handle(LLMCaller $llmCaller)
     {
+        $this->llmCaller = $llmCaller;
         if ($this->client === null) {
             $this->client = new MockableHttpClient();
         }
@@ -157,20 +157,14 @@ class ProcessUploadedFile implements ShouldQueue
     protected function extractWithLLM($markdown): array
     {
         $responseData = $this->llmCaller->callLLM(
+            $this->client,
             "Here's the markdown of invoice:\n\n```md\n$markdown\n```\n\n"
                 . file_get_contents(base_path("app/Jobs/prompt-markdown-to-json.txt")),
         );
         return $this->parseOllamaResponse($responseData);
     }
-    protected function parseOllamaResponse(ResponseInterface $response): array
+    protected function parseOllamaResponse(string $ollamaResponse): array
     {
-        $responseData = json_decode($response->getBody()->getContents(), true);
-        // check if response data contains "error" key. If it does then raise exception with "message" key
-        // if "message" key is unavailable then raise exception with generic message text
-        if (isset($responseData['error'])) {
-            throw new Exception($responseData['error']);
-        }
-        $ollamaResponse = $responseData['response'] ?? '';
         // Ensure ollamaResponse is a string between ```json and ```
         if (preg_match('/```json(.*?)```/s', $ollamaResponse, $matches)) {
             $ollamaResponse = trim($matches[1]);

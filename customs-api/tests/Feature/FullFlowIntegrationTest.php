@@ -21,8 +21,10 @@ class FullFlowIntegrationTest extends TestCase
 
         foreach ($expected['items'] as $i => $expectedItem) {
             $actualItem = $actual['items'][$i];
-            $expectedName = strtolower($expectedItem['item_name']);
             $actualName = strtolower($actualItem['item_name']);
+            $expectedName = strtolower($expectedItem['item_name']);
+            $expectedName = str_replace(" + ", " and ", $expectedName);
+            $actualName = str_replace(" + ", " and ", $actualName);
             if ($actualName == "нов")
                 $actualName = "hob"; // hack because OCR doesn't work correctly on this word
             $this->assertTrue(

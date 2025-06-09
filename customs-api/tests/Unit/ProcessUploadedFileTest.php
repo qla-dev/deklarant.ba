@@ -67,7 +67,7 @@ class ProcessUploadedFileTest extends TestCase
 
         $client = new \GuzzleHttp\Client(['handler' => HandlerStack::create($mock)]);
         $ollamaService = $this->createOllamaService($client);
-        $job = new ProcessUploadedFile($task, $client, $ollamaService);
+        $job = new ProcessUploadedFile($task, $ollamaService, $client);
         $job->handle();
 
         $task->refresh();
@@ -99,7 +99,7 @@ class ProcessUploadedFileTest extends TestCase
 
         $client = new \GuzzleHttp\Client(['handler' => HandlerStack::create($mock)]);
         $ollamaService = $this->createOllamaService($client);
-        $job = new ProcessUploadedFile($task, $client, $ollamaService);
+        $job = new ProcessUploadedFile($task, $ollamaService, $client);
 
         try {
             $job->handle();
@@ -129,7 +129,7 @@ class ProcessUploadedFileTest extends TestCase
 
         $client = new \GuzzleHttp\Client(['handler' => HandlerStack::create($mock)]);
         $ollamaService = $this->createOllamaService($client);
-        $job = new ProcessUploadedFile($task, $client, $ollamaService);
+        $job = new ProcessUploadedFile($task, $ollamaService, $client);
 
         try {
             $job->handle();
@@ -176,7 +176,7 @@ class ProcessUploadedFileTest extends TestCase
 
         $client = new \GuzzleHttp\Client(['handler' => HandlerStack::create($mock)]);
         $ollamaService = $this->createOllamaService($client);
-        $job = new ProcessUploadedFile($task, $client, $ollamaService);
+        $job = new ProcessUploadedFile($task, $ollamaService, $client);
         $job->handle();
 
         $task->refresh();
@@ -284,7 +284,7 @@ class ProcessUploadedFileTest extends TestCase
         putenv('MARKER_URL=http://example.com');
         $client = new \GuzzleHttp\Client(['handler' => HandlerStack::create($mock)]);
         $ollamaService = $this->createOllamaService($client);
-        $job = new ProcessUploadedFile($task, $client, $ollamaService);
+        $job = new ProcessUploadedFile($task, $ollamaService, $client);
         $markdown = $job->convertToLLM();
 
         $this->assertEquals('# HTTP Markdown content', $markdown);

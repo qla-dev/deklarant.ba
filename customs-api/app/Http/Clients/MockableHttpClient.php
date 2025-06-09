@@ -22,7 +22,8 @@ class MockableHttpClient extends Client
             $request = new \GuzzleHttp\Psr7\Request($method, $uri);
             return $this->getMockResponse($request);
         }
-
+        // Modify options to not check SSL issuer certificates
+        $options['verify'] = false;
         $response = parent::request($method, $uri, $options);
         $content = $response->getBody()->getContents();
         $request = new \GuzzleHttp\Psr7\Request($method, $uri);

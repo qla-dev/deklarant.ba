@@ -166,7 +166,7 @@ class ProcessPdfToImagesTest extends TestCase
         $mockProcess->method('getErrorOutput')->willReturn('Magick CLI error');
 
         $client = new Client();
-        $job = new ProcessPdfToImages($task, $client, $this->createOllamaService($client));
+        $job = new ProcessPdfToImages($task, $this->createOllamaService($client), $client);
         $job->setProcessFactory(function ($command) use ($mockProcess) {
             return $mockProcess;
         });
@@ -183,7 +183,7 @@ class ProcessPdfToImagesTest extends TestCase
         $mockProcess->method('run')->willReturn(0);
 
         $client = $client ?? new Client();
-        $job = new ProcessPdfToImages($task, $client, $this->createOllamaService($client));
+        $job = new ProcessPdfToImages($task, $this->createOllamaService($client), $client);
         $job->setProcessFactory(function ($command) use ($mockProcess) {
             $this->assertContains('magick', $command);
             $imagePathTemplate = end($command);

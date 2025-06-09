@@ -3,6 +3,7 @@
 namespace App\Interfaces;
 
 use Psr\Http\Message\ResponseInterface;
+use GuzzleHttp\Client;
 
 interface LLMCaller
 {
@@ -11,7 +12,7 @@ interface LLMCaller
      *
      * @param string $prompt The input prompt for the language model.
      * @param array|null $images Optional images to include in the request.
-     * @return ResponseInterface The response from the language model API.
+     * @return string The response from the language model API.
      */
-    public function callLLM(string $prompt, ?array $images = null): ResponseInterface;
+    public function callLLM(Client $client, string $prompt, ?array $images = null): string;
 }

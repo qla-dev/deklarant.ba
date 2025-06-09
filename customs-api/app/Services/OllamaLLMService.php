@@ -10,23 +10,10 @@ use Psr\Http\Message\ResponseInterface;
 
 class OllamaLLMService implements LLMCaller
 {
-    protected ?Client $client = null;
-
-    public function __construct(Client $client = null)
-    {
-        if ($client !== null) {
-            $this->client = $client;
-        }
-    }
-
     /**
      * Call the Language Model API with a given prompt and optional images.
-     *
-     * @param string $prompt The input prompt for the language model.
-     * @param array|null $images Optional images to include in the request.
-     * @return ResponseInterface The response from the language model API.
      */
-    public function callLLM(string $prompt, ?array $images = null): ResponseInterface
+    public function callLLM(Client $client, string $prompt, ?array $images = null): string
     {
         $maxRetries = 3;
 
@@ -48,8 +35,14 @@ class OllamaLLMService implements LLMCaller
                     $body['json']['images'] = $images;
                 }
 
-                $response = $this->client->post(getenv('OLLAMA_URL') . '/api/generate', $body);
-                return $response;
+                $response = $client->post(getenv('OLLAMA_URL') . '/api/generate', $body);
+                $responseData = json_decode($response->getBody()->getContents(), true);
+                // check if response data contains "error" key. If it does then raise exception with "message" key
+                // if "message" key is unavailable then raise exception with generic message text
+                if (isset($responseData['error'])) {
+                    throw new Exception($responseData['error']);
+                }
+                return $responseData['response'];
             } catch (Exception $e) {
                 Log::error('Error in LLM. Retrying: ' . $e->getMessage());
                 if ($attempt === $maxRetries) {
