@@ -931,4 +931,69 @@ table.dataTable thead th.dtfc-fixed-right {
     background-color: #223644 !important;
 }
 
+/* Sticky first column (row number in tbody is <th>) */
+[data-bs-theme=dark] .tabel-layout th:first-child,
+[data-bs-theme=dark] .tabel-layout td:first-child {
+  background-color: #282c30!important;
+}
+
+/* Sticky last column: "Ukupno" */
+[data-bs-theme=dark] .tabel-layout th:last-child,
+[data-bs-theme=dark] .tabel-layout td:last-child {
+
+   background-color: #282c30!important;
+
+}
+
+[data-bs-theme=dark] .tabel-layout th, 
+[data-bs-theme=dark] .tabel-layout td {
+    border-color: #343a40!important; /* Darker border for contrast */
+}
+
+[data-bs-theme=dark] .table-active {
+    --vz-table-bg-state: #282c30!important;
+}
+
+.swal2-close:hover {color:gray!important}
+
+   @media (min-height: 535.8px) {
+
+   
+ #vise-opcija-btn {
+    display: none !important;
+  } }
+
+
+   @media (max-height: 535.7px) {
+
+   
+ .pc-opcije-button {
+    display: none !important;
+  } }
+
+
+
+@media screen and (max-width: 767px) and (orientation: portrait) {
+    .content-desktop {
+        display: none !important;
+    }
+
+    .content-mobile-warning {
+        display: flex !important;
+    }
+}
+
+@media screen and (max-width: 767px) and (orientation: landscape) {
+    .content-desktop {
+        display: flex !important;
+    }
+
+    .content-mobile-warning {
+        display: none !important;
+    }
+}
+
+
+
+
 
