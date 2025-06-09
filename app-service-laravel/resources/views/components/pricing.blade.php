@@ -69,6 +69,8 @@
    href="javascript:void(0);"
    class="btn btn-info w-100 mt-auto text-white"
    data-package-id="{{ $package->id }}"
+   data-duration="{{ $package->duration }}"
+   data-available-scans="{{ $package->available_scans }}"
    data-bs-toggle="modal"
    data-bs-target="#paymentChoiceModal">
    Započni
