@@ -208,6 +208,7 @@ public function update(Request $request, $invoiceId)
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Deklaracija s unesenim ID-om nije pronađena'], 404);
         } catch (Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Neuspješno skeniranje deklaracije. Pokušajte ponovo kasnije: ' . $e->getMessage());
             return response()->json(['error' => 'Neuspješno skeniranje deklaracije. Pokušajte ponovo kasnije'], 500);
         }
 
