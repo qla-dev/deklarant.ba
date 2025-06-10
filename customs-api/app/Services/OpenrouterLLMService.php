@@ -51,15 +51,19 @@ class OpenrouterLLMService implements LLMCaller
 
                 $headers = [
                     'Authorization' => 'Bearer ' . getenv('OPENROUTER_API_KEY'),
+                    'Helicone-Auth' => 'Bearer ' . getenv('HELICONE_API_KEY'),
                     'Content-Type' => 'application/json',
                 ];
 
-                $response = $client->post('https://openrouter.ai/api/v1/chat/completions', [
+                $response = $client->post('https://openrouter.helicone.ai/api/v1/chat/completions', [
                     'headers' => $headers,
                     'json' => $body['json'],
                 ]);
                 $responseData = json_decode($response->getBody()->getContents(), true);
-                $responseText = $responseData["choices"][0]["message"]["content"];
+                $responseText = '';
+                if (is_array($responseData) && isset($responseData["choices"][0]["message"]["content"])) {
+                    $responseText = $responseData["choices"][0]["message"]["content"];
+                }
                 if (substr_count($responseText, "```") < 2) {
                     $model = 'qwen/qwen2.5-vl-72b-instruct:free';
                     throw new \Exception("Response didn't contain ```");
