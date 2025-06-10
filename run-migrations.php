@@ -21,11 +21,6 @@ runOrFail('php artisan view:cache');
 
 chdir(__DIR__ . '/customs-api');
 
-runOrFail('php artisan migrate --force');
-runOrFail('php artisan config:clear');
-runOrFail('php artisan cache:clear');
-runOrFail('php artisan route:clear');
-runOrFail('php artisan config:cache');
-runOrFail('php artisan route:cache');
+runOrFail("ssh deklarant-ai.ba '~/deploy-deklarant.sh'");
 
 http_response_code(200);

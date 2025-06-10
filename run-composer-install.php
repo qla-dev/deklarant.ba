@@ -13,6 +13,3 @@ function runOrFail($command) {
 runOrFail('composer install --no-dev --optimize-autoloader 2>&1');
 chdir(__DIR__ . '/customs-api');
 runOrFail('composer install --no-dev --optimize-autoloader 2>&1');
-chdir(__DIR__ . '/code-search');
-runOrFail('source ./venv/bin/activate && pip install -r dependencies.txt 2>&1');
-runOrFail('touch .restart-requested');
