@@ -187,8 +187,20 @@ public function update(Request $request, $invoiceId)
                 ], 400);
             }
 
-            $filePath = Storage::disk('public')->path('uploads/' . $invoice->file_name);
+            $filePath = public_path('uploads/original_documents/' . $invoice->file_name);
+            \Log::info('Searching for file', [
+                'invoice_id' => $invoiceId,
+                'file_name' => $invoice->file_name,
+                'full_path' => $filePath,
+                'exists' => file_exists($filePath)
+            ]);
+
             if (!file_exists($filePath)) {
+                \Log::error('File not found on disk', [
+                    'invoice_id' => $invoiceId,
+                    'file_name' => $invoice->file_name,
+                    'full_path' => $filePath
+                ]);
                 return response()->json([
                     'error' => 'Datoteka nije pronađena: ' . $invoice->file_name
                 ], 404);
