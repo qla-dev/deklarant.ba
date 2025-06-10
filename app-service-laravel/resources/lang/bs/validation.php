@@ -101,13 +101,14 @@ return [
     'starts_with'          => 'Polje :attribute mora počinjati sa: :values',
     'string'               => 'Polje :attribute mora biti tekst',
     'timezone'             => 'Polje :attribute mora biti validna vremenska zona',
-    'unique'               => 'Polje :attribute je već zauzeto',
+    'unique'               => 'Nažalost, odabrani :attribute je već zauzet!',
     'uploaded'             => 'Fajl :attribute nije uspješno otpremljen',
     'url'                  => 'Format polja :attribute nije validan',
     'uuid'                 => 'Polje :attribute mora biti validan UUID',
 
     'attributes' => [
-        'email' => 'email adresa',
+        'email' => 'email',
+        'username' => 'username',
         'password' => 'lozinka',
         'name' => 'ime',
         'invoice' => 'deklaracija',

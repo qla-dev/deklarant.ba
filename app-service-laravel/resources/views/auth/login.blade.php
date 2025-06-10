@@ -203,6 +203,11 @@ overflow-y: hidden;
     
     }
 
+    .header-btn2:disabled {
+        opacity: 0.8;
+        cursor: not-allowed;
+        background-color: #4db8e3 !important; /* Brighter version of the info color */
+    }
 
     </style>
   
@@ -377,7 +382,10 @@ overflow-y: hidden;
         </div>
       </div>
 
-      <button type="submit" class="header-btn2 rounded-1 w-100 text-white" style="border:unset" id="login-btn">Prijavi se</button>
+      <button type="submit" class="header-btn2 rounded-1 w-100 text-white" style="border:unset" id="login-btn">
+        <span class="button-text">Prijavi se</span>
+        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+      </button>
 
       <div class="divider">ili</div>
 
@@ -426,7 +434,10 @@ overflow-y: hidden;
         </div>
       </div>
 
-      <button type="submit" class="header-btn2 rounded-1 w-100 mt-3 text-white" style="border:unset">Napravi račun</button>
+      <button type="submit" class="header-btn2 rounded-1 w-100 mt-3 text-white" style="border:unset" id="register-btn">
+        <span class="button-text">Napravi račun</span>
+        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+      </button>
 
       <div class="text-center mb-3 mt-2">
         <small class="text-muted form-label">Imate svoj račun?
@@ -565,25 +576,38 @@ overflow-y: hidden;
     }
 
     document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById("login-btn").addEventListener("click", async function(event) {
+        const loginBtn = document.getElementById("login-btn");
+        const buttonText = loginBtn.querySelector(".button-text");
+        const spinner = loginBtn.querySelector(".spinner-border");
+
+        loginBtn.addEventListener("click", async function(event) {
             event.preventDefault();
-            console.log("Login button clicked");
-
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password-input").value;
-
-            if (!username || !password) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Nedostaju podaci',
-                    text: 'Molimo unesite korisničko ime i lozinku.'
-                });
-                return;
-            }
-
-            const mac = getMACAddress(); // No more error here 
+            
+            // Disable button and show loader
+            loginBtn.disabled = true;
+            buttonText.classList.add("d-none");
+            spinner.classList.remove("d-none");
 
             try {
+                const username = document.getElementById("username").value;
+                const password = document.getElementById("password-input").value;
+
+                if (!username || !password) {
+                    // Re-enable button and hide loader
+                    loginBtn.disabled = false;
+                    buttonText.classList.remove("d-none");
+                    spinner.classList.add("d-none");
+
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Nedostaju podaci',
+                        text: 'Molimo unesite korisničko ime i lozinku.'
+                    });
+                    return;
+                }
+
+                const mac = getMACAddress();
+
                 const response = await axios.post("/api/auth/login", {
                     username,
                     password,
@@ -595,7 +619,6 @@ overflow-y: hidden;
                 });
 
                 const { redirect } = response.data;
-                // Removed: localStorage.setItem("auth_token", token);
 
                 Swal.fire({
                     icon: 'success',
@@ -607,10 +630,28 @@ overflow-y: hidden;
                     window.location.href = redirect || "/";
                 });
             } catch (error) {
+                // Re-enable button and hide loader
+                loginBtn.disabled = false;
+                buttonText.classList.remove("d-none");
+                spinner.classList.add("d-none");
+                
+                console.error("Login error:", error);
+                
+                let errorMessage = error.response?.data?.message || "Došlo je do greške prilikom prijave. Molimo pokušajte ponovo.";
+                
+                // Translate specific error messages
+                if (errorMessage === "Invalid credentials") {
+                    errorMessage = "Pogrešno korisničko ime ili lozinka";
+                }
+
                 Swal.fire({
-                    icon: 'error',
-                    title: 'Greška',
-                    text: error.response?.data?.message || "Greška prilikom prijave"
+                    icon: "error",
+                    title: "Greška",
+                    text: errorMessage,
+                    confirmButtonText: "U redu",
+                    customClass: {
+                        confirmButton: 'btn btn-info w-xs mt-2',
+                    },
                 });
             }
         });
@@ -619,25 +660,52 @@ overflow-y: hidden;
 
  <!--=====Register logic=======-->
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const form = document.getElementById("registerionForm");
+    document.addEventListener("DOMContentLoaded", function() {
+        const registerBtn = document.getElementById("register-btn");
+        const registerButtonText = registerBtn.querySelector(".button-text");
+        const registerSpinner = registerBtn.querySelector(".spinner-border");
 
-        form.addEventListener("submit", async function (e) {
-            e.preventDefault();
-
-            const macAddress = '11:22:33:44:55'; // optional: make dynamic later
+        document.getElementById("registerionForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            
+            // Disable button and show loader
+            registerBtn.disabled = true;
+            registerButtonText.classList.add("d-none");
+            registerSpinner.classList.remove("d-none");
 
             try {
+                const form = document.getElementById("registerionForm");
                 const formData = new FormData(form);
 
-                const registerResponse = await axios.post("/api/auth/register", formData, {
+                // Check password confirmation before submitting
+                const password = formData.get('password');
+                const confirmPassword = formData.get('confirm_password');
+
+                if (password !== confirmPassword) {
+                    // Re-enable button and hide loader
+                    registerBtn.disabled = false;
+                    registerButtonText.classList.remove("d-none");
+                    registerSpinner.classList.add("d-none");
+
+                    Swal.fire({
+                        icon: "error",
+                        title: "Greška",
+                        text: "Potvrda lozinke se ne podudara",
+                        confirmButtonText: "U redu",
+                        customClass: {
+                            confirmButton: 'btn btn-info w-xs mt-2',
+                        },
+                    });
+                    return;
+                }
+
+                const response = await axios.post("/api/auth/register", formData, {
                     headers: {
-                        "Content-Type": "multipart/form-data",
-                        "MAC-Address": macAddress
+                        "Content-Type": "multipart/form-data"
                     }
                 });
 
-                const { token, user, message } = registerResponse.data;
+                const { token, user, message } = response.data;
 
                 // Save token & user info
                 localStorage.setItem("auth_token", token);
@@ -655,13 +723,31 @@ overflow-y: hidden;
                 });
 
             } catch (error) {
-                console.error("Registration failed:", error);
-                const msg = error.response?.data?.message || "Došlo je do greške prilikom registracije";
+                // Re-enable button and hide loader on error
+                registerBtn.disabled = false;
+                registerButtonText.classList.remove("d-none");
+                registerSpinner.classList.add("d-none");
+                
+                console.error("Registration error:", error);
+                
+                let errorMessage = error.response?.data?.message || "Došlo je do greške prilikom registracije. Molimo pokušajte ponovo.";
+                
+                // Get the first validation error if it exists
+                if (error.response?.data?.errors) {
+                    const firstError = Object.values(error.response.data.errors)[0];
+                    if (Array.isArray(firstError) && firstError.length > 0) {
+                        errorMessage = firstError[0];
+                    }
+                }
 
                 Swal.fire({
-                    icon: 'error',
-                    title: 'Greška',
-                    text: msg
+                    icon: "error",
+                    title: "Greška",
+                    text: errorMessage,
+                    confirmButtonText: "U redu",
+                    customClass: {
+                        confirmButton: 'btn btn-info w-xs mt-2',
+                    },
                 });
             }
         });
