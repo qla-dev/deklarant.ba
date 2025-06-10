@@ -41,9 +41,9 @@ class SupplierController extends Controller
                 'owner' => 'nullable|string',
                 'address' => 'nullable|string',
                 'avatar' => 'nullable|string',
-                'tax_id' => 'required|string|unique:suppliers,tax_id',
-                'contact_email' => 'nullable|email|unique:suppliers,contact_email',
-                'contact_phone' => 'required|string|unique:suppliers,contact_phone',
+                'tax_id' => 'nullable|string',
+                'contact_email' => 'nullable|string',
+                'contact_phone' => 'nullable|string',
                 'synonyms' => 'nullable|array',
             ]);
     
