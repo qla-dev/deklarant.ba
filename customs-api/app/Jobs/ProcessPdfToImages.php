@@ -56,8 +56,8 @@ class ProcessPdfToImages extends ProcessUploadedFile
             }
 
             // Clean up temporary directory
-            // array_map('unlink', glob("$tempDir/*"));
-            // rmdir($tempDir);
+            array_map('unlink', glob("$tempDir/*"));
+            rmdir($tempDir);
 
             return $imagesBase64;
         } catch (\Exception $e) {
