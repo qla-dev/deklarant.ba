@@ -14,6 +14,7 @@ use Exception;
 use App\Jobs\StoreInvoiceItemsJob;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log; // At the top of your controller
+use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Support\Facades\DB;
 
@@ -185,7 +186,13 @@ public function update(Request $request, $invoiceId)
                 ], 400);
             }
 
-            $filePath = storage_path('app/uploads/' . $invoice->file_name);
+            $filePath = Storage::disk('public')->path('uploads/' . $invoice->file_name);
+            if (!file_exists($filePath)) {
+                return response()->json([
+                    'error' => 'Datoteka nije pronađena: ' . $invoice->file_name
+                ], 404);
+            }
+
             $aiService = app(AiService::class);
 
             $response = $aiService->uploadDocument($filePath, $invoice->file_name);

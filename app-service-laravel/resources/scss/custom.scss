@@ -813,7 +813,34 @@ thead.has-action + tbody tr > td:last-child, thead.has-action + tbody tr > th:la
     }
 
 
+.avatar-class {
+    object-fit: cover; 
+    aspect-ratio: 1/1;
+     max-width: 50px;
+      max-height: 50px; 
+      min-width: 50px; 
+      min-height: 50px; 
+      display: block;
+      padding-right: 0px;
+       padding-left: 0px;
+        padding: 0.15rem; 
+        border: 0;
+         background-color: transparent;
+}
 
+.avatar-class2 {
+    object-fit: cover; 
+    aspect-ratio: 1/1;
+ 
+      display: block;
+      padding-right: 0px;
+       padding-left: 0px;
+        padding: 0.15rem; 
+        border: 0;
+         background-color: transparent;
+ 
+
+}
 
 
 @media (max-width: 768px) {

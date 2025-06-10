@@ -162,7 +162,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     data: 'name', title: 'Naziv firme',
                     render: (data, type, row) => {
                         const avatar = row.avatar
-                            ? `<img src="/storage/uploads/importers/${row.avatar}" class="rounded-circle me-2" width="40" height="40" style="object-fit: cover;">`
+                            ? `<img src="/uploads/importers/${row.avatar}" class="rounded-circle me-2" width="40" height="40" style="object-fit: cover;">`
                             : `<div class="rounded-circle avatar-initials d-flex align-items-center justify-content-center text-white shadow-sm me-2" style="width: 30px; height: 30px; background-color: #299cdb; font-size: 14px;">${row.name?.[0]?.toUpperCase() || "?"}</div>`;
                         return `<div class="d-flex align-items-center">${avatar}<span>${data}</span></div>`;
                     }

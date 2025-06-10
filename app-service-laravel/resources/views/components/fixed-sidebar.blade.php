@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            const fileUrl = `/storage/uploads/${fileName}`;
+            const fileUrl = `/uploads/${fileName}`;
             document.getElementById("originalDocFrame").src = fileUrl;
             const modal = new bootstrap.Modal(document.getElementById("originalDocumentModal"));
             modal.show();

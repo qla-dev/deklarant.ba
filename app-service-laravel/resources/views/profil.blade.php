@@ -262,9 +262,9 @@
         <div class="col-auto">
             <div class="avatar-lg position-relative" id="avatar-wrapper">
                 <!-- Avatar image -->
-                <img id="user-avatar" class="img-thumbnail rounded-circle">
+                <img class="user-avatar img-thumbnail rounded-circle avatar-class2">
 
-                <div id="avatar-fallback" class="rounded-circle d-flex justify-content-center align-items-center text-white fw-bold d-none"
+                <div class="avatar-fallback rounded-circle d-flex justify-content-center align-items-center text-white fw-bold d-none"
                     style="width: 100%; height: 100%; font-size: 2.5rem;">
                     <!-- initial goes here -->
                 </div>
@@ -280,7 +280,7 @@
             </div>
         </div>
 
-        <div class="col">
+        <div class="col-4">
             <div class="p-2">
                 <!-- Username filled dynamically -->
                 <div class="d-flex align-items-center  flex-wrap">
@@ -1029,10 +1029,10 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const csrftoken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        const avatarBasePath = "/storage/uploads/avatars/";
+        const avatarBasePath = "/uploads/avatars/";
 
-        const avatarImg = document.getElementById("user-avatar");
-        const avatarFallback = document.getElementById("avatar-fallback");
+        const avatarImg = document.querySelector(".user-avatar");
+        const avatarFallback = document.querySelector(".avatar-fallback");
 
         if (!token || !user) {
             alert("Niste prijavljeni.");
@@ -1125,9 +1125,13 @@
                 const updatedAvatar = update.user.avatar;
                 const imgPath = `${avatarBasePath}${updatedAvatar}?t=${Date.now()}`;
 
-                avatarFallback.classList.remove("d-none");
-                avatarImg.classList.add("d-none");
+                // Update all avatar instances using the utility function
+                populateUserAvatar("user-avatar", "avatar-fallback", {
+                    ...user,
+                    avatar: updatedAvatar
+                });
 
+                // Also update the profile avatar specifically
                 const img = new Image();
                 img.onload = function () {
                     avatarImg.src = imgPath;
@@ -1336,7 +1340,7 @@
                     }
                 }
 
-                showSuccess("Podaci su uspješno ažurirani.");
+                showSuccess("Podaci su uspješno ažurirani");
             } catch (err) {
                 console.error("Greška:", err);
                 showError(err);
@@ -1541,7 +1545,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const input = document.getElementById("background-img-input");
         const csrftoken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-        const backgroundUploadPath = "/storage/uploads/profile_backgrounds/";
+        const backgroundUploadPath = "/uploads/profile_backgrounds/";
         const defaultImagePath = "/images/profile-bg.jpg";
 
         if (!token || !user) {

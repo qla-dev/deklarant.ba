@@ -110,8 +110,8 @@
                 <div class="p-2 text-center d-flex flex-column h-100 w-100 justify-content-center align-items-center">
                     <div class="card-body text-center p-2">
                         <div class="row d-flex text-center mb-3 fs-4" style="justify-content: center!important; height: 50px;">
-                            <img id="user-avatar-middle" class="img-thumbnail rounded-circle d-none"  style="object-fit: cover; aspect-ratio: 1/1; max-width: 50px; max-height: 50px; min-width: 50px; min-height: 50px; display: block;padding-right: 0px; padding-left: 0px; padding: 0.15rem; border: 0; background-color: transparent;">
-                            <div id="avatar-middle-fallback" class="rounded-circle bg-info d-flex justify-content-center align-items-center text-white" style="width: 50px; height: 50px;"></div>
+                            <img class="user-avatar img-thumbnail rounded-circle d-none avatar-class">
+                            <div class="avatar-fallback rounded-circle bg-info d-flex justify-content-center align-items-center text-white" style="width: 50px; height: 50px;"></div>
                         </div>
                         <h6 class="fw-bold mb-1 mt-1 logo-span welcome">Dobrodošli na <strong class="logo-span">deklarant<span class="ai-span">.ai</span></strong> {{ Auth::user()->username ?? '' }}</h6>
                         <p class="fs-7 mb-1 text-info" id="user-package-display"></p>
@@ -900,43 +900,6 @@ if (scanSpeedEl) {
 
 
 
-<!-- avatar upload -->
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-         
-
-        if (user) {
-            const welcome = document.getElementById("welcome-user");
-            if (welcome) {
-                welcome.innerText = `Dobrodošli na deklarant.ai {{ Auth::user()->username ?? '' }}`;
-            }
-
-            const avatarImg = document.getElementById("user-avatar-middle");
-            const avatarFallback = document.getElementById("avatar-middle-fallback");
-
-            const avatarUrl = `/storage/uploads/avatars/${user.avatar}`;
-            const firstLetter = (user.username || "U")[0].toUpperCase();
-
-            if (avatarFallback) {
-                avatarFallback.textContent = firstLetter;
-            }
-
-            if (avatarImg) {
-                const testImg = new Image();
-                testImg.onload = function() {
-                    avatarImg.src = avatarUrl;
-                    avatarImg.classList.remove("d-none");
-                    if (avatarFallback) avatarFallback.classList.add("d-none");
-                };
-                testImg.onerror = function() {
-                    avatarImg.classList.add("d-none");
-                    if (avatarFallback) avatarFallback.classList.remove("d-none");
-                };
-                testImg.src = avatarUrl;
-            }
-        }
-    });
-</script>
 
 
 
@@ -1275,4 +1238,15 @@ if (scanSpeedEl) {
 
 
 
+@endsection
+
+@section('script')
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        if (user) {
+            // Populate middle avatar
+            populateUserAvatar("user-avatar-middle", "avatar-middle-fallback", user);
+        }
+    });
+</script>
 @endsection

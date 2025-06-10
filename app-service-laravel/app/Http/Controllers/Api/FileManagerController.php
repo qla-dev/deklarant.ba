@@ -24,26 +24,32 @@ class FileManagerController extends Controller
         $fileName = pathinfo($originalName, PATHINFO_FILENAME);
         $extension = $file->getClientOriginalExtension();
 
-        $disk = Storage::disk($disk);
-        $directory = $folder ? "uploads/{$folder}" : 'uploads';
-        $fullPath = $directory . '/' . $originalName;
+        // Create the uploads directory if it doesn't exist
+        $uploadPath = public_path('uploads/' . $folder);
+        if (!file_exists($uploadPath)) {
+            mkdir($uploadPath, 0755, true);
+        }
+
+        $fullPath = $uploadPath . '/' . $originalName;
         $finalName = $originalName;
         $counter = 1;
 
-        while ($disk->exists($fullPath)) {
+        // Check if file exists and generate new name if needed
+        while (file_exists($fullPath)) {
             $finalName = $fileName . "({$counter})." . $extension;
-            $fullPath = $directory . '/' . $finalName;
+            $fullPath = $uploadPath . '/' . $finalName;
             $counter++;
         }
 
-        $storedPath = $disk->putFileAs($file, $fullPath);
+        // Move the uploaded file
+        $file->move($uploadPath, $finalName);
 
         return [
             'message' => "Datoteka je uspješno učitana",
             'original_name' => $originalName,
             'stored_as' => $finalName,
-            'path' => $storedPath,
-            'url' => asset('storage/' . $storedPath),
+            'path' => 'uploads/original_documents/' . $finalName,
+            'url' => asset('uploads/original_documents/' . $finalName),
         ];
     }
 

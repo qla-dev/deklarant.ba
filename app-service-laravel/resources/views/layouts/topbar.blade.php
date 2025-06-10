@@ -229,10 +229,9 @@
 
                             </span>
 
-                            <img id="topbar-avatar" class="rounded-circle header-profile-user d-none" width="32"
+                            <img class="user-avatar rounded-circle header-profile-user d-none" width="32"
                                 height="32" />
-                            <div id="topbar-avatar-fallback"
-                                class="rounded-circle bg-info text-white d-flex justify-content-center align-items-center"
+                            <div class="avatar-fallback rounded-circle bg-info text-white d-flex justify-content-center align-items-center"
                                 style="width: 32px; height: 32px; font-size: 14px; padding: 12px!important;">
                             </div>
 
@@ -352,59 +351,57 @@
 </script>
 
 
+
+<!-- avatar logic -->
 <script>
-    document.addEventListener("DOMContentLoaded", async function () {
+    // Utility function for handling avatars
+    function populateUserAvatar(avatarImgClass, avatarFallbackClass, user) {
+        if (!user) return;
 
+        const avatarImgs = document.getElementsByClassName(avatarImgClass);
+        const avatarFallbacks = document.getElementsByClassName(avatarFallbackClass);
+        
+        if (!avatarImgs.length || !avatarFallbacks.length) return;
 
-        const avatarBasePath = "/storage/uploads/avatars/";
-
-
-
-        const avatarImg = document.getElementById("user-avatar");
-        const avatarFallback = document.getElementById("avatar-fallback");
-
-        const topbarImg = document.getElementById("topbar-avatar");
-        const topbarFallback = document.getElementById("topbar-avatar-fallback");
-
-        // Show initials immediately
+        const avatarUrl = `/uploads/avatars/${user.avatar}`;
         const firstLetter = (user.username || "U")[0].toUpperCase();
-        if (avatarFallback) avatarFallback.textContent = firstLetter;
-        if (topbarFallback) topbarFallback.textContent = firstLetter;
 
-        try {
-            const res = await fetch(`/api/users/${user.id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+        // Set fallback content for all fallback elements
+        Array.from(avatarFallbacks).forEach(fallback => {
+            fallback.textContent = firstLetter;
+        });
+
+        // Test if avatar image exists
+        const testImg = new Image();
+        testImg.onload = function() {
+            Array.from(avatarImgs).forEach(img => {
+                img.src = avatarUrl;
+                img.classList.remove("d-none");
             });
-            const data = await res.json();
-            const avatar = data.user?.avatar;
+            Array.from(avatarFallbacks).forEach(fallback => {
+                fallback.classList.add("d-none");
+            });
+        };
+        testImg.onerror = function() {
+            Array.from(avatarImgs).forEach(img => {
+                img.classList.add("d-none");
+            });
+            Array.from(avatarFallbacks).forEach(fallback => {
+                fallback.classList.remove("d-none");
+            });
+        };
+        testImg.src = avatarUrl;
+    }
 
-            if (avatar) {
-                const imgPath = `${avatarBasePath}${avatar}`;
-
-                const img = new Image();
-                img.onload = () => {
-                    // Profile image
-                    if (avatarImg) {
-                        avatarImg.src = imgPath;
-                        avatarImg.classList.remove("d-none");
-                        avatarFallback.classList.add("d-none");
-                    }
-                    // Topbar image
-                    if (topbarImg) {
-                        topbarImg.src = imgPath;
-                        topbarImg.style.display = "block";
-                        topbarFallback.style.display = "none";
-                    }
-                };
-                img.onerror = () => {
-                    console.warn("Avatar image failed to load.");
-                };
-                img.src = imgPath;
+    document.addEventListener("DOMContentLoaded", function() {
+        if (user) {
+            const welcome = document.getElementById("welcome-user");
+            if (welcome) {
+                welcome.innerText = `Dobrodošli na deklarant.ai {{ Auth::user()->username ?? '' }}`;
             }
-        } catch (err) {
-            console.error("Failed to fetch user or avatar:", err);
+
+            // Populate all avatars
+            populateUserAvatar("user-avatar", "avatar-fallback", user);
         }
     });
 </script>
@@ -462,7 +459,7 @@
             const topbarAvatar = document.getElementById("topbar-avatar");
 
             if (topbarAvatar) {
-                const avatarUrl = `/storage/uploads/avatars/${user.avatar}`;
+                const avatarUrl = `/uploads/avatars/${user.avatar}`;
 
                 const testImg = new Image();
                 testImg.onload = function () {
