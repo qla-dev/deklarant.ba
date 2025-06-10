@@ -65,7 +65,7 @@ class OpenrouterLLMService implements LLMCaller
                     $responseText = $responseData["choices"][0]["message"]["content"];
                 }
                 if (substr_count($responseText, "```") < 2) {
-                    $model = 'qwen/qwen2.5-vl-72b-instruct:free';
+                    $model = 'qwen/qwen2.5-vl-32b-instruct:free';
                     throw new \Exception("Response didn't contain ```");
                 }
                 return $responseText;
