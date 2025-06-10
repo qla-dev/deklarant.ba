@@ -48,8 +48,8 @@ class FileManagerController extends Controller
             'message' => "Datoteka je uspješno učitana",
             'original_name' => $originalName,
             'stored_as' => $finalName,
-            'path' => 'uploads/original_documents/' . $finalName,
-            'url' => asset('uploads/original_documents/' . $finalName),
+            'path' => 'uploads/' . $folder . '/' . $finalName,
+            'url' => asset('uploads/' . $folder . '/' . $finalName),
         ];
     }
 
@@ -62,9 +62,11 @@ class FileManagerController extends Controller
 
     public function uploadInvoiceFile(Request $request)
     {
+        // Add folder name to request
+        $request->merge(['folder' => 'original_documents']);
+        
         // Handle file upload and get file data
         $fileData = $this->handleFileUpload($request, "public");
-
 
         // Extract file information from the response
         $originalName = $fileData['stored_as'];
