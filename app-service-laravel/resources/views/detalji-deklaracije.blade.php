@@ -99,7 +99,7 @@
                     <div class="card-body p-4 border-top border-top-dashed ">
                         <div class="row pt-1">
                             <div class="col-8 text-start">
-                                <h6 class="text-uppercase fw-semibold mb-3">Podaci o klijentu</h6>
+                                <h6 class="text-uppercase fw-semibold mb-3">Klijent</h6>
                                 <p class="fw-medium mb-2" id="supplier-name"></p>
                                 <p class="text-muted mb-1" id="supplier-address"></p>
                                 <p class="text-muted mb-1"><span>Tel: </span><span id="supplier-phone"></span></p>
@@ -110,7 +110,7 @@
                             </div>
                             <!--end col-->
                             <div class="col-4 text-end">
-                                <h6 class="text-uppercase fw-semibold mb-3">Podaci o dobavljaču</h6>
+                                <h6 class="text-uppercase fw-semibold mb-3">Dobavljač</h6>
                                 <p class="fw-medium mb-2" id="carrier-name"></p>
                                 <p class="text-muted mb-1" id="carrier-address-line-1"></p>
                                 <p class="text-muted mb-1"><span>Tel:</span><span id="carrier-phone"></span></p>
