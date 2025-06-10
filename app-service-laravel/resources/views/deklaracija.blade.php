@@ -159,9 +159,9 @@
                      
                     <div class="mt-4">
                         <h6 class="text-muted text-uppercase fw-semibold">Osnovni podaci</h6>
-                        <input type="text" class="form-control mb-2" id="company-address" name="name" placeholder="Ime kompanije" value="{{ Auth::user()->company['name'] ?? '' }}">
-                        <input type="text" class="form-control mb-2" id="company-id" name="zip" placeholder="ID kompanije" value="{{ Auth::user()->company['id'] ?? '' }}">
-                        <input type="email" class="form-control" id="company-tel" name="tel" placeholder="Adresa" value="{{ Auth::user()->company['address'] ?? '' }}">
+                        <input type="text" class="form-control mb-2" id="company-address" name="name" placeholder="Ime kompanije" disabled value="{{ Auth::user()->company['name'] ?? '' }}">
+                        <input type="text" class="form-control mb-2" id="company-id" name="zip" placeholder="ID kompanije" disabled value="{{ Auth::user()->company['id'] ?? '' }}">
+                        <input type="email" class="form-control" id="company-tel" name="tel" placeholder="Adresa" disabled value="{{ Auth::user()->company['address'] ?? '' }}">
                     </div>
 
                     <!-- Incoterm Dropdown Section -->
@@ -242,7 +242,7 @@
                 <div class="row g-4 mb-3">
                     <div class="col-lg-4 text-start">
                         <label class="text-muted text-uppercase fw-semibold mb-1">ID Deklaracije</label>
-                        <input type="text" class="form-control" id="invoice-no1" name="invoice_no" placeholder="Broj fakture">
+                        <input type="text" class="form-control" id="invoice-no1" name="invoice_no" placeholder="Broj fakture" disabled>
                     </div>
                     <div class="col-lg-4 text-center">
                         <label class="d-flex justify-content-center text-muted text-uppercase fw-semibold mb-1">Datum</label>
@@ -250,7 +250,7 @@
                     </div>
                     <div class="col-lg-4 text-end">
                         <label class="text-muted text-uppercase fw-semibold mb-1">Ukupan iznos</label>
-                        <input type="text" class="form-control text-end" id="total-amount" name="total_amount" placeholder="0.00 KM">
+                        <input type="text" class="form-control text-end" id="total-amount" name="total_amount" placeholder="0.00 KM" disabled>
                     </div>
                 </div>
             </div>

@@ -96,17 +96,11 @@
         // Check all required fields
         checkRequired("billing-name", "Naziv klijenta");
         checkRequired("billing-address-line-1", "Adresa klijenta");
-        checkRequired("billing-tax-no", "PIB klijenta");
-        checkRequired("billing-phone-no", "Telefon klijenta");
-        checkRequired("email", "Email klijenta");
-        checkRequired("supplier-owner", "Vlasnik");
+ 
 
         checkRequired("carrier-name", "Naziv dobavljača");
         checkRequired("carrier-address", "Adresa dobavljača");
-        checkRequired("carrier-tax", "PIB dobavljača");
-        checkRequired("carrier-tel", "Telefon dobavljača");
-        checkRequired("carrier-email", "Email dobavljača");
-        checkRequired("carrier-owner", "Vlasnik");
+
 
         if (missingFields.length > 0) {
             Swal.fire("Greška", "Obavezna polja nisu popunjena:\n" + missingFields.join(", "), "error");
