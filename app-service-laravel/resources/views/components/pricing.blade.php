@@ -67,7 +67,7 @@
                     @else
                   <a id="btnAction-{{ $package->id }}"
    href="javascript:void(0);"
-   class="btn btn-info w-100 mt-auto text-white"
+   class="btn btn-info w-100 mt-auto text-white {{ $loop->iteration > 1 ? 'disabled' : '' }}"
    data-package-id="{{ $package->id }}"
    data-duration="{{ $package->duration }}"
    data-available-scans="{{ $package->available_scans }}"
