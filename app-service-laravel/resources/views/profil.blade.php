@@ -234,7 +234,10 @@
         /* or set fixed px: 1200px, 1400px */
     }
 
-
+    .avatar-fallback {
+        background-color: #f8f9fa !important;
+        color: #6c757d !important;
+    }
 
     /* Wrapper for search input */
 </style>
