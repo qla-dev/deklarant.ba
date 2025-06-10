@@ -364,6 +364,22 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/bs.js"></script>
 
+<script>
+    // Assume this value is set dynamically
+    let EditingMode = 0; // Change to 1 for testing other case
+
+    // Define and expose global_invoice_id globally
+    if (typeof window !== "undefined") {
+      if (EditingMode === 0) {
+        window.global_invoice_id = localStorage.getItem("scan_invoice_id");
+      } else {
+        window.global_invoice_id = 117;
+      }
+    }
+
+    // Test output
+    console.log("Global Invoice ID in script 1:", window.global_invoice_id);
+  </script>
 
 <!-- Scan and other logic script -->
 <script>
@@ -411,7 +427,7 @@
         window.skipPrefillParties = false; // NEW: skip prefill after manual clear
 
         function getInvoiceId() {
-            const id = localStorage.getItem("scan_invoice_id");
+            const id = window.global_invoice_id;
             console.log(" Invoice ID:", id);
             return id;
         }
@@ -1242,7 +1258,7 @@
 
 
         async function fetchAndPrefillParties() {
-            const taskId = localStorage.getItem("scan_invoice_id");
+            const taskId = window.global_invoice_id;
             if (!taskId || !token) return;
 
             try {
@@ -1434,7 +1450,7 @@
         }
 
         async function fetchAndPrefillSupplierOnly() {
-            const taskId = localStorage.getItem("scan_invoice_id");
+            const taskId = window.global_invoice_id;
             if (!taskId || !token) return;
 
             try {
@@ -1550,7 +1566,7 @@
         }
 
         async function fetchAndPrefillImporterOnly() {
-    const taskId = localStorage.getItem("scan_invoice_id");
+    const taskId = window.global_invoice_id;
     if (!taskId || !token) return;
 
     try {
@@ -2135,7 +2151,7 @@
 
             // Handler for supplier AI refill
             $(document).on('click', '#refill-supplier-ai', async function() {
-                const taskId = localStorage.getItem("scan_invoice_id");
+                const taskId = window.global_invoice_id;
                 if (!taskId || !window.token) return;
                 try {
                     const res = await fetch(`/api/invoices/${taskId}/scan/parties`, {
@@ -2172,7 +2188,7 @@
 
             // Handler for importer AI refill
             $(document).on('click', '#refill-importer-ai', async function() {
-                const taskId = localStorage.getItem("scan_invoice_id");
+                const taskId = window.global_invoice_id;
                 if (!taskId || !window.token) return;
                 try {
                     const res = await fetch(`/api/invoices/${taskId}/scan/parties`, {
@@ -2260,7 +2276,7 @@
 <!-- Save logic script final -->
 <script>
     function getInvoiceId() {
-        const scanId = localStorage.getItem("scan_invoice_id");
+        const scanId = window.global_invoice_id;
         if (scanId) {
             console.log("Using scanned invoice ID:", scanId);
             return scanId;
@@ -2747,7 +2763,7 @@
         const match = window.location.pathname.match(/\/deklaracija\/(\d+)/);
         const invoiceId = match ? match[1] : null;
         if (!invoiceId) return console.log("No ID in URL — skipping load-invoice script.");
-        const scanId = localStorage.getItem("scan_invoice_id");
+        const scanId = window.global_invoice_id;
         if (scanId && scanId !== invoiceId) {
             console.warn(`Clearing scan_invoice_id (${scanId}) because it does not match invoiceId (${invoiceId})`);
             localStorage.removeItem("scan_invoice_id");
