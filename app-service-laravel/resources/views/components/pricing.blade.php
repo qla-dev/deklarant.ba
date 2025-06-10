@@ -223,7 +223,7 @@
                 <h5 class="modal-title mb-0 text-white">Izaberi način plaćanja</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Zatvori"></button>
             </div>
-            <div class="modal-body text-center bg-white p-4">
+            <div class="modal-body text-center p-4">
                 <p class="mb-4">Odaberi način na koji želiš izvršiti uplatu</p>
                 <div class="row g-3 justify-content-center">
                     <div class="col-12 col-md-6">
@@ -322,8 +322,8 @@
                 setTimeout(() => {
                     Swal.fire({
                         icon: 'success',
-                        title: 'Pretplata aktivirana!',
-                        text: 'Uspješno ste aktivirali paket',
+                        title: 'Uspješno ste aktivirali trial!',
+                        text: 'Ugodno korištenje želi tim deklarant.ai',
                         timer: 2000,
                         showConfirmButton: false
                     });
