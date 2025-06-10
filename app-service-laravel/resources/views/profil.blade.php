@@ -267,7 +267,7 @@
                 <!-- Avatar image -->
                 <img class="user-avatar img-thumbnail rounded-circle avatar-class2">
 
-                <div class="avatar-fallback rounded-circle d-flex justify-content-center align-items-center text-white fw-bold d-none"
+                <div class="avatar-fallback rounded-circle d-flex justify-content-center align-items-center fw-bold d-none"
                     style="width: 100%; height: 100%; font-size: 2.5rem;">
                     <!-- initial goes here -->
                 </div>
