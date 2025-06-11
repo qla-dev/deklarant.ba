@@ -136,7 +136,8 @@ class InvoiceController extends Controller
                 'total_price' => $data['total_price'] ?? $invoice->total_price,
                 'date_of_issue' => $data['date_of_issue'] ?? $invoice->date_of_issue,
                 'country_of_origin' => $data['country_of_origin'] ?? $invoice->country_of_origin,
-                'importer_id' => $data['importer_id'] ?? $invoice->importer_id
+                'importer_id' => $data['importer_id'] ?? $invoice->importer_id,
+                'supplier_id' => $data['supplier_id'] ?? $invoice->supplier_id
             ]);
     
             // Process items

@@ -50,11 +50,12 @@ Moje spašene deklaracije <span class="counter-value-invoice">0</span><span
                                
                                 <th>Datum</th>
                                  <th>Zemlja porijekla</th>
-                                <th>Dobavljač</th>
-                                                                <th>Cijena</th>
+                                <th>Klijent</th>
+                                                            
                                  <th>Originalni dokument</th>
 
-                                <th>Vlasnik</th>
+                                <th>Status</th>
+                                <th>Cijena</th>
                                 <th style="padding-right: 20px!important;">Akcija</th>
                             </tr>
                         </thead>
@@ -189,15 +190,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 title: 'Dobavljač',
                 defaultContent: '<span class="text-muted">Nepoznato</span>'
             },
+            
+            
             {
-                data: 'supplier.owner',
-                title: 'Vlasnik',
+                data: 'status',
+                title: 'Status',
                 defaultContent: '<span class="text-muted">Nepoznato</span>'
-            },
-            {
-                data: 'total_price',
-                title: 'Cijena',
-                render: data => `${parseFloat(data).toFixed(2)} KM`
             },
             {
                 data: 'file_name',
@@ -218,6 +216,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     };
                     return `<span class="badge ${badgeMap[ext] || 'bg-secondary'} text-uppercase">${ext}</span>`;
                 }
+            },
+            {
+                data: 'total_price',
+                title: 'Cijena',
+                render: data => `${parseFloat(data).toFixed(2)} KM`
             },
             {
                 data: null,

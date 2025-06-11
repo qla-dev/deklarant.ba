@@ -283,7 +283,7 @@ document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
             Swal.fire({
                 icon: "success",
                 title: "Uspješno",
-                text: "Faktura je sačuvana",
+                text: "Deklaracija je sačuvana",
                 confirmButtonText: "U redu",
                 customClass: {
                     confirmButton: "btn btn-info"
