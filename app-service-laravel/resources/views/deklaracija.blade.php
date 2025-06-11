@@ -527,23 +527,7 @@
             console.log("Starting AI scan for task ID:", taskId);
 
             //  Show loader inside scan function
-            Swal.fire({
-                title: 'Skeniranje',
-                html: `
-                    <div class="custom-swal-spinner mb-3"></div>
-                    <div id="swal-status-message">Čeka na obradu</div>
-                    <div class="mt-3 w-100">
-                        <div class="progress" style="height: 8px;">
-                            <div id="scan-progress-bar" class="progress-bar bg-info" role="progressbar" style="width: 0%; transition: width 0.6s;"></div>
-                        </div>
-                        <div class="text-muted mt-1" style="font-size: 0.8rem;">
-                            Preostalo vrijeme: <span id="scan-timer">30s</span>
-                        </div>
-                    </div>
-                `,
-                showConfirmButton: false,
-                allowOutsideClick: false
-            });
+          
 
             try {
                 const response = await fetch(`/api/invoices/${taskId}/scan`, {
@@ -595,158 +579,188 @@
 
 
         async function waitForAIResult(showLoader = true) {
-            const invoice_id = getInvoiceId();
-            if (!invoice_id) return;
+    const invoice_id = getInvoiceId();
+    if (!invoice_id) return;
 
-            let progress = 0;
-            let countdown = 30;
-            let progressBar = null;
-            let timerText = null;
-            let fakeInterval = null;
-            let countdownInterval = null;
+    let progress = 0;
+    let countdown = 50;
+    let progressBar = null;
+    let timerText = null;
+    let fakeInterval = null;
+    let countdownInterval = null;
+    let lastStep = null;
+    let stuckTimer = 0;
 
-            if (showLoader) {
-                Swal.fire({
-                    title: 'Skeniranje',
-                    html: `
+    const stepTextMap = {
+        null: "Pokretanje AI tehnologije u pozadini",
+        conversion: "Konvertovanje dokumenta u potreban format",
+        extraction: "Obrada deklaracije pomoću AI tehnologije",
+        enrichment: "Obogaćivanje podataka i generisanje deklaracije"
+    };
+
+    // Show loader Swal immediately
+    if (showLoader) {
+        Swal.fire({
+            title: "Skeniranje",
+            html: `
                 <div class="custom-swal-spinner mb-3"></div>
                 <div id="swal-status-message">Čeka na obradu</div>
                 <div class="mt-3 w-100">
-                    <div class="progress" style="height: 8px;">
-                        <div id="scan-progress-bar" class="progress-bar bg-info" role="progressbar" style="width: 0%; transition: width 0.6s;"></div>
+                    <div class="progress" style="height: 16px;">
+                        <div id="scan-progress-bar"
+                             class="progress-bar progress-bar-striped progress-bar-animated bg-info fw-bold text-white"
+                             role="progressbar"
+                             style="width: 0%; font-size: 0.85rem; line-height: 16px; transition: width 0.6s ease;"
+                             aria-valuemin="0" aria-valuemax="100">0%
+                        </div>
                     </div>
-                    <div class="text-muted mt-1" style="font-size: 0.8rem;">
-                        Preostalo vrijeme: <span id="scan-timer">30s</span>
+                    <div class="text-muted mt-1" style="font-size: 0.85rem;">
+                        Preostalo vrijeme: <span id="scan-timer">50s</span>
                     </div>
                 </div>
             `,
-                    showConfirmButton: false,
-                    allowOutsideClick: false
-                });
+            showConfirmButton: false,
+            allowOutsideClick: false
+        });
 
-                // Čekaj da se DOM renderuje u SweetAlert-u
-                await new Promise(r => setTimeout(r, 50));
+        await new Promise(r => setTimeout(r, 0)); // Immediately render Swal
+        progressBar = document.getElementById("scan-progress-bar");
+        timerText = document.getElementById("scan-timer");
 
-                progressBar = document.getElementById("scan-progress-bar");
-                timerText = document.getElementById("scan-timer");
+        // Fake loading forward
+        fakeInterval = setInterval(() => {
+            if (progress < 98) {
+                progress += 0.3;
+                updateProgressBar(progress);
+            }
+        }, 400);
 
-                // Fake progress do 35%
-                fakeInterval = setInterval(() => {
-                    if (progress < 50) {
-                        progress += 0.5;
-                        if (progressBar) progressBar.style.width = `${progress}%`;
-                    }
-                }, 200);
+        // Countdown logic (never under 5s)
+        countdownInterval = setInterval(() => {
+            if (countdown > 5) {
+                countdown--;
+            } else {
+                countdown = 13;
+            }
+            if (timerText) timerText.textContent = `${countdown}s`;
+        }, 2000);
+    }
 
-                // Odbrojavanje
-                countdownInterval = setInterval(() => {
-                    countdown--;
-                    if (timerText) timerText.textContent = `${countdown}s`;
-                    if (countdown <= 0) clearInterval(countdownInterval);
-                }, 2000);
+    function updateProgressBar(value) {
+        if (!progressBar) return;
+        const clamped = Math.min(100, Math.max(0, value));
+        progressBar.style.width = `${clamped}%`;
+        progressBar.innerHTML = `${Math.floor(clamped)}%`;
+    }
+
+    while (true) {
+        let status, step, errorMsg;
+
+        try {
+            const res = await fetch(`/api/invoices/${invoice_id}/scan`, {
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            if (!res.ok) throw new Error(`Greška kod API poziva: ${res.status} ${res.statusText}`);
+            const json = await res.json();
+
+            status = json?.status?.status;
+            step = json?.status?.processing_step;
+            errorMsg = json?.status?.error_message;
+
+            // Step progress logic
+            const stepProgress = {
+                conversion: 30,
+                extraction: 50,
+                enrichment: 80
+            };
+            const targetProgress = stepProgress[step] || 10;
+
+            if (step !== lastStep) {
+                stuckTimer = 0;
+                progress = Math.max(progress, targetProgress);
+                updateProgressBar(progress);
+                lastStep = step;
+            } else {
+                stuckTimer++;
+                if (stuckTimer >= 3) {
+                    progress = Math.max(5, progress - 3); // bounce back
+                    updateProgressBar(progress);
+                    await new Promise(r => setTimeout(r, 500));
+                    progress = Math.max(progress, targetProgress);
+                    updateProgressBar(progress);
+                    stuckTimer = 0;
+                }
             }
 
-            const stepTextMap = {
-                null: "Pokretanje AI engine-a u pozadini",
-                conversion: "Konvertovanje dokumenta u potreban format",
-                extraction: "Ekstrakcija i pripremanje podataka za AI",
-                enrichment: "Obogaćivanje podataka i generisanje deklaracije"
-            };
+        } catch (err) {
+            console.error("Greška u waitForAIResult:", err);
+            clearInterval(fakeInterval);
+            clearInterval(countdownInterval);
+            Swal.close();
+            showRetryError(
+                "Greška pri skeniranju",
+                err.message || "Nepoznata greška",
+                () => waitForAIResult()
+            );
+            break;
+        }
 
-            while (true) {
-                let json = null;
-                let status = null;
-                let step = null;
-                let errorMsg = null;
-
-                try {
-                    const res = await fetch(`/api/invoices/${invoice_id}/scan`, {
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                            Authorization: `Bearer ${token}`
-                        }
-                    });
-
-                    if (!res.ok) {
-                        throw new Error(`Greška kod API poziva: ${res.status} ${res.statusText}`);
-                    }
-
-                    json = await res.json();
-                    status = json?.status?.status;
-                    step = json?.status?.processing_step;
-                    errorMsg = json?.status?.error_message;
-
-                    // Ažuriraj progress prema step-u
-                    if (step === "conversion") progress = Math.max(progress, 30);
-                    if (step === "extraction") progress = Math.max(progress, 50);
-                    if (step === "enrichment") progress = Math.max(progress, 80);
-                    if (progressBar) progressBar.style.width = `${progress}%`;
-
-                } catch (err) {
-                    console.error("Greška u waitForAIResult:", err);
-                    clearInterval(fakeInterval);
-                    clearInterval(countdownInterval);
-                    Swal.close();
-
-                    showRetryError(
-                        "Greška pri skeniranju",
-                        err.message || "Nepoznata greška",
-                        () => waitForAIResult()
-                    );
-                    break;
-                }
-
-                console.log("Scan status:", status, "| Step:", step, "| Error:", errorMsg);
-
-                const el = document.getElementById("swal-status-message");
-                if (el) {
-                    if (status === "failed" || status === "error") {
-                        el.innerHTML = `<span class='text-danger'>Greška: ${errorMsg || 'Nepoznata greška'}</span><br><span class='text-muted'>Korak: ${stepTextMap[step] || step || ''}</span>`;
-                    } else {
-                        const message = stepTextMap[step] || "Obrađujemo podatke";
-                        el.textContent = message;
-                    }
-                }
-
-                if (status === "completed") {
-                    clearInterval(fakeInterval);
-                    clearInterval(countdownInterval);
-                    if (progressBar) progressBar.style.width = "100%";
-                    if (el) el.textContent = "Završeno";
-                    await new Promise(r => setTimeout(r, 1000));
-                    if (el) el.textContent = "Deklaracija spremljena u draft";
-                    await new Promise(r => setTimeout(r, 1000));
-                    Swal.close();
-                    _invoice_data = null;
-                    break;
-                }
-
-                if (status === "failed" || status === "error") {
-                    clearInterval(fakeInterval);
-                    clearInterval(countdownInterval);
-                    await new Promise(r => setTimeout(r, 1000));
-                    Swal.close();
-                    console.error("Scan error:", errorMsg);
-
-                    showRetryError(
-                        "Greška pri skeniranju",
-                        `${errorMsg || "Nepoznata greška"}<br><span class="text-muted">${stepTextMap[step] || step || ""}</span>`,
-                        () => waitForAIResult()
-                    );
-
-                    break;
-                }
-
-                await new Promise(r => setTimeout(r, 2000));
+        // Update status text
+        const el = document.getElementById("swal-status-message");
+        if (el) {
+            if (status === "failed" || status === "error") {
+                el.innerHTML = `<span class='text-danger'>Greška: ${errorMsg || 'Nepoznata greška'}</span><br><span class='text-muted'>Korak: ${stepTextMap[step] || step || ''}</span>`;
+            } else {
+                el.textContent = stepTextMap[step] || "Obrađujemo podatke...";
             }
         }
 
+        // SUCCESS
+        if (status === "completed") {
+            clearInterval(fakeInterval);
+            clearInterval(countdownInterval);
 
-        //await updateRemainingScans();
+            Swal.close(); // Close loader Swal first
 
+            // Show independent success Swal (won’t be blocked)
+            setTimeout(() => {
+                Swal.fire({
+                    icon: "success",
+                    title: "Završeno",
+                    text: "Deklaracija je uspješno spremljena u draft.",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    allowOutsideClick: false,
+                    position: "center"
+                });
+            }, 300); // short delay ensures it's standalone
 
+            _invoice_data = null;
+            break;
+        }
 
-        function initializeTariffSelects() {
+        // FAILURE
+        if (status === "failed" || status === "error") {
+            clearInterval(fakeInterval);
+            clearInterval(countdownInterval);
+            Swal.close();
+            showRetryError(
+                "Greška pri skeniranju",
+                `${errorMsg || "Nepoznata greška"}<br><span class="text-muted">${stepTextMap[step] || step || ""}</span>`,
+                () => waitForAIResult()
+            );
+            break;
+        }
+
+        await new Promise(r => setTimeout(r, 2000)); // polling delay
+    }
+}
+
+function initializeTariffSelects() {
             $('.select2-tariff').each(function() {
                 const select = $(this);
                 const prefillValue = select.data("prefill");
@@ -1643,12 +1657,7 @@ row.innerHTML = `
             else if (!invoice.items?.length) scanNeeded = true;
 
             if (scanNeeded) {
-                Swal.fire({
-                    title: 'Skeniranje',
-                    html: `<div class="custom-swal-spinner mb-3"></div><div id="swal-status-message">Čeka na obradu</div>`,
-                    showConfirmButton: false,
-                    allowOutsideClick: false
-                });
+              
 
                 let scanStarted = true;
 
