@@ -226,14 +226,14 @@
             <div class="modal-body text-center p-4">
                 <p class="mb-4">Odaberi način na koji želiš izvršiti uplatu</p>
                 <div class="row g-3 justify-content-center">
-                    <div class="col-12 col-md-6">
+                    <div class="col-6 col-md-6">
                         <button class="w-100 border border-2 rounded-3 py-4 d-flex flex-column align-items-center justify-content-center payment-option"
                                 data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#paymentModal">
                             <div class="fs-1">💳</div>
                             <div class="fw-bold mt-2">Kartično plaćanje</div>
                         </button>
                     </div>
-                    <div class="col-12 col-md-6">
+                    <div class="col-6 col-md-6">
                         <button class="w-100 border border-2 rounded-3 py-4 d-flex flex-column align-items-center justify-content-center payment-option"
                                 data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#virmanModal">
                             <div class="fs-1">🧾</div>
@@ -320,16 +320,19 @@
                 modal.hide();
 
                 setTimeout(() => {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Uspješno ste aktivirali trial!',
-                        text: 'Ugodno korištenje želi tim deklarant.ai',
-                        timer: 2000,
-                        showConfirmButton: false
-                    });
+    Swal.fire({
+        icon: 'success',
+        title: 'Uspješno ste aktivirali trial!',
+        text: 'Ugodno korištenje želi tim deklarant.ai',
+        timer: 2000,
+        showConfirmButton: false
+    });
 
-                    setTimeout(() => location.reload(), 2000);
-                }, 300);
+    setTimeout(() => {
+        window.location.href = '/';
+    }, 2000);
+}, 300);
+
 
             } catch (err) {
                 console.error("Greška:", err);

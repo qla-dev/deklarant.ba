@@ -356,6 +356,12 @@ color: #299cdb ;
     top: 71px;
 }
    @media (max-width: 767.98px) {
+    
+
+      #pre-ai-overlay  .bg-white {
+        width: 95% !important;
+
+      }
 
 
 .card-title {
@@ -1084,5 +1090,7 @@ table.dataTable thead th.dtfc-fixed-right {
         display:flex; flex-direction:column; justify-content:center; align-items:center;
         font-family:inherit;            /* keeps whatever Bootstrap is using */
       }
+
+    
 
 
