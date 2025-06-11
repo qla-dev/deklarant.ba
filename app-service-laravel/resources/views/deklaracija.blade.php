@@ -2742,45 +2742,55 @@ row.innerHTML = `
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-    const overlay = document.getElementById('pre-ai-overlay');
+setTimeout(() => {
+    if (!window.AI_SCAN_STARTED) {
 
-    // Pokreni samo ako overlay postoji i NIJE već sakriven
-    if (overlay && !overlay.classList.contains('d-none')) {
+        const overlay = document.getElementById('pre-ai-overlay');
 
-        setTimeout(() => {
-            if (!window.AI_SCAN_STARTED) {
+        // Sakrij sigurno – class + inline stil
+        overlay.classList.add('d-none');
+        overlay.style.display = 'none';
 
-                // Sakrij sigurno – class + inline stil
-                overlay.classList.add('d-none');
-                overlay.style.display = 'none';
-
-                Swal.fire({
-                    icon: "error",
-                    title: "<div class='text-danger'>Nema pokrenutih procesa za AI obradu</div>",
-                    text: "Prikazuje se zadnja obrađena deklaracija",
-                    showConfirmButton: true,
-                    showCancelButton: true,
-                    reverseButtons: true, // ⬅️ Flip button positions
-                    confirmButtonText: "Uredu",       // just close
-                    cancelButtonText: "Odustani",     // redirect
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    customClass: {
-                        confirmButton: "btn btn-info ",
-                        cancelButton: "btn btn-soft-info me-2"
-                    },
-                    buttonsStyling: false
-                }).then((result) => {
-                    if (result.isDismissed && result.dismiss === Swal.DismissReason.cancel) {
-                        window.location.href = "/";
-                    }
-                });
-
-            }
-        }, 5000); // provjera nakon 5 s
+        // Provjera postoji li global_invoice_id
+        if (window.global_invoice_id) {
+            Swal.fire({
+                icon: "error",
+                title: "<div class='text-danger'>Nema pokrenutih procesa za AI obradu</div>",
+                text: "Prikazuje se zadnja obrađena deklaracija",
+                showConfirmButton: true,
+                showCancelButton: true,
+                reverseButtons: true,
+                confirmButtonText: "Uredu",
+                cancelButtonText: "Odustani",
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                customClass: {
+                    confirmButton: "btn btn-info ",
+                    cancelButton: "btn btn-soft-info me-2"
+                },
+                buttonsStyling: false
+            }).then((result) => {
+                if (result.isDismissed && result.dismiss === Swal.DismissReason.cancel) {
+                    window.location.href = "/";
+                }
+            });
+        } else {
+                    Swal.fire({
+            icon: "error",
+            title: "<div class='text-danger'>Nema pokrenutih procesa za AI obradu niti spremih u lokalnom spremniku</div>",
+            text: "Automatsko prebacivanje na početnu stranicu",
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            timer: 2000, // ⬅️ Auto-close after 2s so .then() triggers
+            timerProgressBar: true
+        }).then(() => {
+            window.location.href = "/";
+        });
+        }
     }
-});
+}, 8000); // provjera nakon 8 s
+
 </script>
 
 
