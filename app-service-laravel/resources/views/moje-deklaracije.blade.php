@@ -48,7 +48,7 @@ Moje spašene deklaracije <span class="counter-value-invoice">0</span><span
                                 <th>Ime dokumenta</th>
                                
                                
-                                <th>Datum</th>
+                                <th style="width: 100px;">Datum</th>
                                  <th>Zemlja porijekla</th>
                                 <th>Klijent</th>
                                                             
@@ -187,7 +187,7 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             {
                 data: 'supplier.name',
-                title: 'Dobavljač',
+                title: 'Klijent',
                 defaultContent: '<span class="text-muted">Nepoznato</span>'
             },
             
