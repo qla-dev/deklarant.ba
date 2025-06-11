@@ -631,7 +631,7 @@
 
                 // Fake progress do 35%
                 fakeInterval = setInterval(() => {
-                    if (progress < 35) {
+                    if (progress < 50) {
                         progress += 0.5;
                         if (progressBar) progressBar.style.width = `${progress}%`;
                     }
@@ -642,14 +642,14 @@
                     countdown--;
                     if (timerText) timerText.textContent = `${countdown}s`;
                     if (countdown <= 0) clearInterval(countdownInterval);
-                }, 1000);
+                }, 2000);
             }
 
             const stepTextMap = {
-                null: "Čeka na početak obrade",
-                conversion: "Konvertovanje dokumenta",
-                extraction: "Ekstrakcija podataka",
-                enrichment: "Obogaćivanje podataka"
+                null: "Pokretanje AI engine-a u pozadini",
+                conversion: "Konvertovanje dokumenta u potreban format",
+                extraction: "Ekstrakcija i pripremanje podataka za AI",
+                enrichment: "Obogaćivanje podataka i generisanje deklaracije"
             };
 
             while (true) {
@@ -676,9 +676,9 @@
                     errorMsg = json?.status?.error_message;
 
                     // Ažuriraj progress prema step-u
-                    if (step === "conversion") progress = Math.max(progress, 40);
-                    if (step === "extraction") progress = Math.max(progress, 70);
-                    if (step === "enrichment") progress = Math.max(progress, 90);
+                    if (step === "conversion") progress = Math.max(progress, 30);
+                    if (step === "extraction") progress = Math.max(progress, 50);
+                    if (step === "enrichment") progress = Math.max(progress, 80);
                     if (progressBar) progressBar.style.width = `${progress}%`;
 
                 } catch (err) {
@@ -713,7 +713,7 @@
                     if (progressBar) progressBar.style.width = "100%";
                     if (el) el.textContent = "Završeno";
                     await new Promise(r => setTimeout(r, 1000));
-                    if (el) el.textContent = "Faktura spremljena u draft";
+                    if (el) el.textContent = "Deklaracija spremljena u draft";
                     await new Promise(r => setTimeout(r, 1000));
                     Swal.close();
                     _invoice_data = null;
@@ -754,6 +754,12 @@
                     placeholder: "Pretraži tarifne stavke...",
                     width: '100%',
                     minimumInputLength: 1,
+                    minimumInputLength: 1,
+    language: {
+        inputTooShort: function(args) {
+            return "Pretraži tarifne oznake...";
+        }
+    },
                     ajax: {
                         transport: function(params, success, failure) {
                             const term = params.data.q?.toLowerCase() || "";
@@ -792,7 +798,7 @@
             const index = tbody.children.length;
 
             globalAISuggestions.push(suggestions);
-
+            const itemId = item.id || "";
             const name = item.name || item.item_description_original || "";
             const tariff = item.tariff_code || "";
             const price = item.base_price || 0;
@@ -802,6 +808,7 @@
             const desc = item.item_description;
             const package_num = item.num_packages || 0;
             const qtype = item.quantity_type || "";
+            const best_customs_code_matches = item.best_customs_code_matches || [];
 
             console.log(` Adding row ${index + 1}:`, item, suggestions);
 
@@ -940,7 +947,7 @@
 
             row.innerHTML = `
           <td style="width: 50px;">${index + 1}</td>
-
+     
           <td colspan="2" style="width: 340px;">
             <div class="input-group" style="display: flex; gap: 0.25rem;">
               <input type="text" class="form-control item-name" name="item_name[]" placeholder="Naziv proizvoda" value="${name}" style="flex:1;">
@@ -957,6 +964,12 @@
               placeholder="Prevod"
             >
           </td>
+           <input type="hidden" name="item_id[]" value="${itemId || ''}">
+         <input 
+  type="hidden" 
+  name="best_customs_code_matches[]" 
+  value='${JSON.stringify(best_customs_code_matches || [])}'>
+
 
           <td class="text-start" style="width: 150px;">
             <div style="position: relative; width: 100%;">
@@ -1983,7 +1996,7 @@
 
                     Swal.fire({
                         title: "Oprez!",
-                        text: "Odabrani proizvod će biti trajno uklonjen sa popisa trenutne deklaracije. Ova radnja nije ireverzibilna!",
+                        text: "Odabrani proizvod će biti trajno uklonjen sa popisa trenutne deklaracije. Nakon akcije, deklaraciju morate spasiti!",
                         icon: "warning",
                         showCancelButton: true,
                         cancelButtonText: "Odustani",
@@ -2347,7 +2360,7 @@
         setTimeout(() => {
             Swal.fire({
                 title: "Oprez!",
-                text: "Odabrani proizvod će biti trajno uklonjen...",
+                text: "Odabrani proizvod će biti trajno uklonjen sa popisa trenutne deklaracije. Nakon akcije, deklaraciju morate spasiti!",
                 icon: "warning",
                 showCancelButton: true,
                 cancelButtonText: "Odustani",

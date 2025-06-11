@@ -1,11 +1,11 @@
 <style>
 
-    .swal2-modal {
+    #vise-opcija-swal {
 
         padding-bottom: 1rem !important;
     }
 
-    .swal2-title {padding-top: 20px!important;}
+    #vise-opcija-swal .swal2-title {padding-top: 20px!important;}
 </style> 
  
  <div class="d-print-none" id="sidebar-buttons-container">
@@ -210,14 +210,14 @@ document.addEventListener("DOMContentLoaded", () => {
              deleteBtn.addEventListener("click", function() {
                  Swal.fire({
                      title: "Jesi li siguran/na?",
-                     text: "Svi proizvodi u tabeli će biti uklonjeni.",
+                     text: "Svi proizvodi u tabeli će biti uklonjeni",
                      icon: "warning",
                      showCancelButton: true,
                      confirmButtonText: "Da, obriši sve",
                      cancelButtonText: "Odustani",
                      customClass: {
-                         confirmButton: "btn btn-danger me-2",
-                         cancelButton: "btn btn-secondary"
+                         confirmButton: "btn btn-soft-info me-2",
+                         cancelButton: "btn btn-info"
                      },
                      buttonsStyling: false
                  }).then((result) => {
@@ -283,6 +283,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 showCancelButton: false,
                 showConfirmButton: false,
                 showCloseButton: true,
+                didOpen: () => {
+                    const popup = Swal.getPopup();
+                    if (popup) popup.setAttribute("id", "vise-opcija-swal");
+                }
             });
         });
     }
