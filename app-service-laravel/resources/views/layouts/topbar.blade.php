@@ -247,14 +247,14 @@
                         <h6 class="dropdown-header" id="dropdownWelcome">Dobrodošli
                             {{ Auth::user()->username ?? 'Korisnik' }}</h6>
                             @if(Auth::user()->role !== 'superadmin')
-                        <a class="dropdown-item" href="profil"><i
+                        <a class="dropdown-item" href="/profil"><i
                                 class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">Moj nalog</span></a>
                         <a class="dropdown-item" href="faqs"><i
                                 class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">Pomoć</span></a>
                        
-                        <a class="dropdown-item" href="cijene-paketa"><i
+                        <a class="dropdown-item" href="/cijene-paketa"><i
                                 class="fas fa-wand-magic-sparkles fs-12 text-muted me-1"></i> <span
                                 class="align-middle">Dostupna skeniranja :
                                 <b>{{ Auth::user()->getRemainingScans() ?? '0' }}</b></span></a>

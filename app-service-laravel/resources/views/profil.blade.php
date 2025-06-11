@@ -283,7 +283,7 @@
             </div>
         </div>
 
-        <div class="col-4">
+        <div class="col col-md-4">
             <div class="p-2">
                 <!-- Username filled dynamically -->
                 <div class="d-flex align-items-center  flex-wrap">
@@ -1498,7 +1498,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                     return `
                     <div class="col-4 text-center">
-                        <a href="#" class="text-decoration-none view-invoice" data-id="${inv.id}" title="Pregled Deklaracije">
+                        <a href="/deklaracija/${inv.id}" class="text-decoration-none view-invoice" data-id="${inv.id}" title="Pregled Deklaracije">
                             <i class="${icon} fs-24 text-info"></i>
                             <p class="fs-13 text-muted mt-1 mb-0" style="white-space:nowrap!important">${file}</p>
                         </a>
