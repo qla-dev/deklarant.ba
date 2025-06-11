@@ -12,6 +12,8 @@
 
 <style>
 
+    #global-mobile-search-form {margin-bottom: 0!important;}
+
     .main-footer {
        margin-bottom: -10px!important;
     }
@@ -405,7 +407,7 @@
         </div>
 
         <!-- Content hidden initially -->
-        <div class="suppliers-list d-none w-100 mt-3"></div>
+        <div class="suppliers-list d-none w-100 mt-3" style="max-height: 250!important;"></div>
     </div>
 </div>
 
