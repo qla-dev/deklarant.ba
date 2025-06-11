@@ -594,7 +594,7 @@ if (typeof window !== "undefined") {
     const invoice_id = getInvoiceId();
     if (!invoice_id) return;
 
-    let progress = 0;
+    let progress = 0; // Start at 0%
     let countdown = 50;
     let progressBar = null;
     let timerText = null;
@@ -612,42 +612,60 @@ if (typeof window !== "undefined") {
 
     // Show loader Swal immediately
     if (showLoader) {
+        document.getElementById('pre-ai-overlay')?.classList.add('d-none');
 
-// ⬇️  CLOSE the pre-AI overlay immediately
-document.getElementById('pre-ai-overlay')?.classList.add('d-none');
-
-Swal.fire({
-    title: "Skeniranje",
-    html: `
-        <div class="custom-swal-spinner mb-3"></div>
-        <div id="swal-status-message">Čeka na obradu</div>
-        <div class="mt-3 w-100">
-            <div class="progress" style="height: 16px;">
-                <div id="scan-progress-bar"
-                     class="progress-bar progress-bar-striped progress-bar-animated bg-info fw-bold text-white"
-                     role="progressbar"
-                     style="width: 0%; font-size: 0.85rem; line-height: 16px; transition: width 0.6s ease;"
-                     aria-valuemin="0" aria-valuemax="100">0%
+        Swal.fire({
+            title: "Skeniranje",
+            html: `
+                <div class="custom-swal-spinner mb-3"></div>
+                <div id="swal-status-message">Čeka na obradu</div>
+                <div class="mt-3 w-100">
+                    <div class="progress" style="height: 16px;">
+                        <div id="scan-progress-bar"
+                             class="progress-bar progress-bar-striped progress-bar-animated bg-info fw-bold text-white"
+                             role="progressbar"
+                             style="width: 0%; font-size: 0.85rem; line-height: 16px; transition: width 0.6s ease;"
+                             aria-valuemin="0" aria-valuemax="100">0%
+                        </div>
+                    </div>
+                    <div class="text-muted mt-1" style="font-size: 0.85rem;">
+                        Preostalo vrijeme: <span id="scan-timer">50s</span>
+                    </div>
                 </div>
-            </div>
-            <div class="text-muted mt-1" style="font-size: 0.85rem;">
-                Preostalo vrijeme: <span id="scan-timer">50s</span>
-            </div>
-        </div>
-    `,
-    showConfirmButton: false,
-    allowOutsideClick: false
-});
+            `,
+            showConfirmButton: false,
+            allowOutsideClick: false
+        });
 
-await new Promise(r => setTimeout(r, 0)); // Immediately render Swal
-progressBar = document.getElementById("scan-progress-bar");
-timerText = document.getElementById("scan-timer");
+        await new Promise(r => setTimeout(r, 0));
+        progressBar = document.getElementById("scan-progress-bar");
+        timerText = document.getElementById("scan-timer");
 
-/* … the rest stays exactly the same … */
-}
-function updateProgressBar(value) {
+        // Start continuous progress movement
+        fakeInterval = setInterval(() => {
+            if (progress < 95) { // Don't go above 95% until complete
+                progress = Math.min(95, progress + 0.5);
+                updateProgressBar(progress);
+            }
+        }, 1000);
+
+        // Start countdown timer
+        countdownInterval = setInterval(() => {
+            countdown--;
+            if (timerText) {
+                timerText.textContent = `${countdown}s`;
+            }
+            // Reset countdown when it hits 5 seconds
+            if (countdown <= 5) {
+                countdown = 15;
+                timerText.textContent = `${countdown}s`;
+            }
+        }, 1000);
+    }
+
+    function updateProgressBar(value) {
         if (!progressBar) return;
-        const clamped = Math.min(100, Math.max(0, value));
+        const clamped = Math.min(95, Math.max(0, value)); // Allow starting from 0%
         progressBar.style.width = `${clamped}%`;
         progressBar.innerHTML = `${Math.floor(clamped)}%`;
     }
@@ -686,7 +704,7 @@ function updateProgressBar(value) {
             } else {
                 stuckTimer++;
                 if (stuckTimer >= 3) {
-                    progress = Math.max(5, progress - 3); // bounce back
+                    progress = Math.max(0, progress - 3); // bounce back but never below 0%
                     updateProgressBar(progress);
                     await new Promise(r => setTimeout(r, 500));
                     progress = Math.max(progress, targetProgress);
@@ -722,10 +740,10 @@ function updateProgressBar(value) {
         if (status === "completed") {
             clearInterval(fakeInterval);
             clearInterval(countdownInterval);
+            updateProgressBar(100); // Show 100% on completion
 
-            Swal.close(); // Close loader Swal first
+            Swal.close();
 
-            // Show independent success Swal (won’t be blocked)
             setTimeout(() => {
                 Swal.fire({
                     icon: "success",
@@ -736,7 +754,7 @@ function updateProgressBar(value) {
                     allowOutsideClick: false,
                     position: "center"
                 });
-            }, 300); // short delay ensures it's standalone
+            }, 300);
 
             _invoice_data = null;
             break;
@@ -755,7 +773,7 @@ function updateProgressBar(value) {
             break;
         }
 
-        await new Promise(r => setTimeout(r, 2000)); // polling delay
+        await new Promise(r => setTimeout(r, 2000));
     }
 }
 
