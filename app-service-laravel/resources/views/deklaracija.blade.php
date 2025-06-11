@@ -344,17 +344,6 @@
 </div>
 
 
-<div id="pre-ai-overlay" class="{{ isset($id) ? 'd-none' : '' }}">
-  <div class="bg-white rounded shadow p-4 text-center" style="width:420px;">
-    <h5 class="mb-4" style="font-size: 20px">Pokretanje AI&nbsp;tehnologije</h5>
-
-    <div class="custom-swal-spinner mb-3"></div>
-
-    <div class="text-muted" style="font-size:.9rem;">
-      Pripremamo okruženje
-    </div>
-  </div>
-</div>
 
 
 
@@ -601,6 +590,7 @@ if (typeof window !== "undefined") {
 
 
         async function waitForAIResult(showLoader = true) {
+            window.AI_SCAN_STARTED = true;
     const invoice_id = getInvoiceId();
     if (!invoice_id) return;
 
@@ -2720,6 +2710,61 @@ row.innerHTML = `
 
     //Remove button logic 
 </script>
+
+<div id="pre-ai-overlay" class="{{ isset($id) ? 'd-none' : '' }}">
+  <div class="bg-white rounded shadow p-4 text-center" style="width:420px;">
+    <h5 class="mb-4" style="font-size: 20px">Pokretanje AI&nbsp;tehnologije</h5>
+
+    <div class="custom-swal-spinner mb-3"></div>
+
+    <div class="text-muted" style="font-size:.9rem;">
+      Pripremamo okruženje
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const overlay = document.getElementById('pre-ai-overlay');
+
+    // Pokreni samo ako overlay postoji i NIJE već sakriven
+    if (overlay && !overlay.classList.contains('d-none')) {
+
+        setTimeout(() => {
+            if (!window.AI_SCAN_STARTED) {
+
+                // Sakrij sigurno – class + inline stil
+                overlay.classList.add('d-none');
+                overlay.style.display = 'none';
+
+                Swal.fire({
+                    icon: "error",
+                    title: "<div class='text-danger'>Nema pokrenutih procesa za AI obradu</div>",
+                    text: "Prikazuje se zadnja obrađena deklaracija",
+                    showConfirmButton: true,
+                    showCancelButton: true,
+                    reverseButtons: true, // ⬅️ Flip button positions
+                    confirmButtonText: "Uredu",       // just close
+                    cancelButtonText: "Odustani",     // redirect
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    customClass: {
+                        confirmButton: "btn btn-info ",
+                        cancelButton: "btn btn-soft-info me-2"
+                    },
+                    buttonsStyling: false
+                }).then((result) => {
+                    if (result.isDismissed && result.dismiss === Swal.DismissReason.cancel) {
+                        window.location.href = "/";
+                    }
+                });
+
+            }
+        }, 5000); // provjera nakon 5 s
+    }
+});
+</script>
+
 
 
 
