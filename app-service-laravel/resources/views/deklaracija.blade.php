@@ -362,6 +362,7 @@
 <script src="{{ URL::asset('build/js/declaration/fix-sidebar.js') }}"></script>
 <script src="{{ URL::asset('build/js/declaration/action-buttons.js') }}"></script>
 <script src="{{ URL::asset('build/js/declaration/swal-declaration-load.js') }}"></script>
+<script src="{{ URL::asset('build/js/countries.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/bs.js"></script>
@@ -819,133 +820,13 @@
 
 
             function generateCountryOptions(selectedCode = "") {
-                // ISO country codes + names (lowercase for flag URL)
-                const countries = [{
-                        code: "af",
-                        name: "Afghanistan"
-                    }, {
-                        code: "al",
-                        name: "Albania"
-                    }, {
-                        code: "dz",
-                        name: "Algeria"
-                    },
-                    {
-                        code: "ad",
-                        name: "Andorra"
-                    }, {
-                        code: "ao",
-                        name: "Angola"
-                    }, {
-                        code: "ag",
-                        name: "Antigua and Barbuda"
-                    },
-                    {
-                        code: "ar",
-                        name: "Argentina"
-                    }, {
-                        code: "am",
-                        name: "Armenia"
-                    }, {
-                        code: "au",
-                        name: "Australia"
-                    },
-                    {
-                        code: "at",
-                        name: "Austria"
-                    }, {
-                        code: "az",
-                        name: "Azerbaijan"
-                    }, {
-                        code: "bs",
-                        name: "Bahamas"
-                    },
-                    {
-                        code: "bh",
-                        name: "Bahrain"
-                    }, {
-                        code: "bd",
-                        name: "Bangladesh"
-                    }, {
-                        code: "bb",
-                        name: "Barbados"
-                    },
-                    {
-                        code: "by",
-                        name: "Belarus"
-                    }, {
-                        code: "be",
-                        name: "Belgium"
-                    }, {
-                        code: "bz",
-                        name: "Belize"
-                    },
-                    {
-                        code: "ba",
-                        name: "Bosnia and Herzegovina"
-                    }, {
-                        code: "hr",
-                        name: "Croatia"
-                    }, {
-                        code: "rs",
-                        name: "Serbia"
-                    },
-                    {
-                        code: "me",
-                        name: "Montenegro"
-                    }, {
-                        code: "si",
-                        name: "Slovenia"
-                    }, {
-                        code: "mk",
-                        name: "North Macedonia"
-                    },
-                    {
-                        code: "de",
-                        name: "Germany"
-                    }, {
-                        code: "fr",
-                        name: "France"
-                    }, {
-                        code: "us",
-                        name: "United States"
-                    },
-                    {
-                        code: "gb",
-                        name: "United Kingdom"
-                    }, {
-                        code: "it",
-                        name: "Italy"
-                    }, {
-                        code: "es",
-                        name: "Spain"
-                    },
-                    {
-                        code: "cn",
-                        name: "China"
-                    }, {
-                        code: "jp",
-                        name: "Japan"
-                    }, {
-                        code: "in",
-                        name: "India"
-                    }
-                    // Add more if needed (or I can give you all 195 full set)
-                ];
-                return countries.map(({
-                    code,
-                    name
-                }) => {
-                    const flagUrl = `https://flagcdn.com/w40/${code}.png`;
-                    const isSelected = selectedCode?.toLowerCase() === code ? "selected" : "";
-                    return `<option value="${code.toUpperCase()}" ${isSelected} data-flag="${flagUrl}">${code.toUpperCase()}</option>`;
-                }).join("");
-
-            }
-
-
-
-            row.innerHTML = `
+    return window.countries.map(({ code, name }) => {
+        const flagUrl = `https://flagcdn.com/w40/${code}.png`;
+        const isSelected = selectedCode?.toLowerCase() === code ? "selected" : "";
+        return `<option value="${code.toUpperCase()}" ${isSelected} data-flag="${flagUrl}">${code.toUpperCase()}</option>`;
+    }).join("");
+}
+row.innerHTML = `
           <td style="width: 50px;">${index + 1}</td>
      
           <td colspan="2" style="width: 340px;">
