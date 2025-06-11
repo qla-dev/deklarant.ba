@@ -344,6 +344,18 @@
 </div>
 
 
+<div id="pre-ai-overlay" class="{{ isset($id) ? 'd-none' : '' }}">
+  <div class="bg-white rounded shadow p-4 text-center" style="width:420px;">
+    <h5 class="mb-4" style="font-size: 20px">Pokretanje AI&nbsp;tehnologije</h5>
+
+    <div class="custom-swal-spinner mb-3"></div>
+
+    <div class="text-muted" style="font-size:.9rem;">
+      Pripremamo okruženje
+    </div>
+  </div>
+</div>
+
 
 
 
@@ -368,23 +380,26 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/bs.js"></script>
 
 <script>
-    // Assume this value is set dynamically
+ 
+
     let EditingMode = {{ isset($id) ? 'true' : 'false' }};
 
-    // Define and expose global_invoice_id globally
-    if (typeof window !== "undefined") {
-      if (!EditingMode) {
-        window.global_invoice_id = localStorage.getItem("scan_invoice_id");
-        window.remainingScans = {!! json_encode(Auth::user()->getRemainingScans()) !!};
-      } else {
-        window.global_invoice_id = {!! isset($id) ? json_encode($id) : 0 !!};
-      }
-      
-    }
+// Define and expose global_invoice_id globally
+if (typeof window !== "undefined") {
+  if (!EditingMode) {
+    window.global_invoice_id = localStorage.getItem("scan_invoice_id");
+    window.remainingScans = {!! json_encode(Auth::user()->getRemainingScans()) !!};
+  } else {
+    window.global_invoice_id = {!! isset($id) ? json_encode($id) : 0 !!};
+  }
+  
+}
 
-    // Test output
-    console.log("Global Invoice ID in script 1:", window.global_invoice_id);
+ 
 </script>
+
+
+
 
 <!-- Scan and other logic script -->
 <script>
@@ -400,23 +415,30 @@
     } else {
         console.log(' Custom invoice JS loaded');
 
-        function showRetryError(title, message, retryCallback) {
-            Swal.fire({
-                title: title,
-                html: `<div class="text-danger mb-2">${message}</div>`,
-                icon: "error",
-                showCancelButton: true,
-                confirmButtonText: "Pokušaj ponovo",
-                cancelButtonText: "Odustani",
-                customClass: {
-                    confirmButton: "btn btn-soft-info me-2",
-                    cancelButton: "btn btn-info"
-                },
-                buttonsStyling: false
-            }).then((result) => {
-                if (result.isConfirmed) retryCallback();
-            });
+        function showRetryError(title, message) {
+    Swal.fire({
+        title: title,
+        html: `<div class="text-danger">${message}</div>`,
+        icon: "error",
+        showCancelButton: true,
+        confirmButtonText: "Pokušaj ponovo",
+        cancelButtonText: "Odustani",
+        reverseButtons: true, // ⬅️ Flip button positions
+        customClass: {
+            confirmButton: "btn btn-info",
+            cancelButton: "btn btn-soft-info me-2"
+        },
+        buttonsStyling: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            location.reload(); // Reload page on "Pokušaj ponovo"
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            location.href = "/"; // Redirect ONLY if user clicked "Odustani"
         }
+    });
+}
+
+
 
         let _invoice_data = null;
         let processedTariffData = [];
@@ -600,53 +622,40 @@
 
     // Show loader Swal immediately
     if (showLoader) {
-        Swal.fire({
-            title: "Skeniranje",
-            html: `
-                <div class="custom-swal-spinner mb-3"></div>
-                <div id="swal-status-message">Čeka na obradu</div>
-                <div class="mt-3 w-100">
-                    <div class="progress" style="height: 16px;">
-                        <div id="scan-progress-bar"
-                             class="progress-bar progress-bar-striped progress-bar-animated bg-info fw-bold text-white"
-                             role="progressbar"
-                             style="width: 0%; font-size: 0.85rem; line-height: 16px; transition: width 0.6s ease;"
-                             aria-valuemin="0" aria-valuemax="100">0%
-                        </div>
-                    </div>
-                    <div class="text-muted mt-1" style="font-size: 0.85rem;">
-                        Preostalo vrijeme: <span id="scan-timer">50s</span>
-                    </div>
+
+// ⬇️  CLOSE the pre-AI overlay immediately
+document.getElementById('pre-ai-overlay')?.classList.add('d-none');
+
+Swal.fire({
+    title: "Skeniranje",
+    html: `
+        <div class="custom-swal-spinner mb-3"></div>
+        <div id="swal-status-message">Čeka na obradu</div>
+        <div class="mt-3 w-100">
+            <div class="progress" style="height: 16px;">
+                <div id="scan-progress-bar"
+                     class="progress-bar progress-bar-striped progress-bar-animated bg-info fw-bold text-white"
+                     role="progressbar"
+                     style="width: 0%; font-size: 0.85rem; line-height: 16px; transition: width 0.6s ease;"
+                     aria-valuemin="0" aria-valuemax="100">0%
                 </div>
-            `,
-            showConfirmButton: false,
-            allowOutsideClick: false
-        });
+            </div>
+            <div class="text-muted mt-1" style="font-size: 0.85rem;">
+                Preostalo vrijeme: <span id="scan-timer">50s</span>
+            </div>
+        </div>
+    `,
+    showConfirmButton: false,
+    allowOutsideClick: false
+});
 
-        await new Promise(r => setTimeout(r, 0)); // Immediately render Swal
-        progressBar = document.getElementById("scan-progress-bar");
-        timerText = document.getElementById("scan-timer");
+await new Promise(r => setTimeout(r, 0)); // Immediately render Swal
+progressBar = document.getElementById("scan-progress-bar");
+timerText = document.getElementById("scan-timer");
 
-        // Fake loading forward
-        fakeInterval = setInterval(() => {
-            if (progress < 98) {
-                progress += 0.3;
-                updateProgressBar(progress);
-            }
-        }, 400);
-
-        // Countdown logic (never under 5s)
-        countdownInterval = setInterval(() => {
-            if (countdown > 5) {
-                countdown--;
-            } else {
-                countdown = 13;
-            }
-            if (timerText) timerText.textContent = `${countdown}s`;
-        }, 2000);
-    }
-
-    function updateProgressBar(value) {
+/* … the rest stays exactly the same … */
+}
+function updateProgressBar(value) {
         if (!progressBar) return;
         const clamped = Math.min(100, Math.max(0, value));
         progressBar.style.width = `${clamped}%`;
@@ -731,7 +740,7 @@
                 Swal.fire({
                     icon: "success",
                     title: "Završeno",
-                    text: "Deklaracija je uspješno spremljena u draft.",
+                    text: "Deklaracija je uspješno spremljena u draft",
                     showConfirmButton: false,
                     timer: 3000,
                     allowOutsideClick: false,
@@ -1351,7 +1360,7 @@ row.innerHTML = `
             } catch (err) {
                 console.error("Greška u fetchAndPrefillParties:", err);
                 showRetryError(
-                    "Greška pri dohvaćanju podataka",
+                    "Kredit za skeniranje nije iskorišten",
                     err.message || "Neuspješno dohvaćanje podataka",
                     () => fetchAndPrefillParties()
                 );
@@ -2280,24 +2289,30 @@ row.innerHTML = `
             console.warn(`Clearing scan_invoice_id (${scanId}) because it does not match invoiceId (${invoiceId})`);
             localStorage.removeItem("scan_invoice_id");
         }
+        
 
         Swal.fire({
-            title: 'Učitavanje deklaracije...',
-            icon: null, // Disable any built-in icon
-            html: `<div class="custom-swal-spinner mb-3"></div><div id="swal-status-message">Molimo sačekajte</div>`,
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            didOpen: () => {
-                const spinner = document.querySelector(".custom-swal-spinner");
+    title: 'Učitavanje deklaracije...',
+    icon: null, // Disable any built-in icon
+    html: `
+        <div class="custom-swal-spinner mb-3"></div>
+        <div id="swal-status-message">Molimo sačekajte</div>
+    `,
+    showConfirmButton: false,
+    allowOutsideClick: false,
+    didOpen: () => {
+        // ⬇️ Close the pre-loader overlay here
+      
 
+        const spinner = document.querySelector(".custom-swal-spinner");
 
-                //  Also remove SweetAlert2's default icon area if still rendered
-                const icon = Swal.getHtmlContainer()?.previousElementSibling;
-                if (icon?.classList.contains('swal2-icon')) {
-                    icon.remove();
-                }
-            }
-        });
+        const icon = Swal.getHtmlContainer()?.previousElementSibling;
+        if (icon?.classList.contains('swal2-icon')) {
+            icon.remove();
+        }
+    }
+});
+
 
         try {
             const [tariffJson, invoiceRes, suppliersRes, importersRes] = await Promise.all([
@@ -2705,6 +2720,8 @@ row.innerHTML = `
 
     //Remove button logic 
 </script>
+
+
 
 <script src="{{ URL::asset('build/js/declaration/swal-declaration-load.js') }}"></script>
 @endsection
