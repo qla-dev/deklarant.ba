@@ -219,7 +219,7 @@ class InvoiceController extends Controller
             } elseif (str_contains($message, 'country_of_origin')) {
                 $translatedMessage = 'Zemlja porijekla je obavezna.';
             } elseif (str_contains($message, 'item_code')) {
-                $translatedMessage = 'Tarifni broj artikla je obavezan.';
+                $translatedMessage = 'Tarifni brojevi svih proizvoda unutar deklaracije su obavezni';
             } else {
                 $translatedMessage = 'Neki od obaveznih podataka nedostaje ili nije ispravan.';
             }

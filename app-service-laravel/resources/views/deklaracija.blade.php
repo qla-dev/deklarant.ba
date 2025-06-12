@@ -832,7 +832,7 @@ function initializeTariffSelects() {
             globalAISuggestions.push(suggestions);
             const itemId = item.id || "";
             const name = item.name || item.item_description_original || "";
-            const tariff = item.tariff_code || "";
+            const tariff = item.item_code || item.tariff_code || "";
             const price = item.base_price || 0;
             const quantity = item.quantity || 0;
             const origin = item.country_of_origin || "DE";
@@ -955,7 +955,7 @@ row.innerHTML = `
               <div class="input-group input-group-sm" style="width: 100%;">
                 <button 
                   class="btn btn-outline-info btn-sm decrement-qty" 
-                  style="background: #f4f4fc !important; width: 20px; padding: 0;" 
+                  style="width: 20px; padding: 0;" 
                   type="button"
                 >−</button>
                 <input 
@@ -969,7 +969,7 @@ row.innerHTML = `
                 >
                 <button 
                   class="btn btn-outline-info btn-sm increment-qty" 
-                  style="background: #f4f4fc !important; width: 20px; padding: 0;" 
+                  style=" width: 20px; padding: 0;" 
                   type="button"
                 >+</button>
               </div>
