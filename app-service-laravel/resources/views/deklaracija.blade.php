@@ -155,17 +155,23 @@
             <div class="card-header border-0 p-4 pb-0">
                 <img src="{{ URL::asset('build/images/logo-light-ai.png') }}" class="card-logo card-logo-dark" alt="logo dark" height="34">
                             <img src="{{ URL::asset('build/images/logo-dark-ai.png') }}" class="card-logo card-logo-light" alt="logo light" height="17">
-                <div class="d-flex flex-row justify-content-between py-4">
-                     
+                <div class="row g-4 justify-content-between py-4">
+                     <div class="col-6">
                     <div class="mt-4">
                         <h6 class="text-muted text-uppercase fw-semibold">Osnovni podaci</h6>
                         <input type="text" class="form-control mb-2" id="company-address" name="name" placeholder="Ime kompanije" disabled value="{{ Auth::user()->company['name'] ?? '' }}">
                         <input type="text" class="form-control mb-2" id="company-id" name="zip" placeholder="ID kompanije" disabled value="{{ Auth::user()->company['id'] ?? '' }}">
-                        <input type="email" class="form-control" id="company-tel" name="tel" placeholder="Adresa" disabled value="{{ Auth::user()->company['address'] ?? '' }}">
+                        <input type="email" class="form-control mb-2" id="company-tel" name="tel" placeholder="Adresa" disabled value="{{ Auth::user()->company['address'] ?? '' }}">
+                        <p class="fs-12 text-muted p-0">Ovo su informacije o tvojoj kompaniji. Možete ih uvijek prilagoditi na <a href="/profil" class="text-info">pregledu svog profila.</a></p>
                     </div>
-
+                </div>
+<div class="col-6">
+      <div class="mt-4">
+                        <h6 class="text-muted text-uppercase fw-semibold mt-1">Broj fakture</h6>
+                        <input type="text" class="form-control" id="invoice-no" name="invoice_no" placeholder="Unesite broj fakture">
+                    </div>
                     <!-- Incoterm Dropdown Section -->
-                       <div style="min-width: 200px;" class="mt-4">
+                       <div style="margin-top: 1.85rem;">
                     <h6 class="text-muted text-uppercase fw-semibold mt-1 ">Incoterm</h6>
                     <select class="form-select mb-2 custom-select-icon incoterm2" name="incoterm" id="incoterm" placeholder="Odaberite incoterm">
 
@@ -181,12 +187,9 @@
                         <option value="CFR">CFR</option>
                         <option value="CIF">CIF</option>
                     </select>
-                    <div style="min-width: 220px;">
-                        <h6 class="text-muted text-uppercase fw-semibold mt-1">Broj fakture</h6>
-                        <input type="text" class="form-control" id="invoice-no" name="invoice_no" placeholder="Unesite broj fakture">
-                    </div>
+                  
                 </div>
-
+</div>
                 </div>
 
               

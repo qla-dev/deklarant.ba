@@ -1500,7 +1500,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                     return `
                     <div class="col-4 text-center">
-                        <a href="/deklaracija/${inv.id}" class="text-decoration-none view-invoice" data-id="${inv.id}" title="Pregled Deklaracije">
+                        <a href="/deklaracija/${inv.id}" class="text-decoration-none"  title="Pregled Deklaracije">
                             <i class="${icon} fs-24 text-info"></i>
                             <p class="fs-13 text-muted mt-1 mb-0" style="white-space:nowrap!important">${file}</p>
                         </a>
