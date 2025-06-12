@@ -156,40 +156,46 @@
                 <img src="{{ URL::asset('build/images/logo-light-ai.png') }}" class="card-logo card-logo-dark" alt="logo dark" height="34">
                             <img src="{{ URL::asset('build/images/logo-dark-ai.png') }}" class="card-logo card-logo-light" alt="logo light" height="17">
                 <div class="row g-4 justify-content-between py-4">
-                     <div class="col-6">
-                    <div class="mt-4">
-                        <h6 class="text-muted text-uppercase fw-semibold">Osnovni podaci</h6>
-                        <input type="text" class="form-control mb-2" id="company-address" name="name" placeholder="Ime kompanije" disabled value="{{ Auth::user()->company['name'] ?? '' }}">
-                        <input type="text" class="form-control mb-2" id="company-id" name="zip" placeholder="ID kompanije" disabled value="{{ Auth::user()->company['id'] ?? '' }}">
-                        <input type="email" class="form-control mb-2" id="company-tel" name="tel" placeholder="Adresa" disabled value="{{ Auth::user()->company['address'] ?? '' }}">
-                        <p class="fs-12 text-muted p-0">Ovo su informacije o tvojoj kompaniji. Možete ih uvijek prilagoditi na <a href="/profil" class="text-info">pregledu svog profila.</a></p>
-                    </div>
-                </div>
-<div class="col-6">
-      <div class="mt-4">
-                        <h6 class="text-muted text-uppercase fw-semibold mt-1">Broj fakture</h6>
-                        <input type="text" class="form-control" id="invoice-no" name="invoice_no" placeholder="Unesite broj fakture">
-                    </div>
-                    <!-- Incoterm Dropdown Section -->
-                       <div style="margin-top: 1.85rem;">
-                    <h6 class="text-muted text-uppercase fw-semibold mt-1 ">Incoterm</h6>
-                    <select class="form-select mb-2 custom-select-icon incoterm2" name="incoterm" id="incoterm" placeholder="Odaberite incoterm">
+       <div class="col-6 col-md-3 col-mob">
+        <div class="mt-4">
+            <h6 class="text-muted text-uppercase fw-semibold">Moji podaci</h6>
+            <input type="text" class="form-control mb-2" id="company-address" name="name" placeholder="Ime kompanije" disabled value="{{ Auth::user()->company['name'] ?? '' }}">
+            <input type="text" class="form-control mb-2" id="company-id" name="zip" placeholder="ID kompanije" disabled value="{{ Auth::user()->company['id'] ?? '' }}">
+            <input type="email" class="form-control mb-2" id="company-tel" name="tel" placeholder="Adresa" disabled value="{{ Auth::user()->company['address'] ?? '' }}">
+            <p class="fs-12 text-muted p-0">
+                Ovo su informacije o tvojoj kompaniji. Možete ih uvijek prilagoditi na 
+                <a href="/profil" class="text-info">pregledu svog profila.</a>
+            </p>
+        </div>
+    </div>
 
-                        <option value="EXW">EXW</option>
-                        <option value="FCA">FCA</option>
-                        <option value="CPT">CPT</option>
-                        <option value="CIP">CIP</option>
-                        <option value="DAP">DAP</option>
-                        <option value="DPU">DPU</option>
-                        <option value="DDP">DDP</option>
-                        <option value="FAS">FAS</option>
-                        <option value="FOB">FOB</option>
-                        <option value="CFR">CFR</option>
-                        <option value="CIF">CIF</option>
-                    </select>
-                  
-                </div>
-</div>
+    <!-- Indentation Column -->
+    <div class="d-none d-md-block col-md-6 mobile-landscape-hide"></div>
+
+    <!-- Right Column: Invoice Info -->
+    <div class="col-6 col-md-3 col-mob">
+        <div class="mt-4">
+            <h6 class="text-muted text-uppercase fw-semibold mt-1">Broj fakture</h6>
+            <input type="text" class="form-control" id="invoice-no" name="invoice_no" placeholder="Unesite broj fakture">
+        </div>
+
+        <div style="margin-top: 1.85rem;">
+            <h6 class="text-muted text-uppercase fw-semibold mt-1">Incoterm</h6>
+            <select class="form-select mb-2 custom-select-icon incoterm2" name="incoterm" id="incoterm">
+                <option value="EXW">EXW</option>
+                <option value="FCA">FCA</option>
+                <option value="CPT">CPT</option>
+                <option value="CIP">CIP</option>
+                <option value="DAP">DAP</option>
+                <option value="DPU">DPU</option>
+                <option value="DDP">DDP</option>
+                <option value="FAS">FAS</option>
+                <option value="FOB">FOB</option>
+                <option value="CFR">CFR</option>
+                <option value="CIF">CIF</option>
+            </select>
+        </div>
+    </div>
                 </div>
 
               
@@ -244,7 +250,7 @@
             <div class="card-body p-4 border-top border-top-dashed">
                 <div class="row g-4 mb-3">
                     <div class="col-lg-4 text-start">
-                        <label class="text-muted text-uppercase fw-semibold mb-1">ID Deklaracije</label>
+                        <label class="text-muted text-uppercase fw-semibold mb-1">Redni broj Deklaracije</label>
                         <input type="text" class="form-control" id="invoice-no1" name="invoice_no" placeholder="Broj fakture" disabled>
                     </div>
                     <div class="col-lg-4 text-center">

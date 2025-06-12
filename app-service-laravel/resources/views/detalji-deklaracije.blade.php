@@ -66,7 +66,7 @@
                             <div class="row">
                                 <!-- LEFT: Osnovni podaci -->
                                 <div class="col-md-8 col-8">
-                                    <h6 class="text-uppercase fw-semibold mb-3 mt-3">Osnovni podaci</h6>
+                                    <h6 class="text-uppercase fw-semibold mb-3 mt-3">Moji podaci</h6>
                                     <p class="text-muted mb-1"><span>E-mail: </span><span id="shipping-email">deklarant@skeniraj.ba</span></p>
                                     <p class="text-muted mb-1"><span>Tel: </span><span id="shipping-phone">+(387) 63974234</span></p>
                                     <p class="text-muted mb-1"><span>VAT: </span><span id="shipping-vat">BA12314519</span></p>

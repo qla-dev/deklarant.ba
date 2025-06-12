@@ -65,7 +65,7 @@
  </div>
  <div class="text-start total-iznos">
      <div class="floatbar-nav-item w-100 mb-3">
-         <p class="text-info fs-13  mb-0 text-uppercase fw-semibold  me-2">Id fakture:</p>
+         <p class="text-info fs-13  mb-0 text-uppercase fw-semibold  me-2">Id:</p>
          <h5 class="fs-13 mb-0">
              #
              <span id="{{ $isDeklaracija ? 'invoice-id1' : 'invoice-id' }}">Učitavanje...</span>
