@@ -272,6 +272,9 @@ document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
             const fileName = invoiceData.file_name || "invoice.pdf";
 
             const payload = {
+
+                incoterm: document.getElementById("incoterm").value.trim(),
+                invoice_number: document.getElementById("invoice-no").value.trim(),
                 file_name: fileName, // use the file name from the uploaded invoice
                 total_price: parseFloat(document.getElementById("total-amount")?.value || "0"),
                 date_of_issue: (() => {

@@ -182,6 +182,7 @@
         <div style="margin-top: 1.85rem;">
             <h6 class="text-muted text-uppercase fw-semibold mt-1">Incoterm</h6>
             <select class="form-select mb-2 custom-select-icon incoterm2" name="incoterm" id="incoterm">
+                <option value="" selected disabled>Izaberite</option>
                 <option value="EXW">EXW</option>
                 <option value="FCA">FCA</option>
                 <option value="CPT">CPT</option>
@@ -251,7 +252,7 @@
                 <div class="row g-4 mb-3">
                     <div class="col-lg-4 text-start">
                         <label class="text-muted text-uppercase fw-semibold mb-1">Redni broj Deklaracije</label>
-                        <input type="text" class="form-control" id="invoice-no1" name="invoice_no" placeholder="Broj fakture" disabled>
+                        <input type="text" class="form-control" id="invoice-no1" name="invoice_no1" placeholder="Broj fakture" disabled>
                     </div>
                     <div class="col-lg-4 text-center">
                         <label class="d-flex justify-content-center text-muted text-uppercase fw-semibold mb-1">Datum</label>
@@ -1967,7 +1968,11 @@ row.innerHTML = `
             const invNo = getInvoiceId();
             if (invNo) document.getElementById("invoice-no1").value = invNo;
 
-            document.getElementById("invoice-date").value = formatDateToDDMMYYYY(new Date());
+          const invoiceDateInput = document.getElementById("invoice-date");
+if (invoiceDateInput) {
+    invoiceDateInput.value = formatDateToDDMMYYYY(invoice.date_of_issue || new Date());
+}
+
 
             console.log(" Invoice date and number set.");
 

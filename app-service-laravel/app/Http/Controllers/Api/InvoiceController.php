@@ -137,7 +137,10 @@ class InvoiceController extends Controller
             'date_of_issue' => $data['date_of_issue'] ?? $invoice->date_of_issue,
             'country_of_origin' => $data['country_of_origin'] ?? $invoice->country_of_origin,
             'importer_id' => $data['importer_id'] ?? $invoice->importer_id,
-            'supplier_id' => $data['supplier_id'] ?? $invoice->supplier_id
+            'supplier_id' => $data['supplier_id'] ?? $invoice->supplier_id,
+            'invoice_number' => $data['invoice_number'] ?? $invoice->invoice_number,
+            'incoterm' => $data['incoterm'] ?? $invoice->incoterm,
+            
         ]);
 
         // Process items
