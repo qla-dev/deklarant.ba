@@ -167,14 +167,18 @@ document.addEventListener("DOMContentLoaded", async function () {
                         return `<div class="d-flex align-items-center">${avatar}<span>${data}</span></div>`;
                     }
                 },
-                { data: 'owner', title: 'Vlasnik' },
+                {
+                    data: 'owner',
+                    title: 'Vlasnik',
+                    render: data => data?.trim() ? data : '<span class="text-muted">Nepoznato</span>'
+                },
                 {
                     data: 'tax_id', title: 'ID broj',
                     render: data => data?.trim() ? data : '<span class="text-muted">Nepoznato</span>'
                 },
                 {
                     data: null, title: 'Adresa',
-                    render: row => row.contact_email ? row.address : '<span class="text-muted">Nepoznato</span>'
+                    render: row =>  row.address ||  '<span class="text-muted">Nepoznato</span>'
                 },
                 {
                     data: null, title: 'Email',
