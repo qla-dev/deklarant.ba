@@ -133,37 +133,37 @@
                         <div class="p-2">
                             <div class="row g-0">
                                 <div class="col-6">
-                                    <a class="dropdown-icon-item" href="kalendar">
+                                    <a class="dropdown-icon-item" href="/kalendar">
                                         <i class="ri-calendar-line text-info fs-4 d-block mb-1"></i>
                                         <span>@lang('translation.statistic')</span>
                                     </a>
                                 </div>
                                 <div class="col-6">
-                                    <a class="dropdown-icon-item" href="moje-deklaracije">
+                                    <a class="dropdown-icon-item" href="/moje-deklaracije">
                                         <i class="ri-file-line text-info fs-4 d-block mb-1"></i>
                                         <span>@lang('translation.myorder')</span>
                                     </a>
                                 </div>
                                 <div class="col-6">
-                                    <a class="dropdown-icon-item" href="moji-klijenti">
+                                    <a class="dropdown-icon-item" href="/moji-klijenti">
                                         <i class="ri-user-line text-info fs-4 d-block mb-1"></i>
                                         <span>@lang('translation.clients')</span>
                                     </a>
                                 </div>
                                 <div class="col-6">
-                                    <a class="dropdown-icon-item" href="moji-dobavljaci">
+                                    <a class="dropdown-icon-item" href="/moji-dobavljaci">
                                         <i class="ri-truck-line text-info fs-4 d-block mb-1"></i>
                                         <span>@lang('translation.importers')</span>
                                     </a>
                                 </div>
                                 <div class="col-6">
-                                    <a class="dropdown-icon-item" href="tarifne-oznake">
+                                    <a class="dropdown-icon-item" href="/tarifne-oznake">
                                         <i class="mdi mdi-sticker-text-outline text-info fs-4 d-block mb-1"></i>
                                         <span>@lang('translation.declarant')</span>
                                     </a>
                                 </div>
                                 <div class="col-6">
-                                    <a class="dropdown-icon-item" href="cijene-paketa">
+                                    <a class="dropdown-icon-item" href="/cijene-paketa">
                                         <i class="ri-price-tag-3-line text-info fs-4 d-block mb-1"></i>
                                         <span>@lang('translation.pricing')</span>
                                     </a>
