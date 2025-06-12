@@ -840,6 +840,7 @@ function initializeTariffSelects() {
             const desc = item.item_description;
             const translate = item.translate || item.item_description_translated || "";
             const package_num = item.num_packages || 0;
+            const tariff_privilege = item.tariff_privilege || 0;
             const qtype = item.quantity_type || "";
             const best_customs_code_matches = item.best_customs_code_matches || [];
 
@@ -1016,7 +1017,12 @@ row.innerHTML = `
                   <i class="fas fa-times"></i>
                 </button>
                 
-                <input type="checkbox" class="form-check-input " data-bs-toggle="tooltip"  style="width: 30px; height: 26.66px; cursor: pointer;" title="Povlastica DA/NE" />
+                <input type="checkbox" class="form-check-input"
+       name="tariff_privilege[]"
+       ${tariff_privilege ? 'checked' : ''}
+       data-bs-toggle="tooltip" title="Povlastica DA/NE"
+       style="width: 30px; height: 26.66px; cursor: pointer;" />
+
               </div>
             </td>
 

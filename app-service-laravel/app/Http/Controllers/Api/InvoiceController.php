@@ -162,7 +162,7 @@ class InvoiceController extends Controller
                         'best_customs_code_matches' => $item['best_customs_code_matches'] ?? [],
                         'country_of_origin' => $item['origin'] ?? null,
                         'quantity_type' => $item['quantity_type'] ?? null,
-                        'package_num' => $item['package_num'] ?? null,
+                        'num_packages' => $item['package_num'] ?? null,
                         'tariff_privilege' => $item['tariff_privilege'] === 'DA' ? 1 : 0
                     ]);
                     $submittedIds[] = $existingItem->id;
@@ -181,7 +181,7 @@ class InvoiceController extends Controller
                     'version' => $item['version'],
                     'country_of_origin' => $item['origin'] ?? null,
                     'quantity_type' => $item['quantity_type'] ?? null,
-                    'package_num' => $item['package_num'] ?? null,
+                    'num_packages' => $item['package_num'] ?? null,
                     'tariff_privilege' => $item['tariff_privilege'] === 'DA' ? 1 : 0,
                     'best_customs_code_matches' => $item['best_customs_code_matches'] ?? []
                 ]);
