@@ -218,10 +218,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             },
             {
-                data: 'total_price',
-                title: 'Cijena',
-                render: data => `${parseFloat(data).toFixed(2)} KM`
-            },
+    data: 'total_price',
+    title: 'Cijena',
+    render: function(data, type, row) {
+        if (type === 'sort' || type === 'type') {
+            return parseFloat(data);
+        }
+        return `${parseFloat(data).toFixed(2)} KM`;
+    }
+},
             {
                 data: null,
                 title: 'Akcija',
