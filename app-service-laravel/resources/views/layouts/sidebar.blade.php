@@ -63,7 +63,7 @@
                     <a href="/" class="nav-link">@lang('translation.information_dashboard')</a>
                 </li>
                 <li class="nav-item">
-                    <a href="analitika" class="nav-link">@lang('translation.analytics')</a>
+                    <a href="/analitika" class="nav-link">@lang('translation.analytics')</a>
                 </li>
             </ul>
         </div>
