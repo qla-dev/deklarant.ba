@@ -25,7 +25,8 @@ class InvoiceItem extends Model
         'best_customs_code_matches',
         'country_of_origin',
         'quantity_type',
-        'num_packages'
+        'num_packages',
+        'tariff_privilege'
     ];
 
     protected $casts = [
