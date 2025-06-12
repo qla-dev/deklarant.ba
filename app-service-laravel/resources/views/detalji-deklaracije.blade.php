@@ -25,6 +25,9 @@
         border: 1px solid #ccc;
         color: #333;
     }
+
+    
+  
 </style>
 
 </style>
@@ -65,23 +68,29 @@
                             <!--end col-->
                             <div class="row">
                                 <!-- LEFT: Osnovni podaci -->
-                                <div class="col-md-8 col-8">
+                                <div class="col-6 col-md-3 col-mob">
                                     <h6 class="text-uppercase fw-semibold mb-3 mt-3">Moji podaci</h6>
-                                    <p class="text-muted mb-1"><span>E-mail: </span><span id="shipping-email">deklarant@skeniraj.ba</span></p>
-                                    <p class="text-muted mb-1"><span>Tel: </span><span id="shipping-phone">+(387) 63974234</span></p>
-                                    <p class="text-muted mb-1"><span>VAT: </span><span id="shipping-vat">BA12314519</span></p>
-                                    <p class="text-muted mb-0"><span>Adresa: </span><span id="shipping-address">Vilsonovo 9, Sarajevo</span></p>
+                                    <p class="text-muted mb-1"><span>Ime firme: </span><span id="shipping-email">{{ Auth::user()->company['name'] ?? '' }}</span></p>
+                                    <p class="text-muted mb-1"><span>JIB: </span><span id="shipping-vat">{{ Auth::user()->company['id'] ?? '' }}</span></p>
+                                    <p class="text-muted mb-3"><span>Adresa: </span><span id="shipping-address">{{ Auth::user()->company['address'] ?? '' }}</span></p>
+                                 <p class="fs-12 text-muted m-0">
+                Ovo su informacije o tvojoj kompaniji. Možete ih uvijek prilagoditi na 
+                <a href="/profil" class="text-info">pregledu svog profila.</a>
+            </p>
                                 </div>
+ <!-- Indentation Column -->
+    <div class="d-none d-md-block col-md-6 mobile-landscape-hide"></div>
 
                                 <!-- RIGHT: Incoterm and Broj fakture stacked -->
-                                <div class="col-md-4 col-4 text-end" style="padding-right: 0px;">
-                                    <div class="mb-3">
-                                        <h6 class="text-uppercase fw-semibold mt-3">Incoterm</h6>
-                                        <h5 class="fs-14 mb-0 text-muted "><span id="incoterm" class=" text-muted" style="background: unset!important;"></span></h5>
-                                    </div>
-                                    <div class="mb-3">
+                                <div class="col-6 col-md-3 col-mob text-end" style="padding-right: 0px;">
+                                    
+                                    <div class="mb-3 mt-3">
                                         <h6 class="text-uppercase fw-semibold">Broj fakture</h6>
                                         <h5 class="fs-14 mb-0 text-muted "><span id="invoice-no"></span></h5>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6 class="text-uppercase fw-semibold mt-4">Incoterm</h6>
+                                        <h5 class="fs-14 mb-0 text-muted "><span id="incoterm" class=" text-muted" style="background: unset!important;"></span></h5>
                                     </div>
 
                                 </div>
@@ -98,7 +107,7 @@
                 <div class="col-lg-12">
                     <div class="card-body p-4 border-top border-top-dashed ">
                         <div class="row pt-1">
-                            <div class="col-8 text-start">
+                            <div class="col-6 text-start">
                                 <h6 class="text-uppercase fw-semibold mb-3">Klijent</h6>
                                 <p class="fw-medium mb-2" id="supplier-name"></p>
                                 <p class="text-muted mb-1" id="supplier-address"></p>
@@ -109,7 +118,7 @@
 
                             </div>
                             <!--end col-->
-                            <div class="col-4 text-end">
+                            <div class="col-6 text-end">
                                 <h6 class="text-uppercase fw-semibold mb-3">Dobavljač</h6>
                                 <p class="fw-medium mb-2" id="carrier-name"></p>
                                 <p class="text-muted mb-1" id="carrier-address-line-1"></p>
@@ -145,9 +154,10 @@
                                         <th>Tip kvantiteta</th>
                                         <th>Zemlja porijekla</th>
                                         <th>Povlastica</th>
-                                        <th>Cijena</th>
+                                       
                                         <th>Količina</th>
                                         <th>Broj paketa</th>
+                                         <th>Cijena</th>
 
                                         <th style="border-right: 1px solid gray;">Ukupno</th>
 
@@ -339,14 +349,15 @@
                             <th scope="row">${index + 1}</th>
                             <td>${item.item_description_original || item.item_description || ''}</td>
                             <td>${item.item_description || ''}</td>
-                            <td>${item.translation || ''}</td>
+                            <td>${item.item_description_translated || ''}</td>
                             <td>${tarifnaOznaka}</td>
                             <td>${item.quantity_type || ''}</td>
                             <td>${item.country_of_origin || ''}</td>
                             <td>${item.povlastica ? 'DA' : 'NE'}</td>
-                            <td>${item.base_price} ${item.currency || ''}</td>
+                            
                             <td>${item.quantity}</td>
                             <td>${item.num_packages || '0'}</td>
+                            <td>${item.base_price} ${item.currency || ''}</td>
                             
                             <td >${item.total_price || (item.base_price * item.quantity).toFixed(2)} ${item.currency || ''}</td>
                       
