@@ -2302,17 +2302,16 @@ row.innerHTML = `
 
     document.addEventListener("DOMContentLoaded", async () => {
 
-        if (!invoiceId) return console.log("No ID in URL — skipping load-invoice script.");
-        const scanId = window.global_invoice_id;
-        if (scanId && scanId !== invoiceId) {
-            console.warn(`Clearing scan_invoice_id (${scanId}) because it does not match invoiceId (${invoiceId})`);
-            localStorage.removeItem("scan_invoice_id");
-        }
-        
+      if (!invoiceId) return console.log("No ID in URL — skipping load-invoice script.");
+const scanId = window.global_invoice_id;
+if (scanId && scanId !== invoiceId) {
+    console.warn(`Clearing scan_invoice_id (${scanId}) because it does not match invoiceId (${invoiceId})`);
+    localStorage.removeItem("scan_invoice_id");
+}
 
-        Swal.fire({
+Swal.fire({
     title: 'Učitavanje deklaracije...',
-    icon: null, // Disable any built-in icon
+    icon: null,
     html: `
         <div class="custom-swal-spinner mb-3"></div>
         <div id="swal-status-message">Molimo sačekajte</div>
@@ -2320,17 +2319,22 @@ row.innerHTML = `
     showConfirmButton: false,
     allowOutsideClick: false,
     didOpen: () => {
-        // ⬇️ Close the pre-loader overlay here
-      
-
         const spinner = document.querySelector(".custom-swal-spinner");
-
         const icon = Swal.getHtmlContainer()?.previousElementSibling;
         if (icon?.classList.contains('swal2-icon')) {
             icon.remove();
         }
+
+        // ➕ Delay 3 seconds before continuing
+        setTimeout(() => {
+            // Place your next action here, e.g. fetch invoice or close Swal
+            console.log("✅ Ready after 3 seconds");
+
+            // Swal.close(); // or any follow-up logic
+        }, 3000);
     }
 });
+
 
 
         try {
