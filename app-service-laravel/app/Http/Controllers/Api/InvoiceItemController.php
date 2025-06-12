@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
+
 use App\Http\Controllers\Controller;
 use App\Models\InvoiceItem;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Log;
+
 use Exception;
+
+
 
 class InvoiceItemController extends Controller
 {
@@ -70,37 +75,57 @@ class InvoiceItemController extends Controller
         }
     }
 
-    public function update(Request $request, $invoiceItemId)
-    {
-        try {
-            $invoiceItem = InvoiceItem::findOrFail($invoiceItemId);
+ 
 
-            $data = $request->validate([
-                'item_code' => 'required|string',
-                'version' => 'required|integer',
-                'item_description_original' => 'required|string',
-                'item_description_translated' => 'required|string',
-                'item_description' => 'required|string',
-                'quantity' => 'required|integer',
-                'base_price' => 'required|numeric',
-                'total_price' => 'required|numeric',
-                'currency' => 'required|string',
-                'best_customs_code_matches' => 'required|array',
-            ]);
-    
-            $invoiceItem->update($data);
-    
-            return response()->json([
-                'message' => 'Invoice item updated successfully',
-                'data' => $invoiceItem
-            ]);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Stavka deklaracije nije pronađena. Provjerite ID stavke i pokušajte ponovo'], 404);
-        } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno ažuriranje stavke deklaracije. Pokušajte ponovo kasnije'], 500);
-        }
+public function update(Request $request, $invoiceItemId)
+{
+    try {
+        Log::info('[InvoiceItem Update] Incoming request:', [
+            'invoiceItemId' => $invoiceItemId,
+            'payload' => $request->all()
+        ]);
 
+        $invoiceItem = InvoiceItem::findOrFail($invoiceItemId);
+
+        $data = $request->validate([
+            'item_code' => 'required|string',
+            'version' => 'required|integer',
+            'item_description_original' => 'required|string',
+            'item_description_translated' => 'required|string',
+            'item_description' => 'required|string',
+            'quantity' => 'required|integer',
+            'base_price' => 'required|numeric',
+            'total_price' => 'required|numeric',
+            'currency' => 'required|string',
+            'best_customs_code_matches' => 'required|array',
+        ]);
+
+        $invoiceItem->update($data);
+
+        Log::info('[InvoiceItem Update] Successfully updated:', [
+            'updated_item' => $invoiceItem->toArray()
+        ]);
+
+        return response()->json([
+            'message' => 'Invoice item updated successfully',
+            'data' => $invoiceItem
+        ]);
+    } catch (ModelNotFoundException $e) {
+        Log::warning('[InvoiceItem Update] Item not found:', [
+            'invoiceItemId' => $invoiceItemId,
+            'exception' => $e->getMessage()
+        ]);
+        return response()->json(['error' => 'Stavka deklaracije nije pronađena. Provjerite ID stavke i pokušajte ponovo'], 404);
+    } catch (\Exception $e) {
+        Log::error('[InvoiceItem Update] General exception:', [
+            'invoiceItemId' => $invoiceItemId,
+            'exception' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ]);
+        return response()->json(['error' => 'Neuspješno ažuriranje stavke deklaracije. Pokušajte ponovo kasnije'], 500);
     }
+}
+
 
     public function destroy($invoiceItemId)
     {

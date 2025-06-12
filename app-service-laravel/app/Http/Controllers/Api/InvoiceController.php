@@ -123,90 +123,116 @@ class InvoiceController extends Controller
 
     }
 
-    public function update(Request $request, $invoiceId)
-    {
-        DB::beginTransaction(); // Ensure safe update
-        try {
-            $invoice = Invoice::with('items')->findOrFail($invoiceId);
-            $data = $request->all();
-    
-            // Update invoice metadata
-            $invoice->update([
-                'file_name' => $data['file_name'] ?? $invoice->file_name,
-                'total_price' => $data['total_price'] ?? $invoice->total_price,
-                'date_of_issue' => $data['date_of_issue'] ?? $invoice->date_of_issue,
-                'country_of_origin' => $data['country_of_origin'] ?? $invoice->country_of_origin,
-                'importer_id' => $data['importer_id'] ?? $invoice->importer_id,
-                'supplier_id' => $data['supplier_id'] ?? $invoice->supplier_id
-            ]);
-    
-            // Process items
-            $submittedItems = $data['items'] ?? [];
-            $submittedIds = [];
-    
-            foreach ($submittedItems as $item) {
-                if (isset($item['item_id'])) {
-                    // Update existing item
-                    $existingItem = $invoice->items()->find($item['item_id']);
-                    if ($existingItem) {
-                        $existingItem->update([
-                            'item_code' => $item['item_code'],
-                            'item_description_original' => $item['item_description_original'],
-                            'item_description' => $item['item_description'],
-                            'quantity' => $item['quantity'],
-                            'base_price' => $item['base_price'],
-                            'total_price' => $item['total_price'],
-                            'currency' => $item['currency'],
-                            'version' => $item['version'],
-                            'best_customs_code_matches' => $item['best_customs_code_matches'] ?? [],
-                            'origin' => $item['origin'] ?? null,
-                            'quantity_type' => $item['quantity_type'] ?? null,
-                            'package_num' => $item['package_num'] ?? null
-                        ]);
-                        $submittedIds[] = $existingItem->id;
-                    }
-                } else {
-                    // Create new item
-                    $newItem = $invoice->items()->create([
+  public function update(Request $request, $invoiceId)
+{
+    DB::beginTransaction(); // Ensure safe update
+    try {
+        $invoice = Invoice::with('items')->findOrFail($invoiceId);
+        $data = $request->all();
+
+        // Update invoice metadata
+        $invoice->update([
+            'file_name' => $data['file_name'] ?? $invoice->file_name,
+            'total_price' => $data['total_price'] ?? $invoice->total_price,
+            'date_of_issue' => $data['date_of_issue'] ?? $invoice->date_of_issue,
+            'country_of_origin' => $data['country_of_origin'] ?? $invoice->country_of_origin,
+            'importer_id' => $data['importer_id'] ?? $invoice->importer_id,
+            'supplier_id' => $data['supplier_id'] ?? $invoice->supplier_id
+        ]);
+
+        // Process items
+        $submittedItems = $data['items'] ?? [];
+        $submittedIds = [];
+
+        foreach ($submittedItems as $item) {
+            if (isset($item['item_id'])) {
+                // Update existing item
+                $existingItem = $invoice->items()->find($item['item_id']);
+                if ($existingItem) {
+                    $existingItem->update([
                         'item_code' => $item['item_code'],
                         'item_description_original' => $item['item_description_original'],
                         'item_description' => $item['item_description'],
+                        'item_description_translated' => $item['item_description_translated'] ?? null,
                         'quantity' => $item['quantity'],
                         'base_price' => $item['base_price'],
                         'total_price' => $item['total_price'],
                         'currency' => $item['currency'],
                         'version' => $item['version'],
-                        'origin' => $item['origin'] ?? null,
+                        'best_customs_code_matches' => $item['best_customs_code_matches'] ?? [],
+                        'country_of_origin' => $item['origin'] ?? null,
                         'quantity_type' => $item['quantity_type'] ?? null,
-                        'package_num' => $item['package_num'] ?? null
+                        'package_num' => $item['package_num'] ?? null,
+                        'tariff_privilege' => $item['tariff_privilege'] === 'DA' ? 1 : 0
                     ]);
-                    $submittedIds[] = $newItem->id;
+                    $submittedIds[] = $existingItem->id;
                 }
+            } else {
+                // Create new item
+                $newItem = $invoice->items()->create([
+                    'item_code' => $item['item_code'],
+                    'item_description_original' => $item['item_description_original'],
+                    'item_description' => $item['item_description'],
+                    'item_description_translated' => $item['item_description_translated'] ?? null,
+                    'quantity' => $item['quantity'],
+                    'base_price' => $item['base_price'],
+                    'total_price' => $item['total_price'],
+                    'currency' => $item['currency'],
+                    'version' => $item['version'],
+                    'country_of_origin' => $item['origin'] ?? null,
+                    'quantity_type' => $item['quantity_type'] ?? null,
+                    'package_num' => $item['package_num'] ?? null,
+                    'tariff_privilege' => $item['tariff_privilege'] === 'DA' ? 1 : 0,
+                    'best_customs_code_matches' => $item['best_customs_code_matches'] ?? []
+                ]);
+                $submittedIds[] = $newItem->id;
             }
-    
-            // Optional: Delete removed items
-            $invoice->items()->whereNotIn('id', $submittedIds)->delete();
-    
-            DB::commit();
-            return response()->json([
-                'message' => 'Deklaracija i stavke uspješno ažurirane',
-                'data' => $invoice->fresh('items')
-            ]);
-        } catch (ModelNotFoundException $e) {
-            DB::rollBack();
-            Log::warning("Deklaracija nije pronađena. ID: $invoiceId", [
-                'exception' => $e->getMessage()
-            ]);
-            return response()->json(['error' => 'Deklaracija s unesenim ID-om nije pronađena'], 404);
-        } catch (Exception $e) {
-            DB::rollBack();
-            Log::error("Greška pri ažuriranju deklaracije. ID: $invoiceId", [
-                'exception' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            return response()->json(['error' => 'Neuspješno ažuriranje deklaracije. Provjerite podatke i pokušajte ponovo'], 500);
         }
+
+        // Optional: Delete removed items
+        $invoice->items()->whereNotIn('id', $submittedIds)->delete();
+
+        DB::commit();
+        return response()->json([
+            'message' => 'Deklaracija i stavke uspješno ažurirane',
+            'data' => $invoice->fresh('items')
+        ]);
+    } catch (ModelNotFoundException $e) {
+        DB::rollBack();
+        Log::warning("Deklaracija nije pronađena. ID: $invoiceId", [
+            'exception' => $e->getMessage()
+        ]);
+        return response()->json(['error' => 'Deklaracija s unesenim ID-om nije pronađena'], 404);
+    } catch (Exception $e) {
+        DB::rollBack();
+        Log::error("Greška pri ažuriranju deklaracije. ID: $invoiceId", [
+            'exception' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ]);
+
+        $message = $e->getMessage();
+        $translatedMessage = 'Došlo je do greške prilikom obrade deklaracije.';
+
+        if (str_contains($message, 'Integrity constraint violation')) {
+            if (str_contains($message, 'item_description_original')) {
+                $translatedMessage = 'Naziv i opis svih proizvoda unutar deklaracije su obavezni';
+            } elseif (str_contains($message, 'country_of_origin')) {
+                $translatedMessage = 'Zemlja porijekla je obavezna.';
+            } elseif (str_contains($message, 'item_code')) {
+                $translatedMessage = 'Tarifni broj artikla je obavezan.';
+            } else {
+                $translatedMessage = 'Neki od obaveznih podataka nedostaje ili nije ispravan.';
+            }
+        }
+
+        return response()->json([
+            'error' => 'Neuspješno ažuriranje deklaracije',
+            'backend_error' => $message,
+            'poruka' => $translatedMessage
+        ], 500);
     }
+}
+
     
 
     public function destroy($invoiceId)

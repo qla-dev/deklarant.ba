@@ -838,6 +838,7 @@ function initializeTariffSelects() {
             const origin = item.country_of_origin || "DE";
             const total = (price * quantity).toFixed(2);
             const desc = item.item_description;
+            const translate = item.translate || item.item_description_translated || "";
             const package_num = item.num_packages || 0;
             const qtype = item.quantity_type || "";
             const best_customs_code_matches = item.best_customs_code_matches || [];
@@ -866,14 +867,15 @@ row.innerHTML = `
               <button class="btn btn-outline-info rounded" onmouseover="updateTooltip(this)" type="button" onclick="searchFromInputs(this)" data-bs-toggle="tooltip" data-bs-placement="top"   title="">
                  <i class="fa-brands fa-google"></i>
             </button>
-              <input type="text" class="form-control item-desc" name="item_desc[]" placeholder="Opis proizvoda" value="${desc}" style="flex:1;">
+              <input type="text" class="form-control item-desc" name="item_desc[]" placeholder="Opisa proizvoda" value="${desc}" style="flex:1;">
             </div>
             <input 
               type="text" 
               class="form-control form-control-sm mt-1" 
-              style="font-size: 0.85rem; padding-left:14.4px; height:37.1px;" 
+              style="font-size: 0.65rem; padding-left:14.4px; height:37.1px;" 
               name="item_prev[]" 
               placeholder="Prevod"
+              value="${translate}"
             >
           </td>
            <input type="hidden" name="item_id[]" value="${itemId || ''}">
@@ -2500,52 +2502,6 @@ row.innerHTML = `
 
             // Use DocumentFragment for fast DOM appending
             const fragment = document.createDocumentFragment();
-
-            invoice.items.forEach((item, index) => {
-                const tarifnaOznaka = item.item_code?.trim() || item.best_customs_code_matches?.[0]?.entry?.["Tarifna oznaka"]?.trim() || "";
-                const row = document.createElement("tr");
-                row.classList.add("product");
-                row.innerHTML = `
-<td>${index + 1}</td>
-<td colspan="2">
-    <div class="input-group" style="display: flex; gap: 0.25rem;">
-        <input type="text" class="form-control item-name" name="item_name[]" placeholder="Naziv proizvoda" value="${item.item_description_original || ''}" style="flex:1;">
-        <button class="btn btn-outline-info rounded" type="button" onclick="searchFromInputs(this)"><i class="fa-brands fa-google"></i></button>
-        <input type="text" class="form-control item-desc" name="item_desc[]" placeholder="Opis proizvoda" value="${item.item_description || ''}" style="flex:1;">
-    </div>
-    <input type="text" class="form-control form-control-sm mt-1" name="item_prev[]" style="padding-left:14.4px; height: 37.1px;" placeholder="Prevod" value="${item.translation || ''}">
-</td>
-<td>
-    <select class="form-control select2-tariff" name="item_code[]">
-        <option value="${tarifnaOznaka}" selected>${tarifnaOznaka}</option>
-    </select>
-</td>
-<td><input type="text" class="form-control" name="quantity_type[]" value="${item.quantity_type || ''}"></td>
-<td>
-    <select class="form-select select2-country" name="origin[]">${generateCountryOptions(item.country_of_origin)}</select>
-</td>
-<td><input type="number" class="form-control" name="price[]" value="${item.base_price || ''}"></td>
-<td style="width: 60px;">
-    <div class="input-group input-group-sm">
-        <button class="btn btn-outline-info btn-sm" type="button" style="height:30px;padding:0 5px;font-size:10px;">−</button>
-        <input type="number" class="form-control text-center" name="quantity[]" value="${item.quantity || 0}" min="0" style="padding: 0 5px;">
-        <button class="btn btn-outline-info btn-sm" type="button" style="height:30px;padding:0 5px;font-size:10px;">+</button>
-    </div>
-    <div class="input-group input-group-sm mt-1">
-        <button class="btn btn-outline-info btn-sm" type="button" style="height:30px;padding:0 5px;font-size:10px;">−</button>
-        <input type="number" class="form-control text-center" name="kolata[]" value="${item.num_packages || 0}" min="0">
-        <button class="btn btn-outline-info btn-sm" type="button" style="height:30px;padding:0 5px;font-size:10px;">+</button>
-    </div>
-</td>
-<td><input type="text" class="form-control" name="total[]" value="${item.total_price || (item.base_price * item.quantity).toFixed(2)}"></td>
-<td style="width: 20px; text-align: center;">
-    <div style="display: flex; flex-direction: column; align-items: end; gap: 2px;">
-        <button type="button" class="btn btn-danger btn-sm remove-row text-center" style="width: 30px;" title="Ukloni red"><i class="fas fa-times"></i></button>
-        <input type="checkbox" class="form-check-input" style="width: 30px; height: 26.66px;" title="Povlastica DA/NE" />
-    </div>
-</td>`;
-                fragment.appendChild(row);
-            });
 
             // Append all rows in one operation
             tbody.appendChild(fragment);

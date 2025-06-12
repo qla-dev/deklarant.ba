@@ -197,9 +197,12 @@ document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
 
     const item_name = row.querySelector('[name="item_name[]"]')?.value?.trim() || "";
     const item_description_original = item_name;
+    const item_description = row.querySelector('[name="item_desc[]"]')?.value?.trim() || "";
+    const item_description_translated = row.querySelector('[name="item_prev[]"]')?.value.trim() || "";
+
+
     const item_code = $(row).find('[name="item_code[]"]').val() || "";
 
-    // ✅ Parse best_customs_code_matches safely from JSON
     const bestMatchesRaw = row.querySelector('[name="best_customs_code_matches[]"]')?.value || "[]";
     let best_customs_code_matches = [];
     try {
@@ -208,13 +211,30 @@ document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
         console.warn("Invalid JSON in best_customs_code_matches[]:", bestMatchesRaw);
     }
 
-    const origin = row.querySelector('[name="origin[]"]')?.value || "";
+    const origin = $(row).find('[name="origin[]"]').val() || "";
     const base_price = parseFloat(row.querySelector('[name="price[]"]')?.value || "0");
     const quantity = parseFloat(row.querySelector('[name="quantity[]"]')?.value || "0");
     const total_price = parseFloat((base_price * quantity).toFixed(2));
-    const item_description = row.querySelector('[name="item_code[]"] option:checked')?.textContent || "";
     const quantity_type = row.querySelector('[name="quantity_type[]"]')?.value || "";
     const package_num = row.querySelector('[name="kolata[]"]')?.value || "";
+
+    const povlastica = row.querySelector('input[type="checkbox"]')?.checked || false;
+    const tariff_privilege = povlastica ? "DA" : "NE";
+
+    console.log(`[ROW ${index + 1}]`, {
+        origin,
+        base_price,
+        quantity,
+        quantity_type,
+        package_num,
+        tariff_privilege,
+        povlastica,
+        item_code,
+        item_name,
+        item_description,
+        item_description_translated,
+        total_price
+    });
 
     items.push({
         item_id,
@@ -223,16 +243,19 @@ document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
         best_customs_code_matches,
         item_description,
         item_description_original,
+        item_description_translated,
         origin,
         base_price,
         quantity,
         quantity_type,
         package_num,
+        tariff_privilege,
         total_price,
         currency: "EUR",
         version: new Date().getFullYear()
     });
 });
+
 
 
             function toISODate(dmy) {
@@ -278,26 +301,54 @@ document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
             });
 
             const resJson = await res.json();
-            if (!res.ok) throw new Error(resJson?.error || "Greška pri spašavanju fakture");
 
-            Swal.fire({
-                icon: "success",
-                title: "Uspješno",
-                text: "Deklaracija je sačuvana",
-                confirmButtonText: "U redu",
-                customClass: {
-                    confirmButton: "btn btn-info"
-                },
-                buttonsStyling: false
-            });
+    if (!res.ok) {
+        // ⛔ Backend returned an error – handle both 'poruka' and 'backend_error'
+        const backendMsg = resJson?.poruka || "Greška pri spašavanju deklaracije.";
 
-        } catch (err) {
-            console.error(" Greška:", err);
-            Swal.fire("Greška", err.message || "Neočekivana greška", "error");
-        } finally {
-            btn.disabled = false;
-            btn.innerHTML = `<i class="ri-save-line align-bottom me-1"></i> Sačuvaj`;
-        }
+
+
+        Swal.fire({
+            icon: "error",
+            title: "Neuspješno",
+            html: `<div class="text-danger mb-2">${backendMsg}</div>`,
+            confirmButtonText: "U redu",
+            customClass: {
+                confirmButton: "btn btn-info"
+            },
+            buttonsStyling: false
+        });
+
+        return; // ⚠️ Prevents running success block below
+    }
+
+    Swal.fire({
+        icon: "success",
+        title: "Uspješno",
+        text: "Deklaracija je sačuvana",
+        confirmButtonText: "U redu",
+        customClass: {
+            confirmButton: "btn btn-info"
+        },
+        buttonsStyling: false
+    });
+
+} catch (err) {
+    console.error("Greška:", err);
+    Swal.fire({
+        icon: "error",
+        title: "Greška",
+        text: err.message || "Neočekivana greška pri komunikaciji sa serverom.",
+        confirmButtonText: "U redu",
+        customClass: {
+            confirmButton: "btn btn-info"
+        },
+        buttonsStyling: false
+    });
+} finally {
+    btn.disabled = false;
+    btn.innerHTML = `<i class="ri-save-line align-bottom me-1"></i> Sačuvaj`;
+}
     });
 
 //  Export to XML -->
