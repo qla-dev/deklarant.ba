@@ -192,11 +192,48 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             
             
-            {
-                data: 'status',
-                title: 'Status',
-                defaultContent: '<span class="text-muted">Nepoznato</span>'
-            },
+         {
+    data: 'internal_status',
+    title: 'Status',
+    className: 'text-center',
+    render: function(data, type, row) {
+        if (type !== 'display') return data;
+
+        const baseClass = 'badge d-inline-block w-100 py-1';
+
+        // Provjera ako nema task_id
+        if (!row.task_id) {
+            return `<span class="${baseClass} bg-danger text-white">
+                        <i class="fas fa-times-circle me-1"></i> Odbijena
+                    </span>`;
+        }
+
+        switch (data) {
+            case 0:
+                return `<span class="${baseClass} bg-primary text-white">
+                            <i class="fas fa-spinner fa-spin me-1"></i> U obradi
+                        </span>`;
+            case 1:
+                return `<span class="${baseClass} bg-warning text-dark">
+                            <i class="fas fa-pencil-alt me-1"></i> Draft
+                        </span>`;
+            case 2:
+                return `<span class="${baseClass} bg-success text-white">
+                            <i class="fas fa-check-circle me-1"></i> Spremljena
+                        </span>`;
+            case 3:
+                return `<span class="${baseClass} bg-danger text-white">
+                            <i class="fas fa-times-circle me-1"></i> Neuspješna
+                        </span>`;
+            default:
+                return `<span class="${baseClass} bg-secondary">
+                            <i class="fas fa-question-circle me-1"></i> Nepoznato
+                        </span>`;
+        }
+    }
+},
+
+
             {
                 data: 'file_name',
                 orderable: false,
@@ -233,16 +270,42 @@ document.addEventListener("DOMContentLoaded", function () {
                 orderable: false,
                 searchable: false,
                 className: 'text-end',
-                render: row => `
-                    <a class="btn btn-sm btn-soft-info me-1 view-invoice" href="/detalji-deklaracije/${row.id}" title="Pregledaj deklaraciju">
+                render: row => {
+    const id = row.id;
+    const status = row.internal_status;
+    const hasTask = !!row.task_id;
+
+    const baseBtn = 'btn btn-sm me-1';
+    const viewBtn = `<a class="${baseBtn} btn-soft-info view-invoice" href="/detalji-deklaracije/${id}" title="Pregledaj deklaraciju">
                         <i class="ri-eye-line"></i>
-                    </a>
-                    <a class="btn btn-sm btn-soft-info me-1 edit-invoice" href="/deklaracija/${row.id}" title="Uredi deklaraciju">
+                     </a>`;
+    const editBtn = `<a class="${baseBtn} btn-soft-info edit-invoice" href="/deklaracija/${id}" title="Uredi deklaraciju">
                         <i class="ri-edit-line"></i>
-                    </a>
-                    <button class="btn btn-sm btn-soft-danger delete-invoice" data-id="${row.id}" title="Obriši deklaraciju">
+                     </a>`;
+    const deleteBtn = `<button class="${baseBtn} btn-soft-danger delete-invoice" data-id="${id}" title="Obriši deklaraciju">
                         <i class="ri-delete-bin-line"></i>
-                    </button>`
+                      </button>`;
+    const trackBtn = ``;
+    const aiBtn = `<button class="${baseBtn} btn-info ai-followup" onclick="handleMagic(${id})" title="AI nastavak">
+                        <i class="fas fa-wand-magic-sparkles"></i>
+                    </button>`;
+                      if (!hasTask) {
+       return aiBtn;
+    }
+                    
+
+    switch (status) {
+        case 0: // U obradi
+            return trackBtn;
+
+        case 3: // Obrađena
+            return aiBtn;
+
+        default: // Sve ostalo: draft, spremljena, odbijena
+            return viewBtn + editBtn + deleteBtn;
+    }
+}
+
             }
         ],
         language: {
@@ -308,7 +371,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 </script>
-
 
 
 

@@ -66,7 +66,7 @@ class InvoiceController extends Controller
         try {
             $invoices = Invoice::where('user_id', $userId)
                 ->with([
-                    'items',
+                    
                     'supplier:id,name,owner,avatar' // Make sure this line is correct
                 ])
                 ->get();
@@ -137,7 +137,13 @@ class InvoiceController extends Controller
             'date_of_issue' => $data['date_of_issue'] ?? $invoice->date_of_issue,
             'country_of_origin' => $data['country_of_origin'] ?? $invoice->country_of_origin,
             'importer_id' => $data['importer_id'] ?? $invoice->importer_id,
-            'supplier_id' => $data['supplier_id'] ?? $invoice->supplier_id
+            'supplier_id' => $data['supplier_id'] ?? $invoice->supplier_id,
+            'invoice_number' => $data['invoice_number'] ?? $invoice->invoice_number,
+            'incoterm' => $data['incoterm'] ?? $invoice->incoterm,
+            'internal_status' => array_key_exists('internal_status', $data)? $data['internal_status']: 2,
+
+
+            
         ]);
 
         // Process items
@@ -308,26 +314,28 @@ class InvoiceController extends Controller
 
     }
 
-    public function getInvoiceInfoById($id)
-    {
-        $invoice = Invoice::find($id);
+  public function getInvoiceInfoById($id)
+{
+    $invoice = Invoice::find($id);
 
-        if (!$invoice) {
-            return response()->json(['error' => 'Deklaracija nije pronađena'], 404);
-        }
-
-        $supplier = Supplier::find($invoice->supplier_id);
-
-        return response()->json([
-            'file_name' => $invoice->file_name,
-            'total_price' => $invoice->total_price,
-            'supplier_id' => $invoice->supplier_id,
-            'supplier_name' => $supplier->name ?? null,
-            'supplier_avatar' => $supplier->avatar ?? null,
-            'owner' => $supplier->owner ?? null, // Make sure this column exists in the DB
-            'user_id' => $invoice->user_id,
-        ]);
+    if (!$invoice) {
+        return response()->json(['error' => 'Deklaracija nije pronađena'], 404);
     }
+
+    $supplier = Supplier::find($invoice->supplier_id);
+
+    return response()->json([
+        'file_name' => $invoice->file_name,
+        'total_price' => $invoice->total_price,
+        'supplier_id' => $invoice->supplier_id,
+        'supplier_name' => $supplier->name ?? null,
+        'supplier_avatar' => $supplier->avatar ?? null,
+        'owner' => $supplier->owner ?? null,
+        'user_id' => $invoice->user_id,
+        'overall_status' => $invoice->overallStatus(), // ✅ Nova linija
+    ]);
+}
+
 
     public function getScanStatus($id)
     {

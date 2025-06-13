@@ -3,13 +3,14 @@
 @lang('translation.create-invoice')
 @endsection
 @section('css')
-<!-- <link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
+<!-- <link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">-->
 <!-- Sweet Alert css-->
 <link href="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet">
 
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <style>
+    
     /* Ensures the selected text is truncated with ellipsis and tooltip works */
     .select2-container--default .select2-results__options {
         max-width: none !important;
@@ -149,44 +150,54 @@
 @endsection
 @section('content')
 
-<div class="row justify-content-center mt-0 mb-3">
+<div class="row justify-content-center mt-0 mb-3  content-desktop">
     <div class="col card paper-layout">
         <div id="invoice-form">
             <div class="card-header border-0 p-4 pb-0">
                 <img src="{{ URL::asset('build/images/logo-light-ai.png') }}" class="card-logo card-logo-dark" alt="logo dark" height="34">
                             <img src="{{ URL::asset('build/images/logo-dark-ai.png') }}" class="card-logo card-logo-light" alt="logo light" height="17">
-                <div class="d-flex flex-row justify-content-between py-4">
-                     
-                    <div class="mt-4">
-                        <h6 class="text-muted text-uppercase fw-semibold">Osnovni podaci</h6>
-                        <input type="text" class="form-control mb-2" id="company-address" name="name" placeholder="Ime kompanije" disabled value="{{ Auth::user()->company['name'] ?? '' }}">
-                        <input type="text" class="form-control mb-2" id="company-id" name="zip" placeholder="ID kompanije" disabled value="{{ Auth::user()->company['id'] ?? '' }}">
-                        <input type="email" class="form-control" id="company-tel" name="tel" placeholder="Adresa" disabled value="{{ Auth::user()->company['address'] ?? '' }}">
-                    </div>
+                <div class="row g-4 justify-content-between py-4">
+       <div class="col-6 col-md-3 col-mob">
+        <div class="mt-4">
+            <h6 class="text-muted text-uppercase fw-semibold">Moji podaci</h6>
+            <input type="text" class="form-control mb-2" id="company-address" name="name" placeholder="Ime kompanije" disabled value="{{ Auth::user()->company['name'] ?? '' }}">
+            <input type="text" class="form-control mb-2" id="company-id" name="zip" placeholder="ID kompanije" disabled value="{{ Auth::user()->company['id'] ?? '' }}">
+            <input type="email" class="form-control mb-2" id="company-tel" name="tel" placeholder="Adresa" disabled value="{{ Auth::user()->company['address'] ?? '' }}">
+            <p class="fs-12 text-muted m-0">
+                Ovo su informacije o tvojoj kompaniji. Možete ih uvijek prilagoditi na 
+                <a href="/profil" class="text-info">pregledu svog profila.</a>
+            </p>
+        </div>
+    </div>
 
-                    <!-- Incoterm Dropdown Section -->
-                       <div style="min-width: 200px;" class="mt-4">
-                    <h6 class="text-muted text-uppercase fw-semibold mt-1 ">Incoterm</h6>
-                    <select class="form-select mb-2 custom-select-icon incoterm2" name="incoterm" id="incoterm" placeholder="Odaberite incoterm">
+    <!-- Indentation Column -->
+    <div class="d-none d-md-block col-md-6 mobile-landscape-hide"></div>
 
-                        <option value="EXW">EXW</option>
-                        <option value="FCA">FCA</option>
-                        <option value="CPT">CPT</option>
-                        <option value="CIP">CIP</option>
-                        <option value="DAP">DAP</option>
-                        <option value="DPU">DPU</option>
-                        <option value="DDP">DDP</option>
-                        <option value="FAS">FAS</option>
-                        <option value="FOB">FOB</option>
-                        <option value="CFR">CFR</option>
-                        <option value="CIF">CIF</option>
-                    </select>
-                    <div style="min-width: 220px;">
-                        <h6 class="text-muted text-uppercase fw-semibold mt-1">Broj fakture</h6>
-                        <input type="text" class="form-control" id="invoice-no" name="invoice_no" placeholder="Unesite broj fakture">
-                    </div>
-                </div>
+    <!-- Right Column: Invoice Info -->
+    <div class="col-6 col-md-3 col-mob">
+        <div class="mt-4">
+            <h6 class="text-muted text-uppercase fw-semibold mt-1">Broj fakture</h6>
+            <input type="text" class="form-control" id="invoice-no" name="invoice_no" placeholder="Unesite broj fakture">
+        </div>
 
+        <div style="margin-top: 1.85rem;">
+            <h6 class="text-muted text-uppercase fw-semibold mt-1">Incoterm</h6>
+            <select class="form-select mb-2 custom-select-icon incoterm2" name="incoterm" id="incoterm">
+                <option value="" selected disabled>Izaberite</option>
+                <option value="EXW">EXW</option>
+                <option value="FCA">FCA</option>
+                <option value="CPT">CPT</option>
+                <option value="CIP">CIP</option>
+                <option value="DAP">DAP</option>
+                <option value="DPU">DPU</option>
+                <option value="DDP">DDP</option>
+                <option value="FAS">FAS</option>
+                <option value="FOB">FOB</option>
+                <option value="CFR">CFR</option>
+                <option value="CIF">CIF</option>
+            </select>
+        </div>
+    </div>
                 </div>
 
               
@@ -200,8 +211,8 @@
 
                         <div class="mb-2">
                             <div style="display: flex;">
-                                <button type="button" class="btn btn-sm btn-info mb-2 me-2 deklaracija-action-buttons" id="add-new-supplier"><i class="fas fa-wand-magic-sparkles fs-6 me-1"></i>Detektovani klijent iz baze</button>
-                                <button type="button" class="btn btn-sm btn-soft-info mb-2 deklaracija-action-buttons" id="refill-supplier-ai"><i class="fa-regular fa-hand align-top me-1 korpica"></i>Ručni unos klijenta</button>
+                                <button type="button" class="btn btn-sm btn-info mb-2 me-2 deklaracija-action-buttons" id="add-new-supplier"><i class="fas fa-wand-magic-sparkles fs-6 me-0 me-md-1"></i><span class="mobile-landscape-hide">Detektovani klijent iz baze</span></button>
+                                <button type="button" class="btn btn-sm btn-soft-info mb-2 deklaracija-action-buttons" id="refill-supplier-ai"><i class="fa-regular fa-hand align-top me-0 me-md-1 korpica"></i><span class="mobile-landscape-hide">Ručni unos klijenta</span></button>
                             </div>
                             <select id="supplier-select2" class="form-select"></select>
                         </div>
@@ -218,8 +229,8 @@
 
                         <div class="mb-2">
                             <div style="justify-content: end; display: flex;">
-                                <button type="button" class="btn btn-sm btn-soft-info mb-2  me-2  deklaracija-action-buttons" id="refill-importer-ai"><i class="fa-regular fa-hand align-top me-1 korpica"></i>Ručni unos dobavljača</button>
-                                <button type="button" class="btn btn-sm btn-info mb-2 deklaracija-action-buttons" id="add-new-importer"><i class="fas fa-wand-magic-sparkles fs-6 me-1"></i>Detektovani dobavljač iz baze</button>
+                                <button type="button" class="btn btn-sm btn-soft-info mb-2  me-2  deklaracija-action-buttons" id="refill-importer-ai"><i class="fa-regular fa-hand align-top me-0 me-md-1 korpica"></i><span class="mobile-landscape-hide">Detektovani dobavljač iz baze</span></button>
+                                <button type="button" class="btn btn-sm btn-info mb-2 deklaracija-action-buttons" id="add-new-importer"><i class="fas fa-wand-magic-sparkles fs-6 me-0 me-md-1"></i><span class="mobile-landscape-hide">Ručni unos dobavljača</span></button>
 
                             </div>
 
@@ -240,15 +251,15 @@
 
             <div class="card-body p-4 border-top border-top-dashed">
                 <div class="row g-4 mb-3">
-                    <div class="col-lg-4 text-start">
-                        <label class="text-muted text-uppercase fw-semibold mb-1">ID Deklaracije</label>
-                        <input type="text" class="form-control" id="invoice-no1" name="invoice_no" placeholder="Broj fakture" disabled>
+                    <div class="col-4 text-start">
+                        <label class="text-muted text-uppercase fw-semibold mb-1"># Deklaracije</label>
+                        <input type="text" class="form-control" id="invoice-no1" name="invoice_no1" placeholder="Broj fakture" disabled>
                     </div>
-                    <div class="col-lg-4 text-center">
+                    <div class="col-4 text-center">
                         <label class="d-flex justify-content-center text-muted text-uppercase fw-semibold mb-1">Datum</label>
                         <input type="date" class="form-control" id="invoice-date" name="invoice_date">
                     </div>
-                    <div class="col-lg-4 text-end">
+                    <div class="col-4 text-end">
                         <label class="text-muted text-uppercase fw-semibold mb-1">Ukupan iznos</label>
                         <input type="text" class="form-control text-end" id="total-amount" name="total_amount" placeholder="0.00 KM" disabled>
                     </div>
@@ -319,7 +330,31 @@
 
 
  
+<!-- Centered fullscreen warning message for mobile -->
+<div class="content-mobile-warning d-none d-flex flex-column align-items-center justify-content-center text-center" style="height: 70vh;">
+    <!-- Light theme icon -->
+    <lord-icon
+        id="rotate-icon-light"
+        src="/build/images/rotate-phone.json"
+        trigger="loop"
+        colors="secondary:#299cdb"
+        style="width:80px;height:80px;margin-bottom: 1rem;">
+    </lord-icon>
 
+    <!-- Dark theme icon -->
+    <lord-icon
+        id="rotate-icon-dark"
+        src="/build/images/rotate-phone-dark.json"
+        trigger="loop"
+        colors="secondary:#299cdb"
+        style="width:80px;height:80px;margin-bottom: 1rem; display: none;">
+    </lord-icon>
+
+    <div>
+        <strong class="d-block mb-1">Molimo okreni uređaj horizontalno</strong>
+        <span class="text-muted">da bi pristupio prikazu deklaracije</span>
+    </div>
+</div>
 
 <div class="modal fade" id="aiSuggestionModal" tabindex="-1" aria-labelledby="aiSuggestionModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
@@ -661,6 +696,16 @@ if (typeof window !== "undefined") {
                 timerText.textContent = `${countdown}s`;
             }
         }, 1000);
+        setTimeout(() => {
+    const container = timerText?.parentElement;
+    if (container) {
+        const notice = document.createElement("div");
+        notice.className = "text-muted mt-2";
+        notice.style.fontSize = "0.82rem";
+        notice.innerHTML = `Ovaj proces može završiti u pozadini. Prati progres kroz pregled <a href="/moje-deklaracije" class="text-info">mojih deklaracija.</a> Kada se završi skeniranje, status će preći u draft, te ćeš moći revizirati podatke i dalje manipulisati sa istim.`;
+        container.appendChild(notice);
+    }
+}, 7000);
     }
 
     function updateProgressBar(value) {
@@ -1383,6 +1428,7 @@ row.innerHTML = `
 
 
             }
+            
 
 
         }
@@ -1734,6 +1780,10 @@ row.innerHTML = `
                             full: s
                         }))
                     }),
+                    minimumInputLength: 1, // ⬅️ ovo SPRJEČAVA da išta bude prikazano dok ne krene search
+tags: false,           // ⬅️ ovo SPRJEČAVA "ručni unos" koji ti ionako ne koristi
+allowClear: true,      // ⬅️ po želji – omogućava 'x' za brisanje izbora
+placeholder: "Pretraži...", // bolji UX
                     cache: true
                 },
                 tags: true,
@@ -1958,7 +2008,11 @@ row.innerHTML = `
             const invNo = getInvoiceId();
             if (invNo) document.getElementById("invoice-no1").value = invNo;
 
-            document.getElementById("invoice-date").value = formatDateToDDMMYYYY(new Date());
+          const invoiceDateInput = document.getElementById("invoice-date");
+if (invoiceDateInput) {
+    invoiceDateInput.value = formatDateToDDMMYYYY(invoice.date_of_issue || new Date());
+}
+
 
             console.log(" Invoice date and number set.");
 
@@ -2162,6 +2216,21 @@ row.innerHTML = `
 <!-- edit fill -->
 
 <script>
+    $.fn.select2.defaults.set("language", {
+  searching: function () {
+    return "Pretraga...";
+  },
+  noResults: function () {
+    return "Nema rezultata";
+  },
+  inputTooShort: function (args) {
+    return `Unesite još ${args.minimum - args.input.length} znakova`;
+  },
+  loadingMore: function () {
+    return "Učitavanje još rezultata...";
+  },
+});
+
     let processedTariffData = [];
     const tariffJsonPromise = fetch("{{ URL::asset('build/json/tariff.json') }}").then(res => res.json());
 
@@ -2299,17 +2368,16 @@ row.innerHTML = `
 
     document.addEventListener("DOMContentLoaded", async () => {
 
-        if (!invoiceId) return console.log("No ID in URL — skipping load-invoice script.");
-        const scanId = window.global_invoice_id;
-        if (scanId && scanId !== invoiceId) {
-            console.warn(`Clearing scan_invoice_id (${scanId}) because it does not match invoiceId (${invoiceId})`);
-            localStorage.removeItem("scan_invoice_id");
-        }
-        
+      if (!invoiceId) return console.log("No ID in URL — skipping load-invoice script.");
+const scanId = window.global_invoice_id;
+if (scanId && scanId !== invoiceId) {
+    console.warn(`Clearing scan_invoice_id (${scanId}) because it does not match invoiceId (${invoiceId})`);
+    localStorage.removeItem("scan_invoice_id");
+}
 
-        Swal.fire({
+Swal.fire({
     title: 'Učitavanje deklaracije...',
-    icon: null, // Disable any built-in icon
+    icon: null,
     html: `
         <div class="custom-swal-spinner mb-3"></div>
         <div id="swal-status-message">Molimo sačekajte</div>
@@ -2317,17 +2385,22 @@ row.innerHTML = `
     showConfirmButton: false,
     allowOutsideClick: false,
     didOpen: () => {
-        // ⬇️ Close the pre-loader overlay here
-      
-
         const spinner = document.querySelector(".custom-swal-spinner");
-
         const icon = Swal.getHtmlContainer()?.previousElementSibling;
         if (icon?.classList.contains('swal2-icon')) {
             icon.remove();
         }
+
+        // ➕ Delay 3 seconds before continuing
+        setTimeout(() => {
+            // Place your next action here, e.g. fetch invoice or close Swal
+            console.log("✅ Ready after 3 seconds");
+
+            // Swal.close(); // or any follow-up logic
+        }, 3000);
     }
 });
+
 
 
         try {
