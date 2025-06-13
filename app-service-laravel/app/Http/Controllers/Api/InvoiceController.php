@@ -268,12 +268,6 @@ class InvoiceController extends Controller
             }
 
             $filePath = public_path('uploads/original_documents/' . $invoice->file_name);
-            \Log::info('Searching for file', [
-                'invoice_id' => $invoiceId,
-                'file_name' => $invoice->file_name,
-                'full_path' => $filePath,
-                'exists' => file_exists($filePath)
-            ]);
 
             if (!file_exists($filePath)) {
                 \Log::error('File not found on disk', [
@@ -296,6 +290,7 @@ class InvoiceController extends Controller
             }
 
             $invoice->task_id = $taskId;
+            $invoice->internal_status = 0;
             $invoice->save();
 
             return response()->json([
@@ -507,7 +502,8 @@ class InvoiceController extends Controller
 
             $invoice->update([
                 'incoterm' => $result['invoice_info']['incoterm'],
-                'invoice_number' => $result['invoice_info']['invoice_number']
+                'invoice_number' => $result['invoice_info']['invoice_number'],
+                'internal_status' => 1
             ]);
 
             // Save items
