@@ -31,7 +31,7 @@ class ProcessPdfToImages extends ProcessUploadedFile
             // Call ImageMagick (command line magick) to convert PDF to PNG images into $tempDir
             $command = [
                 'magick',
-                '-density', '1200',
+                '-density', '600',
                 $pdfPath,
                 '-background', 'white',
                 '-alpha', 'remove',
