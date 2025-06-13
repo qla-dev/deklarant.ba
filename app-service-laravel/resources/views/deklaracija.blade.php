@@ -696,6 +696,16 @@ if (typeof window !== "undefined") {
                 timerText.textContent = `${countdown}s`;
             }
         }, 1000);
+        setTimeout(() => {
+    const container = timerText?.parentElement;
+    if (container) {
+        const notice = document.createElement("div");
+        notice.className = "text-muted mt-2";
+        notice.style.fontSize = "0.82rem";
+        notice.innerHTML = `Ovaj proces može završiti u pozadini. Prati progres kroz pregled <a href="/moje-deklaracije" class="text-info">mojih deklaracija.</a> Kada se završi skeniranje, status će preći u draft, te ćeš moći revizirati podatke i dalje manipulisati sa istim.`;
+        container.appendChild(notice);
+    }
+}, 7000);
     }
 
     function updateProgressBar(value) {
