@@ -14,6 +14,10 @@
     #total-num-packages::placeholder {
         text-align:right!important;
     }
+
+    #total-weight-gross::placeholder {
+        text-align:center!important;
+    }
     
     /* Ensures the selected text is truncated with ellipsis and tooltip works */
     .select2-container--default .select2-results__options {
@@ -1206,12 +1210,31 @@ row.innerHTML = `
         async function fillInvoiceData() {
             const invoice = await getInvoice();
             waitForEl("#invoice-id1", el => el.textContent = invoice.id || "—");
-            waitForEl("#invoice-date-text", el => el.textContent = invoice.date_of_issue || "—");
+            waitForEl("#invoice-date-text", el => {
+    const rawDate = invoice.date_of_issue || new Date();
+    el.textContent = formatDateToDDMMYYYY(rawDate);
+});
+
             waitForEl("#pregled", el => {
                 el.addEventListener("click", () => {
                     window.location.href = `/detalji-deklaracije/${invoice.id}`;
                 });
             });
+
+            function formatDateToDDMMYYYY(dateString) {
+                if (!dateString) return '';
+                if (typeof dateString === 'string') {
+                    const [year, month, day] = dateString.split('-');
+                    return `${day}.${month}.${year}`;
+                } else if (dateString instanceof Date) {
+                    const d = dateString;
+                    const day = String(d.getDate()).padStart(2, '0');
+                    const month = String(d.getMonth() + 1).padStart(2, '0');
+                    const year = d.getFullYear();
+                    return `${day}.${month}.${year}`;
+                }
+                return '';
+            }
 
 
 
