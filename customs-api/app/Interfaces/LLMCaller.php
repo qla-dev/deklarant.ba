@@ -14,5 +14,5 @@ interface LLMCaller
      * @param array|null $images Optional images to include in the request.
      * @return string The response from the language model API.
      */
-    public function callLLM(Client $client, string $prompt, ?array $images = null): string;
+    public function callLLM(Client $client, string $prompt, bool $allowPaidModels, ?array $images = null): string;
 }

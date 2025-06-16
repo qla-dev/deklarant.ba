@@ -22,7 +22,7 @@ class ProcessUploadedFile implements ShouldQueue
     protected ?Client $client = null;
     protected LLMCaller $llmCaller;
 
-    public function __construct(public Task $task, Client $client = null)
+    public function __construct(public Task $task, protected bool $allowPaidModels = false, Client $client = null)
     {
         if ($client !== null) {
             $this->client = $client;
@@ -160,6 +160,7 @@ class ProcessUploadedFile implements ShouldQueue
             $this->client,
             "Here's the markdown of invoice:\n\n```md\n$markdown\n```\n\n"
                 . file_get_contents(base_path("app/Jobs/prompt-markdown-to-json.txt")),
+            $this->allowPaidModels,
         );
         return $this->parseOllamaResponse($responseData);
     }

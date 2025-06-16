@@ -15,14 +15,18 @@ class AiService
         $this->baseUrl = config('services.ai_server.url');
     }
 
-    public function uploadDocument(string $filePath, string $originalName): array|null
+    public function uploadDocument(string $filePath, string $originalName, bool $canUsePaidModels = false): array|null
     {
-        $response = Http::withOptions(['verify' => false])->
-            attach(
+        $response = Http::withOptions(['verify' => false])
+            ->withHeaders([
+                'X-Allow-Paid-Models' => $canUsePaidModels ? 'true' : 'false',
+            ])
+            ->attach(
                 'file',
                 file_get_contents($filePath),
                 $originalName
-            )->post("{$this->baseUrl}/api/upload");
+            )
+            ->post("{$this->baseUrl}/api/upload");
 
         return $this->handleResponse($response);
     }

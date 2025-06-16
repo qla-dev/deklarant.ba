@@ -288,7 +288,9 @@ class InvoiceController extends Controller
 
             $aiService = app(AiService::class);
 
-            $response = $aiService->uploadDocument($filePath, $invoice->file_name);
+            $user = auth()->user();
+            $canUsePaidModels = $user->can_use_paid_models;
+            $response = $aiService->uploadDocument($filePath, $invoice->file_name, $canUsePaidModels);
             $taskId = $response['task_id'] ?? null;
 
             if (!$taskId) {

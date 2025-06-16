@@ -10,10 +10,11 @@ use Psr\Http\Message\ResponseInterface;
 
 class OpenrouterLLMService implements LLMCaller
 {
-    public function callLLM(Client $client, string $prompt, ?array $images = null): string
+    public function callLLM(Client $client, string $prompt, bool $allowPaidModels, ?array $images = null): string
     {
         $maxRetries = 3;
         $model = 'meta-llama/llama-4-maverick:free';
+        $suffix = "\n\nIf you don't see any items (for example, if the input file is not an actual customs declaration, or if document is unreadable because of bad quality), don't output anything.";
 
         for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
             try {
@@ -43,7 +44,7 @@ class OpenrouterLLMService implements LLMCaller
                         'messages' => [
                             [
                                 'role' => 'user',
-                                'content' => $messageContent
+                                'content' => $messageContent + $suffix
                             ]
                         ]
                     ]
@@ -65,7 +66,8 @@ class OpenrouterLLMService implements LLMCaller
                     $responseText = $responseData["choices"][0]["message"]["content"];
                 }
                 if (substr_count($responseText, "```") < 2) {
-                    $model = 'qwen/qwen2.5-vl-32b-instruct:free';
+                    $model = $allowPaidModels ? 'google/gemini-2.5-flash-preview-05-20' : 'qwen/qwen2.5-vl-32b-instruct:free';
+                    $suffix = "";
                     throw new \Exception("Response didn't contain ```");
                 }
                 return $responseText;

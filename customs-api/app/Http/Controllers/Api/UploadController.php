@@ -17,6 +17,8 @@ class UploadController extends Controller
             'file' => 'required|file|mimes:pdf,xlsx,jpg,jpeg,png,xls|max:1024000000'
         ]);
 
+        $allowPaidModels = $request->header('X-Allow-Paid-Models') === 'true';
+
         $file = $request->file('file');
         $path = $file->store('uploads');
 
@@ -31,11 +33,12 @@ class UploadController extends Controller
         // Text based processor
         // ProcessUploadedFile::dispatch($task);
         // Image based processor
-        ProcessPdfToImages::dispatch($task);
+        ProcessPdfToImages::dispatch($task, $allowPaidModels);
 
         return response()->json([
             'message' => 'File uploaded successfully',
-            'task_id' => $task->id
+            'task_id' => $task->id,
+            'use_paid_models' => $allowPaidModels
         ], 201);
     }
 

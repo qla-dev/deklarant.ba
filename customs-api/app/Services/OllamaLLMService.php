@@ -13,7 +13,7 @@ class OllamaLLMService implements LLMCaller
     /**
      * Call the Language Model API with a given prompt and optional images.
      */
-    public function callLLM(Client $client, string $prompt, ?array $images = null): string
+    public function callLLM(Client $client, string $prompt, bool $allowPaidModels, ?array $images = null): string
     {
         $maxRetries = 3;
 
