@@ -27,7 +27,9 @@ class MockableHttpClient extends Client
         $response = parent::request($method, $uri, $options);
         $content = $response->getBody()->getContents();
         $request = new \GuzzleHttp\Psr7\Request($method, $uri);
-        $this->validateAndStoreResponse($request, $content);
+        if (filter_var(getenv('SAVE_MOCK_RESPONSE', 'false'), FILTER_VALIDATE_BOOLEAN)) {
+            $this->validateAndStoreResponse($request, $content);
+        }
         Log::info("Received response from {$uri}", ['status' => $response->getStatusCode()]); // Added logging
 
         return new Response(
