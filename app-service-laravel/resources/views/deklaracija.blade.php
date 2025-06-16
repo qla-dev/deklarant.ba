@@ -10,6 +10,10 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <style>
+
+    #total-num-packages::placeholder {
+        text-align:right!important;
+    }
     
     /* Ensures the selected text is truncated with ellipsis and tooltip works */
     .select2-container--default .select2-results__options {
@@ -257,13 +261,28 @@
                     </div>
                     <div class="col-4 text-center">
                         <label class="d-flex justify-content-center text-muted text-uppercase fw-semibold mb-1">Datum</label>
-                        <input type="date" class="form-control" id="invoice-date" name="invoice_date">
+                        <input type="date" class="form-control text-center" id="invoice-date" name="invoice_date">
                     </div>
                     <div class="col-4 text-end">
                         <label class="text-muted text-uppercase fw-semibold mb-1">Ukupan iznos</label>
                         <input type="text" class="form-control text-end" id="total-amount" name="total_amount" placeholder="0.00 KM" disabled>
                     </div>
                 </div>
+                   <!-- Added fields -->
+    <div class="row g-4">
+        <div class="col-4 text-start">
+            <label class="text-muted text-uppercase fw-semibold mb-1">Neto težina (kg)</label>
+            <input type="number" step="0.01" class="form-control" id="total-weight-net" name="total_weight_net" placeholder="0.00 kg">
+        </div>
+        <div class="col-4 text-center">
+            <label class="d-flex justify-content-center text-muted text-uppercase fw-semibold mb-1">Bruto težina (kg)</label>
+            <input type="number" step="0.01" class="form-control text-center" id="total-weight-gross" name="total_weight_gross" placeholder="0.00 kg">
+        </div>
+        <div class="col-4 text-end">
+            <label class="text-muted text-uppercase fw-semibold mb-1">Broj paketa</label>
+            <input type="number" class="form-control text-end" id="total-num-packages" name="total_num_packages" placeholder="0">
+        </div>
+    </div>
             </div>
 
 
@@ -2012,19 +2031,27 @@ placeholder: "Pretraži...", // bolji UX
 if (invoiceDateInput) {
     invoiceDateInput.value = formatDateToDDMMYYYY(invoice.date_of_issue || new Date());
 }
-
+            
 
             console.log(" Invoice date and number set.");
 
-            //document.getElementById("company-address").value = "Vilsonovo, 9, Sarajevo ";
-            document.getElementById("company-zip").value = "71000";
-            document.getElementById("company-email").value = "business@deklarant.ai";
+
 
 
             document.getElementById("billing-name")?.addEventListener("input", () => {
                 const label = document.getElementById("billing-name-ai-label");
                 if (label) label.classList.add("d-none");
             });
+            // Prefill total weights and package count
+setField("#total-weight-net", invoice.total_weight_net ?? "");
+setField("#total-weight-gross", invoice.total_weight_gross ?? "");
+setField("#total-num-packages", invoice.total_num_packages ?? "");
+console.log("Weights and package count set:",
+    invoice.total_weight_net,
+    invoice.total_weight_gross,
+    invoice.total_num_packages
+);
+            
 
             // Hide AI label when user types in importer name
             document.getElementById("carrier-name")?.addEventListener("input", () => {
@@ -2545,17 +2572,7 @@ Swal.fire({
             console.log("💰 Calculated Total:", calculateTotal(invoice.items));
 
 
-            // --- Prefill invoice fields
-            setField("#invoice_number", invoice.invoice_number);
-            setField("#date", invoice.date_of_issue);
-
-            setText("#invoice-id1", invoice.id);
-            setText("#invoice-date-text", formatDateToDDMMYYYY(invoice.date_of_issue));
-
-            setField("#invoice-no", invoice.invoice_number);
-            setField("#invoice-no1", invoice.id);
-            setField("#incoterm", (invoice.incoterm || "").split(" ")[0]);
-            setField("#invoice-date", formatDateToDDMMYYYY(invoice.date_of_issue));
+         
 
             // --- Prefill selected supplier/importer
             if (invoice.supplier_id) {
