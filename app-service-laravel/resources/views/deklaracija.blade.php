@@ -334,10 +334,10 @@
                 </div>
 
                 <div class="border-top border-top-dashed mt-2">
-                    <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto" style="width:250px">
+                    <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto" style="width:200px">
                         <tbody class="border-bottom-dashed">
                             <tr class="border-top border-top-dashed fs-15">
-                                <th>Ukupan iznos</th>
+                                <th>Ukupan iznos:</th>
                                 <th class="text-end" id="modal-total-amount"> </th>
                             </tr>
                         </tbody>
@@ -546,19 +546,35 @@ if (typeof window !== "undefined") {
 
 
         function updateTotalAmount() {
-            let total = 0;
+           let total = 0;
+            let currency = "KM"; // default fallback if not found
 
-            // Loop through all invoice rows
-            document.querySelectorAll("#newlink tr.product").forEach(function(row) {
+            const currencySymbols = {
+                "EUR": "€",
+                "USD": "$",
+                "KM": "KMa"
+            };
+
+            const productRows = document.querySelectorAll("#newlink tr.product");
+
+            productRows.forEach((row, index) => {
                 const price = parseFloat(row.querySelector('input[name="price[]"]')?.value || 0);
                 const quantity = parseFloat(row.querySelector('input[name="quantity[]"]')?.value || 0);
                 total += price * quantity;
+
+                // Try to detect currency from first row
+                if (index === 0) {
+                    const currencyInput = row.querySelector('input[name="currency[]"]');
+                    if (currencyInput && currencyInput.value.trim()) {
+                        currency = currencyInput.value.trim();
+                    }
+                }
             });
 
-            // Format as currency
-            const formatted = `${total.toFixed(2)} KM`;
+            const currencySymbol = currencySymbols[currency] || currency; // fallback to raw code if symbol missing
+            const formatted = `${total.toFixed(2)} ${currencySymbol}`;
 
-            // Set values in both places
+            // Set values in UI
             document.getElementById("total-amount").value = formatted;
             document.getElementById("modal-total-amount").textContent = formatted;
             document.getElementById("total-edit").textContent = formatted;
@@ -904,6 +920,7 @@ function initializeTariffSelects() {
             const price = item.base_price || 0;
             const quantity = item.quantity || 0;
             const origin = item.country_of_origin || "DE";
+            const currency = item.currency || "EUR";
             const total = (price * quantity).toFixed(2);
             const desc = item.item_description;
             const translate = item.translate || item.item_description_translated || "";
@@ -1069,15 +1086,21 @@ row.innerHTML = `
             </div>
           </td>
 
-          <td style="width: 70px;">
-            <input 
-              type="text" 
-              class="form-control text-start" 
-              name="total[]" 
-              value="${total}"
-              style="width: 100%;"
-            >
-          </td>
+         <td style="width: 70px;">
+    <input 
+      type="text" 
+      class="form-control text-start" 
+      name="total[]" 
+      value="${total}"
+      style="width: 100%;"
+    >
+    <input 
+      type="hidden"
+      name="currency[]"
+      value="${currency}"
+    >
+</td>
+
 
           <td style="width: 20px; text-align: center;">
               <div style="display: flex; flex-direction: column; align-items: end; gap: 2px;">
@@ -1210,10 +1233,11 @@ row.innerHTML = `
         async function fillInvoiceData() {
             const invoice = await getInvoice();
             waitForEl("#invoice-id1", el => el.textContent = invoice.id || "—");
-            waitForEl("#invoice-date-text", el => {
-    const rawDate = invoice.date_of_issue || new Date();
-    el.textContent = formatDateToDDMMYYYY(rawDate);
+           waitForEl("#invoice-date-text", el => {
+    const rawDate = invoice.date_of_issue ? new Date(invoice.date_of_issue) : new Date();
+    el.textContent = rawDate.toLocaleDateString('hr'); // e.g. "17. 6. 2025."
 });
+
 
             waitForEl("#pregled", el => {
                 el.addEventListener("click", () => {
@@ -1221,20 +1245,7 @@ row.innerHTML = `
                 });
             });
 
-            function formatDateToDDMMYYYY(dateString) {
-                if (!dateString) return '';
-                if (typeof dateString === 'string') {
-                    const [year, month, day] = dateString.split('-');
-                    return `${day}.${month}.${year}`;
-                } else if (dateString instanceof Date) {
-                    const d = dateString;
-                    const day = String(d.getDate()).padStart(2, '0');
-                    const month = String(d.getMonth() + 1).padStart(2, '0');
-                    const year = d.getFullYear();
-                    return `${day}.${month}.${year}`;
-                }
-                return '';
-            }
+          
 
 
 

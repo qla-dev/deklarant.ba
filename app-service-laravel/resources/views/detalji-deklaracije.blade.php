@@ -313,7 +313,7 @@
             console.log("%c[DEBUG] Filling invoice details", "color: teal");
             document.getElementById("invoice-no").textContent = invoice.invoice_number || '--';
             document.getElementById("invoice-date").textContent = new Date(invoice.date_of_issue).toLocaleDateString('hr');
-            document.getElementById("total-1").textContent = ` ${symbol}${parseFloat(invoice.total_price).toFixed(2)}`;
+            document.getElementById("total-1").textContent = ` ${parseFloat(invoice.total_price).toFixed(2)} ${symbol}`;
             if (document.getElementById("incoterm")) {
                 document.getElementById("incoterm").textContent = invoice.incoterm || '--';
             }
