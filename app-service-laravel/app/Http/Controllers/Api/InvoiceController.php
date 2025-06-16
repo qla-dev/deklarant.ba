@@ -517,13 +517,14 @@ class InvoiceController extends Controller
             ]);
 
             // Save items
-            $invoice->items()->createMany($items);
+            \Log::info($invoice->items()->createMany($items));
 
             // Reload invoice with fresh items
             $invoice->load('items');
             
         } catch (Exception $e) {
             // Log error but don't fail the request
+            \Log::error($e);
             \Log::error("Neuspješno popunjavanje deklaracije AI podacima. Pokušajte ponovo kasnije" );
         }
     }

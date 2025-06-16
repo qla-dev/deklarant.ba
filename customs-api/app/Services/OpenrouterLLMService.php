@@ -7,6 +7,7 @@ use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 use Psr\Http\Message\ResponseInterface;
+use App\Utils\LLMUtils;
 
 class OpenrouterLLMService implements LLMCaller
 {
@@ -14,7 +15,7 @@ class OpenrouterLLMService implements LLMCaller
     {
         $maxRetries = 3;
         $model = 'meta-llama/llama-4-maverick:free';
-        $suffix = "\n\nIf you don't see any items (for example, if the input file is not an actual customs declaration, or if document is unreadable because of bad quality), don't output anything.";
+        $suffix = "\n\nIf you don't see any items (for example, if the input file is not an actual customs declaration, or if document is unreadable because of bad quality), DO NOT write any json output at all, not even '```' blocks.";
 
         for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
             try {
@@ -65,13 +66,23 @@ class OpenrouterLLMService implements LLMCaller
                 if (is_array($responseData) && isset($responseData["choices"][0]["message"]["content"])) {
                     $responseText = $responseData["choices"][0]["message"]["content"];
                 }
-                if (substr_count($responseText, "```") < 2) {
-                    $model = $allowPaidModels ? 'google/gemini-2.5-flash-preview-05-20' : 'qwen/qwen2.5-vl-32b-instruct:free';
-                    $suffix = "";
-                    throw new \Exception("Response didn't contain ```");
+                
+                $parsedResponse = LLMUtils::parseLLMResponse($responseText);
+                // Raise exception if parsedResponse doesn't have key 'items' or if 'items' is empty array
+                if (!isset($parsedResponse['items']) || !is_array($parsedResponse['items']) || count($parsedResponse['items']) === 0) {
+                    throw new Exception("Parsed response does not contain items or items is an empty array.");
                 }
+
+                // Raise exception if first element of 'items' is an object that has all values as null
+                $firstItem = reset($parsedResponse['items']);
+                if (is_array($firstItem) && count(array_filter($firstItem, function($value) { return !is_null($value); })) === 0) {
+                    throw new Exception("First element of items is an object that has all values as null.");
+                }
+
                 return $responseText;
             } catch (\Exception $e) {
+                $model = $allowPaidModels ? 'google/gemini-2.5-flash-preview-05-20' : 'qwen/qwen2.5-vl-32b-instruct:free';
+                $suffix = "";
                 \Illuminate\Support\Facades\Log::error('Error in LLM. Retrying: ' . $e->getMessage());
                 if ($attempt === $maxRetries) {
                     throw new \Exception('LLM service error: ' . $e->getMessage());

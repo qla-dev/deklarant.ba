@@ -11,6 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
+use App\Utils\LLMUtils;
 
 class ProcessPdfToImages extends ProcessUploadedFile
 {
@@ -73,6 +74,6 @@ class ProcessPdfToImages extends ProcessUploadedFile
                 . " Keep in mind that document origin is international and decimal places could be represented with comma (`,`) as well as dot (`.`)."
                 . " Precision is very important, your text must match exactly what's seen in invoice image. Do not hallucinate.";
         $responseData = $this->llmCaller->callLLM($this->client, $prompt, $this->allowPaidModels, $images);
-        return $this->parseOllamaResponse($responseData);
+        return LLMUtils::parseLLMResponse($responseData);
     }
 }

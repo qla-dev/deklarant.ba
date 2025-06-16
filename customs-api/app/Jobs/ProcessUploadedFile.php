@@ -14,6 +14,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
 use Psr\Http\Message\ResponseInterface;
+use App\Utils\LLMUtils;
 
 class ProcessUploadedFile implements ShouldQueue
 {
@@ -162,37 +163,7 @@ class ProcessUploadedFile implements ShouldQueue
                 . file_get_contents(base_path("app/Jobs/prompt-markdown-to-json.txt")),
             $this->allowPaidModels,
         );
-        return $this->parseOllamaResponse($responseData);
-    }
-    protected function parseOllamaResponse(string $ollamaResponse): array
-    {
-        // Ensure ollamaResponse is a string between ```json and ```
-        if (preg_match('/```json(.*?)```/s', $ollamaResponse, $matches)) {
-            $ollamaResponse = trim($matches[1]);
-        } elseif (preg_match('/```(.*?)```/s', $ollamaResponse, $matches)) {
-            $ollamaResponse = trim($matches[1]);
-        }
-
-        $parsedResponse = json_decode($ollamaResponse, true);
-
-        if ($parsedResponse === null) {
-            throw new Exception('Unable to parse response. Full response: ' . $ollamaResponse);
-        }
-
-        // Process all string values in ['items'] and replace "\n" with "-"
-        if (isset($parsedResponse['items']) && is_array($parsedResponse['items'])) {
-            foreach ($parsedResponse['items'] as &$item) {
-                if (is_array($item)) {
-                    foreach ($item as $key => $value) {
-                        if (is_string($value)) {
-                            $item[$key] = str_replace("\n", " - ", $value);
-                        }
-                    }
-                }
-            }
-        }
-
-        return $parsedResponse;
+        return LLMUtils::parseLLMResponse($responseData);
     }
 
     private function enrichWithSearchAPI(array $items): array
