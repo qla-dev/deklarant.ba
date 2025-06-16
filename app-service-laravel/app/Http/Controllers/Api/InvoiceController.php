@@ -507,6 +507,8 @@ class InvoiceController extends Controller
                     'country_of_origin' => $item['country_of_origin'],
                     'quantity_type' => $item['quantity_type'],
                     'num_packages' => $item['num_packages'],
+                    'weight_gross' => $item['weight_gross'] ?? null,
+                    'weight_net' => $item['weight_net'] ?? null,
                     'item_description_translated' => $item['item_description_translated'],
                 ];
             }, $result['items']);
@@ -514,7 +516,11 @@ class InvoiceController extends Controller
             $invoice->update([
                 'incoterm' => $result['invoice_info']['incoterm'],
                 'invoice_number' => $result['invoice_info']['invoice_number'],
-                'internal_status' => 1
+                'internal_status' => 1,
+                'total_weight_net' => $result['invoice_info']['total_weight_net'] ?? null,
+                'total_weight_gross' => $result['invoice_info']['total_weight_gross'] ?? null,
+                'total_num_packages' => $result['invoice_info']['total_num_packages'] ?? null,
+                'incoterm_destination' => $result['invoice_info']['incoterm_destination'] ?? null
             ]);
 
             // Save items

@@ -26,7 +26,9 @@ class InvoiceItem extends Model
         'country_of_origin',
         'quantity_type',
         'num_packages',
-        'tariff_privilege'
+        'tariff_privilege',
+        'weight_gross',
+        'weight_net'
     ];
 
     protected $casts = [

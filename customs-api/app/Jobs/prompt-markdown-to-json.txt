@@ -16,7 +16,11 @@ You are an AI designed to extract structured JSON data from semi-structured invo
   },
   "invoice_info": {
     "invoice_number": "ID of invoice, usually found somewhere on the document",
-    "incoterm": "Incoterms® 2020 rule for the goods. Possible values are: EXW, FCA, CPT, CIP, DAP, DPU, DDP, FAS, FOB, CFR, CIF."
+    "incoterm": "Incoterms® 2020 rule for the goods. Possible values are: EXW, FCA, CPT, CIP, DAP, DPU, DDP, FAS, FOB, CFR, CIF.",
+    "incoterm_destination": "Destination that's specified after 'incoterm' on invoice",
+    "total_weight_gross": Number,
+    "total_weight_net": Number,
+    "total_num_packages": Number
   },
   "items": [
     {
@@ -28,6 +32,8 @@ You are an AI designed to extract structured JSON data from semi-structured invo
       "currency": "Three-letter currency code (e.g. EUR)",
       "country_of_origin": "Two-letter country of origin code - ISO 3166-1 alpha-2 standard",
       "num_packages": "Number of packages for specified item.",
+      "weight_gross": Number,
+      "weight_net": Number,
       "item_description_translated": "Translation of item name to Bosnian language"
     }
   ]
@@ -56,6 +62,9 @@ You are an AI designed to extract structured JSON data from semi-structured invo
       - `num_packages` should be used for number of packages (if available)
       - `quantity` should be used for raw quantity of item
    - Number of packages is sometimes not explicitly specified, in which case you should put null. Sometimes this column is specified as "kolata".
+   - Do not infer number of packages, and weight information.
+      - Do not calculate any sum of packages or weights for total_num_packages, total_weight_gross and total_weight_net. You should only write on these fields what's written on invoice, if available.
+   - Weights should be written as floating number in kg.
 
 6. **Country of origin**:
    - Detect country of origin for each item.

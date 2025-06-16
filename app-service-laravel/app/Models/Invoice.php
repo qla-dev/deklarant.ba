@@ -24,7 +24,11 @@ class Invoice extends Model
         'task_id', // When this is null it means this file wasn't processed by AI
         'incoterm',
         'invoice_number',
-        'internal_status'
+        'internal_status',
+        'total_weight_net',
+        'total_weight_gross',
+        'total_num_packages',
+        'incoterm_destination'
     ];
 
     public function items()
