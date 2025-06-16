@@ -146,7 +146,7 @@
                             <h6 class="text-muted text-uppercase fs-11 mb-1">Moji klijenti</h6>
                             <div class="d-flex align-items-center justify-content-center">
                                 <i class="ri-user-line text-info" style="font-size: 38px"></i>
-                                <h3 class="mb-0 ms-2"><span class="counter-value" id="totalSuppliers">0</span></h3>
+                                <h3 class="mb-0 ms-2"><span class="counter-value" id="totalImporters">0</span></h3>
                             </div>
                         </div>
                     </div>
@@ -165,7 +165,7 @@
                             <h6 class="text-muted text-uppercase fs-11 mb-1">Moji dobavljači</h6>
                             <div class="d-flex align-items-center justify-content-center">
                                 <i class="ri-truck-line text-info" style="font-size: 45px"></i>
-                                <h3 class="mb-0 ms-2"><span class="counter-value" id="totalImporters">0</span></h3>
+                                <h3 class="mb-0 ms-2"><span class="counter-value" id="totalSuppliers">0</span></h3>
                             </div>
                         </div>
                     </div>
