@@ -207,30 +207,30 @@
                 <div class="row g-4">
                     <div class="col-6 text-start">
 
-                        <h6 class="text-muted text-uppercase fw-semibold mb-3">Klijent</h6>
+                        <h6 class="text-muted text-uppercase fw-semibold mb-3">Dobavljač</h6>
 
                         <div class="mb-2">
                             <div style="display: flex;">
-                                <button type="button" class="btn btn-sm btn-info mb-2 me-2 deklaracija-action-buttons" id="add-new-supplier"><i class="fas fa-wand-magic-sparkles fs-6 me-0 me-md-1"></i><span class="mobile-landscape-hide">Detektovani klijent iz baze</span></button>
-                                <button type="button" class="btn btn-sm btn-soft-info mb-2 deklaracija-action-buttons" id="refill-supplier-ai"><i class="fa-regular fa-hand align-top me-0 me-md-1 korpica"></i><span class="mobile-landscape-hide">Ručni unos klijenta</span></button>
+                                <button type="button" class="btn btn-sm btn-info mb-2 me-2 deklaracija-action-buttons" id="add-new-supplier"><i class="fas fa-wand-magic-sparkles fs-6 me-0 me-md-1"></i><span class="mobile-landscape-hide">Detektovani dobavljač iz baze</span></button>
+                                <button type="button" class="btn btn-sm btn-soft-info mb-2 deklaracija-action-buttons" id="refill-supplier-ai"><i class="fa-regular fa-hand align-top me-0 me-md-1 korpica"></i><span class="mobile-landscape-hide">Ručni unos dobavljača</span></button>
                             </div>
                             <select id="supplier-select2" class="form-select"></select>
                         </div>
-                        <input type="text" class="form-control mb-2" id="billing-name" name="supplier_name" placeholder="Naziv klijenta">
+                        <input type="text" class="form-control mb-2" id="billing-name" name="supplier_name" placeholder="Naziv dobavljača">
 
-                        <input type="text" class="form-control mb-2" id="billing-address-line-1" name="supplier_address" placeholder="Adresa klijenta">
-                        <input type="text" class="form-control mb-2" id="billing-phone-no" name="supplier_phone" placeholder="Telefon klijenta">
-                        <input type="text" class="form-control mb-2" id="billing-tax-no" name="supplier_tax" placeholder="VAT klijenta">
-                        <input type="email" class="form-control mb-2" id="email" name="email" placeholder="Email klijenta">
+                        <input type="text" class="form-control mb-2" id="billing-address-line-1" name="supplier_address" placeholder="Adresa dobavljača">
+                        <input type="text" class="form-control mb-2" id="billing-phone-no" name="supplier_phone" placeholder="Telefon dobavljača">
+                        <input type="text" class="form-control mb-2" id="billing-tax-no" name="supplier_tax" placeholder="VAT dobavljača">
+                        <input type="email" class="form-control mb-2" id="email" name="email" placeholder="Email dobavljača">
                         <input type="email" class="form-control" id="supplier-owner" name="supplierOwner" placeholder="Vlasnik kompanije">
                     </div>
                     <div class="col-6 text-end">
-                        <h6 class="text-muted text-uppercase fw-semibold mb-3 text-end">Dobavljač</h6>
+                        <h6 class="text-muted text-uppercase fw-semibold mb-3 text-end">Klijent</h6>
 
                         <div class="mb-2">
                             <div style="justify-content: end; display: flex;">
-                                <button type="button" class="btn btn-sm btn-soft-info mb-2  me-2  deklaracija-action-buttons" id="refill-importer-ai"><i class="fa-regular fa-hand align-top me-0 me-md-1 korpica"></i><span class="mobile-landscape-hide">Detektovani dobavljač iz baze</span></button>
-                                <button type="button" class="btn btn-sm btn-info mb-2 deklaracija-action-buttons" id="add-new-importer"><i class="fas fa-wand-magic-sparkles fs-6 me-0 me-md-1"></i><span class="mobile-landscape-hide">Ručni unos dobavljača</span></button>
+                                <button type="button" class="btn btn-sm btn-soft-info mb-2  me-2  deklaracija-action-buttons" id="refill-importer-ai"><i class="fa-regular fa-hand align-top me-0 me-md-1 korpica"></i><span class="mobile-landscape-hide">Ručni unos klijenta</span></button>
+                                <button type="button" class="btn btn-sm btn-info mb-2 deklaracija-action-buttons" id="add-new-importer"><i class="fas fa-wand-magic-sparkles fs-6 me-0 me-md-1"></i><span class="mobile-landscape-hide">Detektovani klijent iz baze</span></button>
 
                             </div>
 
@@ -239,10 +239,10 @@
 
                         <input type="text" class="form-control mb-2 text-end" id="carrier-name" name="dobavljačime" placeholder="Naziv dobavljača">
 
-                        <input type="text" class="form-control mb-2 text-end" id="carrier-address" name="dobavljačadresa" placeholder="Adresa dobavljača">
-                        <input type="text" class="form-control mb-2 text-end" id="carrier-tel" name="dobavljačtel" placeholder="Telefon dobavljača">
-                        <input type="text" class="form-control mb-2 text-end" id="carrier-tax" name="dobavljačtel" placeholder="JIB dobavljača">
-                        <input type="text" class="form-control mb-2 text-end" id="carrier-email" name="dobavljačtel" placeholder="Email dobavljača">
+                        <input type="text" class="form-control mb-2 text-end" id="carrier-address" name="klijentadresa" placeholder="Adresa klijenta">
+                        <input type="text" class="form-control mb-2 text-end" id="carrier-tel" name="klijenttel" placeholder="Telefon klijenta">
+                        <input type="text" class="form-control mb-2 text-end" id="carrier-tax" name="klijenttel" placeholder="JIB klijenta">
+                        <input type="text" class="form-control mb-2 text-end" id="carrier-email" name="klijenttel" placeholder="Email klijenta">
                         <input type="text" class="form-control mb-2 text-end" id="carrier-owner" name="carrierOwner" placeholder="Vlasnik kompanije">
 
                     </div>
@@ -276,18 +276,18 @@
                                 <th style="width: 50px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">#</th>
                                 <th style="width: 200px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Proizvodi </th>
                                 <th style="width: 140px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Opis </th>
-                                <th style="width: 140px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Tarifna oznaka</th>
-                                <th style="width: 60px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Tip kvantiteta</th>
-                                <th style="width:70px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Zemlja porijekla</th>
-                                <th style="width:60px; text-align: center;vertical-align: middle; text-align: left; padding-bottom: 1rem;">Cijena</th>
+                                <th style="width: 220px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Tarifna oznaka</th>
+                                <th style="width: 80px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Tip kvantiteta</th>
+                                <th style="width:100px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Porijeklo</th>
+                                <th style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem;">Cijena</th>
                                 <th style="width: 60px; text-align: center;vertical-align: middle;">
                                     Količina<br>
                                     <small style="font-weight: normal; font-size: 0.75rem; color: #666;">
-                                        Broj paketa
+                                        Broj koleta
                                     </small>
                                 </th>
 
-                                <th style="width:70px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Ukupno</th>
+                                <th style="width:100px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Ukupno</th>
                                 <th style="width:20px;vertical-align: middle; text-align: end;">Ukloni <br>
                                     <small style="font-weight: normal; font-size: 0.75rem; color: #666;">
                                         Povlastica
@@ -1095,7 +1095,7 @@ row.innerHTML = `
             function formatFlag(state) {
                 if (!state.id) return state.text;
                 const flagUrl = $(state.element).data('flag');
-                return $(`<span class="flag-option"><img src="${flagUrl}" width="20" style="margin-right: 10px;" /> ${state.text}</span>`);
+                return $(`<span class="flag-option"><img src="${flagUrl}" width="20"  /> ${state.text}</span>`);
             }
 
             tbody.appendChild(row);
@@ -1345,7 +1345,7 @@ row.innerHTML = `
                 let importerId = invoice.importer_id || importer_id;
                 if (window.forceNewImporter) {
                     $("#importer-select2 option[value='new']").remove();
-                    const newOption = new Option('Novi dobavljač', 'new', true, true);
+                    const newOption = new Option('Novi klijent', 'new', true, true);
                     $("#importer-select2").append(newOption).trigger('change');
                     if (importer) {
                         $("#carrier-name").val(importer.name || "").prop('readonly', false);
@@ -1388,8 +1388,8 @@ row.innerHTML = `
                         },
                         error: function() {
                             if (importer) {
-                                // Not found in DB, add 'Novi dobavljač' to select2
-                                const newOption = new Option('Novi dobavljač', 'new', true, true);
+                                // Not found in DB, add 'Novi klijent' to select2
+                                const newOption = new Option('Novi klijent', 'new', true, true);
                                 $("#importer-select2").append(newOption).trigger('change');
                                 $("#carrier-name").val(importer.name || "").prop('readonly', false);
                                 $("#carrier-address").val(importer.address || "").prop('readonly', false);
@@ -1403,10 +1403,10 @@ row.innerHTML = `
                         }
                     });
                 } else if (importer) {
-                    // Always remove any previous 'Novi dobavljač' option
+                    // Always remove any previous 'Novi klijent' option
                     $("#importer-select2 option[value='new']").remove();
-                    // Add and select 'Novi dobavljač'
-                    const newOption = new Option('Novi dobavljač', 'new', true, true);
+                    // Add and select 'Novi klijent'
+                    const newOption = new Option('Novi klijent', 'new', true, true);
                     $("#importer-select2").append(newOption).trigger('change');
                     $("#carrier-name").val(importer.name || "").prop('readonly', false);
                     $("#carrier-address").val(importer.address || "").prop('readonly', false);
@@ -1542,7 +1542,7 @@ row.innerHTML = `
             } catch (err) {
                 console.error("Greška u fetchAndPrefillSupplierOnly:", err);
                 showRetryError(
-                    "Greška pri dohvaćanju dobavljača",
+                    "Greška pri dohvaćanju klijenta",
                     err.message || "Neuspješno dohvaćanje",
                     () => fetchAndPrefillSupplierOnly()
                 );
@@ -1579,7 +1579,7 @@ row.innerHTML = `
             console.log("[IMPORTER] Forcing new importer...");
             $("#importerr-select2 option[value='new']").remove();
 
-            const labelText = importer?.name ? `${importer.name} – ${importer.address || ''}` : 'Novi dobavljač';
+            const labelText = importer?.name ? `${importer.name} – ${importer.address || ''}` : 'Novi klijent';
             const newOption = new Option(labelText, String(importerId), true, true);
             $("#importer-select2").append(newOption);
             $("#importer-select2").val(String(importerId)).trigger("change");
@@ -1652,7 +1652,7 @@ row.innerHTML = `
 
                     if (importer) {
                         console.log("[IMPORTER] Falling back to AI importer data");
-                        const newOption = new Option('Novi dobavljač', 'new', true, true);
+                        const newOption = new Option('Novi klijent', 'new', true, true);
                         $("#importer-select2").append(newOption).trigger('change');
 
                         $("#carrier-name").val(importer.name || "").prop('readonly', false);
@@ -1670,7 +1670,7 @@ row.innerHTML = `
 
         } else if (importer) {
             console.log("[IMPORTER] No ID but importer data available. Treating as new.");
-            const newOption = new Option('Novi dobavljač', 'new', true, true);
+            const newOption = new Option('Novi klijent', 'new', true, true);
             $("#importer-select2").append(newOption).trigger('change');
 
             $("#carrier-name").val(importer.name || "").prop('readonly', false);
@@ -1760,7 +1760,7 @@ row.innerHTML = `
             }
             window.skipPrefillParties = false; // reset after use
             $("#supplier-select2").select2({
-                placeholder: "Pretraži klijenta",
+                placeholder: "Pretraži dobavljača",
                 allowClear: true,
                 ajax: {
                     url: "/api/suppliers",
@@ -1803,7 +1803,7 @@ placeholder: "Pretraži...", // bolji UX
             });
 
             $("#importer-select2").select2({
-                placeholder: "Pretraži dobavljača",
+                placeholder: "Pretraži klijenta",
                 allowClear: true,
                 ajax: {
                     url: "/api/importers",
@@ -2045,7 +2045,7 @@ if (invoiceDateInput) {
 
                 Swal.fire({
                     title: 'Oprez!',
-                    text: 'Ova radnja će izbrisati sve podatke za klijenta i omogućiti ponovno automatsko popunjavanje.',
+                    text: 'Ova radnja će izbrisati sve podatke za dobavljača i omogućiti ponovno automatsko popunjavanje.',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Da',
@@ -2089,7 +2089,7 @@ if (invoiceDateInput) {
 
                 Swal.fire({
                     title: 'Oprez!',
-                    text: 'Ova radnja će izbrisati sve podatke za dobavljača i omogućiti ponovno automatsko popunjavanje.',
+                    text: 'Ova radnja će izbrisati sve podatke za klijenta i omogućiti ponovno automatsko popunjavanje.',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Da',
@@ -2161,7 +2161,7 @@ if (invoiceDateInput) {
                         const label = document.getElementById("billing-name-ai-label");
                         if (label) label.classList.remove("d-none");
                     } else {
-                        Swal.fire("Greška", "Nema AI podataka za klijenta", "error");
+                        Swal.fire("Greška", "Nema AI podataka za dobavljača", "error");
                     }
                 } catch (err) {
                     Swal.fire("Greška", err.message || "Neuspješno dohvaćanje podataka", "error");
@@ -2185,7 +2185,7 @@ if (invoiceDateInput) {
                     if (importer) {
                         // Set select2 to 'Novi dobavljač'
                         $("#importer-select2 option[value='new']").remove();
-                        var newOption = new Option('Novi dobavljač', 'new', true, true);
+                        var newOption = new Option('Novi klijent', 'new', true, true);
                         $("#importer-select2").append(newOption).val('new').trigger('change');
                         // Fill fields
                         $("#carrier-name").val(importer.name || "").prop('readonly', false);
@@ -2197,7 +2197,7 @@ if (invoiceDateInput) {
                         const label = document.getElementById("carrier-name-ai-label");
                         if (label) label.classList.remove("d-none");
                     } else {
-                        Swal.fire("Greška", "Nema AI podataka za dobavljača", "error");
+                        Swal.fire("Greška", "Nema AI podataka za klijenta", "error");
                     }
                 } catch (err) {
                     Swal.fire("Greška", err.message || "Neuspješno dohvaćanje podataka", "error");
@@ -2460,7 +2460,7 @@ Swal.fire({
 
             // --- Supplier Select2
             $('#supplier-select2').select2({
-                placeholder: "Pretraži klijenta",
+                placeholder: "Pretraži dobavljača",
                 width: '100%',
                 data: supplierOptions
             });
@@ -2488,7 +2488,7 @@ Swal.fire({
 
             // --- Importer Select2
             $('#importer-select2').select2({
-                placeholder: "Pretraži dobavljača",
+                placeholder: "Pretraži klijenta",
                 width: '100%',
                 data: importerOptions
             });
@@ -2655,7 +2655,7 @@ Swal.fire({
     function formatCountryWithFlag(state) {
         if (!state.id) return state.text;
         const flagUrl = `https://flagcdn.com/w40/${state.id.toLowerCase()}.png`;
-        return $(`<span><img src="${flagUrl}" class="me-2" width="20" /> ${state.text}</span>`);
+        return $(`<span><img src="${flagUrl}" class="" width="20" /> ${state.text}</span>`);
     }
 
     function formatToDMY(isoDate) {
