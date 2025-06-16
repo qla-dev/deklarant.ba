@@ -507,6 +507,7 @@ class InvoiceController extends Controller
                     'country_of_origin' => $item['country_of_origin'],
                     'quantity_type' => $item['quantity_type'],
                     'num_packages' => $item['num_packages'],
+                    'item_description_translated' => $item['item_description_translated'],
                 ];
             }, $result['items']);
 
