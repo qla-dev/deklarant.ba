@@ -23,7 +23,7 @@ class OpenrouterLLMService implements LLMCaller
                 // Add prompt text as part of the message
                 $messageContent[] = [
                     'type' => 'text',
-                    'text' => $prompt + $suffix,
+                    'text' => $prompt . $suffix,
                 ];
 
                 // Add image(s) as base64-encoded URLs
