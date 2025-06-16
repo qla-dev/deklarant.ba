@@ -67,7 +67,7 @@ class InvoiceController extends Controller
             $invoices = Invoice::where('user_id', $userId)
                 ->with([
                     
-                    'supplier:id,name,owner,avatar' // Make sure this line is correct
+                    'importer:id,name,owner,avatar' // Make sure this line is correct
                 ])
                 ->get();
 

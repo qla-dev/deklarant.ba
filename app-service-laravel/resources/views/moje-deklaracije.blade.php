@@ -186,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 defaultContent: '<span class="text-muted">Nepoznato</span>'
             },
             {
-                data: 'supplier.name',
+                data: 'importer.name',
                 title: 'Klijent',
                 defaultContent: '<span class="text-muted">Nepoznato</span>'
             },
@@ -237,7 +237,7 @@ document.addEventListener("DOMContentLoaded", function () {
             {
                 data: 'file_name',
                 orderable: false,
-                title: 'Originalni dokument',
+                title: 'Vrsta',
                 className: 'text-center',
                 render: data => {
                     if (!data) return '<span class="badge bg-secondary">N/A</span>';

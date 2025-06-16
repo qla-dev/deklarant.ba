@@ -397,8 +397,8 @@
 <!-- MOJI KLIJENTI -->
 <div class="card rounded-0 w-100 mb-3 mb-md-2 pb-2 pb-md-0">
      <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="mb-0">Moji klijenti</h5>
-        <a href="moji-klijenti" class="text-info text-end fs-13">Pregledaj sve</a>
+        <h5 class="mb-0">Moji dobavljači</h5>
+        <a href="moji-dobavljaci" class="text-info text-end fs-13">Pregledaj sve</a>
     </div>
     <div class="card-body d-flex justify-content-start align-items-center flex-column pb-0 pt-0 position-relative" style="min-height: 250px;">
         <!-- Centered loader -->

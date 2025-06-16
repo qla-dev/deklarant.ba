@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\InvoiceItem;
 use App\Models\Supplier;
+use App\Models\Importer;
+
 use App\Services\AiService; 
 
 class Invoice extends Model
@@ -38,6 +40,11 @@ class Invoice extends Model
     public function supplier()
     {
         return $this->belongsTo(Supplier::class);
+    }
+
+      public function importer()
+    {
+        return $this->belongsTo(Importer::class);
     }
 
   public function overallStatus()

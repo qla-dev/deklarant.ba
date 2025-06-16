@@ -532,7 +532,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         console.log("Stats response:", stats);
 
         // --- SUPPLIERS SECTION ---
-        const suppliers = stats.supplier_stats?.latest_suppliers || [];
+        const suppliers = stats.importer_stats?.latest_importers || [];
         const lastSuppliers = suppliers.slice(-5);
 
         if (supplierLoader) supplierLoader.classList.add("d-none");
