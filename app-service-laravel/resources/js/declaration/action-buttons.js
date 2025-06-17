@@ -438,27 +438,4 @@ document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
 
 
 
-//  Export to PDF 
-
-    document.getElementById("export-pdf").addEventEventListener("click", function() {
-        const element = document.getElementById("invoice_form"); // or wrap the main content
-        const opt = {
-            margin: 0.5,
-            filename: 'faktura.pdf',
-            image: {
-                type: 'jpeg',
-
-                quality: 0.98
-            },
-            html2canvas: {
-                scale: 2
-            },
-            jsPDF: {
-                unit: 'in',
-                format: 'a4',
-                orientation: 'landscape'
-            }
-        };
-        html2pdf().set(opt).from(element).save();
-    });
 
