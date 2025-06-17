@@ -335,7 +335,7 @@
                         </tbody>
                         <tbody>
                             <tr class="text-end mt-3">
-                                <td colspan="10" class="text-end mt-3">
+                                <td colspan="12" class="text-end mt-3">
                                     <button id="add-item" class="btn btn-info fw-medium mt-2">
                                         <i class="ri-add-fill me-1 align-bottom"></i> Dodaj proizvod
                                     </button>
