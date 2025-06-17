@@ -6,7 +6,6 @@
        @lang('translation.clients') 
     @endif
 @endsection
-
 @section('css')
 <link href="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
 <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
@@ -32,7 +31,6 @@ deklarant.ai
         @endslot
     @endif
 @endauth
-
 @endcomponent
 
 
@@ -57,17 +55,17 @@ deklarant.ai
                     <p class="text-muted">Učitavanje rezultata</p>
                 </div>
                 <div class="table-responsive table-card ms-1 me-1 mb-2" style="display:none">
-                    <table id="suppliersTable" class="table w-100">
+                    <table id="importersTable" class="table w-100">
                         <thead class="custom-table  has-action">
                             <tr>
                                 <th>ID</th>
                                 <th>Naziv firme</th>
-                                <th>ID broj</th>
                                 <th>Vlasnik</th>
+                                <th>ID broj</th>
                                 <th>Adresa</th>
                                 <th>Email</th>
                                 <th>Telefon</th>
-                                <th style="padding-right: 20px!important;">Akcija</th>
+                                <th class="text-end">Akcija</th>
 
                             </tr>
                         </thead>
@@ -110,6 +108,8 @@ deklarant.ai
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
+
+
 <script>
 document.addEventListener("DOMContentLoaded", async function () {
     if (!user || !token) {
@@ -121,21 +121,21 @@ document.addEventListener("DOMContentLoaded", async function () {
     const tableContainer = document.querySelector('.table-responsive');
     const isSuperAdmin = user.role === 'superadmin';
 
-    let suppliers = [];
+    let importers = [];
     let fields = {};
 
     try {
         const response = isSuperAdmin
-            ? await axios.get("/api/suppliers", { headers: { Authorization: `Bearer ${token}` } })
+            ? await axios.get("/api/importers", { headers: { Authorization: `Bearer ${token}` } })
             : await axios.get(`/api/statistics/users/${user.id}`, { headers: { Authorization: `Bearer ${token}` } });
 
         if (isSuperAdmin) {
-            suppliers = response.data?.data ?? [];
+            importers = response.data?.data ?? [];
         } else {
             const stats = response.data || {};
-            suppliers = stats.supplier_stats?.suppliers ?? [];
+            importers = stats.importer_stats?.importers ?? [];
             fields = {
-                totalSuppliers: stats.supplier_stats?.total_suppliers ?? 0,
+                totalimporters: stats.impoter_stats?.total_importers ?? 0,
                 totalInvoices: stats.total_invoices ?? 0,
                 usedScans: stats.used_scans ?? 0,
                 remainScansTopbar: stats.remaining_scans ?? 0
@@ -150,8 +150,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         loader?.remove();
         tableContainer.style.display = 'block';
 
-        $('#suppliersTable').DataTable({
-            data: suppliers,
+        $('#importersTable').DataTable({
+            data: importers,
             scrollX: true,
             autoWidth: true,
             lengthChange: false,
@@ -162,7 +162,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     data: 'name', title: 'Naziv firme',
                     render: (data, type, row) => {
                         const avatar = row.avatar
-                            ? `<img src="/uploads/suppliers/${row.avatar}" class="rounded-circle me-2" width="40" height="40" style="object-fit: cover;">`
+                            ? `<img src="/uploads/importers/${row.avatar}" class="rounded-circle me-2" width="40" height="40" style="object-fit: cover;">`
                             : `<div class="rounded-circle avatar-initials d-flex align-items-center justify-content-center text-white shadow-sm me-2" style="width: 30px; height: 30px; background-color: #299cdb; font-size: 14px;">${row.name?.[0]?.toUpperCase() || "?"}</div>`;
                         return `<div class="d-flex align-items-center">${avatar}<span>${data}</span></div>`;
                     }
@@ -247,7 +247,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             },
             initComplete: function () {
                 const api = this.api();
-                $('#suppliersTable_filter').html(`
+                $('#importersTable_filter').html(`
                     <div class="position-relative w-100">
                         <input type="text" class="form-control w-100" placeholder="Pretraga..." id="supplier-search-input" style="padding-left: 2rem;">
                         <span class="mdi mdi-magnify text-info fs-5 ps-2 position-absolute top-50 start-0 translate-middle-y"></span>
@@ -286,7 +286,7 @@ document.addEventListener("click", async function (e) {
     let synonyms = [];
 
     try {
-        const res = await axios.get(`/api/suppliers/${supplierId}`, {
+        const res = await axios.get(`/api/importers/${supplierId}`, {
             headers: { Authorization: `Bearer ${token}` }
         });
         synonyms = res.data?.synonyms ?? [];
@@ -329,7 +329,7 @@ document.addEventListener("click", async function (e) {
 
                     try {
                         const updated = [...synonyms, newVal];
-                        await axios.put(`/api/suppliers/${supplierId}`, { synonyms: updated }, {
+                        await axios.put(`/api/importers/${supplierId}`, { synonyms: updated }, {
                             headers: { Authorization: `Bearer ${token}` }
                         });
                         synonyms.push(newVal);
@@ -350,7 +350,7 @@ document.addEventListener("click", async function (e) {
                 const updated = synonyms.filter(s => s !== toRemove);
 
                 try {
-                    await axios.put(`/api/suppliers/${supplierId}`, { synonyms: updated }, {
+                    await axios.put(`/api/importers/${supplierId}`, { synonyms: updated }, {
                         headers: { Authorization: `Bearer ${token}` }
                     });
                     synonyms = updated;
@@ -378,11 +378,6 @@ function showToast(message = "") {
     }, 2000);
 }
 </script>
-
-
-
-
-
 
 
 

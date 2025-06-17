@@ -10,6 +10,14 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <style>
+
+    #total-num-packages::placeholder {
+        text-align:right!important;
+    }
+
+    #total-weight-gross::placeholder {
+        text-align:center!important;
+    }
     
     /* Ensures the selected text is truncated with ellipsis and tooltip works */
     .select2-container--default .select2-results__options {
@@ -160,9 +168,9 @@
        <div class="col-6 col-md-3 col-mob">
         <div class="mt-4">
             <h6 class="text-muted text-uppercase fw-semibold">Moji podaci</h6>
-            <input type="text" class="form-control mb-2" id="company-address" name="name" placeholder="Ime kompanije" disabled value="{{ Auth::user()->company['name'] ?? '' }}">
-            <input type="text" class="form-control mb-2" id="company-id" name="zip" placeholder="ID kompanije" disabled value="{{ Auth::user()->company['id'] ?? '' }}">
-            <input type="email" class="form-control mb-2" id="company-tel" name="tel" placeholder="Adresa" disabled value="{{ Auth::user()->company['address'] ?? '' }}">
+            <input type="text" class="form-control mb-2" id="company-name" name="name" placeholder="Ime kompanije" disabled value="{{ Auth::user()->company['name'] ?? '' }}">
+            <input type="text" class="form-control mb-2" id="company-id" name="id" placeholder="ID kompanije" disabled value="{{ Auth::user()->company['id'] ?? '' }}">
+            <input type="email" class="form-control mb-2" id="company-address" name="address" placeholder="Adresa" disabled value="{{ Auth::user()->company['address'] ?? '' }}">
             <p class="fs-12 text-muted m-0">
                 Ovo su informacije o tvojoj kompaniji. Možete ih uvijek prilagoditi na 
                 <a href="/profil" class="text-info">pregledu svog profila.</a>
@@ -180,23 +188,29 @@
             <input type="text" class="form-control" id="invoice-no" name="invoice_no" placeholder="Unesite broj fakture">
         </div>
 
-        <div style="margin-top: 1.85rem;">
-            <h6 class="text-muted text-uppercase fw-semibold mt-1">Incoterm</h6>
-            <select class="form-select mb-2 custom-select-icon incoterm2" name="incoterm" id="incoterm">
-                <option value="" selected disabled>Izaberite</option>
-                <option value="EXW">EXW</option>
-                <option value="FCA">FCA</option>
-                <option value="CPT">CPT</option>
-                <option value="CIP">CIP</option>
-                <option value="DAP">DAP</option>
-                <option value="DPU">DPU</option>
-                <option value="DDP">DDP</option>
-                <option value="FAS">FAS</option>
-                <option value="FOB">FOB</option>
-                <option value="CFR">CFR</option>
-                <option value="CIF">CIF</option>
-            </select>
-        </div>
+      <div style="margin-top: 1.85rem;">
+  <h6 class="text-muted text-uppercase fw-semibold mt-1">Incoterm</h6>
+  
+  <div class="d-flex gap-2">
+    <select class="form-select mb-2 custom-select-icon incoterm2" name="incoterm" id="incoterm">
+      <option value="" selected disabled>Izaberite</option>
+      <option value="EXW">EXW</option>
+      <option value="FCA">FCA</option>
+      <option value="CPT">CPT</option>
+      <option value="CIP">CIP</option>
+      <option value="DAP">DAP</option>
+      <option value="DPU">DPU</option>
+      <option value="DDP">DDP</option>
+      <option value="FAS">FAS</option>
+      <option value="FOB">FOB</option>
+      <option value="CFR">CFR</option>
+      <option value="CIF">CIF</option>
+    </select>
+
+    <input type="text" id="incoterm-destination" class="form-control mb-2" placeholder="Destinacija">
+  </div>
+</div>
+
     </div>
                 </div>
 
@@ -207,30 +221,30 @@
                 <div class="row g-4">
                     <div class="col-6 text-start">
 
-                        <h6 class="text-muted text-uppercase fw-semibold mb-3">Klijent</h6>
+                        <h6 class="text-muted text-uppercase fw-semibold mb-3">Dobavljač</h6>
 
                         <div class="mb-2">
                             <div style="display: flex;">
-                                <button type="button" class="btn btn-sm btn-info mb-2 me-2 deklaracija-action-buttons" id="add-new-supplier"><i class="fas fa-wand-magic-sparkles fs-6 me-0 me-md-1"></i><span class="mobile-landscape-hide">Detektovani klijent iz baze</span></button>
-                                <button type="button" class="btn btn-sm btn-soft-info mb-2 deklaracija-action-buttons" id="refill-supplier-ai"><i class="fa-regular fa-hand align-top me-0 me-md-1 korpica"></i><span class="mobile-landscape-hide">Ručni unos klijenta</span></button>
+                                <button type="button" class="btn btn-sm btn-info mb-2 me-2 deklaracija-action-buttons" id="add-new-supplier"><i class="fas fa-wand-magic-sparkles fs-6 me-0 me-md-1"></i><span class="mobile-landscape-hide">Detektovani dobavljač iz baze</span></button>
+                                <button type="button" class="btn btn-sm btn-soft-info mb-2 deklaracija-action-buttons" id="refill-supplier-ai"><i class="fa-regular fa-hand align-top me-0 me-md-1 korpica"></i><span class="mobile-landscape-hide">Ručni unos dobavljača</span></button>
                             </div>
                             <select id="supplier-select2" class="form-select"></select>
                         </div>
-                        <input type="text" class="form-control mb-2" id="billing-name" name="supplier_name" placeholder="Naziv klijenta">
+                        <input type="text" class="form-control mb-2" id="billing-name" name="supplier_name" placeholder="Naziv dobavljača">
 
-                        <input type="text" class="form-control mb-2" id="billing-address-line-1" name="supplier_address" placeholder="Adresa klijenta">
-                        <input type="text" class="form-control mb-2" id="billing-phone-no" name="supplier_phone" placeholder="Telefon klijenta">
-                        <input type="text" class="form-control mb-2" id="billing-tax-no" name="supplier_tax" placeholder="VAT klijenta">
-                        <input type="email" class="form-control mb-2" id="email" name="email" placeholder="Email klijenta">
+                        <input type="text" class="form-control mb-2" id="billing-address-line-1" name="supplier_address" placeholder="Adresa dobavljača">
+                        <input type="text" class="form-control mb-2" id="billing-phone-no" name="supplier_phone" placeholder="Telefon dobavljača">
+                        <input type="text" class="form-control mb-2" id="billing-tax-no" name="supplier_tax" placeholder="VAT dobavljača">
+                        <input type="email" class="form-control mb-2" id="email" name="email" placeholder="Email dobavljača">
                         <input type="email" class="form-control" id="supplier-owner" name="supplierOwner" placeholder="Vlasnik kompanije">
                     </div>
                     <div class="col-6 text-end">
-                        <h6 class="text-muted text-uppercase fw-semibold mb-3 text-end">Dobavljač</h6>
+                        <h6 class="text-muted text-uppercase fw-semibold mb-3 text-end">Klijent</h6>
 
                         <div class="mb-2">
                             <div style="justify-content: end; display: flex;">
-                                <button type="button" class="btn btn-sm btn-soft-info mb-2  me-2  deklaracija-action-buttons" id="refill-importer-ai"><i class="fa-regular fa-hand align-top me-0 me-md-1 korpica"></i><span class="mobile-landscape-hide">Detektovani dobavljač iz baze</span></button>
-                                <button type="button" class="btn btn-sm btn-info mb-2 deklaracija-action-buttons" id="add-new-importer"><i class="fas fa-wand-magic-sparkles fs-6 me-0 me-md-1"></i><span class="mobile-landscape-hide">Ručni unos dobavljača</span></button>
+                                <button type="button" class="btn btn-sm btn-soft-info mb-2  me-2  deklaracija-action-buttons" id="refill-importer-ai"><i class="fa-regular fa-hand align-top me-0 me-md-1 korpica"></i><span class="mobile-landscape-hide">Ručni unos klijenta</span></button>
+                                <button type="button" class="btn btn-sm btn-info mb-2 deklaracija-action-buttons" id="add-new-importer"><i class="fas fa-wand-magic-sparkles fs-6 me-0 me-md-1"></i><span class="mobile-landscape-hide">Detektovani klijent iz baze</span></button>
 
                             </div>
 
@@ -239,10 +253,10 @@
 
                         <input type="text" class="form-control mb-2 text-end" id="carrier-name" name="dobavljačime" placeholder="Naziv dobavljača">
 
-                        <input type="text" class="form-control mb-2 text-end" id="carrier-address" name="dobavljačadresa" placeholder="Adresa dobavljača">
-                        <input type="text" class="form-control mb-2 text-end" id="carrier-tel" name="dobavljačtel" placeholder="Telefon dobavljača">
-                        <input type="text" class="form-control mb-2 text-end" id="carrier-tax" name="dobavljačtel" placeholder="JIB dobavljača">
-                        <input type="text" class="form-control mb-2 text-end" id="carrier-email" name="dobavljačtel" placeholder="Email dobavljača">
+                        <input type="text" class="form-control mb-2 text-end" id="carrier-address" name="klijentadresa" placeholder="Adresa klijenta">
+                        <input type="text" class="form-control mb-2 text-end" id="carrier-tel" name="klijenttel" placeholder="Telefon klijenta">
+                        <input type="text" class="form-control mb-2 text-end" id="carrier-tax" name="klijenttel" placeholder="JIB klijenta">
+                        <input type="text" class="form-control mb-2 text-end" id="carrier-email" name="klijenttel" placeholder="Email klijenta">
                         <input type="text" class="form-control mb-2 text-end" id="carrier-owner" name="carrierOwner" placeholder="Vlasnik kompanije">
 
                     </div>
@@ -257,13 +271,33 @@
                     </div>
                     <div class="col-4 text-center">
                         <label class="d-flex justify-content-center text-muted text-uppercase fw-semibold mb-1">Datum</label>
-                        <input type="date" class="form-control" id="invoice-date" name="invoice_date">
+                        <input type="date" class="form-control text-center" id="invoice-date" name="invoice_date">
                     </div>
                     <div class="col-4 text-end">
                         <label class="text-muted text-uppercase fw-semibold mb-1">Ukupan iznos</label>
                         <input type="text" class="form-control text-end" id="total-amount" name="total_amount" placeholder="0.00 KM" disabled>
                     </div>
                 </div>
+                   <!-- Added fields -->
+    <div class="row g-4">
+        <div class="col-4 text-start">
+            <label class="text-muted text-uppercase fw-semibold mb-1">Neto težina (kg)</label>
+            <input type="number" step="0.01" class="form-control" id="total-weight-net" name="total_weight_net" placeholder="0.00 kg">
+        </div>
+        <div class="col-4 text-center">
+            <label class="d-flex justify-content-center text-muted text-uppercase fw-semibold mb-1">Bruto težina (kg)</label>
+            <input type="number" step="0.01" class="form-control text-center" id="total-weight-gross" name="total_weight_gross" placeholder="0.00 kg">
+        </div>
+        <div class="col-4 text-end">
+            <label class="text-muted text-uppercase fw-semibold mb-1">Broj paketa</label>
+            <input type="number" class="form-control text-end" id="total-num-packages" name="total_num_packages" placeholder="0">
+        </div>
+    </div>
+<input id="q1-estimate" name="q1" type="hidden">
+
+
+
+
             </div>
 
 
@@ -274,23 +308,31 @@
                         <thead class="table-active">
                             <tr>
                                 <th style="width: 50px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">#</th>
-                                <th style="width: 200px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Proizvodi </th>
-                                <th style="width: 140px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Opis </th>
-                                <th style="width: 140px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Tarifna oznaka</th>
-                                <th style="width: 60px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Tip kvantiteta</th>
-                                <th style="width:70px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Zemlja porijekla</th>
-                                <th style="width:60px; text-align: center;vertical-align: middle; text-align: left; padding-bottom: 1rem;">Cijena</th>
+                                <th style="width: 200px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; padding-right: 50px!important;">Proizvod </th>
+                                <th style="width: 140px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; margin-left: -5px!important;">Opis </th>
+                                <th style="width: 220px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Tarifna oznaka</th>
+                                <th style="width: 80px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">T. kvantiteta</th>
+                                <th style="width:110px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Porijeklo</th>
+                                <th style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem;">Cijena</th>
                                 <th style="width: 60px; text-align: center;vertical-align: middle;">
-                                    Količina<br>
+                                    Bruto (kg)<br>
                                     <small style="font-weight: normal; font-size: 0.75rem; color: #666;">
-                                        Broj paketa
+                                        Neto (kg)
                                     </small>
                                 </th>
+                                    <th style="width: 60px; text-align: center;vertical-align: middle;">
+                                    Količina<br>
+                                    <small style="font-weight: normal; font-size: 0.75rem; color: #666;">
+                                        Broj koleta
+                                    </small>
+                                </th>
+                                   <th style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem;">Vrijednost <br> (%)</th>
+                                  
 
-                                <th style="width:70px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Ukupno</th>
+                                <th style="width:100px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Ukupno</th>
                                 <th style="width:20px;vertical-align: middle; text-align: end;">Ukloni <br>
                                     <small style="font-weight: normal; font-size: 0.75rem; color: #666;">
-                                        Povlastica
+                                        Pov..
                                     </small>
                                 </th>
                             </tr>
@@ -300,7 +342,7 @@
                         </tbody>
                         <tbody>
                             <tr class="text-end mt-3">
-                                <td colspan="10" class="text-end mt-3">
+                                <td colspan="12" class="text-end mt-3">
                                     <button id="add-item" class="btn btn-info fw-medium mt-2">
                                         <i class="ri-add-fill me-1 align-bottom"></i> Dodaj proizvod
                                     </button>
@@ -311,10 +353,10 @@
                 </div>
 
                 <div class="border-top border-top-dashed mt-2">
-                    <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto" style="width:250px">
+                    <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto" style="width:200px">
                         <tbody class="border-bottom-dashed">
                             <tr class="border-top border-top-dashed fs-15">
-                                <th>Ukupan iznos</th>
+                                <th>Ukupan iznos:</th>
                                 <th class="text-end" id="modal-total-amount"> </th>
                             </tr>
                         </tbody>
@@ -325,6 +367,8 @@
 
         </div>
     </div>
+    <input type="hidden" id="currency-lock" value="">
+
     @include('components.fixed-sidebar')
 </div>
 
@@ -421,9 +465,6 @@ if (typeof window !== "undefined") {
 
  
 </script>
-
-
-
 
 <!-- Scan and other logic script -->
 <script>
@@ -522,28 +563,93 @@ if (typeof window !== "undefined") {
 
 
 
-        function updateTotalAmount() {
-            let total = 0;
+ function updateTotalAmount() {
+    let total = 0;
+    const currencySymbols = {
+        "EUR": "€",
+        "USD": "$",
+        "KM": "KM"
+    };
 
-            // Loop through all invoice rows
-            document.querySelectorAll("#newlink tr.product").forEach(function(row) {
-                const price = parseFloat(row.querySelector('input[name="price[]"]')?.value || 0);
-                const quantity = parseFloat(row.querySelector('input[name="quantity[]"]')?.value || 0);
-                total += price * quantity;
-            });
+    const productRows = document.querySelectorAll("#newlink tr.product");
 
-            // Format as currency
-            const formatted = `${total.toFixed(2)} KM`;
+    // Get locked currency from hidden input
+    let lockedCurrency = document.getElementById("currency-lock").value;
 
-            // Set values in both places
-            document.getElementById("total-amount").value = formatted;
-            document.getElementById("modal-total-amount").textContent = formatted;
-            document.getElementById("total-edit").textContent = formatted;
+   productRows.forEach((row) => {
+    const itemName = row.querySelector('input[name="item_name[]"]')?.value?.trim();
+    const price = parseFloat(row.querySelector('input[name="price[]"]')?.value || 0);
+    const quantity = parseFloat(row.querySelector('input[name="quantity[]"]')?.value || 0);
 
+    // 🚫 Skip rows with no name or zeroed values
+    if (!itemName || (price === 0 && quantity === 0)) return;
+
+    total += price * quantity;
+
+    if (!lockedCurrency) {
+        const currencyInput = row.querySelector('input[name="currency[]"]');
+        if (currencyInput && currencyInput.value.trim()) {
+            lockedCurrency = currencyInput.value.trim();
+            document.getElementById("currency-lock").value = lockedCurrency;
+            console.log("✅ Locked currency:", lockedCurrency);
         }
+    }
+});
 
 
-        async function getInvoice() {
+    const currency = lockedCurrency || "EUR";
+    const currencySymbol = currencySymbols[currency] || currency;
+    const formatted = `${total.toFixed(2)} ${currencySymbol}`;
+
+    document.getElementById("total-amount").value = formatted;
+    document.getElementById("modal-total-amount").textContent = formatted;
+    document.getElementById("total-edit").textContent = formatted;
+
+    // ⬇️ Also update q1-estimate here
+    const numPackages = parseFloat(document.getElementById("total-num-packages")?.value || 0);
+    const q1Input = document.getElementById("q1-estimate");
+    document.getElementById('q1-estimate')?.addEventListener('input', updateProcjenaEstimates);
+
+
+    if (numPackages > 0) {
+        const q1 = total / numPackages;
+        q1Input.value = q1.toFixed(2);
+q1Input.dispatchEvent(new Event("input")); // ✅ ključni event za procjenu
+    } else {
+        q1Input.value = "";
+q1Input.dispatchEvent(new Event("input")); // isto da očisti procjene
+
+    }
+}
+
+
+
+
+
+
+function updateProcjenaEstimates() {
+  const q1 = parseFloat(document.getElementById("q1-estimate")?.value || 0);
+  const rows = document.querySelectorAll("#newlink tr.product");
+
+  rows.forEach(row => {
+    const kolata = parseFloat(row.querySelector('input[name="kolata[]"]')?.value || 0);
+    const procjenaInput = row.querySelector('input[name="procjena[]"]');
+
+    if (procjenaInput) {
+      const result = q1 * kolata;
+      procjenaInput.value = isNaN(result) ? "" : result.toFixed(2);
+    }
+  });
+}
+
+
+
+        
+document.getElementById('total-num-packages')?.addEventListener('input', () => {
+    updateTotalAmount(); // This will auto-update q1 as well
+});
+
+async function getInvoice() {
             if (!_invoice_data) {
                 console.log(" Fetching invoice...");
                 const res = await fetch(`/api/invoices/${getInvoiceId()}`, {
@@ -823,55 +929,68 @@ if (typeof window !== "undefined") {
 }
 
 function initializeTariffSelects() {
-            $('.select2-tariff').each(function() {
-                const select = $(this);
-                const prefillValue = select.data("prefill");
+    $('.select2-tariff').each(function () {
+        const select = $(this);
 
-                select.select2({
-                    placeholder: "Pretraži tarifne stavke...",
-                    width: '100%',
-                    minimumInputLength: 1,
-                    minimumInputLength: 1,
-    language: {
-        inputTooShort: function(args) {
-            return "Pretraži tarifne oznake...";
+        // ⚠️ Destroy existing Select2 to prevent duplicate init
+        if (select.hasClass('select2-hidden-accessible')) {
+            select.select2('destroy');
         }
-    },
-                    ajax: {
-                        transport: function(params, success, failure) {
-                            const term = params.data.q?.toLowerCase() || "";
-                            const filtered = processedTariffData.filter(item => item.search.includes(term));
-                            success({
-                                results: filtered
-                            });
-                        },
-                        delay: 200
-                    },
-                    templateResult: function(item) {
-                        if (!item.id && !item.text) return null;
-                        const icon = item.isLeaf ? "•" : "▶";
-                        return $(`<div style="padding-left:${item.depth * 20}px;" title="${item.display}">${icon} ${item.display}</div>`);
-                    },
-                    templateSelection: function(item) {
-                        return item.id || "";
-                    }
-                });
 
-                // Programmatically set prefill value, only with Tarifna oznaka
-                if (prefillValue) {
-                    const matched = processedTariffData.find(item => item.id === prefillValue);
-                    if (matched) {
-                        const option = new Option(matched.id, matched.id, true, true);
-                        select.append(option).trigger('change');
-                    }
+        const prefillValue = select.data("prefill");
+
+        select.select2({
+            placeholder: "Izaberite tarifnu oznaku",
+            width: '100%',
+            minimumInputLength: 1,
+            language: {
+                inputTooShort: function () {
+                    return "Pretraži tarifne oznake...";
                 }
-            });
+            },
+            ajax: {
+                transport: function (params, success, failure) {
+                    const term = params.data.q?.toLowerCase() || "";
+                    const filtered = processedTariffData.filter(item => item.search.includes(term));
+                    success({
+                        results: filtered
+                    });
+                },
+                delay: 200
+            },
+            templateResult: function (item) {
+                if (!item.id && !item.text) return null;
+                const icon = item.isLeaf ? "•" : "▶";
+                return $(`<div style="padding-left:${item.depth * 20}px;" title="${item.display}">${icon} ${item.display}</div>`);
+            },
+            templateSelection: function (item) {
+                return item.id || "Izaberite tarifnu oznaku";
+            }
+        });
+
+        // ✅ Add placeholder option manually if no prefill
+        if (!prefillValue) {
+            const placeholderOption = new Option("Izaberite tarifnu oznaku", "", false, false);
+            select.append(placeholderOption).trigger('change');
         }
+
+        // ✅ Otherwise, programmatically set the value
+        if (prefillValue) {
+            const matched = processedTariffData.find(item => item.id === prefillValue);
+            if (matched) {
+                const option = new Option(matched.id, matched.id, true, true);
+                select.append(option).trigger('change');
+            }
+        }
+    });
+}
+
 
 
 
         function addRowToInvoice(item = {}, suggestions = []) {
             const tbody = document.getElementById("newlink");
+
             const index = tbody.children.length;
 
             globalAISuggestions.push(suggestions);
@@ -881,13 +1000,16 @@ function initializeTariffSelects() {
             const price = item.base_price || 0;
             const quantity = item.quantity || 0;
             const origin = item.country_of_origin || "DE";
+            const currency = item.currency || "EUR";
             const total = (price * quantity).toFixed(2);
-            const desc = item.item_description;
+            const desc = (item.item_description ?? "") || "";
             const translate = item.translate || item.item_description_translated || "";
             const package_num = item.num_packages || 0;
             const tariff_privilege = item.tariff_privilege || 0;
             const qtype = item.quantity_type || "";
             const best_customs_code_matches = item.best_customs_code_matches || [];
+            const weight_gross = item.weight_gross || 0;
+            const weight_net = item.weight_net || 0;
 
             console.log(` Adding row ${index + 1}:`, item, suggestions);
 
@@ -909,11 +1031,11 @@ row.innerHTML = `
      
           <td colspan="2" style="width: 340px;">
             <div class="input-group" style="display: flex; gap: 0.25rem;">
-              <input type="text" class="form-control item-name" name="item_name[]" placeholder="Naziv proizvoda" value="${name}" style="flex:1;">
+              <input type="text" class="form-control item-name" name="item_name[]" placeholder="Naziv" value="${name}" style="flex:1;">
               <button class="btn btn-outline-info rounded" onmouseover="updateTooltip(this)" type="button" onclick="searchFromInputs(this)" data-bs-toggle="tooltip" data-bs-placement="top"   title="">
                  <i class="fa-brands fa-google"></i>
             </button>
-              <input type="text" class="form-control item-desc" name="item_desc[]" placeholder="Opisa proizvoda" value="${desc}" style="flex:1;">
+              <input type="text" class="form-control item-desc" name="item_desc[]" placeholder="Opis" value="${desc}" style="flex:1;">
             </div>
             <input 
               type="text" 
@@ -979,11 +1101,13 @@ row.innerHTML = `
             >
           </td>
 
-          <td style="width: 70px;">
+          <td style="width: 100px;">
             <select class="form-select" name="origin[]" style="width: 100%;">
               ${generateCountryOptions(origin)}
             </select>
           </td>
+       
+
 
           <td style="width: 60px;">
             <input 
@@ -995,6 +1119,55 @@ row.innerHTML = `
               
             >
           </td>
+                    <td style="width: 80px;">
+            <div style="display: flex; flex-direction: column; gap: 2px; width: 100%;">
+              <div class="input-group input-group-sm" style="width: 100%;">
+                <button 
+                  class="btn btn-outline-info btn-sm" 
+                  style="width: 20px; padding: 0;" 
+                  type="button"
+                >−</button>
+                <input 
+                  type="number" 
+                  class="form-control text-center" 
+                  name="weight_gross[]" 
+                  value="${weight_gross}" 
+                  step="1" 
+                  min="0"
+                  style="padding: 0 5px; height: 30px;"
+                >
+                <button 
+                  class="btn btn-outline-info btn-sm" 
+                  style=" width: 20px; padding: 0;" 
+                  type="button"
+                >+</button>
+              </div>
+              
+             <div class="input-group input-group-sm" style="height: 30px;">
+                <button 
+                class="btn btn-outline-info btn-sm"
+                  style="padding: 0; width: 20px;"
+                >−</button>
+
+                <input
+                  type="number"
+                  class="form-control text-center"
+                  name="weight_net[]"
+                  min="0"
+                  step="1"
+                  style="height: 30px; padding: 0 5px; font-size: 10px;"
+                  value="${weight_net}"
+                >
+
+                <button 
+                  class="btn btn-outline-info btn-sm increment-kolata" 
+                  type="button" 
+                  style="padding: 0; width: 20px;"
+                >+</button>
+                </div>
+            </div>
+          </td>
+
 
           <td style="width: 80px;">
             <div style="display: flex; flex-direction: column; gap: 2px; width: 100%;">
@@ -1045,16 +1218,33 @@ row.innerHTML = `
                 </div>
             </div>
           </td>
-
           <td style="width: 70px;">
-            <input 
-              type="text" 
-              class="form-control text-start" 
-              name="total[]" 
-              value="${total}"
-              style="width: 100%;"
-            >
-          </td>
+  <input 
+    type="text" 
+    class="form-control text-start procjena-field" 
+    name="procjena[]" 
+    value="" 
+    disabled 
+    style="width: 100%; background-color: #f9f9f9;"
+  >
+</td>
+
+
+         <td style="width: 70px;">
+    <input 
+      type="text" 
+      class="form-control text-start" 
+      name="total[]" 
+      value="${total}" disabled
+      style="width: 100%;"
+    >
+    <input 
+      type="hidden"
+      name="currency[]"
+      value="${currency}"
+    >
+</td>
+
 
           <td style="width: 20px; text-align: center;">
               <div style="display: flex; flex-direction: column; align-items: end; gap: 2px;">
@@ -1095,11 +1285,13 @@ row.innerHTML = `
             function formatFlag(state) {
                 if (!state.id) return state.text;
                 const flagUrl = $(state.element).data('flag');
-                return $(`<span class="flag-option"><img src="${flagUrl}" width="20" style="margin-right: 10px;" /> ${state.text}</span>`);
+                return $(`<span class="flag-option"><img src="${flagUrl}" width="20"  /> ${state.text}</span>`);
             }
 
             tbody.appendChild(row);
+            
             initializeTariffSelects();
+            updateProcjenaEstimates(); 
 
             updateTotalAmount();
         }
@@ -1125,6 +1317,7 @@ row.innerHTML = `
             row.find('input[name="total[]"]').val(total);
 
             // Optional: update global total as well
+            updateProcjenaEstimates(); 
             updateTotalAmount();
         });
 
@@ -1187,12 +1380,26 @@ row.innerHTML = `
         async function fillInvoiceData() {
             const invoice = await getInvoice();
             waitForEl("#invoice-id1", el => el.textContent = invoice.id || "—");
-            waitForEl("#invoice-date-text", el => el.textContent = invoice.date_of_issue || "—");
+           waitForEl("#invoice-date-text", el => {
+    const rawDate = invoice.date_of_issue ? new Date(invoice.date_of_issue) : new Date();
+    el.textContent = rawDate.toLocaleDateString('hr'); // e.g. "17. 6. 2025."
+    if (invoice.incoterm_destination) {
+    const destinationInput = document.getElementById("incoterm-destination");
+    if (destinationInput) {
+        destinationInput.value = invoice.incoterm_destination;
+    }
+}
+
+});
+
+
             waitForEl("#pregled", el => {
                 el.addEventListener("click", () => {
                     window.location.href = `/detalji-deklaracije/${invoice.id}`;
                 });
             });
+
+          
 
 
 
@@ -1345,7 +1552,7 @@ row.innerHTML = `
                 let importerId = invoice.importer_id || importer_id;
                 if (window.forceNewImporter) {
                     $("#importer-select2 option[value='new']").remove();
-                    const newOption = new Option('Novi dobavljač', 'new', true, true);
+                    const newOption = new Option('Novi klijent', 'new', true, true);
                     $("#importer-select2").append(newOption).trigger('change');
                     if (importer) {
                         $("#carrier-name").val(importer.name || "").prop('readonly', false);
@@ -1388,8 +1595,8 @@ row.innerHTML = `
                         },
                         error: function() {
                             if (importer) {
-                                // Not found in DB, add 'Novi dobavljač' to select2
-                                const newOption = new Option('Novi dobavljač', 'new', true, true);
+                                // Not found in DB, add 'Novi klijent' to select2
+                                const newOption = new Option('Novi klijent', 'new', true, true);
                                 $("#importer-select2").append(newOption).trigger('change');
                                 $("#carrier-name").val(importer.name || "").prop('readonly', false);
                                 $("#carrier-address").val(importer.address || "").prop('readonly', false);
@@ -1403,10 +1610,10 @@ row.innerHTML = `
                         }
                     });
                 } else if (importer) {
-                    // Always remove any previous 'Novi dobavljač' option
+                    // Always remove any previous 'Novi klijent' option
                     $("#importer-select2 option[value='new']").remove();
-                    // Add and select 'Novi dobavljač'
-                    const newOption = new Option('Novi dobavljač', 'new', true, true);
+                    // Add and select 'Novi klijent'
+                    const newOption = new Option('Novi klijent', 'new', true, true);
                     $("#importer-select2").append(newOption).trigger('change');
                     $("#carrier-name").val(importer.name || "").prop('readonly', false);
                     $("#carrier-address").val(importer.address || "").prop('readonly', false);
@@ -1542,7 +1749,7 @@ row.innerHTML = `
             } catch (err) {
                 console.error("Greška u fetchAndPrefillSupplierOnly:", err);
                 showRetryError(
-                    "Greška pri dohvaćanju dobavljača",
+                    "Greška pri dohvaćanju klijenta",
                     err.message || "Neuspješno dohvaćanje",
                     () => fetchAndPrefillSupplierOnly()
                 );
@@ -1579,7 +1786,7 @@ row.innerHTML = `
             console.log("[IMPORTER] Forcing new importer...");
             $("#importerr-select2 option[value='new']").remove();
 
-            const labelText = importer?.name ? `${importer.name} – ${importer.address || ''}` : 'Novi dobavljač';
+            const labelText = importer?.name ? `${importer.name} – ${importer.address || ''}` : 'Novi klijent';
             const newOption = new Option(labelText, String(importerId), true, true);
             $("#importer-select2").append(newOption);
             $("#importer-select2").val(String(importerId)).trigger("change");
@@ -1652,7 +1859,7 @@ row.innerHTML = `
 
                     if (importer) {
                         console.log("[IMPORTER] Falling back to AI importer data");
-                        const newOption = new Option('Novi dobavljač', 'new', true, true);
+                        const newOption = new Option('Novi klijent', 'new', true, true);
                         $("#importer-select2").append(newOption).trigger('change');
 
                         $("#carrier-name").val(importer.name || "").prop('readonly', false);
@@ -1670,7 +1877,7 @@ row.innerHTML = `
 
         } else if (importer) {
             console.log("[IMPORTER] No ID but importer data available. Treating as new.");
-            const newOption = new Option('Novi dobavljač', 'new', true, true);
+            const newOption = new Option('Novi klijent', 'new', true, true);
             $("#importer-select2").append(newOption).trigger('change');
 
             $("#carrier-name").val(importer.name || "").prop('readonly', false);
@@ -1760,7 +1967,7 @@ row.innerHTML = `
             }
             window.skipPrefillParties = false; // reset after use
             $("#supplier-select2").select2({
-                placeholder: "Pretraži klijenta",
+                placeholder: "Pretraži dobavljača",
                 allowClear: true,
                 ajax: {
                     url: "/api/suppliers",
@@ -1803,7 +2010,7 @@ placeholder: "Pretraži...", // bolji UX
             });
 
             $("#importer-select2").select2({
-                placeholder: "Pretraži dobavljača",
+                placeholder: "Pretraži klijenta",
                 allowClear: true,
                 ajax: {
                     url: "/api/importers",
@@ -2012,25 +2219,57 @@ placeholder: "Pretraži...", // bolji UX
 if (invoiceDateInput) {
     invoiceDateInput.value = formatDateToDDMMYYYY(invoice.date_of_issue || new Date());
 }
-
+            
 
             console.log(" Invoice date and number set.");
 
-            //document.getElementById("company-address").value = "Vilsonovo, 9, Sarajevo ";
-            document.getElementById("company-zip").value = "71000";
-            document.getElementById("company-email").value = "business@deklarant.ai";
 
 
-            document.getElementById("billing-name")?.addEventListener("input", () => {
-                const label = document.getElementById("billing-name-ai-label");
-                if (label) label.classList.add("d-none");
-            });
+
+         // Prefill total weights and package count
+setField("#total-weight-net", invoice.total_weight_net ?? "");
+setField("#total-weight-gross", invoice.total_weight_gross ?? "");
+setField("#total-num-packages", invoice.total_num_packages ?? "");
+
+console.log("Weights and package count set:",
+    invoice.total_weight_net,
+    invoice.total_weight_gross,
+    invoice.total_weight_gross,
+    invoice.total_num_packages
+);
+
+// Prefill q1-estimate (total_value / total_num_packages)
+const totalValue = parseFloat(document.getElementById("total-amount")?.value) || 0;
+const numPackages = parseFloat(invoice.total_num_packages ?? 0);
+const q1Input = document.getElementById("q1-estimate");
+
+if (q1Input) {
+    if (numPackages > 0 && !isNaN(totalValue)) {
+        const rawAmount = totalValue.toString().replace(/[^\d.-]/g, ""); // Remove currency symbols
+        const amount = parseFloat(rawAmount) || 0;
+        q1Input.value = (amount / numPackages).toFixed(2);
+    } else {
+        q1Input.value = "";
+    }
+}
+updateProcjenaEstimates(); // ✅ prisilno izračunaj odmah nakon postavljanja q1
+
+
+            
 
             // Hide AI label when user types in importer name
             document.getElementById("carrier-name")?.addEventListener("input", () => {
                 const label = document.getElementById("carrier-name-ai-label");
                 if (label) label.classList.add("d-none");
             });
+            document.getElementById('q1-estimate')?.addEventListener('input', updateProcjenaEstimates);
+
+            document.addEventListener('input', function (e) {
+    if (e.target?.name === "kolata[]") {
+        updateProcjenaEstimates();
+    }
+});
+
 
 
         });
@@ -2045,7 +2284,7 @@ if (invoiceDateInput) {
 
                 Swal.fire({
                     title: 'Oprez!',
-                    text: 'Ova radnja će izbrisati sve podatke za klijenta i omogućiti ponovno automatsko popunjavanje.',
+                    text: 'Ova radnja će izbrisati sve podatke za dobavljača i omogućiti ponovno automatsko popunjavanje.',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Da',
@@ -2089,7 +2328,7 @@ if (invoiceDateInput) {
 
                 Swal.fire({
                     title: 'Oprez!',
-                    text: 'Ova radnja će izbrisati sve podatke za dobavljača i omogućiti ponovno automatsko popunjavanje.',
+                    text: 'Ova radnja će izbrisati sve podatke za klijenta i omogućiti ponovno automatsko popunjavanje.',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Da',
@@ -2161,7 +2400,7 @@ if (invoiceDateInput) {
                         const label = document.getElementById("billing-name-ai-label");
                         if (label) label.classList.remove("d-none");
                     } else {
-                        Swal.fire("Greška", "Nema AI podataka za klijenta", "error");
+                        Swal.fire("Greška", "Nema AI podataka za dobavljača", "error");
                     }
                 } catch (err) {
                     Swal.fire("Greška", err.message || "Neuspješno dohvaćanje podataka", "error");
@@ -2185,7 +2424,7 @@ if (invoiceDateInput) {
                     if (importer) {
                         // Set select2 to 'Novi dobavljač'
                         $("#importer-select2 option[value='new']").remove();
-                        var newOption = new Option('Novi dobavljač', 'new', true, true);
+                        var newOption = new Option('Novi klijent', 'new', true, true);
                         $("#importer-select2").append(newOption).val('new').trigger('change');
                         // Fill fields
                         $("#carrier-name").val(importer.name || "").prop('readonly', false);
@@ -2197,7 +2436,7 @@ if (invoiceDateInput) {
                         const label = document.getElementById("carrier-name-ai-label");
                         if (label) label.classList.remove("d-none");
                     } else {
-                        Swal.fire("Greška", "Nema AI podataka za dobavljača", "error");
+                        Swal.fire("Greška", "Nema AI podataka za klijenta", "error");
                     }
                 } catch (err) {
                     Swal.fire("Greška", err.message || "Neuspješno dohvaćanje podataka", "error");
@@ -2210,8 +2449,6 @@ if (invoiceDateInput) {
 
     }
 </script>
-
-
 
 <!-- edit fill -->
 
@@ -2252,65 +2489,8 @@ if (invoiceDateInput) {
         });
     }
 
-    function updateTotalAmount() {
-        let total = 0;
 
-        // Loop through all invoice rows
-        document.querySelectorAll("#newlink tr.product").forEach(function(row) {
-            const price = parseFloat(row.querySelector('input[name="price[]"]')?.value || 0);
-            const quantity = parseFloat(row.querySelector('input[name="quantity[]"]')?.value || 0);
-            total += price * quantity;
-        });
-
-        // Format as currency
-        const formatted = `${total.toFixed(2)} KM`;
-
-        // Set values in both places
-        document.getElementById("total-amount").value = formatted;
-        document.getElementById("modal-total-amount").textContent = formatted;
-        document.getElementById("total-edit").textContent = formatted;
-
-    }
-
-    function initializeTariffSelects() {
-        $('.select2-tariff').each(function() {
-            const select = $(this);
-            const prefillValue = select.data("prefill");
-
-            select.select2({
-                placeholder: "Pretraži tarifne stavke...",
-                width: '100%',
-                minimumInputLength: 1,
-                ajax: {
-                    transport: function(params, success, failure) {
-                        const term = params.data.q?.toLowerCase() || "";
-                        const filtered = processedTariffData.filter(item => item.search.includes(term));
-                        success({
-                            results: filtered
-                        });
-                    },
-                    delay: 200
-                },
-                templateResult: function(item) {
-                    if (!item.id && !item.text) return null;
-                    const icon = item.isLeaf ? "•" : "▶";
-                    return $(`<div style="padding-left:${item.depth * 20}px;" title="${item.display}">${icon} ${item.display}</div>`);
-                },
-                templateSelection: function(item) {
-                    return item.id || "";
-                }
-            });
-
-            // Optional: support prefill
-            if (prefillValue) {
-                const match = processedTariffData.find(item => item.id === prefillValue);
-                if (match) {
-                    const option = new Option(match.display, match.id, true, true);
-                    select.append(option).trigger('change');
-                }
-            }
-        });
-    }
+   
 
 
     document.addEventListener("click", function(e) {
@@ -2397,7 +2577,7 @@ Swal.fire({
             console.log("✅ Ready after 3 seconds");
 
             // Swal.close(); // or any follow-up logic
-        }, 3000);
+        }, 4000);
     }
 });
 
@@ -2460,7 +2640,7 @@ Swal.fire({
 
             // --- Supplier Select2
             $('#supplier-select2').select2({
-                placeholder: "Pretraži klijenta",
+                placeholder: "Pretraži dobavljača",
                 width: '100%',
                 data: supplierOptions
             });
@@ -2488,7 +2668,7 @@ Swal.fire({
 
             // --- Importer Select2
             $('#importer-select2').select2({
-                placeholder: "Pretraži dobavljača",
+                placeholder: "Pretraži klijenta",
                 width: '100%',
                 data: importerOptions
             });
@@ -2545,17 +2725,7 @@ Swal.fire({
             console.log("💰 Calculated Total:", calculateTotal(invoice.items));
 
 
-            // --- Prefill invoice fields
-            setField("#invoice_number", invoice.invoice_number);
-            setField("#date", invoice.date_of_issue);
-
-            setText("#invoice-id1", invoice.id);
-            setText("#invoice-date-text", formatDateToDDMMYYYY(invoice.date_of_issue));
-
-            setField("#invoice-no", invoice.invoice_number);
-            setField("#invoice-no1", invoice.id);
-            setField("#incoterm", (invoice.incoterm || "").split(" ")[0]);
-            setField("#invoice-date", formatDateToDDMMYYYY(invoice.date_of_issue));
+         
 
             // --- Prefill selected supplier/importer
             if (invoice.supplier_id) {
@@ -2655,7 +2825,7 @@ Swal.fire({
     function formatCountryWithFlag(state) {
         if (!state.id) return state.text;
         const flagUrl = `https://flagcdn.com/w40/${state.id.toLowerCase()}.png`;
-        return $(`<span><img src="${flagUrl}" class="me-2" width="20" /> ${state.text}</span>`);
+        return $(`<span><img src="${flagUrl}" class="" width="20" /> ${state.text}</span>`);
     }
 
     function formatToDMY(isoDate) {
@@ -2686,71 +2856,7 @@ Swal.fire({
         dateFormat: "d.m.Y"
     });
 
-    function addRowToInvoice() {
-        const tbody = document.querySelector("#newlink");
-        if (!tbody) return;
-
-        const rowCount = tbody.querySelectorAll("tr.product").length;
-        const row = document.createElement("tr");
-        row.classList.add("product");
-
-        row.innerHTML = `
-<td>${rowCount + 1}</td>
-<td colspan="2">
-    <div class="input-group" style="display: flex; gap: 0.25rem;">
-        <input type="text" class="form-control item-name" name="item_name[]" placeholder="Naziv proizvoda" value="" style="flex:1;">
-        <button class="btn btn-outline-info rounded" type="button" onclick="searchFromInputs(this)">
-            <i class="fa-brands fa-google"></i>
-        </button>
-        <input type="text" class="form-control item-desc" name="item_desc[]" placeholder="Opis proizvoda" value="" style="flex:1;">
-    </div>
-    <input type="text" class="form-control form-control-sm mt-1" name="item_prev[]" style="padding-left:14.4px; height: 37.1px;" placeholder="Prevod" value="">
-</td>
-<td>
-    <select class="form-control select2-tariff" name="item_code[]">
-        <option value="" selected></option>
-    </select>
-</td>
-<td><input type="text" class="form-control" name="quantity_type[]" value=""></td>
-<td>
-    <select class="form-select select2-country" name="origin[]">${generateCountryOptions()}</select>
-</td>
-<td><input type="number" class="form-control" name="price[]" value=""></td>
-<td style="width: 60px;">
-    <div class="input-group input-group-sm">
-        <button class="btn btn-outline-info btn-sm" type="button" style="height:30px;padding:0 5px;font-size:10px;">−</button>
-        <input type="number" class="form-control text-center" name="quantity[]" value="0" min="0" style="padding: 0 5px;">
-        <button class="btn btn-outline-info btn-sm" type="button" style="height:30px;padding:0 5px;font-size:10px;">+</button>
-    </div>
-    <div class="input-group input-group-sm mt-1">
-        <button class="btn btn-outline-info btn-sm" type="button" style="height:30px;padding:0 5px;font-size:10px;">−</button>
-        <input type="number" class="form-control text-center" name="kolata[]" value="0" min="0">
-        <button class="btn btn-outline-info btn-sm" type="button" style="height:30px;padding:0 5px;font-size:10px;">+</button>
-    </div>
-</td>
-<td><input type="text" class="form-control" name="total[]" value="0.00"></td>
-<td style="width: 20px; text-align: center;">
-    <div style="display: flex; flex-direction: column; align-items: end; gap: 2px;">
-        <button type="button" class="btn btn-danger btn-sm remove-row text-center" style="width: 30px;" title="Ukloni red">
-            <i class="fas fa-times"></i>
-        </button>
-        <input type="checkbox" class="form-check-input" style="width: 30px; height: 26.66px;" title="Povlastica DA/NE" />
-    </div>
-</td>`;
-
-        tbody.appendChild(row);
-
-        // Reinitialize Select2 for newly added row
-        $(row).find('.select2-country').select2({
-            templateResult: formatCountryWithFlag,
-            templateSelection: formatCountryWithFlag,
-            width: 'resolve',
-            minimumResultsForSearch: Infinity
-        });
-
-
-        updateTotalAmount();
-    }
+  
 
     document.getElementById("add-item")?.addEventListener("click", () => {
         console.log("Dodaj proizvod clicked");
@@ -2836,5 +2942,10 @@ if (overlay && !overlay.classList.contains('d-none')) {
 
 
 
+
+
+
+
+<script src="{{ URL::asset('build/js/declaration/export-edit.js') }}"></script>
 <script src="{{ URL::asset('build/js/declaration/swal-declaration-load.js') }}"></script>
 @endsection

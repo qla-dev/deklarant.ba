@@ -7,6 +7,8 @@
 
     #vise-opcija-swal .swal2-title {padding-top: 20px!important;}
 </style> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
  
  <div class="d-print-none" id="sidebar-buttons-container">
      <div id="fixed-buttons" class="d-flex flex-column gap-3">
@@ -31,18 +33,23 @@
          </button>
          @endif
 
-         <a href="javascript:window.print()" class="btn btn-soft-info pc-opcije-button" style="height: 28px !important; ">
-             <i class="ri-printer-line align-bottom me-1 fs-5"></i> Isprintaj
-         </a>
-         <a href="javascript:void(0);" class="btn btn-soft-info pc-opcije-button" style="height: 28px !important;">
-             <i class="ri-download-2-line align-bottom me-1 fs-5"></i> Preuzmi
-         </a>
+  <a href="javascript:void(0)" onclick="renderPrintTableAndPrint()" class="btn btn-soft-info pc-opcije-button" style="height: 28px !important;">
+    <i class="ri-printer-line align-bottom me-1 fs-5"></i> Isprintaj
+</a>
+
+
+
+      
+
          <a href="#" class="btn btn-soft-info  btn-original-doc pc-opcije-button" style="height: 28px !important;">
              <i class="ri-file-3-line align-bottom me-1 fs-5"></i> Originalni dokument
          </a>
+            <a href="javascript:void(0);" onclick="autoDownloadPDF()" class="btn btn-soft-info pc-opcije-button" style="height: 28px !important;">
+    <i class="ri-file-pdf-line align-bottom me-1 fs-5"></i> Export u PDF
+</a>
 
          <button class="btn btn-soft-info  pc-opcije-button" onclick="exportTableToCustomCSV()" style="height: 28px !important; "><i class="ri-file-excel-line align-bottom me-1 fs-5"></i> Export u CSV</button>
-         <a href="" class="btn btn-soft-info pc-opcije-button" style="height: 28px !important; ">
+         <a class="btn btn-soft-info pc-opcije-button" style="height: 28px !important; ">
              <i class="ri-file-code-line align-bottom me-1 fs-5"></i> Export u XML
          </a>
          
@@ -114,9 +121,15 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector(".btn-original-doc")?.addEventListener("click", async function (e) {
         e.preventDefault();
 
-        const invoiceId = localStorage.getItem("scan_invoice_id");
+        let invoiceId = window.global_invoice_id;
+
+        // Fallback: Try to extract from pathname
         if (!invoiceId) {
-            Swal.fire("Greška", "Fajl nije pronađen", "error");
+            invoiceId = window.location.pathname.split('/').pop();
+        }
+
+        if (!invoiceId) {
+            Swal.fire("Greška", "Faktura nije pronađena", "error");
             return;
         }
 
@@ -137,10 +150,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            const fileUrl = `/uploads/${fileName}`;
-            document.getElementById("originalDocFrame").src = fileUrl;
-            const modal = new bootstrap.Modal(document.getElementById("originalDocumentModal"));
-            modal.show();
+            // 👉 OPEN IN NEW TAB INSTEAD OF MODAL
+            const fileUrl = `/uploads/original_documents/${fileName}`;
+            window.open(fileUrl, '_blank');
 
         } catch (err) {
             console.error("Greška pri otvaranju originalnog dokumenta:", err);
@@ -149,6 +161,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 </script>
+
+
 
 
 
@@ -266,9 +280,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         <i class="ri-file-excel-line align-bottom me-1 fs-5"></i>Export u CSV
                     </button>
 
-                    <button class="btn btn-soft-info w-100 p-0" onclick="document.querySelector('.pc-opcije-button[href*=\'file-code\']')?.click()" style="height: 28px !important;">
+                    <a class="btn btn-soft-info w-100 p-0" style="height: 28px !important;">
                         <i class="ri-file-code-line align-bottom me-1 fs-5"></i>Export u XML
-                    </button>
+                    </a>
 
                     @if($isDeklaracija)
                 

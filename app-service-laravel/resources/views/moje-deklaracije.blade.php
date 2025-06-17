@@ -49,7 +49,7 @@ Moje spašene deklaracije <span class="counter-value-invoice">0</span><span
                                
                                
                                 <th style="width: 100px;">Datum</th>
-                                 <th>Zemlja porijekla</th>
+                                
                                 <th>Klijent</th>
                                                             
                                  <th>Originalni dokument</th>
@@ -177,22 +177,38 @@ document.addEventListener("DOMContentLoaded", function () {
                 title: 'Datum',
                 render: data => new Date(data).toLocaleDateString('hr')
             },
+          
             {
-                data: 'country_of_origin',
-                title: 'Zemlja porijekla',
-                render: data => (!data || data === 'default')
-                    ? '<span class="text-muted">Nepoznato</span>'
-                    : data,
-                defaultContent: '<span class="text-muted">Nepoznato</span>'
-            },
-            {
-                data: 'supplier.name',
+                data: 'importer.name',
                 title: 'Klijent',
                 defaultContent: '<span class="text-muted">Nepoznato</span>'
             },
             
             
-         {
+       
+
+
+            {
+                data: 'file_name',
+                orderable: false,
+                title: 'Vrsta',
+                className: 'text-center',
+                render: data => {
+                    if (!data) return '<span class="badge bg-secondary">N/A</span>';
+                    const ext = data.split('.').pop().toLowerCase();
+                    const badgeMap = {
+                        pdf: 'bg-danger',
+                        xls: 'bg-success',
+                        xlsx: 'bg-success',
+                        jpg: 'bg-warning',
+                        jpeg: 'bg-warning',
+                        png: 'bg-warning',
+                        txt: 'bg-dark'
+                    };
+                    return `<span class="badge ${badgeMap[ext] || 'bg-secondary'} text-uppercase">${ext}</span>`;
+                }
+            },
+              {
     data: 'internal_status',
     title: 'Status',
     className: 'text-center',
@@ -232,28 +248,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 },
-
-
-            {
-                data: 'file_name',
-                orderable: false,
-                title: 'Originalni dokument',
-                className: 'text-center',
-                render: data => {
-                    if (!data) return '<span class="badge bg-secondary">N/A</span>';
-                    const ext = data.split('.').pop().toLowerCase();
-                    const badgeMap = {
-                        pdf: 'bg-danger',
-                        xls: 'bg-success',
-                        xlsx: 'bg-success',
-                        jpg: 'bg-warning',
-                        jpeg: 'bg-warning',
-                        png: 'bg-warning',
-                        txt: 'bg-dark'
-                    };
-                    return `<span class="badge ${badgeMap[ext] || 'bg-secondary'} text-uppercase">${ext}</span>`;
-                }
-            },
             {
     data: 'total_price',
     title: 'Cijena',
