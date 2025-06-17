@@ -465,9 +465,6 @@ if (typeof window !== "undefined") {
  
 </script>
 
-
-
-
 <!-- Scan and other logic script -->
 <script>
     const isEditMode = false;
@@ -610,8 +607,11 @@ if (typeof window !== "undefined") {
     if (numPackages > 0) {
         const q1 = total / numPackages;
         q1Input.value = q1.toFixed(2);
+q1Input.dispatchEvent(new Event("input")); // ✅ ključni event za procjenu
     } else {
         q1Input.value = "";
+q1Input.dispatchEvent(new Event("input")); // isto da očisti procjene
+
     }
 }
 
@@ -2426,8 +2426,6 @@ if (q1Input) {
 
     }
 </script>
-
-
 
 <!-- edit fill -->
 
