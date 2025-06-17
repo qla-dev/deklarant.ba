@@ -585,7 +585,7 @@ overflow-y: hidden;
     <div class="row align-items-center mb-4 mb-mb-0">
       <div class="col-lg-7 order-2 order-md-1">
         <div class="process-images reveal">
-          <img src="build/images/homepage/img/process-img-1.png" alt="Upload dokumenta">
+          <img src="build/images/homepage/img/process-img.png" alt="Upload dokumenta">
         </div>
       </div>
       <div class="col-lg-5 order-1 order-md-2">
