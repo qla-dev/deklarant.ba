@@ -312,7 +312,7 @@
                                 <th style="width: 140px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Opis </th>
                                 <th style="width: 220px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Tarifna oznaka</th>
                                 <th style="width: 80px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Tip kvantiteta</th>
-                                <th style="width:100px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Porijeklo</th>
+                                <th style="width:110px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Porijeklo</th>
                                 <th style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem;">Cijena</th>
                                 <th style="width: 60px; text-align: center;vertical-align: middle;">
                                     Bruto (kg)<br>
@@ -331,7 +331,7 @@
                                 <th style="width:100px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Ukupno</th>
                                 <th style="width:20px;vertical-align: middle; text-align: end;">Ukloni <br>
                                     <small style="font-weight: normal; font-size: 0.75rem; color: #666;">
-                                        Povlastica
+                                        Pov..
                                     </small>
                                 </th>
                             </tr>
@@ -922,50 +922,62 @@ async function getInvoice() {
 }
 
 function initializeTariffSelects() {
-            $('.select2-tariff').each(function() {
-                const select = $(this);
-                const prefillValue = select.data("prefill");
+    $('.select2-tariff').each(function () {
+        const select = $(this);
 
-                select.select2({
-                    placeholder: "Pretraži tarifne stavke...",
-                    width: '100%',
-                    minimumInputLength: 1,
-                    minimumInputLength: 1,
-    language: {
-        inputTooShort: function(args) {
-            return "Pretraži tarifne oznake...";
+        // ⚠️ Destroy existing Select2 to prevent duplicate init
+        if (select.hasClass('select2-hidden-accessible')) {
+            select.select2('destroy');
         }
-    },
-                    ajax: {
-                        transport: function(params, success, failure) {
-                            const term = params.data.q?.toLowerCase() || "";
-                            const filtered = processedTariffData.filter(item => item.search.includes(term));
-                            success({
-                                results: filtered
-                            });
-                        },
-                        delay: 200
-                    },
-                    templateResult: function(item) {
-                        if (!item.id && !item.text) return null;
-                        const icon = item.isLeaf ? "•" : "▶";
-                        return $(`<div style="padding-left:${item.depth * 20}px;" title="${item.display}">${icon} ${item.display}</div>`);
-                    },
-                    templateSelection: function(item) {
-                        return item.id || "";
-                    }
-                });
 
-                // Programmatically set prefill value, only with Tarifna oznaka
-                if (prefillValue) {
-                    const matched = processedTariffData.find(item => item.id === prefillValue);
-                    if (matched) {
-                        const option = new Option(matched.id, matched.id, true, true);
-                        select.append(option).trigger('change');
-                    }
+        const prefillValue = select.data("prefill");
+
+        select.select2({
+            placeholder: "Izaberite tarifnu oznaku",
+            width: '100%',
+            minimumInputLength: 1,
+            language: {
+                inputTooShort: function () {
+                    return "Pretraži tarifne oznake...";
                 }
-            });
+            },
+            ajax: {
+                transport: function (params, success, failure) {
+                    const term = params.data.q?.toLowerCase() || "";
+                    const filtered = processedTariffData.filter(item => item.search.includes(term));
+                    success({
+                        results: filtered
+                    });
+                },
+                delay: 200
+            },
+            templateResult: function (item) {
+                if (!item.id && !item.text) return null;
+                const icon = item.isLeaf ? "•" : "▶";
+                return $(`<div style="padding-left:${item.depth * 20}px;" title="${item.display}">${icon} ${item.display}</div>`);
+            },
+            templateSelection: function (item) {
+                return item.id || "Izaberite tarifnu oznaku";
+            }
+        });
+
+        // ✅ Add placeholder option manually if no prefill
+        if (!prefillValue) {
+            const placeholderOption = new Option("Izaberite tarifnu oznaku", "", false, false);
+            select.append(placeholderOption).trigger('change');
         }
+
+        // ✅ Otherwise, programmatically set the value
+        if (prefillValue) {
+            const matched = processedTariffData.find(item => item.id === prefillValue);
+            if (matched) {
+                const option = new Option(matched.id, matched.id, true, true);
+                select.append(option).trigger('change');
+            }
+        }
+    });
+}
+
 
 
 
@@ -1082,7 +1094,7 @@ row.innerHTML = `
             >
           </td>
 
-          <td style="width: 70px;">
+          <td style="width: 100px;">
             <select class="form-select" name="origin[]" style="width: 100%;">
               ${generateCountryOptions(origin)}
             </select>
