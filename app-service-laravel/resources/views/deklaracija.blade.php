@@ -293,7 +293,7 @@
             <input type="number" class="form-control text-end" id="total-num-packages" name="total_num_packages" placeholder="0">
         </div>
     </div>
-<input id="q1-estimate" name="q1">
+<input id="q1-estimate" name="q1" type="hidden">
 
 
 
@@ -1205,7 +1205,7 @@ row.innerHTML = `
     class="form-control text-start procjena-field" 
     name="procjena[]" 
     value="" 
-    readonly 
+    disabled 
     style="width: 100%; background-color: #f9f9f9;"
   >
 </td>
@@ -1216,7 +1216,7 @@ row.innerHTML = `
       type="text" 
       class="form-control text-start" 
       name="total[]" 
-      value="${total}"
+      value="${total}" disabled
       style="width: 100%;"
     >
     <input 
@@ -1272,6 +1272,7 @@ row.innerHTML = `
             tbody.appendChild(row);
             
             initializeTariffSelects();
+            updateProcjenaEstimates(); 
 
             updateTotalAmount();
         }
@@ -1297,6 +1298,7 @@ row.innerHTML = `
             row.find('input[name="total[]"]').val(total);
 
             // Optional: update global total as well
+            updateProcjenaEstimates(); 
             updateTotalAmount();
         });
 
@@ -2231,6 +2233,8 @@ if (q1Input) {
         q1Input.value = "";
     }
 }
+updateProcjenaEstimates(); // ✅ prisilno izračunaj odmah nakon postavljanja q1
+
 
             
 
