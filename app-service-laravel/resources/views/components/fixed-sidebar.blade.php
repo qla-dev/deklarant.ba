@@ -42,7 +42,7 @@
          </a>
 
          <button class="btn btn-soft-info  pc-opcije-button" onclick="exportTableToCustomCSV()" style="height: 28px !important; "><i class="ri-file-excel-line align-bottom me-1 fs-5"></i> Export u CSV</button>
-         <a href="" class="btn btn-soft-info pc-opcije-button" style="height: 28px !important; ">
+         <a href="#" class="btn btn-soft-info pc-opcije-button" style="height: 28px !important; ">
              <i class="ri-file-code-line align-bottom me-1 fs-5"></i> Export u XML
          </a>
          
@@ -114,9 +114,15 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector(".btn-original-doc")?.addEventListener("click", async function (e) {
         e.preventDefault();
 
-        const invoiceId = localStorage.getItem("scan_invoice_id");
+        let invoiceId = window.global_invoice_id;
+
+        // Fallback: Try to extract from pathname
         if (!invoiceId) {
-            Swal.fire("Greška", "Fajl nije pronađen", "error");
+            invoiceId = window.location.pathname.split('/').pop();
+        }
+
+        if (!invoiceId) {
+            Swal.fire("Greška", "Faktura nije pronađena", "error");
             return;
         }
 
@@ -137,10 +143,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            const fileUrl = `/uploads/${fileName}`;
-            document.getElementById("originalDocFrame").src = fileUrl;
-            const modal = new bootstrap.Modal(document.getElementById("originalDocumentModal"));
-            modal.show();
+            // 👉 OPEN IN NEW TAB INSTEAD OF MODAL
+            const fileUrl = `/uploads/original_documents/${fileName}`;
+            window.open(fileUrl, '_blank');
 
         } catch (err) {
             console.error("Greška pri otvaranju originalnog dokumenta:", err);
@@ -149,6 +154,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 </script>
+
+
 
 
 
