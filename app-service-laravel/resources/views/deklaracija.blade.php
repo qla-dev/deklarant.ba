@@ -618,7 +618,12 @@ if (typeof window !== "undefined") {
 
 
 
-        async function getInvoice() {
+        
+document.getElementById('total-num-packages')?.addEventListener('input', () => {
+    updateTotalAmount(); // This will auto-update q1 as well
+});
+
+async function getInvoice() {
             if (!_invoice_data) {
                 console.log(" Fetching invoice...");
                 const res = await fetch(`/api/invoices/${getInvoiceId()}`, {
