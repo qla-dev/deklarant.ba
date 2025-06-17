@@ -576,20 +576,26 @@ if (typeof window !== "undefined") {
     // Get locked currency from hidden input
     let lockedCurrency = document.getElementById("currency-lock").value;
 
-    productRows.forEach((row) => {
-        const price = parseFloat(row.querySelector('input[name="price[]"]')?.value || 0);
-        const quantity = parseFloat(row.querySelector('input[name="quantity[]"]')?.value || 0);
-        total += price * quantity;
+   productRows.forEach((row) => {
+    const itemName = row.querySelector('input[name="item_name[]"]')?.value?.trim();
+    const price = parseFloat(row.querySelector('input[name="price[]"]')?.value || 0);
+    const quantity = parseFloat(row.querySelector('input[name="quantity[]"]')?.value || 0);
 
-        if (!lockedCurrency) {
-            const currencyInput = row.querySelector('input[name="currency[]"]');
-            if (currencyInput && currencyInput.value.trim()) {
-                lockedCurrency = currencyInput.value.trim();
-                document.getElementById("currency-lock").value = lockedCurrency;
-                console.log("✅ Locked currency:", lockedCurrency);
-            }
+    // 🚫 Skip rows with no name or zeroed values
+    if (!itemName || (price === 0 && quantity === 0)) return;
+
+    total += price * quantity;
+
+    if (!lockedCurrency) {
+        const currencyInput = row.querySelector('input[name="currency[]"]');
+        if (currencyInput && currencyInput.value.trim()) {
+            lockedCurrency = currencyInput.value.trim();
+            document.getElementById("currency-lock").value = lockedCurrency;
+            console.log("✅ Locked currency:", lockedCurrency);
         }
-    });
+    }
+});
+
 
     const currency = lockedCurrency || "EUR";
     const currencySymbol = currencySymbols[currency] || currency;
@@ -2945,50 +2951,41 @@ function exportTableToCustomCSV() {
     ];
     let csv = [headers.join(";")];
 
-    const rows = document.querySelectorAll("#products-table tbody tr");
+    // ✅ Remove last row forcibly
+    const rows = Array.from(document.querySelectorAll("#products-table tbody tr")).slice(0, -1);
 
-    rows.forEach((row, index) => {
+    rows.forEach((row) => {
         const rowData = [];
 
-        // ✅ TPL1 (original product name)
         const tplName = row.querySelector('input[name="item_name[]"]')?.value || "";
         rowData.push(`"${tplName}"`);
 
-        // ✅ Zemlja porijekla
         const origin = row.querySelector('select[name="origin[]"]')?.value || "";
         rowData.push(`"${origin}"`);
 
-        // ✅ Povlastica from checkbox (DA if checked)
         const povlastica = row.querySelector('input[name="tariff_privilege[]"]')?.checked ? "DA" : "NE";
         rowData.push(`"${povlastica}"`);
 
-        // ✅ Naziv robe (translated name)
         const translatedName = row.querySelector('input[name="item_prev[]"]')?.value || "";
         rowData.push(`"${translatedName}"`);
 
-        // ✅ Broj komada
         const qty = row.querySelector('input[name="quantity[]"]')?.value || "";
         rowData.push(`"${qty}"`);
 
-        // ✅ Vrijednost – convert decimal + remove currency
         let rawPrice = row.querySelector('input[name="price[]"]')?.value || "";
         let numericOnly = rawPrice.replace(/[^\d.,]/g, "").replace(",", ".");
         let formattedValue = numericOnly ? parseFloat(numericOnly).toFixed(2).replace(".", ",") : "";
         rowData.push(`"${formattedValue}"`);
 
-        // ✅ Koleta
         const koleta = row.querySelector('input[name="kolata[]"]')?.value || "";
         rowData.push(`"${koleta}"`);
 
-        // ✅ Bruto kg
         const bruto = row.querySelector('input[name="weight_gross[]"]')?.value || "";
         rowData.push(`"${bruto}"`);
 
-        // ✅ Neto kg
         const neto = row.querySelector('input[name="weight_net[]"]')?.value || "";
         rowData.push(`"${neto}"`);
 
-        // ✅ Required = empty
         rowData.push(`""`);
 
         csv.push(rowData.join(";"));
@@ -3006,6 +3003,7 @@ function exportTableToCustomCSV() {
     document.body.removeChild(link);
 }
 </script>
+
 
 
 
