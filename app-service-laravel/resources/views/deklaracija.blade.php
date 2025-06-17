@@ -308,10 +308,10 @@
                         <thead class="table-active">
                             <tr>
                                 <th style="width: 50px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">#</th>
-                                <th style="width: 200px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Proizvodi </th>
-                                <th style="width: 140px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Opis </th>
+                                <th style="width: 200px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; padding-right: 50px!important;">Proizvod </th>
+                                <th style="width: 140px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; margin-left: -5px!important;">Opis </th>
                                 <th style="width: 220px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Tarifna oznaka</th>
-                                <th style="width: 80px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Tip kvantiteta</th>
+                                <th style="width: 80px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">T. kvantiteta</th>
                                 <th style="width:110px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Porijeklo</th>
                                 <th style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem;">Cijena</th>
                                 <th style="width: 60px; text-align: center;vertical-align: middle;">
@@ -1025,11 +1025,11 @@ row.innerHTML = `
      
           <td colspan="2" style="width: 340px;">
             <div class="input-group" style="display: flex; gap: 0.25rem;">
-              <input type="text" class="form-control item-name" name="item_name[]" placeholder="Naziv proizvoda" value="${name}" style="flex:1;">
+              <input type="text" class="form-control item-name" name="item_name[]" placeholder="Naziv" value="${name}" style="flex:1;">
               <button class="btn btn-outline-info rounded" onmouseover="updateTooltip(this)" type="button" onclick="searchFromInputs(this)" data-bs-toggle="tooltip" data-bs-placement="top"   title="">
                  <i class="fa-brands fa-google"></i>
             </button>
-              <input type="text" class="form-control item-desc" name="item_desc[]" placeholder="Opisa proizvoda" value="${desc}" style="flex:1;">
+              <input type="text" class="form-control item-desc" name="item_desc[]" placeholder="Opis" value="${desc}" style="flex:1;">
             </div>
             <input 
               type="text" 
