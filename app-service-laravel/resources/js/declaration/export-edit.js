@@ -182,7 +182,7 @@ function renderPrintTableAndPrint(isDownloadOnly = false, container = null) {
             filename:     `Deklaracija_${invoiceNo || invoiceId || 'export'}.pdf`,
             image:        { type: 'jpeg', quality: 0.98 },
             html2canvas:  { scale: 2 },
-            jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+            jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
         })
         .from(container)
         .save()

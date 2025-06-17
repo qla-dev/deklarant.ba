@@ -456,7 +456,7 @@ document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
             jsPDF: {
                 unit: 'in',
                 format: 'a4',
-                orientation: 'portrait'
+                orientation: 'landscape'
             }
         };
         html2pdf().set(opt).from(element).save();
