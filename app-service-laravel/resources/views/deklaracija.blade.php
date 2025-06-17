@@ -326,6 +326,7 @@
                                         Broj koleta
                                     </small>
                                 </th>
+                                   <th style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem;">Procjena</th>
 
                                 <th style="width:100px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Ukupno</th>
                                 <th style="width:20px;vertical-align: middle; text-align: end;">Ukloni <br>
@@ -603,6 +604,8 @@ if (typeof window !== "undefined") {
     // ⬇️ Also update q1-estimate here
     const numPackages = parseFloat(document.getElementById("total-num-packages")?.value || 0);
     const q1Input = document.getElementById("q1-estimate");
+    document.getElementById('q1-estimate')?.addEventListener('input', updateProcjenaEstimates);
+
 
     if (numPackages > 0) {
         const q1 = total / numPackages;
@@ -615,6 +618,22 @@ if (typeof window !== "undefined") {
 
 
 
+
+
+function updateProcjenaEstimates() {
+  const q1 = parseFloat(document.getElementById("q1-estimate")?.value || 0);
+  const rows = document.querySelectorAll("#newlink tr.product");
+
+  rows.forEach(row => {
+    const kolata = parseFloat(row.querySelector('input[name="kolata[]"]')?.value || 0);
+    const procjenaInput = row.querySelector('input[name="procjena[]"]');
+
+    if (procjenaInput) {
+      const result = q1 * kolata;
+      procjenaInput.value = isNaN(result) ? "" : result.toFixed(2);
+    }
+  });
+}
 
 
 
@@ -952,6 +971,7 @@ function initializeTariffSelects() {
 
         function addRowToInvoice(item = {}, suggestions = []) {
             const tbody = document.getElementById("newlink");
+
             const index = tbody.children.length;
 
             globalAISuggestions.push(suggestions);
@@ -1067,6 +1087,8 @@ row.innerHTML = `
               ${generateCountryOptions(origin)}
             </select>
           </td>
+       
+
 
           <td style="width: 60px;">
             <input 
@@ -1177,6 +1199,17 @@ row.innerHTML = `
                 </div>
             </div>
           </td>
+          <td style="width: 70px;">
+  <input 
+    type="text" 
+    class="form-control text-start procjena-field" 
+    name="procjena[]" 
+    value="" 
+    readonly 
+    style="width: 100%; background-color: #f9f9f9;"
+  >
+</td>
+
 
          <td style="width: 70px;">
     <input 
@@ -1237,6 +1270,7 @@ row.innerHTML = `
             }
 
             tbody.appendChild(row);
+            
             initializeTariffSelects();
 
             updateTotalAmount();
@@ -2205,6 +2239,14 @@ if (q1Input) {
                 const label = document.getElementById("carrier-name-ai-label");
                 if (label) label.classList.add("d-none");
             });
+            document.getElementById('q1-estimate')?.addEventListener('input', updateProcjenaEstimates);
+
+            document.addEventListener('input', function (e) {
+    if (e.target?.name === "kolata[]") {
+        updateProcjenaEstimates();
+    }
+});
+
 
 
         });
