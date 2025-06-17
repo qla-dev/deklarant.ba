@@ -983,7 +983,7 @@ function initializeTariffSelects() {
             const origin = item.country_of_origin || "DE";
             const currency = item.currency || "EUR";
             const total = (price * quantity).toFixed(2);
-            const desc = item.item_description;
+            const desc = (item.item_description ?? "") || "";
             const translate = item.translate || item.item_description_translated || "";
             const package_num = item.num_packages || 0;
             const tariff_privilege = item.tariff_privilege || 0;
@@ -2471,45 +2471,7 @@ updateProcjenaEstimates(); // ✅ prisilno izračunaj odmah nakon postavljanja q
     }
 
 
-    function initializeTariffSelects() {
-        $('.select2-tariff').each(function() {
-            const select = $(this);
-            const prefillValue = select.data("prefill");
-
-            select.select2({
-                placeholder: "Pretraži tarifne stavke...",
-                width: '100%',
-                minimumInputLength: 1,
-                ajax: {
-                    transport: function(params, success, failure) {
-                        const term = params.data.q?.toLowerCase() || "";
-                        const filtered = processedTariffData.filter(item => item.search.includes(term));
-                        success({
-                            results: filtered
-                        });
-                    },
-                    delay: 200
-                },
-                templateResult: function(item) {
-                    if (!item.id && !item.text) return null;
-                    const icon = item.isLeaf ? "•" : "▶";
-                    return $(`<div style="padding-left:${item.depth * 20}px;" title="${item.display}">${icon} ${item.display}</div>`);
-                },
-                templateSelection: function(item) {
-                    return item.id || "";
-                }
-            });
-
-            // Optional: support prefill
-            if (prefillValue) {
-                const match = processedTariffData.find(item => item.id === prefillValue);
-                if (match) {
-                    const option = new Option(match.display, match.id, true, true);
-                    select.append(option).trigger('change');
-                }
-            }
-        });
-    }
+   
 
 
     document.addEventListener("click", function(e) {
