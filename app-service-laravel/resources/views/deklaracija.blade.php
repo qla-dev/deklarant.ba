@@ -2875,71 +2875,7 @@ Swal.fire({
         dateFormat: "d.m.Y"
     });
 
-    function addRowToInvoice() {
-        const tbody = document.querySelector("#newlink");
-        if (!tbody) return;
-
-        const rowCount = tbody.querySelectorAll("tr.product").length;
-        const row = document.createElement("tr");
-        row.classList.add("product");
-
-        row.innerHTML = `
-<td>${rowCount + 1}</td>
-<td colspan="2">
-    <div class="input-group" style="display: flex; gap: 0.25rem;">
-        <input type="text" class="form-control item-name" name="item_name[]" placeholder="Naziv proizvoda" value="" style="flex:1;">
-        <button class="btn btn-outline-info rounded" type="button" onclick="searchFromInputs(this)">
-            <i class="fa-brands fa-google"></i>
-        </button>
-        <input type="text" class="form-control item-desc" name="item_desc[]" placeholder="Opis proizvoda" value="" style="flex:1;">
-    </div>
-    <input type="text" class="form-control form-control-sm mt-1" name="item_prev[]" style="padding-left:14.4px; height: 37.1px;" placeholder="Prevod" value="">
-</td>
-<td>
-    <select class="form-control select2-tariff" name="item_code[]">
-        <option value="" selected></option>
-    </select>
-</td>
-<td><input type="text" class="form-control" name="quantity_type[]" value=""></td>
-<td>
-    <select class="form-select select2-country" name="origin[]">${generateCountryOptions()}</select>
-</td>
-<td><input type="number" class="form-control" name="price[]" value=""></td>
-<td style="width: 60px;">
-    <div class="input-group input-group-sm">
-        <button class="btn btn-outline-info btn-sm" type="button" style="height:30px;padding:0 5px;font-size:10px;">−</button>
-        <input type="number" class="form-control text-center" name="quantity[]" value="0" min="0" style="padding: 0 5px;">
-        <button class="btn btn-outline-info btn-sm" type="button" style="height:30px;padding:0 5px;font-size:10px;">+</button>
-    </div>
-    <div class="input-group input-group-sm mt-1">
-        <button class="btn btn-outline-info btn-sm" type="button" style="height:30px;padding:0 5px;font-size:10px;">−</button>
-        <input type="number" class="form-control text-center" name="kolata[]" value="0" min="0">
-        <button class="btn btn-outline-info btn-sm" type="button" style="height:30px;padding:0 5px;font-size:10px;">+</button>
-    </div>
-</td>
-<td><input type="text" class="form-control" name="total[]" value="0.00"></td>
-<td style="width: 20px; text-align: center;">
-    <div style="display: flex; flex-direction: column; align-items: end; gap: 2px;">
-        <button type="button" class="btn btn-danger btn-sm remove-row text-center" style="width: 30px;" title="Ukloni red">
-            <i class="fas fa-times"></i>
-        </button>
-        <input type="checkbox" class="form-check-input" style="width: 30px; height: 26.66px;" title="Povlastica DA/NE" />
-    </div>
-</td>`;
-
-        tbody.appendChild(row);
-
-        // Reinitialize Select2 for newly added row
-        $(row).find('.select2-country').select2({
-            templateResult: formatCountryWithFlag,
-            templateSelection: formatCountryWithFlag,
-            width: 'resolve',
-            minimumResultsForSearch: Infinity
-        });
-
-
-        updateTotalAmount();
-    }
+  
 
     document.getElementById("add-item")?.addEventListener("click", () => {
         console.log("Dodaj proizvod clicked");
