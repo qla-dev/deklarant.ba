@@ -245,6 +245,7 @@
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="{{ URL::asset('build/js/declaration/fix-sidebar.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 
 
@@ -478,73 +479,6 @@ if (q1Hidden) q1Hidden.value = numPackages > 0 ? q1 : "";
 
 
 <!-- Export to csv -->
-<script>
-    function exportTableToCustomCSV() {
-        const invoiceNo = document.getElementById("invoice-no")?.textContent?.trim() || "unknown";
-        const filename = `declaration_${invoiceNo}.csv`;
-
-        // Define custom headers (must match your spec exactly)
-        const headers = [
-            "TPL1", "Zemlja porijekla", "Povlastica", "Naziv robe", "Broj komada",
-            "Vrijednost", "Koleta", "Bruto kg", "Neto kg", "Required"
-        ];
-
-        let csv = [headers.join(";")];
-
-        const rows = document.querySelectorAll("#products-list tr");
-
-        rows.forEach(row => {
-            const cells = row.querySelectorAll("td");
-            let rowData = [];
-
-            // Extract Bruto/Neto from one cell, assuming format like "123 / 98"
-            let bruto = "";
-            let neto = "";
-            const kgSplit = cells[8]?.innerText.trim().split("/");
-
-            if (kgSplit?.length === 2) {
-                bruto = kgSplit[0].trim();
-                neto = kgSplit[1].trim();
-            }
-
-
-            // Map cells to the structure manually or with fallback
-            rowData.push(`"${cells[0]?.innerText.trim() || ""}"`); // TPL1
-            rowData.push(`"${cells[5]?.innerText.trim() || ""}"`); // Zemlja porijekla
-            rowData.push(`"${cells[6]?.innerText.trim() || ""}"`);
-           rowData.push(`"${cells[2]?.textContent.trim() || ""}"`);
-            rowData.push(`"${cells[7]?.innerText.trim() || ""}"`); // Broj komada
-            let rawValue = cells[12]?.innerText.trim() || "";
-let numericOnly = rawValue.replace(/[^\d.,]/g, "")         // Remove non-numeric/currency characters
-                          .replace(",", ".")                // Normalize comma to dot
-                          .match(/[\d.]+/g)?.[0] || "";     // Extract numeric part
-let formattedValue = numericOnly.replace(".", ",");         // Convert decimal point to comma
-
-rowData.push(`"${formattedValue}"`);
-            rowData.push(`"${cells[9]?.innerText.trim() || ""}"`); // Koleta (empty)
-            rowData.push(`"${bruto}"`); // Bruto kg
-            rowData.push(`"${neto}"`);  // Neto kg
-            rowData.push(`""`); // Required (empty)
-
-            csv.push(rowData.join(";"));
-        });
-
-    
-       // Create CSV and download (with BOM for čćžš to show in Excel)
-const csvFile = new Blob(
-    ["\uFEFF" + csv.join("\n")],
-    { type: "text/csv;charset=utf-8;" }
-);
-
-const link = document.createElement("a");
-link.href = URL.createObjectURL(csvFile);
-link.download = filename;
-document.body.appendChild(link);
-link.click();
-document.body.removeChild(link);
-
-    }
-</script>
 
 
 
@@ -553,4 +487,5 @@ document.body.removeChild(link);
 
 
 
+<script src="{{ URL::asset('build/js/declaration/export-view.js') }}"></script>
 @endsection

@@ -168,9 +168,9 @@
        <div class="col-6 col-md-3 col-mob">
         <div class="mt-4">
             <h6 class="text-muted text-uppercase fw-semibold">Moji podaci</h6>
-            <input type="text" class="form-control mb-2" id="company-address" name="name" placeholder="Ime kompanije" disabled value="{{ Auth::user()->company['name'] ?? '' }}">
-            <input type="text" class="form-control mb-2" id="company-id" name="zip" placeholder="ID kompanije" disabled value="{{ Auth::user()->company['id'] ?? '' }}">
-            <input type="email" class="form-control mb-2" id="company-tel" name="tel" placeholder="Adresa" disabled value="{{ Auth::user()->company['address'] ?? '' }}">
+            <input type="text" class="form-control mb-2" id="company-name" name="name" placeholder="Ime kompanije" disabled value="{{ Auth::user()->company['name'] ?? '' }}">
+            <input type="text" class="form-control mb-2" id="company-id" name="id" placeholder="ID kompanije" disabled value="{{ Auth::user()->company['id'] ?? '' }}">
+            <input type="email" class="form-control mb-2" id="company-address" name="address" placeholder="Adresa" disabled value="{{ Auth::user()->company['address'] ?? '' }}">
             <p class="fs-12 text-muted m-0">
                 Ovo su informacije o tvojoj kompaniji. Možete ih uvijek prilagoditi na 
                 <a href="/profil" class="text-info">pregledu svog profila.</a>
@@ -2940,73 +2940,12 @@ if (overlay && !overlay.classList.contains('d-none')) {
 
 
 
-<script>
-function exportTableToCustomCSV() {
-    const invoiceNo = document.getElementById("invoice-no")?.value?.trim() || "unknown";
-    const filename = `declaration_${invoiceNo}.csv`;
-
-    const headers = [
-        "TPL1", "Zemlja porijekla", "Povlastica", "Naziv robe", "Broj komada",
-        "Vrijednost", "Koleta", "Bruto kg", "Neto kg", "Required"
-    ];
-    let csv = [headers.join(";")];
-
-    // ✅ Remove last row forcibly
-    const rows = Array.from(document.querySelectorAll("#products-table tbody tr")).slice(0, -1);
-
-    rows.forEach((row) => {
-        const rowData = [];
-
-        const tplName = row.querySelector('input[name="item_name[]"]')?.value || "";
-        rowData.push(`"${tplName}"`);
-
-        const origin = row.querySelector('select[name="origin[]"]')?.value || "";
-        rowData.push(`"${origin}"`);
-
-        const povlastica = row.querySelector('input[name="tariff_privilege[]"]')?.checked ? "DA" : "NE";
-        rowData.push(`"${povlastica}"`);
-
-        const translatedName = row.querySelector('input[name="item_prev[]"]')?.value || "";
-        rowData.push(`"${translatedName}"`);
-
-        const qty = row.querySelector('input[name="quantity[]"]')?.value || "";
-        rowData.push(`"${qty}"`);
-
-        let rawPrice = row.querySelector('input[name="price[]"]')?.value || "";
-        let numericOnly = rawPrice.replace(/[^\d.,]/g, "").replace(",", ".");
-        let formattedValue = numericOnly ? parseFloat(numericOnly).toFixed(2).replace(".", ",") : "";
-        rowData.push(`"${formattedValue}"`);
-
-        const koleta = row.querySelector('input[name="kolata[]"]')?.value || "";
-        rowData.push(`"${koleta}"`);
-
-        const bruto = row.querySelector('input[name="weight_gross[]"]')?.value || "";
-        rowData.push(`"${bruto}"`);
-
-        const neto = row.querySelector('input[name="weight_net[]"]')?.value || "";
-        rowData.push(`"${neto}"`);
-
-        rowData.push(`""`);
-
-        csv.push(rowData.join(";"));
-    });
-
-    const csvFile = new Blob(["\uFEFF" + csv.join("\n")], {
-        type: "text/csv;charset=utf-8;"
-    });
-
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(csvFile);
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
-</script>
 
 
 
 
 
+
+<script src="{{ URL::asset('build/js/declaration/export-edit.js') }}"></script>
 <script src="{{ URL::asset('build/js/declaration/swal-declaration-load.js') }}"></script>
 @endsection

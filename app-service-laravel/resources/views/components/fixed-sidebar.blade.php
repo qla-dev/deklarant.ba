@@ -7,6 +7,8 @@
 
     #vise-opcija-swal .swal2-title {padding-top: 20px!important;}
 </style> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
  
  <div class="d-print-none" id="sidebar-buttons-container">
      <div id="fixed-buttons" class="d-flex flex-column gap-3">
@@ -31,15 +33,20 @@
          </button>
          @endif
 
-         <a href="javascript:window.print()" class="btn btn-soft-info pc-opcije-button" style="height: 28px !important; ">
-             <i class="ri-printer-line align-bottom me-1 fs-5"></i> Isprintaj
-         </a>
-         <a href="javascript:void(0);" class="btn btn-soft-info pc-opcije-button" style="height: 28px !important;">
-             <i class="ri-download-2-line align-bottom me-1 fs-5"></i> Preuzmi
-         </a>
+  <a href="javascript:void(0)" onclick="renderPrintTableAndPrint()" class="btn btn-soft-info pc-opcije-button" style="height: 28px !important;">
+    <i class="ri-printer-line align-bottom me-1 fs-5"></i> Isprintaj
+</a>
+
+
+
+      
+
          <a href="#" class="btn btn-soft-info  btn-original-doc pc-opcije-button" style="height: 28px !important;">
              <i class="ri-file-3-line align-bottom me-1 fs-5"></i> Originalni dokument
          </a>
+            <a href="javascript:void(0);" onclick="autoDownloadPDF()" class="btn btn-soft-info pc-opcije-button" style="height: 28px !important;">
+    <i class="ri-file-pdf-line align-bottom me-1 fs-5"></i> Export u PDF
+</a>
 
          <button class="btn btn-soft-info  pc-opcije-button" onclick="exportTableToCustomCSV()" style="height: 28px !important; "><i class="ri-file-excel-line align-bottom me-1 fs-5"></i> Export u CSV</button>
          <a class="btn btn-soft-info pc-opcije-button" style="height: 28px !important; ">
