@@ -188,23 +188,29 @@
             <input type="text" class="form-control" id="invoice-no" name="invoice_no" placeholder="Unesite broj fakture">
         </div>
 
-        <div style="margin-top: 1.85rem;">
-            <h6 class="text-muted text-uppercase fw-semibold mt-1">Incoterm</h6>
-            <select class="form-select mb-2 custom-select-icon incoterm2" name="incoterm" id="incoterm">
-                <option value="" selected disabled>Izaberite</option>
-                <option value="EXW">EXW</option>
-                <option value="FCA">FCA</option>
-                <option value="CPT">CPT</option>
-                <option value="CIP">CIP</option>
-                <option value="DAP">DAP</option>
-                <option value="DPU">DPU</option>
-                <option value="DDP">DDP</option>
-                <option value="FAS">FAS</option>
-                <option value="FOB">FOB</option>
-                <option value="CFR">CFR</option>
-                <option value="CIF">CIF</option>
-            </select>
-        </div>
+      <div style="margin-top: 1.85rem;">
+  <h6 class="text-muted text-uppercase fw-semibold mt-1">Incoterm</h6>
+  
+  <div class="d-flex gap-2">
+    <select class="form-select mb-2 custom-select-icon incoterm2" name="incoterm" id="incoterm">
+      <option value="" selected disabled>Izaberite</option>
+      <option value="EXW">EXW</option>
+      <option value="FCA">FCA</option>
+      <option value="CPT">CPT</option>
+      <option value="CIP">CIP</option>
+      <option value="DAP">DAP</option>
+      <option value="DPU">DPU</option>
+      <option value="DDP">DDP</option>
+      <option value="FAS">FAS</option>
+      <option value="FOB">FOB</option>
+      <option value="CFR">CFR</option>
+      <option value="CIF">CIF</option>
+    </select>
+
+    <input type="text" id="incoterm-destination" class="form-control mb-2" placeholder="Destinacija">
+  </div>
+</div>
+
     </div>
                 </div>
 
@@ -304,6 +310,12 @@
                                 <th style="width:100px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Porijeklo</th>
                                 <th style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem;">Cijena</th>
                                 <th style="width: 60px; text-align: center;vertical-align: middle;">
+                                    Bruto (kg)<br>
+                                    <small style="font-weight: normal; font-size: 0.75rem; color: #666;">
+                                        Neto (kg)
+                                    </small>
+                                </th>
+                                    <th style="width: 60px; text-align: center;vertical-align: middle;">
                                     Količina<br>
                                     <small style="font-weight: normal; font-size: 0.75rem; color: #666;">
                                         Broj koleta
@@ -348,6 +360,8 @@
 
         </div>
     </div>
+    <input type="hidden" id="currency-lock" value="">
+
     @include('components.fixed-sidebar')
 </div>
 
@@ -545,41 +559,47 @@ if (typeof window !== "undefined") {
 
 
 
-        function updateTotalAmount() {
-           let total = 0;
-            let currency = "KM"; // default fallback if not found
+    function updateTotalAmount() {
+    let total = 0;
+    const currencySymbols = {
+        "EUR": "€",
+        "USD": "$",
+        "KM": "KM"
+    };
 
-            const currencySymbols = {
-                "EUR": "€",
-                "USD": "$",
-                "KM": "KMa"
-            };
+    const productRows = document.querySelectorAll("#newlink tr.product");
 
-            const productRows = document.querySelectorAll("#newlink tr.product");
+    // Get locked currency from hidden input
+    let lockedCurrency = document.getElementById("currency-lock").value;
 
-            productRows.forEach((row, index) => {
-                const price = parseFloat(row.querySelector('input[name="price[]"]')?.value || 0);
-                const quantity = parseFloat(row.querySelector('input[name="quantity[]"]')?.value || 0);
-                total += price * quantity;
+    productRows.forEach((row) => {
+        const price = parseFloat(row.querySelector('input[name="price[]"]')?.value || 0);
+        const quantity = parseFloat(row.querySelector('input[name="quantity[]"]')?.value || 0);
+        total += price * quantity;
 
-                // Try to detect currency from first row
-                if (index === 0) {
-                    const currencyInput = row.querySelector('input[name="currency[]"]');
-                    if (currencyInput && currencyInput.value.trim()) {
-                        currency = currencyInput.value.trim();
-                    }
-                }
-            });
-
-            const currencySymbol = currencySymbols[currency] || currency; // fallback to raw code if symbol missing
-            const formatted = `${total.toFixed(2)} ${currencySymbol}`;
-
-            // Set values in UI
-            document.getElementById("total-amount").value = formatted;
-            document.getElementById("modal-total-amount").textContent = formatted;
-            document.getElementById("total-edit").textContent = formatted;
-
+        // Lock currency only once
+        if (!lockedCurrency) {
+            const currencyInput = row.querySelector('input[name="currency[]"]');
+            if (currencyInput && currencyInput.value.trim()) {
+                lockedCurrency = currencyInput.value.trim();
+                document.getElementById("currency-lock").value = lockedCurrency;
+                console.log("✅ Locked currency:", lockedCurrency);
+            }
         }
+    });
+
+    const currency = lockedCurrency || "EUR";
+    const currencySymbol = currencySymbols[currency] || currency;
+    const formatted = `${total.toFixed(2)} ${currencySymbol}`;
+
+    document.getElementById("total-amount").value = formatted;
+    document.getElementById("modal-total-amount").textContent = formatted;
+    document.getElementById("total-edit").textContent = formatted;
+}
+
+
+
+
 
 
         async function getInvoice() {
@@ -928,6 +948,8 @@ function initializeTariffSelects() {
             const tariff_privilege = item.tariff_privilege || 0;
             const qtype = item.quantity_type || "";
             const best_customs_code_matches = item.best_customs_code_matches || [];
+            const weight_gross = item.weight_gross || 0;
+            const weight_net = item.weight_net || 0;
 
             console.log(` Adding row ${index + 1}:`, item, suggestions);
 
@@ -1035,6 +1057,55 @@ row.innerHTML = `
               
             >
           </td>
+                    <td style="width: 80px;">
+            <div style="display: flex; flex-direction: column; gap: 2px; width: 100%;">
+              <div class="input-group input-group-sm" style="width: 100%;">
+                <button 
+                  class="btn btn-outline-info btn-sm" 
+                  style="width: 20px; padding: 0;" 
+                  type="button"
+                >−</button>
+                <input 
+                  type="number" 
+                  class="form-control text-center" 
+                  name="weight_gross[]" 
+                  value="${weight_gross}" 
+                  step="1" 
+                  min="0"
+                  style="padding: 0 5px; height: 30px;"
+                >
+                <button 
+                  class="btn btn-outline-info btn-sm" 
+                  style=" width: 20px; padding: 0;" 
+                  type="button"
+                >+</button>
+              </div>
+              
+             <div class="input-group input-group-sm" style="height: 30px;">
+                <button 
+                class="btn btn-outline-info btn-sm"
+                  style="padding: 0; width: 20px;"
+                >−</button>
+
+                <input
+                  type="number"
+                  class="form-control text-center"
+                  name="weight_net[]"
+                  min="0"
+                  step="1"
+                  style="height: 30px; padding: 0 5px; font-size: 10px;"
+                  value="${weight_net}"
+                >
+
+                <button 
+                  class="btn btn-outline-info btn-sm increment-kolata" 
+                  type="button" 
+                  style="padding: 0; width: 20px;"
+                >+</button>
+                </div>
+            </div>
+          </td>
+
 
           <td style="width: 80px;">
             <div style="display: flex; flex-direction: column; gap: 2px; width: 100%;">
@@ -1236,6 +1307,13 @@ row.innerHTML = `
            waitForEl("#invoice-date-text", el => {
     const rawDate = invoice.date_of_issue ? new Date(invoice.date_of_issue) : new Date();
     el.textContent = rawDate.toLocaleDateString('hr'); // e.g. "17. 6. 2025."
+    if (invoice.incoterm_destination) {
+    const destinationInput = document.getElementById("incoterm-destination");
+    if (destinationInput) {
+        destinationInput.value = invoice.incoterm_destination;
+    }
+}
+
 });
 
 
@@ -2313,25 +2391,6 @@ console.log("Weights and package count set:",
         });
     }
 
-    function updateTotalAmount() {
-        let total = 0;
-
-        // Loop through all invoice rows
-        document.querySelectorAll("#newlink tr.product").forEach(function(row) {
-            const price = parseFloat(row.querySelector('input[name="price[]"]')?.value || 0);
-            const quantity = parseFloat(row.querySelector('input[name="quantity[]"]')?.value || 0);
-            total += price * quantity;
-        });
-
-        // Format as currency
-        const formatted = `${total.toFixed(2)} KM`;
-
-        // Set values in both places
-        document.getElementById("total-amount").value = formatted;
-        document.getElementById("modal-total-amount").textContent = formatted;
-        document.getElementById("total-edit").textContent = formatted;
-
-    }
 
     function initializeTariffSelects() {
         $('.select2-tariff').each(function() {

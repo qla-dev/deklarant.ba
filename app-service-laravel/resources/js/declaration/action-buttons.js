@@ -217,6 +217,8 @@ document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
     const total_price = parseFloat((base_price * quantity).toFixed(2));
     const quantity_type = row.querySelector('[name="quantity_type[]"]')?.value || "";
     const package_num = row.querySelector('[name="kolata[]"]')?.value || "";
+    const weight_gross = row.querySelector('[name="weight_gross[]"]')?.value || "";
+    const weight_net = row.querySelector('[name="weight_net[]"]')?.value || "";
 
     const povlastica = row.querySelector('input[type="checkbox"]')?.checked || false;
     const tariff_privilege = povlastica ? "DA" : "NE";
@@ -233,7 +235,9 @@ document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
         item_name,
         item_description,
         item_description_translated,
-        total_price
+        total_price,
+        weight_gross,
+        weight_net
     });
 
     items.push({
@@ -250,6 +254,8 @@ document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
         quantity_type,
         package_num,
         tariff_privilege,
+        weight_gross,
+        weight_net,
         total_price,
         currency: "EUR",
         version: new Date().getFullYear()
@@ -274,6 +280,7 @@ document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
             const payload = {
 
                 incoterm: document.getElementById("incoterm").value.trim(),
+                incoterm_destination: document.getElementById("incoterm-destination").value.trim(),
                 invoice_number: document.getElementById("invoice-no").value.trim(),
                 file_name: fileName, // use the file name from the uploaded invoice
                 total_price: parseFloat(document.getElementById("total-amount")?.value || "0"),

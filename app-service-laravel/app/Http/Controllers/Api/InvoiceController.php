@@ -140,6 +140,7 @@ class InvoiceController extends Controller
             'supplier_id' => $data['supplier_id'] ?? $invoice->supplier_id,
             'invoice_number' => $data['invoice_number'] ?? $invoice->invoice_number,
             'incoterm' => $data['incoterm'] ?? $invoice->incoterm,
+            'incoterm_destination' => $data['incoterm_destination'] ?? $invoice->incoterm_destination,
             'total_weight_net' => $data['total_weight_net'] ?? $invoice->total_weight_net,
             'total_weight_gross' => $data['total_weight_gross'] ?? $invoice->total_weight_gross,
             'total_num_packages' => $data['total_num_packages'] ?? $invoice->total_num_packages,
@@ -172,6 +173,8 @@ class InvoiceController extends Controller
                         'country_of_origin' => $item['origin'] ?? null,
                         'quantity_type' => $item['quantity_type'] ?? null,
                         'num_packages' => $item['package_num'] ?? null,
+                        'weight_gross' => $item['weight_gross'] ?? null,
+                        'weight_net' => $item['weight_net'] ?? null,
                         'tariff_privilege' => $item['tariff_privilege'] === 'DA' ? 1 : 0
                     ]);
                     $submittedIds[] = $existingItem->id;
