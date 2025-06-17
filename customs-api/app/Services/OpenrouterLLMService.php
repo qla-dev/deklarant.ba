@@ -14,7 +14,7 @@ class OpenrouterLLMService implements LLMCaller
     public function callLLM(Client $client, string $prompt, bool $allowPaidModels, ?array $images = null): string
     {
         $maxRetries = 3;
-        $model = 'meta-llama/llama-4-maverick:free';
+        $model = $allowPaidModels ? 'google/gemini-2.5-flash-preview-05-20' : 'meta-llama/llama-4-maverick:free';
         $suffix = "\n\nIf you don't see any items (for example, if the input file is not an actual customs declaration, or if document is unreadable because of bad quality), DO NOT write any json output at all, not even '```' blocks.";
 
         for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
