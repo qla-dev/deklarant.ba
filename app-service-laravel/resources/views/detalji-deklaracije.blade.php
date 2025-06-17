@@ -525,31 +525,52 @@ if (q1Hidden) q1Hidden.value = numPackages > 0 ? q1 : "";
             const cells = row.querySelectorAll("td");
             let rowData = [];
 
+            // Extract Bruto/Neto from one cell, assuming format like "123 / 98"
+            let bruto = "";
+            let neto = "";
+            const kgSplit = cells[8]?.innerText.trim().split("/");
+
+            if (kgSplit?.length === 2) {
+                bruto = kgSplit[0].trim();
+                neto = kgSplit[1].trim();
+            }
+
+
             // Map cells to the structure manually or with fallback
             rowData.push(`"${cells[0]?.innerText.trim() || ""}"`); // TPL1
             rowData.push(`"${cells[5]?.innerText.trim() || ""}"`); // Zemlja porijekla
-            rowData.push(`""`); // Povlastica (empty)
-            rowData.push(`"${cells[1]?.innerText.trim() || ""}"`); // Naziv robe
-            rowData.push(`"${cells[4]?.innerText.trim() || ""}"`); // Broj komada
-            rowData.push(`"${cells[6]?.innerText.trim() || ""}"`); // Vrijednost (Ukupna cijena)
-            rowData.push(`""`); // Koleta (empty)
-            rowData.push(`""`); // Bruto kg (empty)
-            rowData.push(`""`); // Neto kg (empty)
+            rowData.push(`"${cells[6]?.innerText.trim() || ""}"`);
+           rowData.push(`"${cells[2]?.textContent.trim() || ""}"`);
+            rowData.push(`"${cells[7]?.innerText.trim() || ""}"`); // Broj komada
+            let rawValue = cells[12]?.innerText.trim() || "";
+let numericOnly = rawValue.replace(/[^\d.,]/g, "")         // Remove non-numeric/currency characters
+                          .replace(",", ".")                // Normalize comma to dot
+                          .match(/[\d.]+/g)?.[0] || "";     // Extract numeric part
+let formattedValue = numericOnly.replace(".", ",");         // Convert decimal point to comma
+
+rowData.push(`"${formattedValue}"`);
+            rowData.push(`"${cells[9]?.innerText.trim() || ""}"`); // Koleta (empty)
+            rowData.push(`"${bruto}"`); // Bruto kg
+            rowData.push(`"${neto}"`);  // Neto kg
             rowData.push(`""`); // Required (empty)
 
             csv.push(rowData.join(";"));
         });
 
-        // Create CSV and download
-        const csvFile = new Blob([csv.join("\n")], {
-            type: "text/csv"
-        });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(csvFile);
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+    
+       // Create CSV and download (with BOM for čćžš to show in Excel)
+const csvFile = new Blob(
+    ["\uFEFF" + csv.join("\n")],
+    { type: "text/csv;charset=utf-8;" }
+);
+
+const link = document.createElement("a");
+link.href = URL.createObjectURL(csvFile);
+link.download = filename;
+document.body.appendChild(link);
+link.click();
+document.body.removeChild(link);
+
     }
 </script>
 
