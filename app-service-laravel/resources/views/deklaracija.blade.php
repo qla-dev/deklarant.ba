@@ -2934,6 +2934,82 @@ if (overlay && !overlay.classList.contains('d-none')) {
 
 
 
+<script>
+    function exportTableToCustomCSV() {
+        const invoiceNo = document.getElementById("invoice-no1")?.textContent?.trim() || "unknown";
+        const filename = `declaration_${invoiceNo}.csv`;
+
+        // Header row
+        const headers = [
+            "TPL1", "Zemlja porijekla", "Povlastica", "Naziv robe", "Broj komada",
+            "Vrijednost", "Koleta", "Bruto kg", "Neto kg", "Required"
+        ];
+        let csv = [headers.join(";")];
+
+        const rows = document.querySelectorAll("#products-list tr");
+
+        rows.forEach(row => {
+            const cells = row.querySelectorAll("td");
+            let rowData = [];
+
+            // TPL1
+            rowData.push(`"${cells[0]?.innerText.trim() || ""}"`);
+
+            // Zemlja porijekla
+            const origin = cells[5]?.innerText.trim() || "";
+            rowData.push(`"${origin}"`);
+
+            // Povlastica logic
+            const povlastica = origin === "TR" ? "TRP" : "";
+            rowData.push(`"${povlastica}"`);
+
+            // Naziv robe
+            rowData.push(`"${cells[2]?.textContent.trim() || ""}"`);
+
+            // Broj komada
+            rowData.push(`"${cells[7]?.innerText.trim() || ""}"`);
+
+            // Vrijednost – clean currency & format
+            let rawValue = cells[12]?.innerText.trim() || "";
+            let numericOnly = rawValue.replace(/[^\d.,]/g, "")         // Remove currency text
+                                      .replace(",", ".")                // normalize comma to dot
+                                      .match(/[\d.]+/g)?.[0] || "";     // get numeric part
+            let formattedValue = numericOnly.replace(".", ",");         // convert . to ,
+            rowData.push(`"${formattedValue}"`);
+
+            // Koleta
+            rowData.push(`"${cells[9]?.innerText.trim() || ""}"`);
+
+            // Bruto/Neto kg split from one column (assume it's in index 8)
+            let bruto = "", neto = "";
+            const kgSplit = cells[8]?.innerText.trim().split("/");
+            if (kgSplit?.length === 2) {
+                bruto = kgSplit[0].trim();
+                neto = kgSplit[1].trim();
+            }
+            rowData.push(`"${bruto}"`);
+            rowData.push(`"${neto}"`);
+
+            // Required – always empty
+            rowData.push(`""`);
+
+            // Add this row to CSV
+            csv.push(rowData.join(";"));
+        });
+
+        // Download CSV with UTF-8 BOM
+        const csvFile = new Blob(["\uFEFF" + csv.join("\n")], {
+            type: "text/csv;charset=utf-8;"
+        });
+
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(csvFile);
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
 
 
 <script src="{{ URL::asset('build/js/declaration/swal-declaration-load.js') }}"></script>

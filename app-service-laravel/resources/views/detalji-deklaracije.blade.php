@@ -474,35 +474,7 @@ if (q1Hidden) q1Hidden.value = numPackages > 0 ? q1 : "";
 </script>
 
 
-<!-- Export to xslx -->
-<script>
-    document.getElementById("export-xlsx").addEventListener("click", function() {
-        const table = document.getElementById("invoiceTable");
-        if (!table) {
-            alert("Tabela nije pronađena!");
-            return;
-        }
 
-        // 1. Convert table to worksheet
-        const ws = XLSX.utils.table_to_sheet(table);
-
-        // 2. Append "Ukupan iznos" row manually
-
-        const sheetData = XLSX.utils.sheet_to_json(ws, {
-            header: 1
-        }); // get 2D array of data
-        sheetData.push([]); // empty spacer row
-        sheetData.push(["", "", "", "", "", "Ukupan iznos:", totalAmount]); // add summary row
-
-        const newWs = XLSX.utils.aoa_to_sheet(sheetData);
-
-        // 3. Create workbook and export
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, newWs, "Faktura");
-
-        XLSX.writeFile(wb, "faktura.xlsx");
-    });
-</script>
 
 
 <!-- Export to csv -->
