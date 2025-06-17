@@ -2,6 +2,8 @@
 @section('css')
 <link href="https://db.onlinewebfonts.com/c/b05a654a86637945b4997a378a5181fe?family=Facebook+Sans+Bold" rel="stylesheet">
 <link href="{{ URL::asset('build/css/landing.min.css') }}"  rel="stylesheet" type="text/css" />
+<script src="https://cdn.lordicon.com/lordicon.js"></script>
+
     <style>
         #loginForm {
   animation: fadeIn 0.5s ease;
@@ -315,10 +317,10 @@ overflow-y: hidden;
 </h2>
                      
 
-                    <p data-aos="fade-up" data-aos-duration="1000">Automatsko skeniranje carinskih deklaracija uz pomoć AI – bez čekanja. <br>Uz <strong class="logo-span">deklarant<span class="ai-span">.ai</span></strong>, svaki unos postaje jednostavan, precizan i odmah dostupan u nekoliko sekundi – oslobodite se ručne obrade i fokusirajte se na ono što je važno.</p>
+                    <p data-aos="fade-up" data-aos-duration="1000">Automatsko skeniranje carinskih deklaracija uz pomoć AI – bez čekanja. <br>Uz <strong class="logo-span">deklarant<span class="ai-span" style="color:#289cdb!important">.ai</span></strong>, svaki unos postaje jednostavan, precizan i odmah dostupan u nekoliko sekundi – oslobodite se ručne obrade i fokusirajte se na ono što je važno.</p>
                     <div data-aos="fade-up" data-aos-duration="1200">
                       <a href="#" class="header-btn2 rounded-1 openRegister">Započni </a>
-                    <a href="#" class="header-btn2 ms-2 rounded-1">Provjeri funkcionalnosti</a>
+                    <a href="#functions" class="header-btn2 ms-2 rounded-1">Provjeri funkcionalnosti</a>
                     </div>
                 </div>
             </div>
@@ -338,7 +340,7 @@ overflow-y: hidden;
                     </div>
                 </div>
 
-                    <p class="mb-0" data-aos="fade-up" data-aos-duration="1000">Automatsko skeniranje carinskih deklaracija uz pomoć AI – bez čekanja. <br>Uz <strong class="logo-span">deklarant<span class="ai-span">.ai</span></strong>, svaki unos postaje jednostavan, precizan i odmah dostupan u nekoliko sekundi – oslobodite se ručne obrade i fokusirajte se na ono što je važno.</p>
+                    <p class="mb-0" data-aos="fade-up" data-aos-duration="1000">Automatsko skeniranje carinskih deklaracija uz pomoć AI – bez čekanja. <br>Uz <strong class="logo-span">deklarant<span class="ai-span" style="color:#289cdb!important;">.ai</span></strong>, svaki unos postaje jednostavan, precizan i odmah dostupan u nekoliko sekundi – oslobodite se ručne obrade i fokusirajte se na ono što je važno.</p>
                     <div data-aos="fade-up" data-aos-duration="1200">
                       <a href="#" class="header-btn2 rounded-1 openRegister  bottom-buttons">Započni </a>
                     <a href="#" class="header-btn2 ms-2 rounded-1  bottom-buttons">Provjeri funkcionalnosti</a>
@@ -461,7 +463,211 @@ overflow-y: hidden;
 </div>
 <!--===== WELCOME ENDS =======-->
 
- 
+
+<!--===== GENERATION AREA with Local Lottie Icons =======-->
+<div class="genaration2-section-area sp5" id="functions">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 m-auto">
+        <div class="genaration2-header text-center heading4">
+          <span data-aos="fade-up" data-aos-duration="800" class="mb-4">Pametna obrada deklaracija</span>
+          <h2 data-aos="fade-up" data-aos-duration="800" class="naslov main-naslov">
+            Šta nudi <b style="font-family: 'Facebook Sans Bold', sans-serif; color: black;">deklarant</b><b style="color: #289cdb;  font-family: 'Facebook Sans Bold', sans-serif;">.ai</b>?
+          </h2>
+        </div>
+      </div>
+    </div>
+    <div class="space60"></div>
+
+    <div class="row text-center">
+      <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-duration="800">
+        <div class="mb-3">
+          <lord-icon
+              src="/build/images/lottie/wired-outline-2844-magic-wand-hover-pinch.json"
+              trigger="hover"
+              stroke="regular"
+              colors="primary:#121331,secondary:#289cdb"
+              style="width:70px;height:70px">
+          </lord-icon>
+        </div>
+        <h5 class="fw-bold text-black">AI prepoznavanje i klasifikacija</h5>
+        <p>Na osnovu opisa artikala, sistem automatski predlaže najtačniju tarifnu oznaku iz baze – brzo i precizno.</p>
+      </div>
+
+      <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-duration="1000">
+        <div class="mb-3">
+          <lord-icon
+              src="/build/images/lottie/wired-outline-245-edit-document-hover-pinch.json"
+              trigger="hover"
+              stroke="regular"
+              style="width:65px;height:65px">
+          </lord-icon>
+        </div>
+        <h5 class="fw-bold  text-black">Revizija i uređivanje</h5>
+        <p>Korisnik ima punu kontrolu – svi AI rezultati su otvoreni za izmjene prije eksportovanja.</p>
+      </div>
+
+      <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-duration="1200">
+        <div class="mb-3">
+          <lord-icon
+              src="/build/images/lottie/wired-outline-56-document-hover-swipe.json"
+              trigger="hover"
+              stroke="regular"
+              style="width:60px;height:60px">
+          </lord-icon>
+        </div>
+        <h5 class="fw-bold  text-black">Eksport u više formata</h5>
+        <p>Generiši dokumente u PDF, CSV (za tarifne softvere) i XML formatima – spremno za carinu i štampu.</p>
+      </div>
+    </div>
+
+    <div class="row text-center mt-4">
+      <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-duration="1400">
+        <div class="mb-3">
+          <lord-icon
+              src="/build/images/lottie/wired-outline-12-layers-hover-slide.json"
+              trigger="hover"
+              stroke="regular"
+              style="width:65px;height:65px">
+          </lord-icon>
+        </div>
+        <h5 class="fw-bold  text-black">Baza uvoznika i partnera</h5>
+        <p>Pristupi svojoj internoj bazi, ali i globalnoj koju obezbjeđuje deklarant.ai – sve centralizirano.</p>
+      </div>
+
+      <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-duration="1600">
+        <div class="mb-3">
+          <lord-icon
+              src="/build/images/lottie/wired-outline-212-arrow-1-rounded-hover-pinch.json"
+              trigger="hover"
+              stroke="regular"
+              style="width:60px;height:60px">
+          </lord-icon>
+        </div>
+        <h5 class="fw-bold  text-black">Do 11x brža obrada</h5>
+        <p>Zahvaljujući AI automatizaciji, unos deklaracija postaje munjevito brz – bez ručnog unosa.</p>
+      </div>
+
+      <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-duration="1800">
+        <div class="mb-3">
+          <lord-icon
+              src="/build/images/lottie/wired-outline-1140-error-hover-enlarge.json"
+              trigger="hover"
+              stroke="regular"
+              style="width:65px;height:65px">
+          </lord-icon>
+        </div>
+        <h5 class="fw-bold  text-black">Sigurnost i pouzdanost</h5>
+        <p>Podaci su zaštićeni, a tarifna baza ažurirana u skladu sa službenim pravilnicima.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!--===== PROCESS AREA STARTS =======-->
+<div class="process-section-area sp5">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 m-auto">
+        <div class="process-header heading4 text-center">
+          <span data-aos="fade-up" data-aos-duration="800">Kako funkcioniše</span>
+          <h2 data-aos="fade-up" data-aos-duration="1000" class="main-naslov">Od dokumenta do <strong style=" color: #289cdb!important;">gotove deklaracije</strong> – jednostavno u 5 koraka</h2>
+        </div>
+      </div>
+    </div>
+    <div class="space60"></div>
+
+    <!-- Korak 1 -->
+    <div class="row align-items-center">
+      <div class="col-lg-7">
+        <div class="process-images reveal">
+          <img src="build/images/homepage/img/process-img-1.png" alt="Upload dokumenta">
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="process-images-content heading4">
+          <span data-aos="fade-left" data-aos-duration="800">1. Učitaj deklaraciju</span>
+          <h2 data-aos="fade-left" data-aos-duration="1000">Upload carinske fakture</h2>
+          <p data-aos="fade-left" data-aos-duration="1200">Uvezi PDF, Excel ili uslikaj dokument fakture. Naš sistem automatski prepoznaje sadržaj i priprema ga za obradu.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Korak 2 -->
+    <div class="process-section2">
+      <img src="assets/images/elements/process-elements1.png" alt="" class="process-elements1 d-lg-block d-none">
+      <img src="assets/images/elements/process-elements2.png" alt="" class="process-elements2 d-lg-block d-none">
+      <div class="row align-items-center">
+        <div class="col-lg-5">
+          <div class="process-images-content heading4">
+            <span data-aos="fade-right" data-aos-duration="800">2. Prepoznavanje klijenata i dobavljača</span>
+            <h2 data-aos="fade-right" data-aos-duration="1000">Automatsko pronalaženje</h2>
+            <p data-aos="fade-right" data-aos-duration="1200">Sistem automatski traži klijenta i dobavljača po nazivu, ID-u ili PIB-u. Ako postoji u tvojoj bazi ili globalnoj bazi deklarant.ai, podaci se odmah popunjavaju.</p>
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="process-images reveal">
+            <img src="build/images/homepage/img/process-img-3.png" alt="Prepoznavanje firmi">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Korak 3 -->
+    <div class="row align-items-center" style="padding-bottom:160px">
+      <div class="col-lg-7">
+        <div class="process-images reveal">
+          <img src="build/images/homepage/img/process-img-4.png" alt="AI klasifikacija">
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="process-images-content heading4" >
+          <span data-aos="fade-left" data-aos-duration="800">3. AI analiza i prijedlozi</span>
+          <h2 data-aos="fade-left" data-aos-duration="1000">Automatska klasifikacija artikala</h2>
+          <p data-aos="fade-left" data-aos-duration="1200">AI prepoznaje sve stavke i automatski predlaže najtačniju tarifnu oznaku za svaki artikal. Sve prijedloge možete pregledati i ručno prilagoditi.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Korak 4 -->
+    <div class="row align-items-center"  style="padding-bottom:160px">
+      <div class="col-lg-6">
+        <div class="process-images-content heading4" style="padding:0 50px 0 0!important">
+          <span data-aos="fade-right" data-aos-duration="800">4. Spasi i uređuj deklaraciju</span>
+          <h2 data-aos="fade-right" data-aos-duration="1000">Deklaracija ostaje u tvojoj arhivi</h2>
+          <p data-aos="fade-right" data-aos-duration="1200">Nisi gotov u jednom sjedenju? Nema problema. Svaku deklaraciju možeš spremiti, kasnije uređivati i dovršiti kad god poželiš.</p>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="process-images reveal">
+          <img src="assets/images/all-images/process-img-save.png" alt="Spasi deklaraciju">
+        </div>
+      </div>
+    </div>
+
+    <!-- Korak 5 -->
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <div class="process-images reveal">
+          <img src="assets/images/all-images/process-img3.png" alt="Eksport fajla">
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="process-images-content heading4">
+          <span data-aos="fade-left" data-aos-duration="800">5. Eksport i dostava</span>
+          <h2 data-aos="fade-left" data-aos-duration="1000">Preuzmi gotovu deklaraciju</h2>
+          <p data-aos="fade-left" data-aos-duration="1200">Kada ste zadovoljni, jednim klikom eksportujte podatke u PDF, CSV ili XML format – spremno za carinu, internu arhivu ili tarifne softvere.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--===== PROCESS AREA ENDS =======-->
+
 
 @endsection
 

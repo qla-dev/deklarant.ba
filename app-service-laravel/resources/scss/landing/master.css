@@ -1461,10 +1461,11 @@ img {
     padding: 0;
   }
 }
-.welcome2-section-area .welcome2-header span {
+.welcome2-section-area .welcome2-header span, .genaration2-section-area .genaration2-header span, .process-section-area .process-images-content span,
+.process-section-area .process-header span {
   display: inline-block;
-  background: #dff0fa;
-  color: black;
+  background: #dff0fa!important;
+  color: black!important;
   font-family: "Figtree", sans-serif;
   font-size: 16px;
   font-style: normal;
@@ -1474,6 +1475,17 @@ img {
   border-radius: 35px;
   margin-bottom: 18px;
 }
+
+.main-naslov {
+  font-family: 'Facebook Sans', sans-serif; 
+  font-size: 3.5rem;
+  font-weight:500!important; 
+  text-transform: unset!important; 
+  color: #495057, imp !important;
+}
+
+.ai-span {color:#289cdb!important}
+.logo-span {color:black!important}
 .welcome2-section-area .welcome2-header p {
   color: gray;
   font-family: "Figtree", sans-serif;
