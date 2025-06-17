@@ -326,7 +326,7 @@
                                         Broj koleta
                                     </small>
                                 </th>
-                                   <th style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem;">Prostor <br> (%)</th>
+                                   <th style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem;">Vrijednost <br> (%)</th>
                                   
 
                                 <th style="width:100px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Ukupno</th>

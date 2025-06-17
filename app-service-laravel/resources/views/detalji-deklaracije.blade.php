@@ -88,10 +88,29 @@
                                         <h6 class="text-uppercase fw-semibold">Broj fakture</h6>
                                         <h5 class="fs-14 mb-0 text-muted "><span id="invoice-no"></span></h5>
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3 mt-3">
                                         <h6 class="text-uppercase fw-semibold mt-4">Incoterm</h6>
-                                        <h5 class="fs-14 mb-0 text-muted "><span id="incoterm" class=" text-muted" style="background: unset!important;"></span></h5>
+                                        <h5 class="fs-14 mb-0 text-muted "><span id="incoterm" class=" text-muted" style="background: unset!important;"></span>-<span id="incoterm-destination" class=" text-muted" style="background: unset!important;"></span></h5>
                                     </div>
+                                    <div class="mb-3 mt-3">
+                                        <h6 class="text-uppercase fw-semibold">Bruto/Neto težina</h6>
+                                        <h5 class="fs-14 mb-0 text-muted "><span id="total-weight-gross"></span>/<span id="total-weight-net"></span> kg</h5>
+                                    </div>
+                                    <div class="mb-3 mt-3">
+                                        <h6 class="text-uppercase fw-semibold">Broj koleta</h6>
+                                        <h5 class="fs-14 mb-0 text-muted "><span id="total-num-packages"></span></h5>
+                                    </div>
+                         <div class="mb-3 mt-3 d-none">
+    <h6 class="text-uppercase fw-semibold">Vrijednost po koletu</h6>
+    <h5 class="fs-14 mb-0 text-muted">
+        <span id="q1-static">--</span> <span class="text-lowercase">KM</span>
+    </h5>
+</div>
+
+
+                            
+                
+
 
                                 </div>
                             </div>
@@ -147,7 +166,7 @@
                                 <thead>
                                     <tr class="table-active">
                                         <th>#</th>
-                                        <th>Proizvodi</th>
+                                        <th>Proizvod</th>
                                         <th>Opis</th>
                                         <th>Prevod</th>
                                         <th>Tarifna oznaka</th>
@@ -156,7 +175,9 @@
                                         <th>Povlastica</th>
                                        
                                         <th>Količina</th>
-                                        <th>Broj paketa</th>
+                                        <th>Bruto/Neto (kg)</th>
+                                        <th>Broj koleta</th>
+                                        <th>Vrijednost (%)</th>
                                          <th>Cijena</th>
 
                                         <th style="border-right: 1px solid gray;">Ukupno</th>
@@ -308,17 +329,50 @@
             } else if (currencies.length > 1) {
                 symbol = "Multiple";
             }
+console.log("%c[DEBUG] Filling invoice details", "color: teal");
 
-            // Fill invoice details
-            console.log("%c[DEBUG] Filling invoice details", "color: teal");
-            document.getElementById("invoice-no").textContent = invoice.invoice_number || '--';
-            document.getElementById("invoice-date").textContent = new Date(invoice.date_of_issue).toLocaleDateString('hr');
-            document.getElementById("total-1").textContent = ` ${parseFloat(invoice.total_price).toFixed(2)} ${symbol}`;
-            if (document.getElementById("incoterm")) {
-                document.getElementById("incoterm").textContent = invoice.incoterm || '--';
-            }
-            document.getElementById("invoice-no").textContent = invoice.invoice_number || '--';
-            document.getElementById("invoice-id").textContent = invoice.id || '--';
+// Format helper
+function formatValue(val, suffix = '') {
+    return (val ?? '') !== '' ? `${val}${suffix}` : '--';
+}
+
+document.getElementById("invoice-no").textContent = invoice.invoice_number ?? '--';
+
+if (invoice.date_of_issue) {
+    const date = new Date(invoice.date_of_issue);
+    document.getElementById("invoice-date").textContent = date.toLocaleDateString('hr');
+} else {
+    document.getElementById("invoice-date").textContent = '--';
+}
+
+if (document.getElementById("total-1")) {
+    const price = parseFloat(invoice.total_price);
+    const formatted = isNaN(price) ? '--' : `${price.toFixed(2)} ${symbol}`;
+    document.getElementById("total-1").textContent = formatted;
+}
+
+if (document.getElementById("incoterm")) {
+    document.getElementById("incoterm").textContent = invoice.incoterm ?? '--';
+}
+
+if (document.getElementById("incoterm-destination")) {
+    document.getElementById("incoterm-destination").textContent = invoice.incoterm_destination ?? '--';
+}
+
+document.getElementById("total-weight-net").textContent = formatValue(invoice.total_weight_net);
+document.getElementById("total-weight-gross").textContent = formatValue(invoice.total_weight_gross);
+document.getElementById("total-num-packages").textContent = formatValue(invoice.total_num_packages);
+document.getElementById("invoice-id").textContent = invoice.id ?? '--';
+// q1-static logic
+const q1Span = document.getElementById("q1-static");
+const q1Hidden = document.getElementById("q1-estimate");
+
+const totalAmount = parseFloat(invoice.total_price ?? 0);
+const numPackages = parseFloat(invoice.total_num_packages ?? 0);
+const q1 = numPackages > 0 ? (parseFloat(totalAmount.toString().replace(/[^\d.-]/g, "")) / numPackages).toFixed(2) : "--";
+
+if (q1Span) q1Span.textContent = q1;
+if (q1Hidden) q1Hidden.value = numPackages > 0 ? q1 : "";
 
 
             const productsList = document.getElementById("products-list");
@@ -334,37 +388,43 @@
                     </tr>
                 `;
             } else {
-                productsList.innerHTML = '';
-                invoice.items.forEach((item, index) => {
-                    // Find best customs code match for Tarifna oznaka if not present
-                    let tarifnaOznaka = item.item_code || item.tariff_code || '';
-                    if (!tarifnaOznaka && Array.isArray(item.best_customs_code_matches) && item.best_customs_code_matches.length > 0) {
-                        const best = item.best_customs_code_matches.find(e => e.entry?.["Tarifna oznaka"]);
-                        if (best) {
-                            tarifnaOznaka = best.entry["Tarifna oznaka"];
-                        }
-                    }
-                    productsList.innerHTML += `
-                        <tr>
-                            <th scope="row">${index + 1}</th>
-                            <td>${item.item_description_original || item.item_description || ''}</td>
-                            <td>${item.item_description || ''}</td>
-                            <td>${item.item_description_translated || 'Nepoznato'}</td>
-                            <td>${tarifnaOznaka}</td>
-                            <td>${item.quantity_type || 'Nepoznato'}</td>
-                            <td>${item.country_of_origin || ''}</td>
-                            <td>${item.povlastica ? 'DA' : 'NE'}</td>
-                            
-                            <td>${item.quantity}</td>
-                            <td>${item.num_packages || '0'}</td>
-                            <td>${item.base_price} ${item.currency || ''}</td>
-                            
-                            <td >${item.total_price || (item.base_price * item.quantity).toFixed(2)} ${item.currency || ''}</td>
-                      
-                        </tr>
-                    `;
-                });
+    productsList.innerHTML = '';
+    const q1Value = parseFloat(document.getElementById("q1-static")?.textContent?.replace(/[^\d.-]/g, "") || "0");
+
+    invoice.items.forEach((item, index) => {
+        // Find best customs code match for Tarifna oznaka if not present
+        let tarifnaOznaka = item.item_code || item.tariff_code || '';
+        if (!tarifnaOznaka && Array.isArray(item.best_customs_code_matches) && item.best_customs_code_matches.length > 0) {
+            const best = item.best_customs_code_matches.find(e => e.entry?.["Tarifna oznaka"]);
+            if (best) {
+                tarifnaOznaka = best.entry["Tarifna oznaka"];
             }
+        }
+
+        const numPackages = parseFloat(item.num_packages || "0");
+        const estimatedTotal = !isNaN(q1Value * numPackages) ? (q1Value * numPackages).toFixed(2) : "0";
+
+        productsList.innerHTML += `
+            <tr>
+                <th scope="row">${index + 1}</th>
+                <td>${item.item_description_original || item.item_description || '<span class="text-muted">Nepoznato</span>'}</td>
+                <td>${item.item_description || '<span class="text-muted">Nepoznato</span>'}</td>
+                <td>${item.item_description_translated || '<span class="text-muted">Nepoznato</span>'}</td>
+                <td>${tarifnaOznaka || '<span class="text-muted">Nepoznato</span>'}</td>
+                <td>${item.quantity_type || '<span class="text-muted">Nepoznato</span>'}</td>
+                <td>${item.country_of_origin || ''}</td>
+                <td>${item.povlastica ? 'DA' : 'NE'}</td>
+                <td>${item.quantity}</td>
+                <td>${item.weight_gross || '0'}/${item.weight_net || '0'}</td>
+                <td>${item.num_packages || '0'}</td>
+                <td>${estimatedTotal}</td>
+                <td>${item.base_price} ${item.currency || ''}</td>
+                <td>${item.total_price || (item.base_price * item.quantity).toFixed(2)} ${item.currency || ''}</td>
+            </tr>
+        `;
+    });
+}
+
 
             // Fetch and fill supplier and importer data
             const supplierRes = await fetch(`/api/suppliers/${invoice.supplier_id}`, {
@@ -492,6 +552,7 @@
         document.body.removeChild(link);
     }
 </script>
+
 
 
 
