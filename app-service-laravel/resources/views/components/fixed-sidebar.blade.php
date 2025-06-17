@@ -42,7 +42,7 @@
          </a>
 
          <button class="btn btn-soft-info  pc-opcije-button" onclick="exportTableToCustomCSV()" style="height: 28px !important; "><i class="ri-file-excel-line align-bottom me-1 fs-5"></i> Export u CSV</button>
-         <a href="#" class="btn btn-soft-info pc-opcije-button" style="height: 28px !important; ">
+         <a class="btn btn-soft-info pc-opcije-button" style="height: 28px !important; ">
              <i class="ri-file-code-line align-bottom me-1 fs-5"></i> Export u XML
          </a>
          
@@ -273,9 +273,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         <i class="ri-file-excel-line align-bottom me-1 fs-5"></i>Export u CSV
                     </button>
 
-                    <button class="btn btn-soft-info w-100 p-0" onclick="document.querySelector('.pc-opcije-button[href*=\'file-code\']')?.click()" style="height: 28px !important;">
+                    <a class="btn btn-soft-info w-100 p-0" style="height: 28px !important;">
                         <i class="ri-file-code-line align-bottom me-1 fs-5"></i>Export u XML
-                    </button>
+                    </a>
 
                     @if($isDeklaracija)
                 
