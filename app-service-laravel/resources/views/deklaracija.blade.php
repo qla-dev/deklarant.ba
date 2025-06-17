@@ -293,6 +293,11 @@
             <input type="number" class="form-control text-end" id="total-num-packages" name="total_num_packages" placeholder="0">
         </div>
     </div>
+<input id="q1-estimate" name="q1">
+
+
+
+
             </div>
 
 
@@ -559,7 +564,7 @@ if (typeof window !== "undefined") {
 
 
 
-    function updateTotalAmount() {
+ function updateTotalAmount() {
     let total = 0;
     const currencySymbols = {
         "EUR": "€",
@@ -577,7 +582,6 @@ if (typeof window !== "undefined") {
         const quantity = parseFloat(row.querySelector('input[name="quantity[]"]')?.value || 0);
         total += price * quantity;
 
-        // Lock currency only once
         if (!lockedCurrency) {
             const currencyInput = row.querySelector('input[name="currency[]"]');
             if (currencyInput && currencyInput.value.trim()) {
@@ -595,7 +599,19 @@ if (typeof window !== "undefined") {
     document.getElementById("total-amount").value = formatted;
     document.getElementById("modal-total-amount").textContent = formatted;
     document.getElementById("total-edit").textContent = formatted;
+
+    // ⬇️ Also update q1-estimate here
+    const numPackages = parseFloat(document.getElementById("total-num-packages")?.value || 0);
+    const q1Input = document.getElementById("q1-estimate");
+
+    if (numPackages > 0) {
+        const q1 = total / numPackages;
+        q1Input.value = q1.toFixed(2);
+    } else {
+        q1Input.value = "";
+    }
 }
+
 
 
 
@@ -2150,19 +2166,33 @@ if (invoiceDateInput) {
 
 
 
-            document.getElementById("billing-name")?.addEventListener("input", () => {
-                const label = document.getElementById("billing-name-ai-label");
-                if (label) label.classList.add("d-none");
-            });
-            // Prefill total weights and package count
+         // Prefill total weights and package count
 setField("#total-weight-net", invoice.total_weight_net ?? "");
 setField("#total-weight-gross", invoice.total_weight_gross ?? "");
 setField("#total-num-packages", invoice.total_num_packages ?? "");
+
 console.log("Weights and package count set:",
     invoice.total_weight_net,
     invoice.total_weight_gross,
+    invoice.total_weight_gross,
     invoice.total_num_packages
 );
+
+// Prefill q1-estimate (total_value / total_num_packages)
+const totalValue = parseFloat(document.getElementById("total-amount")?.value) || 0;
+const numPackages = parseFloat(invoice.total_num_packages ?? 0);
+const q1Input = document.getElementById("q1-estimate");
+
+if (q1Input) {
+    if (numPackages > 0 && !isNaN(totalValue)) {
+        const rawAmount = totalValue.toString().replace(/[^\d.-]/g, ""); // Remove currency symbols
+        const amount = parseFloat(rawAmount) || 0;
+        q1Input.value = (amount / numPackages).toFixed(2);
+    } else {
+        q1Input.value = "";
+    }
+}
+
             
 
             // Hide AI label when user types in importer name
@@ -2517,7 +2547,7 @@ Swal.fire({
             console.log("✅ Ready after 3 seconds");
 
             // Swal.close(); // or any follow-up logic
-        }, 3000);
+        }, 4000);
     }
 });
 
