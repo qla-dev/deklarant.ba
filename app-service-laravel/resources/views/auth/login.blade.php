@@ -331,7 +331,7 @@ overflow-y: hidden;
 </h2>
                         <div class="header-images-area">
                     <div class="header-elements1 reveal h-100 w-100">
-                        <img src="{{ URL::asset('build/images/homepage/img/home.png') }}" alt="">
+                        <img src="{{ URL::asset('build/images/homepage/img/home2.png') }}" alt="">
                     </div>
                     <div class="header-elements2" data-aos="zoom-out" data-aos-duration="1000">
                         <img src="{{ URL::asset('build/images/homepage/elements/scan.png') }}" alt="" class="aniamtion-key-3">
@@ -348,7 +348,7 @@ overflow-y: hidden;
             <div class="col-lg-6  ps-lg-0 d-none d-lg-block" id="appImage">
                 <div class="header-images-area">
                     <div class="header-elements1 reveal h-100 w-100">
-                        <img src="{{ URL::asset('build/images/homepage/img/home.png') }}" alt="">
+                        <img src="{{ URL::asset('build/images/homepage/img/home2.png') }}" alt="">
                     </div>
                     <div class="header-elements2" data-aos="zoom-out" data-aos-duration="1000">
                         <img src="{{ URL::asset('build/images/homepage/elements/scan.png') }}" alt="" class="aniamtion-key-3">
