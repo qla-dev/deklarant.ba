@@ -2935,81 +2935,79 @@ if (overlay && !overlay.classList.contains('d-none')) {
 
 
 <script>
-    function exportTableToCustomCSV() {
-        const invoiceNo = document.getElementById("invoice-no1")?.textContent?.trim() || "unknown";
-        const filename = `declaration_${invoiceNo}.csv`;
+function exportTableToCustomCSV() {
+    const invoiceNo = document.getElementById("invoice-no")?.value?.trim() || "unknown";
+    const filename = `declaration_${invoiceNo}.csv`;
 
-        // Header row
-        const headers = [
-            "TPL1", "Zemlja porijekla", "Povlastica", "Naziv robe", "Broj komada",
-            "Vrijednost", "Koleta", "Bruto kg", "Neto kg", "Required"
-        ];
-        let csv = [headers.join(";")];
+    const headers = [
+        "TPL1", "Zemlja porijekla", "Povlastica", "Naziv robe", "Broj komada",
+        "Vrijednost", "Koleta", "Bruto kg", "Neto kg", "Required"
+    ];
+    let csv = [headers.join(";")];
 
-        const rows = document.querySelectorAll("#products-list tr");
+    const rows = document.querySelectorAll("#products-table tbody tr");
 
-        rows.forEach(row => {
-            const cells = row.querySelectorAll("td");
-            let rowData = [];
+    rows.forEach((row, index) => {
+        const rowData = [];
 
-            // TPL1
-            rowData.push(`"${cells[0]?.innerText.trim() || ""}"`);
+        // ✅ TPL1 (original product name)
+        const tplName = row.querySelector('input[name="item_name[]"]')?.value || "";
+        rowData.push(`"${tplName}"`);
 
-            // Zemlja porijekla
-            const origin = cells[5]?.innerText.trim() || "";
-            rowData.push(`"${origin}"`);
+        // ✅ Zemlja porijekla
+        const origin = row.querySelector('select[name="origin[]"]')?.value || "";
+        rowData.push(`"${origin}"`);
 
-            // Povlastica logic
-            const povlastica = origin === "TR" ? "TRP" : "";
-            rowData.push(`"${povlastica}"`);
+        // ✅ Povlastica from checkbox (DA if checked)
+        const povlastica = row.querySelector('input[name="tariff_privilege[]"]')?.checked ? "DA" : "NE";
+        rowData.push(`"${povlastica}"`);
 
-            // Naziv robe
-            rowData.push(`"${cells[2]?.textContent.trim() || ""}"`);
+        // ✅ Naziv robe (translated name)
+        const translatedName = row.querySelector('input[name="item_prev[]"]')?.value || "";
+        rowData.push(`"${translatedName}"`);
 
-            // Broj komada
-            rowData.push(`"${cells[7]?.innerText.trim() || ""}"`);
+        // ✅ Broj komada
+        const qty = row.querySelector('input[name="quantity[]"]')?.value || "";
+        rowData.push(`"${qty}"`);
 
-            // Vrijednost – clean currency & format
-            let rawValue = cells[12]?.innerText.trim() || "";
-            let numericOnly = rawValue.replace(/[^\d.,]/g, "")         // Remove currency text
-                                      .replace(",", ".")                // normalize comma to dot
-                                      .match(/[\d.]+/g)?.[0] || "";     // get numeric part
-            let formattedValue = numericOnly.replace(".", ",");         // convert . to ,
-            rowData.push(`"${formattedValue}"`);
+        // ✅ Vrijednost – convert decimal + remove currency
+        let rawPrice = row.querySelector('input[name="price[]"]')?.value || "";
+        let numericOnly = rawPrice.replace(/[^\d.,]/g, "").replace(",", ".");
+        let formattedValue = numericOnly ? parseFloat(numericOnly).toFixed(2).replace(".", ",") : "";
+        rowData.push(`"${formattedValue}"`);
 
-            // Koleta
-            rowData.push(`"${cells[9]?.innerText.trim() || ""}"`);
+        // ✅ Koleta
+        const koleta = row.querySelector('input[name="kolata[]"]')?.value || "";
+        rowData.push(`"${koleta}"`);
 
-            // Bruto/Neto kg split from one column (assume it's in index 8)
-            let bruto = "", neto = "";
-            const kgSplit = cells[8]?.innerText.trim().split("/");
-            if (kgSplit?.length === 2) {
-                bruto = kgSplit[0].trim();
-                neto = kgSplit[1].trim();
-            }
-            rowData.push(`"${bruto}"`);
-            rowData.push(`"${neto}"`);
+        // ✅ Bruto kg
+        const bruto = row.querySelector('input[name="weight_gross[]"]')?.value || "";
+        rowData.push(`"${bruto}"`);
 
-            // Required – always empty
-            rowData.push(`""`);
+        // ✅ Neto kg
+        const neto = row.querySelector('input[name="weight_net[]"]')?.value || "";
+        rowData.push(`"${neto}"`);
 
-            // Add this row to CSV
-            csv.push(rowData.join(";"));
-        });
+        // ✅ Required = empty
+        rowData.push(`""`);
 
-        // Download CSV with UTF-8 BOM
-        const csvFile = new Blob(["\uFEFF" + csv.join("\n")], {
-            type: "text/csv;charset=utf-8;"
-        });
+        csv.push(rowData.join(";"));
+    });
 
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(csvFile);
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
+    const csvFile = new Blob(["\uFEFF" + csv.join("\n")], {
+        type: "text/csv;charset=utf-8;"
+    });
+
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(csvFile);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
 </script>
+
+
 
 
 <script src="{{ URL::asset('build/js/declaration/swal-declaration-load.js') }}"></script>
