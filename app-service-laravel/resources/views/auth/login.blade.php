@@ -571,7 +571,7 @@ overflow-y: hidden;
 <!--===== PROCESS AREA STARTS =======-->
 <div class="process-section-area sp5">
   <div class="container">
-    <div class="row">
+    <div class="row pt-2 pb-3">
       <div class="col-lg-6 m-auto">
         <div class="process-header heading4 text-center">
           <span data-aos="fade-up" data-aos-duration="800">Kako funkcioniše</span>
@@ -579,16 +579,16 @@ overflow-y: hidden;
         </div>
       </div>
     </div>
-    <div class="space60"></div>
+    <div class="space60 d-none d-md-block"></div>
 
     <!-- Korak 1 -->
-    <div class="row align-items-center">
-      <div class="col-lg-7">
+    <div class="row align-items-center mb-4 mb-mb-0">
+      <div class="col-lg-7 order-2 order-md-1">
         <div class="process-images reveal">
           <img src="build/images/homepage/img/process-img-1.png" alt="Upload dokumenta">
         </div>
       </div>
-      <div class="col-lg-5">
+      <div class="col-lg-5 order-1 order-md-2">
         <div class="process-images-content heading4">
           <span data-aos="fade-left" data-aos-duration="800">1. Učitaj deklaraciju</span>
           <h2 data-aos="fade-left" data-aos-duration="1000">Upload carinske fakture</h2>
@@ -598,7 +598,7 @@ overflow-y: hidden;
     </div>
 
     <!-- Korak 2 -->
-    <div class="process-section2">
+    <div class="process-section2 ps-0 pe-0  mb-4 mb-mb-0">
       <img src="assets/images/elements/process-elements1.png" alt="" class="process-elements1 d-lg-block d-none">
       <img src="assets/images/elements/process-elements2.png" alt="" class="process-elements2 d-lg-block d-none">
       <div class="row align-items-center">
@@ -619,12 +619,12 @@ overflow-y: hidden;
 
     <!-- Korak 3 -->
     <div class="row align-items-center" style="padding-bottom:160px">
-      <div class="col-lg-7">
+      <div class="col-lg-7 order-2 order-md-1">
         <div class="process-images reveal">
           <img src="build/images/homepage/img/process-img-4.png" alt="AI klasifikacija">
         </div>
       </div>
-      <div class="col-lg-5">
+      <div class="col-lg-5 order-1 order-md-2">
         <div class="process-images-content heading4" >
           <span data-aos="fade-left" data-aos-duration="800">3. AI analiza i prijedlozi</span>
           <h2 data-aos="fade-left" data-aos-duration="1000">Automatska klasifikacija artikala</h2>
