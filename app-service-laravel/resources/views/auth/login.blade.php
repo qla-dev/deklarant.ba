@@ -173,7 +173,7 @@ overflow-y: hidden;
         }
 
         .bottom-buttons {
-          margin-bottom: 36px!important;
+          margin-bottom: 45px!important;
         }
 
         .header-images-area {
@@ -209,6 +209,9 @@ overflow-y: hidden;
         opacity: 0.8;
         cursor: not-allowed;
         background-color: #4db8e3 !important; /* Brighter version of the info color */
+    }
+    .header-btn2 {
+       margin-top: 36px!important;
     }
 
     </style>

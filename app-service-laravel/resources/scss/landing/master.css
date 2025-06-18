@@ -1427,10 +1427,10 @@ img {
   }
 }
 .welocme1-section-area .welcome-content-header .welcome-btnarea .header-btn {
-  margin-top: 32px;
+  margin-top: 36px;
 }
 .welocme1-section-area .welcome-content-header .welcome-btnarea .header-btn1 {
-  margin-top: 32px;
+  margin-top: 36px;
   margin-left: 16px;
 }
 @media (max-width: 767px) {
@@ -1482,6 +1482,7 @@ img {
   font-weight:500!important; 
   text-transform: unset!important; 
   color: #495057, imp !important;
+  margin-bottom: 0px!important;
 }
 
 .ai-span {color:#289cdb!important}
@@ -1496,10 +1497,10 @@ img {
   margin-top: 12px;
 }
 .welcome2-section-area .welcome2-header .header-btn2 {
-  margin-top: 32px;
+  margin-top: 36px;
 }
 .welcome2-section-area .welcome2-header .header-btn3 {
-  margin-top: 32px;
+  margin-top: 36px;
   margin-left: 16px;
 }
 @media (max-width: 767px) {
