@@ -465,7 +465,7 @@ overflow-y: hidden;
 
 
 <!--===== GENERATION AREA with Local Lottie Icons =======-->
-<div class="genaration2-section-area sp5" id="functions">
+<div class="genaration2-section-area sp5 pb-2 pb-md-5" id="functions">
   <div class="container">
     <div class="row">
       <div class="col-lg-6 m-auto">
@@ -582,7 +582,7 @@ overflow-y: hidden;
     <div class="space60 d-none d-md-block"></div>
 
     <!-- Korak 1 -->
-    <div class="row align-items-center mb-4 mb-mb-0">
+    <div class="row align-items-center sekcija ">
       <div class="col-lg-7 order-2 order-md-1">
         <div class="process-images reveal">
           <img src="build/images/homepage/img/process-img.png" alt="Upload dokumenta" class="aniamtion-key-3">
@@ -598,7 +598,7 @@ overflow-y: hidden;
     </div>
 
     <!-- Korak 2 -->
-    <div class="process-section2 ps-0 pe-0  mb-4 mb-mb-0">
+    <div class="row align-items-center sekcija">
       <img src="assets/images/elements/process-elements1.png" alt="" class="process-elements1 d-lg-block d-none">
       <img src="assets/images/elements/process-elements2.png" alt="" class="process-elements2 d-lg-block d-none">
       <div class="row align-items-center">
