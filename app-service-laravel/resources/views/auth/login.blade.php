@@ -653,13 +653,13 @@ overflow-y: hidden;
     </div>
 
     <!-- Korak 5 -->
-    <div class="row align-items-center">
-      <div class="col-lg-6">
+    <div class="row align-items-center sekcija">
+      <div class="col-lg-7">
         <div class="process-images reveal">
-          <img src="assets/images/all-images/process-img3.png" alt="Eksport fajla">
+          <img src="build/images/homepage/img/process-img-6.png" class="aniamtion-key-2" alt="Eksport fajla">
         </div>
       </div>
-      <div class="col-lg-6">
+      <div class="col-lg-5">
         <div class="process-images-content heading4">
           <span data-aos="fade-left" data-aos-duration="800">5. Eksport i dostava</span>
           <h2 data-aos="fade-left" data-aos-duration="1000">Preuzmi gotovu deklaraciju</h2>
