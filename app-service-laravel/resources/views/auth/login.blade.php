@@ -574,7 +574,7 @@ overflow-y: hidden;
 <!--===== PROCESS AREA STARTS =======-->
 <div class="process-section-area sp5">
   <div class="container">
-    <div class="row pt-2 pb-3">
+    <div class="row pt-2 pb-4">
       <div class="col-lg-6 m-auto">
         <div class="process-header heading4 text-center">
           <span data-aos="fade-up" data-aos-duration="800">Kako funkcioniše</span>
@@ -680,33 +680,40 @@ overflow-y: hidden;
 
  <script src="{{ URL::asset('build/js/login-js/plugins/jquery-3-6-0.min.js') }}"></script>
 
-    <script>
+   <script>
   $(document).ready(function () {
     // Otvori login formu
     $(".loginFormShow").on("click", function (e) {
       e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to top
       $("#appImage").removeClass("d-lg-block");
       $("#registerForm").addClass("d-none");
       $("#mobileFirstContent").addClass("d-none");
-      $("#loginForm").removeClass("d-none").hide().fadeIn(400);
-      document.getElementById("username")?.focus();
-
+      $("#loginForm").removeClass("d-none").hide().fadeIn(400, function () {
+        document.getElementById("username")?.focus(); // Focus after fadeIn
+      });
     });
 
     // Otvori registraciju
     $(".openRegister").on("click", function (e) {
       e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to top
       $("#loginForm").addClass("d-none");
       $("#appImage").removeClass("d-lg-block");
       $("#mobileFirstContent").addClass("d-none");
-      $("#registerForm").removeClass("d-none").hide().fadeIn(400);
+      $("#registerForm").removeClass("d-none").hide().fadeIn(400, function () {
+        document.getElementById("email")?.focus(); // Adjust to your first input field ID
+      });
     });
 
     // Povratak na login iz registracije
     $("#backToLogin").on("click", function (e) {
       e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
       $("#registerForm").addClass("d-none");
-      $("#loginForm").removeClass("d-none").hide().fadeIn(400);
+      $("#loginForm").removeClass("d-none").hide().fadeIn(400, function () {
+        document.getElementById("username")?.focus();
+      });
     });
 
     // Povratak na početnu
@@ -716,16 +723,14 @@ overflow-y: hidden;
       $("#registerForm").addClass("d-none");
       $("#appImage").addClass("d-lg-block");
       $("#mobileFirstContent").removeClass("d-none");
-        
     });
-      
-      // Povratak na početnu mobile
+
+    // Povratak na početnu mobile
     $(".back-home-mobile").on("click", function (e) {
       e.preventDefault();
       $("#loginForm").addClass("d-none");
       $("#registerForm").addClass("d-none");
       $("#mobileFirstContent").removeClass("d-none");
-        
     });
 
     // Globalna funkcija za prikaz/skrivanje lozinki
@@ -745,6 +750,7 @@ overflow-y: hidden;
     }
   });
 </script>
+
 <script>
     $(window).on('load', function () {
         $('#preloader').fadeOut('slow', function () {

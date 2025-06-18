@@ -1485,7 +1485,7 @@ img {
   margin-bottom: 0px!important;
 }
 
-.ai-span {color:#289cdb!important}
+.ai-span {color:#289cdb!important; background-color: unset!important; background: unset!important;}
 .logo-span {color:black!important}
 .welcome2-section-area .welcome2-header p {
   color: gray;
