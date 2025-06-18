@@ -11717,6 +11717,18 @@ a.header-btn9 i {
   margin: 0 0 0 6px;
 }
 
+@media (max-width:775px) {
 
+  .sekcija {
+    padding-bottom:1.5rem;
+  }
+}
+
+@media (min-width:776px) {
+
+  .sekcija {
+    padding-bottom:160px
+  }
+}
 
 /*============= RTL CSS AREA ENDS ===============*//*# sourceMappingURL=master.css.map */

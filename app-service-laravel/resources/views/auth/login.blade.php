@@ -312,7 +312,7 @@ overflow-y: hidden;
             <div class="col-lg-6 ps-lg-0 ps-lg-0 d-none d-lg-block">
                 <div class="welcome2-header heading3">
                     <span data-aos="fade-up" data-aos-duration="600">Oslobodite potencijal AI tehnologije</span>
-                    <h2 data-aos="fade-up" data-aos-duration="800" style="font-family: 'Facebook Sans', sans-serif; font-size: 3.5rem" class="naslov">
+                    <h2 data-aos="fade-up" data-aos-duration="800" style="font-family: 'Facebook Sans', sans-serif; font-size: 3.5rem; color:black" class="naslov">
   Obrađuj <b style="color: #289cdb;  font-family: 'Facebook Sans Bold', sans-serif;">deklaracije</b> do <b style="color: #289cdb;  font-family: 'Facebook Sans Bold', sans-serif;">11X brže</b> i uštedi
 </h2>
                      
@@ -585,7 +585,7 @@ overflow-y: hidden;
     <div class="row align-items-center mb-4 mb-mb-0">
       <div class="col-lg-7 order-2 order-md-1">
         <div class="process-images reveal">
-          <img src="build/images/homepage/img/process-img.png" alt="Upload dokumenta">
+          <img src="build/images/homepage/img/process-img.png" alt="Upload dokumenta" class="aniamtion-key-3">
         </div>
       </div>
       <div class="col-lg-5 order-1 order-md-2">
@@ -611,17 +611,17 @@ overflow-y: hidden;
         </div>
         <div class="col-lg-7">
           <div class="process-images reveal">
-            <img src="build/images/homepage/img/process-img-3.png" alt="Prepoznavanje firmi">
+            <img src="build/images/homepage/img/process-img-3.png" alt="Prepoznavanje firmi" class="aniamtion-key-1">
           </div>
         </div>
       </div>
     </div>
 
     <!-- Korak 3 -->
-    <div class="row align-items-center" style="padding-bottom:160px">
+    <div class="row align-items-center sekcija" >
       <div class="col-lg-7 order-2 order-md-1">
         <div class="process-images reveal">
-          <img src="build/images/homepage/img/process-img-4.png" alt="AI klasifikacija">
+          <img src="build/images/homepage/img/process-img-4.png" alt="AI klasifikacija"  class="aniamtion-key-3">
         </div>
       </div>
       <div class="col-lg-5 order-1 order-md-2">
@@ -634,17 +634,17 @@ overflow-y: hidden;
     </div>
 
     <!-- Korak 4 -->
-    <div class="row align-items-center"  style="padding-bottom:160px">
-      <div class="col-lg-6">
+    <div class="row align-items-center sekcija" >
+      <div class="col-lg-5">
         <div class="process-images-content heading4" style="padding:0 50px 0 0!important">
           <span data-aos="fade-right" data-aos-duration="800">4. Spasi i uređuj deklaraciju</span>
           <h2 data-aos="fade-right" data-aos-duration="1000">Deklaracija ostaje u tvojoj arhivi</h2>
-          <p data-aos="fade-right" data-aos-duration="1200">Nisi gotov u jednom sjedenju? Nema problema. Svaku deklaraciju možeš spremiti, kasnije uređivati i dovršiti kad god poželiš.</p>
+          <p data-aos="fade-right" data-aos-duration="1200">Nisi siguran u sve podatke odmah? Nema problema. Svaku deklaraciju možeš spremiti, kasnije uređivati i dovršiti kad god poželiš.</p>
         </div>
       </div>
-      <div class="col-lg-6">
+      <div class="col-lg-7">
         <div class="process-images reveal">
-          <img src="assets/images/all-images/process-img-save.png" alt="Spasi deklaraciju">
+           <img src="build/images/homepage/img/process-img-5.png" alt="Upload dokumenta" class="aniamtion-key-1">
         </div>
       </div>
     </div>
