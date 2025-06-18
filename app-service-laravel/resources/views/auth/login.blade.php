@@ -210,7 +210,7 @@ overflow-y: hidden;
         cursor: not-allowed;
         background-color: #4db8e3 !important; /* Brighter version of the info color */
     }
-    .header-btn2 {
+    #loginFormShow, #openRegister  {
        margin-top: 36px!important;
     }
 
