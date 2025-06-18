@@ -315,7 +315,7 @@ overflow-y: hidden;
             <div class="col-lg-6 ps-lg-0 ps-lg-0 d-none d-lg-block">
                 <div class="welcome2-header heading3">
                     <span data-aos="fade-up" data-aos-duration="600">Oslobodite potencijal AI tehnologije</span>
-                    <h2 data-aos="fade-up" data-aos-duration="800" style="font-family: 'Facebook Sans', sans-serif; font-size: 3.5rem; color:black" class="naslov">
+                    <h2 data-aos="fade-up" data-aos-duration="800" style="font-family: 'Facebook Sans', sans-serif; font-size: 3.5rem; color:black" class="naslov text-black">
   Obrađuj <b style="color: #289cdb;  font-family: 'Facebook Sans Bold', sans-serif;">deklaracije</b> do <b style="color: #289cdb;  font-family: 'Facebook Sans Bold', sans-serif;">11X brže</b> i uštedi
 </h2>
                      
@@ -331,7 +331,7 @@ overflow-y: hidden;
                 <div class="welcome2-header heading3">
                     <span data-aos="fade-up" data-aos-duration="600" style="margin-top: 3.7rem;
     margin-bottom: 2rem;">Oslobodite potencijal AI tehnologije</span>
-                    <h2 data-aos="fade-up" data-aos-duration="800" style="font-family: 'Facebook Sans', sans-serif; font-size: 3.5rem" class="naslov">
+                    <h2 data-aos="fade-up" data-aos-duration="800" style="font-family: 'Facebook Sans', sans-serif; font-size: 3.5rem; color:black!important" class="naslov">
   Obrađuj <b style="color: #289cdb;  font-family: 'Facebook Sans Bold', sans-serif;">deklaracije</b> do <b style="color: #289cdb;  font-family: 'Facebook Sans Bold', sans-serif;">11X brže</b> i uštedi
 </h2>
                         <div class="header-images-area">
