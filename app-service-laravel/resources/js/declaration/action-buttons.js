@@ -23,7 +23,7 @@
         const name = nameInput?.value.trim() || '';
         const desc = descInput?.value.trim() || '';
         const label = (name || desc) ?
-            `Klikni za pretragu: ${name} ${desc}` :
+            `Klikni za Google pretragu: ${name} ${desc}` :
             'Klikni za Google pretragu';
 
         // Update title attribute for fallback

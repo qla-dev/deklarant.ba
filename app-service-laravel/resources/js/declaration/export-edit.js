@@ -21,11 +21,14 @@ function exportTableToCustomCSV() {
         const origin = row.querySelector('select[name="origin[]"]')?.value || "";
         rowData.push(`"${origin}"`);
 
-        const povlastica = row.querySelector('input[name="tariff_privilege[]"]')?.checked ? "DA" : "NE";
+        const tariffVal = row.querySelector('input[name="tariff_privilege[]"]')?.value || "0";
+        const povlastica = tariffVal !== "0" ? tariffVal : "";
         rowData.push(`"${povlastica}"`);
 
-        const translatedName = row.querySelector('input[name="item_prev[]"]')?.value || "";
-        rowData.push(`"${translatedName}"`);
+
+
+       const translatedName = row.querySelector('input[name="item_prev[]"]')?.value.trim().toUpperCase() || "";
+       rowData.push(`"${translatedName}"`);
 
         const qty = row.querySelector('input[name="quantity[]"]')?.value || "";
         rowData.push(`"${qty}"`);

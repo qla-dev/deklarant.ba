@@ -34,7 +34,7 @@
             rowData.push(`"${cells[0]?.innerText.trim() || ""}"`); // TPL1
             rowData.push(`"${cells[5]?.innerText.trim() || ""}"`); // Zemlja porijekla
             rowData.push(`"${cells[6]?.innerText.trim() || ""}"`);
-           rowData.push(`"${cells[2]?.textContent.trim() || ""}"`);
+            rowData.push(`"${(cells[2]?.textContent.trim().toUpperCase()) || ""}"`);
             rowData.push(`"${cells[7]?.innerText.trim() || ""}"`); // Broj komada
             let rawValue = cells[12]?.innerText.trim() || "";
 let numericOnly = rawValue.replace(/[^\d.,]/g, "")         // Remove non-numeric/currency characters

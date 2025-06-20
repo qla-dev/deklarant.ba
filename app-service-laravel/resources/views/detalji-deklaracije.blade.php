@@ -414,7 +414,7 @@ if (q1Hidden) q1Hidden.value = numPackages > 0 ? q1 : "";
                 <td>${tarifnaOznaka || '<span class="text-muted">Nepoznato</span>'}</td>
                 <td>${item.quantity_type || '<span class="text-muted">Nepoznato</span>'}</td>
                 <td>${item.country_of_origin || ''}</td>
-                <td>${item.povlastica ? 'DA' : 'NE'}</td>
+              <td>${item.tariff_privilege && item.tariff_privilege !== "0" ? item.tariff_privilege : ''}</td>
                 <td>${item.quantity}</td>
                 <td>${item.weight_gross || '0'}/${item.weight_net || '0'}</td>
                 <td>${item.num_packages || '0'}</td>
