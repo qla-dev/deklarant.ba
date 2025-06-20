@@ -5,7 +5,8 @@ $("#newlink").on("change", ".tariff-privilege-toggle", function () {
 
     const itemName = row.find("input[name='item_name[]']").val()?.trim();
     const itemPrevod = row.find("input[name='item_prev[]']").val()?.trim();
-    const titleText = itemPrevod || itemName || "Odaberi povlasticu";
+const titleText = (itemPrevod || itemName || "Odaberi povlasticu").toUpperCase();
+
 
     if (checkbox.is(":checked")) {
         Swal.fire({
@@ -13,7 +14,7 @@ $("#newlink").on("change", ".tariff-privilege-toggle", function () {
             html: `
                 <div class="select-wrapper position-relative mt-2">
                     <select id="povlastica-select" class="form-select swal2-select">
-                        <option value="">Odaberi opciju</option>
+                        <option value="">Odaberi povlasticu</option>
                         <option value="CEFTA/AP">Povlastica po sporazumu CEFTA/AP</option>
                         <option value="EFTA1">Povlastica izloženih cijena</option>
                         <option value="EFTA2">Švicarska, Lihtenštajn</option>

@@ -1158,7 +1158,17 @@ table.dataTable thead th.dtfc-fixed-right {
 }
 
 
+.select2-search 
+{
+    border: 1px solid;
+    border-color: #ccc;
+}
 
-    
+
+
+[data-bs-theme=dark]  .select2-search 
+{
+    border-color:white;
+}  
 
 
