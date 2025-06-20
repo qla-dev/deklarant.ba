@@ -1252,11 +1252,16 @@ row.innerHTML = `
                   <i class="fas fa-times"></i>
                 </button>
                 
-                <input type="checkbox" class="form-check-input"
-       name="tariff_privilege[]"
-       ${tariff_privilege ? 'checked' : ''}
-       data-bs-toggle="tooltip" title="Povlastica DA/NE"
-       style="width: 30px; height: 26.66px; cursor: pointer;" />
+          <input type="checkbox" class="form-check-input tariff-privilege-toggle"
+  name="tariff_privilege_check[]"
+  ${tariff_privilege !== 0 && tariff_privilege !== "0" ? 'checked' : ''}
+  data-bs-toggle="tooltip" title="Povlastica DA/NE"
+  data-initial-value="${tariff_privilege || ''}"
+  style="width: 30px; height: 26.66px; cursor: pointer;" />
+
+<input type="hidden" name="tariff_privilege[]" value="${tariff_privilege || 0}">
+
+
 
               </div>
             </td>
@@ -2870,6 +2875,8 @@ Swal.fire({
     //Remove button logic 
 </script>
 
+
+
 <div id="pre-ai-overlay" class="{{ isset($id) ? 'd-none' : '' }}">
   <div class="bg-white rounded shadow p-4 text-center" style="width:420px;">
     <h5 class="mb-4" style="font-size: 20px">Pokretanje AI&nbsp;tehnologije</h5>
@@ -2945,7 +2952,7 @@ if (overlay && !overlay.classList.contains('d-none')) {
 
 
 
-
+<script src="{{ URL::asset('build/js/declaration/tariff-privilege.js') }}"></script>
 <script src="{{ URL::asset('build/js/declaration/export-edit.js') }}"></script>
 <script src="{{ URL::asset('build/js/declaration/swal-declaration-load.js') }}"></script>
 @endsection

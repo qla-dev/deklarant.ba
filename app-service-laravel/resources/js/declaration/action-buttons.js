@@ -220,8 +220,8 @@ document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
     const weight_gross = row.querySelector('[name="weight_gross[]"]')?.value || "";
     const weight_net = row.querySelector('[name="weight_net[]"]')?.value || "";
 
-    const povlastica = row.querySelector('input[type="checkbox"]')?.checked || false;
-    const tariff_privilege = povlastica ? "DA" : "NE";
+    const povlastica = row.querySelector('input[type="checkbox"]')?.checked ? 1 : 0;
+    const tariff_privilege = row.querySelector('input[name="tariff_privilege[]"]')?.value || "0";
 
     console.log(`[ROW ${index + 1}]`, {
         origin,

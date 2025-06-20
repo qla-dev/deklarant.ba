@@ -175,7 +175,7 @@ class InvoiceController extends Controller
                         'num_packages' => $item['package_num'] ?? null,
                         'weight_gross' => $item['weight_gross'] ?? null,
                         'weight_net' => $item['weight_net'] ?? null,
-                        'tariff_privilege' => $item['tariff_privilege'] === 'DA' ? 1 : 0
+                        'tariff_privilege' => $item['tariff_privilege'] !== '0' ? $item['tariff_privilege'] : null,
                     ]);
                     $submittedIds[] = $existingItem->id;
                 }

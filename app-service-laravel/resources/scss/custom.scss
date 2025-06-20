@@ -1103,6 +1103,62 @@ table.dataTable thead th.dtfc-fixed-right {
         font-family:inherit;            /* keeps whatever Bootstrap is using */
       }
 
+      .swal2-select {
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ced4da;
+  cursor: pointer;
+  outline: none;
+  background-color: var(--vz-topbar-search-bg) !important;
+  box-shadow: none;
+   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='gray' d='M4.646 6.646a.5.5 0 0 1 .708 0L8 9.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+  appearance: none; /* Remove native arrow */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.select-wrapper .dropdown-arrow-icon {
+  position: absolute;
+  right: 60px;
+  top: 54%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #6c757d; /* Optional: gray tone */
+  font-size: 14px;
+}
+
+.swal2-select.form-select {
+  padding-right: 2rem; /* Add space for icon */
+  cursor: pointer;
+}
+
+
+#povlastica-select{
+    width: unset!important;
+    padding-right: .375em!important ;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+#povlastica-select:focus {
+    box-shadow:unset!important;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.swal2-html-container .select-wrapper {
+
+    display: flex;
+    justify-content: center;
+}
+
+
+
     
 
 
