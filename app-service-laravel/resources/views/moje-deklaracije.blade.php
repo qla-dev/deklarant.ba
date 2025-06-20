@@ -49,6 +49,8 @@ Moje spašene deklaracije <span class="counter-value-invoice">0</span><span
                                
                                
                                 <th style="width: 100px;">Datum</th>
+                                <th style="width: 100px;"><i class="fa fa-balance-scale"></i> Bruto/Neto</th>
+                                <th style="width: 100px;"><i class="fa fa-cubes"></i> Broj koleta</th>
                                 
                                 <th>Klijent</th>
                                                             
@@ -185,6 +187,26 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             
             
+          {
+    data: null,
+    title: '<i class="fa-solid fa-scale-unbalanced"></i> Bruto/Neto',
+    render: function(data, type, row) {
+        const gross = row.total_weight_gross ?? '';
+        const net = row.total_weight_net ?? '';
+        if (!gross && !net) {
+            return '<span class="text-muted">Nepoznato</span>';
+        }
+        return `${gross} / ${net}`;
+    },
+    defaultContent: '<span class="text-muted">Nepoznato</span>'
+},{
+    data: 'total_num_packages',
+    title: '<i class="fa-regular fa-box-open"></i> Broj Koleta',
+    render: function(data, type, row) {
+        return data ? data : '<span class="text-muted">Nepoznato</span>';
+    },
+    defaultContent: '<span class="text-muted">Nepoznato</span>'
+},
        
 
 
@@ -247,17 +269,19 @@ document.addEventListener("DOMContentLoaded", function () {
                         </span>`;
         }
     }
-},
-            {
+},{
     data: 'total_price',
     title: 'Cijena',
     render: function(data, type, row) {
-        if (type === 'sort' || type === 'type') {
-            return parseFloat(data);
-        }
-        return `${parseFloat(data).toFixed(2)} KM`;
+        const numericValue = parseFloat(data?.toString().replace(/[^\d.,-]/g, "").replace(",", "."));
+        if (isNaN(numericValue)) return type === 'sort' || type === 'type' ? 0 : '--';
+        
+        return type === 'sort' || type === 'type'
+            ? numericValue
+            : `${numericValue.toFixed(2).replace('.', ',')} KM`;
     }
-},
+}
+,
             {
                 data: null,
                 title: 'Akcija',
