@@ -214,7 +214,7 @@ document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
     const origin = $(row).find('[name="origin[]"]').val() || "";
     const base_price = parseFloat(row.querySelector('[name="price[]"]')?.value || "0");
     const quantity = parseFloat(row.querySelector('[name="quantity[]"]')?.value || "0");
-    const total_price = parseFloat((base_price * quantity).toFixed(2));
+    const total_price = formatDecimal(base_price * quantity, 2);
     const quantity_type = row.querySelector('[name="quantity_type[]"]')?.value || "";
     const package_num = row.querySelector('[name="kolata[]"]')?.value || "";
     const weight_gross = row.querySelector('[name="weight_gross[]"]')?.value || "";
@@ -283,7 +283,7 @@ document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
                 incoterm_destination: document.getElementById("incoterm-destination").value.trim(),
                 invoice_number: document.getElementById("invoice-no").value.trim(),
                 file_name: fileName, // use the file name from the uploaded invoice
-                total_price: parseFloat(document.getElementById("total-amount")?.value || "0"),
+                total_price: parseFloat((document.getElementById("total-amount")?.value || "0").replace(',', '.')),
                 total_weight_net: parseFloat(document.getElementById("total-weight-net")?.value || "0"),
                 total_weight_gross: parseFloat(document.getElementById("total-weight-gross")?.value || "0"),
                 total_num_packages: parseInt(document.getElementById("total-num-packages")?.value || "0", 10),

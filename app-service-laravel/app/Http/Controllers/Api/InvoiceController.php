@@ -123,17 +123,23 @@ class InvoiceController extends Controller
 
     }
 
-  public function update(Request $request, $invoiceId)
+public function update(Request $request, $invoiceId)
 {
-    DB::beginTransaction(); // Ensure safe update
+    DB::beginTransaction();
+
     try {
         $invoice = Invoice::with('items')->findOrFail($invoiceId);
         $data = $request->all();
 
+        // Localized decimal parser
+        $normalizeDecimal = function ($value) {
+            return is_numeric($value) ? floatval($value) : floatval(str_replace(',', '.', preg_replace('/\./', '', $value)));
+        };
+
         // Update invoice metadata
         $invoice->update([
             'file_name' => $data['file_name'] ?? $invoice->file_name,
-            'total_price' => $data['total_price'] ?? $invoice->total_price,
+            'total_price' => isset($data['total_price']) ? $normalizeDecimal($data['total_price']) : $invoice->total_price,
             'date_of_issue' => $data['date_of_issue'] ?? $invoice->date_of_issue,
             'country_of_origin' => $data['country_of_origin'] ?? $invoice->country_of_origin,
             'importer_id' => $data['importer_id'] ?? $invoice->importer_id,
@@ -144,10 +150,7 @@ class InvoiceController extends Controller
             'total_weight_net' => $data['total_weight_net'] ?? $invoice->total_weight_net,
             'total_weight_gross' => $data['total_weight_gross'] ?? $invoice->total_weight_gross,
             'total_num_packages' => $data['total_num_packages'] ?? $invoice->total_num_packages,
-            'internal_status' => array_key_exists('internal_status', $data)? $data['internal_status']: 2,
-
-
-            
+            'internal_status' => array_key_exists('internal_status', $data) ? $data['internal_status'] : 2,
         ]);
 
         // Process items
@@ -155,56 +158,48 @@ class InvoiceController extends Controller
         $submittedIds = [];
 
         foreach ($submittedItems as $item) {
-            if (isset($item['item_id'])) {
-                // Update existing item
+            $basePrice = isset($item['base_price']) ? $normalizeDecimal($item['base_price']) : null;
+            $totalPrice = isset($item['total_price']) ? $normalizeDecimal($item['total_price']) : null;
+
+            $itemData = [
+                'item_code' => $item['item_code'],
+                'item_description_original' => $item['item_description_original'],
+                'item_description' => $item['item_description'],
+                'item_description_translated' => $item['item_description_translated'] ?? null,
+                'quantity' => $item['quantity'],
+                'base_price' => $basePrice,
+                'total_price' => $totalPrice,
+                'currency' => $item['currency'],
+                'version' => $item['version'],
+                'best_customs_code_matches' => $item['best_customs_code_matches'] ?? [],
+                'country_of_origin' => $item['origin'] ?? null,
+                'quantity_type' => $item['quantity_type'] ?? null,
+                'num_packages' => $item['package_num'] ?? null,
+                'weight_gross' => $item['weight_gross'] ?? null,
+                'weight_net' => $item['weight_net'] ?? null,
+                'tariff_privilege' => $item['tariff_privilege'] !== '0' ? $item['tariff_privilege'] : null,
+            ];
+
+            if (!empty($item['item_id'])) {
                 $existingItem = $invoice->items()->find($item['item_id']);
                 if ($existingItem) {
-                    $existingItem->update([
-                        'item_code' => $item['item_code'],
-                        'item_description_original' => $item['item_description_original'],
-                        'item_description' => $item['item_description'],
-                        'item_description_translated' => $item['item_description_translated'] ?? null,
-                        'quantity' => $item['quantity'],
-                        'base_price' => $item['base_price'],
-                        'total_price' => $item['total_price'],
-                        'currency' => $item['currency'],
-                        'version' => $item['version'],
-                        'best_customs_code_matches' => $item['best_customs_code_matches'] ?? [],
-                        'country_of_origin' => $item['origin'] ?? null,
-                        'quantity_type' => $item['quantity_type'] ?? null,
-                        'num_packages' => $item['package_num'] ?? null,
-                        'weight_gross' => $item['weight_gross'] ?? null,
-                        'weight_net' => $item['weight_net'] ?? null,
-                        'tariff_privilege' => $item['tariff_privilege'] !== '0' ? $item['tariff_privilege'] : null,
-                    ]);
+                    $existingItem->update($itemData);
                     $submittedIds[] = $existingItem->id;
                 }
             } else {
-                // Create new item
                 $newItem = $invoice->items()->create([
-                    'item_code' => $item['item_code'],
-                    'item_description_original' => $item['item_description_original'],
-                    'item_description' => $item['item_description'],
-                    'item_description_translated' => $item['item_description_translated'] ?? null,
-                    'quantity' => $item['quantity'],
-                    'base_price' => $item['base_price'],
-                    'total_price' => $item['total_price'],
-                    'currency' => $item['currency'],
-                    'version' => $item['version'],
-                    'country_of_origin' => $item['origin'] ?? null,
-                    'quantity_type' => $item['quantity_type'] ?? null,
-                    'num_packages' => $item['package_num'] ?? null,
+                    ...$itemData,
                     'tariff_privilege' => $item['tariff_privilege'] === 'DA' ? 1 : 0,
-                    'best_customs_code_matches' => $item['best_customs_code_matches'] ?? []
                 ]);
                 $submittedIds[] = $newItem->id;
             }
         }
 
-        // Optional: Delete removed items
+        // Delete removed items
         $invoice->items()->whereNotIn('id', $submittedIds)->delete();
 
         DB::commit();
+
         return response()->json([
             'message' => 'Deklaracija i stavke uspješno ažurirane',
             'data' => $invoice->fresh('items')
@@ -222,8 +217,8 @@ class InvoiceController extends Controller
             'trace' => $e->getTraceAsString()
         ]);
 
-        $message = $e->getMessage();
         $translatedMessage = 'Došlo je do greške prilikom obrade deklaracije.';
+        $message = $e->getMessage();
 
         if (str_contains($message, 'Integrity constraint violation')) {
             if (str_contains($message, 'item_description_original')) {
@@ -244,8 +239,6 @@ class InvoiceController extends Controller
         ], 500);
     }
 }
-
-    
 
     public function destroy($invoiceId)
     {

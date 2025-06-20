@@ -438,6 +438,7 @@
 <!-- <script src="{{ URL::asset('build/js/pages/invoicecreate.init.js') }}"></script> -->
 <script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
+<script src="{{ URL::asset('build/js/declaration/format-to-decimal.js') }}"></script>
 <script src="{{ URL::asset('build/js/declaration/fix-sidebar.js') }}"></script>
 <script src="{{ URL::asset('build/js/declaration/action-buttons.js') }}"></script>
 <script src="{{ URL::asset('build/js/declaration/swal-declaration-load.js') }}"></script>
@@ -445,6 +446,8 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/bs.js"></script>
+
+
 
 <script>
  
@@ -598,8 +601,7 @@ if (typeof window !== "undefined") {
 
     const currency = lockedCurrency || "EUR";
     const currencySymbol = currencySymbols[currency] || currency;
-    const formatted = `${total.toFixed(2)} ${currencySymbol}`;
-
+    const formatted = `${formatDecimal(total, 2)} ${currencySymbol}`;
     document.getElementById("total-amount").value = formatted;
     document.getElementById("modal-total-amount").textContent = formatted;
     document.getElementById("total-edit").textContent = formatted;
@@ -1007,7 +1009,7 @@ function addRowToInvoice(item = {}, suggestions = []) {
             const quantity = item.quantity || 0;
             const origin = item.country_of_origin || "DE";
             const currency = item.currency || "EUR";
-            const total = (price * quantity).toFixed(2);
+            const total = formatDecimal(price * quantity, 2);
             const desc = (item.item_description ?? "") || "";
             const translate = item.translate || item.item_description_translated || "";
             const package_num = item.num_packages || 0;
@@ -1210,14 +1212,18 @@ row.innerHTML = `
          
 
    <td style="width: 60px;">
-            <input 
-              type="number" 
-              class="form-control text-start-truncate" 
-              name="price[]" 
-              value="${price}" 
-              style="width: 100%;"
-              
-            >
+    <input 
+  type="text" 
+  class="form-control text-start-truncate price-input" 
+  name="price[]" 
+  value="${formatDecimal(price)}" 
+  inputmode="decimal" 
+  pattern="^\d{0,8}(,\d{0,2})?$" 
+  style="width: 100%;"
+/>
+
+
+
           </td>
 
 
@@ -1324,7 +1330,7 @@ $(row).find('[data-bs-toggle="tooltip"]').each(function () {
             const row = $(this).closest('tr');
             const price = parseFloat(row.find('input[name="price[]"]').val()) || 0;
             const quantity = parseInt(row.find('input[name="quantity[]"]').val()) || 0;
-            const total = (price * quantity).toFixed(2);
+            const total = formatDecimal(price * quantity, 2);
             row.find('input[name="total[]"]').val(total);
 
             // Optional: update global total as well
@@ -2911,13 +2917,44 @@ if (overlay && !overlay.classList.contains('d-none')) {
                 }).then(() => window.location.href = "/");
             }
         }
-    }, 12000); // provjera nakon 12 s
+    }, 15000); // provjera nakon 12 s
 }
 </script>
 
 
 
 
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.price-input').forEach(input => {
+
+    // Prevent invalid characters as you type
+    input.addEventListener('beforeinput', function (e) {
+      const char = e.data;
+      if (!char) return;
+
+      const currentValue = this.value;
+      const newValue = currentValue.slice(0, this.selectionStart) + char + currentValue.slice(this.selectionEnd);
+
+      // Allow only numbers and one comma, and max 2 decimals
+      if (!/^\d{0,8}(,\d{0,2})?$/.test(newValue)) {
+        e.preventDefault();
+      }
+    });
+
+    // Format on blur if necessary
+    input.addEventListener('blur', function () {
+      if (this.value && !this.value.includes(',')) {
+        this.value += ',00';
+      } else if (this.value.match(/^(\d+),(\d)$/)) {
+        // Pad with zero if only 1 decimal digit
+        this.value += '0';
+      }
+    });
+  });
+});
+</script>
 
 
 
