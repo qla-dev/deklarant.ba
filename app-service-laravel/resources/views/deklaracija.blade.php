@@ -311,7 +311,7 @@
                                 <th style="width: 200px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; padding-right: 50px!important;">Proizvod </th>
                                 <th style="width: 140px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; margin-left: -5px!important;">Opis </th>
                                 <th style="width: 220px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Tarifna oznaka</th>
-                                <th style="width: 80px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">T. kvantiteta</th>
+                                <th style="width: 80px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Jed. mjere</th>
                                 <th style="width:110px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Porijeklo</th>
                               
                                  <th style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem;">Koleta</th>

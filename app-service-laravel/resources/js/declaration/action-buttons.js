@@ -13,7 +13,7 @@
     const desc = descInput?.value.trim() || '';
     const tariff = tariffInput?.value?.trim() || '';
 
-    const query = encodeURIComponent(`${name} ${desc} ${tariff}`);
+    const query = encodeURIComponent(`${desc} hs code`);
 
     if (name || desc) {
         window.open(`https://www.google.com/search?q=${query}`, '_blank');

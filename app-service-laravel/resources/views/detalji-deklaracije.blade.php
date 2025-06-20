@@ -170,7 +170,7 @@
                                         <th>Opis</th>
                                         <th>Prevod</th>
                                         <th>Tarifna oznaka</th>
-                                        <th>Tip kvantiteta</th>
+                                        <th>Jedinica mjere</th>
                                         <th>Zemlja porijekla</th>
                                         <th>Povlastica</th>
                                        
