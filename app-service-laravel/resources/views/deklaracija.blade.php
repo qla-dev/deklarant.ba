@@ -322,7 +322,7 @@
                                         Neto (kg)
                                     </small>
                                 </th>
-                                    <th style="width: 100px; text-align: center;vertical-align: middle;">
+                                    <th style="width: 150px; text-align: center;vertical-align: middle;">
                                     Količina<br>
                                   
                                 </th>
@@ -611,7 +611,7 @@ if (typeof window !== "undefined") {
 
 
     if (numPackages > 0) {
-        const q1 = total / numPackages;
+        const q1 =  numPackages/ total;
         q1Input.value = q1.toFixed(2);
 q1Input.dispatchEvent(new Event("input")); // ✅ ključni event za procjenu
     } else {
@@ -2244,7 +2244,7 @@ if (q1Input) {
     if (numPackages > 0 && !isNaN(totalValue)) {
         const rawAmount = totalValue.toString().replace(/[^\d.-]/g, ""); // Remove currency symbols
         const amount = parseFloat(rawAmount) || 0;
-        q1Input.value = (amount / numPackages).toFixed(2);
+        q1Input.value = (numPackages / amount ).toFixed(2);
     } else {
         q1Input.value = "";
     }

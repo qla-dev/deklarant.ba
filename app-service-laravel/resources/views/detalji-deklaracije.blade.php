@@ -369,7 +369,9 @@ const q1Hidden = document.getElementById("q1-estimate");
 
 const totalAmount = parseFloat(invoice.total_price ?? 0);
 const numPackages = parseFloat(invoice.total_num_packages ?? 0);
-const q1 = numPackages > 0 ? (parseFloat(totalAmount.toString().replace(/[^\d.-]/g, "")) / numPackages).toFixed(2) : "--";
+const q1 = numPackages > 0
+  ? (numPackages / parseFloat(totalAmount.toString().replace(/[^\d.-]/g, ""))).toFixed(2)
+  : "--";
 
 if (q1Span) q1Span.textContent = q1;
 if (q1Hidden) q1Hidden.value = numPackages > 0 ? q1 : "";
