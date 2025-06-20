@@ -322,7 +322,7 @@
                                         Neto (kg)
                                     </small>
                                 </th>
-                                    <th style="width: 150px; text-align: center;vertical-align: middle;">
+                                    <th style="width: 100px; text-align: center;vertical-align: middle;">
                                     Količina<br>
                                   
                                 </th>
