@@ -3,18 +3,23 @@
 
 
     function searchFromInputs(button) {
-        const nameInput = button.closest('.input-group').querySelector('.item-name');
-        const descInput = button.closest('.input-group').parentElement.querySelector('.item-desc');
+    const container = button.closest('td'); 
 
-        const name = nameInput.value.trim();
-        const desc = descInput.value.trim();
-        const query = encodeURIComponent(`${name} ${desc}`);
+    const nameInput = container.querySelector('.item-name');
+    const descInput = container.querySelector('.item-desc');
+    const tariffInput = container.parentElement.querySelector('.select2-tariff');
 
+    const name = nameInput?.value.trim() || '';
+    const desc = descInput?.value.trim() || '';
+    const tariff = tariffInput?.value?.trim() || '';
 
-        if (name || desc) {
-            window.open(`https://www.google.com/search?q=${query}`, '_blank');
-        }
+    const query = encodeURIComponent(`${name} ${desc} ${tariff}`);
+
+    if (name || desc) {
+        window.open(`https://www.google.com/search?q=${query}`, '_blank');
     }
+}
+
 
     function updateTooltip(button) {
         const nameInput = document.querySelector('.item-name');
