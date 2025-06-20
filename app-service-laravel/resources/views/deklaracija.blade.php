@@ -1063,7 +1063,6 @@ row.innerHTML = `
                 data-suggestions='${JSON.stringify(suggestions)
                 .replace(/&/g, '&amp;')
                 .replace(/'/g, '&#39;')
-                .replace(/"/g, '&quot;')
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;')}'>
               </select>
