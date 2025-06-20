@@ -3,7 +3,7 @@
 
     function exportTableToCustomCSV() {
         const invoiceNo = document.getElementById("invoice-no")?.textContent?.trim() || "unknown";
-        const filename = `declaration_${invoiceNo}.csv`;
+        const filename = `deklaracija-ai_${invoiceNo}.csv`;
 
         // Define custom headers (must match your spec exactly)
         const headers = [
@@ -31,7 +31,8 @@
 
 
             // Map cells to the structure manually or with fallback
-            rowData.push(`"${cells[0]?.innerText.trim() || ""}"`); // TPL1
+            let tpl1 = (cells[3]?.innerText.trim() || "").replace(/\s+/g, '').slice(0, 8);
+            rowData.push(`"${tpl1}"`); // TPL1
             rowData.push(`"${cells[5]?.innerText.trim() || ""}"`); // Zemlja porijekla
             rowData.push(`"${cells[6]?.innerText.trim() || ""}"`);
             rowData.push(`"${(cells[2]?.textContent.trim().toUpperCase()) || ""}"`);

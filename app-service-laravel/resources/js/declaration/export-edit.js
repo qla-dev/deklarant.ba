@@ -1,7 +1,7 @@
   // ✅ Export to CSV
 function exportTableToCustomCSV() {
     const invoiceNo = document.getElementById("invoice-no")?.value?.trim() || "unknown";
-    const filename = `declaration_${invoiceNo}.csv`;
+    const filename = `deklaracija-ai_${invoiceNo}.csv`;
 
     const headers = [
         "TPL1", "Zemlja porijekla", "Povlastica", "Naziv robe", "Broj komada",
@@ -15,8 +15,10 @@ function exportTableToCustomCSV() {
     rows.forEach((row) => {
         const rowData = [];
 
-        const tplName = row.querySelector('input[name="item_name[]"]')?.value || "";
+        let tplName = row.querySelector('select[name="item_code[]"]')?.value || "";
+        tplName = tplName.replace(/\s+/g, '').slice(0, 8);  // Remove spaces and limit to 8 digits
         rowData.push(`"${tplName}"`);
+
 
         const origin = row.querySelector('select[name="origin[]"]')?.value || "";
         rowData.push(`"${origin}"`);

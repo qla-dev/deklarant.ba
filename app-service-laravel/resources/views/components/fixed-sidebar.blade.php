@@ -45,7 +45,7 @@
              <i class="ri-file-3-line align-bottom me-1 fs-5"></i> Originalni dokument
          </a>
             <a href="javascript:void(0);" onclick="autoDownloadPDF()" class="btn btn-soft-info pc-opcije-button" style="height: 28px !important;">
-    <i class="ri-file-pdf-line align-bottom me-1 fs-5"></i> Export u PDF
+    <i class="ri-file-pdf-2-line align-bottom me-1 fs-5"></i> Export u PDF
 </a>
 
          <button class="btn btn-soft-info  pc-opcije-button" onclick="exportTableToCustomCSV()" style="height: 28px !important; "><i class="ri-file-excel-line align-bottom me-1 fs-5"></i> Export u CSV</button>
