@@ -37,13 +37,7 @@
             rowData.push(`"${cells[6]?.innerText.trim() || ""}"`);
             rowData.push(`"${(cells[2]?.textContent.trim().toUpperCase()) || ""}"`);
             rowData.push(`"${cells[7]?.innerText.trim() || ""}"`); // Broj komada
-            let rawValue = cells[12]?.innerText.trim() || "";
-let numericOnly = rawValue.replace(/[^\d.,]/g, "")         // Remove non-numeric/currency characters
-                          .replace(",", ".")                // Normalize comma to dot
-                          .match(/[\d.]+/g)?.[0] || "";     // Extract numeric part
-let formattedValue = numericOnly.replace(".", ",");         // Convert decimal point to comma
-
-rowData.push(`"${formattedValue}"`);
+            rowData.push(`"${(cells[11]?.innerText.trim().split(' ')[0]) || ""}"`);
             rowData.push(`"${cells[9]?.innerText.trim() || ""}"`); // Koleta (empty)
             rowData.push(`"${bruto}"`); // Bruto kg
             rowData.push(`"${neto}"`);  // Neto kg
