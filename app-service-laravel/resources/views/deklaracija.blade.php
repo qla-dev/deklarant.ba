@@ -580,7 +580,7 @@ if (typeof window !== "undefined") {
 
    productRows.forEach((row) => {
     const itemName = row.querySelector('input[name="item_name[]"]')?.value?.trim();
-    const price = parseFloat(row.querySelector('input[name="price[]"]')?.value || 0);
+    const price = parseFloat((row.querySelector('input[name="price[]"]')?.value || '0').replace(',', '.'));
     const quantity = parseFloat(row.querySelector('input[name="quantity[]"]')?.value || 0);
 
     // 🚫 Skip rows with no name or zeroed values
