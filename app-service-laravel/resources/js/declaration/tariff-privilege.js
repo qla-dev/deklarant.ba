@@ -3,7 +3,6 @@ $("#newlink").on("change", ".tariff-privilege-toggle", function () {
     const hiddenInput = checkbox.closest("td").find("input[name='tariff_privilege[]']");
     const row = checkbox.closest("tr");
 
-    // Grab the item name or fallback to translation
     const itemName = row.find("input[name='item_name[]']").val()?.trim();
     const itemPrevod = row.find("input[name='item_prev[]']").val()?.trim();
     const titleText = itemPrevod || itemName || "Odaberi povlasticu";
@@ -14,7 +13,7 @@ $("#newlink").on("change", ".tariff-privilege-toggle", function () {
             html: `
                 <div class="select-wrapper position-relative mt-2">
                     <select id="povlastica-select" class="form-select swal2-select">
-                        <option value="">Odaberi povlasticu</option>
+                        <option value="">Odaberi opciju</option>
                         <option value="CEFTA/AP">Povlastica po sporazumu CEFTA/AP</option>
                         <option value="EFTA1">Povlastica izloženih cijena</option>
                         <option value="EFTA2">Švicarska, Lihtenštajn</option>
@@ -45,12 +44,20 @@ $("#newlink").on("change", ".tariff-privilege-toggle", function () {
         }).then(result => {
             if (result.isConfirmed) {
                 hiddenInput.val(result.value);
+                checkbox.attr('data-bs-original-title', result.value) // for Bootstrap tooltip internals
+        .attr('title', result.value); // optional, for DOM consistency
+
+// Refresh tooltip instance
+bootstrap.Tooltip.getInstance(checkbox[0])?.dispose();
+new bootstrap.Tooltip(checkbox[0]);
             } else {
                 checkbox.prop('checked', false);
                 hiddenInput.val("0");
+                checkbox.attr('title', 'Odaberi povlasticu').tooltip('dispose').tooltip();
             }
         });
     } else {
         hiddenInput.val("0");
+        checkbox.attr('title', 'Odaberi povlasticu').tooltip('dispose').tooltip();
     }
 });

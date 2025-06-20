@@ -1037,14 +1037,15 @@ row.innerHTML = `
             </button>
               <input type="text" class="form-control item-desc" name="item_desc[]" placeholder="Opis" value="${desc}" style="flex:1;">
             </div>
-            <input 
-              type="text" 
-              class="form-control form-control-sm mt-1" 
-              style="font-size: 0.65rem; padding-left:14.4px; height:37.1px;" 
-              name="item_prev[]" 
-              placeholder="Prevod"
-              value="${translate}"
-            >
+          <input 
+  type="text" 
+  class="form-control form-control-sm mt-1 text-uppercase"
+  style="font-size: 0.65rem; padding-left:14.4px; height:37.1px; text-transform: uppercase;"
+  name="item_prev[]" 
+  placeholder="Prevod"
+  value="${translate}"
+>
+
           </td>
            <input type="hidden" name="item_id[]" value="${itemId || ''}">
          <input 
@@ -1070,6 +1071,7 @@ row.innerHTML = `
 
               <button
                 type="button"
+                  data-bs-toggle="tooltip"
                 class="btn btn-outline-info btn-sm show-ai-btn"
 
                 style="
@@ -1252,15 +1254,22 @@ row.innerHTML = `
                   <i class="fas fa-times"></i>
                 </button>
                 
-          <input type="checkbox" class="form-check-input tariff-privilege-toggle"
+  <input 
+  type="checkbox" 
+  class="form-check-input tariff-privilege-toggle"
   name="tariff_privilege_check[]"
   ${tariff_privilege !== 0 && tariff_privilege !== "0" ? 'checked' : ''}
-  data-bs-toggle="tooltip" title="Povlastica DA/NE"
-  data-initial-value="${tariff_privilege || ''}"
-  style="width: 30px; height: 26.66px; cursor: pointer;" />
+  title="${tariff_privilege !== 0 && tariff_privilege !== '0' ? tariff_privilege : 'Odaberi povlasticu'}"
+  data-bs-toggle="tooltip"
+  style="width: 30px; height: 26.66px; cursor: pointer;" 
+/>
 
-<input type="hidden" name="tariff_privilege[]" value="${tariff_privilege || 0}">
 
+<input 
+  type="hidden" 
+  name="tariff_privilege[]" 
+  value="${tariff_privilege || 0}"
+>
 
 
               </div>
@@ -1294,6 +1303,10 @@ row.innerHTML = `
             }
 
             tbody.appendChild(row);
+            // ✅ Re-init all tooltips inside the new row
+$(row).find('[data-bs-toggle="tooltip"]').each(function () {
+  new bootstrap.Tooltip(this);
+});
             
             initializeTariffSelects();
             updateProcjenaEstimates(); 
