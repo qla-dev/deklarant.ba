@@ -370,7 +370,7 @@ const q1Hidden = document.getElementById("q1-estimate");
 const totalAmount = parseFloat(invoice.total_price ?? 0);
 const numPackages = parseFloat(invoice.total_num_packages ?? 0);
 const q1 = numPackages > 0
-  ? (numPackages / parseFloat(totalAmount.toString().replace(/[^\d.-]/g, ""))).toFixed(2)
+  ? (numPackages / parseFloat(totalAmount.toString().replace(/[^\d.-]/g, ""))).toFixed(6)
   : "--";
 
 if (q1Span) q1Span.textContent = q1;

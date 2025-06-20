@@ -612,7 +612,7 @@ if (typeof window !== "undefined") {
 
     if (numPackages > 0) {
         const q1 =  numPackages/ total;
-        q1Input.value = q1.toFixed(2);
+        q1Input.value = q1.toFixed(6);
 q1Input.dispatchEvent(new Event("input")); // ✅ ključni event za procjenu
     } else {
         q1Input.value = "";
@@ -1046,49 +1046,53 @@ row.innerHTML = `
 >
 
           </td>
-           <input type="hidden" name="item_id[]" value="${itemId || ''}">
-         <input 
+<input type="hidden" name="item_id[]" value="${itemId || ''}">
+<input 
   type="hidden" 
   name="best_customs_code_matches[]" 
-  value='${JSON.stringify(best_customs_code_matches || [])}'>
+  value='${JSON.stringify(best_customs_code_matches || [])
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/&/g, '&amp;')
+    .replace(/'/g, '&#39;')
+  }'>
 
+<td class="text-start" style="width: 150px;">
+  <div style="position: relative; width: 100%;">
+    <select
+      class="form-control select2-tariff"
+      style="width: 100%; padding-right: 45px;"
+      name="item_code[]"
+      data-prefill="${tariff || ''}"
+      data-suggestions='${JSON.stringify(suggestions || [])
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/&/g, '&amp;')
+        .replace(/'/g, '&#39;')
+      }'>
+    </select>
 
-          <td class="text-start" style="width: 150px;">
-            <div style="position: relative; width: 100%;">
-              <select
-                class="form-control select2-tariff "
-                style="width: 100%; padding-right: 45px;"
-                name="item_code[]"
-                data-prefill="${tariff}"
-                data-suggestions='${JSON.stringify(suggestions)
-                .replace(/&/g, '&amp;')
-                .replace(/'/g, '&#39;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')}'>
-              </select>
+    <button
+      type="button"
+      data-bs-toggle="tooltip"
+      class="btn btn-outline-info btn-sm show-ai-btn"
+      style="
+        position: absolute;
+        top: 50%;
+        right: 5px;
+        transform: translateY(-50%);
+        height: 30px;
+        width: 30px;
+        padding: 0;
+        border-radius: 3px;
+      "
+      title="Prikaži AI prijedloge"
+    >
+      <i class="fas fa-wand-magic-sparkles" style="font-size: 16px;"></i>
+    </button>
+  </div>
+</td>
 
-              <button
-                type="button"
-                  data-bs-toggle="tooltip"
-                class="btn btn-outline-info btn-sm show-ai-btn"
-
-                style="
-                  position: absolute;
-                  top: 50%;
-                  right: 5px;
-                  transform: translateY(-50%);
-                  height: 30px;
-                  width: 30px;
-                  padding: 0;
-                  border-radius: 3px;
-                "
-                
-                title="Prikaži AI prijedloge"
-              >
-                <i class="fas fa-wand-magic-sparkles" style="font-size: 16px;"></i>
-              </button>
-            </div>
-          </td>
 
           <td style="width: 60px;">
             <input 
@@ -2243,7 +2247,7 @@ if (q1Input) {
     if (numPackages > 0 && !isNaN(totalValue)) {
         const rawAmount = totalValue.toString().replace(/[^\d.-]/g, ""); // Remove currency symbols
         const amount = parseFloat(rawAmount) || 0;
-        q1Input.value = (numPackages / amount ).toFixed(2);
+        q1Input.value = (numPackages / amount ).toFixed(6);
     } else {
         q1Input.value = "";
     }
