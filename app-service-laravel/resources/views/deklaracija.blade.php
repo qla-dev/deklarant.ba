@@ -1103,16 +1103,16 @@ row.innerHTML = `
 </td>
 
 
-          <td style="width: 60px;">
-            <input 
-              type="text" 
-              class="form-control" 
-              name="quantity_type[]" 
-              placeholder="AD, AE.." 
-              value="${qtype}"
-              
-            >
-          </td>
+         <td style="width: 60px;">
+  <input 
+    type="text" 
+    class="form-control" 
+    name="quantity_type[]" 
+    placeholder="AD, AE.." 
+    value="${qtype || 'PSC'}"
+  >
+</td>
+
 
           <td style="width: 100px;">
             <select class="form-select" name="origin[]" style="width: 100%;">
