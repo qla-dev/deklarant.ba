@@ -212,7 +212,9 @@ document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
     }
 
     const origin = $(row).find('[name="origin[]"]').val() || "";
-    const base_price = parseFloat(row.querySelector('[name="price[]"]')?.value || "0");
+    const rawPrice = row.querySelector('[name="price[]"]')?.value || "0";
+    const parsedPrice = parseFloat(rawPrice.replace(',', '.')) || 0;
+    const base_price = parsedPrice.toFixed(2).replace('.', ','); // this is a string
     const quantity = parseFloat(row.querySelector('[name="quantity[]"]')?.value || "0");
     const total_price = formatDecimal(base_price * quantity, 2);
     const quantity_type = row.querySelector('[name="quantity_type[]"]')?.value || "";

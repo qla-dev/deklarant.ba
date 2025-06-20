@@ -241,6 +241,7 @@
 @endsection
 @section('script')
 <script src="{{ URL::asset('build/js/pages/invoicedetails.js') }}"></script>
+<script src="{{ URL::asset('build/js/declaration/format-to-decimal.js') }}"></script>
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="{{ URL::asset('build/js/declaration/fix-sidebar.js') }}"></script>
@@ -346,10 +347,19 @@ if (invoice.date_of_issue) {
 }
 
 if (document.getElementById("total-1")) {
-    const price = parseFloat(invoice.total_price);
-    const formatted = isNaN(price) ? '--' : `${price.toFixed(2)} ${symbol}`;
+    const rawPrice = invoice.total_price ?? "0";
+    const price = parseFloat(rawPrice.toString().replace(',', '.'));
+
+    console.log("[DEBUG] total_price raw:", rawPrice);
+    console.log("[DEBUG] total_price parsed:", price);
+
+    const formatted = isNaN(price)
+        ? '--'
+        : `${price.toFixed(2).replace('.', ',')} ${symbol}`;
+
     document.getElementById("total-1").textContent = formatted;
 }
+
 
 if (document.getElementById("incoterm")) {
     document.getElementById("incoterm").textContent = invoice.incoterm ?? '--';
@@ -391,8 +401,9 @@ if (q1Hidden) q1Hidden.value = numPackages > 0 ? q1 : "";
                 `;
             } else {
     productsList.innerHTML = '';
-    const q1Value = parseFloat(document.getElementById("q1-static")?.textContent?.replace(/[^\d.-]/g, "") || "0");
-
+  const q1Value = parseFloat(
+  document.getElementById("q1-static")?.textContent?.replace(',', '.') || "0"
+);
     invoice.items.forEach((item, index) => {
         // Find best customs code match for Tarifna oznaka if not present
         let tarifnaOznaka = item.item_code || item.tariff_code || '';
@@ -402,9 +413,16 @@ if (q1Hidden) q1Hidden.value = numPackages > 0 ? q1 : "";
                 tarifnaOznaka = best.entry["Tarifna oznaka"];
             }
         }
+    const q1Raw = document.getElementById("q1-static")?.textContent || "0";
+const totalRaw = item.base_price * item.quantity || "0";
 
-        const totalPrice = parseFloat(item.total_price || "0");
-        const estimatedTotal = !isNaN(q1Value * totalPrice) ? (q1Value * totalPrice).toFixed(2) : "0";
+const q1 = parseFloat(q1Raw.replace(',', '.'));
+const totalPrice = parseFloat(totalRaw.toString().replace(',', '.'));
+
+
+const estimatedTotal = formatDecimal(q1 * totalPrice, 2);
+
+
 
         productsList.innerHTML += `
             <tr>
@@ -418,10 +436,10 @@ if (q1Hidden) q1Hidden.value = numPackages > 0 ? q1 : "";
               <td>${item.tariff_privilege && item.tariff_privilege !== "0" ? item.tariff_privilege : ''}</td>
                 <td>${item.quantity}</td>
                 <td>${item.weight_gross || '0'}/${item.weight_net || '0'}</td>
-                <td>${estimatedTotal}</td>
-                <td>${item.base_price} ${item.currency || ''}</td>
-                <td>${item.total_price || (item.base_price * item.quantity).toFixed(2)} ${item.currency || ''}</td>
-            </tr>
+                <td>${String(estimatedTotal).replace('.', ',')}</td>
+                <td>${String(item.base_price).replace('.', ',')} ${item.currency || ''}</td>
+
+               <td>${formatDecimal(item.total_price || (item.base_price * item.quantity))} ${item.currency || ''}</td> </tr>
         `;
     });
 }

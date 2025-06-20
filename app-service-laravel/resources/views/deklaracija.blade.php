@@ -1211,20 +1211,16 @@ row.innerHTML = `
           </td>
          
 
-   <td style="width: 60px;">
-    <input 
-  type="text" 
-  class="form-control text-start-truncate price-input" 
-  name="price[]" 
-  value="${formatDecimal(price)}" 
-  inputmode="decimal" 
-  pattern="^\d{0,8}(,\d{0,2})?$" 
-  style="width: 100%;"
-/>
-
-
-
-          </td>
+  <td style="width: 60px;">
+  <input 
+    type="text" 
+    class="form-control text-start-truncate price-input" 
+    name="price[]" 
+    value="${formatDecimal(price)}" 
+    inputmode="decimal"
+    style="width: 100%;" 
+  />
+</td>
 
 
          <td style="width: 70px;">
@@ -1326,17 +1322,28 @@ $(row).find('[data-bs-toggle="tooltip"]').each(function () {
                 updateTotalAmount();
             }
         });
-        $(document).on('input', 'input[name="price[]"], input[name="quantity[]"]', function() {
-            const row = $(this).closest('tr');
-            const price = parseFloat(row.find('input[name="price[]"]').val()) || 0;
-            const quantity = parseInt(row.find('input[name="quantity[]"]').val()) || 0;
-            const total = formatDecimal(price * quantity, 2);
-            row.find('input[name="total[]"]').val(total);
+       $(document).on('input', 'input[name="price[]"], input[name="quantity[]"]', function () {
+    const row = $(this).closest('tr');
 
-            // Optional: update global total as well
-            updateProcjenaEstimates(); 
-            updateTotalAmount();
-        });
+    // Get raw input strings
+    let priceRaw = row.find('input[name="price[]"]').val() || "0";
+    let quantityRaw = row.find('input[name="quantity[]"]').val() || "0";
+
+    // Normalize price by replacing comma with dot
+    const price = parseFloat(priceRaw.replace(',', '.')) || 0;
+    const quantity = parseInt(quantityRaw, 10) || 0;
+
+    // Calculate and format total
+    const total = formatDecimal(price * quantity, 2);
+
+    // Set formatted total with comma
+    row.find('input[name="total[]"]').val(total);
+
+    // Update koleta and global total
+    updateProcjenaEstimates();
+    updateTotalAmount();
+});
+
 
 
 
@@ -2726,22 +2733,7 @@ Swal.fire({
             }
 
 
-            function calculateTotal(items) {
-                return items.reduce((sum, item) => {
-                    const price = parseFloat(item.base_price) || 0;
-                    const quantity = parseFloat(item.quantity) || 0;
-                    return sum + (price * quantity);
-                }, 0).toFixed(2);
-            }
-
-
-
-
-            const calculatedTotal = calculateTotal(invoice.items);
-            const currency = invoice.items?.[0]?.currency || "EUR";
-            console.log("💰 Calculated Total:", calculateTotal(invoice.items));
-
-
+        
          
 
             // --- Prefill selected supplier/importer
@@ -2925,40 +2917,12 @@ if (overlay && !overlay.classList.contains('d-none')) {
 
 
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelectorAll('.price-input').forEach(input => {
-
-    // Prevent invalid characters as you type
-    input.addEventListener('beforeinput', function (e) {
-      const char = e.data;
-      if (!char) return;
-
-      const currentValue = this.value;
-      const newValue = currentValue.slice(0, this.selectionStart) + char + currentValue.slice(this.selectionEnd);
-
-      // Allow only numbers and one comma, and max 2 decimals
-      if (!/^\d{0,8}(,\d{0,2})?$/.test(newValue)) {
-        e.preventDefault();
-      }
-    });
-
-    // Format on blur if necessary
-    input.addEventListener('blur', function () {
-      if (this.value && !this.value.includes(',')) {
-        this.value += ',00';
-      } else if (this.value.match(/^(\d+),(\d)$/)) {
-        // Pad with zero if only 1 decimal digit
-        this.value += '0';
-      }
-    });
-  });
-});
-</script>
 
 
 
 
+
+<script src="{{ URL::asset('build/js/declaration/decimal-regex.js') }}"></script>
 <script src="{{ URL::asset('build/js/declaration/tariff-privilege.js') }}"></script>
 <script src="{{ URL::asset('build/js/declaration/export-edit.js') }}"></script>
 <script src="{{ URL::asset('build/js/declaration/swal-declaration-load.js') }}"></script>
