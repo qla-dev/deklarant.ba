@@ -24,7 +24,7 @@ const titleText = (itemPrevod || itemName || "Odaberi povlasticu").toUpperCase()
                         <option value="EFTA4">Norveška</option>
                         <option value="EFTA4T">Norveška – Tranziciona pravila</option>
                     </select>
-                    <i class="fa fa-chevron-down dropdown-arrow-icon"></i>
+              
                 </div>
             `,
             showCancelButton: true,

@@ -1164,11 +1164,24 @@ table.dataTable thead th.dtfc-fixed-right {
     border-color: #ccc;
 }
 
-
+#povlastica-select {
+    text-align: center;
+}
 
 [data-bs-theme=dark]  .select2-search 
 {
     border-color:white;
 }  
+
+[data-bs-theme=dark]  #povlastica-select
+{
+    border:unset!important;
+}  
+
+[data-bs-theme=dark] #povlastica-select option
+{
+    background: #282c30!important;
+    color: white!important;
+}
 
 
