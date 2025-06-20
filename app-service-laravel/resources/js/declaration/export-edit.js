@@ -35,12 +35,12 @@ function exportTableToCustomCSV() {
         const qty = row.querySelector('input[name="quantity[]"]')?.value || "";
         rowData.push(`"${qty}"`);
 
-        let rawPrice = row.querySelector('input[name="price[]"]')?.value || "";
+        let rawPrice = row.querySelector('input[name="total[]"]')?.value || "";
         let numericOnly = rawPrice.replace(/[^\d.,]/g, "").replace(",", ".");
         let formattedValue = numericOnly ? parseFloat(numericOnly).toFixed(2).replace(".", ",") : "";
         rowData.push(`"${formattedValue}"`);
 
-        const koleta = row.querySelector('input[name="kolata[]"]')?.value || "";
+        const koleta = row.querySelector('input[name="procjena[]"]')?.value || "";
         rowData.push(`"${koleta}"`);
 
         const bruto = row.querySelector('input[name="weight_gross[]"]')?.value || "";

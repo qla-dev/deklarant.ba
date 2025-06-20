@@ -638,7 +638,7 @@ function updateProcjenaEstimates() {
 
     if (procjenaInput) {
       const result = q1 * total;
-      procjenaInput.value = isNaN(result) ? "" : result.toFixed(2);
+     procjenaInput.value = formatDecimal(result, 2);
     }
   });
 }
@@ -1127,7 +1127,7 @@ row.innerHTML = `
     class="form-control text-start procjena-field" 
     name="procjena[]" 
     value="" 
-    disabled 
+    readonly 
     style="width: 100%; background-color: #f9f9f9;"
   >
 </td>
