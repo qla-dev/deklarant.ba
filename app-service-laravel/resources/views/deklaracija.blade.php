@@ -1109,7 +1109,7 @@ row.innerHTML = `
     class="form-control" 
     name="quantity_type[]" 
     placeholder="AD, AE.." 
-    value="${qtype || 'PSC'}"
+    value="${qtype || 'KOM'}"
   >
 </td>
 
