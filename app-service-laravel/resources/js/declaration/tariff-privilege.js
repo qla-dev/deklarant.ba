@@ -13,18 +13,20 @@ const titleText = (itemPrevod || itemName || "Odaberi povlasticu").toUpperCase()
             title: titleText,
             html: `
                 <div class="select-wrapper position-relative mt-2">
-                    <select id="povlastica-select" class="form-select swal2-select">
-                        <option value="">Odaberi povlasticu</option>
-                        <option value="CEFTA/AP">Povlastica po sporazumu CEFTA/AP</option>
-                        <option value="EFTA1">Povlastica izloženih cijena</option>
-                        <option value="EFTA2">Švicarska, Lihtenštajn</option>
-                        <option value="EFTA2T">Švicarska, Lihtenštajn – Tranziciona pravila</option>
-                        <option value="EFTA3">Island</option>
-                        <option value="EFTA3T">Island – Tranziciona pravila</option>
-                        <option value="EFTA4">Norveška</option>
-                        <option value="EFTA4T">Norveška – Tranziciona pravila</option>
-                    </select>
-              
+                <select id="povlastica-select" class="form-select swal2-select">
+                    <option value="">Odaberi povlasticu</option>
+                    <option value="TRP">Turska</option>
+                    <option value="EUP">Evropska unija</option>
+                    <option value="IRP">Iran</option>
+                    <option value="CEFTA/AP">Povlastica po sporazumu CEFTA/AP</option>
+                    <option value="EFTA1">Povlastica izloženih cijena</option>
+                    <option value="EFTA2">Švicarska, Lihtenštajn</option>
+                    <option value="EFTA2T">Švicarska, Lihtenštajn – Tranziciona pravila</option>
+                    <option value="EFTA3">Island</option>
+                    <option value="EFTA3T">Island – Tranziciona pravila</option>
+                    <option value="EFTA4">Norveška</option>
+                    <option value="EFTA4T">Norveška – Tranziciona pravila</option>
+                </select>
                 </div>
             `,
             showCancelButton: true,
