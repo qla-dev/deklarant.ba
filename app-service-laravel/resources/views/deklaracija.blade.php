@@ -289,7 +289,7 @@
             <input type="number" step="0.01" class="form-control text-center" id="total-weight-gross" name="total_weight_gross" placeholder="0.00 kg">
         </div>
         <div class="col-4 text-end">
-            <label class="text-muted text-uppercase fw-semibold mb-1">Broj paketa</label>
+            <label class="text-muted text-uppercase fw-semibold mb-1">Broj koleta</label>
             <input type="number" class="form-control text-end" id="total-num-packages" name="total_num_packages" placeholder="0">
         </div>
     </div>
@@ -313,22 +313,21 @@
                                 <th style="width: 220px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Tarifna oznaka</th>
                                 <th style="width: 80px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">T. kvantiteta</th>
                                 <th style="width:110px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Porijeklo</th>
-                                <th style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem;">Cijena</th>
-                                <th style="width: 60px; text-align: center;vertical-align: middle;">
+                              
+                                 <th style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem;">Koleta</th>
+                                  
+                                <th style="width: 100px; text-align: center;vertical-align: middle;">
                                     Bruto (kg)<br>
                                     <small style="font-weight: normal; font-size: 0.75rem; color: #666;">
                                         Neto (kg)
                                     </small>
                                 </th>
-                                    <th style="width: 60px; text-align: center;vertical-align: middle;">
+                                    <th style="width: 100px; text-align: center;vertical-align: middle;">
                                     Količina<br>
-                                    <small style="font-weight: normal; font-size: 0.75rem; color: #666;">
-                                        Broj koleta
-                                    </small>
-                                </th>
-                                   <th style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem;">Vrijednost <br> (%)</th>
                                   
-
+                                </th>
+                                  
+  <th style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem;">Cijena</th>
                                 <th style="width:100px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Ukupno</th>
                                 <th style="width:20px;vertical-align: middle; text-align: end;">Ukloni <br>
                                     <small style="font-weight: normal; font-size: 0.75rem; color: #666;">
@@ -632,11 +631,11 @@ function updateProcjenaEstimates() {
   const rows = document.querySelectorAll("#newlink tr.product");
 
   rows.forEach(row => {
-    const kolata = parseFloat(row.querySelector('input[name="kolata[]"]')?.value || 0);
+    const total = parseFloat(row.querySelector('input[name="total[]"]')?.value || 0);
     const procjenaInput = row.querySelector('input[name="procjena[]"]');
 
     if (procjenaInput) {
-      const result = q1 * kolata;
+      const result = q1 * total;
       procjenaInput.value = isNaN(result) ? "" : result.toFixed(2);
     }
   });
@@ -1110,17 +1109,17 @@ row.innerHTML = `
           </td>
        
 
-
-          <td style="width: 60px;">
-            <input 
-              type="number" 
-              class="form-control text-start-truncate" 
-              name="price[]" 
-              value="${price}" 
-              style="width: 100%;"
-              
-            >
-          </td>
+ <td style="width: 70px;">
+  <input 
+    type="text" 
+    class="form-control text-start procjena-field" 
+    name="procjena[]" 
+    value="" 
+    disabled 
+    style="width: 100%; background-color: #f9f9f9;"
+  >
+</td>
+       
                     <td style="width: 80px;">
             <div style="display: flex; flex-direction: column; gap: 2px; width: 100%;">
               <div class="input-group input-group-sm" style="width: 100%;">
@@ -1131,12 +1130,12 @@ row.innerHTML = `
                 >−</button>
                 <input 
                   type="number" 
-                  class="form-control text-center" 
+                  class="form-control text-center rounded-0" 
                   name="weight_gross[]" 
                   value="${weight_gross}" 
                   step="1" 
                   min="0"
-                  style="padding: 0 5px; height: 30px;"
+                  style="padding: 0 5px; height: 30px; border-radius:0!important"
                 >
                 <button 
                   class="btn btn-outline-info btn-sm" 
@@ -1153,11 +1152,11 @@ row.innerHTML = `
 
                 <input
                   type="number"
-                  class="form-control text-center"
+                  class="form-control text-center rounded-0"
                   name="weight_net[]"
                   min="0"
                   step="1"
-                  style="height: 30px; padding: 0 5px; font-size: 10px;"
+                  style="height: 30px; padding: 0 5px; font-size: 10px; border-radius:0!important"
                   value="${weight_net}"
                 >
 
@@ -1181,55 +1180,35 @@ row.innerHTML = `
                 >−</button>
                 <input 
                   type="number" 
-                  class="form-control text-center" 
+                  class="form-control text-center rounded-0" 
                   name="quantity[]" 
                   value="${quantity}" 
                   step="1" 
                   min="0"
-                  style="padding: 0 5px; height: 30px;"
+                  style="padding: 0 5px; height: 37px;border-radius:0!important"
                 >
                 <button 
                   class="btn btn-outline-info btn-sm increment-qty" 
-                  style=" width: 20px; padding: 0;" 
+                  style=" width: 20px; padding: 0; " 
                   type="button"
                 >+</button>
               </div>
               
-             <div class="input-group input-group-sm" style="height: 30px;">
-                <button 
-                class="btn btn-outline-info btn-sm decrement-kolata"
-                  style="padding: 0; width: 20px;"
-                >−</button>
-
-                <input
-                  type="number"
-                  class="form-control text-center"
-                  name="kolata[]"
-                  placeholder="Broj paketa"
-                  min="0"
-                  step="1"
-                  style="height: 30px; padding: 0 5px; font-size: 10px;"
-                  value="${package_num}"
-                >
-
-                <button 
-                  class="btn btn-outline-info btn-sm increment-kolata" 
-                  type="button" 
-                  style="padding: 0; width: 20px;"
-                >+</button>
-                </div>
+             
             </div>
           </td>
-          <td style="width: 70px;">
-  <input 
-    type="text" 
-    class="form-control text-start procjena-field" 
-    name="procjena[]" 
-    value="" 
-    disabled 
-    style="width: 100%; background-color: #f9f9f9;"
-  >
-</td>
+         
+
+   <td style="width: 60px;">
+            <input 
+              type="number" 
+              class="form-control text-start-truncate" 
+              name="price[]" 
+              value="${price}" 
+              style="width: 100%;"
+              
+            >
+          </td>
 
 
          <td style="width: 70px;">
