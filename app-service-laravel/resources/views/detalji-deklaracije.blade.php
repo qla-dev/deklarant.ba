@@ -176,8 +176,7 @@
                                        
                                         <th>Količina</th>
                                         <th>Bruto/Neto (kg)</th>
-                                        <th>Broj koleta</th>
-                                        <th>Vrijednost (%)</th>
+                                        <th>Koleta</th>
                                          <th>Cijena</th>
 
                                         <th style="border-right: 1px solid gray;">Ukupno</th>
@@ -402,8 +401,8 @@ if (q1Hidden) q1Hidden.value = numPackages > 0 ? q1 : "";
             }
         }
 
-        const numPackages = parseFloat(item.num_packages || "0");
-        const estimatedTotal = !isNaN(q1Value * numPackages) ? (q1Value * numPackages).toFixed(2) : "0";
+        const totalPrice = parseFloat(item.total_price || "0");
+        const estimatedTotal = !isNaN(q1Value * totalPrice) ? (q1Value * totalPrice).toFixed(2) : "0";
 
         productsList.innerHTML += `
             <tr>
@@ -417,7 +416,6 @@ if (q1Hidden) q1Hidden.value = numPackages > 0 ? q1 : "";
               <td>${item.tariff_privilege && item.tariff_privilege !== "0" ? item.tariff_privilege : ''}</td>
                 <td>${item.quantity}</td>
                 <td>${item.weight_gross || '0'}/${item.weight_net || '0'}</td>
-                <td>${item.num_packages || '0'}</td>
                 <td>${estimatedTotal}</td>
                 <td>${item.base_price} ${item.currency || ''}</td>
                 <td>${item.total_price || (item.base_price * item.quantity).toFixed(2)} ${item.currency || ''}</td>
