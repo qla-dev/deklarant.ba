@@ -3,30 +3,64 @@
 
 
 function searchFromInputs(button) {
-    const row = button.closest('tr');
+  console.log("[Tooltip] Google button clicked");
 
-    const nameInput = row.querySelector('.item-name');
-    const descInput = row.querySelector('.item-desc');
-    const tariffInput = row.querySelector('.select2-tariff');
+  const row = button.closest('tr');
+  const nameInput = row.querySelector('.item-name');
+  const descInput = row.querySelector('.item-desc');
+  const name = nameInput?.value.trim() || '';
+  const desc = descInput?.value.trim() || '';
+  const query = encodeURIComponent(`${desc} hs code`);
 
-    const name = nameInput?.value.trim() || '';
-    const desc = descInput?.value.trim() || '';
-    const tariff = tariffInput?.value?.trim() || '';
+  // 🛑 Kill existing tooltip instance
+  const instance = bootstrap.Tooltip.getInstance(button);
+  if (instance) {
+    console.log("[Tooltip] Instance found");
+    instance.dispose(); // <- kills it completely
+    console.log("[Tooltip] instance.dispose() called");
 
-    const query = encodeURIComponent(`${desc} hs code`);
-
-    if (name || desc) {
-        window.open(`https://www.google.com/search?q=${query}`, '_blank');
-    } else {
-        Swal.fire({
-            icon: 'info',
-            title: 'Nedostaje opis',
-            text: 'Unesite naziv ili opis proizvoda za Google pretragu.',
-            confirmButtonText: 'Uredu',
-            confirmButtonColor: '#299dcb'
-        });
+    const tooltipId = button.getAttribute('aria-describedby');
+    if (tooltipId) {
+      const tooltipEl = document.getElementById(tooltipId);
+      if (tooltipEl) {
+        tooltipEl.remove();
+        console.log(`[Tooltip] Removed lingering tooltip: ${tooltipId}`);
+      }
+      button.removeAttribute('aria-describedby');
     }
+  } else {
+    console.warn("[Tooltip] No instance found on button");
+  }
+
+  // 🔍 Open Google if query is valid
+  if (name || desc) {
+    const url = `https://www.google.com/search?q=${query}`;
+    console.log(`[Google] Opening search URL: ${url}`);
+    window.open(url, '_blank');
+  } else {
+    console.log("[Google] Missing name or desc. Showing Swal.");
+    Swal.fire({
+      icon: 'info',
+      title: 'Nedostaje opis',
+      text: 'Unesite naziv ili opis proizvoda za Google pretragu.',
+      confirmButtonText: 'Uredu',
+      confirmButtonColor: '#299dcb'
+    });
+  }
+
+  // ✅ Reinit tooltip later if needed
+  setTimeout(() => {
+    new bootstrap.Tooltip(button, {
+      trigger: 'hover',
+      delay: { show: 100, hide: 100 }
+    });
+    console.log("[Tooltip] Reinitialized after click");
+  }, 300); // give time for old DOM to go away
 }
+
+
+
+
 
 
 

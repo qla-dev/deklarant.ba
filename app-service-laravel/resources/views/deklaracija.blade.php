@@ -1460,19 +1460,7 @@ $(row).find('[data-bs-toggle="tooltip"]').each(function () {
                 }
             }
 
-            // Initialize all tooltips once
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            tooltipTriggerList.forEach(function(tooltipTriggerEl) {
-                if (!bootstrap.Tooltip.getInstance(tooltipTriggerEl)) { // avoid re-init
-                    new bootstrap.Tooltip(tooltipTriggerEl, {
-                        trigger: 'hover',
-                        delay: {
-                            show: 100,
-                            hide: 100
-                        }
-                    });
-                }
-            });
+        
 
             // Add a single click listener outside to hide tooltips on outside click
             document.addEventListener('click', function(e) {
