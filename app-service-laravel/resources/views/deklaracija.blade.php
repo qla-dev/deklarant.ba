@@ -446,6 +446,8 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/bs.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8/jquery.inputmask.min.js"></script>
+
 
 
 
@@ -933,7 +935,7 @@ function initializeTariffSelects() {
     $('.select2-tariff').each(function () {
         const select = $(this);
 
-        // ⚠️ Destroy existing Select2 to prevent duplicate init
+        // Destroy if already initialized
         if (select.hasClass('select2-hidden-accessible')) {
             select.select2('destroy');
         }
@@ -941,52 +943,97 @@ function initializeTariffSelects() {
         const prefillValue = select.data("prefill");
 
         select.select2({
-            placeholder: "Izaberite tarifnu oznaku",
+            placeholder: "",
+            allowClear: false,
             width: '100%',
             minimumInputLength: 1,
             language: {
-                inputTooShort: function () {
-                    return "Pretraži oznake...";
-                }
+                inputTooShort: () => "Pretraži oznake...",
+                searching: () => "Pretražujem...",
+                noResults: () => "Nema rezultata",
+                loadingMore: () => "Učitavanje još rezultata..."
             },
             ajax: {
                 transport: function (params, success, failure) {
-                    const term = params.data.q?.toLowerCase() || "";
-                    const filtered = processedTariffData.filter(item =>
-                        item.search.includes(term)
-                    );
-                    success({ results: filtered });
+                    const term = (params.data.q || "").toLowerCase();
+
+                    // Allow full input (letters + digits)
+                    if (term.length === 0) {
+                        success({ results: [] });
+                        return;
+                    }
+
+                    // Show fake loading
+                    setTimeout(() => {
+                        const container = document.querySelector('.select2-results__options');
+                        if (container) {
+                            container.innerHTML = `
+                                <li class="select2-results__option" role="alert" aria-live="assertive">
+                                    <i class="fa fa-spinner fa-spin" style="margin-right: 6px;"></i>
+                                    Pretražujem...
+                                </li>`;
+                        }
+                    }, 0);
+
+                    // Filter on id and display (letters and digits)
+                    const filtered = processedTariffData.filter(item => {
+                        const id = item.id.toLowerCase();
+                        const display = item.display.toLowerCase();
+                        return id.includes(term) || display.includes(term);
+                    });
+
+                    setTimeout(() => success({ results: filtered }), 200);
                 },
                 delay: 200
             },
             templateResult: function (item) {
-                if (!item.id && !item.text) return null;
+                if (!item || !item.id || !item.display) return null;
+
                 const icon = item.isLeaf ? "•" : "▶";
-                return $(
-                    `<div style="padding-left:${item.depth * 20}px;" title="${item.display}">
-                        ${icon} ${item.display}
-                    </div>`
-                );
+                return $(`<div style="padding-left:${item.depth * 20}px;" title="${item.display}">
+                            ${icon} ${item.display}
+                        </div>`);
             },
             templateSelection: function (item) {
-                return item.id || "Izaberite tarifnu oznaku";
+                return item?.id || "";
             }
         });
 
-        // ✅ Auto-focus search field on dropdown open
+        // Simulated mask after 4 digits
         select.on('select2:open', function () {
             setTimeout(() => {
-                document.querySelector('.select2-search__field')?.focus();
+                const $searchField = $('.select2-search__field');
+
+                if ($searchField.length) {
+                    $searchField.off('input.smartMask');
+
+                    $searchField.on('input.smartMask', function () {
+                        const rawInput = this.value;
+                        const digitsOnly = rawInput.replace(/\D+/g, "");
+
+                        // Only format if 4+ digits
+                        if (digitsOnly.length >= 4) {
+                            const formatted = digitsOnly.replace(
+                                /^(\d{4})(\d{0,2})(\d{0,2})(\d{0,2})/,
+                                (_, a, b, c, d) => [a, b, c, d].filter(Boolean).join(' ')
+                            );
+
+                            // Only override if raw input was just digits
+                            if (/^\d[\d\s]*$/.test(rawInput)) {
+                                this.value = formatted;
+
+                                // Move cursor to end
+                                setTimeout(() => {
+                                    this.setSelectionRange(this.value.length, this.value.length);
+                                }, 0);
+                            }
+                        }
+                    });
+                }
             }, 0);
         });
 
-        // ✅ Add placeholder option manually if no prefill
-        if (!prefillValue) {
-            const placeholderOption = new Option("Izaberite tarifnu oznaku", "", false, false);
-            select.append(placeholderOption).trigger('change');
-        }
-
-        // ✅ Otherwise, programmatically set the value
+        // Prefill logic
         if (prefillValue) {
             const matched = processedTariffData.find(item => item.id === prefillValue);
             if (matched) {
@@ -996,6 +1043,7 @@ function initializeTariffSelects() {
         }
     });
 }
+
 function addRowToInvoice(item = {}, suggestions = []) {
             const tbody = document.getElementById("newlink");
 
