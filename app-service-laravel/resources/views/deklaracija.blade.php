@@ -951,7 +951,7 @@ function initializeTariffSelects() {
             language: {
                 inputTooShort: () => "Pretraži oznake...",
                 searching: () => "Pretraga...",
-                noResults: () => "Nema rezultata",
+                noResults: () => "Nema rezultata..",
                 loadingMore: () => "Učitavanje još rezultata..."
             },
             ajax: {
