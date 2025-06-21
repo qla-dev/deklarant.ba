@@ -310,9 +310,9 @@
                                 <th style="width: 50px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">#</th>
                                 <th style="width: 200px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; padding-right: 50px!important;">Proizvod </th>
                                 <th style="width: 140px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; margin-left: -5px!important;">Opis </th>
-                                <th style="width: 220px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Tarifna oznaka</th>
-                                <th style="width: 80px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Jed. mjere</th>
-                                <th style="width:110px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Porijeklo</th>
+                                <th style="width: 350px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Tarifna oznaka</th>
+                                <th style="width: 50px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Jed. mjere</th>
+                                <th style="width:120px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Porijeklo</th>
                               
                                  <th style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem;">Koleta</th>
                                   
@@ -933,23 +933,22 @@ async function getInvoice() {
 
 function initializeTariffSelects() {
     $('.select2-tariff').each(function () {
-        const select = $(this);
+        const $select = $(this);
+        const prefillValue = $select.data("prefill");
 
-        // Destroy if already initialized
-        if (select.hasClass('select2-hidden-accessible')) {
-            select.select2('destroy');
+        // Destroy existing Select2 if needed
+        if ($select.hasClass('select2-hidden-accessible')) {
+            $select.select2('destroy');
         }
 
-        const prefillValue = select.data("prefill");
-
-        select.select2({
+        $select.select2({
             placeholder: "",
             allowClear: false,
             width: '100%',
             minimumInputLength: 1,
             language: {
                 inputTooShort: () => "Pretraži oznake...",
-                searching: () => "Pretražujem...",
+                searching: () => "Pretraga...",
                 noResults: () => "Nema rezultata",
                 loadingMore: () => "Učitavanje još rezultata..."
             },
@@ -957,25 +956,21 @@ function initializeTariffSelects() {
                 transport: function (params, success, failure) {
                     const term = (params.data.q || "").toLowerCase();
 
-                    // Allow full input (letters + digits)
                     if (term.length === 0) {
                         success({ results: [] });
                         return;
                     }
 
-                    // Show fake loading
-                    setTimeout(() => {
-                        const container = document.querySelector('.select2-results__options');
-                        if (container) {
-                            container.innerHTML = `
-                                <li class="select2-results__option" role="alert" aria-live="assertive">
-                                    <i class="fa fa-spinner fa-spin" style="margin-right: 6px;"></i>
-                                    Pretražujem...
-                                </li>`;
-                        }
-                    }, 0);
+                    // Fake loader
+                    const container = document.querySelector('.select2-results__options');
+                    if (container) {
+                        container.innerHTML = `
+                            <li class="select2-results__option" role="alert" aria-live="assertive">
+                                <i class="fa fa-spinner fa-spin" style="margin-right: 6px;"></i>
+                                Pretraga...
+                            </li>`;
+                    }
 
-                    // Filter on id and display (letters and digits)
                     const filtered = processedTariffData.filter(item => {
                         const id = item.id.toLowerCase();
                         const display = item.display.toLowerCase();
@@ -988,60 +983,56 @@ function initializeTariffSelects() {
             },
             templateResult: function (item) {
                 if (!item || !item.id || !item.display) return null;
-
                 const icon = item.isLeaf ? "•" : "▶";
-                return $(`<div style="padding-left:${item.depth * 20}px;" title="${item.display}">
+                return $(`<div style="padding-left:${item.depth * 5}px;" title="${item.display}">
                             ${icon} ${item.display}
-                        </div>`);
+                          </div>`);
             },
             templateSelection: function (item) {
                 return item?.id || "";
             }
         });
 
-        // Simulated mask after 4 digits
-        select.on('select2:open', function () {
+        // Force focus + smart masking on dropdown open
+        $select.on('select2:open', function () {
             setTimeout(() => {
-                const $searchField = $('.select2-search__field');
-
-                if ($searchField.length) {
-                    $searchField.off('input.smartMask');
-
-                    $searchField.on('input.smartMask', function () {
-                        const rawInput = this.value;
-                        const digitsOnly = rawInput.replace(/\D+/g, "");
-
-                        // Only format if 4+ digits
-                        if (digitsOnly.length >= 4) {
-                            const formatted = digitsOnly.replace(
-                                /^(\d{4})(\d{0,2})(\d{0,2})(\d{0,2})/,
-                                (_, a, b, c, d) => [a, b, c, d].filter(Boolean).join(' ')
-                            );
-
-                            // Only override if raw input was just digits
-                            if (/^\d[\d\s]*$/.test(rawInput)) {
-                                this.value = formatted;
-
-                                // Move cursor to end
-                                setTimeout(() => {
-                                    this.setSelectionRange(this.value.length, this.value.length);
-                                }, 0);
-                            }
-                        }
-                    });
+                const input = document.querySelector('.select2-container--open .select2-search__field');
+                if (input) {
+                    input.focus();
+                    input.removeEventListener('input', smartMaskHandler);
+                    input.addEventListener('input', smartMaskHandler, { passive: true });
                 }
             }, 0);
         });
 
-        // Prefill logic
+        // Prefill if needed
         if (prefillValue) {
             const matched = processedTariffData.find(item => item.id === prefillValue);
             if (matched) {
                 const option = new Option(matched.id, matched.id, true, true);
-                select.append(option).trigger('change');
+                $select.append(option).trigger('change');
             }
         }
     });
+}
+
+function smartMaskHandler(e) {
+    const rawInput = e.target.value;
+    const digitsOnly = rawInput.replace(/\D+/g, "");
+
+    if (digitsOnly.length >= 4) {
+        const formatted = digitsOnly.replace(
+            /^(\d{4})(\d{0,2})(\d{0,2})(\d{0,2})/,
+            (_, a, b, c, d) => [a, b, c, d].filter(Boolean).join(' ')
+        );
+
+        if (/^\d[\d\s]*$/.test(rawInput)) {
+            e.target.value = formatted;
+            setTimeout(() => {
+                e.target.setSelectionRange(e.target.value.length, e.target.value.length);
+            }, 0);
+        }
+    }
 }
 
 function addRowToInvoice(item = {}, suggestions = []) {

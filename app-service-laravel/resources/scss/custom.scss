@@ -271,7 +271,7 @@ opacity: 0;
 
 }
 
-.form-control:focus {
+.form-control:focus, .select2-search__field:focus {
 
     border-color: rgba(41, 156, 219, 1)!important;
 }
@@ -1158,30 +1158,33 @@ table.dataTable thead th.dtfc-fixed-right {
 }
 
 
-.select2-search 
-{
-    border: 1px solid;
-    border-color: #ccc;
-}
+
 
 #povlastica-select {
     text-align: center;
 }
 
-[data-bs-theme=dark]  .select2-search 
-{
-    border-color:white;
-}  
 
-[data-bs-theme=dark]  #povlastica-select
-{
-    border:unset!important;
-}  
+
+
 
 [data-bs-theme=dark] #povlastica-select option
 {
     background: #282c30!important;
     color: white!important;
+}
+
+.select2-results__options {border:unset!important}
+
+.select2-dropdown {
+    box-shadow: 0 4px 12px rgba(56, 65, 74, 0.25)!important; /* deeper, softer shadow */
+
+}
+
+[data-bs-theme=dark] .select2-dropdown {
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.12); /* soft glow */
+
+    
 }
 
 
