@@ -944,7 +944,16 @@ function initializeTariffSelects() {
 
         $select.select2({
             placeholder: "Izaberi oznaku",
-          
+            allowClear: false,
+            width: '100%',
+            dropdownCssClass: 'tariff-selection',
+            minimumInputLength: 1,
+            language: {
+                inputTooShort: () => "Pretraži oznake...",
+                searching: () => "Pretraga...",
+                noResults: () => "Nema rezultata",
+                loadingMore: () => "Učitavanje još rezultata..."
+            },
             ajax: {
                 transport: function (params, success, failure) {
                     const term = (params.data.q || "").toLowerCase();
@@ -1123,19 +1132,17 @@ row.innerHTML = `
 <td class="text-start" style="width: 150px;">
   <div style="position: relative; width: 100%;">
     <select
-  class="form-control select2-tariff tariff-selection"
-  style="width: 100%; padding-right: 45px;"
-  name="item_code[]"
-  data-prefill="${tariff || ''}"
-  data-suggestions='${JSON.stringify(suggestions || [])
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/&/g, '&amp;')
-    .replace(/'/g, '&#39;')
-  }'>
-  <option value=""></option> 
-</select>
-
+      class="form-control select2-tariff tariff-selection"
+      style="width: 100%; padding-right: 45px;"
+      name="item_code[]"
+      data-prefill="${tariff || ''}"
+      data-suggestions='${JSON.stringify(suggestions || [])
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/&/g, '&amp;')
+        .replace(/'/g, '&#39;')
+      }'>
+    </select>
 
     <button
       type="button"
