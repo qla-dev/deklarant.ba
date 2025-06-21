@@ -342,9 +342,10 @@
                         <tbody>
                             <tr class="text-end mt-3">
                                 <td colspan="12" class="text-end mt-3">
-                                    <button id="add-item" class="btn btn-info fw-medium mt-2">
-                                        <i class="ri-add-fill me-1 align-bottom"></i> Dodaj proizvod
-                                    </button>
+                                 <a href="#" id="add-item" class="btn btn-info fw-medium mt-2" role="button">
+    <i class="ri-add-fill me-1 align-bottom"></i> Dodaj proizvod
+</a>
+
                                 </td>
                             </tr>
                         </tbody>
@@ -942,16 +943,8 @@ function initializeTariffSelects() {
         }
 
         $select.select2({
-            placeholder: "",
-            allowClear: false,
-            width: '100%',
-            minimumInputLength: 1,
-            language: {
-                inputTooShort: () => "Pretraži oznake...",
-                searching: () => "Pretraga...",
-                noResults: () => "Nema rezultata",
-                loadingMore: () => "Učitavanje još rezultata..."
-            },
+            placeholder: "Izaberi oznaku",
+          
             ajax: {
                 transport: function (params, success, failure) {
                     const term = (params.data.q || "").toLowerCase();
@@ -1016,6 +1009,14 @@ function initializeTariffSelects() {
                     input.focus();
                     input.removeEventListener('input', smartMaskHandler);
                     input.addEventListener('input', smartMaskHandler, { passive: true });
+
+                    // Prefill search field with selected value
+                    const selected = $select.val();
+                    if (selected) {
+                        input.value = selected;
+                        const evt = new Event('input', { bubbles: true });
+                        input.dispatchEvent(evt);
+                    }
                 }
             }, 0);
         });
@@ -1122,17 +1123,19 @@ row.innerHTML = `
 <td class="text-start" style="width: 150px;">
   <div style="position: relative; width: 100%;">
     <select
-      class="form-control select2-tariff"
-      style="width: 100%; padding-right: 45px;"
-      name="item_code[]"
-      data-prefill="${tariff || ''}"
-      data-suggestions='${JSON.stringify(suggestions || [])
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/&/g, '&amp;')
-        .replace(/'/g, '&#39;')
-      }'>
-    </select>
+  class="form-control select2-tariff tariff-selection"
+  style="width: 100%; padding-right: 45px;"
+  name="item_code[]"
+  data-prefill="${tariff || ''}"
+  data-suggestions='${JSON.stringify(suggestions || [])
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/&/g, '&amp;')
+    .replace(/'/g, '&#39;')
+  }'>
+  <option value=""></option> 
+</select>
+
 
     <button
       type="button"
@@ -2884,11 +2887,13 @@ Swal.fire({
 
   
 
-    document.getElementById("add-item")?.addEventListener("click", () => {
-        console.log("Dodaj proizvod clicked");
-        addRowToInvoice();
-        initializeTariffSelects();
-    });
+    document.getElementById("add-item")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    console.log("Dodaj proizvod clicked");
+    addRowToInvoice();
+    initializeTariffSelects();
+});
+
 
 
 

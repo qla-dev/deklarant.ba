@@ -1190,3 +1190,18 @@ table.dataTable thead th.dtfc-fixed-right {
 .select2-results__options {overflow-x: hidden;}
 
 
+
+.tariff-selection 
+{
+
+    width: 450px!important;
+
+}
+
+.select2-results,
+.select2-results__options {
+  height: auto !important;
+  overflow-y: auto;
+}
+
+
