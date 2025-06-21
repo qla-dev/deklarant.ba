@@ -312,7 +312,7 @@
                                 <th style="width: 140px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; margin-left: -5px!important;">Opis </th>
                                 <th style="width: 350px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Tarifna oznaka</th>
                                 <th style="width: 50px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Jed. mjere</th>
-                                <th style="width:120px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Porijeklo</th>
+                                <th style="width:120px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Porijeklo/Pov..</th>
                               
                                  <th style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem;">Koleta</th>
                                   
@@ -329,10 +329,8 @@
                                   
   <th style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem;">Cijena</th>
                                 <th style="width:100px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Ukupno</th>
-                                <th style="width:20px;vertical-align: middle; text-align: end;">Ukloni <br>
-                                    <small style="font-weight: normal; font-size: 0.75rem; color: #666;">
-                                        Pov..
-                                    </small>
+                                <th style="width:20px;vertical-align: middle; text-align: end;">Ukloni 
+    
                                 </th>
                             </tr>
                         </thead>
@@ -1202,12 +1200,42 @@ row.innerHTML = `
 </td>
 
 
-          <td style="width: 100px;">
-            <select class="form-select" name="origin[]" style="width: 100%;">
-              ${generateCountryOptions(origin)}
-            </select>
-          </td>
-       
+      <td class="text-start" style="width: 130px;">
+  <div style="position: relative; width: 100%;">
+    <select class="form-select" name="origin[]" style="width: 100%;">
+      ${generateCountryOptions(origin)}
+    </select>
+
+    <!-- ✅ Povlastica (checkbox) pozicioniran desno, ne ometa dropdown -->
+    <input 
+      type="checkbox" 
+      class="form-check-input tariff-privilege-toggle"
+      name="tariff_privilege_check[]"
+      ${tariff_privilege !== 0 && tariff_privilege !== "0" ? 'checked' : ''}
+      title="${tariff_privilege !== 0 && tariff_privilege !== '0' ? tariff_privilege : 'Odaberi povlasticu'}"
+      data-bs-toggle="tooltip"
+      style="
+        position: absolute;
+        top: 50%;
+        right: 5px;
+        transform: translateY(-50%);
+        width: 26px;
+        height: 26px;
+        cursor: pointer;
+        margin-top:0px!important;
+      "
+    />
+
+    <!-- hidden field -->
+    <input 
+      type="hidden" 
+      name="tariff_privilege[]" 
+      value="${tariff_privilege || 0}"
+    >
+  </div>
+</td>
+
+
 
  <td style="width: 70px;">
   <input 
@@ -1329,27 +1357,11 @@ row.innerHTML = `
 
           <td style="width: 20px; text-align: center;">
               <div style="display: flex; flex-direction: column; align-items: end; gap: 2px;">
-                <button type="button" class="btn btn-danger btn-sm remove-row text-center "   style="width: 30px;" title="Ukloni red"  >
+                <button type="button" class="btn btn-danger btn-sm remove-row text-center "   style="width: 26px;" title="Ukloni red"  >
                   <i class="fas fa-times"></i>
                 </button>
                 
-  <input 
-  type="checkbox" 
-  class="form-check-input tariff-privilege-toggle"
-  name="tariff_privilege_check[]"
-  ${tariff_privilege !== 0 && tariff_privilege !== "0" ? 'checked' : ''}
-  title="${tariff_privilege !== 0 && tariff_privilege !== '0' ? tariff_privilege : 'Odaberi povlasticu'}"
-  data-bs-toggle="tooltip"
-  style="width: 30px; height: 26.66px; cursor: pointer;" 
-/>
-
-
-<input 
-  type="hidden" 
-  name="tariff_privilege[]" 
-  value="${tariff_privilege || 0}"
->
-
+  
 
               </div>
             </td>
