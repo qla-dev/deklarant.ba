@@ -936,7 +936,7 @@ function initializeTariffSelects() {
         const $select = $(this);
         const prefillValue = $select.data("prefill");
 
-        // Destroy existing Select2 if needed
+        // Reset Select2 if already initialized
         if ($select.hasClass('select2-hidden-accessible')) {
             $select.select2('destroy');
         }
@@ -956,12 +956,11 @@ function initializeTariffSelects() {
                 transport: function (params, success, failure) {
                     const term = (params.data.q || "").toLowerCase();
 
-                    if (term.length === 0) {
+                    if (!term) {
                         success({ results: [] });
                         return;
                     }
 
-                    // Fake loader
                     const container = document.querySelector('.select2-results__options');
                     if (container) {
                         container.innerHTML = `
@@ -972,9 +971,8 @@ function initializeTariffSelects() {
                     }
 
                     const filtered = processedTariffData.filter(item => {
-                        const id = item.id.toLowerCase();
-                        const display = item.display.toLowerCase();
-                        return id.includes(term) || display.includes(term);
+                        return item.id.toLowerCase().includes(term) ||
+                            item.display.toLowerCase().includes(term);
                     });
 
                     setTimeout(() => success({ results: filtered }), 200);
@@ -983,17 +981,34 @@ function initializeTariffSelects() {
             },
             templateResult: function (item) {
                 if (!item || !item.id || !item.display) return null;
-                const icon = item.isLeaf ? "•" : "▶";
-                return $(`<div style="padding-left:${item.depth * 5}px;" title="${item.display}">
-                            ${icon} ${item.display}
-                          </div>`);
+
+                const digits = item.id.replace(/\D+/g, '');
+                const is4Digit = /^\d{4}$/.test(digits);
+                const is6Digit = /^\d{6}$/.test(digits);
+
+                let isParent = false;
+                if (is4Digit) {
+                    isParent = true;
+                } else if (is6Digit) {
+                    const parentId = item.id.slice(0, 4);
+                    isParent = !processedTariffData.some(other =>
+                        other.id.startsWith(parentId) && /^\d{4}$/.test(other.id.replace(/\D+/g, ''))
+                    );
+                }
+
+                const icon = isParent ? "›" : "•";
+                const padding = isParent ? 0 : item.depth * 5;
+                const fontWeight = isParent ? "bold" : "normal";
+
+                return $(`<div style="padding-left:${padding}px; font-weight:${fontWeight};" title="${item.display}">
+                    ${icon} ${item.display}
+                </div>`);
             },
             templateSelection: function (item) {
                 return item?.id || "";
             }
         });
 
-        // Force focus + smart masking on dropdown open
         $select.on('select2:open', function () {
             setTimeout(() => {
                 const input = document.querySelector('.select2-container--open .select2-search__field');
@@ -1005,11 +1020,10 @@ function initializeTariffSelects() {
             }, 0);
         });
 
-        // Prefill if needed
         if (prefillValue) {
-            const matched = processedTariffData.find(item => item.id === prefillValue);
-            if (matched) {
-                const option = new Option(matched.id, matched.id, true, true);
+            const match = processedTariffData.find(item => item.id === prefillValue);
+            if (match) {
+                const option = new Option(match.id, match.id, true, true);
                 $select.append(option).trigger('change');
             }
         }
