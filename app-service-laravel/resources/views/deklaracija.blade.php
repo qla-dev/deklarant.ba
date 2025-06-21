@@ -1103,9 +1103,6 @@ row.innerHTML = `
           <td colspan="2" style="width: 340px;">
             <div class="input-group" style="display: flex; gap: 0.25rem;">
               <input type="text" class="form-control item-name" name="item_name[]" placeholder="Naziv" value="${name}" style="flex:1;">
-              <button class="btn btn-outline-info rounded" onmouseover="updateTooltip(this)" type="button" onclick="searchFromInputs(this)" data-bs-toggle="tooltip" data-bs-placement="top"   title="">
-                 <i class="fa-brands fa-google"></i>
-            </button>
               <input type="text" class="form-control item-desc" name="item_desc[]" placeholder="Opis" value="${desc}" style="flex:1;">
             </div>
           <input 
@@ -1133,7 +1130,7 @@ row.innerHTML = `
   <div style="position: relative; width: 100%;">
     <select
       class="form-control select2-tariff tariff-selection"
-      style="width: 100%; padding-right: 45px;"
+      style="width: 100%; padding-right: 75px;"
       name="item_code[]"
       data-prefill="${tariff || ''}"
       data-suggestions='${JSON.stringify(suggestions || [])
@@ -1144,6 +1141,29 @@ row.innerHTML = `
       }'>
     </select>
 
+    <!-- 🔍 Google search tooltip button -->
+    <button
+      type="button"
+      class="btn btn-outline-info btn-sm google-search-btn"
+      style="
+        position: absolute;
+        top: 50%;
+        right: 40px;
+        transform: translateY(-50%);
+        height: 30px;
+        width: 30px;
+        padding: 0;
+        border-radius: 3px;
+      "
+      title="Klikni za Google pretragu"
+      data-bs-toggle="tooltip"
+      onclick="searchFromInputs(this)"
+      onmouseover="updateTooltip(this)"
+    >
+      <i class="fab fa-google" style="font-size: 15px;"></i>
+    </button>
+
+    <!-- ✨ AI suggestion button -->
     <button
       type="button"
       data-bs-toggle="tooltip"
@@ -1162,6 +1182,9 @@ row.innerHTML = `
     >
       <i class="fas fa-wand-magic-sparkles" style="font-size: 16px;"></i>
     </button>
+  </div>
+</td>
+
   </div>
 </td>
 

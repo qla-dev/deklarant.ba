@@ -2,12 +2,12 @@
 //  Google search 
 
 
-    function searchFromInputs(button) {
-    const container = button.closest('td'); 
+  function searchFromInputs(button) {
+    const row = button.closest('tr'); // 👈 get the full row instead of <td>
 
-    const nameInput = container.querySelector('.item-name');
-    const descInput = container.querySelector('.item-desc');
-    const tariffInput = container.parentElement.querySelector('.select2-tariff');
+    const nameInput = row.querySelector('.item-name');
+    const descInput = row.querySelector('.item-desc');
+    const tariffInput = row.querySelector('.select2-tariff');
 
     const name = nameInput?.value.trim() || '';
     const desc = descInput?.value.trim() || '';
@@ -17,8 +17,17 @@
 
     if (name || desc) {
         window.open(`https://www.google.com/search?q=${query}`, '_blank');
+    } else {
+        Swal.fire({
+            icon: 'info',
+            title: 'Nedostaje opis',
+            text: 'Unesite naziv ili opis proizvoda za Google pretragu.',
+            confirmButtonText: 'Uredu',
+            confirmButtonColor: '#299dcb'
+        });
     }
 }
+
 
 
     function updateTooltip(button) {
