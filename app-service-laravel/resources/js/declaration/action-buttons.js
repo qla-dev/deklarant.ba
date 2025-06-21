@@ -2,8 +2,8 @@
 //  Google search 
 
 
-  function searchFromInputs(button) {
-    const row = button.closest('tr'); // 👈 get the full row instead of <td>
+function searchFromInputs(button) {
+    const row = button.closest('tr');
 
     const nameInput = row.querySelector('.item-name');
     const descInput = row.querySelector('.item-desc');
@@ -29,29 +29,6 @@
 }
 
 
-
-    function updateTooltip(button) {
-        const nameInput = document.querySelector('.item-name');
-        const descInput = document.querySelector('.item-desc');
-
-        const name = nameInput?.value.trim() || '';
-        const desc = descInput?.value.trim() || '';
-        const label = (name || desc) ?
-            `Klikni za Google pretragu: ${name} ${desc}` :
-            'Klikni za Google pretragu';
-
-        // Update title attribute for fallback
-        button.setAttribute('title', label);
-        button.setAttribute('data-bs-original-title', label); // for Bootstrap
-
-        // Update Bootstrap tooltip instance if it exists
-        const tooltip = bootstrap.Tooltip.getInstance(button);
-        if (tooltip) {
-            tooltip.setContent({
-                '.tooltip-inner': label
-            });
-        }
-    }
 
 
 

@@ -1141,27 +1141,29 @@ row.innerHTML = `
       }'>
     </select>
 
-    <!-- 🔍 Google search tooltip button -->
-    <button
-      type="button"
-      class="btn btn-outline-info btn-sm google-search-btn"
-      style="
-        position: absolute;
-        top: 50%;
-        right: 40px;
-        transform: translateY(-50%);
-        height: 30px;
-        width: 30px;
-        padding: 0;
-        border-radius: 3px;
-      "
-      title="Klikni za Google pretragu"
-      data-bs-toggle="tooltip"
-      onclick="searchFromInputs(this)"
-      onmouseover="updateTooltip(this)"
-    >
-      <i class="fab fa-google" style="font-size: 15px;"></i>
-    </button>
+   <!-- 🔍 Google search tooltip button -->
+<button
+  type="button"
+  class="btn btn-outline-info btn-sm google-search-btn"
+  style="
+    position: absolute;
+    top: 50%;
+    right: 40px;
+    transform: translateY(-50%);
+    height: 30px;
+    width: 30px;
+    padding: 0;
+    border-radius: 3px;
+  "
+  data-bs-toggle="tooltip"
+  data-bs-placement="top"
+  data-bs-original-title="Klikni za Google pretragu: ${name} ${desc}"
+  onclick="searchFromInputs(this)"
+>
+  <i class="fab fa-google" style="font-size: 15px;"></i>
+</button>
+
+
 
     <!-- ✨ AI suggestion button -->
     <button
