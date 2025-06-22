@@ -949,32 +949,40 @@ function initializeTariffSelects() {
                 loadingMore: () => "Učitavanje još rezultata..."
             },
             ajax: {
-                transport: function (params, success, failure) {
-                    const term = (params.data.q || "").toLowerCase();
+  transport: function (params, success, failure) {
+    const term = (params.data.q || "").toLowerCase();
 
-                    if (!term) {
-                        success({ results: [] });
-                        return;
-                    }
+    // show spinner…
+    const container = document.querySelector('.select2-results__options');
+    if (container) {
+      container.innerHTML = `
+        <li class="select2-results__option" role="alert" aria-live="assertive">
+          <i class="fa fa-spinner fa-spin" style="margin-right:6px;"></i>
+          Pretraga...
+        </li>`;
+    }
 
-                    const container = document.querySelector('.select2-results__options');
-                    if (container) {
-                        container.innerHTML = `
-                            <li class="select2-results__option" role="alert" aria-live="assertive">
-                                <i class="fa fa-spinner fa-spin" style="margin-right: 6px;"></i>
-                                Pretraga...
-                            </li>`;
-                    }
+    // split into matches and non-matches
+    const matches = processedTariffData.filter(item =>
+      item.id.toLowerCase().includes(term) ||
+      item.display.toLowerCase().includes(term)
+    );
+    const rest = processedTariffData.filter(item =>
+      !matches.some(m => m.id === item.id)
+    );
 
-                    const filtered = processedTariffData.filter(item => {
-                        return item.id.toLowerCase().includes(term) ||
-                            item.display.toLowerCase().includes(term);
-                    });
+    setTimeout(() => {
+      // concat matches first, then the rest
+      success({ results: [...matches, ...rest] });
 
-                    setTimeout(() => success({ results: filtered }), 200);
-                },
-                delay: 200
-            },
+      // reset scroll
+      const dropdown = document.querySelector('.select2-results__options');
+      if (dropdown) dropdown.scrollTop = 0;
+    }, 200);
+  },
+  delay: 200
+},
+
             templateResult: function (item) {
                 if (!item || !item.id || !item.display) return null;
 
@@ -2239,84 +2247,92 @@ placeholder: "Pretraži...", // bolji UX
             });
 
 
-            // await promptForSupplierAfterScan();
-            $(document).on('click', '.show-ai-btn', function() {
-                console.log(" AI button clicked");
+                    // Handle AI suggestions button click
+          $(document).on('click', '.show-ai-btn', function() {
+  console.log("AI button clicked");
 
-                const select = $(this).closest('td').find('select.select2-tariff');
-                console.log(" Found select element:", select);
+  // 1) find the select2 and parse its suggestions
+  const $select = $(this).closest('td').find('select.select2-tariff');
+  let raw = $select.data('suggestions');
+  if (!raw) {
+    console.warn("No suggestions data on select");
+    return;
+  }
+  try {
+    if (typeof raw === 'string') raw = JSON.parse(raw);
+  } catch (e) {
+    console.error("Bad JSON in suggestions:", e);
+    return;
+  }
+  if (!Array.isArray(raw)) {
+    console.warn("Suggestions not an array:", raw);
+    return;
+  }
 
-                let rawSuggestions = select.data("suggestions");
-                try {
-                    if (typeof rawSuggestions === "string") {
-                        rawSuggestions = JSON.parse(rawSuggestions);
-                    }
-                } catch (err) {
-                    console.error(" Failed to parse suggestions JSON:", err);
-                    return;
-                }
+  // 2) sort by closeness, take top 10
+  const sorted = raw
+    .slice()
+    .sort((a, b) => a.closeness - b.closeness)
+    .slice(0, 10);
 
-                console.log(" Raw suggestions:", rawSuggestions);
+  // 3) render into the modal body
+  const $body = $('#aiSuggestionsBody');
+  if (sorted.length === 0) {
+    $body.html('<div class="text-muted">Nema prijedloga.</div>');
+  } else {
+    const html = sorted.map((s, i) => {
+      const code      = s.entry["Tarifna oznaka"];
+      const childName = s.entry["Naziv"];
 
-                if (!rawSuggestions) {
-                    console.warn(" No suggestions found on data attribute.");
-                    return;
-                }
+      // split out the parent code (first segment)
+      const parts = code.split(' ');
+      let nameLabel;
 
-                if (!Array.isArray(rawSuggestions)) {
-                    console.warn(" Suggestions are not an array:", typeof rawSuggestions);
-                    return;
-                }
+      if (parts.length > 1) {
+        const parentCode = parts[0];
+        // look up the parent in your master list
+        const parentItem = processedTariffData.find(item => item.id === parentCode);
+        const parentName = parentItem
+          ? (parentItem.Naziv || parentItem.text || parentItem.label)
+          : parentCode;
 
-                const sorted = [...rawSuggestions].sort((a, b) => a.closeness - b.closeness).slice(0, 10);
-                console.log(" Sorted suggestions:", sorted);
+        // format: Parent – Child (with child in bold)
+        nameLabel = `${parentName} – <strong>${childName}</strong>`;
+      } else {
+        // no parent segment: just bold the whole name
+        nameLabel = `<strong>${childName}</strong>`;
+      }
 
-                const container = document.getElementById("aiSuggestionsBody");
-                if (!container) {
-                    console.error(" aiSuggestionsBody not found in DOM");
-                    return;
-                }
+      return `
+        <div class="mb-3">
+          <div>
+            <strong>${i+1}. Tarifna oznaka:</strong> ${code}
+          </div>
+          <div>
+            <strong>Naziv:</strong> ${nameLabel}
+          </div>
+          <button type="button"
+                  class="btn btn-sm btn-info mt-1 use-tariff"
+                  data-value="${code}">
+            Koristi ovu oznaku
+          </button>
+          <hr>
+        </div>
+      `;
+    }).join('');
 
-                if (!sorted.length) {
-                    container.innerHTML = `<div class="text-muted">Nema prijedloga.</div>`;
-                    console.log("ℹ No sorted suggestions to show.");
-                } else {
-                    container.innerHTML = sorted.map((s, i) => `
-            <div class="mb-2">
-                <div><strong>${i + 1}. Tarifna oznaka:</strong> ${s.entry["Tarifna oznaka"]}</div>
-                <div><strong>Naziv:</strong> ${s.entry["Naziv"]}</div>
-                <button class="btn btn-sm btn-info mt-1 use-tariff" data-value="${s.entry["Tarifna oznaka"]}">
-                    Koristi ovu oznaku
-                </button>
-                <hr>
-            </div>
-        `).join("");
-                    console.log(" Inserted suggestions into modal body.");
-                }
+    $body.html(html);
+  }
 
-                $('#aiSuggestionModal').data('target-select', select);
-                console.log(" Set data-target-select on modal.");
+  // 4) stash the select2 field for the “use-tariff” handler
+  $('#aiSuggestionModal').data('target-select', $select);
 
-                const modalEl = document.getElementById("aiSuggestionModal");
-                if (!modalEl) {
-                    console.error(" Modal element not found with ID aiSuggestionModal");
-                    return;
-                }
-
-                let modal = bootstrap.Modal.getInstance(modalEl);
-                console.log(" Existing modal instance:", modal);
-
-                if (!modal) {
-                    modal = new bootstrap.Modal(modalEl, {
-                        backdrop: 'static',
-                        keyboard: true
-                    });
-                    console.log(" Modal instance created.");
-                }
-
-                modal.show();
-                console.log(" Bootstrap modal should be showing now.");
-            });
+  // 5) show the Bootstrap modal
+  const modalEl = document.getElementById('aiSuggestionModal');
+  let modal = bootstrap.Modal.getInstance(modalEl)
+           || new bootstrap.Modal(modalEl, { backdrop: 'static', keyboard: true });
+  modal.show();
+});
 
             $(document).on('click', '.use-tariff', function() {
                 const code = $(this).data('value');
