@@ -1363,62 +1363,63 @@ row.innerHTML = `
             </td>
 
         `;
-// 1) Initialize origin Select2 on the new row
-$(row).find('select[name="origin[]"]').select2({
-  templateResult: formatFlag,
-  templateSelection: formatFlag,
-  placeholder: "Select a country",
-  width: 'style',
-  language: {
-    noResults:    () => "Nisu pronađeni rezultati",
-    inputTooShort: () => "Unesite još znakova…"
-  }
-}).on('select2:open', () => {
-  setTimeout(() => $('.select2-search__field').focus(), 0);
+            // 1) Initialize origin Select2 on the new row
+            $(row).find('select[name="origin[]"]').select2({
+            templateResult: formatFlag,
+            templateSelection: formatFlag,
+            placeholder: "Select a country",
+            width: 'style',
+            language: {
+                noResults:    () => "Nisu pronađeni rezultati",
+                inputTooShort: () => "Unesite još znakova…"
+            }
+            }).on('select2:open', function() {
+  const $search = $('.select2-container--open .select2-search__field');
+  if ($search.length) setTimeout(() => $search[0].focus(), 0);
 });
 
-// 2) Global country-change listener
-$(document)
-  .off('change', 'select[name="origin[]"]')
-  .on('change', 'select[name="origin[]"]', function () {
-    const code        = $(this).val()?.toUpperCase();
-    const allowedCode = allowedCountries[code];                // lookup
-    const $row        = $(this).closest('tr');
-    const $cb         = $row.find('.tariff-privilege-toggle');
-    const $hidden     = $row.find('input[name="tariff_privilege[]"]');
+            // 2) Global country-change listener
+            $(document)
+            .off('change', 'select[name="origin[]"]')
+            .on('change', 'select[name="origin[]"]', function () {
+                const code        = $(this).val()?.toUpperCase();
+                const allowedCode = allowedCountries[code];                // lookup
+                const $row        = $(this).closest('tr');
+                const $cb         = $row.find('.tariff-privilege-toggle');
+                const $hidden     = $row.find('input[name="tariff_privilege[]"]');
 
-    if (!allowedCode) {
-      // if country not allowed: disable & clear
-      $cb.prop('disabled', true).prop('checked', false);
-      $hidden.val(0);
-    } else {
-      // country allowed: enable, preserve checked value if any
-      $cb.prop('disabled', false);
-      if ($cb.is(':checked')) {
-        $hidden.val(allowedCode);
-      }
-    }
+                if (!allowedCode) {
+                // if country not allowed: disable & clear
+                $cb.prop('disabled', true).prop('checked', false);
+                $hidden.val(0);
+                } else {
+                // country allowed: enable, preserve checked value if any
+                $cb.prop('disabled', false);
+                if ($cb.is(':checked')) {
+                    $hidden.val(allowedCode);
+                }
+                }
 
-    // update tooltip text based on checkbox state
-    const tipText = $cb.is(':checked')
-      ? $hidden.val()                  // show code when checked
-      : 'Odaberi povlasticu';         // fallback
+                // update tooltip text based on checkbox state
+                const tipText = $cb.is(':checked')
+                ? $hidden.val()                  // show code when checked
+                : 'Odaberi povlasticu';         // fallback
 
-    const inst = bootstrap.Tooltip.getInstance($cb[0]);
-    if (inst) {
-      inst.setContent({ '.tooltip-inner': tipText });
-    } else {
-      $cb
-        .attr('data-bs-original-title', tipText)
-        .removeAttr('title');
-      new bootstrap.Tooltip($cb[0]);
-    }
-  });
+                const inst = bootstrap.Tooltip.getInstance($cb[0]);
+                if (inst) {
+                inst.setContent({ '.tooltip-inner': tipText });
+                } else {
+                $cb
+                    .attr('data-bs-original-title', tipText)
+                    .removeAttr('title');
+                new bootstrap.Tooltip($cb[0]);
+                }
+            });
 
-// 3) Trigger once on row-creation to set the initial state & tooltip
-setTimeout(() => {
-  $(row).find('select[name="origin[]"]').trigger('change');
-}, 0);
+            // 3) Trigger once on row-creation to set the initial state & tooltip
+            setTimeout(() => {
+            $(row).find('select[name="origin[]"]').trigger('change');
+            }, 0);
 
 
         
@@ -2970,7 +2971,6 @@ Swal.fire({
 </script>
 
 
-
 <div id="pre-ai-overlay" class="{{ isset($id) ? 'd-none' : '' }}">
   <div class="bg-white rounded shadow p-4 text-center" style="width:420px;">
     <h5 class="mb-4" style="font-size: 20px">Pokretanje AI&nbsp;tehnologije</h5>
@@ -2983,61 +2983,6 @@ Swal.fire({
   </div>
 </div>
 
-<script>
-const overlay = document.getElementById('pre-ai-overlay');
-
-/*  Pokreći logiku SAMO ako overlay postoji i NIJE već sakriven  */
-if (overlay && !overlay.classList.contains('d-none')) {
-
-    setTimeout(() => {
-        if (!window.AI_SCAN_STARTED) {
-
-            /*  Sakrij overlay  */
-            overlay.classList.add('d-none');
-            overlay.style.display = 'none';
-
-            /*  1) Postoji global_invoice_id → prikaži “Uredu / Odustani”  */
-            if (window.global_invoice_id) {
-                Swal.fire({
-                    icon: "error",
-                    title: "<div class='text-danger'>Nema pokrenutih procesa za AI obradu</div>",
-                    text: "Prikazuje se zadnja obrađena deklaracija",
-                    showConfirmButton: true,
-                    showCancelButton: true,
-                    reverseButtons: true,
-                    confirmButtonText: "Uredu",
-                    cancelButtonText: "Odustani",
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    customClass: {
-                        confirmButton: "btn btn-info",
-                        cancelButton: "btn btn-soft-info me-2"
-                    },
-                    buttonsStyling: false
-                }).then((result) => {
-                    if (result.isDismissed &&
-                        result.dismiss === Swal.DismissReason.cancel) {
-                        window.location.href = "/";
-                    }
-                });
-
-            /*  2) Nema ni global_invoice_id → automatski redirect  */
-            } else {
-                Swal.fire({
-                    icon: "error",
-                    title: "<div class='text-danger'>Nema pokrenutih procesa za AI obradu niti spremih u lokalnom spremniku</div>",
-                    text: "Automatsko prebacivanje na početnu stranicu",
-                    showConfirmButton: false,
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    timer: 2000,
-                    timerProgressBar: true
-                }).then(() => window.location.href = "/");
-            }
-        }
-    }, 15000); // provjera nakon 12 s
-}
-</script>
 
 
 
@@ -3047,7 +2992,8 @@ if (overlay && !overlay.classList.contains('d-none')) {
 
 
 
-
+<script src="{{ URL::asset('build/js/declaration/select-autofocus.js') }}"></script>
+<script src="{{ URL::asset('build/js/declaration/loading-overlay.js') }}"></script>
 <script src="{{ URL::asset('build/js/declaration/decimal-regex.js') }}"></script>
 <script src="{{ URL::asset('build/js/declaration/tariff-privilege.js') }}"></script>
 <script src="{{ URL::asset('build/js/declaration/export-edit.js') }}"></script>
