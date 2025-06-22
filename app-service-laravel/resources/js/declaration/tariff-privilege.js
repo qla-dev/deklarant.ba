@@ -64,16 +64,59 @@ new bootstrap.Tooltip(checkbox[0]);
         checkbox.attr('title', 'Odaberi povlasticu').tooltip('dispose').tooltip();
     }
 });
- const allowedCountries = {
-            "TR": "TRP",
-            "AT": "EUP",
-            "DE": "EUP",
-            "FR": "EUP",
-            "IR": "IRP",
-            "CH": "EFTA2",
-            "LI": "EFTA2",
-            "IS": "EFTA3",
-            "NO": "EFTA4",
-            "BA": "CEFTA/AP"
-            // Add more as needed
+const allowedCountries = {
+  // Turkey
+  "TR": "TRP",
+
+  // EU countries (27 members, post-Brexit)
+  "AT": "EUP", // Austria
+  "BE": "EUP", // Belgium
+  "BG": "EUP", // Bulgaria
+  "HR": "EUP", // Croatia
+  "CY": "EUP", // Cyprus
+  "CZ": "EUP", // Czechia
+  "DK": "EUP", // Denmark
+  "EE": "EUP", // Estonia
+  "FI": "EUP", // Finland
+  "FR": "EUP", // France
+  "DE": "EUP", // Germany
+  "GR": "EUP", // Greece
+  "HU": "EUP", // Hungary
+  "IE": "EUP", // Ireland
+  "IT": "EUP", // Italy
+  "LV": "EUP", // Latvia
+  "LT": "EUP", // Lithuania
+  "LU": "EUP", // Luxembourg
+  "MT": "EUP", // Malta
+  "NL": "EUP", // Netherlands
+  "PL": "EUP", // Poland
+  "PT": "EUP", // Portugal
+  "RO": "EUP", // Romania
+  "SK": "EUP", // Slovakia
+  "SI": "EUP", // Slovenia
+  "ES": "EUP", // Spain
+  "SE": "EUP", // Sweden
+
+  // Iran
+  "IR": "IRP",
+
+  // CEFTA – Central European Free Trade Agreement members
+  "AL": "CEFTA/AP", // Albania
+  "BA": "CEFTA/AP", // Bosnia and Herzegovina
+  "MK": "CEFTA/AP", // North Macedonia
+  "ME": "CEFTA/AP", // Montenegro
+  "RS": "CEFTA/AP", // Serbia
+
+  // EFTA countries
+  "CH": "EFTA2",   // Switzerland
+  "LI": "EFTA2",   // Liechtenstein
+  "IS": "EFTA3",   // Iceland
+  "NO": "EFTA4",   // Norway
+
+  // EFTA transitional rules (added as special pseudo-codes)
+  "CHT": "EFTA2T", // Switzerland – Transitional
+  "LIT": "EFTA2T", // Liechtenstein – Transitional
+  "IST": "EFTA3T", // Iceland – Transitional
+  "NOT": "EFTA4T", // Norway – Transitional
 };
+
