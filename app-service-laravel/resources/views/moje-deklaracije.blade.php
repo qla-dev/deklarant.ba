@@ -392,6 +392,57 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+<script>
+  // DELETE handler
+  $('#invoiceTable').on('click', '.delete-invoice', function () {
+    const invoiceId = $(this).data('id');
+    Swal.fire({
+      title: 'Upozorenje',
+      text: 'Jeste li sigurni da želite obrisati ovu deklaraciju?',
+      icon: 'warning',
+      showCancelButton: true,
+      reverseButtons: true,
+      customClass: {
+        confirmButton: "btn btn-info",
+        cancelButton: "btn btn-soft-info me-2"
+      },
+      confirmButtonText: 'Da, obriši',
+      cancelButtonText: 'Ne, odustani'
+    }).then((result) => {
+      if (!result.isConfirmed) return;
+
+      $.ajax({
+        url: `/api/invoices/${invoiceId}`,
+        type: 'DELETE',
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        },
+        success(response) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Obrisano!',
+            text: response.message,
+            timer: 1500,
+            showConfirmButton: false
+          }).then(() => {
+            // full page reload on success
+            location.reload();
+          });
+        },
+        error(xhr) {
+          const err = xhr.responseJSON?.error || 'Došlo je do greške prilikom brisanja.';
+          Swal.fire({
+            icon: 'error',
+            title: 'Greška',
+            text: err
+          });
+        }
+      });
+    });
+  });
+</script>
 
 
 
