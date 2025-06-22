@@ -2247,8 +2247,8 @@ placeholder: "Pretraži...", // bolji UX
             });
 
 
-                    // Handle AI suggestions button click
-          $(document).on('click', '.show-ai-btn', function() {
+             // Handle AI suggestions button click
+$(document).on('click', '.show-ai-btn', function() {
   console.log("AI button clicked");
 
   // 1) find the select2 and parse its suggestions
@@ -2281,6 +2281,7 @@ placeholder: "Pretraži...", // bolji UX
     $body.html('<div class="text-muted">Nema prijedloga.</div>');
   } else {
     const html = sorted.map((s, i) => {
+      const isLast = i === sorted.length - 1;
       const code      = s.entry["Tarifna oznaka"];
       const childName = s.entry["Naziv"];
 
@@ -2304,7 +2305,7 @@ placeholder: "Pretraži...", // bolji UX
       }
 
       return `
-        <div class="mb-3">
+        <div${!isLast ? ' class="mb-3"' : ''}>
           <div>
             <strong>${i+1}. Tarifna oznaka:</strong> ${code}
           </div>
@@ -2316,7 +2317,7 @@ placeholder: "Pretraži...", // bolji UX
                   data-value="${code}">
             Koristi ovu oznaku
           </button>
-          <hr>
+          ${!isLast ? '<hr>' : ''}
         </div>
       `;
     }).join('');
@@ -2333,6 +2334,7 @@ placeholder: "Pretraži...", // bolji UX
            || new bootstrap.Modal(modalEl, { backdrop: 'static', keyboard: true });
   modal.show();
 });
+
 
             $(document).on('click', '.use-tariff', function() {
                 const code = $(this).data('value');
