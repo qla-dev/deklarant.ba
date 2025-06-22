@@ -1219,8 +1219,40 @@ row.innerHTML = `
         height: 26px;
         cursor: pointer;
         margin-top:0px!important;
+        z-index:99!important;
+        border: 1px solid #299cdb;
       "
     />
+    <!-- 🔒 Lock icon (hidden by default) -->
+<span
+  style="
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+    width: 26px;
+    height: 26px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    display: inline-block;
+  "
+  data-bs-toggle="tooltip"
+  data-bs-placement="top"
+  title="Odabrana država nema nijednu povlasticu"
+  class="lock-disabled"
+>
+  <i class="fa fa-lock" aria-hidden="true" style="
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 16px;
+    color: #888;
+  "></i>
+</span>
+
+
+
 
     <!-- hidden field -->
     <input 
@@ -1379,22 +1411,30 @@ row.innerHTML = `
 });
 
             // 2) Global country-change listener
-            $(document)
-            .off('change', 'select[name="origin[]"]')
-            .on('change', 'select[name="origin[]"]', function () {
-                const code        = $(this).val()?.toUpperCase();
-                const allowedCode = allowedCountries[code];                // lookup
-                const $row        = $(this).closest('tr');
-                const $cb         = $row.find('.tariff-privilege-toggle');
-                const $hidden     = $row.find('input[name="tariff_privilege[]"]');
-
+           $(document)
+            .off('change','select[name="origin[]"]')
+            .on('change','select[name="origin[]"]', function(){
+                const code       = $(this).val()?.toUpperCase();
+                const allowedCode= allowedCountries[code];
+                const $row       = $(this).closest('tr');
+                const $cb        = $row.find('.tariff-privilege-toggle');
+                const $lock      = $row.find('.lock-icon');
+                const $hidden    = $row.find('input[name="tariff_privilege[]"]');
+                
                 if (!allowedCode) {
-                // if country not allowed: disable & clear
-                $cb.prop('disabled', true).prop('checked', false);
+                // ← country *not* allowed
+                $cb
+                    .prop('checked', false)
+                    .prop('disabled', true)
+                    .hide();
+                $lock.show();
                 $hidden.val(0);
                 } else {
-                // country allowed: enable, preserve checked value if any
-                $cb.prop('disabled', false);
+                // ← country *allowed*
+                $lock.hide();
+                $cb
+                    .prop('disabled', false)
+                    .show();
                 if ($cb.is(':checked')) {
                     $hidden.val(allowedCode);
                 }
