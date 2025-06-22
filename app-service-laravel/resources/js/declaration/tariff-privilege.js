@@ -64,3 +64,16 @@ new bootstrap.Tooltip(checkbox[0]);
         checkbox.attr('title', 'Odaberi povlasticu').tooltip('dispose').tooltip();
     }
 });
+ const allowedCountries = {
+            "TR": "TRP",
+            "AT": "EUP",
+            "DE": "EUP",
+            "FR": "EUP",
+            "IR": "IRP",
+            "CH": "EFTA2",
+            "LI": "EFTA2",
+            "IS": "EFTA3",
+            "NO": "EFTA4",
+            "BA": "CEFTA/AP"
+            // Add more as needed
+};

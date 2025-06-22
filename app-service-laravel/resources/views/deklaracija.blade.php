@@ -513,10 +513,6 @@ if (typeof window !== "undefined") {
         let globalAISuggestions = [];
         const remaining_scans = @json(Auth::user() -> getRemainingScans());
 
-
-
-
-
         // Add global flags
         window.forceNewSupplier = false;
         window.forceNewImporter = false;
@@ -1208,13 +1204,13 @@ row.innerHTML = `
 
     <!-- ✅ Povlastica (checkbox) pozicioniran desno, ne ometa dropdown -->
     <input 
-      type="checkbox" 
-      class="form-check-input tariff-privilege-toggle"
-      name="tariff_privilege_check[]"
-      ${tariff_privilege !== 0 && tariff_privilege !== "0" ? 'checked' : ''}
-      title="${tariff_privilege !== 0 && tariff_privilege !== '0' ? tariff_privilege : 'Odaberi povlasticu'}"
-      data-bs-toggle="tooltip"
-      style="
+       type="checkbox" 
+  class="form-check-input tariff-privilege-toggle"
+  name="tariff_privilege_check[]"
+  ${tariff_privilege !== 0 && tariff_privilege !== "0" ? 'checked' : ''}
+  data-bs-toggle="tooltip"
+  data-bs-original-title="${tariff_privilege !== 0 && tariff_privilege !== '0' ? tariff_privilege : 'Odaberi povlasticu'}"
+  style="
         position: absolute;
         top: 50%;
         right: 5px;
@@ -1367,30 +1363,65 @@ row.innerHTML = `
             </td>
 
         `;
-
-
-   $(row).find('select[name="origin[]"]').select2({
-    templateResult: formatFlag,
-    templateSelection: formatFlag,
-    placeholder: "Select a country",
-    width: 'style',
-
-    language: {
-        noResults: function () {
-            return "Nisu pronađeni rezultati";
-        },
-        inputTooShort: function () {
-            return "Unesite još znakova…";
-        }
-    }
-}).on('select2:open', function () {
-    // Autofocus search field on dropdown open
-    setTimeout(() => {
-        document.querySelector('.select2-search__field')?.focus();
-    }, 0);
+// 1) Initialize origin Select2 on the new row
+$(row).find('select[name="origin[]"]').select2({
+  templateResult: formatFlag,
+  templateSelection: formatFlag,
+  placeholder: "Select a country",
+  width: 'style',
+  language: {
+    noResults:    () => "Nisu pronađeni rezultati",
+    inputTooShort: () => "Unesite još znakova…"
+  }
+}).on('select2:open', () => {
+  setTimeout(() => $('.select2-search__field').focus(), 0);
 });
 
+// 2) Global country-change listener
+$(document)
+  .off('change', 'select[name="origin[]"]')
+  .on('change', 'select[name="origin[]"]', function () {
+    const code        = $(this).val()?.toUpperCase();
+    const allowedCode = allowedCountries[code];                // lookup
+    const $row        = $(this).closest('tr');
+    const $cb         = $row.find('.tariff-privilege-toggle');
+    const $hidden     = $row.find('input[name="tariff_privilege[]"]');
 
+    if (!allowedCode) {
+      // if country not allowed: disable & clear
+      $cb.prop('disabled', true).prop('checked', false);
+      $hidden.val(0);
+    } else {
+      // country allowed: enable, preserve checked value if any
+      $cb.prop('disabled', false);
+      if ($cb.is(':checked')) {
+        $hidden.val(allowedCode);
+      }
+    }
+
+    // update tooltip text based on checkbox state
+    const tipText = $cb.is(':checked')
+      ? $hidden.val()                  // show code when checked
+      : 'Odaberi povlasticu';         // fallback
+
+    const inst = bootstrap.Tooltip.getInstance($cb[0]);
+    if (inst) {
+      inst.setContent({ '.tooltip-inner': tipText });
+    } else {
+      $cb
+        .attr('data-bs-original-title', tipText)
+        .removeAttr('title');
+      new bootstrap.Tooltip($cb[0]);
+    }
+  });
+
+// 3) Trigger once on row-creation to set the initial state & tooltip
+setTimeout(() => {
+  $(row).find('select[name="origin[]"]').trigger('change');
+}, 0);
+
+
+        
             function formatFlag(state) {
                 if (!state.id) return state.text;
                 const flagUrl = $(state.element).data('flag');
@@ -1398,10 +1429,15 @@ row.innerHTML = `
             }
 
             tbody.appendChild(row);
+            const cb = row.querySelector('.tariff-privilege-toggle');
+cb.removeAttribute('title');                 // ensure no native tooltip
+bootstrap.Tooltip.getInstance(cb)?.dispose(); 
+new bootstrap.Tooltip(cb); 
             // ✅ Re-init all tooltips inside the new row
 $(row).find('[data-bs-toggle="tooltip"]').each(function () {
   new bootstrap.Tooltip(this);
 });
+
             
             initializeTariffSelects();
             updateProcjenaEstimates(); 
