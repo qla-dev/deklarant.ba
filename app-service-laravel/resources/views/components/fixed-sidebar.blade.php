@@ -217,35 +217,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
  <!-- remove items bnt logic -->
 
- <script>
-     document.addEventListener("DOMContentLoaded", function() {
-         const deleteBtn = document.getElementById("brisanje");
-         if (deleteBtn) {
-             deleteBtn.addEventListener("click", function() {
-                 Swal.fire({
-                     title: "Jesi li siguran/na?",
-                     text: "Svi proizvodi u tabeli će biti uklonjeni",
-                     icon: "warning",
-                     showCancelButton: true,
-                     confirmButtonText: "Da, obriši sve",
-                     cancelButtonText: "Odustani",
-                     customClass: {
-                         confirmButton: "btn btn-soft-info me-2",
-                         cancelButton: "btn btn-info"
-                     },
-                     buttonsStyling: false
-                 }).then((result) => {
-                     if (result.isConfirmed) {
-                         const tbody = document.querySelector("#newlink");
-                         if (tbody) {
-                             tbody.innerHTML = ""; // remove all rows
-                         }
-                     }
-                 });
-             });
-         }
-     });
- </script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const deleteBtn = document.getElementById("brisanje");
+    if (deleteBtn) {
+      deleteBtn.addEventListener("click", function() {
+        Swal.fire({
+          title: "Jesi li siguran/na?",
+          text: "Svi proizvodi u tabeli će biti uklonjeni",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Da, obriši sve",
+          cancelButtonText: "Odustani",
+          customClass: {
+            confirmButton: "btn btn-soft-info me-2",
+            cancelButton: "btn btn-info"
+          },
+          buttonsStyling: false
+        }).then((result) => {
+          if (result.isConfirmed) {
+            const tbody = document.querySelector("#newlink");
+            if (tbody) {
+              tbody.innerHTML = "";      // remove all rows
+              updateTotalAmount();       // recalculate totals
+            }
+          }
+        });
+      });
+    }
+  });
+</script>
+
 
 
 
