@@ -331,7 +331,7 @@
                                   
   <th style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem;">Cijena</th>
                                 <th style="width:100px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Ukupno</th>
-                                <th style="width:20px;vertical-align: middle; text-align: end;">Ukloni 
+                                <th style="width:20px;vertical-align: middle; text-align: end;"> 
     
                                 </th>
                             </tr>
