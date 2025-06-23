@@ -2579,8 +2579,8 @@ if (invoiceDateInput) {
             });
 
             document.getElementById('q1-estimate')?.addEventListener('input', updateProcjenaEstimates);
-            // document.getElementById('q2-bruto')?.addEventListener('input', updateBrutoEstimates);
-            // document.getElementById('q3-neto')?.addEventListener('input', updateNetoEstimates);
+            document.getElementById('q2-bruto')?.addEventListener('input', updateBrutoEstimates);
+            document.getElementById('q3-neto')?.addEventListener('input', updateNetoEstimates);
 
             document.addEventListener('input', function (e) {
                 if (e.target?.name === "kolata[]") {
