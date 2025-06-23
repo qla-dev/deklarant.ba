@@ -175,8 +175,8 @@ public function update(Request $request, $invoiceId)
                 'country_of_origin' => $item['origin'] ?? null,
                 'quantity_type' => $item['quantity_type'] ?? null,
                 'num_packages' => $item['package_num'] ?? null,
-                'weight_gross' => $item['weight_gross'] ?? null,
-                'weight_net' => $item['weight_net'] ?? null,
+                'weight_gross' => isset($item['weight_gross']) ? floatval(str_replace(',', '.', $item['weight_gross'])): null,
+                'weight_net'   => isset($item['weight_net']) ? floatval(str_replace(',', '.', $item['weight_net'])) : null,
                 'tariff_privilege' => $item['tariff_privilege'] !== '0' ? $item['tariff_privilege'] : null,
             ];
 
