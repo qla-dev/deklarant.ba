@@ -307,31 +307,31 @@
             <div class="card-body p-4 border-top border-top-dashed">
                 <div class="table-responsive">
                     <table class="table table-borderless text-center table-nowrap align-middle mb-0" id="products-table">
-                        <thead class="table-active">
+                        <thead>
                             <tr>
-                                <th style="width: 50px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">#</th>
-                                <th style="width: 200px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; padding-right: 50px!important;">Proizvod </th>
-                                <th style="width: 140px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; margin-left: -5px!important;">Opis </th>
-                                <th style="width: 350px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Tarifna oznaka</th>
-                                <th style="width: 50px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Jed. mjere</th>
-                                <th style="width:120px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Porijeklo/Pov..</th>
+                                <th style="width: 50px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!important">#</th>
+                                <th style="width: 200px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; padding-right: 50px!important; background: #f3f3f9!important">Proizvod </th>
+                                <th style="width: 140px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; margin-left: -5px!important; background: #f3f3f9!important">Opis </th>
+                                <th style="width: 350px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!important">Tarifna oznaka</th>
+                                <th style="width: 50px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!important">Jed. mjere</th>
+                                <th style="width:120px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!important">Porijeklo/Pov..</th>
                               
-                                 <th style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem;">Koleta</th>
+                                 <th style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem; background: #f3f3f9!important">Koleta</th>
                                   
-                                <th style="width: 100px; text-align: center;vertical-align: middle;">
+                                <th style="width: 100px; text-align: center;vertical-align: middle; background: #f3f3f9!important">
                                     Bruto (kg)<br>
                                     <small style="font-weight: normal; font-size: 0.75rem; color: #666;">
                                         Neto (kg)
                                     </small>
                                 </th>
-                                    <th style="width: 100px; text-align: center;vertical-align: middle;">
+                                    <th style="width: 100px; text-align: center;vertical-align: middle; background: #f3f3f9!important">
                                     Količina<br>
                                   
                                 </th>
                                   
-  <th style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem;">Cijena</th>
-                                <th style="width:100px;vertical-align: middle; text-align: middle; padding-bottom: 1rem;">Ukupno</th>
-                                <th style="width:20px;vertical-align: middle; text-align: end;"> 
+  <th style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem; background: #f3f3f9!important">Cijena</th>
+                                <th style="width:100px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!important">Ukupno</th>
+                                <th style="width:20px;vertical-align: middle; text-align: end; background:unset!important; border: 1px solid transparent;"> 
     
                                 </th>
                             </tr>
