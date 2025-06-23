@@ -2531,10 +2531,17 @@ if (invoiceDateInput) {
             
 
             console.log(" Invoice date and number set.");
+            // Prefill total weights and package count
+            const rawNet   = invoice.total_weight_net;
+            const rawGross = invoice.total_weight_gross;
+
+            // if parseFloat(...) is NaN, use 0
+            const netVal   = isNaN(parseFloat(rawNet))   ? 0 : rawNet;
+            const grossVal = isNaN(parseFloat(rawGross)) ? 0 : rawGross;
 
          // Prefill total weights and package count
-            setField("#total-weight-net",   formatDecimal(invoice.total_weight_net,   2));
-            setField("#total-weight-gross", formatDecimal(invoice.total_weight_gross, 2));
+            setField("#total-weight-net",   formatDecimal(netVal,   2));
+            setField("#total-weight-gross", formatDecimal(grossVal, 2));
             setField("#total-num-packages", invoice.total_num_packages ?? "0");
 
             console.log("Weights and package count set:",
