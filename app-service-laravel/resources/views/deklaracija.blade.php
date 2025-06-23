@@ -1347,7 +1347,7 @@ row.innerHTML = `
             <div style="display: flex; flex-direction: column; gap: 2px; width: 100%;">
               <div class="input-group input-group-sm" style="width: 100%;">
                 <button 
-                  class="btn btn-outline-info btn-sm" 
+                  class="btn btn-outline-info btn-sm decrement-gross" 
                   style="width: 20px; padding: 0;" 
                   type="button"
                 >−</button>
@@ -1361,7 +1361,7 @@ row.innerHTML = `
                   style="padding: 0 5px; height: 30px; border-radius:0!important"
                 >
                 <button 
-                  class="btn btn-outline-info btn-sm" 
+                  class="btn btn-outline-info btn-sm increment-gross" 
                   style=" width: 20px; padding: 0;" 
                   type="button"
                 >+</button>
@@ -1369,7 +1369,7 @@ row.innerHTML = `
               
              <div class="input-group input-group-sm" style="height: 30px;">
                 <button 
-                class="btn btn-outline-info btn-sm"
+                class="btn btn-outline-info btn-sm decrement-net"
                   style="padding: 0; width: 20px;"
                 >−</button>
 
@@ -1384,7 +1384,7 @@ row.innerHTML = `
                 >
 
                 <button 
-                  class="btn btn-outline-info btn-sm increment-kolata" 
+                  class="btn btn-outline-info btn-sm increment-net" 
                   type="button" 
                   style="padding: 0; width: 20px;"
                 >+</button>
@@ -1568,6 +1568,46 @@ $(row).find('[data-bs-toggle="tooltip"]').each(function () {
                 updateTotalAmount();
             }
         });
+        // Net-weight increment
+        $(document).on('click', '.increment-net', function() {
+            console.log('▶︎ increment-net clicked');
+            const input = $(this).siblings('input[name="weight_net[]"]');
+            input.val(parseFloat(input.val() || 0) + 1).trigger('input');
+            updateTotalAmount();
+        });
+
+        // Net-weight decrement
+        $(document).on('click', '.decrement-net', function() {
+            console.log('▶︎ decrement-net clicked');
+            const input = $(this).siblings('input[name="weight_net[]"]');
+            const current = parseFloat(input.val() || 0);
+            if (current > 0) {
+                input.val(current - 1).trigger('input');
+                updateTotalAmount();
+            }
+        });
+      // Bruto-weight increment
+$(document).on('click', '.increment-gross', function() {
+    const $input = $(this).siblings('input[name="weight_gross[]"]');
+    const current = parseFloat($input.val() || 0);
+    const next    = current + 1;
+    console.log('▶︎ increment-gross clicked — current:', current, 'new:', next);
+    $input.val(next).trigger('input');
+    updateTotalAmount();
+});
+
+ // Net-weight decrement
+        $(document).on('click', '.decrement-gross', function() {
+            console.log('▶︎ decrement-net clicked');
+            const input = $(this).siblings('input[name="weight_gross[]"]');
+            const current = parseFloat(input.val() || 0);
+            if (current > 0) {
+                input.val(current - 1).trigger('input');
+                updateTotalAmount();
+            }
+        });
+
+
        $(document).on('input', 'input[name="price[]"], input[name="quantity[]"]', function () {
     const row = $(this).closest('tr');
 
@@ -1596,31 +1636,6 @@ $(row).find('[data-bs-toggle="tooltip"]').each(function () {
 
 
         document.addEventListener('click', (event) => {
-            // Handle decrement button click
-            if (event.target.closest('.decrement-kolata')) {
-                const container = event.target.closest('div'); // or closest input group wrapper
-                const input = container.querySelector('input[name="kolata[]"]');
-                if (input) {
-                    let currentValue = parseInt(input.value) || 0;
-                    if (currentValue > 0) {
-                        input.value = currentValue - 1;
-                        input.dispatchEvent(new Event('change')); // if you listen for changes
-                    }
-                }
-            }
-
-            // Handle increment button click
-            if (event.target.closest('.increment-kolata')) {
-                const container = event.target.closest('div'); // or closest input group wrapper
-                const input = container.querySelector('input[name="kolata[]"]');
-                if (input) {
-                    let currentValue = parseInt(input.value) || 0;
-                    input.value = currentValue + 1;
-                    input.dispatchEvent(new Event('change'));
-                }
-            }
-
-        
 
            // 1) Grab all elements with tooltips
                 const tooltipTriggerList = Array.from(
@@ -2564,8 +2579,8 @@ if (invoiceDateInput) {
             });
 
             document.getElementById('q1-estimate')?.addEventListener('input', updateProcjenaEstimates);
-            document.getElementById('q2-bruto')?.addEventListener('input', updateBrutoEstimates);
-            document.getElementById('q2-neto')?.addEventListener('input', updateNetoEstimates);
+            // document.getElementById('q2-bruto')?.addEventListener('input', updateBrutoEstimates);
+            // document.getElementById('q3-neto')?.addEventListener('input', updateNetoEstimates);
 
             document.addEventListener('input', function (e) {
                 if (e.target?.name === "kolata[]") {
