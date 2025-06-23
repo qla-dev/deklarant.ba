@@ -655,26 +655,39 @@ function updateProcjenaEstimates() {
 function updateBrutoEstimates() {
   const q2 = parseFloat(document.getElementById("q2-bruto")?.value || 0);
   console.log("▶︎ updateBrutoEstimates() — q2 =", q2);
+
   document.querySelectorAll("#newlink tr.product").forEach((row, i) => {
-    const gross = parseFloat(row.querySelector('input[name="weight_gross[]"]')?.value || 0);
-    const brutoInput = row.querySelector('input[name="q2-bruto-estimate[]"]');
-    const total = parseFloat(row.querySelector('input[name="total[]"]')?.value || 0);
-    const value = q2 * total;
-    console.log(`   row ${i}: gross=${gross} → bruto=${value}`);
-    if (brutoInput) brutoInput.value = formatDecimal(value, 2);
+    // grab the element, not its parsed value
+    const brutoInputEl = row.querySelector('input[name="weight_gross[]"]');
+    const total        = parseFloat(row.querySelector('input[name="total[]"]')?.value || 0);
+    const value        = q2 * total;
+
+    console.log(`row ${i}: gross=${value}`);
+
+    if (brutoInputEl) {
+      brutoInputEl.value = formatDecimal(value, 2);
+      // re-fire input event so any listeners pick it up
+      brutoInputEl.dispatchEvent(new Event("input"));
+    }
   });
 }
+
 
 function updateNetoEstimates() {
   const q3 = parseFloat(document.getElementById("q3-neto")?.value || 0);
   console.log("▶︎ updateNetoEstimates() — q3 =", q3);
+
   document.querySelectorAll("#newlink tr.product").forEach((row, i) => {
-    const net = parseFloat(row.querySelector('input[name="weight_net[]"]')?.value || 0);
-    const netoInput = row.querySelector('input[name="q3-neto-estimate[]"]');
-    const total = parseFloat(row.querySelector('input[name="total[]"]')?.value || 0);
-    const value = q3 * total;
-    console.log(`   row ${i}: net=${net} → neto=${value}`);
-    if (netoInput) netoInput.value = formatDecimal(value, 2);
+    const netoInputEl = row.querySelector('input[name="weight_net[]"]');
+    const total       = parseFloat(row.querySelector('input[name="total[]"]')?.value || 0);
+    const value       = q3 * total;
+
+    console.log(`row ${i}: net=${value}`);
+
+    if (netoInputEl) {
+      netoInputEl.value = formatDecimal(value, 2);
+      netoInputEl.dispatchEvent(new Event("input"));
+    }
   });
 }
 
@@ -691,6 +704,7 @@ document.getElementById('total-weight-gross')?.addEventListener('input', () => {
 document.getElementById('total-weight-net')?.addEventListener('input', () => {
   updateTotalAmount(); // and your neto estimates
 });
+
 
 async function getInvoice() {
             if (!_invoice_data) {
@@ -1338,7 +1352,7 @@ row.innerHTML = `
                   type="button"
                 >−</button>
                 <input 
-                  type="number" 
+                  type="text" 
                   class="form-control text-center rounded-0" 
                   name="weight_gross[]" 
                   value="${weight_gross}" 
@@ -1360,7 +1374,7 @@ row.innerHTML = `
                 >−</button>
 
                 <input
-                  type="number"
+                  type="text"
                   class="form-control text-center rounded-0"
                   name="weight_net[]"
                   min="0"
@@ -1608,15 +1622,32 @@ $(row).find('[data-bs-toggle="tooltip"]').each(function () {
 
         
 
-            // Add a single click listener outside to hide tooltips on outside click
-            document.addEventListener('click', function(e) {
-                tooltipTriggerList.forEach(function(el) {
-                    var tooltip = bootstrap.Tooltip.getInstance(el);
-                    if (tooltip && e.target !== el && !el.contains(e.target)) {
-                        tooltip.hide();
-                    }
+           // 1) Grab all elements with tooltips
+                const tooltipTriggerList = Array.from(
+                document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                );
+
+                // 2) Initialize Bootstrap tooltips on each
+                tooltipTriggerList.forEach(el => {
+                new bootstrap.Tooltip(el);
                 });
-            });
+
+                // 3) Only add the “hide on outside click” handler if we actually have tooltips
+                if (tooltipTriggerList.length > 0) {
+                document.addEventListener('click', function(e) {
+                    tooltipTriggerList.forEach(function(el) {
+                    const tooltipInstance = bootstrap.Tooltip.getInstance(el);
+                    // If there's a tooltip open AND the click target isn't the trigger (or inside it)...
+                    if (
+                        tooltipInstance &&
+                        e.target !== el &&
+                        !el.contains(e.target)
+                    ) {
+                        tooltipInstance.hide();
+                    }
+                    });
+                });
+                }
 
 
 
@@ -2530,6 +2561,28 @@ if (invoiceDateInput) {
             document.getElementById("carrier-name")?.addEventListener("input", () => {
                 const label = document.getElementById("carrier-name-ai-label");
                 if (label) label.classList.add("d-none");
+            });
+
+            document.getElementById('q1-estimate')?.addEventListener('input', updateProcjenaEstimates);
+            document.getElementById('q2-bruto')?.addEventListener('input', updateBrutoEstimates);
+            document.getElementById('q2-neto')?.addEventListener('input', updateNetoEstimates);
+
+            document.addEventListener('input', function (e) {
+                if (e.target?.name === "kolata[]") {
+                    updateProcjenaEstimates();
+                }
+            });
+
+            document.addEventListener('input', function (e) {
+                if (e.target?.name === "total-weight-gross[]") {
+                    updateBrutoEstimates();
+                }
+            });
+
+            document.addEventListener('input', function (e) {
+                if (e.target?.name === "total-net-gross[]") {
+                    updateNetoEstimates();
+                }
             });
           
 
