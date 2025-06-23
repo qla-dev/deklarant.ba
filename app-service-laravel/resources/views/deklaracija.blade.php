@@ -294,6 +294,8 @@
         </div>
     </div>
 <input id="q1-estimate" name="q1" type="hidden">
+<input id="q2-bruto" name="q2" type="hidden">
+<input id="q3-neto" name="q3" type="hidden">
 
 
 
@@ -603,21 +605,31 @@ if (typeof window !== "undefined") {
     document.getElementById("modal-total-amount").textContent = formatted;
     document.getElementById("total-edit").textContent = formatted;
 
-    // ⬇️ Also update q1-estimate here
-    const numPackages = parseFloat(document.getElementById("total-num-packages")?.value || 0);
-    const q1Input = document.getElementById("q1-estimate");
-    document.getElementById('q1-estimate')?.addEventListener('input', updateProcjenaEstimates);
+   // ─── Compute all three Q-values ───
+    const numPackages  = parseFloat(document.getElementById("total-num-packages")?.value || 0);
+    const grossWeight  = parseFloat(document.getElementById("total-weight-gross")?.value  || 0);
+    const netWeight    = parseFloat(document.getElementById("total-weight-net")?.value    || 0);
 
+    const q1 = (numPackages > 0 && total > 0) ? numPackages   / total : 0;
+    const q2 = (numPackages > 0 && total > 0) ? grossWeight  / total : 0;
+    const q3 = (numPackages > 0 && total > 0) ? netWeight    / total : 0;
 
-    if (numPackages > 0) {
-        const q1 =  numPackages/ total;
-        q1Input.value = q1.toFixed(6);
-q1Input.dispatchEvent(new Event("input")); // ✅ ključni event za procjenu
-    } else {
-        q1Input.value = "";
-q1Input.dispatchEvent(new Event("input")); // isto da očisti procjene
+    // ─── Apply them all in a loop ───
+    [
+    { id: "q1-estimate", value: q1 },
+    { id: "q2-bruto",     value: q2 },
+    { id: "q3-neto",      value: q3 },
+    ].forEach(({ id, value }) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    // write either empty or 6-dec place number
+    el.value = value > 0
+        ? value.toFixed(6)
+        : "";
+    // fire input so that your updateXxxEstimates() hooks run
+    el.dispatchEvent(new Event("input"));
+    });
 
-    }
 }
 
 
@@ -640,11 +652,44 @@ function updateProcjenaEstimates() {
   });
 }
 
+function updateBrutoEstimates() {
+  const q2 = parseFloat(document.getElementById("q2-bruto")?.value || 0);
+  console.log("▶︎ updateBrutoEstimates() — q2 =", q2);
+  document.querySelectorAll("#newlink tr.product").forEach((row, i) => {
+    const gross = parseFloat(row.querySelector('input[name="weight_gross[]"]')?.value || 0);
+    const brutoInput = row.querySelector('input[name="q2-bruto-estimate[]"]');
+    const total = parseFloat(row.querySelector('input[name="total[]"]')?.value || 0);
+    const value = q2 * total;
+    console.log(`   row ${i}: gross=${gross} → bruto=${value}`);
+    if (brutoInput) brutoInput.value = formatDecimal(value, 2);
+  });
+}
+
+function updateNetoEstimates() {
+  const q3 = parseFloat(document.getElementById("q3-neto")?.value || 0);
+  console.log("▶︎ updateNetoEstimates() — q3 =", q3);
+  document.querySelectorAll("#newlink tr.product").forEach((row, i) => {
+    const net = parseFloat(row.querySelector('input[name="weight_net[]"]')?.value || 0);
+    const netoInput = row.querySelector('input[name="q3-neto-estimate[]"]');
+    const total = parseFloat(row.querySelector('input[name="total[]"]')?.value || 0);
+    const value = q3 * total;
+    console.log(`   row ${i}: net=${net} → neto=${value}`);
+    if (netoInput) netoInput.value = formatDecimal(value, 2);
+  });
+}
 
 
         
 document.getElementById('total-num-packages')?.addEventListener('input', () => {
     updateTotalAmount(); // This will auto-update q1 as well
+});
+
+document.getElementById('total-weight-gross')?.addEventListener('input', () => {
+  updateTotalAmount(); // now also recalcs your bruto estimates
+});
+
+document.getElementById('total-weight-net')?.addEventListener('input', () => {
+  updateTotalAmount(); // and your neto estimates
 });
 
 async function getInvoice() {
@@ -1490,6 +1535,8 @@ $(row).find('[data-bs-toggle="tooltip"]').each(function () {
             
             initializeTariffSelects();
             updateProcjenaEstimates(); 
+            updateNetoEstimates();
+            updateBrutoEstimates();
 
             updateTotalAmount();
         }
@@ -1526,6 +1573,8 @@ $(row).find('[data-bs-toggle="tooltip"]').each(function () {
 
     // Update koleta and global total
     updateProcjenaEstimates();
+    updateBrutoEstimates();
+    updateNetoEstimates();
     updateTotalAmount();
 });
 
@@ -2430,54 +2479,59 @@ if (invoiceDateInput) {
 
             console.log(" Invoice date and number set.");
 
-
-
-
          // Prefill total weights and package count
-setField("#total-weight-net", invoice.total_weight_net ?? "");
-setField("#total-weight-gross", invoice.total_weight_gross ?? "");
-setField("#total-num-packages", invoice.total_num_packages ?? "");
+            setField("#total-weight-net", invoice.total_weight_net ?? "");
+            setField("#total-weight-gross", invoice.total_weight_gross ?? "");
+            setField("#total-num-packages", invoice.total_num_packages ?? "");
 
-console.log("Weights and package count set:",
-    invoice.total_weight_net,
-    invoice.total_weight_gross,
-    invoice.total_weight_gross,
-    invoice.total_num_packages
-);
+            console.log("Weights and package count set:",
+                invoice.total_weight_net,
+                invoice.total_weight_gross,
+                invoice.total_weight_gross,
+                invoice.total_num_packages
+            );
 
-// Prefill q1-estimate (total_value / total_num_packages)
-const totalValue = parseFloat(document.getElementById("total-amount")?.value) || 0;
-const numPackages = parseFloat(invoice.total_num_packages ?? 0);
-const q1Input = document.getElementById("q1-estimate");
+        // ─── Prefill Q1/Q2/Q3 on initial load ───
+        const totalStr      = document.getElementById("total-amount")?.value || "";
+        const totalValue    = parseFloat(
+        totalStr
+            .replace(/\s/g, "")   // strip spaces
+            .replace(/\./g, "")   // strip thousand-seps
+            .replace(",", ".")    // comma→dot
+        ) || 0;
 
-if (q1Input) {
-    if (numPackages > 0 && !isNaN(totalValue)) {
-        const rawAmount = totalValue.toString().replace(/[^\d.-]/g, ""); // Remove currency symbols
-        const amount = parseFloat(rawAmount) || 0;
-        q1Input.value = (numPackages / amount ).toFixed(6);
-    } else {
-        q1Input.value = "";
-    }
-}
-updateProcjenaEstimates(); // ✅ prisilno izračunaj odmah nakon postavljanja q1
+        // — grab counts/weights
+        const numPackages   = parseFloat(invoice.total_num_packages)   || 0;
+        const totalGross    = parseFloat(document.getElementById("total-weight-gross")?.value) || 0;
+        const totalNet      = parseFloat(document.getElementById("total-weight-net")  ?.value) || 0;
 
+        // — compute & apply all three ratios
+        [
+        { id: "q1-estimate", numerator: numPackages, denominator: totalValue },
+        { id: "q2-bruto",     numerator: totalGross,  denominator: totalValue },
+        { id: "q3-neto",      numerator: totalNet,    denominator: totalValue },
+        ].forEach(({ id, numerator, denominator }) => {
+        const input = document.getElementById(id);
+        if (!input) return;
+        if (numPackages > 0 && denominator > 0) {
+            input.value = (numerator / denominator).toFixed(6);
+        } else {
+            input.value = "";
+        }
+        });
 
-            
+        // ─── now recalc per-row estimates ───
+        updateProcjenaEstimates();
+        updateBrutoEstimates();
+        updateNetoEstimates();
+
 
             // Hide AI label when user types in importer name
             document.getElementById("carrier-name")?.addEventListener("input", () => {
                 const label = document.getElementById("carrier-name-ai-label");
                 if (label) label.classList.add("d-none");
             });
-            document.getElementById('q1-estimate')?.addEventListener('input', updateProcjenaEstimates);
-
-            document.addEventListener('input', function (e) {
-    if (e.target?.name === "kolata[]") {
-        updateProcjenaEstimates();
-    }
-});
-
-
+          
 
         });
 
