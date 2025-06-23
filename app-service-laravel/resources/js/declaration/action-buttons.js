@@ -310,9 +310,9 @@ document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
                 incoterm_destination: document.getElementById("incoterm-destination").value.trim(),
                 invoice_number: document.getElementById("invoice-no").value.trim(),
                 file_name: fileName, // use the file name from the uploaded invoice
-                total_price: parseFloat((document.getElementById("total-amount")?.value || "0").replace(',', '.')),
-                total_weight_net: parseFloat(document.getElementById("total-weight-net")?.value || "0"),
-                total_weight_gross: parseFloat(document.getElementById("total-weight-gross")?.value || "0"),
+                total_price:        parseFloat((document.getElementById("total-amount")?.value         || "0").replace(',', '.')),
+                total_weight_net:   parseFloat((document.getElementById("total-weight-net")?.value   || "0").replace(',', '.')),
+                total_weight_gross: parseFloat((document.getElementById("total-weight-gross")?.value || "0").replace(',', '.')),
                 total_num_packages: parseInt(document.getElementById("total-num-packages")?.value || "0", 10),
 
                 date_of_issue: (() => {

@@ -147,8 +147,8 @@ public function update(Request $request, $invoiceId)
             'invoice_number' => $data['invoice_number'] ?? $invoice->invoice_number,
             'incoterm' => $data['incoterm'] ?? $invoice->incoterm,
             'incoterm_destination' => $data['incoterm_destination'] ?? $invoice->incoterm_destination,
-            'total_weight_net' => $data['total_weight_net'] ?? $invoice->total_weight_net,
-            'total_weight_gross' => $data['total_weight_gross'] ?? $invoice->total_weight_gross,
+            'total_weight_net'   => isset($data['total_weight_net'])   ? floatval(str_replace(',', '.', $data['total_weight_net']))   : $invoice->total_weight_gross,
+            'total_weight_gross'   => isset($data['total_weight_gross'])   ? floatval(str_replace(',', '.', $data['total_weight_gross']))   : $invoice->total_weight_gross,
             'total_num_packages' => $data['total_num_packages'] ?? $invoice->total_num_packages,
             'internal_status' => array_key_exists('internal_status', $data) ? $data['internal_status'] : 2,
         ]);

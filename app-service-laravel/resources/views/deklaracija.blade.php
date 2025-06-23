@@ -282,11 +282,11 @@
     <div class="row g-4">
         <div class="col-4 text-start">
             <label class="text-muted text-uppercase fw-semibold mb-1">Neto težina (kg)</label>
-            <input type="number" step="0.01" class="form-control" id="total-weight-net" name="total_weight_net" placeholder="0.00 kg">
+            <input type="text" step="0.01" class="form-control" id="total-weight-net" name="total_weight_net" placeholder="0,00 kg">
         </div>
         <div class="col-4 text-center">
             <label class="d-flex justify-content-center text-muted text-uppercase fw-semibold mb-1">Bruto težina (kg)</label>
-            <input type="number" step="0.01" class="form-control text-center" id="total-weight-gross" name="total_weight_gross" placeholder="0.00 kg">
+            <input type="text" step="0.01" class="form-control text-center" id="total-weight-gross" name="total_weight_gross" placeholder="0,00 kg">
         </div>
         <div class="col-4 text-end">
             <label class="text-muted text-uppercase fw-semibold mb-1">Broj koleta</label>
@@ -607,8 +607,8 @@ if (typeof window !== "undefined") {
 
    // ─── Compute all three Q-values ───
     const numPackages  = parseFloat(document.getElementById("total-num-packages")?.value || 0);
-    const grossWeight  = parseFloat(document.getElementById("total-weight-gross")?.value  || 0);
-    const netWeight    = parseFloat(document.getElementById("total-weight-net")?.value    || 0);
+    const grossWeight  = parseDecimalToDot(document.getElementById("total-weight-gross")?.value);
+    const netWeight    = parseDecimalToDot(document.getElementById("total-weight-net")?.value);
 
     const q1 = (numPackages > 0 && total > 0) ? numPackages   / total : 0;
     const q2 = (numPackages > 0 && total > 0) ? grossWeight  / total : 0;
@@ -636,57 +636,63 @@ if (typeof window !== "undefined") {
 
 
 
-
+// Update per‐row procjena (q1 * total)
 function updateProcjenaEstimates() {
-  const q1 = parseFloat(document.getElementById("q1-estimate")?.value || 0);
-  const rows = document.querySelectorAll("#newlink tr.product");
-
-  rows.forEach(row => {
-    const total = parseFloat(row.querySelector('input[name="total[]"]')?.value || 0);
-    const procjenaInput = row.querySelector('input[name="procjena[]"]');
-
-    if (procjenaInput) {
+  const q1 = parseDecimalToDot(
+    document.getElementById("q1-estimate")?.value
+  );
+  document.querySelectorAll("#newlink tr.product").forEach(row => {
+    const total = parseDecimalToDot(
+      row.querySelector('input[name="total[]"]')?.value
+    );
+    const input = row.querySelector('input[name="procjena[]"]');
+    if (input) {
       const result = q1 * total;
-     procjenaInput.value = formatDecimal(result, 2);
+      input.value = result.toFixed(2).replace(".", ",");
     }
   });
 }
 
+// Update per‐row bruto weight (q2 * total)
 function updateBrutoEstimates() {
-  const q2 = parseFloat(document.getElementById("q2-bruto")?.value || 0);
+  const q2 = parseDecimalToDot(
+    document.getElementById("q2-bruto")?.value
+  );
   console.log("▶︎ updateBrutoEstimates() — q2 =", q2);
 
   document.querySelectorAll("#newlink tr.product").forEach((row, i) => {
-    // grab the element, not its parsed value
-    const brutoInputEl = row.querySelector('input[name="weight_gross[]"]');
-    const total        = parseFloat(row.querySelector('input[name="total[]"]')?.value || 0);
-    const value        = q2 * total;
-
+    const total = parseDecimalToDot(
+      row.querySelector('input[name="total[]"]')?.value
+    );
+    const input = row.querySelector('input[name="weight_gross[]"]');
+    const value = q2 * total;
     console.log(`row ${i}: gross=${value}`);
 
-    if (brutoInputEl) {
-      brutoInputEl.value = formatDecimal(value, 2);
-      // re-fire input event so any listeners pick it up
-      brutoInputEl.dispatchEvent(new Event("input"));
+    if (input) {
+      input.value = value.toFixed(2).replace(".", ",");
+      input.dispatchEvent(new Event("input"));
     }
   });
 }
 
-
+// Update per‐row neto weight (q3 * total)
 function updateNetoEstimates() {
-  const q3 = parseFloat(document.getElementById("q3-neto")?.value || 0);
+  const q3 = parseDecimalToDot(
+    document.getElementById("q3-neto")?.value
+  );
   console.log("▶︎ updateNetoEstimates() — q3 =", q3);
 
   document.querySelectorAll("#newlink tr.product").forEach((row, i) => {
-    const netoInputEl = row.querySelector('input[name="weight_net[]"]');
-    const total       = parseFloat(row.querySelector('input[name="total[]"]')?.value || 0);
-    const value       = q3 * total;
-
+    const total = parseDecimalToDot(
+      row.querySelector('input[name="total[]"]')?.value
+    );
+    const input = row.querySelector('input[name="weight_net[]"]');
+    const value = q3 * total;
     console.log(`row ${i}: net=${value}`);
 
-    if (netoInputEl) {
-      netoInputEl.value = formatDecimal(value, 2);
-      netoInputEl.dispatchEvent(new Event("input"));
+    if (input) {
+      input.value = value.toFixed(2).replace(".", ",");
+      input.dispatchEvent(new Event("input"));
     }
   });
 }
@@ -2526,9 +2532,9 @@ if (invoiceDateInput) {
             console.log(" Invoice date and number set.");
 
          // Prefill total weights and package count
-            setField("#total-weight-net", invoice.total_weight_net ?? "");
-            setField("#total-weight-gross", invoice.total_weight_gross ?? "");
-            setField("#total-num-packages", invoice.total_num_packages ?? "");
+            setField("#total-weight-net",   formatDecimal(invoice.total_weight_net,   2));
+            setField("#total-weight-gross", formatDecimal(invoice.total_weight_gross, 2));
+            setField("#total-num-packages", invoice.total_num_packages ?? "0");
 
             console.log("Weights and package count set:",
                 invoice.total_weight_net,
