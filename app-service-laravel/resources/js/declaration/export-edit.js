@@ -9,48 +9,58 @@ function exportTableToCustomCSV() {
     ];
     let csv = [headers.join(";")];
 
-    // ✅ Remove last row forcibly
+    // Remove last (empty) row
     const rows = Array.from(document.querySelectorAll("#products-table tbody tr")).slice(0, -1);
 
     rows.forEach((row) => {
         const rowData = [];
 
+        // 1. TPL1
         let tplName = row.querySelector('select[name="item_code[]"]')?.value || "";
-        tplName = tplName.replace(/\s+/g, '').slice(0, 8);  // Remove spaces and limit to 8 digits
-        rowData.push(`"${tplName}"`);
+        tplName = tplName.replace(/\s+/g, '').slice(0, 8);
+        rowData.push(tplName);
 
-
+        // 2. Zemlja porijekla
         const origin = row.querySelector('select[name="origin[]"]')?.value || "";
-        rowData.push(`"${origin}"`);
+        rowData.push(origin);
 
+        // 3. Povlastica
         const tariffVal = row.querySelector('input[name="tariff_privilege[]"]')?.value || "0";
         const povlastica = tariffVal !== "0" ? tariffVal : "";
-        rowData.push(`"${povlastica}"`);
+        rowData.push(povlastica);
 
+        // 4. Naziv robe (uppercase)
+        const translatedName = row.querySelector('input[name="item_prev[]"]')?.value.trim().toUpperCase() || "";
+        rowData.push(translatedName);
 
-
-       const translatedName = row.querySelector('input[name="item_prev[]"]')?.value.trim().toUpperCase() || "";
-       rowData.push(`"${translatedName}"`);
-
+        // 5. Broj komada
         const qty = row.querySelector('input[name="quantity[]"]')?.value || "";
-        rowData.push(`"${qty}"`);
+        rowData.push(qty);
 
+        // 6. Vrijednost (with comma decimal)
         let rawPrice = row.querySelector('input[name="total[]"]')?.value || "";
         let numericOnly = rawPrice.replace(/[^\d.,]/g, "").replace(",", ".");
-        let formattedValue = numericOnly ? parseFloat(numericOnly).toFixed(2).replace(".", ",") : "";
-        rowData.push(`"${formattedValue}"`);
+        let formattedValue = numericOnly
+            ? parseFloat(numericOnly).toFixed(2).replace(".", ",")
+            : "";
+        rowData.push(formattedValue);
 
+        // 7. Koleta
         const koleta = row.querySelector('input[name="procjena[]"]')?.value || "";
-        rowData.push(`"${koleta}"`);
+        rowData.push(koleta);
 
+        // 8. Bruto kg
         const bruto = row.querySelector('input[name="weight_gross[]"]')?.value || "";
-        rowData.push(`"${bruto}"`);
+        rowData.push(bruto);
 
+        // 9. Neto kg
         const neto = row.querySelector('input[name="weight_net[]"]')?.value || "";
-        rowData.push(`"${neto}"`);
+        rowData.push(neto);
 
-        rowData.push(`""`);
+        // 10. Required (always empty)
+        rowData.push("");
 
+        // join with semicolons, no extra quotes
         csv.push(rowData.join(";"));
     });
 
@@ -65,6 +75,7 @@ function exportTableToCustomCSV() {
     link.click();
     document.body.removeChild(link);
 }
+
 
   // ✅ Print preview
 function getVal(sel) {
