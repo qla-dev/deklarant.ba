@@ -369,8 +369,10 @@ if (document.getElementById("incoterm-destination")) {
     document.getElementById("incoterm-destination").textContent = invoice.incoterm_destination ?? '--';
 }
 
-document.getElementById("total-weight-net").textContent = formatValue(invoice.total_weight_net);
-document.getElementById("total-weight-gross").textContent = formatValue(invoice.total_weight_gross);
+document.getElementById("total-weight-net").textContent =
+  formatValue(invoice.total_weight_net).replace(/\./g, ',');
+document.getElementById("total-weight-gross").textContent =
+  formatValue(invoice.total_weight_gross).replace(/\./g, ',');
 document.getElementById("total-num-packages").textContent = formatValue(invoice.total_num_packages);
 document.getElementById("invoice-id").textContent = invoice.id ?? '--';
 // q1-static logic
@@ -435,7 +437,7 @@ const estimatedTotal = formatDecimal(q1 * totalPrice, 2);
                 <td>${item.country_of_origin || ''}</td>
               <td>${item.tariff_privilege && item.tariff_privilege !== "0" ? item.tariff_privilege : ''}</td>
                 <td>${item.quantity}</td>
-                <td>${item.weight_gross || '0'}/${item.weight_net || '0'}</td>
+                <td>${String(item.weight_gross ?? 0).replace('.', ',')}/${String(item.weight_net ?? 0).replace('.', ',')}</td>
                 <td>${String(estimatedTotal).replace('.', ',')}</td>
                 <td>${String(item.base_price).replace('.', ',')} ${item.currency || ''}</td>
 

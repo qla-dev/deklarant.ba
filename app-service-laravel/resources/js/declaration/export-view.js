@@ -1,66 +1,83 @@
  // ✅ Export to csv
 
 
-    function exportTableToCustomCSV() {
-        const invoiceNo = document.getElementById("invoice-no")?.textContent?.trim() || "unknown";
-        const filename = `deklaracija-ai_${invoiceNo}.csv`;
+function exportTableToCustomCSV() {
+    const invoiceNo = document.getElementById("invoice-no")?.textContent?.trim() || "unknown";
+    const filename = `deklaracija-ai_${invoiceNo}.csv`;
 
-        // Define custom headers (must match your spec exactly)
-        const headers = [
-            "TPL1", "Zemlja porijekla", "Povlastica", "Naziv robe", "Broj komada",
-            "Vrijednost", "Koleta", "Bruto kg", "Neto kg", "Required"
-        ];
-
-        let csv = [headers.join(";")];
-
-        const rows = document.querySelectorAll("#products-list tr");
-
-        rows.forEach(row => {
-            const cells = row.querySelectorAll("td");
-            let rowData = [];
-
-            // Extract Bruto/Neto from one cell, assuming format like "123 / 98"
-            let bruto = "";
-            let neto = "";
-            const kgSplit = cells[8]?.innerText.trim().split("/");
-
-            if (kgSplit?.length === 2) {
-                bruto = kgSplit[0].trim();
-                neto = kgSplit[1].trim();
-            }
-
-
-            // Map cells to the structure manually or with fallback
-            let tpl1 = (cells[3]?.innerText.trim() || "").replace(/\s+/g, '').slice(0, 8);
-            rowData.push(`"${tpl1}"`); // TPL1
-            rowData.push(`"${cells[5]?.innerText.trim() || ""}"`); // Zemlja porijekla
-            rowData.push(`"${cells[6]?.innerText.trim() || ""}"`);
-            rowData.push(`"${(cells[2]?.textContent.trim().toUpperCase()) || ""}"`);
-            rowData.push(`"${cells[7]?.innerText.trim() || ""}"`); // Broj komada
-            rowData.push(`"${(cells[11]?.innerText.trim().split(' ')[0]) || ""}"`);
-            rowData.push(`"${cells[9]?.innerText.trim() || ""}"`); // Koleta (empty)
-            rowData.push(`"${bruto}"`); // Bruto kg
-            rowData.push(`"${neto}"`);  // Neto kg
-            rowData.push(`""`); // Required (empty)
-
-            csv.push(rowData.join(";"));
-        });
-
-    
-       // Create CSV and download (with BOM for čćžš to show in Excel)
-const csvFile = new Blob(
-    ["\uFEFF" + csv.join("\n")],
-    { type: "text/csv;charset=utf-8;" }
-);
-
-const link = document.createElement("a");
-link.href = URL.createObjectURL(csvFile);
-link.download = filename;
-document.body.appendChild(link);
-link.click();
-document.body.removeChild(link);
-
+    // Helper to transliterate and uppercase diacritics
+    function transliterate(str) {
+        return str
+            .toUpperCase()
+            .replace(/Č/g, 'C')
+            .replace(/Ć/g, 'C')
+            .replace(/Š/g, 'S')
+            .replace(/Đ/g, 'DJ')
+            .replace(/Ž/g, 'Z');
     }
+
+    // Define custom headers
+    const headers = [
+        "TPL1", "Zemlja porijekla", "Povlastica", "Naziv robe", "Broj komada",
+        "Vrijednost", "Koleta", "Bruto kg", "Neto kg", "Required"
+    ];
+
+    // Start CSV with header row (no quotes)
+    const csvLines = [ headers.join(';') ];
+
+    // Process each product row
+    document.querySelectorAll('#products-list tr').forEach(row => {
+        const cells = row.querySelectorAll('td');
+        let rowData = [];
+
+        // Extract bruto/neto
+        let bruto = '';
+        let neto = '';
+        const kgSplit = cells[8]?.innerText.trim().split('/');
+        if (kgSplit?.length === 2) {
+            bruto = kgSplit[0].trim();
+            neto = kgSplit[1].trim();
+        }
+
+        // Map fields, remove quotes, transliterate diacritics
+        const tpl1     = transliterate((cells[3]?.innerText.trim() || '').replace(/\s+/g, '').slice(0, 8));
+        const origin   = transliterate(cells[5]?.innerText.trim() || '');
+        const povl     = transliterate(cells[6]?.innerText.trim() || '');
+        const name     = transliterate(cells[2]?.textContent.trim() || '');
+        const qty      = cells[7]?.innerText.trim() || '';
+        const value    = cells[11]?.innerText.trim().split(' ')[0] || '';
+        const koleta   = cells[9]?.innerText.trim() || '';
+
+        rowData.push(
+            tpl1,
+            origin,
+            povl,
+            name,
+            qty,
+            value,
+            koleta,
+            bruto,
+            neto,
+            '' // Required is always empty
+        );
+
+        csvLines.push(rowData.join(';'));
+    });
+
+    // drop BOM + use CRLF
+    const content = csvLines.join("\r\n");
+    const blob = new Blob([ content ], { type: "text/csv" });
+
+    // Trigger download
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+
 
 
 

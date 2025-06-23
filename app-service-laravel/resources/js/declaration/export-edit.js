@@ -1,18 +1,26 @@
   // ✅ Export to CSV
 function exportTableToCustomCSV() {
     const invoiceNo = document.getElementById("invoice-no")?.value?.trim() || "unknown";
-    const filename = `deklaracija-ai_${invoiceNo}.csv`;
+    const filename = `ai_deklaracija_${invoiceNo}.csv`;
+
+    // helper to map diacritics → ASCII
+    const transliterate = str => str
+        .replace(/č/gi, 'c')
+        .replace(/ć/gi, 'c')
+        .replace(/ž/gi, 'z')
+        .replace(/đ/gi, 'dj')
+        .replace(/š/gi, 's');
 
     const headers = [
         "TPL1", "Zemlja porijekla", "Povlastica", "Naziv robe", "Broj komada",
         "Vrijednost", "Koleta", "Bruto kg", "Neto kg", "Required"
     ];
-    let csv = [headers.join(";")];
+    const csv = [ headers.join(";") ];
 
-    // Remove last (empty) row
+    // Remove the last (empty) row
     const rows = Array.from(document.querySelectorAll("#products-table tbody tr")).slice(0, -1);
 
-    rows.forEach((row) => {
+    rows.forEach(row => {
         const rowData = [];
 
         // 1. TPL1
@@ -21,60 +29,55 @@ function exportTableToCustomCSV() {
         rowData.push(tplName);
 
         // 2. Zemlja porijekla
-        const origin = row.querySelector('select[name="origin[]"]')?.value || "";
-        rowData.push(origin);
+        rowData.push(row.querySelector('select[name="origin[]"]')?.value || "");
 
         // 3. Povlastica
         const tariffVal = row.querySelector('input[name="tariff_privilege[]"]')?.value || "0";
-        const povlastica = tariffVal !== "0" ? tariffVal : "";
-        rowData.push(povlastica);
+        rowData.push(tariffVal !== "0" ? tariffVal : "");
 
-        // 4. Naziv robe (uppercase)
-        const translatedName = row.querySelector('input[name="item_prev[]"]')?.value.trim().toUpperCase() || "";
-        rowData.push(translatedName);
+        // 4. Naziv robe (uppercase then transliterate)
+        let name = row.querySelector('input[name="item_prev[]"]')?.value || "";
+        name = transliterate(name.trim()).toUpperCase();
+        rowData.push(name);
 
         // 5. Broj komada
-        const qty = row.querySelector('input[name="quantity[]"]')?.value || "";
-        rowData.push(qty);
+        rowData.push(row.querySelector('input[name="quantity[]"]')?.value || "");
 
-        // 6. Vrijednost (with comma decimal)
-        let rawPrice = row.querySelector('input[name="total[]"]')?.value || "";
-        let numericOnly = rawPrice.replace(/[^\d.,]/g, "").replace(",", ".");
-        let formattedValue = numericOnly
-            ? parseFloat(numericOnly).toFixed(2).replace(".", ",")
-            : "";
-        rowData.push(formattedValue);
+        // 6. Vrijednost (comma decimal)
+        const rawPrice = row.querySelector('input[name="total[]"]')?.value || "";
+        const num = rawPrice.replace(/[^\d.,]/g, "").replace(",", ".");
+        const formatted = num ? parseFloat(num).toFixed(2).replace(".", ",") : "";
+        rowData.push(formatted);
 
         // 7. Koleta
-        const koleta = row.querySelector('input[name="procjena[]"]')?.value || "";
-        rowData.push(koleta);
+        rowData.push(row.querySelector('input[name="procjena[]"]')?.value || "");
 
         // 8. Bruto kg
-        const bruto = row.querySelector('input[name="weight_gross[]"]')?.value || "";
-        rowData.push(bruto);
+        rowData.push(row.querySelector('input[name="weight_gross[]"]')?.value || "");
 
         // 9. Neto kg
-        const neto = row.querySelector('input[name="weight_net[]"]')?.value || "";
-        rowData.push(neto);
+        rowData.push(row.querySelector('input[name="weight_net[]"]')?.value || "");
 
         // 10. Required (always empty)
         rowData.push("");
 
-        // join with semicolons, no extra quotes
-        csv.push(rowData.join(";"));
+        // transliterate entire row just in case any other field contains diacritics
+        const normalizedRow = rowData.map(cell => transliterate(cell));
+        csv.push(normalizedRow.join(";"));
     });
 
-    const csvFile = new Blob(["\uFEFF" + csv.join("\n")], {
-        type: "text/csv;charset=utf-8;"
-    });
-
+    // drop BOM + use CRLF
+    const content = csv.join("\r\n");
+    const blob = new Blob([ content ], { type: "text/csv" });
     const link = document.createElement("a");
-    link.href = URL.createObjectURL(csvFile);
+    link.href = URL.createObjectURL(blob);
     link.download = filename;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
 }
+
+
 
 
   // ✅ Print preview
