@@ -309,29 +309,29 @@
                     <table class="table table-borderless text-center table-nowrap align-middle mb-0" id="products-table">
                         <thead>
                             <tr>
-                                <th style="width: 50px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!important">#</th>
-                                <th style="width: 200px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; padding-right: 50px!important; background: #f3f3f9!important">Proizvod </th>
-                                <th style="width: 140px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; margin-left: -5px!important; background: #f3f3f9!important">Opis </th>
-                                <th class="th-tarifa" style="width: 350px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!important">Tarifna oznaka</th>
-                                <th style="width: 50px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!important">Jed. mjere</th>
-                                <th style="width:120px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!important">Porijeklo/Pov..</th>
+                                <th class="dark-remove-bg" style="width: 50px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!">#</th>
+                                <th class="dark-remove-bg"  style="width: 200px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; padding-right: 50px!important; background: #f3f3f9!">Proizvod </th>
+                                <th class="dark-remove-bg" style="width: 140px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; margin-left: -5px!important; background: #f3f3f9!">Opis </th>
+                                <th class="th-tarifa dark-remove-bg" style="width: 350px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!">Tarifna oznaka</th>
+                                <th class="dark-remove-bg" style="width: 50px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!">Jed. mjere</th>
+                                <th class="dark-remove-bg" style="width:120px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!">Porijeklo/Pov..</th>
                               
-                                 <th style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem; background: #f3f3f9!important">Koleta</th>
+                                 <th class="dark-remove-bg" style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem; background: #f3f3f9!">Koleta</th>
                                   
-                                <th style="width: 100px; text-align: center;vertical-align: middle; background: #f3f3f9!important">
+                                <th class="dark-remove-bg" style="width: 100px; text-align: center;vertical-align: middle; background: #f3f3f9!">
                                     Bruto (kg)<br>
                                     <small style="font-weight: normal; font-size: 0.75rem; color: #666;">
                                         Neto (kg)
                                     </small>
                                 </th>
-                                    <th style="width: 100px; text-align: center;vertical-align: middle; background: #f3f3f9!important">
+                                    <th class="dark-remove-bg" style="width: 100px; text-align: center;vertical-align: middle; background: #f3f3f9!">
                                     Količina<br>
                                   
                                 </th>
                                   
-  <th style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem; background: #f3f3f9!important">Cijena</th>
-                                <th style="width:100px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!important">Ukupno</th>
-                                <th style="width:20px;vertical-align: middle; text-align: end; background:unset!important; border: 1px solid transparent;"> 
+  <th class="dark-remove-bg" style="width:100px; text-align: center;vertical-align: middle; padding-bottom: 1rem; background: #f3f3f9!">Cijena</th>
+                                <th class="dark-remove-bg" style="width:100px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!">Ukupno</th>
+                                <th class="dark-remove-bg" style="width:20px;vertical-align: middle; text-align: end; background:unset!important; border: 1px solid transparent;"> 
     
                                 </th>
                             </tr>
