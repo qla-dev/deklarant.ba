@@ -225,8 +225,8 @@
 
                         <div class="mb-2">
                             <div style="display: flex;">
-                                <button type="button" class="btn btn-sm btn-info mb-2 me-2 deklaracija-action-buttons" id="add-new-supplier"><i class="fas fa-wand-magic-sparkles fs-6 me-0 me-md-1"></i><span class="mobile-landscape-hide">Detektovani dobavljač iz baze</span></button>
-                                <button type="button" class="btn btn-sm btn-soft-info mb-2 deklaracija-action-buttons" id="refill-supplier-ai"><i class="fa-regular fa-hand align-top me-0 me-md-1 korpica"></i><span class="mobile-landscape-hide">Ručni unos dobavljača</span></button>
+                                <button type="button" class="btn btn-sm btn-info mb-2 me-2 deklaracija-action-buttons" id="add-new-supplier"><i class="fas fa-wand-magic-sparkles fs-6 me-0 me-lg-1"></i><span class="mobile-landscape-hide">Detektovani dobavljač iz baze</span></button>
+                                <button type="button" class="btn btn-sm btn-soft-info mb-2 deklaracija-action-buttons" id="refill-supplier-ai"><i class="fa-regular fa-hand align-top me-0 me-lg-1 korpica"></i><span class="mobile-landscape-hide">Ručni unos dobavljača</span></button>
                             </div>
                             <select id="supplier-select2" class="form-select"></select>
                         </div>
@@ -243,8 +243,8 @@
 
                         <div class="mb-2">
                             <div style="justify-content: end; display: flex;">
-                                <button type="button" class="btn btn-sm btn-soft-info mb-2  me-2  deklaracija-action-buttons" id="refill-importer-ai"><i class="fa-regular fa-hand align-top me-0 me-md-1 korpica"></i><span class="mobile-landscape-hide">Ručni unos klijenta</span></button>
-                                <button type="button" class="btn btn-sm btn-info mb-2 deklaracija-action-buttons" id="add-new-importer"><i class="fas fa-wand-magic-sparkles fs-6 me-0 me-md-1"></i><span class="mobile-landscape-hide">Detektovani klijent iz baze</span></button>
+                                <button type="button" class="btn btn-sm btn-soft-info mb-2  me-2  deklaracija-action-buttons" id="refill-importer-ai"><i class="fa-regular fa-hand align-top me-0 me-lg-1 korpica"></i><span class="mobile-landscape-hide">Ručni unos klijenta</span></button>
+                                <button type="button" class="btn btn-sm btn-info mb-2 deklaracija-action-buttons" id="add-new-importer"><i class="fas fa-wand-magic-sparkles fs-6 me-0 me-lg-1"></i><span class="mobile-landscape-hide">Detektovani klijent iz baze</span></button>
 
                             </div>
 
@@ -281,11 +281,11 @@
                    <!-- Added fields -->
     <div class="row g-4">
         <div class="col-4 text-start">
-            <label class="text-muted text-uppercase fw-semibold mb-1">Neto težina (kg)</label>
+            <label class="text-muted text-uppercase fw-semibold mb-1">Neto (kg)</label>
             <input type="text" step="0.01" class="form-control" id="total-weight-net" name="total_weight_net" placeholder="0,00 kg">
         </div>
         <div class="col-4 text-center">
-            <label class="d-flex justify-content-center text-muted text-uppercase fw-semibold mb-1">Bruto težina (kg)</label>
+            <label class="d-flex justify-content-center text-muted text-uppercase fw-semibold mb-1">Bruto (kg)</label>
             <input type="text" step="0.01" class="form-control text-center" id="total-weight-gross" name="total_weight_gross" placeholder="0,00 kg">
         </div>
         <div class="col-4 text-end">
@@ -312,7 +312,7 @@
                                 <th style="width: 50px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!important">#</th>
                                 <th style="width: 200px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; padding-right: 50px!important; background: #f3f3f9!important">Proizvod </th>
                                 <th style="width: 140px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; margin-left: -5px!important; background: #f3f3f9!important">Opis </th>
-                                <th style="width: 350px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!important">Tarifna oznaka</th>
+                                <th class="th-tarifa" style="width: 350px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!important">Tarifna oznaka</th>
                                 <th style="width: 50px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!important">Jed. mjere</th>
                                 <th style="width:120px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!important">Porijeklo/Pov..</th>
                               
@@ -1082,6 +1082,7 @@ function initializeTariffSelects() {
             setTimeout(() => {
                 const input = document.querySelector('.select2-container--open .select2-search__field');
                 if (input) {
+                    input.style.minWidth = '200px';
                     input.focus();
                     input.removeEventListener('input', smartMaskHandler);
                     input.addEventListener('input', smartMaskHandler, { passive: true });
@@ -1169,7 +1170,7 @@ row.innerHTML = `
      
           <td colspan="2" style="width: 340px;">
             <div class="input-group" style="display: flex; gap: 0.25rem;">
-              <input type="text" class="form-control item-name" name="item_name[]" placeholder="Naziv" value="${name}" style="flex:1;">
+              <input type="text" class="form-control item-name" name="item_name[]" placeholder="Naziv" value="${name}" style="flex:1; width:180px!important">
               <input type="text" class="form-control item-desc" name="item_desc[]" placeholder="Opis" value="${desc}" style="flex:1;">
             </div>
           <input 
@@ -1193,8 +1194,8 @@ row.innerHTML = `
     .replace(/'/g, '&#39;')
   }'>
 
-<td class="text-start" style="width: 150px;">
-  <div style="position: relative; width: 100%;">
+<td class="text-start" style="width: 150px!important;">
+  <div style="position: relative; width: 100%;" class="th-tarifa">
     <select
       class="form-control select2-tariff tariff-selection"
       style="width: 100%; padding-right: 75px;"
@@ -1341,7 +1342,7 @@ row.innerHTML = `
  <td style="width: 70px;">
   <input 
     type="text" 
-    class="form-control text-start procjena-field" 
+    class="form-control text-start procjena-field th-input" 
     name="procjena[]" 
     value="" 
     readonly 
@@ -1350,7 +1351,7 @@ row.innerHTML = `
 </td>
        
                     <td style="width: 80px;">
-            <div style="display: flex; flex-direction: column; gap: 2px; width: 100%;">
+            <div class="th-counter" style="display: flex; flex-direction: column; gap: 2px; width: 100%;">
               <div class="input-group input-group-sm" style="width: 100%;">
                 <button 
                   class="btn btn-outline-info btn-sm decrement-gross" 
@@ -1400,7 +1401,7 @@ row.innerHTML = `
 
 
           <td style="width: 80px;">
-            <div style="display: flex; flex-direction: column; gap: 2px; width: 100%;">
+            <div  class="th-counter" style="display: flex; flex-direction: column; gap: 2px; width: 100%;">
               <div class="input-group input-group-sm" style="width: 100%;">
                 <button 
                   class="btn btn-outline-info btn-sm decrement-qty" 
@@ -1431,7 +1432,7 @@ row.innerHTML = `
   <td style="width: 60px;">
   <input 
     type="text" 
-    class="form-control text-start-truncate price-input" 
+    class="form-control text-start-truncate price-input th-input" 
     name="price[]" 
     value="${formatDecimal(price)}" 
     inputmode="decimal"
@@ -1443,7 +1444,7 @@ row.innerHTML = `
          <td style="width: 70px;">
     <input 
       type="text" 
-      class="form-control text-start" 
+      class="form-control text-start th-input" 
       name="total[]" 
       value="${total}" disabled
       style="width: 100%;"

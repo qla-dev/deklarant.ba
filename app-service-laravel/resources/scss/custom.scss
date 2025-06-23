@@ -1009,8 +1009,30 @@ table.dataTable thead th.dtfc-fixed-right {
    
  .pc-opcije-button {
     display: none !important;
-  } }
+  } 
 
+.th-tarifa {
+
+    width: 180px!important;
+}
+
+
+
+
+
+
+}
+
+
+.th-counter {
+
+    width: 73px!important;
+}
+
+.th-input {
+
+    width: 70px!important;
+}
 
 
 @media screen and (max-width: 767px) and (orientation: portrait) {
@@ -1268,6 +1290,5 @@ table.dataTable thead th.dtfc-fixed-right {
     border: unset!important;
     background: #212529;
 }
-
 
 

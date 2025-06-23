@@ -270,12 +270,24 @@ document.addEventListener("DOMContentLoaded", function () {
         
                     @endif
 
-                    <button class="btn btn-soft-info w-100 mb-3 p-0" onclick="document.querySelector('.pc-opcije-button[href^=\'javascript:void\']')?.click()"  style="height: 28px !important;">
-                        <i class="ri-download-2-line align-bottom me-1 fs-5"></i>Preuzmi
-                    </button>
+                   <button
+  class="btn btn-soft-info w-100 mb-3 p-0"
+  onclick="renderPrintTableAndPrint()"
+  style="height: 28px !important;"
+>
+  <i class="ri-printer-line align-bottom me-1 fs-5"></i> Isprintaj
+</button>
 
-                    <button class="btn btn-soft-info w-100 mb-3 p-0" onclick="document.querySelector('.pc-opcije-button[href*=\'file-3\']')?.click()"  style="height: 28px !important;">
+
+                    <button class="btn btn-soft-info w-100 mb-3 p-0" onclick="document.querySelector('.btn-original-doc')?.click()" style="height: 28px !important;">
                         <i class="ri-file-3-line align-bottom me-1 fs-5"></i>Originalni dokument
+                    </button>
+                    <button
+                      class="btn btn-soft-info w-100 mb-3 p-0"
+                      onclick="document.querySelector('a[onclick^=\\'autoDownloadPDF\\']')?.click()"
+                      style="height: 28px !important;"
+                    >
+                      <i class="ri-file-pdf-2-line align-bottom me-1 fs-5"></i> Export u PDF
                     </button>
 
                     <button class="btn btn-soft-info w-100 mb-3 p-0" onclick="exportTableToCustomCSV()"  style="height: 28px !important;">
