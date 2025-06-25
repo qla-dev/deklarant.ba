@@ -63,6 +63,12 @@ def remove_close_values(values: list):
 #     ax.set_title("Cumulative Rectangle Plot")
 #     plt.show()
 
+# Keep in mind that keys are 1-indexed page numbers
+# values are Y cordinates after which we should consider tables on those pages
+ignore_tables_above_these_points = {
+    514: 300 # WARNING: Possibly multiple pages on page 514    Y1: 273         Y2: 405
+}
+
 def detect_table_lines_from_pdf(page: fitz.Page):
     """
     Detect and print the x-coordinates of vertical lines on a PDF page.
@@ -78,6 +84,9 @@ def detect_table_lines_from_pdf(page: fitz.Page):
     # Extract vertical lines
     vertical_lines = []
     horizontal_lines = []
+
+    ignore_above = ignore_tables_above_these_points.get(page.number + 1, -100000000000)
+
     for item in drawings:
         if 'rect' in item:
             rect = item['rect']
@@ -85,18 +94,26 @@ def detect_table_lines_from_pdf(page: fitz.Page):
             x0, x1 = rect.x0, rect.x1
             y0, y1 = rect.y0, rect.y1
             # add_rect_to_plot(rect)
+            if y0 < ignore_above or y1 < ignore_above:
+                continue
 
             vertical_lines.append(round(x0))
             vertical_lines.append(round(x1))
             horizontal_lines.append(round(y0))
             horizontal_lines.append(round(y1))
-    
+
     # Remove duplicates and sort the x-coordinates
     vertical_lines = sorted(set(vertical_lines))
     horizontal_lines = sorted(set(horizontal_lines))
 
     remove_close_values(vertical_lines)
     remove_close_values(horizontal_lines)
+
+    for i in range(len(horizontal_lines) - 1):
+        if horizontal_lines[i+1] - horizontal_lines[i] > 100:
+            print()
+            print("WARNING: Possibly multiple pages on page", page.number + 1,
+                  "\tY1:",horizontal_lines[i],"\tY2:",horizontal_lines[i+1])
     # show_plot()
 
     return vertical_lines, horizontal_lines
@@ -165,16 +182,13 @@ def remove_and_test_first_rows(df: pd.DataFrame):
     # Flatten all non-empty cells from the first 4 rows
     non_empty_cells = first_four_rows.values.flatten()
     non_empty_cells = [str(cell).strip() for cell in non_empty_cells if pd.notna(cell) and str(cell).strip()]
+    
+    if non_empty_cells == []:
+        raise AssertionError("No table found")
 
-    # Sort the non-empty cells alphabetically
-    sorted_cells = sorted(non_empty_cells)
-
-    expected_values = ['1', '10', '11', '2', '3', '4', '5', '6', '7', '8', '9', 'CEFTA',
-                       'CHE, LIE', 'Carinska stopa (%)', 'Carinska stopa (%) za robe porijeklom iz zemalja',
-                       'Dopunska jedinica', 'EFTA', 'EU', 'IRN', 'ISL', 'NOR', 'Naziv', 'TUR', 'Tarifna oznaka']
-
-    # Assert if the sorted cells match the expected values
-    assert sorted_cells == sorted(expected_values), f"Sorted cells {sorted_cells} do not match expected {sorted(expected_values)}"
+    for i in range(1, 11):
+        if str(i) not in non_empty_cells:
+            raise AssertionError(f"{i} column not found")
 
     # Return the DataFrame with the first 4 rows removed
     return df.iloc[4:].reset_index(drop=True)
@@ -314,7 +328,7 @@ def do_page(pdf: fitz.Document, page_number: int):
     df["Odjeljak"] = [last_known_section] * len(df)
     df["Glava"] = [last_known_head] * len(df)
     os.makedirs('debug_assets/extracted-table-declarations-csv', exist_ok=True)
-    df.to_csv(f'debug_assets/extracted-table-declarations-csv/table_{page_number}.csv', index=False)
+    df.to_csv(f'debug_assets/extracted-table-declarations-csv/table_{page_number+1}.csv', index=False)
     return df
 
 # Helper function to clean up names and remove references like "(1)"
@@ -374,11 +388,13 @@ if __name__ == '__main__':
     pdf = fitz.open(pdf_path)
     dfs = []
 
+    if os.path.exists("debug_assets/conversion_errors.txt"):
+        os.unlink("debug_assets/conversion_errors.txt")
     for i in progressbar(range(len(pdf))):
         try:
             dfs.append(do_page(pdf, i))
-        except AssertionError:
-            pass
+        except AssertionError as e:
+            open("debug_assets/conversion_errors.txt", "a", encoding="utf-8").write(f"\nError in page {i+1}: {e}")
 
     single_table = pd.concat(dfs, ignore_index=True)
 

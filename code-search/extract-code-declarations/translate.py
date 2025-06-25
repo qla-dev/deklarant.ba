@@ -10,9 +10,11 @@ if __name__ == '__main__':
     input_path = "debug_assets/input_for_translation.xlsx"
     bosnian_names = pd.DataFrame(data["Puni Naziv"])
     bosnian_names.to_excel(input_path, index=False, header=False)
+    print("Written", input_path)
     
     # Wait for translated xlsx file
     output_path = "debug_assets/output_translated.xlsx"
+    print("Waiting for", output_path)
     while not os.path.exists(output_path):
         time.sleep(1)
     
@@ -23,6 +25,7 @@ if __name__ == '__main__':
     assert len(translated) == len(data), f"Row count mismatch: input {len(data)} vs output {len(translated)}"
     data["Puni Naziv - ENG"] = translated[0].str.strip().str.lower()
     data.to_csv(file_path, index=False)
+    data.to_json("../app-service-laravel/resources/json/tariff.json", index=False, indent=2, orient='records', force_ascii=False)
     
     # Delete files
     os.unlink(output_path)
