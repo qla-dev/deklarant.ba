@@ -307,7 +307,7 @@
             <div class="card-body p-4 border-top border-top-dashed">
                 <div class="table-responsive">
                     <table class="table table-borderless text-center table-nowrap align-middle mb-0" id="products-table">
-                        <thead>
+                        <thead class="mb-3">
                             <tr>
                                 <th class="dark-remove-bg" style="width: 50px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!">#</th>
                                 <th class="dark-remove-bg"  style="width: 200px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; padding-right: 50px!important; background: #f3f3f9!">Proizvod </th>

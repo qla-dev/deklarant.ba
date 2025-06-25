@@ -1289,11 +1289,13 @@ table.dataTable thead th.dtfc-fixed-right {
 [data-bs-theme=dark] .lock-disabled {
     border: unset!important;
     background: #212529;
+
 }
 
-[data-bs-theme=dark] .dark-remove-bg{
+.dark-remove-bg{
     background: var(--vz-topbar-search-bg) !important;
 }
+
 
 
 
