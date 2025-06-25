@@ -1,7 +1,7 @@
 
   if (typeof EditingMode !== 'undefined' && EditingMode === true) {
     Swal.fire({
-      title: 'Učitavanje fakture',
+      title: 'Učitavanje deklaracije',
       icon: null,
       html: `<div class="custom-swal-spinner mb-3"></div><div id="swal-status-message">Molimo sačekajte</div>`,
       showConfirmButton: false,

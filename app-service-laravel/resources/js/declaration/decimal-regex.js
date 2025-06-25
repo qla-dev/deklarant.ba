@@ -19,24 +19,10 @@ document.addEventListener('input', function (e) {
     value = parts[0] + ',' + parts[1];
   }
 
-  // empty → 0
-  if (value.trim() === '') {
+  // only clear-to-zero for non-weight fields
+  if (value.trim() === '' && !e.target.matches('#total-weight-net, #total-weight-gross')) {
     value = '0';
   }
 
   e.target.value = value;
 });
-
-document.addEventListener('blur', function (e) {
-  if (!e.target.matches(FORMAT_SELECTOR)) return;
-  let val = e.target.value || '0';
-
-  // ensure ",dd"
-  if (!val.includes(',')) {
-    val += ',00';
-  } else if (/^(\d+),(\d)$/.test(val)) {
-    val += '0';
-  }
-
-  e.target.value = val;
-}, true);
