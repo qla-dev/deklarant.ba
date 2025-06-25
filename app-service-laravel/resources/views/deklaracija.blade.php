@@ -1642,38 +1642,7 @@ $(document).on('click', '.increment-gross', function() {
 
 
 
-        document.addEventListener('click', (event) => {
-
-           // 1) Grab all elements with tooltips
-                const tooltipTriggerList = Array.from(
-                document.querySelectorAll('[data-bs-toggle="tooltip"]')
-                );
-
-                // 2) Initialize Bootstrap tooltips on each
-                tooltipTriggerList.forEach(el => {
-                new bootstrap.Tooltip(el);
-                });
-
-                // 3) Only add the “hide on outside click” handler if we actually have tooltips
-                if (tooltipTriggerList.length > 0) {
-                document.addEventListener('click', function(e) {
-                    tooltipTriggerList.forEach(function(el) {
-                    const tooltipInstance = bootstrap.Tooltip.getInstance(el);
-                    // If there's a tooltip open AND the click target isn't the trigger (or inside it)...
-                    if (
-                        tooltipInstance &&
-                        e.target !== el &&
-                        !el.contains(e.target)
-                    ) {
-                        tooltipInstance.hide();
-                    }
-                    });
-                });
-                }
-
-
-
-        });
+   
 
 
         async function fillInvoiceData() {
@@ -2204,6 +2173,7 @@ $(document).on('click', '.increment-gross', function() {
 
 
         document.addEventListener("DOMContentLoaded", async () => {
+            
 
             window.skipPrefillParties = false; // Always allow prefill on page load/scan
             console.log(" Page loaded. Starting init process...");
@@ -2711,7 +2681,7 @@ if (invoiceDateInput) {
         // 1. Add buttons in the DOM (jQuery, after DOMContentLoaded)
         $(document).ready(function() {
             // Add 'Popuni ponovo s AI' button next to 'Obriši' for supplier
-
+            
 
             // Handler for supplier AI refill
             $(document).on('click', '#refill-supplier-ai', async function() {
@@ -3176,7 +3146,6 @@ Swal.fire({
     </div>
   </div>
 </div>
-
 
 
 
