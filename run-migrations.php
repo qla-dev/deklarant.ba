@@ -1,4 +1,8 @@
 <?php
+
+chdir(__DIR__ . '/customs-api');
+runOrFail("ssh deklarant-ai.ba '~/deploy-deklarant.sh'");
+
 chdir(__DIR__ . '/app-service-laravel');
 
 function runOrFail($command) {
@@ -18,9 +22,5 @@ runOrFail('php artisan route:clear');
 runOrFail('php artisan config:cache');
 runOrFail('php artisan route:cache');
 runOrFail('php artisan view:cache');
-
-chdir(__DIR__ . '/customs-api');
-
-runOrFail("ssh deklarant-ai.ba '~/deploy-deklarant.sh'");
 
 http_response_code(200);
