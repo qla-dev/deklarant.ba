@@ -461,13 +461,20 @@ class InvoiceController extends Controller
                 $quantity = $item['quantity'] ?? 0;
                 $base_price = $item['unit_price'] ?? 0;
 
-                $best_entry = null;
-                foreach ($item['detected_codes'] as $entry) {
-                    if (is_null($best_entry) || $entry['closeness'] < $best_entry['closeness']) {
-                        $best_entry = $entry;
+                // Check if item has hs_code with length of 10 after removing whitespace
+                $hs_code = str_replace(' ', '', $item['hs_code'] ?? '');
+                if ($hs_code && strlen($hs_code) === 10) {
+                    $item_code = substr($hs_code, 0, 4) . ' ' . substr($hs_code, 4, 2) . ' ' . substr($hs_code, 6, 2) . ' ' . substr($hs_code, 8);
+                } else {
+                    // Find the best entry from detected codes
+                    $best_entry = null;
+                    foreach ($item['detected_codes'] as $entry) {
+                        if (is_null($best_entry) || $entry['closeness'] < $best_entry['closeness']) {
+                            $best_entry = $entry;
+                        }
                     }
+                    $item_code = $best_entry ? $best_entry['entry']['Tarifna oznaka'] : null;
                 }
-                $item_code = $best_entry ? $best_entry['entry']['Tarifna oznaka'] : null;
 
                 return [
                     'version' => 1,
@@ -499,7 +506,7 @@ class InvoiceController extends Controller
             ]);
 
             // Save items
-            \Log::info($invoice->items()->createMany($items));
+            $invoice->items()->createMany($items);
 
             // Reload invoice with fresh items
             $invoice->load('items');

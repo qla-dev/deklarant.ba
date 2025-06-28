@@ -34,7 +34,8 @@ You are an AI designed to extract structured JSON data from semi-structured invo
       "num_packages": "Number of packages for specified item.",
       "weight_gross": Number,
       "weight_net": Number,
-      "item_description_translated": "Translation of item name to Bosnian language"
+      "item_description_translated": "Simple translation of item name to Bosnian language",
+      "hs_code": "10-digit detected harmonized code"
     }
   ]
 }
@@ -49,11 +50,11 @@ You are an AI designed to extract structured JSON data from semi-structured invo
 3. **Item count and order matching**: Ensure the number of extracted JSON items matches the number of actual items presented. Item order must also be kept as actual items presented. Do not hallucinate. 
 
 4. **Item names**:
-   - Use the *human-readable* description for `item_name`.
+   - Use the *human-readable* english description for `item_name`.
    - Do not put any manufacturer-specific names or codes in `item_name`. It should be as general as possible.
    - Use codes, abbreviations, or full technical labels for `original_name`.
-   - In case you are unsure what the item is, put value of `original_name` into `item_name`. Never put "unknown" in `item_name`
-   - For field "item_description_translated" insert the `item_name` translated to Bosnian language.
+   - In case you are unsure what the item is, put value of `original_name` into `item_name`. Never put "unknown" in `item_name`.
+   - For field "item_description_translated" insert the simpler version of `item_name` translated to Bosnian language. For example, don't include any specific numbers, codes, colors, descriptions, labels, quantities, etc. Just a simple human-readable name.
 
 5. **Quantities and units**:
    - Quantities must be integers (unless the document uses fractional quantities explicitly).
