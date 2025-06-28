@@ -71,6 +71,8 @@ class InvoiceController extends Controller
                 ])
                 ->get();
 
+            
+
             if ($invoices->isEmpty()) {
                 return response()->json(['error' => 'Nisu pronađene deklaracije za navedenog korisnika'], 404);
             }
@@ -285,11 +287,9 @@ public function update(Request $request, $invoiceId)
                 ], 404);
             }
 
-            $aiService = app(AiService::class);
-
             $user = auth()->user();
             $canUsePaidModels = $user->can_use_paid_models;
-            $response = $aiService->uploadDocument($filePath, $invoice->file_name, $canUsePaidModels);
+            $response = app(AiService::class)->uploadDocument($filePath, $invoice->file_name, $canUsePaidModels);
             $taskId = $response['task_id'] ?? null;
 
             if (!$taskId) {
@@ -315,27 +315,27 @@ public function update(Request $request, $invoiceId)
 
     }
 
-  public function getInvoiceInfoById($id)
-{
-    $invoice = Invoice::find($id);
+    public function getInvoiceInfoById($id)
+    {
+        $invoice = Invoice::find($id);
 
-    if (!$invoice) {
-        return response()->json(['error' => 'Deklaracija nije pronađena'], 404);
+        if (!$invoice) {
+            return response()->json(['error' => 'Deklaracija nije pronađena'], 404);
+        }
+
+        $supplier = Supplier::find($invoice->supplier_id);
+
+        return response()->json([
+            'file_name' => $invoice->file_name,
+            'total_price' => $invoice->total_price,
+            'supplier_id' => $invoice->supplier_id,
+            'supplier_name' => $supplier->name ?? null,
+            'supplier_avatar' => $supplier->avatar ?? null,
+            'owner' => $supplier->owner ?? null,
+            'user_id' => $invoice->user_id,
+            'overall_status' => $invoice->overallStatus(), // ✅ Nova linija
+        ]);
     }
-
-    $supplier = Supplier::find($invoice->supplier_id);
-
-    return response()->json([
-        'file_name' => $invoice->file_name,
-        'total_price' => $invoice->total_price,
-        'supplier_id' => $invoice->supplier_id,
-        'supplier_name' => $supplier->name ?? null,
-        'supplier_avatar' => $supplier->avatar ?? null,
-        'owner' => $supplier->owner ?? null,
-        'user_id' => $invoice->user_id,
-        'overall_status' => $invoice->overallStatus(), // ✅ Nova linija
-    ]);
-}
 
 
     public function getScanStatus($id)
@@ -347,42 +347,18 @@ public function update(Request $request, $invoiceId)
             if ($invoice->user_id !== auth()->id()) {
                 return response()->json(['error' => 'Neovlašten pristup deklaraciji'], 403);
             }
-
-            // Check if invoice has task_id
-            if (!$invoice->task_id) {
-                return response()->json(['error' => 'Nijedan nalog skeniranja nije povezan s ovom deklaracijom'], 404);
-            }
-
             
-            $status = app(AiService::class)->getTaskStatus($invoice->task_id);
+            $status = $invoice->getStatusFromAI();
 
             if (!$status) {
                 return response()->json(['error' => 'Nalog za skeniranje nije pronađen'], 404);
             }
-            
-            if ($invoice->user_id !== auth()->id()) {
-                return response()->json(['error' => 'Niste ovlašteni za pristup ovoj deklaraciji'], 403);
-            }
-
-            // Provjera da li deklaracija ima task_id
-            if (!$invoice->task_id) {
-                return response()->json(['error' => 'Nijedan nalog skeniranja nije povezan s ovom deklaracijom'], 404);
-            }
-
-            // Get task status from AI service
-            $status = app(AiService::class)->getTaskStatus($invoice->task_id);
-
-            if (!$status) {
-                return response()->json(['error' => 'Nalog za skeniranje nije pronađen'], 404);
-            }
-
 
             return response()->json([
                 'status' => $status,
                 'invoice_id' => $invoice->id,
                 'task_id' => $invoice->task_id
             ]);
-
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Deklaracija nije pronađena'], 404);
         } catch (Exception $e) {
@@ -405,7 +381,7 @@ public function update(Request $request, $invoiceId)
         }
 
         // Get task result from AI service
-        $result = app(AiService::class)->getTaskResult($invoice->task_id);
+        $result = $invoice->getStatusFromAI();
 
         if (!$result) {
             return response()->json(['error' => 'Rezultat skeniranja nije pronađen'], 404);
@@ -473,8 +449,7 @@ public function update(Request $request, $invoiceId)
         }
 
         try {
-            $aiService = app(AiService::class);
-            $result = $aiService->getTaskResult($invoice->task_id);
+            $result = $invoice->getTaskResultFromAI();
             
             if (empty($result['items'])) {
                 return;

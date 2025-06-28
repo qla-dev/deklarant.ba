@@ -47,20 +47,36 @@ class Invoice extends Model
         return $this->belongsTo(Importer::class);
     }
 
-  public function overallStatus()
-{
-    // Ako nije pokrenut AI proces (nema task_id), tretiraj kao "Odbijena"
-    if (!$this->task_id) {
-        return 'Odbijena';
+    public function overallStatus()
+    {
+        // Ako nije pokrenut AI proces (nema task_id), tretiraj kao "Odbijena"
+        if (!$this->task_id) {
+            return 'Odbijena';
+        }
+
+        return match ((int) $this->internal_status) {
+            0 => 'U obradi',
+            1 => 'Draft',
+            2 => 'Spremljena',
+            3 => 'Odbijena',
+            default => 'Nepoznato'
+        };
     }
 
-    return match ((int) $this->internal_status) {
-        0 => 'U obradi',
-        1 => 'Draft',
-        2 => 'Spremljena',
-        3 => 'Odbijena',
-        default => 'Nepoznato'
-    };
-}
+    public function getStatusFromAI()
+    {
+        if (!$this->task_id) {
+            return null;
+        }
+        return app(AiService::class)->getTaskStatus($this->task_id);
+    }
+
+    public function getTaskResultFromAI()
+    {
+        if (!$this->task_id) {
+            return null;
+        }
+        return app(AiService::class)->getTaskResult($this->task_id);
+    }
 
 }
