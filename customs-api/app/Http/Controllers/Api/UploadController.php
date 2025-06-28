@@ -7,10 +7,29 @@ use App\Models\Task;
 use App\Jobs\ProcessUploadedFile;
 use App\Jobs\ProcessPdfToImages;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 class UploadController extends Controller
 {
+    /**
+     * Update old tasks that are still pending or processing after 1 day.
+     */
+    public static function updateOldTasks()
+    {
+        // Get the current time in local timezone
+        $now = Carbon::now();
+
+        // Find all tasks with status PENDING or PROCESSING older than 1 day
+        Task::whereIn('status', [Task::STATUS_PENDING, Task::STATUS_PROCESSING])
+            ->where('created_at', '<=', $now->subDay())
+            ->get()
+            ->each(function ($task) {
+                // Mark as failed with expiration message
+                $task->markAsFailed("Task is expired");
+            });
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -34,6 +53,8 @@ class UploadController extends Controller
         // ProcessUploadedFile::dispatch($task);
         // Image based processor
         ProcessPdfToImages::dispatch($task, $allowPaidModels);
+
+        UploadController::updateOldTasks();
 
         return response()->json([
             'message' => 'File uploaded successfully',

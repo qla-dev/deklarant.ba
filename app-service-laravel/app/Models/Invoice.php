@@ -79,4 +79,40 @@ class Invoice extends Model
         return app(AiService::class)->getTaskResult($this->task_id);
     }
 
+    public function setInternalStatusFromAiResult()
+    {
+        $result = $this->getStatusFromAI();
+
+        if ($result === null) {
+            $this->internal_status = 3;
+            $this->save();
+            return;
+        }
+
+        switch ($result['status']) {
+            case 'pending':
+                $this->internal_status = 0;
+                break;
+            case 'processing':
+                $this->internal_status = 0;
+                break;
+            case 'failed':
+                $this->internal_status = 3;
+                break;
+            case 'completed':
+                $this->internal_status = 1;
+                break;
+            default:
+                return; // Don't change anything
+        }
+
+        $this->save();
+    }
+
+    public function updateInternalStatusIfNecessary()
+    {
+        if ($this->internal_status == 0) {
+            $this->setInternalStatusFromAiResult();
+        }
+    }
 }

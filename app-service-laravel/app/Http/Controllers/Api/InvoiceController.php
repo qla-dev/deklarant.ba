@@ -78,6 +78,10 @@ class InvoiceController extends Controller
                 return response()->json(['error' => 'Nisu pronađene deklaracije za navedenog korisnika'], 404);
             }
 
+            foreach ($invoices as $invoice) {
+                $invoice->updateInternalStatusIfNecessary();
+            }
+
             return response()->json($invoices);
         } catch (Exception $e) {
             return $this->handleInternalError($e, 'Neuspješno preuzimanje deklaracija. Pokušajte ponovo kasnije');
@@ -445,6 +449,7 @@ class InvoiceController extends Controller
         }
 
         try {
+            $invoice->updateInternalStatusIfNecessary();
             $result = $invoice->getTaskResultFromAI();
 
             if (empty($result['items'])) {
