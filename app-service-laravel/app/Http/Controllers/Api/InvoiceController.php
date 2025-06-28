@@ -18,16 +18,21 @@ use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Support\Facades\DB;
 
-
 class InvoiceController extends Controller
 {
+    private function handleInternalError(Exception $exception, string $errorMessage)
+    {
+        Log::error($errorMessage . ': ' . $exception->getMessage() . '. Stacktrace: ' . $exception->getTraceAsString());
+        return response()->json(['error' => $errorMessage], 500);
+    }
+
     public function index()
     {
         try {
             $invoices = Invoice::with('items')->get();
             return response()->json($invoices);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno preuzimanje deklaracija. Pokušajte ponovo kasnije'], 500);
+            return $this->handleInternalError($e, 'Neuspješno preuzimanje deklaracija. Pokušajte ponovo kasnije');
         }
     }
 
@@ -56,22 +61,18 @@ class InvoiceController extends Controller
 
             return response()->json($invoices);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno preuzimanje deklaracija. Provjerite ID dobavljača i pokušajte ponovo'], 500);
+            return $this->handleInternalError($e, 'Neuspješno preuzimanje deklaracija. Provjerite ID dobavljača i pokušajte ponovo');
         }
     }
-
 
     public function getInvoicesByUser($userId)
     {
         try {
             $invoices = Invoice::where('user_id', $userId)
                 ->with([
-                    
                     'importer:id,name,owner,avatar' // Make sure this line is correct
                 ])
                 ->get();
-
-            
 
             if ($invoices->isEmpty()) {
                 return response()->json(['error' => 'Nisu pronađene deklaracije za navedenog korisnika'], 404);
@@ -79,7 +80,7 @@ class InvoiceController extends Controller
 
             return response()->json($invoices);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno preuzimanje deklaracija. Pokušajte ponovo kasnije'], 500);
+            return $this->handleInternalError($e, 'Neuspješno preuzimanje deklaracija. Pokušajte ponovo kasnije');
         }
     }
 
@@ -110,137 +111,136 @@ class InvoiceController extends Controller
             ], 201);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Dobavljač nije pronađen. Provjerite ID dobavljača i pokušajte ponovo'], 404);
-        } 
+        }
         catch (ValidationException $e) {
             return response()->json([
                 'error' => "Neuspješno kreiranje deklaracije",
                 // ukloniti uglaste zagrade ako treba ispisati sve errore a ne samo prvi
-                'message' => $e->errors()[array_key_first($e->errors())][0] 
+                'message' => $e->errors()[array_key_first($e->errors())][0]
             ], 422);
         }
         catch (Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Neuspješno kreiranje deklaracije. Pokušajte ponovo kasnije: ' . $e->getMessage());
-            return response()->json(['error' => 'Neuspješno kreiranje deklaracije. Pokušajte ponovo kasnije'], 500);
+            return $this->handleInternalError($e, 'Neuspješno kreiranje deklaracije. Pokušajte ponovo kasnije');
         }
 
     }
 
-public function update(Request $request, $invoiceId)
-{
-    DB::beginTransaction();
+    public function update(Request $request, $invoiceId)
+    {
+        DB::beginTransaction();
 
-    try {
-        $invoice = Invoice::with('items')->findOrFail($invoiceId);
-        $data = $request->all();
+        try {
+            $invoice = Invoice::with('items')->findOrFail($invoiceId);
+            $data = $request->all();
 
-        // Localized decimal parser
-        $normalizeDecimal = function ($value) {
-            return is_numeric($value) ? floatval($value) : floatval(str_replace(',', '.', preg_replace('/\./', '', $value)));
-        };
+            // Localized decimal parser
+            $normalizeDecimal = function ($value) {
+                return is_numeric($value) ? floatval($value) : floatval(str_replace(',', '.', preg_replace('/\./', '', $value)));
+            };
 
-        // Update invoice metadata
-        $invoice->update([
-            'file_name' => $data['file_name'] ?? $invoice->file_name,
-            'total_price' => isset($data['total_price']) ? $normalizeDecimal($data['total_price']) : $invoice->total_price,
-            'date_of_issue' => $data['date_of_issue'] ?? $invoice->date_of_issue,
-            'country_of_origin' => $data['country_of_origin'] ?? $invoice->country_of_origin,
-            'importer_id' => $data['importer_id'] ?? $invoice->importer_id,
-            'supplier_id' => $data['supplier_id'] ?? $invoice->supplier_id,
-            'invoice_number' => $data['invoice_number'] ?? $invoice->invoice_number,
-            'incoterm' => $data['incoterm'] ?? $invoice->incoterm,
-            'incoterm_destination' => $data['incoterm_destination'] ?? $invoice->incoterm_destination,
-            'total_weight_net'   => isset($data['total_weight_net'])   ? floatval(str_replace(',', '.', $data['total_weight_net']))   : $invoice->total_weight_gross,
-            'total_weight_gross'   => isset($data['total_weight_gross'])   ? floatval(str_replace(',', '.', $data['total_weight_gross']))   : $invoice->total_weight_gross,
-            'total_num_packages' => $data['total_num_packages'] ?? $invoice->total_num_packages,
-            'internal_status' => array_key_exists('internal_status', $data) ? $data['internal_status'] : 2,
-        ]);
+            // Update invoice metadata
+            $invoice->update([
+                'file_name' => $data['file_name'] ?? $invoice->file_name,
+                'total_price' => isset($data['total_price']) ? $normalizeDecimal($data['total_price']) : $invoice->total_price,
+                'date_of_issue' => $data['date_of_issue'] ?? $invoice->date_of_issue,
+                'country_of_origin' => $data['country_of_origin'] ?? $invoice->country_of_origin,
+                'importer_id' => $data['importer_id'] ?? $invoice->importer_id,
+                'supplier_id' => $data['supplier_id'] ?? $invoice->supplier_id,
+                'invoice_number' => $data['invoice_number'] ?? $invoice->invoice_number,
+                'incoterm' => $data['incoterm'] ?? $invoice->incoterm,
+                'incoterm_destination' => $data['incoterm_destination'] ?? $invoice->incoterm_destination,
+                'total_weight_net'   => isset($data['total_weight_net'])   ? floatval(str_replace(',', '.', $data['total_weight_net']))   : $invoice->total_weight_gross,
+                'total_weight_gross'   => isset($data['total_weight_gross'])   ? floatval(str_replace(',', '.', $data['total_weight_gross']))   : $invoice->total_weight_gross,
+                'total_num_packages' => $data['total_num_packages'] ?? $invoice->total_num_packages,
+                'internal_status' => array_key_exists('internal_status', $data) ? $data['internal_status'] : 2,
+            ]);
 
-        // Process items
-        $submittedItems = $data['items'] ?? [];
-        $submittedIds = [];
+            // Process items
+            $submittedItems = $data['items'] ?? [];
+            $submittedIds = [];
 
-        foreach ($submittedItems as $item) {
-            $basePrice = isset($item['base_price']) ? $normalizeDecimal($item['base_price']) : null;
-            $totalPrice = isset($item['total_price']) ? $normalizeDecimal($item['total_price']) : null;
+            foreach ($submittedItems as $item) {
+                $basePrice = isset($item['base_price']) ? $normalizeDecimal($item['base_price']) : null;
+                $totalPrice = isset($item['total_price']) ? $normalizeDecimal($item['total_price']) : null;
 
-            $itemData = [
-                'item_code' => $item['item_code'],
-                'item_description_original' => $item['item_description_original'],
-                'item_description' => $item['item_description'],
-                'item_description_translated' => $item['item_description_translated'] ?? null,
-                'quantity' => $item['quantity'],
-                'base_price' => $basePrice,
-                'total_price' => $totalPrice,
-                'currency' => $item['currency'],
-                'version' => $item['version'],
-                'best_customs_code_matches' => $item['best_customs_code_matches'] ?? [],
-                'country_of_origin' => $item['origin'] ?? null,
-                'quantity_type' => $item['quantity_type'] ?? null,
-                'num_packages' => $item['package_num'] ?? null,
-                'weight_gross' => isset($item['weight_gross']) ? floatval(str_replace(',', '.', $item['weight_gross'])): null,
-                'weight_net'   => isset($item['weight_net']) ? floatval(str_replace(',', '.', $item['weight_net'])) : null,
-                'tariff_privilege' => $item['tariff_privilege'] !== '0' ? $item['tariff_privilege'] : null,
-            ];
+                $itemData = [
+                    'item_code' => $item['item_code'],
+                    'item_description_original' => $item['item_description_original'],
+                    'item_description' => $item['item_description'],
+                    'item_description_translated' => $item['item_description_translated'] ?? null,
+                    'quantity' => $item['quantity'],
+                    'base_price' => $basePrice,
+                    'total_price' => $totalPrice,
+                    'currency' => $item['currency'],
+                    'version' => $item['version'],
+                    'best_customs_code_matches' => $item['best_customs_code_matches'] ?? [],
+                    'country_of_origin' => $item['origin'] ?? null,
+                    'quantity_type' => $item['quantity_type'] ?? null,
+                    'num_packages' => $item['package_num'] ?? null,
+                    'weight_gross' => isset($item['weight_gross']) ? floatval(str_replace(',', '.', $item['weight_gross'])): null,
+                    'weight_net'   => isset($item['weight_net']) ? floatval(str_replace(',', '.', $item['weight_net'])) : null,
+                    'tariff_privilege' => $item['tariff_privilege'] !== '0' ? $item['tariff_privilege'] : null,
+                ];
 
-            if (!empty($item['item_id'])) {
-                $existingItem = $invoice->items()->find($item['item_id']);
-                if ($existingItem) {
-                    $existingItem->update($itemData);
-                    $submittedIds[] = $existingItem->id;
+                if (!empty($item['item_id'])) {
+                    $existingItem = $invoice->items()->find($item['item_id']);
+                    if ($existingItem) {
+                        $existingItem->update($itemData);
+                        $submittedIds[] = $existingItem->id;
+                    }
+                } else {
+                    $newItem = $invoice->items()->create([
+                        ...$itemData,
+                        'tariff_privilege' => $item['tariff_privilege'] === 'DA' ? 1 : 0,
+                    ]);
+                    $submittedIds[] = $newItem->id;
                 }
-            } else {
-                $newItem = $invoice->items()->create([
-                    ...$itemData,
-                    'tariff_privilege' => $item['tariff_privilege'] === 'DA' ? 1 : 0,
-                ]);
-                $submittedIds[] = $newItem->id;
             }
-        }
 
-        // Delete removed items
-        $invoice->items()->whereNotIn('id', $submittedIds)->delete();
+            // Delete removed items
+            $invoice->items()->whereNotIn('id', $submittedIds)->delete();
 
-        DB::commit();
+            DB::commit();
 
-        return response()->json([
-            'message' => 'Deklaracija i stavke uspješno ažurirane',
-            'data' => $invoice->fresh('items')
-        ]);
-    } catch (ModelNotFoundException $e) {
-        DB::rollBack();
-        Log::warning("Deklaracija nije pronađena. ID: $invoiceId", [
-            'exception' => $e->getMessage()
-        ]);
-        return response()->json(['error' => 'Deklaracija s unesenim ID-om nije pronađena'], 404);
-    } catch (Exception $e) {
-        DB::rollBack();
-        Log::error("Greška pri ažuriranju deklaracije. ID: $invoiceId", [
-            'exception' => $e->getMessage(),
-            'trace' => $e->getTraceAsString()
-        ]);
+            return response()->json([
+                'message' => 'Deklaracija i stavke uspješno ažurirane',
+                'data' => $invoice->fresh('items')
+            ]);
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
+            Log::warning("Deklaracija nije pronađena. ID: $invoiceId", [
+                'exception' => $e->getMessage()
+            ]);
+            return response()->json(['error' => 'Deklaracija s unesenim ID-om nije pronađena'], 404);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error("Greška pri ažuriranju deklaracije. ID: $invoiceId", [
+                'exception' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
 
-        $translatedMessage = 'Došlo je do greške prilikom obrade deklaracije.';
-        $message = $e->getMessage();
+            $translatedMessage = 'Došlo je do greške prilikom obrade deklaracije.';
+            $message = $e->getMessage();
 
-        if (str_contains($message, 'Integrity constraint violation')) {
-            if (str_contains($message, 'item_description_original')) {
-                $translatedMessage = 'Naziv i opis svih proizvoda unutar deklaracije su obavezni';
-            } elseif (str_contains($message, 'country_of_origin')) {
-                $translatedMessage = 'Zemlja porijekla je obavezna.';
-            } elseif (str_contains($message, 'item_code')) {
-                $translatedMessage = 'Tarifni brojevi svih proizvoda unutar deklaracije su obavezni';
-            } else {
-                $translatedMessage = 'Neki od obaveznih podataka nedostaje ili nije ispravan.';
+            if (str_contains($message, 'Integrity constraint violation')) {
+                if (str_contains($message, 'item_description_original')) {
+                    $translatedMessage = 'Naziv i opis svih proizvoda unutar deklaracije su obavezni';
+                } elseif (str_contains($message, 'country_of_origin')) {
+                    $translatedMessage = 'Zemlja porijekla je obavezna.';
+                } elseif (str_contains($message, 'item_code')) {
+                    $translatedMessage = 'Tarifni brojevi svih proizvoda unutar deklaracije su obavezni';
+                } else {
+                    $translatedMessage = 'Neki od obaveznih podataka nedostaje ili nije ispravan.';
+                }
             }
-        }
 
-        return response()->json([
-            'error' => 'Neuspješno ažuriranje deklaracije',
-            'backend_error' => $message,
-            'poruka' => $translatedMessage
-        ], 500);
+            return response()->json([
+                'error' => 'Neuspješno ažuriranje deklaracije',
+                'backend_error' => $message,
+                'poruka' => $translatedMessage
+            ], 500);
+        }
     }
-}
 
     public function destroy($invoiceId)
     {
@@ -252,9 +252,8 @@ public function update(Request $request, $invoiceId)
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Deklaracija s unesenim ID-om nije pronađena'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno brisanje deklaracije. Pokušajte ponovo kasnije'], 500);
+            return $this->handleInternalError($e, 'Neuspješno brisanje deklaracije. Pokušajte ponovo kasnije');
         }
-
     }
 
     public function scan($invoiceId)
@@ -309,10 +308,8 @@ public function update(Request $request, $invoiceId)
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Deklaracija s unesenim ID-om nije pronađena'], 404);
         } catch (Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Neuspješno skeniranje deklaracije. Pokušajte ponovo kasnije: ' . $e->getMessage());
-            return response()->json(['error' => 'Neuspješno skeniranje deklaracije. Pokušajte ponovo kasnije'], 500);
+            return $this->handleInternalError($e, 'Neuspješno skeniranje deklaracije. Pokušajte ponovo kasnije');
         }
-
     }
 
     public function getInvoiceInfoById($id)
@@ -337,7 +334,6 @@ public function update(Request $request, $invoiceId)
         ]);
     }
 
-
     public function getScanStatus($id)
     {
         try {
@@ -347,7 +343,7 @@ public function update(Request $request, $invoiceId)
             if ($invoice->user_id !== auth()->id()) {
                 return response()->json(['error' => 'Neovlašten pristup deklaraciji'], 403);
             }
-            
+
             $status = $invoice->getStatusFromAI();
 
             if (!$status) {
@@ -362,7 +358,7 @@ public function update(Request $request, $invoiceId)
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Deklaracija nije pronađena'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno dohvaćanje statusa skeniranja. Pokušajte ponovo kasnije'], 500);
+            return $this->handleInternalError($e, 'Neuspješno dohvaćanje statusa skeniranja. Pokušajte ponovo kasnije');
         }
     }
 
@@ -381,7 +377,7 @@ public function update(Request $request, $invoiceId)
         }
 
         // Get task result from AI service
-        $result = $invoice->getStatusFromAI();
+        $result = $invoice->getTaskResultFromAI();
 
         if (!$result) {
             return response()->json(['error' => 'Rezultat skeniranja nije pronađen'], 404);
@@ -409,7 +405,7 @@ public function update(Request $request, $invoiceId)
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Deklaracija nije pronađena'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno dohvaćanje statusa skeniranja. Pokušajte ponovo kasnije'], 500);
+            return $this->handleInternalError($e, 'Neuspješno dohvaćanje statusa skeniranja. Pokušajte ponovo kasnije');
         }
     }
 
@@ -437,7 +433,7 @@ public function update(Request $request, $invoiceId)
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Deklaracija nije pronađena'], 404);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Neuspješno dohvaćanje statusa skeniranja. Pokušajte ponovo kasnije'], 500);
+            return $this->handleInternalError($e, 'Neuspješno dohvaćanje statusa skeniranja. Pokušajte ponovo kasnije');
         }
     }
 
@@ -450,7 +446,7 @@ public function update(Request $request, $invoiceId)
 
         try {
             $result = $invoice->getTaskResultFromAI();
-            
+
             if (empty($result['items'])) {
                 return;
             }
@@ -502,7 +498,7 @@ public function update(Request $request, $invoiceId)
 
             // Reload invoice with fresh items
             $invoice->load('items');
-            
+
         } catch (Exception $e) {
             // Log error but don't fail the request
             \Log::error($e);
@@ -576,14 +572,7 @@ public function update(Request $request, $invoiceId)
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Dobavljač ili korisnik nije pronađen. Provjerite ID-ove i pokušajte ponovo'], 404);
         } catch (Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Neuspješno preuzimanje AI podataka. Pokušajte ponovo kasnije: ' . $e->getMessage());
-            return response()->json(['error' => 'Neuspješno preuzimanje AI podataka. Pokušajte ponovo kasnije'], 500);
+            return $this->handleInternalError($e, 'Neuspješno preuzimanje AI podataka. Pokušajte ponovo kasnije');
         }
-
     }
-
-
-
-
-
 }
