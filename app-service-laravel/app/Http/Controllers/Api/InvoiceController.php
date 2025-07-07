@@ -441,6 +441,58 @@ class InvoiceController extends Controller
         }
     }
 
+    # returns string or null
+    private function getTariffPrivilageFromCountry(string $country): ?string
+    {
+        switch ($country) {
+            # Turkey
+            case 'TR':
+                return 'TRP';
+            # CEFTA/AP
+            case 'AL':
+            case 'XK':
+            case 'MD':
+            case 'ME':
+            case 'MK':
+            case 'RS':
+                return 'CEFTA/AP';
+            # Iran
+            case 'IR':
+                return 'IRP';
+            # EU
+            case 'AT':
+            case 'BE':
+            case 'BG':
+            case 'HR':
+            case 'CY':
+            case 'CZ':
+            case 'DK':
+            case 'EE':
+            case 'FI':
+            case 'FR':
+            case 'DE':
+            case 'GR':
+            case 'HU':
+            case 'IE':
+            case 'IT':
+            case 'LV':
+            case 'LT':
+            case 'LU':
+            case 'MT':
+            case 'NL':
+            case 'PL':
+            case 'PT':
+            case 'RO':
+            case 'SK':
+            case 'SI':
+            case 'ES':
+            case 'SE':
+                return 'EUP';
+            default:
+                return null;
+        }
+    }
+
     private function fillWithAiDataIfNecessary(Invoice $invoice)
     {
         // Skip if invoice has no task_id or already has items
@@ -492,6 +544,7 @@ class InvoiceController extends Controller
                     'weight_gross' => $item['weight_gross'] ?? null,
                     'weight_net' => $item['weight_net'] ?? null,
                     'item_description_translated' => $item['item_description_translated'],
+                    'tariff_privilege' => $this->getTariffPrivilageFromCountry($item['country_of_origin']),
                 ];
             }, $result['items']);
 
