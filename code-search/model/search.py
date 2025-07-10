@@ -115,7 +115,7 @@ def perform_search(query: str, good_candidates: list[str]):
             for entry in ret:
                 if entry["entry"]["Tarifna oznaka cleaned"].startswith(candidate):
                     any_good_candidate_found = True
-                    entry["closeness"] -= 0.3
+                    entry["closeness"] -= 0.5
                     print("Removing", candidate, "from", entry["entry"]["Tarifna oznaka cleaned"], "now has closeness of", entry["closeness"])
     if any_good_candidate_found:
         ret.sort(key=lambda x: x["closeness"])
