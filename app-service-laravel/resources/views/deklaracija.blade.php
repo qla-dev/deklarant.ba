@@ -1014,39 +1014,39 @@ function initializeTariffSelects() {
                 loadingMore: () => "Učitavanje još rezultata..."
             },
             ajax: {
-  transport: function (params, success, failure) {
-    const term = (params.data.q || "").toLowerCase();
+                transport: function (params, success, failure) {
+                    const term = (params.data.q || "").toLowerCase();
 
-    // show spinner…
-    const container = document.querySelector('.select2-results__options');
-    if (container) {
-      container.innerHTML = `
-        <li class="select2-results__option" role="alert" aria-live="assertive">
-          <i class="fa fa-spinner fa-spin" style="margin-right:6px;"></i>
-          Pretraga...
-        </li>`;
-    }
+                    // show spinner…
+                    const container = document.querySelector('.select2-results__options');
+                    if (container) {
+                        container.innerHTML = `
+                            <li class="select2-results__option" role="alert" aria-live="assertive">
+                                <i class="fa fa-spinner fa-spin" style="margin-right:6px;"></i>
+                                Pretraga...
+                            </li>`;
+                    }
 
-    // split into matches and non-matches
-    const matches = processedTariffData.filter(item =>
-      item.id.toLowerCase().includes(term) ||
-      item.display.toLowerCase().includes(term)
-    );
-    const rest = processedTariffData.filter(item =>
-      !matches.some(m => m.id === item.id)
-    );
+                    // split into matches and non-matches
+                    const matches = processedTariffData.filter(item =>
+                        item.id.toLowerCase().includes(term) ||
+                        item.display.toLowerCase().includes(term)
+                    );
+                    const rest = processedTariffData.filter(item =>
+                        !matches.some(m => m.id === item.id)
+                    );
 
-    setTimeout(() => {
-      // concat matches first, then the rest
-      success({ results: [...matches, ...rest] });
+                    setTimeout(() => {
+                        // concat matches first, then the rest
+                        success({ results: [...matches, ...rest] });
 
-      // reset scroll
-      const dropdown = document.querySelector('.select2-results__options');
-      if (dropdown) dropdown.scrollTop = 0;
-    }, 200);
-  },
-  delay: 200
-},
+                        // reset scroll
+                        const dropdown = document.querySelector('.select2-results__options');
+                        if (dropdown) dropdown.scrollTop = 0;
+                    }, 200);
+                },
+                delay: 200
+            },
 
             templateResult: function (item) {
                 if (!item || !item.id || !item.display) return null;
@@ -1069,12 +1069,48 @@ function initializeTariffSelects() {
                 const padding = isParent ? 0 : item.depth * 5;
                 const fontWeight = isParent ? "bold" : "normal";
 
-                return $(`<div style="padding-left:${padding}px; font-weight:${fontWeight};" title="${item.display}">
+                // Only items with 10 or more digits are enabled/clickable
+                const isClickable = digits.length >= 10;
+                const style = isClickable
+                    ? `padding-left:${padding}px; font-weight:${fontWeight}; cursor:pointer;`
+                    : `padding-left:${padding}px; font-weight:${fontWeight}; color:#aaa; cursor:not-allowed;`;
+
+                return $(`<div style="${style}" title="${item.display}">
                     ${icon} ${item.display}
                 </div>`);
             },
             templateSelection: function (item) {
-                return item?.id || "";
+                // Only allow selection if 10 or more digits
+                const digits = (item?.id || '').replace(/\D+/g, '');
+                if (digits.length >= 10) {
+                    return item?.id || "";
+                }
+                return "";
+            },
+            // Prevent selection of items with less than 10 digits
+            matcher: function(params, data) {
+                if ($.trim(params.term) === '') {
+                    return data;
+                }
+                if (typeof data.text === 'undefined') {
+                    return null;
+                }
+                const term = params.term.toLowerCase();
+                if (data.text.toLowerCase().indexOf(term) > -1) {
+                    const digits = (data.id || '').replace(/\D+/g, '');
+                    if (digits.length >= 10) {
+                        return data;
+                    }
+                }
+                return null;
+            }
+        });
+
+        // Prevent selection of items with less than 10 digits
+        $select.on('select2:selecting', function (e) {
+            const digits = (e.params.args.data.id || '').replace(/\D+/g, '');
+            if (digits.length < 10) {
+                e.preventDefault();
             }
         });
 
@@ -1101,8 +1137,11 @@ function initializeTariffSelects() {
         if (prefillValue) {
             const match = processedTariffData.find(item => item.id === prefillValue);
             if (match) {
-                const option = new Option(match.id, match.id, true, true);
-                $select.append(option).trigger('change');
+                const digits = (match.id || '').replace(/\D+/g, '');
+                if (digits.length >= 10) {
+                    const option = new Option(match.id, match.id, true, true);
+                    $select.append(option).trigger('change');
+                }
             }
         }
     });
