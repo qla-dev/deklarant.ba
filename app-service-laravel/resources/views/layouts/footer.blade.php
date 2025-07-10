@@ -20,20 +20,20 @@
 
                   <a href="/" class="logo-dark">
                         <span class="d-inline d-md-none">
-                            <img src="{{ URL::asset('build/images/logo-qla.png') }}" alt="" style="width:55px; margin-left: 3px;">
+                            <img src="{{ URL::asset('build/images/logo-qla.png') }}" alt="" style="width:55px; margin-left: 3px;  margin-bottom: -5px;">
                         </span>
-                         <span class="d-none d-md-inline"> <img src="{{ URL::asset('build/images/logo-qla.png') }}" alt="" style="width:60px; margin-top: -3px; margin-left: 2px;"></span>
+                         <span class="d-none d-md-inline"> <img src="{{ URL::asset('build/images/logo-qla.png') }}" alt="" style="width:60px; margin-top: -1px; margin-left: 2px;"></span>
                  
                     </a>
                    
 
                     <a href="/" class="logo-light">
                         <span class="d-inline d-md-none">
-                            <img src="{{ URL::asset('build/images/logo-qla-dark.png') }}" alt=""  style="width:55px; margin-left: 3px;">
+                            <img src="{{ URL::asset('build/images/logo-qla-dark.png') }}" alt=""  style="width:55px; margin-left: 3px;  margin-bottom: -5px;">
                         </span>
 
                         <span class="d-none d-md-inline">
-                            <img src="{{ URL::asset('build/images/logo-qla-dark.png') }}" alt=""  style="width:60px; margin-top: -3px; margin-left: 2px;">
+                            <img src="{{ URL::asset('build/images/logo-qla-dark.png') }}" alt=""  style="width:60px; margin-top: -1px; margin-left: 2px;">
                         </span>
                        
                         

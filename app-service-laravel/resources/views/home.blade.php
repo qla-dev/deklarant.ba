@@ -17,7 +17,6 @@
 
      .logo-span {
         font-family: 'Facebook Sans Bold', sans-serif!important;
-         font-weight: bolder!important;
     }
 
     .ai-span {
@@ -27,7 +26,6 @@
         background: unset!Important;
             font-size: inherit!important;
     font-style: normal!important;
-    font-weight: bolder!important;
         margin-bottom: unset!important;
         padding-bottom: !important;
          font-family: 'Facebook Sans Bold', sans-serif!important;
@@ -113,7 +111,7 @@
                             <img class="user-avatar img-thumbnail rounded-circle d-none avatar-class">
                             <div class="avatar-fallback rounded-circle bg-info d-flex justify-content-center align-items-center text-white" style="width: 50px; height: 50px;"></div>
                         </div>
-                        <h6 class="fw-bold mb-1 mt-1 logo-span welcome">Dobrodošli na <strong class="logo-span">deklarant<span class="ai-span">.ai</span></strong> {{ Auth::user()->username ?? '' }}</h6>
+                        <h6 class="mb-1 mt-1 logo-span welcome">Dobrodošli na <span class="">deklarant<span class="ai-span">.ai</span></span> {{ Auth::user()->username ?? '' }}</h6>
                         <p class="fs-7 mb-1 text-info" id="user-package-display"></p>
     @include('components.package-dashboard-statusbar')
                         

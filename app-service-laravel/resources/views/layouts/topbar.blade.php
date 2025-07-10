@@ -68,7 +68,7 @@
 
                 <div class="topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
                     <a href="/kursna-lista"
-                        class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none">
+                        class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" title="Kursna lista">
                         <i class="ri-exchange-dollar-line konverzija" style="font-size:27px"></i>
                     </a>
                 </div>
@@ -180,17 +180,20 @@
 
                 <div class="ms-1 header-item d-none d-sm-flex">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none"
-                        data-toggle-custom="fullscreen">
+                        data-toggle-custom="fullscreen"
+                        title="Cijeli ekran">
                         <i class='bx bx-fullscreen fs-2'></i>
                     </button>
                 </div>
 
                 <div class="ms-1 header-item d-none d-sm-flex  me-5">
                     <button type="button"
-                        class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle light-dark-mode shadow-none">
+                        class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle light-dark-mode shadow-none"
+                      title="Tamni/svijetli režim">
                         <i class='bx bx-moon fs-2'></i>
                     </button>
                 </div>
+
 
 
 
@@ -325,9 +328,11 @@
 </div><!-- /.modal -->
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- after jQuery (if you need it) but before your inline script -->
+<script src="/build/js/bootstrap.bundle.min.js"></script>
 <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
 <script src="{{ URL::asset('build/js/pages/dashboard-analytics.init.js') }}"></script>
-<script src="{{ URL::asset('build/js/app.js') }}"></script>
+
 <script src="{{ URL::asset('build/libs/chart.js/chart.umd.js') }}"></script>
 <script src="{{ URL::asset('build/js/pages/chartjs.init.js') }}"></script>
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
@@ -849,4 +854,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 });
 </script>
+
+
 
