@@ -1332,7 +1332,9 @@ function addRowToInvoice(item = {}, suggestions = []) {
             const quantity = item.quantity || 0;
             const origin = item.country_of_origin || "DE";
             const currency = item.currency || "EUR";
-            const total = formatDecimal(price * quantity, 2);
+            const total = (typeof item.total_price !== 'undefined' && item.total_price !== null && item.total_price !== '')
+    ? item.total_price
+    : formatDecimal(price * quantity, 2);
             const desc = (item.item_description ?? "") || "";
             const translate = item.translate || item.item_description_translated || "";
             const package_num = item.num_packages || 0;
@@ -2690,7 +2692,7 @@ $(document).on('click', '.show-ai-btn', function() {
     $body.html(html);
   }
 
-  // 4) stash the select2 field for the “use-tariff” handler
+  // 4) stash the select2 field for the "use-tariff" handler
   $('#aiSuggestionModal').data('target-select', $select);
 
   // 5) show the Bootstrap modal

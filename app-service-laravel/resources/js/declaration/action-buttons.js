@@ -241,7 +241,14 @@ document.querySelectorAll("#newlink tr.product").forEach((row, index) => {
     const parsedPrice = parseFloat(rawPrice.replace(',', '.')) || 0;
     const base_price = parsedPrice.toFixed(2).replace('.', ','); // this is a string
     const quantity = parseFloat(row.querySelector('[name="quantity[]"]')?.value || "0");
-    const total_price = formatDecimal(base_price * quantity, 2);
+    const totalInputRaw = row.querySelector('input[name="total[]"]')?.value || "";
+    let total_price = null;
+    if (totalInputRaw.trim() !== "") {
+        // Clean and normalize
+        total_price = parseFloat(totalInputRaw.replace(',', '.')) || 0;
+    } else {
+        total_price = parseFloat(base_price.replace(',', '.')) * quantity;
+    }
     const quantity_type = row.querySelector('[name="quantity_type[]"]')?.value || "";
     const package_num = row.querySelector('[name="kolata[]"]')?.value || "";
     const weight_gross = row.querySelector('[name="weight_gross[]"]')?.value || "";
