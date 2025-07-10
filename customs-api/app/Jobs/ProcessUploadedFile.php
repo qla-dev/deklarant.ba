@@ -166,6 +166,25 @@ class ProcessUploadedFile implements ShouldQueue
         return LLMUtils::parseLLMResponse($responseData);
     }
 
+    private function getCleanHsCodes(array $item): array {
+        $combinedCodes = [];
+
+        // Add hs_code if it's a non-empty string
+        if (!empty($item['hs_code']) && is_string($item['hs_code'])) {
+            $combinedCodes[] = $item['hs_code'];
+        }
+
+        // Add guessed_hs_codes if it's an array, filtering out empty strings
+        if (!empty($item['guessed_hs_codes']) && is_array($item['guessed_hs_codes'])) {
+            $filteredGuessed = array_filter($item['guessed_hs_codes'], function($code) {
+                return is_string($code) && trim($code) !== '';
+            });
+            $combinedCodes = array_merge($combinedCodes, $filteredGuessed);
+        }
+
+        return $combinedCodes;
+    }
+
     private function enrichWithSearchAPI(array $items): array
     {
         $enriched = [];
@@ -176,7 +195,10 @@ class ProcessUploadedFile implements ShouldQueue
             }
 
             $response = $this->client->get(getenv('SEARCH_API_URL'), [
-                'query' => ['query' => $item['item_name']]
+                'query' => [
+                    'query' => $item['item_name'],
+                    'good_candidates' => implode(",", $this->getCleanHsCodes($item)),
+                ]
             ]);
 
             $results = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);

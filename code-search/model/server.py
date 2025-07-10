@@ -1,14 +1,14 @@
 from flask import Flask, request, jsonify, render_template_string
 from model.search import perform_search
 import os
-import sys
+import signal
 import threading
 import time
 
 # Define the "search" function
-def search(query):
+def search(query, good_candidates: list[str]):
     print("Searching for '", query, "'")
-    results = perform_search(query)[:10]
+    results = perform_search(query, good_candidates)[:10]
     return results
 
 # Create the Flask app
@@ -17,8 +17,9 @@ app = Flask(__name__)
 @app.route('/search-api')
 def handle_request():
     query = request.args.get("query")
+    good_candidates = request.args.get("good_candidates", "").split(",")
     if query:
-        return jsonify(search(query))
+        return jsonify(search(query, good_candidates))
     else:
         return jsonify({"error": "Missing 'query' parameter"}), 400
 
@@ -54,7 +55,8 @@ HTML_TEMPLATE = """
 <body>
     <form method="GET">
         <label for="query">Search Query:</label>
-        <input type="text" id="query" name="query" required>
+        <input type="text" id="query" name="query" placeholder="Item name" required>
+        <input type="text" id="good_candidates" name="good_candidates" placeholder="Good candidates">
         <button type="submit">Search</button>
     </form>
     {% if query %}
@@ -78,7 +80,8 @@ HTML_TEMPLATE = """
 @app.route('/', methods=['GET'])
 def search_page():
     query = request.args.get('query')
-    results = search(query) if query else None
+    good_candidates = request.args.get("good_candidates", "").split(",")
+    results = search(query, good_candidates) if query else None
     return render_template_string(HTML_TEMPLATE, query=query, results=results)
 
 def monitor_restart_file():
@@ -87,7 +90,7 @@ def monitor_restart_file():
         if os.path.exists(restart_file):
             print("Restart requested via .restart-requested file")
             os.remove(restart_file)
-            sys.exit(0)
+            os.kill(os.getpid(), signal.SIGINT)
         time.sleep(2)
 
 if __name__ == "__main__":

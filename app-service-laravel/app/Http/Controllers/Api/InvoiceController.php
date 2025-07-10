@@ -515,7 +515,7 @@ class InvoiceController extends Controller
 
                 // Check if item has hs_code with length of 10 after removing whitespace
                 $hs_code = str_replace(' ', '', $item['hs_code'] ?? '');
-                if ($hs_code && strlen($hs_code) === 10) {
+                if ($hs_code && strlen($hs_code) >= 10) {
                     $item_code = substr($hs_code, 0, 4) . ' ' . substr($hs_code, 4, 2) . ' ' . substr($hs_code, 6, 2) . ' ' . substr($hs_code, 8);
                 } else {
                     // Find the best entry from detected codes

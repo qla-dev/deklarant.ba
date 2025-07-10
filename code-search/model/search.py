@@ -21,9 +21,13 @@ for model_name in MODEL_NAMES:
 
 result_caches = {}
 
+def remove_non_digits(s):
+    return "".join(c for c in str(s) if c.isdigit())
+
 def preprocess_csv(file_path):
     df = pd.read_csv(file_path)
-    df = df[df['Tarifna oznaka'].apply(lambda x: str(x).replace(' ', '').isdigit() and len(str(x).replace(' ', '')) == 10)]
+    df = df[df['Tarifna oznaka'].apply(lambda x: str(x).replace(' ', '').isdigit() and len(str(x).replace(' ', '')) >= 10)]
+    df["Tarifna oznaka cleaned"] = df["Tarifna oznaka"].apply(remove_non_digits)
     return df
 
 def generate_embeddings(data, column_name):
@@ -98,12 +102,23 @@ data = preprocess_csv(file_path)
 all_embeddings = generate_embeddings(data, column_name="Puni Naziv - ENG")
 indices = build_faiss_index(all_embeddings)
 
-def perform_search(query: str):
+def perform_search(query: str, good_candidates: list[str]):
     results = search_faiss_index(query.lower(), indices, data)
     ret = [{
         "entry": json.loads(data.iloc[int(idx)].to_json()),
         "closeness": float(sum_of_distances)
     } for (idx, sum_of_distances) in results]
+    any_good_candidate_found = False
+    for candidate in good_candidates:
+        candidate = remove_non_digits(candidate)
+        if candidate != "":
+            for entry in ret:
+                if entry["entry"]["Tarifna oznaka cleaned"].startswith(candidate):
+                    any_good_candidate_found = True
+                    entry["closeness"] -= 0.3
+                    print("Removing", candidate, "from", entry["entry"]["Tarifna oznaka cleaned"], "now has closeness of", entry["closeness"])
+    if any_good_candidate_found:
+        ret.sort(key=lambda x: x["closeness"])
     return ret
 
 if __name__ == "__main__":
