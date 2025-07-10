@@ -1299,24 +1299,6 @@ function smartMaskHandler(e) {
         }
     }
 }
-function smartMaskHandler(e) {
-    const rawInput = e.target.value;
-    const digitsOnly = rawInput.replace(/\D+/g, "");
-
-    if (digitsOnly.length >= 4) {
-        const formatted = digitsOnly.replace(
-            /^(\d{4})(\d{0,2})(\d{0,2})(\d{0,2})/,
-            (_, a, b, c, d) => [a, b, c, d].filter(Boolean).join(' ')
-        );
-
-        if (/^\d[\d\s]*$/.test(rawInput)) {
-            e.target.value = formatted;
-            setTimeout(() => {
-                e.target.setSelectionRange(e.target.value.length, e.target.value.length);
-            }, 0);
-        }
-    }
-}
 
 function addRowToInvoice(item = {}, suggestions = []) {
             const tbody = document.getElementById("newlink");
