@@ -4,3 +4,4 @@ pandas
 sentence-transformers
 faiss-cpu
 flask
+rapidfuzz

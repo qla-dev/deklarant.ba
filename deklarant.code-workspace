@@ -1,16 +1,16 @@
 {
 	"folders": [
 		{
+			"name": "code-search",
+			"path": "code-search"
+		},
+		{
 			"name": "app-service-laravel",
 			"path": "app-service-laravel"
 		},
 		{
 			"name": "customs-api",
 			"path": "customs-api"
-		},
-		{
-			"name": "code-search",
-			"path": "code-search"
 		},
 		{
 			"name": ".github",

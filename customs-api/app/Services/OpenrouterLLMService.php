@@ -47,7 +47,8 @@ class OpenrouterLLMService implements LLMCaller
                                 'role' => 'user',
                                 'content' => $messageContent
                             ]
-                        ]
+                        ],
+                        'temperature' => 0.02,
                     ]
                 ];
 
