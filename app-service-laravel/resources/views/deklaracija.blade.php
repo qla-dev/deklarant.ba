@@ -579,13 +579,23 @@ if (typeof window !== "undefined") {
 
    productRows.forEach((row) => {
     const itemName = row.querySelector('input[name="item_name[]"]')?.value?.trim();
-    const price = parseFloat((row.querySelector('input[name="price[]"]')?.value || '0').replace(',', '.'));
+    const priceRaw = row.querySelector('input[name="price[]"]')?.value || '';
+    const totalRaw = row.querySelector('input[name="total[]"]')?.value || '';
     const quantity = parseFloat(row.querySelector('input[name="quantity[]"]')?.value || 0);
 
-    // 🚫 Skip rows with no name or zeroed values
-    if (!itemName || (price === 0 && quantity === 0)) return;
+    // 🚫 Skip rows with no name or empty/zeroed values
+    if (!itemName || priceRaw.trim() === '' || (parseFloat(priceRaw.replace(',', '.')) === 0 && quantity === 0)) return;
 
-    total += price * quantity;
+    // Use total value if available, otherwise calculate from price * quantity
+    let rowTotal = 0;
+    if (totalRaw.trim() !== '') {
+        rowTotal = parseFloat(totalRaw.replace(/[^\d.,]/g, '').replace(',', '.')) || 0;
+    } else {
+        const price = parseFloat(priceRaw.replace(',', '.')) || 0;
+        rowTotal = price * quantity;
+    }
+    
+    total += rowTotal;
 
     if (!lockedCurrency) {
         const currencyInput = row.querySelector('input[name="currency[]"]');
@@ -642,13 +652,16 @@ function updateProcjenaEstimates() {
     document.getElementById("q1-estimate")?.value
   );
   document.querySelectorAll("#newlink tr.product").forEach(row => {
-    const total = parseDecimalToDot(
-      row.querySelector('input[name="total[]"]')?.value
-    );
+    const totalRaw = row.querySelector('input[name="total[]"]')?.value || '';
     const input = row.querySelector('input[name="procjena[]"]');
     if (input) {
-      const result = q1 * total;
-      input.value = result.toFixed(2).replace(".", ",");
+      if (totalRaw.trim() === '') {
+        input.value = '';
+      } else {
+        const total = parseDecimalToDot(totalRaw);
+        const result = q1 * total;
+        input.value = result.toFixed(2).replace(".", ",");
+      }
     }
   });
 }
@@ -661,15 +674,18 @@ function updateBrutoEstimates() {
   console.log("▶︎ updateBrutoEstimates() — q2 =", q2);
 
   document.querySelectorAll("#newlink tr.product").forEach((row, i) => {
-    const total = parseDecimalToDot(
-      row.querySelector('input[name="total[]"]')?.value
-    );
+    const totalRaw = row.querySelector('input[name="total[]"]')?.value || '';
     const input = row.querySelector('input[name="weight_gross[]"]');
-    const value = q2 * total;
-    console.log(`row ${i}: gross=${value}`);
-
+    
     if (input) {
-      input.value = value.toFixed(2).replace(".", ",");
+      if (totalRaw.trim() === '') {
+        input.value = '';
+      } else {
+        const total = parseDecimalToDot(totalRaw);
+        const value = q2 * total;
+        console.log(`row ${i}: gross=${value}`);
+        input.value = value.toFixed(2).replace(".", ",");
+      }
       input.dispatchEvent(new Event("input"));
     }
   });
@@ -683,15 +699,18 @@ function updateNetoEstimates() {
   console.log("▶︎ updateNetoEstimates() — q3 =", q3);
 
   document.querySelectorAll("#newlink tr.product").forEach((row, i) => {
-    const total = parseDecimalToDot(
-      row.querySelector('input[name="total[]"]')?.value
-    );
+    const totalRaw = row.querySelector('input[name="total[]"]')?.value || '';
     const input = row.querySelector('input[name="weight_net[]"]');
-    const value = q3 * total;
-    console.log(`row ${i}: net=${value}`);
-
+    
     if (input) {
-      input.value = value.toFixed(2).replace(".", ",");
+      if (totalRaw.trim() === '') {
+        input.value = '';
+      } else {
+        const total = parseDecimalToDot(totalRaw);
+        const value = q3 * total;
+        console.log(`row ${i}: net=${value}`);
+        input.value = value.toFixed(2).replace(".", ",");
+      }
       input.dispatchEvent(new Event("input"));
     }
   });
@@ -1617,9 +1636,10 @@ row.innerHTML = `
          <td style="width: 70px;">
     <input 
       type="text" 
-      class="form-control text-start th-input" 
+      class="form-control text-start th-input total-input" 
       name="total[]" 
-      value="${total}" disabled
+      value="${total}" 
+      inputmode="decimal"
       style="width: 100%;"
     >
     <input 
@@ -1792,8 +1812,18 @@ $(document).on('click', '.increment-gross', function() {
     const row = $(this).closest('tr');
 
     // Get raw input strings
-    let priceRaw = row.find('input[name="price[]"]').val() || "0";
+    let priceRaw = row.find('input[name="price[]"]').val() || "";
     let quantityRaw = row.find('input[name="quantity[]"]').val() || "0";
+
+    // Handle empty price field
+    if (priceRaw.trim() === "") {
+        row.find('input[name="total[]"]').val("");
+        updateProcjenaEstimates();
+        updateBrutoEstimates();
+        updateNetoEstimates();
+        updateTotalAmount();
+        return;
+    }
 
     // Normalize price by replacing comma with dot
     const price = parseFloat(priceRaw.replace(',', '.')) || 0;
@@ -1810,6 +1840,96 @@ $(document).on('click', '.increment-gross', function() {
     updateBrutoEstimates();
     updateNetoEstimates();
     updateTotalAmount();
+});
+
+// Handle total field input for reverse calculation
+$(document).on('input', 'input[name="total[]"]', function () {
+    const row = $(this).closest('tr');
+    const $totalInput = $(this);
+    const $priceInput = row.find('input[name="price[]"]');
+    const $quantityInput = row.find('input[name="quantity[]"]');
+
+    // Get raw total value
+    let totalRaw = $totalInput.val() || "";
+    
+    // If field is empty, update calculations with 0
+    if (totalRaw.trim() === "") {
+        const quantity = parseInt($quantityInput.val() || "0", 10) || 0;
+        if (quantity > 0) {
+            $priceInput.val("0,00");
+        }
+        updateProcjenaEstimates();
+        updateBrutoEstimates();
+        updateNetoEstimates();
+        updateTotalAmount();
+        return;
+    }
+    
+    // Parse the total value (decimal-regex.js handles the cleaning)
+    const total = parseFloat(totalRaw.replace(',', '.')) || 0;
+    const quantity = parseInt($quantityInput.val() || "0", 10) || 0;
+
+    // Calculate new price if quantity > 0
+    if (quantity > 0) {
+        const newPrice = total / quantity;
+        const formattedPrice = formatDecimal(newPrice, 2);
+        $priceInput.val(formattedPrice);
+    }
+
+    // Update koleta and global total
+    updateProcjenaEstimates();
+    updateBrutoEstimates();
+    updateNetoEstimates();
+    updateTotalAmount();
+});
+
+
+
+// Format total field when user leaves the field (blur event)
+$(document).on('blur', 'input[name="total[]"]', function () {
+    const $totalInput = $(this);
+    let totalRaw = $totalInput.val() || "";
+    
+    if (totalRaw.trim() === "") {
+        return; // Leave empty if user wants it empty
+    }
+    
+    // If the value contains a comma but doesn't have 2 decimal places, add them
+    if (totalRaw.includes(',')) {
+        const parts = totalRaw.split(',');
+        if (parts.length === 2 && parts[1].length === 1) {
+            // User typed something like "1,2" - add a zero to make it "1,20"
+            totalRaw = parts[0] + ',' + parts[1] + '0';
+        } else if (parts.length === 2 && parts[1].length === 0) {
+            // User typed something like "1," - add "00" to make it "1,00"
+            totalRaw = parts[0] + ',00';
+        }
+    }
+    
+    $totalInput.val(totalRaw);
+});
+
+// Handle paste events for total field
+$(document).on('paste', 'input[name="total[]"]', function (e) {
+    e.preventDefault();
+    
+    // Get pasted content
+    const pastedText = (e.originalEvent || e).clipboardData.getData('text/plain');
+    
+    // Clean the pasted text to only allow numbers, comma, and dot
+    const cleanedText = pastedText.replace(/[^\d.,]/g, '');
+    
+    // Insert the cleaned text
+    const input = this;
+    const start = input.selectionStart;
+    const end = input.selectionEnd;
+    const value = input.value;
+    
+    input.value = value.substring(0, start) + cleanedText + value.substring(end);
+    input.setSelectionRange(start + cleanedText.length, start + cleanedText.length);
+    
+    // Trigger input event to format the value
+    $(input).trigger('input');
 });
 
 

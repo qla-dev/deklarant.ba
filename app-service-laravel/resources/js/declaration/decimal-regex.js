@@ -1,4 +1,4 @@
-const FORMAT_SELECTOR = '.price-input, #total-weight-net, #total-weight-gross';
+const FORMAT_SELECTOR = '.price-input, .total-input, #total-weight-net, #total-weight-gross';
 
 document.addEventListener('input', function (e) {
   if (!e.target.matches(FORMAT_SELECTOR)) return;
@@ -19,8 +19,8 @@ document.addEventListener('input', function (e) {
     value = parts[0] + ',' + parts[1];
   }
 
-  // only clear-to-zero for non-weight fields
-  if (value.trim() === '' && !e.target.matches('#total-weight-net, #total-weight-gross')) {
+  // only clear-to-zero for weight fields (allow price and total fields to be empty)
+  if (value.trim() === '' && e.target.matches('#total-weight-net, #total-weight-gross')) {
     value = '0';
   }
 
