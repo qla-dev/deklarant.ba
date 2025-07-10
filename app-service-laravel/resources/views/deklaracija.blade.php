@@ -1234,11 +1234,15 @@ function initializeTariffSelects() {
                 }
                 // Enable Bootstrap tooltips for dropdown items
                 setTimeout(() => {
-                    $('.select2-results__option [data-bs-toggle="tooltip"]').each(function () {
-                        if (!$(this).data('bs.tooltip')) {
-                            new bootstrap.Tooltip(this);
-                        }
-                    });
+                    if (window.tooltipManager) {
+                        window.tooltipManager.reinitializeTooltips();
+                    } else {
+                        $('.select2-results__option [data-bs-toggle="tooltip"]').each(function () {
+                            if (!$(this).data('bs.tooltip')) {
+                                new bootstrap.Tooltip(this);
+                            }
+                        });
+                    }
                 }, 0);
             }, 0);
         });
@@ -1333,8 +1337,8 @@ function addRowToInvoice(item = {}, suggestions = []) {
             const origin = item.country_of_origin || "DE";
             const currency = item.currency || "EUR";
             const total = (typeof item.total_price !== 'undefined' && item.total_price !== null && item.total_price !== '')
-    ? item.total_price
-    : formatDecimal(price * quantity, 2);
+    ? formatDecimal(parseFloat(item.total_price), 2, '')
+    : formatDecimal(price * quantity, 2, '');
             const desc = (item.item_description ?? "") || "";
             const translate = item.translate || item.item_description_translated || "";
             const package_num = item.num_packages || 0;
@@ -1628,7 +1632,7 @@ row.innerHTML = `
     type="text" 
     class="form-control text-start-truncate price-input th-input" 
     name="price[]" 
-    value="${formatDecimal(price)}" 
+    value="${formatDecimal(price, 2, '')}" 
     inputmode="decimal"
     style="width: 100%;" 
   />
@@ -1743,10 +1747,15 @@ row.innerHTML = `
 cb.removeAttribute('title');                 // ensure no native tooltip
 bootstrap.Tooltip.getInstance(cb)?.dispose(); 
 new bootstrap.Tooltip(cb); 
-            // ✅ Re-init all tooltips inside the new row
-$(row).find('[data-bs-toggle="tooltip"]').each(function () {
-  new bootstrap.Tooltip(this);
-});
+            // ✅ Re-init all tooltips inside the new row using the global tooltip manager
+            if (window.tooltipManager) {
+                window.tooltipManager.reinitializeTooltips();
+            } else {
+                // Fallback to direct initialization if tooltip manager is not available
+                $(row).find('[data-bs-toggle="tooltip"]').each(function () {
+                    new bootstrap.Tooltip(this);
+                });
+            }
 
             
             initializeTariffSelects();
@@ -1832,7 +1841,7 @@ $(document).on('click', '.increment-gross', function() {
     const quantity = parseInt(quantityRaw, 10) || 0;
 
     // Calculate and format total
-    const total = formatDecimal(price * quantity, 2);
+    const total = formatDecimal(price * quantity, 2, '');
 
     // Set formatted total with comma
     row.find('input[name="total[]"]').val(total);
@@ -2805,8 +2814,8 @@ if (invoiceDateInput) {
             const grossVal = isNaN(parseFloat(rawGross)) ? 0 : rawGross;
 
          // Prefill total weights and package count
-            setField("#total-weight-net",   formatDecimal(netVal,   2));
-            setField("#total-weight-gross", formatDecimal(grossVal, 2));
+            setField("#total-weight-net",   formatDecimal(netVal,   2, ''));
+            setField("#total-weight-gross", formatDecimal(grossVal, 2, ''));
             setField("#total-num-packages", invoice.total_num_packages ?? "0");
 
             console.log("Weights and package count set:",

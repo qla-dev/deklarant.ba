@@ -68,7 +68,10 @@
 
                 <div class="topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
                     <a href="/kursna-lista"
-                        class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" title="Kursna lista">
+                        class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" 
+                        data-bs-toggle="tooltip" 
+                        data-bs-placement="bottom" 
+                        data-bs-title="Kursna lista">
                         <i class="ri-exchange-dollar-line konverzija" style="font-size:27px"></i>
                     </a>
                 </div>
@@ -181,7 +184,9 @@
                 <div class="ms-1 header-item d-none d-sm-flex">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none"
                         data-toggle-custom="fullscreen"
-                        title="Cijeli ekran">
+                        data-bs-toggle="tooltip" 
+                        data-bs-placement="bottom" 
+                        data-bs-title="Cijeli ekran">
                         <i class='bx bx-fullscreen fs-2'></i>
                     </button>
                 </div>
@@ -189,7 +194,9 @@
                 <div class="ms-1 header-item d-none d-sm-flex  me-5">
                     <button type="button"
                         class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle light-dark-mode shadow-none"
-                      title="Tamni/svijetli režim">
+                        data-bs-toggle="tooltip" 
+                        data-bs-placement="bottom" 
+                        data-bs-title="Tamni/svijetli režim">
                         <i class='bx bx-moon fs-2'></i>
                     </button>
                 </div>
@@ -329,7 +336,17 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- after jQuery (if you need it) but before your inline script -->
-<script src="/build/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap is already loaded in vendor-scripts, so we don't need to load it again -->
+
+<style>
+/* Force tooltips to be visible */
+.tooltip {
+    z-index: 9999999999 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+</style>
 <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
 <script src="{{ URL::asset('build/js/pages/dashboard-analytics.init.js') }}"></script>
 
@@ -532,6 +549,34 @@
         document.addEventListener("mozfullscreenchange", exitHandler);
         document.addEventListener("MSFullscreenChange", exitHandler);
     });
+    
+    // Fix dark/light mode toggle button stuck state
+    document.addEventListener("DOMContentLoaded", function() {
+        const darkModeBtn = document.querySelector('.light-dark-mode');
+        if (darkModeBtn) {
+            darkModeBtn.addEventListener('click', function() {
+                // Remove hover/focus/active classes after a short delay
+                setTimeout(() => {
+                    this.classList.remove('hover', 'focus', 'active');
+                    this.blur(); // Remove focus
+                }, 100);
+            });
+        }
+    });
+    
+    // Fix fullscreen button stuck state
+    document.addEventListener("DOMContentLoaded", function() {
+        const fullscreenBtn = document.querySelector('[data-toggle-custom="fullscreen"]');
+        if (fullscreenBtn) {
+            fullscreenBtn.addEventListener('click', function() {
+                // Remove hover/focus/active classes after a short delay
+                setTimeout(() => {
+                    this.classList.remove('hover', 'focus', 'active');
+                    this.blur(); // Remove focus
+                }, 100);
+            });
+        }
+    });
 </script>
 
 <script>
@@ -568,6 +613,34 @@
 
     // Initialize on page load
     document.addEventListener("DOMContentLoaded", initDarkModeToggle);
+    
+    // Initialize Bootstrap tooltips after all scripts are loaded
+    function initTooltips() {
+        // Test if Bootstrap is available
+        if (typeof bootstrap === 'undefined' || typeof bootstrap.Tooltip === 'undefined') {
+            return;
+        }
+        
+        // Initialize tooltips
+        $('[data-bs-toggle="tooltip"]').each(function() {
+            new bootstrap.Tooltip(this);
+        });
+        
+        // Hide tooltips when buttons are clicked
+        $('[data-bs-toggle="tooltip"]').on('click', function() {
+            const tooltip = bootstrap.Tooltip.getInstance(this);
+            if (tooltip) {
+                tooltip.hide();
+            }
+        });
+    }
+    
+    // Initialize tooltips
+    initTooltips();
+    
+    // Also try on DOM ready and window load
+    $(document).ready(initTooltips);
+    window.addEventListener('load', initTooltips);
 </script>
 
 

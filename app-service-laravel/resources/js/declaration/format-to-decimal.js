@@ -1,6 +1,7 @@
     function formatDecimal(value, decimals = 2, currencySymbol = '') {
     if (isNaN(value)) return '';
-    return `${parseFloat(value).toFixed(decimals).replace('.', ',')} ${currencySymbol}`.trim();
+    const formatted = parseFloat(value).toFixed(decimals).replace('.', ',');
+    return currencySymbol ? `${formatted} ${currencySymbol}`.trim() : formatted;
 }
 
 function parseDecimalToDot(str) {
