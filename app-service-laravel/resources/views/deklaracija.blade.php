@@ -312,7 +312,7 @@
                                 <th class="dark-remove-bg" style="width: 50px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!">#</th>
                                 <th class="dark-remove-bg"  style="width: 200px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; padding-right: 50px!important; background: #f3f3f9!">Proizvod </th>
                                 <th class="dark-remove-bg" style="width: 140px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; margin-left: -5px!important; background: #f3f3f9!">Opis </th>
-                                <th class="th-tarifa dark-remove-bg" style="width: 350px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!">Tarifna oznaka</th>
+                                <th class="th-tarifa dark-remove-bg" style="width: 400px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!">Tarifna oznaka</th>
                                 <th class="dark-remove-bg" style="width: 50px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!">Jed. mjere</th>
                                 <th class="dark-remove-bg" style="width:120px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!">Porijeklo/Pov..</th>
                               
