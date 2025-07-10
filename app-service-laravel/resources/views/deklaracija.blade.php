@@ -1027,7 +1027,18 @@ function initializeTariffSelects() {
                             </li>`;
                     }
 
-                    // split into matches and non-matches
+                    // Find selected value and its parent
+                    let selectedItem = null;
+                    let parentItem = null;
+                    if ($select.val()) {
+                        selectedItem = processedTariffData.find(item => item.id === $select.val());
+                        if (selectedItem && selectedItem.id && selectedItem.id.length > 4) {
+                            const parentId = selectedItem.id.slice(0, 4);
+                            parentItem = processedTariffData.find(item => item.id === parentId);
+                        }
+                    }
+
+                    // Filter matches
                     const matches = processedTariffData.filter(item =>
                         item.id.toLowerCase().includes(term) ||
                         item.display.toLowerCase().includes(term)
@@ -1036,10 +1047,17 @@ function initializeTariffSelects() {
                         !matches.some(m => m.id === item.id)
                     );
 
-                    setTimeout(() => {
-                        // concat matches first, then the rest
-                        success({ results: [...matches, ...rest] });
+                    // Compose result: parent, selected, then matches+rest
+                    let results = [];
+                    if (parentItem) results.push(parentItem);
+                    if (selectedItem && (!parentItem || selectedItem.id !== parentItem.id)) results.push(selectedItem);
+                    // Remove duplicates
+                    const ids = new Set(results.map(i => i.id));
+                    const restList = [...matches, ...rest].filter(i => !ids.has(i.id));
+                    results = [...results, ...restList];
 
+                    setTimeout(() => {
+                        success({ results });
                         // reset scroll
                         const dropdown = document.querySelector('.select2-results__options');
                         if (dropdown) dropdown.scrollTop = 0;
@@ -1075,7 +1093,38 @@ function initializeTariffSelects() {
                     ? `padding-left:${padding}px; font-weight:${fontWeight}; cursor:pointer;`
                     : `padding-left:${padding}px; font-weight:${fontWeight}; color:#aaa; cursor:not-allowed;`;
 
-                return $(`<div style="${style}" title="${item.display}">
+                // Tooltip: just description (without tariff number)
+                let parentDesc = "";
+                if (item.id && item.id.length > 4) {
+                    const parentId = item.id.slice(0, 4);
+                    const parent = processedTariffData.find(i => i.id === parentId);
+                    parentDesc = parent ? parent.display : "";
+                }
+
+                // --- CHILD DESC CLEANUP ---
+                // Remove all digits and spaces before first letter in child desc
+                function trimToFirstLetter(str) {
+                    if (!str) return "";
+                    // Find first letter (unicode safe)
+                    const match = str.match(/[A-Za-zŠĐČĆŽšđčćž]/);
+                    if (!match) return str;
+                    const idx = str.indexOf(match[0]);
+                    return str.slice(idx);
+                }
+
+                // Remove tariff numbers from tooltip for child
+                let onlyDesc = item.display.replace(/^\s*\d+\s*[-–]?\s*/, '');
+                onlyDesc = trimToFirstLetter(onlyDesc);
+
+                // Parent desc is untouched (as requested)
+                let onlyParentDesc = parentDesc.replace(/^\s*\d+\s*[-–]?\s*/, '');
+
+                const tooltip = onlyParentDesc && onlyParentDesc !== onlyDesc
+                    ? `${onlyParentDesc} — ${onlyDesc}`
+                    : onlyDesc;
+
+                // Remove native title, add data-bs-toggle for Bootstrap tooltip
+                return $(`<div style="${style}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="${tooltip}">
                     ${icon} ${item.display}
                 </div>`);
             },
@@ -1083,6 +1132,39 @@ function initializeTariffSelects() {
                 // Only allow selection if 10 or more digits
                 const digits = (item?.id || '').replace(/\D+/g, '');
                 if (digits.length >= 10) {
+                    // Set tooltip on the rendered selection
+                    setTimeout(() => {
+                        const $container = $select.next('.select2-container').find('.select2-selection__rendered');
+                        let parentDesc = "";
+                        if (item.id && item.id.length > 4) {
+                            const parentId = item.id.slice(0, 4);
+                            const parent = processedTariffData.find(i => i.id === parentId);
+                            parentDesc = parent ? parent.display : "";
+                        }
+                        // Remove tariff numbers from tooltip for child
+                        function trimToFirstLetter(str) {
+                            if (!str) return "";
+                            const match = str.match(/[A-Za-zŠĐČĆŽšđčćž]/);
+                            if (!match) return str;
+                            const idx = str.indexOf(match[0]);
+                            return str.slice(idx);
+                        }
+                        let onlyDesc = item.display.replace(/^\s*\d+\s*[-–]?\s*/, '');
+                        onlyDesc = trimToFirstLetter(onlyDesc);
+                        let onlyParentDesc = parentDesc.replace(/^\s*\d+\s*[-–]?\s*/, '');
+                        const tooltip = onlyParentDesc && onlyParentDesc !== onlyDesc
+                            ? `${onlyParentDesc} — ${onlyDesc}`
+                            : onlyDesc;
+                        $container.removeAttr('title'); // Remove native
+                        $container.attr('data-bs-toggle', 'tooltip');
+                        $container.attr('data-bs-placement', 'top');
+                        $container.attr('data-bs-title', tooltip);
+                        // Init or update Bootstrap tooltip
+                        if (typeof bootstrap !== "undefined") {
+                            bootstrap.Tooltip.getInstance($container[0])?.dispose();
+                            new bootstrap.Tooltip($container[0]);
+                        }
+                    }, 0);
                     return item?.id || "";
                 }
                 return "";
@@ -1131,8 +1213,60 @@ function initializeTariffSelects() {
                         input.dispatchEvent(evt);
                     }
                 }
+                // Enable Bootstrap tooltips for dropdown items
+                setTimeout(() => {
+                    $('.select2-results__option [data-bs-toggle="tooltip"]').each(function () {
+                        if (!$(this).data('bs.tooltip')) {
+                            new bootstrap.Tooltip(this);
+                        }
+                    });
+                }, 0);
             }, 0);
         });
+
+        // Set tooltip for selection on initial load and after selection
+        function setTooltipForSelection() {
+            setTimeout(() => {
+                const $container = $select.next('.select2-container').find('.select2-selection__rendered');
+                const selectedId = $select.val();
+                if (!selectedId) return;
+                const selectedItem = processedTariffData.find(i => i.id === selectedId);
+                if (!selectedItem) return;
+                let parentDesc = "";
+                if (selectedItem.id && selectedItem.id.length > 4) {
+                    const parentId = selectedItem.id.slice(0, 4);
+                    const parent = processedTariffData.find(i => i.id === parentId);
+                    parentDesc = parent ? parent.display : "";
+                }
+                // Remove tariff numbers from tooltip for child
+                function trimToFirstLetter(str) {
+                    if (!str) return "";
+                    const match = str.match(/[A-Za-zŠĐČĆŽšđčćž]/);
+                    if (!match) return str;
+                    const idx = str.indexOf(match[0]);
+                    return str.slice(idx);
+                }
+                let onlyDesc = selectedItem.display.replace(/^\s*\d+\s*[-–]?\s*/, '');
+                onlyDesc = trimToFirstLetter(onlyDesc);
+                let onlyParentDesc = parentDesc.replace(/^\s*\d+\s*[-–]?\s*/, '');
+                const tooltip = onlyParentDesc && onlyParentDesc !== onlyDesc
+                    ? `${onlyParentDesc} — ${onlyDesc}`
+                    : onlyDesc;
+                $container.removeAttr('title');
+                $container.attr('data-bs-toggle', 'tooltip');
+                $container.attr('data-bs-placement', 'top');
+                $container.attr('data-bs-title', tooltip);
+                if (typeof bootstrap !== "undefined") {
+                    bootstrap.Tooltip.getInstance($container[0])?.dispose();
+                    new bootstrap.Tooltip($container[0]);
+                }
+            }, 0);
+        }
+
+        $select.on('select2:select', setTooltipForSelection);
+
+        // Also set tooltip on initial load if value is prefilled
+        setTooltipForSelection();
 
         if (prefillValue) {
             const match = processedTariffData.find(item => item.id === prefillValue);
@@ -1147,6 +1281,24 @@ function initializeTariffSelects() {
     });
 }
 
+function smartMaskHandler(e) {
+    const rawInput = e.target.value;
+    const digitsOnly = rawInput.replace(/\D+/g, "");
+
+    if (digitsOnly.length >= 4) {
+        const formatted = digitsOnly.replace(
+            /^(\d{4})(\d{0,2})(\d{0,2})(\d{0,2})/,
+            (_, a, b, c, d) => [a, b, c, d].filter(Boolean).join(' ')
+        );
+
+        if (/^\d[\d\s]*$/.test(rawInput)) {
+            e.target.value = formatted;
+            setTimeout(() => {
+                e.target.setSelectionRange(e.target.value.length, e.target.value.length);
+            }, 0);
+        }
+    }
+}
 function smartMaskHandler(e) {
     const rawInput = e.target.value;
     const digitsOnly = rawInput.replace(/\D+/g, "");
