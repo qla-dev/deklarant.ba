@@ -86,7 +86,7 @@ function getVal(sel) {
     return el?.value?.trim() || el?.textContent?.trim() || "—";
 }
 
-function renderPrintTableAndPrint(isDownloadOnly = false, container = null) {
+function renderPrintTableAndPrint(isDownloadOnly = true, container = null, showTotal = true) {
     const invoiceNo = getVal("#invoice-no");
     const invoiceId = getVal("#invoice-id1");
     const date = getVal("#invoice-date");
@@ -109,54 +109,59 @@ function renderPrintTableAndPrint(isDownloadOnly = false, container = null) {
         return;
     }
 
-    let sumBruto = 0;
-    let sumNeto = 0;
+    let sumUkupnaCijena = 0;
 
     const headers = [
-        "Redni broj", "Opis (Original)", "Opis", "Opis (Preveden)",
+        "Redni broj", "Naziv", "Opis", "Prevod",
         "Tarifna oznaka", "Jedinica mjere", "Zemlja porijekla", "Povlastica",
-        "Količina", "Bruto kg", "Neto kg", "Paketi", "Procijenjeno", "Cijena/jedinica", "Ukupna cijena"
+        "Količina", "Bruto kg", "Neto kg", "Koleta", "Cijena/jedinica", "Ukupna cijena"
     ];
 
     let html = `
-    <div style="font-family: Arial, sans-serif;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <img src="/build/images/logo-light-ai.png" alt="Logo" height="40" style="max-height: 40px;">
-            <div style="text-align: right; font-size: 12px;">
-                <strong>Moji podaci</strong><br>
-                ${companyName}<br>
-                ${companyId}<br>
-                ${companyAddress}
+        <div style="font-family: Arial, sans-serif;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <img src="/build/images/logo-light-ai.png" alt="Logo" height="40" style="max-height: 40px;">
+                <div style="text-align: right; font-size: 12px;">
+                    <strong>Moji podaci</strong><br>
+                    ${companyName}<br>
+                    ${companyId}<br>
+                    ${companyAddress}
+                </div>
             </div>
-        </div>
 
-        <h2 style="text-align: center;">Deklaracija ${invoiceId ? `#${invoiceId}` : ''}</h2>
+            <h2 style="text-align: center;">Deklaracija ${invoiceId ? `#${invoiceId}` : ''}</h2>
 
-        <table style="width: 100%; font-size: 13px; margin-bottom: 20px; border: none;">
-            <tr><td><strong>Broj fakture:</strong></td><td>${invoiceNo}</td></tr>
-            <tr><td><strong>Datum:</strong></td><td>${date}</td></tr>
-            <tr><td><strong>Incoterm:</strong></td><td>${incoterm} – ${incotermDestination}</td></tr>
-            <tr><td><strong>Dobavljač:</strong></td><td>${supplier}</td></tr>
-            <tr><td><strong>Klijent:</strong></td><td>${client}</td></tr>
-            <tr><td><strong>Ukupan iznos:</strong></td><td>${totalAmount}</td></tr>
-            <tr><td><strong>Ukupna bruto masa:</strong></td><td>${totalWeightGross}</td></tr>
-            <tr><td><strong>Ukupna neto masa:</strong></td><td>${totalWeightNet}</td></tr>
-            <tr><td><strong>Ukupan broj paketa:</strong></td><td>${totalPackages}</td></tr>
-        </table>
+            <table style="width: 100%; font-size: 13px; margin-bottom: 20px; border: none;">
+                <tr><td><strong>Broj fakture:</strong></td><td>${invoiceNo}</td></tr>
+                <tr><td><strong>Datum:</strong></td><td>${date}</td></tr>
+                <tr><td><strong>Incoterm:</strong></td><td>${incoterm} – ${incotermDestination}</td></tr>
+                <tr><td><strong>Dobavljač:</strong></td><td>${supplier}</td></tr>
+                <tr><td><strong>Klijent:</strong></td><td>${client}</td></tr>
+                <tr><td><strong>Ukupan iznos:</strong></td><td>${totalAmount}</td></tr>
+                <tr><td><strong>Ukupna bruto masa:</strong></td><td>${totalWeightGross}</td></tr>
+                <tr><td><strong>Ukupna neto masa:</strong></td><td>${totalWeightNet}</td></tr>
+                <tr><td><strong>Ukupan broj paketa:</strong></td><td>${totalPackages}</td></tr>
+            </table>
 
-        <table border="1" cellspacing="0" cellpadding="5" style="width:100%; font-size: 11px; border-collapse: collapse;">
-            <thead><tr>${headers.map(h => `<th>${h}</th>`).join("")}</tr></thead>
-            <tbody>
-    `;
+            <table border="1" cellspacing="0" cellpadding="5" style="width:100%; font-size: 11px; border-collapse: collapse;">
+                <thead><tr>${headers.map(h => `<th>${h}</th>`).join("")}</tr></thead>
+                <tbody>
+        `;
+        rows.forEach((row, i) => {
+            const get = s => row.querySelector(s)?.value?.trim() || row.querySelector(s)?.textContent?.trim() || "";
+            const getCheck = () => {
+                const val = row.querySelector('input[name="tariff_privilege[]"]')?.value?.trim();
+                return (!val || val === "0") ? "NE" : val;
+            };
 
-    rows.forEach((row, i) => {
-        const get = s => row.querySelector(s)?.value?.trim() || row.querySelector(s)?.textContent?.trim() || "";
-        const getCheck = s => row.querySelector(s)?.checked ? "DA" : "NE";
-
-        const bruto = parseFloat(get('input[name="weight_gross[]"]')) || 0;
-        const neto = parseFloat(get('input[name="weight_net[]"]')) || 0;
-        sumBruto += bruto;
-        sumNeto += neto;
+        // Parse Ukupna cijena (last column)
+        let ukupnaCijenaRaw = get('input[name="total[]"]');
+        let ukupnaCijena = 0;
+        if (ukupnaCijenaRaw) {
+            // Remove non-numeric except comma/dot, convert comma to dot
+            ukupnaCijena = parseFloat(ukupnaCijenaRaw.replace(/[^\d.,-]/g, '').replace(',', '.')) || 0;
+        }
+        sumUkupnaCijena += ukupnaCijena;
 
         const rowData = [
             i + 1,
@@ -168,9 +173,8 @@ function renderPrintTableAndPrint(isDownloadOnly = false, container = null) {
             get('select[name="origin[]"]'),
             getCheck('input[name="tariff_privilege[]"]'),
             get('input[name="quantity[]"]'),
-            bruto.toFixed(2),
-            neto.toFixed(2),
-            get('input[name="kolata[]"]'),
+            get('input[name="weight_gross[]"]'),
+            get('input[name="weight_net[]"]'),
             get('input[name="procjena[]"]'),
             get('input[name="price[]"]'),
             get('input[name="total[]"]'),
@@ -179,19 +183,27 @@ function renderPrintTableAndPrint(isDownloadOnly = false, container = null) {
         html += `<tr>${rowData.map(d => `<td>${d}</td>`).join("")}</tr>`;
     });
 
+    // Format sumUkupnaCijena with comma as decimal separator
+    const formattedSumUkupnaCijena = sumUkupnaCijena
+        .toFixed(2)
+        .replace('.', ',');
+
+    // Only show total row if showTotal is true (i.e., only on last page)
+    // For print: showTotal is always true, but we want total only on last page
+    // Solution: move total row to tfoot and use CSS to show tfoot only on last page
     html += `
             </tbody>
             <tfoot>
-                <tr style="font-weight: bold; background: #f9f9f9;">
-                    <td colspan="9">Ukupno</td>
-                    <td>${sumBruto.toFixed(2)}</td>
-                    <td>${sumNeto.toFixed(2)}</td>
-                    <td colspan="4"></td>
+                <tr class="total-row" style="font-weight: bold; background: #f9f9f9;">
+                    <td style="text-align:left;">Ukupno</td>
+                    <td colspan="12"></td>
+                    <td>${showTotal ? formattedSumUkupnaCijena : ""}</td>
                 </tr>
             </tfoot>
         </table>
     </div>`;
 
+    // Default: export to PDF (isDownloadOnly = true), landscape mode
     if (isDownloadOnly && container) {
         container.innerHTML = html;
         document.body.appendChild(container);
@@ -210,6 +222,7 @@ function renderPrintTableAndPrint(isDownloadOnly = false, container = null) {
         return;
     }
 
+    // For print: use CSS to show tfoot only on last page
     const win = window.open("", "", "width=1000,height=800");
     win.document.write(`
         <html><head><title>Deklaracija ${invoiceNo}</title>
@@ -219,6 +232,17 @@ function renderPrintTableAndPrint(isDownloadOnly = false, container = null) {
             th, td { border: 1px solid #000; padding: 6px; font-size: 11px; }
             th { background: #f2f2f2; }
             h2 { text-align: center; }
+            tfoot { display: table-footer-group; }
+            @media print {
+                tfoot { display: table-footer-group; }
+                tfoot tr.total-row { 
+                    page-break-inside: avoid;
+                    break-inside: avoid;
+                }
+                /* Hide tfoot except on last page */
+                tfoot { visibility: hidden; }
+                tfoot:last-of-type { visibility: visible; }
+            }
         </style>
         </head><body>${html}</body></html>
     `);
@@ -230,9 +254,6 @@ function renderPrintTableAndPrint(isDownloadOnly = false, container = null) {
 
 
 
-function autoDownloadPDF() {
-    const printContent = document.createElement('div');
-    renderPrintTableAndPrint(true, printContent); // use modified function below
-}
+
 
 

@@ -88,132 +88,161 @@ function getVal(sel) {
     return el?.value?.trim() || el?.textContent?.trim() || "—";
 }
 
-  function renderPrintTableAndPrint(isDownloadOnly = false, container = null) {
-    const invoiceNo = getVal("#invoice-no");
-    const invoiceId = getVal("#invoice-id") || getVal("#invoice-id1");
-    const date = getVal("#invoice-date");
-    const incoterm = getVal("#incoterm");
-    const incotermDestination = getVal("#incoterm-destination");
-    const supplier = getVal("#supplier-name");
-    const client = getVal("#carrier-name");
-    const totalAmount = getVal("#total-1");
-    const totalWeightGross = getVal("#total-weight-gross");
-    const totalWeightNet = getVal("#total-weight-net");
-    const totalPackages = getVal("#total-num-packages");
+function renderPrintTableAndPrint(isDownloadOnly = true, container = null, showTotal = true) {
+  // —–––––– Invoice summary fields
+  const invoiceNo           = getVal("#invoice-no");
+  const invoiceId           = getVal("#invoice-id") || getVal("#invoice-id1");
+  const date                = getVal("#invoice-date");
+  const incoterm            = getVal("#incoterm");
+  const incotermDestination = getVal("#incoterm-destination");
+  const supplier            = getVal("#supplier-name");
+  const client              = getVal("#carrier-name");
+  const totalWeightGross    = getVal("#total-weight-gross");
+  const totalWeightNet      = getVal("#total-weight-net");
+  const totalPackages       = getVal("#total-num-packages");
 
-    const companyName = getVal("#shipping-email");
-    const companyId = getVal("#shipping-vat");
-    const companyAddress = getVal("#shipping-address");
+  const companyName    = getVal("#shipping-email");
+  const companyId      = getVal("#shipping-vat");
+  const companyAddress = getVal("#shipping-address");
 
-    const rows = document.querySelectorAll("#products-list tr");
-    if (!rows.length) {
-        Swal.fire("Greška", "Nema stavki za ispis.", "error");
-        return;
-    }
+  // —–––––– Collect all product rows
+  const rows = Array.from(document.querySelectorAll("#products-list tr"));
+  if (!rows.length) {
+    Swal.fire("Greška", "Nema stavki za ispis.", "error");
+    return;
+  }
 
-    let sumBruto = 0, sumNeto = 0;
+  // —–––––– Build the HTML
+  const headers = [
+    "#", "Proizvod", "Opis", "Prevod",
+    "Tarifna oznaka", "Jedinica mjere", "Zemlja porijekla", "Povlastica",
+    "Količina", "Bruto/Neto (kg)", "Koleta", "Cijena", "Ukupno"
+  ];
 
-    let html = `
+  let sumTotal = 0;
+  let html = `
     <div style="font-family: Arial, sans-serif;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <img src="/build/images/logo-light-ai.png" alt="Logo" height="40" style="max-height: 40px;">
-            <div style="text-align: right; font-size: 12px;">
-                <strong>Moji podaci</strong><br>
-                ${companyName}<br>
-                ${companyId}<br>
-                ${companyAddress}
-            </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <img src="/build/images/logo-light-ai.png" alt="Logo" height="40">
+        <div style="text-align: right; font-size: 12px;">
+          <strong>Moji podaci</strong><br>
+          ${companyName}<br>
+          ${companyId}<br>
+          ${companyAddress}
         </div>
+      </div>
 
-        <h2 style="text-align: center;">Deklaracija ${invoiceId ? `#${invoiceId}` : ''}</h2>
+      <h2 style="text-align: center; margin-bottom:20px;">
+        Deklaracija ${invoiceId ? `#${invoiceId}` : ""}
+      </h2>
 
-        <table style="width: 100%; font-size: 13px; margin-bottom: 20px; border: none;">
-            <tr><td><strong>Broj fakture:</strong></td><td>${invoiceNo}</td></tr>
-            <tr><td><strong>Datum:</strong></td><td>${date}</td></tr>
-            <tr><td><strong>Incoterm:</strong></td><td>${incoterm} – ${incotermDestination}</td></tr>
-            <tr><td><strong>Dobavljač:</strong></td><td>${supplier}</td></tr>
-            <tr><td><strong>Klijent:</strong></td><td>${client}</td></tr>
-            <tr><td><strong>Ukupan iznos:</strong></td><td>${totalAmount}</td></tr>
-            <tr><td><strong>Ukupna bruto masa:</strong></td><td>${totalWeightGross}</td></tr>
-            <tr><td><strong>Ukupna neto masa:</strong></td><td>${totalWeightNet}</td></tr>
-            <tr><td><strong>Ukupan broj paketa:</strong></td><td>${totalPackages}</td></tr>
-        </table>
+      <table style="width:100%; font-size:13px; margin-bottom:20px; border:none;">
+        <tr><td><strong>Broj fakture:</strong></td><td>${invoiceNo}</td></tr>
+        <tr><td><strong>Datum:</strong></td><td>${date}</td></tr>
+        <tr><td><strong>Incoterm:</strong></td>
+            <td>${incoterm} – ${incotermDestination}</td></tr>
+        <tr><td><strong>Dobavljač:</strong></td><td>${supplier}</td></tr>
+        <tr><td><strong>Klijent:</strong></td><td>${client}</td></tr>
+        <tr><td><strong>Ukupna bruto/neto masa:</strong></td>
+            <td>${totalWeightGross}/${totalWeightNet} kg</td></tr>
+        <tr><td><strong>Broj koleta:</strong></td><td>${totalPackages}</td></tr>
+      </table>
 
-        <table border="1" cellspacing="0" cellpadding="5" style="width:100%; font-size: 11px; border-collapse: collapse;">
-            <thead>
-                <tr>
-                    <th>#</th><th>Proizvod</th><th>Opis</th><th>Prevod</th>
-                    <th>Tarifna oznaka</th><th>Tip kvantiteta</th><th>Zemlja porijekla</th>
-                    <th>Povlastica</th><th>Količina</th><th>Bruto kg</th>
-                    <th>Neto kg</th><th>Paketi</th><th>Vrijednost</th><th>Cijena</th><th>Ukupno</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
+      <table border="1" cellspacing="0" cellpadding="5"
+             style="width:100%; font-size:11px; border-collapse:collapse;">
+        <thead><tr>${headers.map(h => `<th>${h}</th>`).join("")}</tr></thead>
+        <tbody>
+  `;
 
-    rows.forEach((row, i) => {
-        const cols = Array.from(row.children).map(td => td?.innerText?.trim() || "--");
-        const weightSplit = cols[9]?.split("/") || ["0", "0"];
-        const bruto = parseFloat(weightSplit[0]) || 0;
-        const neto = parseFloat(weightSplit[1]) || 0;
-
-        sumBruto += bruto;
-        sumNeto += neto;
-
-        html += `<tr><td>${i + 1}</td>${cols.slice(1).map(c => `<td>${c}</td>`).join("")}</tr>`;
+  rows.forEach((row, i) => {
+    // Extract each cell's value (input/select or text)
+    const cells = Array.from(row.querySelectorAll("td"));
+    const values = cells.map(cell => {
+      const formEl = cell.querySelector("input, select, textarea");
+      if (formEl) {
+        if (formEl.tagName === "SELECT") {
+          return formEl.options[formEl.selectedIndex]?.textContent.trim() || "";
+        }
+        return (formEl.value || "").trim();
+      }
+      return cell.textContent.trim();
     });
 
-    html += `
-            </tbody>
-            <tfoot>
-                <tr style="font-weight: bold; background: #f9f9f9;">
-                    <td colspan="9">Ukupno</td>
-                    <td>${sumBruto.toFixed(2)}</td>
-                    <td>${sumNeto.toFixed(2)}</td>
-                    <td colspan="4"></td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>`;
+    // Insert the row index as the first column
+    const numbered = [i + 1, ...values];
 
-    if (isDownloadOnly && container) {
-        container.innerHTML = html;
-        document.body.appendChild(container);
+    // Sum up the last column (Ukupno)
+    const raw = numbered[numbered.length - 1] || "";
+    const num = parseFloat(raw.replace(/[^\d.,-]/g, "").replace(",", ".")) || 0;
+    sumTotal += num;
 
-        html2pdf().set({
-            margin: 0.3,
-            filename: `Deklaracija_${invoiceNo || invoiceId || 'export'}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' }
-        }).from(container).save().then(() => container.remove());
+    html += `<tr>${numbered.map(v => `<td>${v}</td>`).join("")}</tr>`;
+  });
 
-        return;
-    }
+  const formattedSum = sumTotal.toFixed(2).replace(".", ",");
 
-    const win = window.open("", "", "width=1000,height=800");
-    win.document.write(`
-        <html><head><title>Deklaracija ${invoiceNo}</title>
-        <style>
-            body { font-family: Arial, sans-serif; margin: 40px; }
-            table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-            th, td { border: 1px solid #000; padding: 6px; font-size: 11px; }
-            th { background: #f2f2f2; }
-            h2 { text-align: center; }
-        </style>
-        </head><body>${html}</body></html>
-    `);
-    win.document.close();
-    win.focus();
-    win.print();
-    win.onafterprint = () => win.close();
+  html += `
+        </tbody>
+        <tfoot>
+          <tr style="font-weight:bold; background:#f9f9f9;">
+            <td colspan="${headers.length - 1}" style="text-align:left;">
+              Ukupno
+            </td>
+            <td>${showTotal ? formattedSum : ""}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  `;
+
+  // —–––––– PDF download
+  if (isDownloadOnly && container) {
+    container.innerHTML = html;
+    document.body.appendChild(container);
+    html2pdf().set({
+      margin:       0.3,
+      filename:     `Deklaracija_${invoiceNo || invoiceId || "export"}.pdf`,
+      image:        { type: "jpeg", quality: 0.98 },
+      html2canvas:  { scale: 2 },
+      jsPDF:        { unit: "in", format: "a4", orientation: "landscape" }
+    })
+    .from(container)
+    .save()
+    .then(() => container.remove());
+    return;
+  }
+
+  // —–––––– Print view
+  const win = window.open("", "", "width=1000,height=800");
+  win.document.write(`
+    <html><head><title>Deklaracija ${invoiceNo}</title>
+      <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid #000; padding: 6px; font-size: 11px; }
+        th { background: #f2f2f2; }
+        h2 { text-align: center; }
+        tfoot { display: table-footer-group; }
+        @media print {
+          tfoot tr { page-break-inside: avoid; break-inside: avoid; }
+          tfoot { visibility: hidden; }
+          tfoot:last-of-type { visibility: visible; }
+        }
+      <\/style>
+    <\/head>
+    <body>${html}<\/body>
+    </html>
+  `);
+  win.document.close();
+  win.focus();
+  win.print();
+  win.onafterprint = () => win.close();
 }
 
 
 
 
-function autoDownloadPDF() {
-    const printContent = document.createElement('div');
-    renderPrintTableAndPrint(true, printContent); // use modified function below
-}
+
+
+
 

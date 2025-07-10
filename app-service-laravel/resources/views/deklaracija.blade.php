@@ -312,7 +312,7 @@
                                 <th class="dark-remove-bg" style="width: 50px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!">#</th>
                                 <th class="dark-remove-bg"  style="width: 200px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; padding-right: 50px!important; background: #f3f3f9!">Proizvod </th>
                                 <th class="dark-remove-bg" style="width: 140px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; margin-left: -5px!important; background: #f3f3f9!">Opis </th>
-                                <th class="th-tarifa dark-remove-bg" style="width: 350px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!">Tarifna oznaka</th>
+                                <th class="th-tarifa dark-remove-bg" style="width: 400px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!">Tarifna oznaka</th>
                                 <th class="dark-remove-bg" style="width: 50px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!">Jed. mjere</th>
                                 <th class="dark-remove-bg" style="width:120px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!">Porijeklo/Pov..</th>
                               
@@ -1014,39 +1014,57 @@ function initializeTariffSelects() {
                 loadingMore: () => "Učitavanje još rezultata..."
             },
             ajax: {
-  transport: function (params, success, failure) {
-    const term = (params.data.q || "").toLowerCase();
+                transport: function (params, success, failure) {
+                    const term = (params.data.q || "").toLowerCase();
 
-    // show spinner…
-    const container = document.querySelector('.select2-results__options');
-    if (container) {
-      container.innerHTML = `
-        <li class="select2-results__option" role="alert" aria-live="assertive">
-          <i class="fa fa-spinner fa-spin" style="margin-right:6px;"></i>
-          Pretraga...
-        </li>`;
-    }
+                    // show spinner…
+                    const container = document.querySelector('.select2-results__options');
+                    if (container) {
+                        container.innerHTML = `
+                            <li class="select2-results__option" role="alert" aria-live="assertive">
+                                <i class="fa fa-spinner fa-spin" style="margin-right:6px;"></i>
+                                Pretraga...
+                            </li>`;
+                    }
 
-    // split into matches and non-matches
-    const matches = processedTariffData.filter(item =>
-      item.id.toLowerCase().includes(term) ||
-      item.display.toLowerCase().includes(term)
-    );
-    const rest = processedTariffData.filter(item =>
-      !matches.some(m => m.id === item.id)
-    );
+                    // Find selected value and its parent
+                    let selectedItem = null;
+                    let parentItem = null;
+                    if ($select.val()) {
+                        selectedItem = processedTariffData.find(item => item.id === $select.val());
+                        if (selectedItem && selectedItem.id && selectedItem.id.length > 4) {
+                            const parentId = selectedItem.id.slice(0, 4);
+                            parentItem = processedTariffData.find(item => item.id === parentId);
+                        }
+                    }
 
-    setTimeout(() => {
-      // concat matches first, then the rest
-      success({ results: [...matches, ...rest] });
+                    // Filter matches
+                    const matches = processedTariffData.filter(item =>
+                        item.id.toLowerCase().includes(term) ||
+                        item.display.toLowerCase().includes(term)
+                    );
+                    const rest = processedTariffData.filter(item =>
+                        !matches.some(m => m.id === item.id)
+                    );
 
-      // reset scroll
-      const dropdown = document.querySelector('.select2-results__options');
-      if (dropdown) dropdown.scrollTop = 0;
-    }, 200);
-  },
-  delay: 200
-},
+                    // Compose result: parent, selected, then matches+rest
+                    let results = [];
+                    if (parentItem) results.push(parentItem);
+                    if (selectedItem && (!parentItem || selectedItem.id !== parentItem.id)) results.push(selectedItem);
+                    // Remove duplicates
+                    const ids = new Set(results.map(i => i.id));
+                    const restList = [...matches, ...rest].filter(i => !ids.has(i.id));
+                    results = [...results, ...restList];
+
+                    setTimeout(() => {
+                        success({ results });
+                        // reset scroll
+                        const dropdown = document.querySelector('.select2-results__options');
+                        if (dropdown) dropdown.scrollTop = 0;
+                    }, 200);
+                },
+                delay: 200
+            },
 
             templateResult: function (item) {
                 if (!item || !item.id || !item.display) return null;
@@ -1069,12 +1087,112 @@ function initializeTariffSelects() {
                 const padding = isParent ? 0 : item.depth * 5;
                 const fontWeight = isParent ? "bold" : "normal";
 
-                return $(`<div style="padding-left:${padding}px; font-weight:${fontWeight};" title="${item.display}">
+                // Only items with 10 or more digits are enabled/clickable
+                const isClickable = digits.length >= 10;
+                const style = isClickable
+                    ? `padding-left:${padding}px; font-weight:${fontWeight}; cursor:pointer;`
+                    : `padding-left:${padding}px; font-weight:${fontWeight}; color:#aaa; cursor:not-allowed;`;
+
+                // Tooltip: just description (without tariff number)
+                let parentDesc = "";
+                if (item.id && item.id.length > 4) {
+                    const parentId = item.id.slice(0, 4);
+                    const parent = processedTariffData.find(i => i.id === parentId);
+                    parentDesc = parent ? parent.display : "";
+                }
+
+                // --- CHILD DESC CLEANUP ---
+                // Remove all digits and spaces before first letter in child desc
+                function trimToFirstLetter(str) {
+                    if (!str) return "";
+                    // Find first letter (unicode safe)
+                    const match = str.match(/[A-Za-zŠĐČĆŽšđčćž]/);
+                    if (!match) return str;
+                    const idx = str.indexOf(match[0]);
+                    return str.slice(idx);
+                }
+
+                // Remove tariff numbers from tooltip for child
+                let onlyDesc = item.display.replace(/^\s*\d+\s*[-–]?\s*/, '');
+                onlyDesc = trimToFirstLetter(onlyDesc);
+
+                // Parent desc is untouched (as requested)
+                let onlyParentDesc = parentDesc.replace(/^\s*\d+\s*[-–]?\s*/, '');
+
+                const tooltip = onlyParentDesc && onlyParentDesc !== onlyDesc
+                    ? `${onlyParentDesc} — ${onlyDesc}`
+                    : onlyDesc;
+
+                // Remove native title, add data-bs-toggle for Bootstrap tooltip
+                return $(`<div style="${style}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="${tooltip}">
                     ${icon} ${item.display}
                 </div>`);
             },
             templateSelection: function (item) {
-                return item?.id || "";
+                // Only allow selection if 10 or more digits
+                const digits = (item?.id || '').replace(/\D+/g, '');
+                if (digits.length >= 10) {
+                    // Set tooltip on the rendered selection
+                    setTimeout(() => {
+                        const $container = $select.next('.select2-container').find('.select2-selection__rendered');
+                        let parentDesc = "";
+                        if (item.id && item.id.length > 4) {
+                            const parentId = item.id.slice(0, 4);
+                            const parent = processedTariffData.find(i => i.id === parentId);
+                            parentDesc = parent ? parent.display : "";
+                        }
+                        // Remove tariff numbers from tooltip for child
+                        function trimToFirstLetter(str) {
+                            if (!str) return "";
+                            const match = str.match(/[A-Za-zŠĐČĆŽšđčćž]/);
+                            if (!match) return str;
+                            const idx = str.indexOf(match[0]);
+                            return str.slice(idx);
+                        }
+                        let onlyDesc = item.display.replace(/^\s*\d+\s*[-–]?\s*/, '');
+                        onlyDesc = trimToFirstLetter(onlyDesc);
+                        let onlyParentDesc = parentDesc.replace(/^\s*\d+\s*[-–]?\s*/, '');
+                        const tooltip = onlyParentDesc && onlyParentDesc !== onlyDesc
+                            ? `${onlyParentDesc} — ${onlyDesc}`
+                            : onlyDesc;
+                        $container.removeAttr('title'); // Remove native
+                        $container.attr('data-bs-toggle', 'tooltip');
+                        $container.attr('data-bs-placement', 'top');
+                        $container.attr('data-bs-title', tooltip);
+                        // Init or update Bootstrap tooltip
+                        if (typeof bootstrap !== "undefined") {
+                            bootstrap.Tooltip.getInstance($container[0])?.dispose();
+                            new bootstrap.Tooltip($container[0]);
+                        }
+                    }, 0);
+                    return item?.id || "";
+                }
+                return "";
+            },
+            // Prevent selection of items with less than 10 digits
+            matcher: function(params, data) {
+                if ($.trim(params.term) === '') {
+                    return data;
+                }
+                if (typeof data.text === 'undefined') {
+                    return null;
+                }
+                const term = params.term.toLowerCase();
+                if (data.text.toLowerCase().indexOf(term) > -1) {
+                    const digits = (data.id || '').replace(/\D+/g, '');
+                    if (digits.length >= 10) {
+                        return data;
+                    }
+                }
+                return null;
+            }
+        });
+
+        // Prevent selection of items with less than 10 digits
+        $select.on('select2:selecting', function (e) {
+            const digits = (e.params.args.data.id || '').replace(/\D+/g, '');
+            if (digits.length < 10) {
+                e.preventDefault();
             }
         });
 
@@ -1095,14 +1213,69 @@ function initializeTariffSelects() {
                         input.dispatchEvent(evt);
                     }
                 }
+                // Enable Bootstrap tooltips for dropdown items
+                setTimeout(() => {
+                    $('.select2-results__option [data-bs-toggle="tooltip"]').each(function () {
+                        if (!$(this).data('bs.tooltip')) {
+                            new bootstrap.Tooltip(this);
+                        }
+                    });
+                }, 0);
             }, 0);
         });
+
+        // Set tooltip for selection on initial load and after selection
+        function setTooltipForSelection() {
+            setTimeout(() => {
+                const $container = $select.next('.select2-container').find('.select2-selection__rendered');
+                const selectedId = $select.val();
+                if (!selectedId) return;
+                const selectedItem = processedTariffData.find(i => i.id === selectedId);
+                if (!selectedItem) return;
+                let parentDesc = "";
+                if (selectedItem.id && selectedItem.id.length > 4) {
+                    const parentId = selectedItem.id.slice(0, 4);
+                    const parent = processedTariffData.find(i => i.id === parentId);
+                    parentDesc = parent ? parent.display : "";
+                }
+                // Remove tariff numbers from tooltip for child
+                function trimToFirstLetter(str) {
+                    if (!str) return "";
+                    const match = str.match(/[A-Za-zŠĐČĆŽšđčćž]/);
+                    if (!match) return str;
+                    const idx = str.indexOf(match[0]);
+                    return str.slice(idx);
+                }
+                let onlyDesc = selectedItem.display.replace(/^\s*\d+\s*[-–]?\s*/, '');
+                onlyDesc = trimToFirstLetter(onlyDesc);
+                let onlyParentDesc = parentDesc.replace(/^\s*\d+\s*[-–]?\s*/, '');
+                const tooltip = onlyParentDesc && onlyParentDesc !== onlyDesc
+                    ? `${onlyParentDesc} — ${onlyDesc}`
+                    : onlyDesc;
+                $container.removeAttr('title');
+                $container.attr('data-bs-toggle', 'tooltip');
+                $container.attr('data-bs-placement', 'top');
+                $container.attr('data-bs-title', tooltip);
+                if (typeof bootstrap !== "undefined") {
+                    bootstrap.Tooltip.getInstance($container[0])?.dispose();
+                    new bootstrap.Tooltip($container[0]);
+                }
+            }, 0);
+        }
+
+        $select.on('select2:select', setTooltipForSelection);
+
+        // Also set tooltip on initial load if value is prefilled
+        setTooltipForSelection();
 
         if (prefillValue) {
             const match = processedTariffData.find(item => item.id === prefillValue);
             if (match) {
-                const option = new Option(match.id, match.id, true, true);
-                $select.append(option).trigger('change');
+                const digits = (match.id || '').replace(/\D+/g, '');
+                if (digits.length >= 10) {
+                    const option = new Option(match.id, match.id, true, true);
+                    $select.append(option).trigger('change');
+                }
             }
         }
     });
@@ -1276,7 +1449,7 @@ row.innerHTML = `
       ${generateCountryOptions(origin)}
     </select>
 
-    <!-- ✅ Povlastica (checkbox) pozicioniran desno, ne ometa dropdown -->
+    <!-- ✅ Povlastica (checkbox) -->
     <input 
        type="checkbox" 
   class="form-check-input tariff-privilege-toggle"
@@ -1297,7 +1470,7 @@ row.innerHTML = `
         border: 1px solid #299cdb;
       "
     />
-    <!-- 🔒 Lock icon (hidden by default) -->
+    <!-- Lock icon (hidden by default) -->
 <span
   style="
     position: absolute;

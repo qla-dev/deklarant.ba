@@ -157,7 +157,7 @@
                                     </a>
                                 </div>
                                 <div class="col-6">
-                                    <a class="dropdown-icon-item" href="/tarifne-oznake">
+                                    <a class="dropdown-icon-item" href="/tarifne-oznake" target="_blank">
                                         <i class="mdi mdi-sticker-text-outline text-info fs-4 d-block mb-1"></i>
                                         <span>@lang('translation.declarant')</span>
                                     </a>
