@@ -1276,7 +1276,7 @@ row.innerHTML = `
       ${generateCountryOptions(origin)}
     </select>
 
-    <!-- ✅ Povlastica (checkbox) pozicioniran desno, ne ometa dropdown -->
+    <!-- ✅ Povlastica (checkbox) -->
     <input 
        type="checkbox" 
   class="form-check-input tariff-privilege-toggle"
@@ -1297,7 +1297,7 @@ row.innerHTML = `
         border: 1px solid #299cdb;
       "
     />
-    <!-- 🔒 Lock icon (hidden by default) -->
+    <!-- Lock icon (hidden by default) -->
 <span
   style="
     position: absolute;

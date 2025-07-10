@@ -89,7 +89,7 @@
         </a>
     </li>
     <li class="nav-item me-1">
-        <a class="nav-link menu-link" href="/tarifne-oznake">
+        <a class="nav-link menu-link" href="/tarifne-oznake" target="_blank">
             <i class="mdi mdi-sticker-text-outline text-info"></i> <span>@lang('translation.declarant')</span>
         </a>
     </li>

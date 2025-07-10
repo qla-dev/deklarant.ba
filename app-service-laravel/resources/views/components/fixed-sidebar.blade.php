@@ -44,7 +44,7 @@
          <a href="#" class="btn btn-soft-info  btn-original-doc pc-opcije-button" style="height: 28px !important;">
              <i class="ri-file-3-line align-bottom me-1 fs-5"></i> Originalni dokument
          </a>
-            <a href="javascript:void(0);" onclick="autoDownloadPDF()" class="btn btn-soft-info pc-opcije-button" style="height: 28px !important;">
+            <a href="javascript:void(0)" onclick="renderPrintTableAndPrint()" class="btn btn-soft-info pc-opcije-button" style="height: 28px !important;">
     <i class="ri-file-pdf-2-line align-bottom me-1 fs-5"></i> Export u PDF
 </a>
 
@@ -282,11 +282,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     <button class="btn btn-soft-info w-100 mb-3 p-0" onclick="document.querySelector('.btn-original-doc')?.click()" style="height: 28px !important;">
                         <i class="ri-file-3-line align-bottom me-1 fs-5"></i>Originalni dokument
                     </button>
-                    <button
-                      class="btn btn-soft-info w-100 mb-3 p-0"
-                      onclick="document.querySelector('a[onclick^=\\'autoDownloadPDF\\']')?.click()"
-                      style="height: 28px !important;"
-                    >
+                    <button class="btn btn-soft-info w-100 mb-3 p-0" onclick="renderPrintTableAndPrint()" style="height: 28px !important;">
                       <i class="ri-file-pdf-2-line align-bottom me-1 fs-5"></i> Export u PDF
                     </button>
 
