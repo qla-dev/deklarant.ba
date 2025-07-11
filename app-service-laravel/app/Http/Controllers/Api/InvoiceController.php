@@ -510,9 +510,6 @@ class InvoiceController extends Controller
 
             // Create invoice items from AI data
             $items = array_map(function ($item) {
-                $quantity = $item['quantity'] ?? 0;
-                $base_price = $item['unit_price'] ?? 0;
-
                 // Check if item has hs_code with length of 10 after removing whitespace
                 $hs_code = str_replace(' ', '', $item['hs_code'] ?? '');
                 if ($hs_code && strlen($hs_code) >= 10) {
@@ -533,9 +530,9 @@ class InvoiceController extends Controller
                     'item_code' => $item_code,
                     'item_description_original' => $item['original_name'],
                     'item_description' => $item['item_name'],
-                    'quantity' => $quantity,
-                    'base_price' => $base_price,
-                    'total_price' => $base_price * $quantity,
+                    'quantity' => $item['quantity'],
+                    'base_price' => $item['unit_price'],
+                    'total_price' => $item['total_price'],
                     'currency' => $item['currency'],
                     'best_customs_code_matches' => $item['detected_codes'] ?? [],
                     'country_of_origin' => $item['country_of_origin'],

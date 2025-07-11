@@ -29,6 +29,7 @@ You are an AI designed to extract structured JSON data from semi-structured invo
       "quantity": Number,
       "quantity_type": "EU/WCO two-letter code for packaging type (for example BX is bag, CT is carton, etc)"
       "unit_price": Decimal number,
+      "total_price": Decimal number,
       "currency": "Three-letter currency code (e.g. EUR)",
       "country_of_origin": "Two-letter country of origin code - ISO 3166-1 alpha-2 standard",
       "num_packages": "Number of packages for specified item.",
