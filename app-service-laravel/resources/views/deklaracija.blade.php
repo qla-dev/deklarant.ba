@@ -309,7 +309,12 @@
                     <table class="table table-borderless text-center table-nowrap align-middle mb-0" id="products-table">
                         <thead>
                             <tr>
-                                <th class="dark-remove-bg" style="width: 50px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!">#</th>
+                                <th class="dark-remove-bg" style="width: 50px;vertical-align: middle; text-align: middle; background: #f3f3f9!">
+                                    Pozicija<br>
+                                    <small style="font-weight: normal; font-size: 0.75rem; color: #666;">
+                                        Naimenovanje
+                                    </small>
+                                </th>
                                 <th class="dark-remove-bg"  style="width: 200px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; padding-right: 50px!important; background: #f3f3f9!">Proizvod </th>
                                 <th class="dark-remove-bg" style="width: 140px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; margin-left: -5px!important; background: #f3f3f9!">Opis </th>
                                 <th class="th-tarifa dark-remove-bg" style="width: 400px;vertical-align: middle; text-align: middle; padding-bottom: 1rem; background: #f3f3f9!">Tarifna oznaka</th>
@@ -1330,6 +1335,7 @@ function addRowToInvoice(item = {}, suggestions = []) {
 
             globalAISuggestions.push(suggestions);
             const itemId = item.id || "";
+            const slotNumber = item.slot_number || "???";
             const name = item.name || item.item_description_original || "";
             const tariff = item.item_code || item.tariff_code || "";
             const price = item.base_price || 0;
@@ -1364,7 +1370,14 @@ function addRowToInvoice(item = {}, suggestions = []) {
     }).join("");
 }
 row.innerHTML = `
-          <td style="width: 50px;">${index + 1}</td>
+          <td style="width: 50px;">
+          
+            <div class="th-counter" style="display: flex; flex-direction: column; gap: 2px; width: 100%;">
+                <div>${index + 1}</div>
+                <div style="margin-top: 1rem" id="slot-number-${index}">${slotNumber}</div>
+            </div>
+        </td>
+
      
           <td colspan="2" style="width: 340px;">
             <div class="input-group" style="display: flex; gap: 0.25rem;">
