@@ -112,7 +112,7 @@ function renderPrintTableAndPrint(isDownloadOnly = true, container = null, showT
     let sumUkupnaCijena = 0;
 
     const headers = [
-        "Redni broj", "Naziv", "Opis", "Prevod",
+        "Pozicija", "Naimenovanje", "Naziv", "Opis", "Prevod",
         "Tarifna oznaka", "Jedinica mjere", "Zemlja porijekla", "Povlastica",
         "Količina", "Bruto kg", "Neto kg", "Koleta", "Cijena/jedinica", "Ukupna cijena"
     ];
@@ -165,6 +165,7 @@ function renderPrintTableAndPrint(isDownloadOnly = true, container = null, showT
 
         const rowData = [
             i + 1,
+            get('.slot-number'),
             get('input[name="item_name[]"]'),
             get('input[name="item_desc[]"]'),
             get('input[name="item_prev[]"]'),
@@ -196,7 +197,7 @@ function renderPrintTableAndPrint(isDownloadOnly = true, container = null, showT
             <tfoot>
                 <tr class="total-row" style="font-weight: bold; background: #f9f9f9;">
                     <td style="text-align:left;">Ukupno</td>
-                    <td colspan="12"></td>
+                    <td colspan="13"></td>
                     <td>${showTotal ? formattedSumUkupnaCijena : ""}</td>
                 </tr>
             </tfoot>

@@ -114,7 +114,7 @@ function renderPrintTableAndPrint(isDownloadOnly = true, container = null, showT
 
   // —–––––– Build the HTML
   const headers = [
-    "#", "Proizvod", "Opis", "Prevod",
+    "Pozicija", "Naimenovanje", "Proizvod", "Opis", "Prevod",
     "Tarifna oznaka", "Jedinica mjere", "Zemlja porijekla", "Povlastica",
     "Količina", "Bruto/Neto (kg)", "Koleta", "Cijena", "Ukupno"
   ];

@@ -165,7 +165,8 @@
                             <table id="invoiceTable" class="table table-borderless text-center table-nowrap align-middle mb-0 tabel-layout">
                                 <thead>
                                     <tr class="table-active">
-                                        <th>#</th>
+                                        <th>Pozicija</th>
+                                        <th>Naimenovanje</th>
                                         <th>Proizvod</th>
                                         <th>Opis</th>
                                         <th>Prevod</th>
@@ -429,6 +430,7 @@ const estimatedTotal = formatDecimal(q1 * totalPrice, 2);
         productsList.innerHTML += `
             <tr>
                 <th scope="row">${index + 1}</th>
+                <td>${item.slot_number ? item.slot_number.toString().padStart(3, '0') : "???"}</td>
                 <td>${item.item_description_original || item.item_description || '<span class="text-muted">Nepoznato</span>'}</td>
                 <td>${item.item_description || '<span class="text-muted">Nepoznato</span>'}</td>
                 <td>${item.item_description_translated || '<span class="text-muted">Nepoznato</span>'}</td>

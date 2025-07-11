@@ -1381,7 +1381,7 @@
 
                 <div class="th-counter" style="display: flex; flex-direction: column; gap: 2px; width: 100%;">
                     <div>${index + 1}</div>
-                    <div style="margin-top: 1rem" id="slot-number-${index}">${slotNumber}</div>
+                    <div style="margin-top: 1rem" id="slot-number-${index}" class="slot-number">${slotNumber}</div>
                 </div>
             </td>
 
@@ -3401,4 +3401,5 @@
     <script src="{{ URL::asset('build/js/declaration/tariff-privilege.js') }}"></script>
     <script src="{{ URL::asset('build/js/declaration/export-edit.js') }}"></script>
     <script src="{{ URL::asset('build/js/declaration/swal-declaration-load.js') }}"></script>
+    <script src="{{ URL::asset('build/js/declaration/slot-number.js') }}"></script>
 @endsection

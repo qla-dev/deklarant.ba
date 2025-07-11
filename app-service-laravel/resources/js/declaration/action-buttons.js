@@ -226,8 +226,8 @@ function buildInvoiceItem(row) {
     const package_num = row.querySelector('[name="kolata[]"]')?.value || "";
     const weight_gross = row.querySelector('[name="weight_gross[]"]')?.value || "";
     const weight_net = row.querySelector('[name="weight_net[]"]')?.value || "";
-    const povlastica = row.querySelector('input[type="checkbox"]')?.checked ? 1 : 0;
     const tariff_privilege = row.querySelector('input[name="tariff_privilege[]"]')?.value || "0";
+    const slot_number = parseInt(row.querySelector('.slot-number')?.innerText || "-1", 10);
 
     return {
         item_id,
@@ -247,16 +247,20 @@ function buildInvoiceItem(row) {
         weight_net,
         total_price,
         currency: "EUR",
+        slot_number,
         version: new Date().getFullYear()
     };
 }
 
-function buildInvoicePayload(items, supplierId, importerId, invoiceData) {
+function buildInvoicePayload(supplierId, importerId) {
+    const items = [];
+    document.querySelectorAll("#newlink tr.product").forEach((row) => {
+        items.push(buildInvoiceItem(row));
+    });
     return {
         incoterm: document.getElementById("incoterm").value.trim(),
         incoterm_destination: document.getElementById("incoterm-destination").value.trim(),
         invoice_number: document.getElementById("invoice-no").value.trim(),
-        file_name: invoiceData.file_name || "invoice.pdf",
         total_price: parseFloat((document.getElementById("total-amount")?.value || "0").replace(',', '.')),
         total_weight_net: parseFloat((document.getElementById("total-weight-net")?.value || "0").replace(',', '.')),
         total_weight_gross: parseFloat((document.getElementById("total-weight-gross")?.value || "0").replace(',', '.')),
@@ -305,16 +309,10 @@ async function handleSaveInvoice(btn) {
         supplierId = Number(supplierId);
         importerId = Number(importerId);
 
-        const items = [];
-        document.querySelectorAll("#newlink tr.product").forEach((row) => {
-            items.push(buildInvoiceItem(row));
-        });
-
         const invoiceId = getInvoiceId();
         console.log("💾 Saving to invoice ID:", invoiceId);
-        const invoiceData = await getInvoice();
 
-        const payload = buildInvoicePayload(items, supplierId, importerId, invoiceData);
+        const payload = buildInvoicePayload(supplierId, importerId);
         console.log(" Sending payload (update):", payload);
 
         const res = await fetch(`/api/invoices/${invoiceId}`, {

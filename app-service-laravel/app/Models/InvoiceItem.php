@@ -28,7 +28,8 @@ class InvoiceItem extends Model
         'num_packages',
         'tariff_privilege',
         'weight_gross',
-        'weight_net'
+        'weight_net',
+        'slot_number',
     ];
 
     protected $casts = [
