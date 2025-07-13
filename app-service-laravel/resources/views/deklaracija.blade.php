@@ -468,6 +468,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/bs.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8/jquery.inputmask.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
 
     <script>
         let EditingMode = {{ isset($id) ? 'true' : 'false' }};
@@ -520,9 +521,7 @@
                 });
             }
 
-
-
-            let _invoice_data = null;
+            var _invoice_data = null;
             let processedTariffData = [];
             let globalAISuggestions = [];
             const remaining_scans = @json(Auth::user()->getRemainingScans());
@@ -1144,7 +1143,7 @@
                             }
 
                             // Remove tariff numbers from tooltip for child
-                            let onlyDesc = item.display.replace(/^\s*\d+\s*[-–]?\s*/, '');
+                            let onlyDesc = item.display?.replace(/^\s*\d+\s*[-–]?\s*/, '') || "";
                             onlyDesc = trimToFirstLetter(onlyDesc);
 
                             // Parent desc is untouched (as requested)
@@ -1180,7 +1179,7 @@
                                         const idx = str.indexOf(match[0]);
                                         return str.slice(idx);
                                     }
-                                    let onlyDesc = item.display.replace(/^\s*\d+\s*[-–]?\s*/, '');
+                                    let onlyDesc = item.display?.replace(/^\s*\d+\s*[-–]?\s*/, '') || "";
                                     onlyDesc = trimToFirstLetter(onlyDesc);
                                     let onlyParentDesc = parentDesc.replace(/^\s*\d+\s*[-–]?\s*/, '');
                                     const tooltip = onlyParentDesc && onlyParentDesc !== onlyDesc
@@ -1281,7 +1280,7 @@
                                 const idx = str.indexOf(match[0]);
                                 return str.slice(idx);
                             }
-                            let onlyDesc = selectedItem.display.replace(/^\s*\d+\s*[-–]?\s*/, '');
+                            let onlyDesc = selectedItem.display?.replace(/^\s*\d+\s*[-–]?\s*/, '') || "";
                             onlyDesc = trimToFirstLetter(onlyDesc);
                             let onlyParentDesc = parentDesc.replace(/^\s*\d+\s*[-–]?\s*/, '');
                             const tooltip = onlyParentDesc && onlyParentDesc !== onlyDesc
@@ -1774,7 +1773,6 @@
                 updateProcjenaEstimates();
                 updateNetoEstimates();
                 updateBrutoEstimates();
-
                 updateTotalAmount();
             }
             $(document).on('click', '.increment-qty', function () {
@@ -2011,6 +2009,8 @@
                 }
 
                 await updateRemainingScans();
+                
+                thingInitialized();
             }
 
             async function fetchAndPrefillParties() {
@@ -2190,6 +2190,7 @@
                         const label = document.getElementById("carrier-name-ai-label");
                         if (label) label.classList.remove("d-none");
                     }
+                    thingInitialized();
 
                 } catch (err) {
                     console.error("Greška u fetchAndPrefillParties:", err);
@@ -2512,6 +2513,10 @@
 
                     if (!invoice.items?.length) {
                         await waitForAIResult();
+                        if (window.location.href.endsWith('/deklaracija')) {
+                            window.location.href = '/deklaracija/' + getInvoiceId();
+                            return;
+                        }
                     }
 
 
@@ -2523,6 +2528,8 @@
                 await fillInvoiceData();
                 if (!window.skipPrefillParties) {
                     await fetchAndPrefillParties();
+                } else {
+                    thingInitialized();
                 }
                 window.skipPrefillParties = false; // reset after use
                 $("#supplier-select2").select2({
@@ -3121,213 +3128,6 @@
             }, 10);
         });
 
-        document.addEventListener("DOMContentLoaded", async () => {
-
-            if (!invoiceId) return console.log("No ID in URL — skipping load-invoice script.");
-            const scanId = window.global_invoice_id;
-            if (scanId && scanId !== invoiceId) {
-                console.warn(`Clearing scan_invoice_id (${scanId}) because it does not match invoiceId (${invoiceId})`);
-                localStorage.removeItem("scan_invoice_id");
-            }
-
-            Swal.fire({
-                title: 'Učitavanje deklaracije...',
-                icon: null,
-                html: `
-            <div class="custom-swal-spinner mb-3"></div>
-            <div id="swal-status-message">Molimo sačekajte</div>
-        `,
-                showConfirmButton: false,
-                allowOutsideClick: false,
-                didOpen: () => {
-                    const spinner = document.querySelector(".custom-swal-spinner");
-                    const icon = Swal.getHtmlContainer()?.previousElementSibling;
-                    if (icon?.classList.contains('swal2-icon')) {
-                        icon.remove();
-                    }
-
-                    // ➕ Delay 3 seconds before continuing
-                    setTimeout(() => {
-                        // Place your next action here, e.g. fetch invoice or close Swal
-                        console.log("✅ Ready after 3 seconds");
-
-                        // Swal.close(); // or any follow-up logic
-                    }, 4000);
-                }
-            });
-
-            try {
-                const [tariffJson, invoiceRes, suppliersRes, importersRes] = await Promise.all([
-                    tariffJsonPromise,
-                    fetch(`/api/invoices/${invoiceId}`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }),
-                    fetch("/api/suppliers", {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }),
-                    fetch("/api/importers", {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    })
-                ]);
-
-                const invoice = await invoiceRes.json();
-                waitForEl("#pregled", (el) => {
-                    el.addEventListener("click", () => {
-                        window.location.href = `/detalji-deklaracije/${invoice.id}`;
-                    });
-                });
-
-                const suppliersJson = await suppliersRes.json();
-                const importersJson = await importersRes.json();
-
-                //  CORRECT – this updates the global variable
-                processedTariffData = tariffJson
-                    .filter(item => item["Tarifna oznaka"])
-                    .map(item => ({
-                        id: item["Tarifna oznaka"],
-                        text: `${item["Tarifna oznaka"]} – "${item["Naziv"]}"`,
-                        display: `${item["Tarifna oznaka"]} – "${item["Naziv"]}"`,
-                        search: `${item["Tarifna oznaka"]} ${item["Naziv"]}`.toLowerCase(),
-                        isLeaf: item["leaf"] ?? true,
-                        depth: item["depth"] ?? 0
-                    }));
-
-                const supplierOptions = suppliersJson.data.map(s => ({
-                    id: s.id,
-                    text: `${s.name} – ${s.address}`,
-                    full: s
-                }));
-
-                const importerOptions = importersJson.data.map(i => ({
-                    id: i.id,
-                    text: `${i.name} – ${i.address}`,
-                    full: i
-                }));
-
-                // --- Supplier Select2
-                $('#supplier-select2').select2({
-                    placeholder: "Pretraži dobavljača",
-                    width: '100%',
-                    data: supplierOptions
-                });
-                $('#supplier-select2').on('change', async function () {
-                    const supplierId = $(this).val();
-                    if (!supplierId) return;
-                    try {
-                        const res = await fetch(`/api/suppliers/${supplierId}`, {
-                            headers: {
-                                Authorization: `Bearer ${token}`
-                            }
-                        });
-                        const s = await res.json();
-                        setField("#billing-name", s.name);
-                        setField("#billing-address-line-1", s.address);
-                        setField("#billing-phone-no", s.contact_phone);
-                        setField("#billing-tax-no", s.tax_id);
-                        setField("#email", s.contact_email);
-                        setField("#supplier-owner", s.owner);
-                    } catch (err) {
-                        console.warn("Failed to load supplier:", err);
-                    }
-                });
-
-                // --- Importer Select2
-                $('#importer-select2').select2({
-                    placeholder: "Pretraži klijenta",
-                    width: '100%',
-                    data: importerOptions
-                });
-                $('#importer-select2').on('change', async function () {
-                    const importerId = $(this).val();
-                    if (!importerId) return;
-                    try {
-                        const res = await fetch(`/api/importers/${importerId}`, {
-                            headers: {
-                                Authorization: `Bearer ${token}`
-                            }
-                        });
-                        const i = await res.json();
-                        setField("#carrier-name", i.name);
-                        setField("#carrier-address", i.address);
-                        setField("#carrier-tel", i.contact_phone);
-                        setField("#carrier-tax", i.tax_id);
-                        setField("#carrier-email", i.contact_email);
-                        setField("#carrier-owner", i.owner);
-                    } catch (err) {
-                        console.warn("Failed to load importer:", err);
-                    }
-                });
-
-                function formatDateToDDMMYYYY(dateString) {
-                    if (!dateString) return '';
-                    if (typeof dateString === 'string') {
-                        const [year, month, day] = dateString.split('-');
-                        return `${day}.${month}.${year}`;
-                    } else if (dateString instanceof Date) {
-                        const d = dateString;
-                        const day = String(d.getDate()).padStart(2, '0');
-                        const month = String(d.getMonth() + 1).padStart(2, '0');
-                        const year = d.getFullYear();
-                        return `${day}.${month}.${year}`;
-                    }
-                    return '';
-                }
-
-                // --- Prefill selected supplier/importer
-                if (invoice.supplier_id) {
-                    const selected = supplierOptions.find(s => s.id === invoice.supplier_id);
-                    if (selected) {
-                        $('#supplier-select2').append(new Option(selected.text, selected.id, true, true)).trigger('change');
-                    }
-                }
-
-                if (invoice.importer_id) {
-                    const selected = importerOptions.find(i => i.id === invoice.importer_id);
-                    if (selected) {
-                        $('#importer-select2').append(new Option(selected.text, selected.id, true, true)).trigger('change');
-                    }
-                }
-
-                // --- Table rendering
-                const tbody = document.querySelector("#newlink");
-                tbody.innerHTML = "";
-
-                // Clear previous rows
-                tbody.innerHTML = "";
-
-                // Use DocumentFragment for fast DOM appending
-                const fragment = document.createDocumentFragment();
-
-                // Append all rows in one operation
-                tbody.appendChild(fragment);
-
-                // Update totals only once
-                updateTotalAmount();
-
-                // Close loading UI ASAP to unblock interaction
-                Swal.close();
-
-                // Defer Select2 initialization to next event loop tick
-                setTimeout(() => {
-
-                    $('.select2-tariff').select2({
-                        data: processedTariffData,
-                        width: 'resolve'
-                    });
-                }, 0);
-
-            } catch (e) {
-                console.error("Error loading invoice:", e);
-                Swal.fire("Greška", "Nije moguće učitati deklaraciju.", "error");
-            }
-        });
-
         function setField(selector, value) {
             const el = document.querySelector(selector);
             if (el) el.value = value || "";
@@ -3402,4 +3202,5 @@
     <script src="{{ URL::asset('build/js/declaration/export-edit.js') }}"></script>
     <script src="{{ URL::asset('build/js/declaration/swal-declaration-load.js') }}"></script>
     <script src="{{ URL::asset('build/js/declaration/slot-number.js') }}"></script>
+    <script src="{{ URL::asset('build/js/declaration/auto-save.js') }}"></script>
 @endsection

@@ -95,6 +95,7 @@ async function getInvoice() {
 }
 
 function setupSaveButtonLoadingState(btn) {
+    if (!btn) return;
     btn.setAttribute("data-disabled", "true");
     btn.classList.add("position-relative");
     btn.innerHTML = `
@@ -106,6 +107,7 @@ function setupSaveButtonLoadingState(btn) {
 }
 
 function resetSaveButtonState(btn) {
+    if (!btn) return;
     btn.disabled = false;
     btn.innerHTML = `<i class="ri-save-line align-bottom me-1"></i> Sačuvaj`;
 }
@@ -149,6 +151,7 @@ async function ensureEntity(endpoint, data, select2Id) {
         });
         const json = await res.json();
         if (!res.ok) throw new Error(json?.error || `Greška kod spremanja ${endpoint}`);
+        $(select2Id).val(json.data.id)
         return json.data.id;
     }
     return selectedId;
@@ -162,8 +165,7 @@ function buildSupplierData() {
         contact_phone: document.getElementById("billing-phone-no").value.trim(),
         contact_email: document.getElementById("email").value.trim(),
         owner: document.getElementById("supplier-owner").value.trim() || null,
-        avatar: null,
-        synonyms: []
+        avatar: null
     };
 }
 
@@ -175,8 +177,7 @@ function buildImporterData() {
         contact_phone: document.getElementById("carrier-tel").value.trim(),
         contact_email: document.getElementById("carrier-email").value.trim(),
         owner: document.getElementById("carrier-owner").value.trim() || null,
-        avatar: null,
-        synonyms: []
+        avatar: null
     };
 }
 
@@ -192,17 +193,28 @@ function toISODate(dmy) {
 }
 
 function buildInvoiceItem(row) {
-    const item_id_raw = row.querySelector('[name="item_id[]"]')?.value || null;
+    function str(selector, defaultValue="") {
+        return row.querySelector(selector)?.value?.trim() || defaultValue
+    }
+    function num(selector, decimalPlaces=undefined) {
+        const ret = parseFloat(str(selector, "0").replace(",", "."))
+        if (decimalPlaces != null) {
+            return parseFloat(ret.toFixed(decimalPlaces))
+        } else {
+            return ret
+        }
+    }
+    const item_id_raw = str('[name="item_id[]"]', null);
     const item_id = item_id_raw ? parseInt(item_id_raw) : null;
 
-    const item_name = row.querySelector('[name="item_name[]"]')?.value?.trim() || "";
+    const item_name = str('[name="item_name[]"]');
     const item_description_original = item_name;
-    const item_description = row.querySelector('[name="item_desc[]"]')?.value?.trim() || "";
-    const item_description_translated = row.querySelector('[name="item_prev[]"]')?.value.trim() || "";
+    const item_description = str('[name="item_desc[]"]');
+    const item_description_translated = str('[name="item_prev[]"]');
 
     const item_code = $(row).find('[name="item_code[]"]').val() || "";
 
-    const bestMatchesRaw = row.querySelector('[name="best_customs_code_matches[]"]')?.value || "[]";
+    const bestMatchesRaw = str('[name="best_customs_code_matches[]"]', "[]");
     let best_customs_code_matches = [];
     try {
         best_customs_code_matches = JSON.parse(bestMatchesRaw);
@@ -210,23 +222,21 @@ function buildInvoiceItem(row) {
         console.warn("Invalid JSON in best_customs_code_matches[]:", bestMatchesRaw);
     }
 
-    const origin = $(row).find('[name="origin[]"]').val() || "";
-    const rawPrice = row.querySelector('[name="price[]"]')?.value || "0";
-    const parsedPrice = parseFloat(rawPrice.replace(',', '.')) || 0;
-    const base_price = parsedPrice.toFixed(2).replace('.', ',');
-    const quantity = parseFloat(row.querySelector('[name="quantity[]"]')?.value || "0");
-    const totalInputRaw = row.querySelector('input[name="total[]"]')?.value || "";
+    const country_of_origin = $(row).find('[name="origin[]"]').val() || "";
+    const base_price = num('[name="price[]"]', 2);
+    const quantity = num('[name="quantity[]"]');
+    const totalInputRaw = num('input[name="total[]"]');
     let total_price = null;
-    if (totalInputRaw.trim() !== "") {
-        total_price = parseFloat(totalInputRaw.replace(',', '.')) || 0;
+    if (totalInputRaw != 0) {
+        total_price = totalInputRaw;
     } else {
-        total_price = parseFloat(base_price.replace(',', '.')) * quantity;
+        total_price = base_price * quantity;
     }
-    const quantity_type = row.querySelector('[name="quantity_type[]"]')?.value || "";
-    const package_num = row.querySelector('[name="kolata[]"]')?.value || "";
-    const weight_gross = row.querySelector('[name="weight_gross[]"]')?.value || "";
-    const weight_net = row.querySelector('[name="weight_net[]"]')?.value || "";
-    const tariff_privilege = row.querySelector('input[name="tariff_privilege[]"]')?.value || "0";
+    const quantity_type = str('[name="quantity_type[]"]');
+    const num_packages = num('[name="kolata[]"]');
+    const weight_gross = num(('[name="weight_gross[]"]'));
+    const weight_net = num(('[name="weight_net[]"]'));
+    const tariff_privilege = str('input[name="tariff_privilege[]"]');
     const slot_number = parseInt(row.querySelector('.slot-number')?.innerText || "-1", 10);
 
     return {
@@ -237,11 +247,11 @@ function buildInvoiceItem(row) {
         item_description,
         item_description_original,
         item_description_translated,
-        origin,
+        country_of_origin,
         base_price,
         quantity,
         quantity_type,
-        package_num,
+        num_packages,
         tariff_privilege,
         weight_gross,
         weight_net,
@@ -272,12 +282,24 @@ function buildInvoicePayload(supplierId, importerId) {
     };
 }
 
+async function getSupplierID() {
+    const supplierData = buildSupplierData();
+    const id = await ensureEntity("suppliers", supplierData, "#supplier-select2");
+    return isValidId(id) ? Number(id) : undefined
+}
+
+async function getImporterID() {
+    const importerData = buildImporterData();
+    const id = await ensureEntity("importers", importerData, "#importer-select2");
+    return isValidId(id) ? Number(id) : undefined
+}
+
 async function handleSaveInvoice(btn) {
     setupSaveButtonLoadingState(btn);
 
     const missingFields = validateRequiredFields();
     if (missingFields.length > 0) {
-        showMissingFieldsAlert(missingFields);
+        // showMissingFieldsAlert(missingFields);
         resetSaveButtonState(btn);
         return;
     }
@@ -289,25 +311,19 @@ async function handleSaveInvoice(btn) {
     }
 
     try {
-        const supplierData = buildSupplierData();
-        const importerData = buildImporterData();
+        let supplierId = await getSupplierID();
+        let importerId = await getImporterID();
 
-        let supplierId = await ensureEntity("suppliers", supplierData, "#supplier-select2");
-        let importerId = await ensureEntity("importers", importerData, "#importer-select2");
-
-        if (!isValidId(supplierId)) {
-            Swal.fire("Greška", "Molimo odaberite ili unesite validnog klijenta.", "error");
-            resetSaveButtonState(btn);
-            return;
-        }
-        if (!isValidId(importerId)) {
-            Swal.fire("Greška", "Molimo odaberite ili unesite validnog dobavljača.", "error");
-            resetSaveButtonState(btn);
-            return;
-        }
-
-        supplierId = Number(supplierId);
-        importerId = Number(importerId);
+        // if (!isValidId(supplierId)) {
+        //     Swal.fire("Greška", "Molimo odaberite ili unesite validnog klijenta.", "error");
+        //     resetSaveButtonState(btn);
+        //     return;
+        // }
+        // if (!isValidId(importerId)) {
+        //     Swal.fire("Greška", "Molimo odaberite ili unesite validnog dobavljača.", "error");
+        //     resetSaveButtonState(btn);
+        //     return;
+        // }
 
         const invoiceId = getInvoiceId();
         console.log("💾 Saving to invoice ID:", invoiceId);
@@ -340,14 +356,14 @@ async function handleSaveInvoice(btn) {
             return;
         }
 
-        Swal.fire({
-            icon: "success",
-            title: "Uspješno",
-            text: "Deklaracija je sačuvana",
-            confirmButtonText: "U redu",
-            customClass: { confirmButton: "btn btn-info" },
-            buttonsStyling: false
-        });
+        // Swal.fire({
+        //     icon: "success",
+        //     title: "Uspješno",
+        //     text: "Deklaracija je sačuvana",
+        //     confirmButtonText: "U redu",
+        //     customClass: { confirmButton: "btn btn-info" },
+        //     buttonsStyling: false
+        // });
 
     } catch (err) {
         console.error("Greška:", err);
