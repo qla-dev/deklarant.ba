@@ -4,8 +4,11 @@ document.addEventListener('input', function (e) {
   if (!e.target.matches(FORMAT_SELECTOR)) return;
   let value = e.target.value;
 
-  // allow only digits and comma
-  value = value.replace(/[^0-9,]/g, '');
+  // allow only digits, comma, and dot
+  value = value.replace(/[^0-9,.]/g, '');
+
+  // convert all dots to commas
+  value = value.replace(/\./g, ',');
 
   // only one comma
   const parts = value.split(',');
@@ -17,11 +20,6 @@ document.addEventListener('input', function (e) {
   if (parts.length === 2) {
     parts[1] = parts[1].slice(0, 2);
     value = parts[0] + ',' + parts[1];
-  }
-
-  // only clear-to-zero for weight fields (allow price and total fields to be empty)
-  if (value.trim() === '' && e.target.matches('#total-weight-net, #total-weight-gross')) {
-    value = '0';
   }
 
   e.target.value = value;

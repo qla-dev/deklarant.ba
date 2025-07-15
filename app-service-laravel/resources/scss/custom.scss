@@ -1024,7 +1024,11 @@ table.dataTable thead th.dtfc-fixed-right {
 
 .th-counter {
 
-    min-width: 73px!important;
+    min-width: 30px!important;
+}
+
+.th-qty {
+    min-width: 80px!important;
 }
 
 .th-input {
@@ -1292,6 +1296,10 @@ table.dataTable thead th.dtfc-fixed-right {
 
 .dark-remove-bg{
     background: var(--vz-topbar-search-bg) !important;
+}
+
+.th-tarifa .select2.select2-container {
+    min-width: 180px!important;
 }
 
 

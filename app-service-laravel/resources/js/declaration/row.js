@@ -35,11 +35,11 @@ function addRowToInvoice(item = {}, suggestions = []) {
 
 
     row.innerHTML = `
-              <td style="width: 20px!important;">
+              <td style="width: 0px!important;">
 
-                <div class="th-counter" style="display: flex; flex-direction: column; gap: 2px; width: 100%;">
+                <div class="th-counter" style="display: flex; flex-direction: column; gap: 2px; text-align: left;">
                     <div>${index + 1}</div>
-                    <div style="margin-top: 1rem" id="slot-number-${index}" class="slot-number">${slotNumber}</div>
+                    <div style="margin-top: 1rem" id="slot-number-${index}" class="slot-number text-start">${slotNumber}</div>
                 </div>
             </td>
 
@@ -70,7 +70,7 @@ function addRowToInvoice(item = {}, suggestions = []) {
             .replace(/'/g, '&#39;')
         }'>
 
-    <td class="text-start" style="width: 150px!important;">
+    <td class="text-start" style="width: 200px!important;">
       <div style="position: relative; width: 100%;" class="th-tarifa">
         <select
           class="form-control select2-tariff tariff-selection"
@@ -298,8 +298,8 @@ function addRowToInvoice(item = {}, suggestions = []) {
     </td>
 
 
-              <td style="width: 80px;">
-                <div class="th-counter" style="display: flex; flex-direction: column; gap: 2px; width: 100%;">
+              <td style="width: 100px;">
+                <div class="th-qty" style="display: flex; flex-direction: column; gap: 2px; width: 100%;">
                   <div class="input-group input-group-sm" style="width: 100%;">
                     <button 
                       class="btn btn-outline-info btn-sm decrement-qty" 

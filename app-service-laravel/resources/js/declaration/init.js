@@ -260,15 +260,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Prefill total weights and package count
     const rawNet = invoice.total_weight_net;
     const rawGross = invoice.total_weight_gross;
+    const rawPackages = invoice.total_num_packages;
 
     // if parseFloat(...) is NaN, use 0
     const netVal = isNaN(parseFloat(rawNet)) ? 0 : rawNet;
     const grossVal = isNaN(parseFloat(rawGross)) ? 0 : rawGross;
+    const packagesVal = isNaN(parseFloat(rawPackages)) ? 0 : rawPackages;
 
     // Prefill total weights and package count
     setField("#total-weight-net", formatDecimal(netVal, 2, ''));
     setField("#total-weight-gross", formatDecimal(grossVal, 2, ''));
-    setField("#total-num-packages", invoice.total_num_packages ?? "0");
+    setField("#total-num-packages", formatDecimal(packagesVal, 2, ''));
 
     console.log("Weights and package count set:",
         invoice.total_weight_net,

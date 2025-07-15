@@ -300,8 +300,8 @@
                         </div>
                         <div class="col-4 text-end">
                             <label class="text-muted text-uppercase fw-semibold mb-1">Broj koleta</label>
-                            <input type="number" class="form-control text-end" id="total-num-packages"
-                                name="total_num_packages" placeholder="0" oninput="updateEstimates()">
+                            <input type="text" class="form-control text-end decimal-input" id="total-num-packages"
+                                name="total_num_packages" placeholder="0,00" oninput="updateEstimates()">
                         </div>
                     </div>
                 </div>
@@ -313,7 +313,7 @@
                             <thead>
                                 <tr>
                                     <th class="dark-remove-bg"
-                                        style="width: 20px;vertical-align: middle; text-align: middle; background: #f3f3f9!">
+                                        style="width: 20px;vertical-align: middle; text-align: left; background: #f3f3f9!">
                                         Poz<br>
                                         <small style="font-weight: normal; font-size: 0.75rem; color: #666;">
                                             BRN
