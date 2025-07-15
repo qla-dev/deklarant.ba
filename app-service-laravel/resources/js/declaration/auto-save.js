@@ -52,7 +52,7 @@ async function checkAutoSave() {
     if (thingsToInitialize <= 0 && _invoice_data) {
         const invoicePayload = buildInvoicePayload(await getSupplierID(), await getImporterID());
         const same = isEqualIgnoringPaths(_invoice_data, invoicePayload, [
-            "id", "country_of_origin", "created_at", "date_of_issue", "file_name",
+            "id", "country_of_origin", "created_at", "file_name",
             "internal_status", "scan_time", "task_id", "updated_at", "user_id",
             "items[].best_customs_code_matches", "items[].id", "items[].invoice_id",
             "items[].created_at", "items[].item_id", "items[].item_name",
