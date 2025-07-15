@@ -508,4 +508,5 @@
     <script src="{{ URL::asset('build/js/declaration/runtime.js') }}"></script>
     <script src="{{ URL::asset('build/js/declaration/row.js') }}"></script>
     <script src="{{ URL::asset('build/js/declaration/tariff-selector.js') }}"></script>
+    <script src="{{ URL::asset('build/js/declaration/validate-weight.js') }}"></script>
 @endsection
