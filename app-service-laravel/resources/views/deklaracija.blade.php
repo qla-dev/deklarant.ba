@@ -313,10 +313,10 @@
                             <thead>
                                 <tr>
                                     <th class="dark-remove-bg"
-                                        style="width: 50px;vertical-align: middle; text-align: middle; background: #f3f3f9!">
-                                        Pozicija<br>
+                                        style="width: 20px;vertical-align: middle; text-align: middle; background: #f3f3f9!">
+                                        Poz<br>
                                         <small style="font-weight: normal; font-size: 0.75rem; color: #666;">
-                                            Naimenovanje
+                                            BRN
                                         </small>
                                     </th>
                                     <th class="dark-remove-bg"

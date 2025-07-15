@@ -1,4 +1,4 @@
-const FORMAT_SELECTOR = '.price-input, .total-input, #total-weight-net, #total-weight-gross';
+const FORMAT_SELECTOR = '.price-input, .total-input, #total-weight-net, #total-weight-gross, .decimal-input';
 
 document.addEventListener('input', function (e) {
   if (!e.target.matches(FORMAT_SELECTOR)) return;

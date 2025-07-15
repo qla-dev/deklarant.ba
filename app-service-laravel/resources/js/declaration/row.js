@@ -35,7 +35,7 @@ function addRowToInvoice(item = {}, suggestions = []) {
 
 
     row.innerHTML = `
-              <td style="width: 50px;">
+              <td style="width: 20px!important;">
 
                 <div class="th-counter" style="display: flex; flex-direction: column; gap: 2px; width: 100%;">
                     <div>${index + 1}</div>
@@ -216,73 +216,90 @@ function addRowToInvoice(item = {}, suggestions = []) {
 
 
      <td style="width: 70px;">
-        <input 
+        <div style="position: relative; width: 100%;">
+          <input 
             type="text" 
-            class="form-control text-start procjena-field th-input" 
+            class="form-control text-start procjena-field th-input decimal-input" 
             name="num_packages[]" 
-            value="${num_packages}" 
-            style="width: 100%; background-color: #f9f9f9;"
+            value="${formatDecimal(num_packages, 2, '')}" 
+            style="width: 100%; background-color: #f9f9f9; padding-left: 6px; padding-right: 6px;"
             onblur="lockableInputBlurred()"
             ${num_packages_locked ? 'disabled' : ''}
-        >
-        <input
+          >
+          <input
             type="checkbox"
-            class="form-check-input"
+            class="form-check-input lock-checkbox"
             name="num_packages_locked[]"
             ${num_packages_locked ? 'checked' : ''}
             onChange="updateEstimates()"
-        >
+            style="position: absolute; top: 50%; right: 5px; transform: translateY(-50%); width: 26px; height: 26px; margin: 0; z-index: 2; opacity: 0; cursor: pointer;"
+            data-bs-toggle="tooltip"
+            title="${num_packages_locked ? 'Otključaj koletu' : 'Zaključaj koletu'}"
+          >
+          <span class="custom-lock-icon" style="position: absolute; top: 50%; right: 5px; transform: translateY(-50%); width: 26px; height: 26px; border-radius: 3px; display: inline-block; z-index: 1;" data-bs-toggle="tooltip" title="${num_packages_locked ? 'Otključaj koletu' : 'Zaključaj koletu'}"><i class="fa fa-lock"></i></span>
+        </div>
     </td>
 
-                        <td style="width: 80px;">
-                <div class="th-counter" style="display: flex; flex-direction: column; gap: 2px; width: 100%;">
-                  <div class="input-group input-group-sm" style="width: 100%;">
-                    <input 
-                      type="text" 
-                      class="form-control text-center rounded-0" 
-                      name="weight_gross[]" 
-                      value="${weight_gross}" 
-                      step="1" 
-                      min="0"
-                      style="padding: 0 5px; height: 30px; border-radius:0!important"
-                      ${weight_gross_locked ? 'disabled' : ''}
-                      onblur="lockableInputBlurred()"
-                    >
-                    <input
-                      type="checkbox"
-                      class="form-check-input"
-                      name="weight_gross_locked[]"
-                      ${weight_gross_locked ? 'checked' : ''}
-                      onChange="updateEstimates()"
-                    >
-                  </div>
-
-                 <div class="input-group input-group-sm" style="height: 30px;">
-                    <input
-                      type="text"
-                      class="form-control text-center rounded-0"
-                      name="weight_net[]"
-                      min="0"
-                      step="1"
-                      style="height: 30px; padding: 0 5px; font-size: 10px; border-radius:0!important"
-                      value="${weight_net}"
-                      onblur="lockableInputBlurred()"
-                      ${weight_net_locked ? 'disabled' : ''}
-                    >
-                    <input
-                      type="checkbox"
-                      class="form-check-input"
-                      name="weight_net_locked[]"
-                      ${weight_net_locked ? 'checked' : ''}
-                      onChange="updateEstimates()"
-                    >
-                    </div>
-                </div>
-              </td>
+    <td style="width: 80px;">
+      <div class="th-counter" style="display: flex; flex-direction: column; gap: 2px; width: 100%;">
+        <div class="input-group input-group-sm" style="width: 100%;">
+          <div style="position: relative; width: 100%;">
+            <input 
+              type="text" 
+              class="form-control text-start rounded th-input decimal-input" 
+              name="weight_gross[]" 
+              value="${formatDecimal(weight_gross, 2, '')}" 
+              step="1" 
+              min="0"
+              style="padding-left: 6px; padding-right: 6px; height: 30px; border-radius:6px;"
+              ${weight_gross_locked ? 'disabled' : ''}
+              onblur="lockableInputBlurred()"
+            >
+            <input
+              type="checkbox"
+              class="form-check-input lock-checkbox"
+              name="weight_gross_locked[]"
+              ${weight_gross_locked ? 'checked' : ''}
+              onChange="updateEstimates()"
+              style="position: absolute; top: 50%; right: 5px; transform: translateY(-50%); width: 22px; height: 22px; margin: 0; z-index: 2; opacity: 0; cursor: pointer;"
+              data-bs-toggle="tooltip"
+              title="${weight_gross_locked ? 'Otključaj bruto težinu' : 'Zaključaj bruto težinu'}"
+            >
+            <span class="custom-lock-icon" style="position: absolute; top: 50%; right: 5px; transform: translateY(-50%); width: 22px; height: 22px; border-radius: 3px; display: inline-block; z-index: 1;" data-bs-toggle="tooltip" title="${weight_gross_locked ? 'Otključaj bruto težinu' : 'Zaključaj bruto težinu'}"><i class="fa fa-lock"></i></span>
+          </div>
+        </div>
+        <div class="input-group input-group-sm" style="height: 30px;">
+          <div style="position: relative; width: 100%;">
+            <input
+              type="text"
+              class="form-control text-start rounded th-input decimal-input"
+              name="weight_net[]"
+              min="0"
+              step="1"
+              style="height: 30px; padding-left: 6px; padding-right: 6px; font-size: 10px; border-radius:6px;"
+              value="${formatDecimal(weight_net, 2, '')}"
+              onblur="lockableInputBlurred()"
+              ${weight_net_locked ? 'disabled' : ''}
+            >
+            <input
+              type="checkbox"
+              class="form-check-input lock-checkbox"
+              name="weight_net_locked[]"
+              ${weight_net_locked ? 'checked' : ''}
+              onChange="updateEstimates()"
+              style="position: absolute; top: 50%; right: 5px; transform: translateY(-50%); width: 22px; height: 22px; margin: 0; z-index: 2; opacity: 0; cursor: pointer;"
+              data-bs-toggle="tooltip"
+              title="${weight_net_locked ? 'Otključaj neto težinu' : 'Zaključaj neto težinu'}"
+            >
+            <span class="custom-lock-icon" style="position: absolute; top: 50%; right: 5px; transform: translateY(-50%); width: 22px; height: 22px; border-radius: 3px; display: inline-block; z-index: 1;" data-bs-toggle="tooltip" title="${weight_net_locked ? 'Otključaj neto težinu' : 'Zaključaj neto težinu'}"><i class="fa fa-lock"></i></span>
+          </div>
+        </div>
+      </div>
+    </td>
 
 
               <td style="width: 80px;">
-                <div  class="th-counter" style="display: flex; flex-direction: column; gap: 2px; width: 100%;">
+                <div class="th-counter" style="display: flex; flex-direction: column; gap: 2px; width: 100%;">
                   <div class="input-group input-group-sm" style="width: 100%;">
                     <button 
                       class="btn btn-outline-info btn-sm decrement-qty" 
@@ -353,3 +370,79 @@ function addRowToInvoice(item = {}, suggestions = []) {
     initializeTariffSelects(row);
     updateEstimates();
 }
+
+// --- Custom lock icon styling for visually integrated checkboxes ---
+const style = document.createElement('style');
+style.innerHTML = `
+  .lock-checkbox + .custom-lock-icon {
+    background-color: #d1ecfa; /* bg-soft-info for unlocked */
+    border: 1px solid #299cdb;
+    display: inline-block;
+    border-radius: 3px;
+    text-align: center;
+    line-height: 26px;
+    transition: background 0.2s, border 0.2s;
+    vertical-align: middle;
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-55%); /* move up a bit for better centering */
+  }
+  .lock-checkbox:checked + .custom-lock-icon {
+    background-color: #e9ecef; /* gray bg for locked */
+    border: 1px solid #ccc;
+  }
+  .custom-lock-icon i {
+    color: #299cdb;
+    font-size: 16px;
+    line-height: 26px;
+    vertical-align: middle;
+    position: relative;
+    top: -1px; /* move icon up for better centering */
+    transition: color 0.2s;
+  }
+  .lock-checkbox:checked + .custom-lock-icon i {
+    color: #888;
+  }
+  /* For smaller (22px) lock icons */
+  .custom-lock-icon[style*='22px'] i {
+    font-size: 14px;
+    line-height: 22px;
+    top: -3px;
+  }
+`;
+document.head.appendChild(style);
+
+// --- Tooltip update and autoclose for lock checkboxes ---
+document.addEventListener('change', function(e) {
+  if (!e.target.classList.contains('lock-checkbox')) return;
+  const checkbox = e.target;
+  const lockIcon = checkbox.nextElementSibling;
+  if (!lockIcon || !lockIcon.classList.contains('custom-lock-icon')) return;
+  let field = checkbox.getAttribute('name');
+  setTimeout(() => {
+    let locked = checkbox.checked;
+    let title = '';
+    if (field === 'num_packages_locked[]') {
+      title = locked ? 'Otključaj koletu' : 'Zaključaj koletu';
+    } else if (field === 'weight_gross_locked[]') {
+      title = locked ? 'Otključaj bruto težinu' : 'Zaključaj bruto težinu';
+    } else if (field === 'weight_net_locked[]') {
+      title = locked ? 'Otključaj neto težinu' : 'Zaključaj neto težinu';
+    }
+    checkbox.setAttribute('title', title);
+    checkbox.setAttribute('data-bs-original-title', title);
+    lockIcon.setAttribute('title', title);
+    lockIcon.setAttribute('data-bs-original-title', title);
+    if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
+      bootstrap.Tooltip.getInstance(checkbox)?.dispose();
+      bootstrap.Tooltip.getInstance(lockIcon)?.dispose();
+      new bootstrap.Tooltip(checkbox);
+      new bootstrap.Tooltip(lockIcon);
+      setTimeout(() => {
+        bootstrap.Tooltip.getInstance(checkbox)?.hide();
+        bootstrap.Tooltip.getInstance(lockIcon)?.hide();
+      }, 200);
+    }
+  }, 0);
+});
