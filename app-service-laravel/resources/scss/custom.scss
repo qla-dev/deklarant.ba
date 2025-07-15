@@ -1294,6 +1294,11 @@ table.dataTable thead th.dtfc-fixed-right {
 
 }
 
+[data-bs-theme=dark] .custom-lock-icon.lock-disabled {
+    border: unset !important;
+    background: #212529 !important;
+}
+
 .dark-remove-bg{
     background: var(--vz-topbar-search-bg) !important;
 }
