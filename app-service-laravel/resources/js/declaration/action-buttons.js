@@ -151,7 +151,8 @@ async function ensureEntity(endpoint, data, select2Id) {
         });
         const json = await res.json();
         if (!res.ok) throw new Error(json?.error || `Greška kod spremanja ${endpoint}`);
-        $(select2Id).val(json.data.id)
+        $(select2Id).append(new Option(companyNameForSelect2(json.data), json.data.id));
+        $(select2Id).val(json.data.id).trigger("change");
         return json.data.id;
     }
     return selectedId;

@@ -1791,6 +1791,10 @@
                 thingInitialized();
             }
 
+            function companyNameForSelect2(company) {
+                return company?.name ? `${company.name} – ${company.address || ''}` : company?.id
+            }
+
             async function fetchAndPrefillParties() {
                 const taskId = window.global_invoice_id;
                 if (!taskId || !token) return;
@@ -1839,7 +1843,7 @@
                     } else if (supplierId) {
                         // Ensure the option exists before setting value
                         if ($(`#supplier-select2 option[value='${supplierId}']`).length === 0) {
-                            const text = supplier?.name ? `${supplier.name} – ${supplier.address || ''}` : supplierId;
+                            const text = companyNameForSelect2(supplier);
                             const newOption = new Option(text, supplierId, true, true);
                             $("#supplier-select2").append(newOption);
                         }
@@ -1914,7 +1918,7 @@
                     } else if (importerId) {
                         // Ensure the option exists before setting value
                         if ($(`#importer-select2 option[value='${importerId}']`).length === 0) {
-                            const text = importer?.name ? `${importer.name} – ${importer.address || ''}` : importerId;
+                            const text = companyNameForSelect2(importer);
                             const newOption = new Option(text, importerId, true, true);
                             $("#importer-select2").append(newOption);
                         }
@@ -2025,7 +2029,7 @@
 
                     } else if (supplierId) {
                         if ($(`#supplier-select2 option[value='${supplierId}']`).length === 0) {
-                            const text = supplier?.name ? `${supplier.name} – ${supplier.address || ''}` : supplierId;
+                            const text = companyNameForSelect2(supplier);
                             const newOption = new Option(text, supplierId, true, true);
                             $("#supplier-select2").append(newOption);
                         }
@@ -2159,7 +2163,7 @@
                         console.log("[IMPORTER] importerId exists:", stringId);
 
                         if ($(`#importer-select2 option[value='${stringId}']`).length === 0) {
-                            const text = importer?.name ? `${importer.name} – ${importer.address || ''}` : stringId;
+                            const text = companyNameForSelect2(imporeter);
                             console.log("[IMPORTER] Option not found. Adding manually:", text);
                             const newOption = new Option(text, stringId, true, true);
                             $("#importer-select2").append(newOption);
