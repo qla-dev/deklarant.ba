@@ -30,6 +30,9 @@ class InvoiceItem extends Model
         'weight_gross',
         'weight_net',
         'slot_number',
+        'weight_gross_locked',
+        'weight_net_locked',
+        'num_packages_locked',
     ];
 
     protected $casts = [

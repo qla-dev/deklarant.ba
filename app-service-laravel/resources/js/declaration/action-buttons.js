@@ -196,6 +196,9 @@ function buildInvoiceItem(row) {
     function str(selector, defaultValue="") {
         return row.querySelector(selector)?.value?.trim() || defaultValue
     }
+    function bool(selector, defaultValue=false) {
+        return row.querySelector(selector)?.checked || defaultValue
+    }
     function num(selector, decimalPlaces=undefined) {
         const ret = parseFloat(str(selector, "0").replace(",", "."))
         if (decimalPlaces != null) {
@@ -233,10 +236,14 @@ function buildInvoiceItem(row) {
         total_price = base_price * quantity;
     }
     const quantity_type = str('[name="quantity_type[]"]');
-    const num_packages = num('[name="kolata[]"]');
+    const num_packages = num('[name="num_packages[]"]');
+    const num_packages_locked = bool('[name="num_packages_locked[]"]');
     const weight_gross = num(('[name="weight_gross[]"]'));
+    const weight_gross_locked = bool('[name="weight_gross_locked[]"]');
     const weight_net = num(('[name="weight_net[]"]'));
+    const weight_net_locked = bool('[name="weight_net_locked[]"]');
     const tariff_privilege = str('input[name="tariff_privilege[]"]');
+    const currency = str('input[name="currency[]"]');
     const slot_number = parseInt(row.querySelector('.slot-number')?.innerText || "-1", 10);
 
     return {
@@ -256,8 +263,11 @@ function buildInvoiceItem(row) {
         weight_gross,
         weight_net,
         total_price,
-        currency: "EUR",
+        currency,
         slot_number,
+        weight_gross_locked,
+        weight_net_locked,
+        num_packages_locked,
         version: new Date().getFullYear()
     };
 }

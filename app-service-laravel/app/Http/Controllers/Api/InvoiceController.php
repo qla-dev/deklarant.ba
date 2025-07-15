@@ -185,6 +185,9 @@ class InvoiceController extends Controller
                     'weight_gross' => isset($item['weight_gross']) ? floatval(str_replace(',', '.', $item['weight_gross'])): null,
                     'weight_net'   => isset($item['weight_net']) ? floatval(str_replace(',', '.', $item['weight_net'])) : null,
                     'tariff_privilege' => $item['tariff_privilege'] !== '0' ? $item['tariff_privilege'] : null,
+                    'num_packages_locked' => $item['num_packages_locked'] ?? false,
+                    'weight_gross_locked'   => $item['weight_gross_locked'] ?? false,
+                    'weight_net_locked'   => $item['weight_net_locked'] ?? false,
                 ];
 
                 if (!empty($item['item_id'])) {
@@ -265,12 +268,6 @@ class InvoiceController extends Controller
     {
         try {
             $invoice = Invoice::findOrFail($invoiceId);
-
-            if ($invoice->task_id !== null) {
-                return response()->json([
-                    'message' => 'Deklaracija je već skenirana'
-                ], 409); // 409 = Conflict
-            }
 
             if (empty($invoice->file_name)) {
                 return response()->json([
@@ -538,9 +535,12 @@ class InvoiceController extends Controller
                     'best_customs_code_matches' => $item['detected_codes'] ?? [],
                     'country_of_origin' => $item['country_of_origin'],
                     'quantity_type' => $item['quantity_type'],
-                    'num_packages' => $item['num_packages'],
+                    'num_packages' => $item['num_packages'] ?? null,
                     'weight_gross' => $item['weight_gross'] ?? null,
                     'weight_net' => $item['weight_net'] ?? null,
+                    'num_packages_locked' => !empty($item['num_packages']),
+                    'weight_gross_locked' => !empty($item['weight_gross']),
+                    'weight_net_locked' => !empty($item['weight_net']),
                     'item_description_translated' => $item['item_description_translated'],
                     'tariff_privilege' => $this->getTariffPrivilageFromCountry($item['country_of_origin']),
                 ];

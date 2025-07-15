@@ -50,7 +50,7 @@ function exportTableToCustomCSV() {
         rowData.push(formatted);
 
         // 7. Koleta
-        rowData.push(row.querySelector('input[name="procjena[]"]')?.value || "");
+        rowData.push(row.querySelector('input[name="num_packages[]"]')?.value || "");
 
         // 8. Bruto kg
         rowData.push(row.querySelector('input[name="weight_gross[]"]')?.value || "");
@@ -176,7 +176,7 @@ function renderPrintTableAndPrint(isDownloadOnly = true, container = null, showT
             get('input[name="quantity[]"]'),
             get('input[name="weight_gross[]"]'),
             get('input[name="weight_net[]"]'),
-            get('input[name="procjena[]"]'),
+            get('input[name="num_packages[]"]'),
             get('input[name="price[]"]'),
             get('input[name="total[]"]'),
         ];

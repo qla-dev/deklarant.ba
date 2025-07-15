@@ -52,9 +52,7 @@
             /* text color to maintain contrast */
         }
 
-
         .detached-fixed-buttons {
-
             position: fixed !important;
             top: calc(70.8px + 40.5px);
             /* 110.91px total offset */
@@ -82,8 +80,6 @@
             background-color: #f4f4fc;
             /* keep your bg */
         }
-
-
 
         .custom-swal-popup {
             padding-top: 1.5rem;
@@ -286,7 +282,7 @@
                         <div class="col-4 text-end">
                             <label class="text-muted text-uppercase fw-semibold mb-1">Ukupan iznos</label>
                             <input type="text" class="form-control text-end" id="total-amount" name="total_amount"
-                                placeholder="0.00 KM" disabled>
+                                placeholder="0.00 KM" disabled oninput="updateEstimates()">
                         </div>
                     </div>
                     <!-- Added fields -->
@@ -294,23 +290,20 @@
                         <div class="col-4 text-start">
                             <label class="text-muted text-uppercase fw-semibold mb-1">Neto (kg)</label>
                             <input type="text" step="0.01" class="form-control" id="total-weight-net"
-                                name="total_weight_net" placeholder="0,00 kg">
+                                name="total_weight_net" placeholder="0,00 kg" oninput="updateEstimates()">
                         </div>
                         <div class="col-4 text-center">
                             <label class="d-flex justify-content-center text-muted text-uppercase fw-semibold mb-1">Bruto
                                 (kg)</label>
                             <input type="text" step="0.01" class="form-control text-center" id="total-weight-gross"
-                                name="total_weight_gross" placeholder="0,00 kg">
+                                name="total_weight_gross" placeholder="0,00 kg" oninput="updateEstimates()">
                         </div>
                         <div class="col-4 text-end">
                             <label class="text-muted text-uppercase fw-semibold mb-1">Broj koleta</label>
                             <input type="number" class="form-control text-end" id="total-num-packages"
-                                name="total_num_packages" placeholder="0">
+                                name="total_num_packages" placeholder="0" oninput="updateEstimates()">
                         </div>
                     </div>
-                    <input id="q1-estimate" name="q1" type="hidden">
-                    <input id="q2-bruto" name="q2" type="hidden">
-                    <input id="q3-neto" name="q3" type="hidden">
                 </div>
 
                 <div class="card-body p-4 border-top border-top-dashed">
@@ -514,7 +507,8 @@
                     buttonsStyling: false
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        location.reload(); // Reload page on "Pokušaj ponovo"
+                        Swal.close();
+                        startAiScan().then(() => waitForAiResult(true));
                     } else if (result.dismiss === Swal.DismissReason.cancel) {
                         location.href = "/"; // Redirect ONLY if user clicked "Odustani"
                     }
@@ -571,176 +565,6 @@
                     console.error(" Failed to update scan count:", err);
                 }
             }
-
-
-
-
-            function updateTotalAmount() {
-                let total = 0;
-                const currencySymbols = {
-                    "EUR": "€",
-                    "USD": "$",
-                    "KM": "KM"
-                };
-
-                const productRows = document.querySelectorAll("#newlink tr.product");
-
-                // Get locked currency from hidden input
-                let lockedCurrency = document.getElementById("currency-lock").value;
-
-                productRows.forEach((row) => {
-                    const itemName = row.querySelector('input[name="item_name[]"]')?.value?.trim();
-                    const priceRaw = row.querySelector('input[name="price[]"]')?.value || '';
-                    const totalRaw = row.querySelector('input[name="total[]"]')?.value || '';
-                    const quantity = parseFloat(row.querySelector('input[name="quantity[]"]')?.value || 0);
-
-                    // 🚫 Skip rows with no name or empty/zeroed values
-                    if (!itemName || priceRaw.trim() === '' || (parseFloat(priceRaw.replace(',', '.')) === 0 && quantity === 0)) return;
-
-                    // Use total value if available, otherwise calculate from price * quantity
-                    let rowTotal = 0;
-                    if (totalRaw.trim() !== '') {
-                        rowTotal = parseFloat(totalRaw.replace(/[^\d.,]/g, '').replace(',', '.')) || 0;
-                    } else {
-                        const price = parseFloat(priceRaw.replace(',', '.')) || 0;
-                        rowTotal = price * quantity;
-                    }
-
-                    total += rowTotal;
-
-                    if (!lockedCurrency) {
-                        const currencyInput = row.querySelector('input[name="currency[]"]');
-                        if (currencyInput && currencyInput.value.trim()) {
-                            lockedCurrency = currencyInput.value.trim();
-                            document.getElementById("currency-lock").value = lockedCurrency;
-                            console.log("✅ Locked currency:", lockedCurrency);
-                        }
-                    }
-                });
-
-
-                const currency = lockedCurrency || "EUR";
-                const currencySymbol = currencySymbols[currency] || currency;
-                const formatted = `${formatDecimal(total, 2)} ${currencySymbol}`;
-                document.getElementById("total-amount").value = formatted;
-                document.getElementById("modal-total-amount").textContent = formatted;
-                document.getElementById("total-edit").textContent = formatted;
-
-                // ─── Compute all three Q-values ───
-                const numPackages = parseFloat(document.getElementById("total-num-packages")?.value || 0);
-                const grossWeight = parseDecimalToDot(document.getElementById("total-weight-gross")?.value);
-                const netWeight = parseDecimalToDot(document.getElementById("total-weight-net")?.value);
-
-                const q1 = (numPackages > 0 && total > 0) ? numPackages / total : 0;
-                const q2 = (numPackages > 0 && total > 0) ? grossWeight / total : 0;
-                const q3 = (numPackages > 0 && total > 0) ? netWeight / total : 0;
-
-                // ─── Apply them all in a loop ───
-                [
-                    { id: "q1-estimate", value: q1 },
-                    { id: "q2-bruto", value: q2 },
-                    { id: "q3-neto", value: q3 },
-                ].forEach(({ id, value }) => {
-                    const el = document.getElementById(id);
-                    if (!el) return;
-                    // write either empty or 6-dec place number
-                    el.value = value > 0
-                        ? value.toFixed(6)
-                        : "";
-                    // fire input so that your updateXxxEstimates() hooks run
-                    el.dispatchEvent(new Event("input"));
-                });
-
-            }
-
-
-
-
-
-            // Update per‐row procjena (q1 * total)
-            function updateProcjenaEstimates() {
-                const q1 = parseDecimalToDot(
-                    document.getElementById("q1-estimate")?.value
-                );
-                document.querySelectorAll("#newlink tr.product").forEach(row => {
-                    const totalRaw = row.querySelector('input[name="total[]"]')?.value || '';
-                    const input = row.querySelector('input[name="procjena[]"]');
-                    if (input) {
-                        if (totalRaw.trim() === '') {
-                            input.value = '';
-                        } else {
-                            const total = parseDecimalToDot(totalRaw);
-                            const result = q1 * total;
-                            input.value = result.toFixed(2).replace(".", ",");
-                        }
-                    }
-                });
-            }
-
-            // Update per‐row bruto weight (q2 * total)
-            function updateBrutoEstimates() {
-                const q2 = parseDecimalToDot(
-                    document.getElementById("q2-bruto")?.value
-                );
-                console.log("▶︎ updateBrutoEstimates() — q2 =", q2);
-
-                document.querySelectorAll("#newlink tr.product").forEach((row, i) => {
-                    const totalRaw = row.querySelector('input[name="total[]"]')?.value || '';
-                    const input = row.querySelector('input[name="weight_gross[]"]');
-
-                    if (input) {
-                        if (totalRaw.trim() === '') {
-                            input.value = '';
-                        } else {
-                            const total = parseDecimalToDot(totalRaw);
-                            const value = q2 * total;
-                            console.log(`row ${i}: gross=${value}`);
-                            input.value = value.toFixed(2).replace(".", ",");
-                        }
-                        input.dispatchEvent(new Event("input"));
-                    }
-                });
-            }
-
-            // Update per‐row neto weight (q3 * total)
-            function updateNetoEstimates() {
-                const q3 = parseDecimalToDot(
-                    document.getElementById("q3-neto")?.value
-                );
-                console.log("▶︎ updateNetoEstimates() — q3 =", q3);
-
-                document.querySelectorAll("#newlink tr.product").forEach((row, i) => {
-                    const totalRaw = row.querySelector('input[name="total[]"]')?.value || '';
-                    const input = row.querySelector('input[name="weight_net[]"]');
-
-                    if (input) {
-                        if (totalRaw.trim() === '') {
-                            input.value = '';
-                        } else {
-                            const total = parseDecimalToDot(totalRaw);
-                            const value = q3 * total;
-                            console.log(`row ${i}: net=${value}`);
-                            input.value = value.toFixed(2).replace(".", ",");
-                        }
-                        input.dispatchEvent(new Event("input"));
-                    }
-                });
-            }
-
-
-
-            document.getElementById('total-num-packages')?.addEventListener('input', () => {
-                updateTotalAmount(); // This will auto-update q1 as well
-            });
-
-            document.getElementById('total-weight-gross')?.addEventListener('input', () => {
-                updateTotalAmount(); // now also recalcs your bruto estimates
-            });
-
-            document.getElementById('total-weight-net')?.addEventListener('input', () => {
-                updateTotalAmount(); // and your neto estimates
-            });
-
 
             async function getInvoice() {
                 if (!_invoice_data) {
@@ -1353,12 +1177,15 @@
                     : formatDecimal(price * quantity, 2, '');
                 const desc = (item.item_description ?? "") || "";
                 const translate = item.translate || item.item_description_translated || "";
-                const package_num = item.num_packages || 0;
+                const num_packages = item.num_packages || 0;
+                const num_packages_locked = item.num_packages_locked || false;
                 const tariff_privilege = item.tariff_privilege || 0;
                 const qtype = item.quantity_type || "";
                 const best_customs_code_matches = item.best_customs_code_matches || [];
                 const weight_gross = item.weight_gross || 0;
+                const weight_gross_locked = item.weight_gross_locked || false;
                 const weight_net = item.weight_net || 0;
+                const weight_net_locked = item.weight_net_locked || false;
 
                 console.log(` Adding row ${index + 1}:`, item, suggestions);
 
@@ -1557,24 +1384,27 @@
 
 
      <td style="width: 70px;">
-      <input 
-        type="text" 
-        class="form-control text-start procjena-field th-input" 
-        name="procjena[]" 
-        value="" 
-        readonly 
-        style="width: 100%; background-color: #f9f9f9;"
-      >
+        <input 
+            type="text" 
+            class="form-control text-start procjena-field th-input" 
+            name="num_packages[]" 
+            value="${num_packages}" 
+            style="width: 100%; background-color: #f9f9f9;"
+            onblur="lockableInputBlurred()"
+            ${num_packages_locked ? 'disabled' : ''}
+        >
+        <input
+            type="checkbox"
+            class="form-check-input"
+            name="num_packages_locked[]"
+            ${num_packages_locked ? 'checked' : ''}
+            onChange="updateEstimates()"
+        >
     </td>
 
                         <td style="width: 80px;">
                 <div class="th-counter" style="display: flex; flex-direction: column; gap: 2px; width: 100%;">
                   <div class="input-group input-group-sm" style="width: 100%;">
-                    <button 
-                      class="btn btn-outline-info btn-sm decrement-gross" 
-                      style="width: 20px; padding: 0;" 
-                      type="button"
-                    >−</button>
                     <input 
                       type="text" 
                       class="form-control text-center rounded-0" 
@@ -1583,20 +1413,19 @@
                       step="1" 
                       min="0"
                       style="padding: 0 5px; height: 30px; border-radius:0!important"
+                      ${weight_gross_locked ? 'disabled' : ''}
+                      onblur="lockableInputBlurred()"
                     >
-                    <button 
-                      class="btn btn-outline-info btn-sm increment-gross" 
-                      style=" width: 20px; padding: 0;" 
-                      type="button"
-                    >+</button>
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      name="weight_gross_locked[]"
+                      ${weight_gross_locked ? 'checked' : ''}
+                      onChange="updateEstimates()"
+                    >
                   </div>
 
                  <div class="input-group input-group-sm" style="height: 30px;">
-                    <button 
-                    class="btn btn-outline-info btn-sm decrement-net"
-                      style="padding: 0; width: 20px;"
-                    >−</button>
-
                     <input
                       type="text"
                       class="form-control text-center rounded-0"
@@ -1605,13 +1434,16 @@
                       step="1"
                       style="height: 30px; padding: 0 5px; font-size: 10px; border-radius:0!important"
                       value="${weight_net}"
+                      onblur="lockableInputBlurred()"
+                      ${weight_net_locked ? 'disabled' : ''}
                     >
-
-                    <button 
-                      class="btn btn-outline-info btn-sm increment-net" 
-                      type="button" 
-                      style="padding: 0; width: 20px;"
-                    >+</button>
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      name="weight_net_locked[]"
+                      ${weight_net_locked ? 'checked' : ''}
+                      onChange="updateEstimates()"
+                    >
                     </div>
                 </div>
               </td>
@@ -1770,15 +1602,12 @@
                     });
                 }
                 initializeTariffSelects();
-                updateProcjenaEstimates();
-                updateNetoEstimates();
-                updateBrutoEstimates();
-                updateTotalAmount();
+                updateEstimates();
             }
             $(document).on('click', '.increment-qty', function () {
                 const input = $(this).siblings('input[name="quantity[]"]');
                 input.val(parseInt(input.val() || 0) + 1).trigger('input');
-                updateTotalAmount();
+                updateEstimates();
             });
 
             $(document).on('click', '.decrement-qty', function () {
@@ -1786,48 +1615,9 @@
                 const current = parseInt(input.val() || 0);
                 if (current > 0) {
                     input.val(current - 1).trigger('input');
-                    updateTotalAmount();
+                    updateEstimates();
                 }
             });
-            // Net-weight increment
-            $(document).on('click', '.increment-net', function () {
-                console.log('▶︎ increment-net clicked');
-                const input = $(this).siblings('input[name="weight_net[]"]');
-                input.val(parseFloat(input.val() || 0) + 1).trigger('input');
-                updateTotalAmount();
-            });
-
-            // Net-weight decrement
-            $(document).on('click', '.decrement-net', function () {
-                console.log('▶︎ decrement-net clicked');
-                const input = $(this).siblings('input[name="weight_net[]"]');
-                const current = parseFloat(input.val() || 0);
-                if (current > 0) {
-                    input.val(current - 1).trigger('input');
-                    updateTotalAmount();
-                }
-            });
-            // Bruto-weight increment
-            $(document).on('click', '.increment-gross', function () {
-                const $input = $(this).siblings('input[name="weight_gross[]"]');
-                const current = parseFloat($input.val() || 0);
-                const next = current + 1;
-                console.log('▶︎ increment-gross clicked — current:', current, 'new:', next);
-                $input.val(next).trigger('input');
-                updateTotalAmount();
-            });
-
-            // Net-weight decrement
-            $(document).on('click', '.decrement-gross', function () {
-                console.log('▶︎ decrement-net clicked');
-                const input = $(this).siblings('input[name="weight_gross[]"]');
-                const current = parseFloat(input.val() || 0);
-                if (current > 0) {
-                    input.val(current - 1).trigger('input');
-                    updateTotalAmount();
-                }
-            });
-
 
             $(document).on('input', 'input[name="price[]"], input[name="quantity[]"]', function () {
                 const row = $(this).closest('tr');
@@ -1839,10 +1629,7 @@
                 // Handle empty price field
                 if (priceRaw.trim() === "") {
                     row.find('input[name="total[]"]').val("");
-                    updateProcjenaEstimates();
-                    updateBrutoEstimates();
-                    updateNetoEstimates();
-                    updateTotalAmount();
+                    updateEstimates();
                     return;
                 }
 
@@ -1857,10 +1644,7 @@
                 row.find('input[name="total[]"]').val(total);
 
                 // Update koleta and global total
-                updateProcjenaEstimates();
-                updateBrutoEstimates();
-                updateNetoEstimates();
-                updateTotalAmount();
+                updateEstimates();
             });
 
             // Handle total field input for reverse calculation
@@ -1879,10 +1663,7 @@
                     if (quantity > 0) {
                         $priceInput.val("0,00");
                     }
-                    updateProcjenaEstimates();
-                    updateBrutoEstimates();
-                    updateNetoEstimates();
-                    updateTotalAmount();
+                    updateEstimates();
                     return;
                 }
 
@@ -1898,10 +1679,7 @@
                 }
 
                 // Update koleta and global total
-                updateProcjenaEstimates();
-                updateBrutoEstimates();
-                updateNetoEstimates();
-                updateTotalAmount();
+                updateEstimates();
             });
 
             // Format total field when user leaves the field (blur event)
@@ -2756,7 +2534,7 @@
                         }).then((result) => {
                             if (result.isConfirmed && row) {
                                 row.remove();
-                                updateTotalAmount();
+                                updateEstimates();
                             }
                         });
                     }
@@ -2812,67 +2590,13 @@
                     invoice.total_num_packages
                 );
 
-                // ─── Prefill Q1/Q2/Q3 on initial load ───
-                const totalStr = document.getElementById("total-amount")?.value || "";
-                const totalValue = parseFloat(
-                    totalStr
-                        .replace(/\s/g, "")   // strip spaces
-                        .replace(/\./g, "")   // strip thousand-seps
-                        .replace(",", ".")    // comma→dot
-                ) || 0;
-
-                // — grab counts/weights
-                const numPackages = parseFloat(invoice.total_num_packages) || 0;
-                const totalGross = parseFloat(document.getElementById("total-weight-gross")?.value) || 0;
-                const totalNet = parseFloat(document.getElementById("total-weight-net")?.value) || 0;
-
-                // — compute & apply all three ratios
-                [
-                    { id: "q1-estimate", numerator: numPackages, denominator: totalValue },
-                    { id: "q2-bruto", numerator: totalGross, denominator: totalValue },
-                    { id: "q3-neto", numerator: totalNet, denominator: totalValue },
-                ].forEach(({ id, numerator, denominator }) => {
-                    const input = document.getElementById(id);
-                    if (!input) return;
-                    if (numPackages > 0 && denominator > 0) {
-                        input.value = (numerator / denominator).toFixed(6);
-                    } else {
-                        input.value = "";
-                    }
-                });
-
                 // ─── now recalc per-row estimates ───
-                updateProcjenaEstimates();
-                updateBrutoEstimates();
-                updateNetoEstimates();
-
+                updateEstimates();
 
                 // Hide AI label when user types in importer name
                 document.getElementById("carrier-name")?.addEventListener("input", () => {
                     const label = document.getElementById("carrier-name-ai-label");
                     if (label) label.classList.add("d-none");
-                });
-
-                document.getElementById('q1-estimate')?.addEventListener('input', updateProcjenaEstimates);
-                document.getElementById('q2-bruto')?.addEventListener('input', updateBrutoEstimates);
-                document.getElementById('q3-neto')?.addEventListener('input', updateNetoEstimates);
-
-                document.addEventListener('input', function (e) {
-                    if (e.target?.name === "kolata[]") {
-                        updateProcjenaEstimates();
-                    }
-                });
-
-                document.addEventListener('input', function (e) {
-                    if (e.target?.name === "total-weight-gross[]") {
-                        updateBrutoEstimates();
-                    }
-                });
-
-                document.addEventListener('input', function (e) {
-                    if (e.target?.name === "total-net-gross[]") {
-                        updateNetoEstimates();
-                    }
                 });
             });
 
@@ -3095,7 +2819,7 @@
                 const val = parseInt(input.value) || 0;
                 const min = parseInt(input.min) || 0;
                 input.value = isMinus ? Math.max(min, val - 1) : val + 1;
-                updateTotalAmount();
+                updateEstimates();
             }
         });
 
@@ -3122,7 +2846,7 @@
                 }).then((result) => {
                     if (result.isConfirmed && row) {
                         row.remove();
-                        updateTotalAmount();
+                        updateEstimates();
                     }
                 });
             }, 10);
@@ -3203,4 +2927,5 @@
     <script src="{{ URL::asset('build/js/declaration/swal-declaration-load.js') }}"></script>
     <script src="{{ URL::asset('build/js/declaration/slot-number.js') }}"></script>
     <script src="{{ URL::asset('build/js/declaration/auto-save.js') }}"></script>
+    <script src="{{ URL::asset('build/js/declaration/weight-estimation.js') }}"></script>
 @endsection
