@@ -29,10 +29,10 @@ async function fetchAndPrefillParties() {
         // --- SUPPLIER LOGIC ---
         let supplierId = invoice.supplier_id || supplier_id;
         if (window.forceNewSupplier) {
-            // Always remove any previous 'Novi klijent' option
+            // Always remove any previous 'Novi primatelj' option
             $("#supplier-select2 option[value='new']").remove();
-            // Add and select 'Novi klijent'
-            const newOption = new Option('Novi klijent', 'new', true, true);
+            // Add and select 'Novi primatelj'
+            const newOption = new Option('Novi primatelj', 'new', true, true);
             $("#supplier-select2").append(newOption).trigger('change');
             if (supplier) {
                 $("#billing-name").val(supplier.name || "").prop('readonly', false);
@@ -75,8 +75,8 @@ async function fetchAndPrefillParties() {
                 },
                 error: function () {
                     if (supplier) {
-                        // Not found in DB, add 'Novi klijent' to select2
-                        const newOption = new Option('Novi klijent', 'new', true, true);
+                        // Not found in DB, add 'Novi primatelj' to select2
+                        const newOption = new Option('Novi primatelj', 'new', true, true);
                         $("#supplier-select2").append(newOption).trigger('change');
                         $("#billing-name").val(supplier.name || "").prop('readonly', false);
                         $("#billing-address-line-1").val(supplier.address || "").prop('readonly', false);
@@ -90,8 +90,8 @@ async function fetchAndPrefillParties() {
                 }
             });
         } else if (supplier) {
-            // Not found in DB, add 'Novi klijent' to select2
-            const newOption = new Option('Novi klijent', 'new', true, true);
+            // Not found in DB, add 'Novi primatelj' to select2
+            const newOption = new Option('Novi primatelj', 'new', true, true);
             $("#supplier-select2").append(newOption).trigger('change');
             $("#billing-name").val(supplier.name || "").prop('readonly', false);
             $("#billing-address-line-1").val(supplier.address || "").prop('readonly', false);
@@ -107,7 +107,7 @@ async function fetchAndPrefillParties() {
         let importerId = invoice.importer_id || importer_id;
         if (window.forceNewImporter) {
             $("#importer-select2 option[value='new']").remove();
-            const newOption = new Option('Novi klijent', 'new', true, true);
+            const newOption = new Option('Novi primatelj', 'new', true, true);
             $("#importer-select2").append(newOption).trigger('change');
             if (importer) {
                 $("#carrier-name").val(importer.name || "").prop('readonly', false);
@@ -150,8 +150,8 @@ async function fetchAndPrefillParties() {
                 },
                 error: function () {
                     if (importer) {
-                        // Not found in DB, add 'Novi klijent' to select2
-                        const newOption = new Option('Novi klijent', 'new', true, true);
+                        // Not found in DB, add 'Novi primatelj' to select2
+                        const newOption = new Option('Novi primatelj', 'new', true, true);
                         $("#importer-select2").append(newOption).trigger('change');
                         $("#carrier-name").val(importer.name || "").prop('readonly', false);
                         $("#carrier-address").val(importer.address || "").prop('readonly', false);
@@ -165,10 +165,10 @@ async function fetchAndPrefillParties() {
                 }
             });
         } else if (importer) {
-            // Always remove any previous 'Novi klijent' option
+            // Always remove any previous 'Novi primatelj' option
             $("#importer-select2 option[value='new']").remove();
-            // Add and select 'Novi klijent'
-            const newOption = new Option('Novi klijent', 'new', true, true);
+            // Add and select 'Novi primatelj'
+            const newOption = new Option('Novi primatelj', 'new', true, true);
             $("#importer-select2").append(newOption).trigger('change');
             $("#carrier-name").val(importer.name || "").prop('readonly', false);
             $("#carrier-address").val(importer.address || "").prop('readonly', false);
@@ -216,7 +216,7 @@ async function fetchAndPrefillSupplierOnly() {
         let supplierId = invoice.supplier_id || supplier_id;
         if (window.forceNewSupplier) {
             $("#supplier-select2 option[value='new']").remove();
-            const newOption = new Option('Novi klijent', 'new', true, true);
+            const newOption = new Option('Novi primatelj', 'new', true, true);
             $("#supplier-select2").append(newOption).trigger('change');
             if (supplier) {
                 $("#billing-name").val(supplier.name || "").prop('readonly', false);
@@ -262,15 +262,15 @@ async function fetchAndPrefillSupplierOnly() {
                     console.warn("Supplier not found in DB. Status:", xhr.status);
 
                     Swal.fire({
-                        title: "Klijent nije pronađen",
-                        text: "Podaci za klijenta nisu pronađeni u bazi. Unos će biti omogućen ručno.",
+                        title: "primatelj nije pronađen",
+                        text: "Podaci za primatelja nisu pronađeni u bazi. Unos će biti omogućen ručno.",
                         icon: "info",
                         confirmButtonText: "U redu",
                         confirmButtonColor: "#299dcb"
                     });
 
                     if (supplier) {
-                        const newOption = new Option('Novi klijent', 'new', true, true);
+                        const newOption = new Option('Novi primatelj', 'new', true, true);
                         $("#supplier-select2").append(newOption).trigger('change');
                         $("#billing-name").val(supplier.name || "").prop('readonly', false);
                         $("#billing-address-line-1").val(supplier.address || "").prop('readonly', false);
@@ -286,7 +286,7 @@ async function fetchAndPrefillSupplierOnly() {
             });
 
         } else if (supplier) {
-            const newOption = new Option('Novi klijent', 'new', true, true);
+            const newOption = new Option('Novi primatelj', 'new', true, true);
             $("#supplier-select2").append(newOption).trigger('change');
             $("#billing-name").val(supplier.name || "").prop('readonly', false);
             $("#billing-address-line-1").val(supplier.address || "").prop('readonly', false);
@@ -301,7 +301,7 @@ async function fetchAndPrefillSupplierOnly() {
     } catch (err) {
         console.error("Greška u fetchAndPrefillSupplierOnly:", err);
         showRetryError(
-            "Greška pri dohvaćanju klijenta",
+            "Greška pri dohvaćanju primatelja",
             err.message || "Neuspješno dohvaćanje",
             () => fetchAndPrefillSupplierOnly()
         );
@@ -338,7 +338,7 @@ async function fetchAndPrefillImporterOnly() {
             console.log("[IMPORTER] Forcing new importer...");
             $("#importerr-select2 option[value='new']").remove();
 
-            const labelText = importer?.name ? `${importer.name} – ${importer.address || ''}` : 'Novi klijent';
+            const labelText = importer?.name ? `${importer.name} – ${importer.address || ''}` : 'Novi primatelj';
             const newOption = new Option(labelText, String(importerId), true, true);
             $("#importer-select2").append(newOption);
             $("#importer-select2").val(String(importerId)).trigger("change");
@@ -402,8 +402,8 @@ async function fetchAndPrefillImporterOnly() {
                     console.warn("Importer not found in DB. Status:", xhr.status);
 
                     Swal.fire({
-                        title: "Uvoznik nije pronađen",
-                        text: "Podaci za uvoznika nisu pronađeni u bazi. Unos će biti omogućen ručno.",
+                        title: "primatelj nije pronađen",
+                        text: "Podaci za primatelja nisu pronađeni u bazi. Unos će biti omogućen ručno.",
                         icon: "info",
                         confirmButtonText: "U redu",
                         confirmButtonColor: "#299dcb"
@@ -411,7 +411,7 @@ async function fetchAndPrefillImporterOnly() {
 
                     if (importer) {
                         console.log("[IMPORTER] Falling back to AI importer data");
-                        const newOption = new Option('Novi klijent', 'new', true, true);
+                        const newOption = new Option('Novi primatelj', 'new', true, true);
                         $("#importer-select2").append(newOption).trigger('change');
 
                         $("#carrier-name").val(importer.name || "").prop('readonly', false);
@@ -446,7 +446,7 @@ async function fetchAndPrefillImporterOnly() {
     } catch (err) {
         console.error("Greška u fetchAndPrefillImporterOnly:", err);
         showRetryError(
-            "Greška pri dohvaćanju uvoznika",
+            "Greška pri dohvaćanju primatelja",
             err.message || "Neuspješno dohvaćanje",
             () => fetchAndPrefillImporterOnly()
         );
@@ -455,7 +455,7 @@ async function fetchAndPrefillImporterOnly() {
 
 function initImporterSupplierSelect2() {
     $("#supplier-select2").select2({
-        placeholder: "Pretraži dobavljača",
+        placeholder: "Pretraži pošiljatelja",
         allowClear: true,
         ajax: {
             url: "/api/suppliers",
@@ -498,7 +498,7 @@ function initImporterSupplierSelect2() {
     });
 
     $("#importer-select2").select2({
-        placeholder: "Pretraži klijenta",
+        placeholder: "Pretraži primatelja",
         allowClear: true,
         ajax: {
             url: "/api/importers",
@@ -548,7 +548,7 @@ $(document).ready(function () {
 
         Swal.fire({
             title: 'Oprez!',
-            text: 'Ova radnja će izbrisati sve podatke za dobavljača i omogućiti ponovno automatsko popunjavanje.',
+            text: 'Ova radnja će izbrisati sve podatke za pošiljatelja i omogućiti ponovno automatsko popunjavanje.',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Da',
@@ -588,7 +588,7 @@ $(document).ready(function () {
 
         Swal.fire({
             title: 'Oprez!',
-            text: 'Ova radnja će izbrisati sve podatke za klijenta i omogućiti ponovno automatsko popunjavanje.',
+            text: 'Ova radnja će izbrisati sve podatke za primatelja i omogućiti ponovno automatsko popunjavanje.',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Da',
@@ -657,7 +657,7 @@ $(document).ready(function () {
                 const label = document.getElementById("billing-name-ai-label");
                 if (label) label.classList.remove("d-none");
             } else {
-                Swal.fire("Greška", "Nema AI podataka za dobavljača", "error");
+                Swal.fire("Greška", "Nema AI podataka za pošiljatelja", "error");
             }
         } catch (err) {
             Swal.fire("Greška", err.message || "Neuspješno dohvaćanje podataka", "error");
@@ -679,7 +679,7 @@ $(document).ready(function () {
             if (!res.ok) throw new Error("Greška u AI response");
             const importer = data.importer;
             if (importer) {
-                // Set select2 to 'Novi dobavljač'
+                // Set select2 to 'Novi pošiljatelj'
                 $("#importer-select2 option[value='new']").remove();
                 var newOption = new Option('Novi klijent', 'new', true, true);
                 $("#importer-select2").append(newOption).val('new').trigger('change');
@@ -693,7 +693,7 @@ $(document).ready(function () {
                 const label = document.getElementById("carrier-name-ai-label");
                 if (label) label.classList.remove("d-none");
             } else {
-                Swal.fire("Greška", "Nema AI podataka za klijenta", "error");
+                Swal.fire("Greška", "Nema AI podataka za primatelja", "error");
             }
         } catch (err) {
             Swal.fire("Greška", err.message || "Neuspješno dohvaćanje podataka", "error");

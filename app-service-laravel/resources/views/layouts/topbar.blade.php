@@ -30,7 +30,7 @@
                 <form class="app-search d-none d-md-block me-5" style="width: 77%;" id="global-search-form">
                     <div class="position-relative">
                         <input type="text" class="form-control border"
-                            placeholder="Pretraga po broju deklaracije, imenu dokumenta, dobavljaču, zemlji projekla..."
+                            placeholder="Pretraga po broju deklaracije, imenu dokumenta, pošiljaocu, zemlji projekla..."
                             autocomplete="off" id="global-search" />
                         <span class="mdi mdi-magnify search-widget-icon text-info"></span>
                         <span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none"
@@ -89,7 +89,7 @@
             <div class="form-group m-0">
                 <div class="input-group">
                     <input id="global-mobile-search" type="text" class="form-control border border-2"
-                        placeholder="Pretraga po broju deklaracije, imenu dokumenta, dobavljaču, zemlji porijekla..."
+                        placeholder="Pretraga po broju deklaracije, imenu dokumenta, pošiljaocu, zemlji porijekla..."
                         aria-label="Pretraga">
                     <button class="btn btn-info" type="submit">
                         <i class="mdi mdi-magnify"></i>
@@ -150,13 +150,13 @@
                                 <div class="col-6">
                                     <a class="dropdown-icon-item" href="/moji-klijenti">
                                         <i class="ri-user-line text-info fs-4 d-block mb-1"></i>
-                                        <span>@lang('translation.clients')</span>
+                                        <span>@lang('translation.primaoci')</span>
                                     </a>
                                 </div>
                                 <div class="col-6">
-                                    <a class="dropdown-icon-item" href="/moji-dobavljaci">
+                                    <a class="dropdown-icon-item" href="/moji-pošiljaoci">
                                         <i class="ri-truck-line text-info fs-4 d-block mb-1"></i>
-                                        <span>@lang('translation.importers')</span>
+                                        <span>@lang('translation.pošiljaoci')</span>
                                     </a>
                                 </div>
                                 <div class="col-6">

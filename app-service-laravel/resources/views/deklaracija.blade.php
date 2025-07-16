@@ -200,37 +200,37 @@
                     <div class="row g-4">
                         <div class="col-6 text-start">
 
-                            <h6 class="text-muted text-uppercase fw-semibold mb-3">Dobavljač</h6>
+                            <h6 class="text-muted text-uppercase fw-semibold mb-3">pošiljatelj</h6>
 
                             <div class="mb-2">
                                 <div style="display: flex;">
                                     <button type="button" class="btn btn-sm btn-info mb-2 me-2 deklaracija-action-buttons"
                                         id="add-new-supplier"><i
                                             class="fas fa-wand-magic-sparkles fs-6 me-0 me-lg-1"></i><span
-                                            class="mobile-landscape-hide">Detektovani dobavljač iz baze</span></button>
+                                            class="mobile-landscape-hide">Detektovani pošiljatelj iz baze</span></button>
                                     <button type="button" class="btn btn-sm btn-soft-info mb-2 deklaracija-action-buttons"
                                         id="refill-supplier-ai"><i
                                             class="fa-regular fa-hand align-top me-0 me-lg-1 korpica"></i><span
-                                            class="mobile-landscape-hide">Ručni unos dobavljača</span></button>
+                                            class="mobile-landscape-hide">Ručni unos pošiljatelja</span></button>
                                 </div>
                                 <select id="supplier-select2" class="form-select"></select>
                             </div>
                             <input type="text" class="form-control mb-2" id="billing-name" name="supplier_name"
-                                placeholder="Naziv dobavljača">
+                                placeholder="Naziv pošiljatelja">
 
                             <input type="text" class="form-control mb-2" id="billing-address-line-1" name="supplier_address"
-                                placeholder="Adresa dobavljača">
+                                placeholder="Adresa pošiljatelja">
                             <input type="text" class="form-control mb-2" id="billing-phone-no" name="supplier_phone"
-                                placeholder="Telefon dobavljača">
+                                placeholder="Telefon pošiljatelja">
                             <input type="text" class="form-control mb-2" id="billing-tax-no" name="supplier_tax"
-                                placeholder="VAT dobavljača">
+                                placeholder="VAT pošiljatelja">
                             <input type="email" class="form-control mb-2" id="email" name="email"
                                 placeholder="Email dobavljača">
                             <input type="email" class="form-control" id="supplier-owner" name="supplierOwner"
                                 placeholder="Vlasnik kompanije">
                         </div>
                         <div class="col-6 text-end">
-                            <h6 class="text-muted text-uppercase fw-semibold mb-3 text-end">Klijent</h6>
+                            <h6 class="text-muted text-uppercase fw-semibold mb-3 text-end">Primatelj</h6>
 
                             <div class="mb-2">
                                 <div style="justify-content: end; display: flex;">
@@ -238,11 +238,11 @@
                                         class="btn btn-sm btn-soft-info mb-2  me-2  deklaracija-action-buttons"
                                         id="refill-importer-ai"><i
                                             class="fa-regular fa-hand align-top me-0 me-lg-1 korpica"></i><span
-                                            class="mobile-landscape-hide">Ručni unos klijenta</span></button>
+                                            class="mobile-landscape-hide">Ručni unos primatelja</span></button>
                                     <button type="button" class="btn btn-sm btn-info mb-2 deklaracija-action-buttons"
                                         id="add-new-importer"><i
                                             class="fas fa-wand-magic-sparkles fs-6 me-0 me-lg-1"></i><span
-                                            class="mobile-landscape-hide">Detektovani klijent iz baze</span></button>
+                                            class="mobile-landscape-hide">Detektovani primatelj iz baze</span></button>
 
                                 </div>
 
@@ -250,16 +250,16 @@
                             </div>
 
                             <input type="text" class="form-control mb-2 text-end" id="carrier-name" name="dobavljačime"
-                                placeholder="Naziv dobavljača">
+                                placeholder="Naziv primatelja">
 
                             <input type="text" class="form-control mb-2 text-end" id="carrier-address" name="klijentadresa"
-                                placeholder="Adresa klijenta">
+                                placeholder="Adresa primatelja">
                             <input type="text" class="form-control mb-2 text-end" id="carrier-tel" name="klijenttel"
-                                placeholder="Telefon klijenta">
+                                placeholder="Telefon primatelja">
                             <input type="text" class="form-control mb-2 text-end" id="carrier-tax" name="klijenttel"
-                                placeholder="JIB klijenta">
+                                placeholder="JIB primatelja">
                             <input type="text" class="form-control mb-2 text-end" id="carrier-email" name="klijenttel"
-                                placeholder="Email klijenta">
+                                placeholder="Email primatelja">
                             <input type="text" class="form-control mb-2 text-end" id="carrier-owner" name="carrierOwner"
                                 placeholder="Vlasnik kompanije">
 

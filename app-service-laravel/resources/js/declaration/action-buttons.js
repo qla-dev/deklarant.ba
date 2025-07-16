@@ -102,10 +102,10 @@ function checkRequiredField(id, label, missingFields) {
 function validateRequiredFields() {
     let missingFields = [];
 
-    checkRequiredField("billing-name", "Naziv klijenta", missingFields);
-    checkRequiredField("billing-address-line-1", "Adresa klijenta", missingFields);
-    checkRequiredField("carrier-name", "Naziv dobavljača", missingFields);
-    checkRequiredField("carrier-address", "Adresa dobavljača", missingFields);
+    checkRequiredField("billing-name", "Naziv primatelja", missingFields);
+    checkRequiredField("billing-address-line-1", "Adresa primatelja", missingFields);
+    checkRequiredField("carrier-name", "Naziv pošiljatelja", missingFields);
+    checkRequiredField("carrier-address", "Adresa pošiljatelja", missingFields);
 
     return missingFields;
 }
@@ -156,12 +156,12 @@ async function handleSaveInvoice(btn) {
         let importerId = await getImporterID();
 
         // if (!isValidId(supplierId)) {
-        //     Swal.fire("Greška", "Molimo odaberite ili unesite validnog klijenta.", "error");
+        //     Swal.fire("Greška", "Molimo odaberite ili unesite validnog primatelja.", "error");
         //     resetSaveButtonState(btn);
         //     return;
         // }
         // if (!isValidId(importerId)) {
-        //     Swal.fire("Greška", "Molimo odaberite ili unesite validnog dobavljača.", "error");
+        //     Swal.fire("Greška", "Molimo odaberite ili unesite validnog pošiljatelja.", "error");
         //     resetSaveButtonState(btn);
         //     return;
         // }

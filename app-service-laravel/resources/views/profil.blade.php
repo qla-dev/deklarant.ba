@@ -394,10 +394,10 @@
     </div>
 </div>
 
-<!-- MOJI KLIJENTI -->
+<!-- MOJI PRIMAOCI -->
 <div class="card rounded-0 w-100 mb-3 mb-md-2 pb-2 pb-md-0">
      <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="mb-0">Moji dobavljači</h5>
+        <h5 class="mb-0">Moji pošiljaoci</h5>
         <a href="moji-dobavljaci" class="text-info text-end fs-13">Pregledaj sve</a>
     </div>
     <div class="card-body d-flex justify-content-start align-items-center flex-column pb-0 pt-0 position-relative" style="min-height: 250px;">
@@ -678,7 +678,7 @@
                                                     <div class="row g-3">
                                                         <div class="col-6">
                                                             <h6 class="text-muted text-uppercase fw-semibold mb-3">
-                                                                Dobavljač</h6>
+                                                                pošiljatelj</h6>
                                                             <p class="fw-medium mb-2" id="billing-name">--</p>
                                                             <p class="text-muted mb-1" id="billing-address-line-1">--
                                                             </p>
@@ -901,7 +901,7 @@
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Naziv primaoca:</label>
+                    <label class="form-label fw-bold">Naziv primatelja:</label>
                     <p class="mb-0">Qla Dev d.o.o. Sarajevo</p>
                 </div>
                 <div class="mb-3">
@@ -1397,7 +1397,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             if (lastSuppliers.length === 0) {
                 supplierContainer.innerHTML = `
-                    <div class="text-muted text-center position-absolute translate-middle top-50 start-50">Nema podataka o dobavljačima</div>
+                    <div class="text-muted text-center position-absolute translate-middle top-50 start-50">Nema podataka o pošiljaocima</div>
                 `;
             } else {
                 lastSuppliers.forEach((supplier) => {
@@ -1439,7 +1439,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         if (supplierContainer) {
             supplierContainer.classList.remove("d-none");
-            supplierContainer.innerHTML = `<div class="text-danger row w-100 text-center">Greška pri dohvaćanju dobavljača.</div>`;
+            supplierContainer.innerHTML = `<div class="text-danger row w-100 text-center">Greška pri dohvaćanju pošiljatelja.</div>`;
         }
     }
 });

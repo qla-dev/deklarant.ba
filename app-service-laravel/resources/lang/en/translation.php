@@ -246,9 +246,9 @@ return [
     "statistic"=>"Kalendar",
     "exclist" => "Kursna lista",
     "myorder" => "Deklaracije",
-    "clients" => "Klijenti",
+    "clients" => "Primatelji",
     "users" => "Korisnici",
-    "importers" => "Dobavljači",
+    "importers" => "Pošiljatelji",
     "declarant" => "Tarifne oznake",
 
 

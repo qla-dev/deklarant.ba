@@ -607,9 +607,9 @@ overflow-y: hidden;
       <div class="row align-items-center">
         <div class="col-lg-5">
           <div class="process-images-content heading4">
-            <span data-aos="fade-right" data-aos-duration="800">2. Prepoznavanje klijenata i dobavljača</span>
+            <span data-aos="fade-right" data-aos-duration="800">2. Prepoznavanje primatelja i pošiljatelja</span>
             <h2 data-aos="fade-right" data-aos-duration="1000">Automatsko pronalaženje</h2>
-            <p data-aos="fade-right" data-aos-duration="1200">Sistem automatski traži klijenta i dobavljača po nazivu, ID-u ili PIB-u. Ako postoji u tvojoj bazi ili globalnoj bazi deklarant.ai, podaci se odmah popunjavaju.</p>
+            <p data-aos="fade-right" data-aos-duration="1200">Sistem automatski traži primatelja i pošiljatelja po nazivu, ID-u ili PIB-u. Ako postoji u tvojoj bazi ili globalnoj bazi deklarant.ai, podaci se odmah popunjavaju.</p>
           </div>
         </div>
         <div class="col-lg-7">

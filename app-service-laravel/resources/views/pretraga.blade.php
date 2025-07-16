@@ -103,7 +103,7 @@ Rezultati pretrage za "<span class="text-info fw-medium ml-0 pl-0">{{ request('k
         <i class="ri-file-line align-middle me-1 fs-15" style="margin-top:-4px; font-size:15px!important"></i>${invoice.file_name || 'Nepoznato ime fajla'}
       </p>
       <p class="text-success mb-0">
-        <i class="ri-truck-line align-middle me-1 fs-15" style="margin-top:-4px; font-size:15px!important"></i>${invoice.supplier?.name || 'Nepoznati dobavljač'}
+        <i class="ri-truck-line align-middle me-1 fs-15" style="margin-top:-4px; font-size:15px!important"></i>${invoice.supplier?.name || 'Nepoznati pošiljatelj'}
       </p>
       <p class="text-success mb-0">
         <i class="ri-globe-line align-middle me-1 fs-15" style="margin-top:-4px; font-size:15px!important"></i>${invoice.country_of_origin || 'Nepoznata zemlja projekta'}
@@ -203,7 +203,7 @@ Rezultati pretrage za "<span class="text-info fw-medium ml-0 pl-0">{{ request('k
                 <div class="card-body p-4 border-top border-top-dashed">
                   <div class="row g-3">
                     <div class="col-6">
-                      <h6 class="text-muted text-uppercase fw-semibold mb-3">Dobavljač</h6>
+                      <h6 class="text-muted text-uppercase fw-semibold mb-3">pošiljatelj</h6>
                       <p class="fw-medium mb-2" id="billing-name">--</p>
                       <p class="text-muted mb-1" id="billing-address-line-1">--</p>
                       <p class="text-muted mb-1"><span>Telefon: </span><span id="billing-phone-no">--</span></p>

@@ -193,11 +193,11 @@
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Naziv primaoca:</label>
+                    <label class="form-label fw-bold">Naziv primatelja:</label>
                     <p class="mb-0">"qla.dev"</p>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Adresa primaoca:</label>
+                    <label class="form-label fw-bold">Adresa primatelja:</label>
                     <p class="mb-0">Vilsonovo šetalište 9</p>
                 </div>
                  <div class="mb-3">

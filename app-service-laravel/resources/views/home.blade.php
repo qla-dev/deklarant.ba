@@ -140,7 +140,7 @@
                             <span>Pregledaj sve</span>
                         </div>
                         <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
-                            <h6 class="text-muted text-uppercase fs-11 mb-1">Moji klijenti</h6>
+                            <h6 class="text-muted text-uppercase fs-11 mb-1">Moji primatelji</h6>
                             <div class="d-flex align-items-center justify-content-center">
                                 <i class="ri-user-line text-info" style="font-size: 38px"></i>
                                 <h3 class="mb-0 ms-2"><span class="counter-value" id="totalImporters">0</span></h3>
@@ -159,7 +159,7 @@
                             <span>Pregledaj sve</span>
                         </div>
                         <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center p-2">
-                            <h6 class="text-muted text-uppercase fs-11 mb-1">Moji dobavljači</h6>
+                            <h6 class="text-muted text-uppercase fs-11 mb-1">Moji pošiljatelji</h6>
                             <div class="d-flex align-items-center justify-content-center">
                                 <i class="ri-truck-line text-info" style="font-size: 45px"></i>
                                 <h3 class="mb-0 ms-2"><span class="counter-value" id="totalSuppliers">0</span></h3>
@@ -242,7 +242,7 @@
         </div>
     </div>
 
-    <!-- Card 3: Ukupan broj dobavljača -->
+    <!-- Card 3: Ukupan broj pošiljatelja -->
     <div class="col-xl-3 col-md-6">
         <div class="card rounded-0 card-animate overflow-hidden">
             <div class="position-absolute start-0" style="z-index: 0;">
@@ -447,11 +447,11 @@
                         </div>
                     </div>
 
-                    <!-- Second column: Zadnje korišteni dobavljači -->
+                    <!-- Second column: Zadnje korišteni pošiljaoci -->
                                        <div class="col-md-6 d-flex ">
                         <div class="card rounded-0 w-100 h-100 mb-0">
                             <div class="card-header">
-                                <h5 class="mb-0">Nedavni klijenti</h5>
+                                <h5 class="mb-0">Nedavni primatelji</h5>
                             </div>
                                                        <div class="card-body d-flex justify-content-start align-items-center flex-column pb-0 pt-0 position-relative" style="min-height: 200px;">
                                 <div class="position-absolute top-50 start-50 translate-middle">
@@ -540,7 +540,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             if (lastSuppliers.length === 0) {
                 supplierContainer.innerHTML = `
                     <div class="text-muted text-center position-absolute translate-middle top-50 start-50">
-                        Nema podataka o dobavljačima
+                        Nema podataka o pošiljaocima
                     </div>
                 `;
             } else {
@@ -572,7 +572,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                 supplierContainer.innerHTML += `
                     <div class="card-footer p-0 pb-0 pt-0 d-flex justify-content-end pregledaj-vise-bottom-right">
-                        <a href="moji-klijenti" class="text-info fs-13 mb-2" style="margin:.5rem!important;">
+                        <a href="moji-primaoci" class="text-info fs-13 mb-2" style="margin:.5rem!important;">
                             Pregledaj sve
                         </a>
                     </div>
@@ -629,7 +629,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         if (supplierContainer) {
             supplierContainer.classList.remove("d-none");
-            supplierContainer.innerHTML = `<div class="text-danger">Greška pri dohvaćanju dobavljača.</div>`;
+            supplierContainer.innerHTML = `<div class="text-danger">Greška pri dohvaćanju pošiljatelja.</div>`;
         }
 
         if (tariffContainer) {

@@ -141,8 +141,8 @@ function renderPrintTableAndPrint(isDownloadOnly = true, container = null, showT
         <tr><td><strong>Datum:</strong></td><td>${date}</td></tr>
         <tr><td><strong>Incoterm:</strong></td>
             <td>${incoterm} – ${incotermDestination}</td></tr>
-        <tr><td><strong>Dobavljač:</strong></td><td>${supplier}</td></tr>
-        <tr><td><strong>Klijent:</strong></td><td>${client}</td></tr>
+        <tr><td><strong>pošiljatelj:</strong></td><td>${supplier}</td></tr>
+        <tr><td><strong>primatelj:</strong></td><td>${client}</td></tr>
         <tr><td><strong>Ukupna bruto/neto masa:</strong></td>
             <td>${totalWeightGross}/${totalWeightNet} kg</td></tr>
         <tr><td><strong>Broj koleta:</strong></td><td>${totalPackages}</td></tr>

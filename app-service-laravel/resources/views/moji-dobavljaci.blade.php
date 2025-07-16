@@ -1,7 +1,7 @@
 @extends('layouts.master')
 @section('title')
     @if(Auth::user()->role === 'superadmin')
-        Globalni dobavljači
+        Globalni pošiljaoci
     @else
        @lang('translation.importers') 
     @endif
@@ -24,11 +24,11 @@ deklarant.ai
 @auth
     @if(Auth::user()->role === 'superadmin')
         @slot('title')
-            Lista globalnih dobavljača
+            Lista globalnih pošiljatelja
         @endslot
     @else
         @slot('title')
-            Lista dobavljača
+            Lista pošiljatelja
         @endslot
     @endif
 @endauth

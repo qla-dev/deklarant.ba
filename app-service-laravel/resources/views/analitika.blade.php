@@ -123,7 +123,7 @@
         <div class="col-xxl-3 col-md-6">
             <div class="card">
                 <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Česti dobavljači</h4>
+                    <h4 class="card-title mb-0 flex-grow-1">Česti pošiljaoci</h4>
                     <div class="flex-shrink-0">
                                <button type="button" class="btn btn-soft-info btn-sm shadow-none">
                                          <i class="ri-file-list-3-line align-middle"></i> Export
@@ -140,7 +140,7 @@
         <div class="col-xlx-3 col-md-4">
                         <div class="card card-height-100">
                             <div class="card-header align-items-center d-flex">
-                                <h4 class="card-title mb-0 flex-grow-1">Omjer dobavljača</h4>
+                                <h4 class="card-title mb-0 flex-grow-1">Omjer pošiljatelja</h4>
                                 <div class="flex-shrink-0">
                                <button type="button" class="btn btn-soft-info btn-sm shadow-none">
                                          <i class="ri-file-list-3-line align-middle"></i> Export
@@ -740,7 +740,7 @@
                            
                         </div>
                         <div class="p-3 pt-0">
-                            <h6 class="text-muted mb-3 text-uppercase fw-semibold">Zadnji dobavljači</h6>
+                            <h6 class="text-muted mb-3 text-uppercase fw-semibold">Zadnji pošiljaoci</h6>
                             <!-- Swiper -->
                             <div class="swiper vertical-swiper" style="height: 250px;">
                                 <div class="swiper-wrapper">

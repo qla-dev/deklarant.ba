@@ -52,7 +52,7 @@ Moje spašene deklaracije <span class="counter-value-invoice">0</span><span
                                 <th style="width: 100px;"><i class="fa fa-balance-scale"></i> Bruto/Neto</th>
                                 <th style="width: 100px;"><i class="fa fa-cubes"></i> Broj koleta</th>
                                 
-                                <th>Klijent</th>
+                                <th>Primatelj</th>
                                                             
                                  <th>Originalni dokument</th>
 
@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", function () {
           
             {
                 data: 'importer.name',
-                title: 'Klijent',
+                title: 'Primatelj',
                 defaultContent: '<span class="text-muted">Nepoznato</span>'
             },
             

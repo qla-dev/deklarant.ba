@@ -158,7 +158,7 @@ Kalendarni prikaz mojih faktura
                                     <div class="row g-3">
                                         <div class="col-6">
                                             <h6 class="text-muted text-uppercase fw-semibold mb-3">
-                                                klijent</h6>
+                                                primatelj</h6>
                                             <p class="fw-medium mb-2" id="billing-name">--</p>
                                             <p class="text-muted mb-1" id="billing-address-line-1">--
                                             </p>
@@ -433,9 +433,9 @@ Kalendarni prikaz mojih faktura
                     events: events,
                     eventDidMount: function(info) {
                         const invoice = info.event.extendedProps.invoiceData;
-                        const supplierName = invoice.supplier?.name || 'Nepoznat klijent';
+                        const supplierName = invoice.supplier?.name || 'Nepoznat primatelj';
                         const price = invoice.total_price || 'N/A';
-                        info.el.setAttribute('title', `Fajl: ${invoice.file_name}\nklijent: ${supplierName}\nCijena: ${price} KM`);
+                        info.el.setAttribute('title', `Fajl: ${invoice.file_name}\nprimatelj: ${supplierName}\nCijena: ${price} KM`);
                         info.el.style.cursor = 'pointer';
                     },
                     eventClick: function(info) {
@@ -475,7 +475,7 @@ Kalendarni prikaz mojih faktura
             container.innerHTML = "";
 
             latestTen.forEach(invoice => {
-                const supplierName = invoice.supplier?.name || "Nepoznat klijent";
+                const supplierName = invoice.supplier?.name || "Nepoznat primatelj";
                 const fileName = invoice.file_name || "Nepoznat naziv";
                 const totalPrice = parseFloat(invoice.total_price || 0).toFixed(2);
                 const date = new Date(invoice.created_at).toLocaleDateString("hr", {
