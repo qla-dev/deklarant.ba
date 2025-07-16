@@ -116,7 +116,7 @@ Baza tarifnih oznaka
                         leftColumns: 1
                     },
                     columns: [
-                        { data: null, title: 'ID', render: (data, type, row, meta) => meta.row + 1 },
+                        { data: null, title: 'ID', render: (data, type, row, meta) => meta.row + 1, visible: false },
                         { data: 'Tarifna oznaka', title: 'Tarifna oznaka' },
                         { data: 'Naziv', title: 'Naziv' },
                         { data: 'Dopunska jedinica', title: 'Jedinica' },
@@ -195,6 +195,34 @@ Baza tarifnih oznaka
 
                         const input = $('#tariff-search-input');
                         const clear = $('#tariff-search-clear');
+
+                        // Smart mask logic with console logs and digit limit
+                        input.on('keyup', function (e) {
+                            let rawInput = e.target.value;
+                            let digitsOnly = rawInput.replace(/\D+/g, "");
+                            // Limit to 10 digits
+                            if (digitsOnly.length > 10) {
+                                digitsOnly = digitsOnly.slice(0, 10);
+                            }
+                            let formatted = rawInput;
+                            if (digitsOnly.length >= 4) {
+                                formatted = digitsOnly.replace(
+                                    /^(\d{4})(\d{0,2})(\d{0,2})(\d{0,2})/,
+                                    (_, a, b, c, d) => [a, b, c, d].filter(Boolean).join(' ')
+                                );
+                                if (/^\d[\d\s]*$/.test(rawInput)) {
+                                    e.target.value = formatted;
+                               
+                                }
+                            }
+                            // Always trigger DataTable search with the formatted value
+                            if (window.jQuery && window.jQuery.fn.DataTable) {
+                              
+                                window.jQuery('#tariffTable').DataTable().search(e.target.value).draw();
+                            } else {
+                           
+                            }
+                        });
 
                         input.on('input', function () {
                             const val = $(this).val();
