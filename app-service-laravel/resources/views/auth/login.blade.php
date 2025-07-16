@@ -214,6 +214,8 @@ overflow-y: hidden;
        margin-top: 36px!important;
     }
 
+
+
     </style>
   
 @endsection
@@ -671,6 +673,24 @@ overflow-y: hidden;
 </div>
 <!--===== PROCESS AREA ENDS =======-->
 
+<!--===== PRICING AREA STARTS =======-->
+<div class="pricing-section-area sp5" style="background-color: #f8f9fa;">
+  <div class="container">
+    <div class="row pt-2 pb-4">
+      <div class="col-lg-6 m-auto">
+        <div class="pricing-header heading4 text-center">
+          <span data-aos="fade-up" data-aos-duration="800">Odaberi paket koji odgovara tvojim potrebama</span>
+          <h2 data-aos="fade-up" data-aos-duration="1000" class="main-naslov">Jednostavan i transparentan <strong style="color: #289cdb!important;">cijenovnik paketa</strong></h2>
+          <p data-aos="fade-up" data-aos-duration="1200" class="text-muted">Odustani bez naknade bilo kada • Preostali AI tokeni se prenose pri nadogradnji</p>
+        </div>
+      </div>
+    </div>
+    <div class="space40 d-none d-md-block"></div>
+
+    @include('components.pricing-public')
+  </div>
+</div>
+<!--===== PRICING AREA ENDS =======-->
 
 @endsection
 
@@ -748,6 +768,59 @@ overflow-y: hidden;
         icon.classList.add("fa-eye");
       }
     }
+
+    // Pricing toggle functionality
+    const toggle = document.getElementById('toggleYearly');
+    if (toggle) {
+        function updatePrices() {
+            const yearly = toggle.checked;
+            document.querySelectorAll('.package-price').forEach(function(el) {
+                const monthly = parseFloat(el.getAttribute('data-monthly'));
+                const yearlyVal = parseFloat(el.getAttribute('data-yearly'));
+                const monthly12 = parseFloat(el.getAttribute('data-monthly12'));
+                
+                function formatPrice(num) {
+                    return num.toFixed(2).replace('.', ',');
+                }
+                
+                const currencyEl = el.nextElementSibling;
+                const oldPriceEl = currencyEl?.nextElementSibling;
+                
+                if (yearly) {
+                    el.textContent = formatPrice(yearlyVal);
+                    if(currencyEl) currencyEl.textContent = ' KM';
+                    if(oldPriceEl) {
+                        oldPriceEl.classList.remove('d-none');
+                        oldPriceEl.classList.add('text-danger');
+                        oldPriceEl.textContent = formatPrice(monthly12) + ' KM';
+                    }
+                } else {
+                    el.textContent = formatPrice(monthly);
+                    if(currencyEl) currencyEl.textContent = ' KM';
+                    if(oldPriceEl) {
+                        oldPriceEl.classList.add('d-none');
+                        oldPriceEl.classList.remove('text-danger');
+                    }
+                }
+            });
+            
+            // Update billing period text
+            document.querySelectorAll('.billing-period').forEach(function(el) {
+                el.textContent = yearly ? 'godišnje' : 'mjesečno';
+            });
+            
+            // Update labels
+            const labelMonthly = document.getElementById('labelMonthly');
+            const labelYearly = document.getElementById('labelYearly');
+            if (labelMonthly && labelYearly) {
+                labelMonthly.style.color = yearly ? '#888' : '#222';
+                labelYearly.style.color = yearly ? '#222' : '#888';
+            }
+        }
+        
+        toggle.addEventListener('change', updatePrices);
+        updatePrices(); // Initialize
+    }
   });
 </script>
 
@@ -775,10 +848,63 @@ overflow-y: hidden;
 
 <script src="{{ URL::asset('build/js/login-js/main.js') }}"></script>
 
-
-
-
-
+<!-- Pricing Toggle Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Toggle for monthly/yearly pricing
+    const toggle = document.getElementById('toggleYearly');
+    if (toggle) {
+        function updatePrices() {
+            const yearly = toggle.checked;
+            document.querySelectorAll('.package-price').forEach(function(el) {
+                const monthly = parseFloat(el.getAttribute('data-monthly'));
+                const yearlyVal = parseFloat(el.getAttribute('data-yearly'));
+                const monthly12 = parseFloat(el.getAttribute('data-monthly12'));
+                
+                function formatPrice(num) {
+                    return num.toFixed(2).replace('.', ',');
+                }
+                
+                const currencyEl = el.nextElementSibling;
+                const oldPriceEl = currencyEl?.nextElementSibling;
+                
+                if (yearly) {
+                    el.textContent = formatPrice(yearlyVal);
+                    if(currencyEl) currencyEl.textContent = ' KM';
+                    if(oldPriceEl) {
+                        oldPriceEl.classList.remove('d-none');
+                        oldPriceEl.classList.add('text-danger');
+                        oldPriceEl.textContent = formatPrice(monthly12) + ' KM';
+                    }
+                } else {
+                    el.textContent = formatPrice(monthly);
+                    if(currencyEl) currencyEl.textContent = ' KM';
+                    if(oldPriceEl) {
+                        oldPriceEl.classList.add('d-none');
+                        oldPriceEl.classList.remove('text-danger');
+                    }
+                }
+            });
+            
+            // Update billing period text
+            document.querySelectorAll('.billing-period').forEach(function(el) {
+                el.textContent = yearly ? 'godišnje' : 'mjesečno';
+            });
+            
+            // Update labels
+            const labelMonthly = document.getElementById('labelMonthly');
+            const labelYearly = document.getElementById('labelYearly');
+            if (labelMonthly && labelYearly) {
+                labelMonthly.style.color = yearly ? '#888' : '#222';
+                labelYearly.style.color = yearly ? '#222' : '#888';
+            }
+        }
+        
+        toggle.addEventListener('change', updatePrices);
+        updatePrices(); // Initialize
+    }
+});
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

@@ -1462,7 +1462,7 @@ img {
   }
 }
 .welcome2-section-area .welcome2-header span, .genaration2-section-area .genaration2-header span, .process-section-area .process-images-content span,
-.process-section-area .process-header span {
+.process-section-area .process-header span, .pricing-section-area .pricing-header span {
   display: inline-block;
   background: #dff0fa!important;
   color: black!important;

@@ -30,13 +30,12 @@ use App\Http\Middleware\IsMineProfile;
 */
 
 // Public Routes (Accessible Without Authentication)
-
-
+Route::get('/packages', [PackageController::class, 'index']);
 
 // Protected Routes (Require Authentication)
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::apiResource('packages', PackageController::class);
+    Route::apiResource('packages', PackageController::class)->except(['index']);
 Route::apiResource('tariff-rates', TariffRateController::class);
 
     // INVOICE ROUTES
