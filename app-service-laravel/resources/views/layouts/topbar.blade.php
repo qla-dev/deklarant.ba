@@ -266,7 +266,7 @@
                        
                         <a class="dropdown-item" href="/cijene-paketa"><i
                                 class="fas fa-wand-magic-sparkles fs-12 text-muted me-1"></i> <span
-                                class="align-middle">Dostupna skeniranja :
+                                class="align-middle">Dostupni AI tokeni :
                                 <b>{{ Auth::user()->getRemainingScans() ?? '0' }}</b></span></a>
  @endif
                         <div class="dropdown-divider"></div>

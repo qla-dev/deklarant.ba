@@ -32,7 +32,7 @@ class CanScan
         }
 
         if ($userPackage->remaining_scans < 1) {
-            return response()->json(['message' => 'Nažalost, nema dostupnih AI skeniranja'], 403);
+            return response()->json(['message' => 'Nažalost, nema dostupnih AI tokena'], 403);
         }
 
         return $next($request);

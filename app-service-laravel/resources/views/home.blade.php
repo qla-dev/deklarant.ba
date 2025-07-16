@@ -73,8 +73,7 @@
             <div class="d-flex card  rounded-0 m-0 flex-column h-100">
                      @include('components.package-card-statusbar')
                     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center text-center p-2">
-                        <h6 class="text-muted text-uppercase fs-11 mb-1" style="margin-top: -10px;">Dostupna AI
-                            skeniranja</h6>
+                        <h6 class="text-muted text-uppercase fs-11 mb-1" style="margin-top: -10px;">Dostupni AI tokeni</h6>
                         <div class="d-flex align-items-center justify-content-center" style="margin-top: 20px;">
                             <i class="fas fa-wand-magic-sparkles text-info mb-1" style="font-size: 35px;"></i>
                             <h3 class="mb-0 ms-2"><span class="counter-value">{{ Auth::user()->getRemainingScans() ?? '0' }}</span></h3>

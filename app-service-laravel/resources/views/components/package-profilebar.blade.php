@@ -39,10 +39,10 @@
             <span class="text-danger">Pretplata je istekla</span>
 
         @elseif ($remainingScans == 0)
-            <span class="text-danger">Nema dostupnih skeniranja</span>
+            <span class="text-danger">Nema dostupnih AI tokena</span>
 
         @elseif ($remainingScans < 10)
-            <span class="text-warning">Imate još {{ $remainingScans }} skeniranja</span>
+            <span class="text-warning">Imate još {{ $remainingScans }} AI tokena</span>
 
         @elseif ($daysLeft !== null && $daysLeft <= 10 && $daysLeft > 0)
             <span class="text-warning">Ističe za {{ $daysLeft }} dana</span>

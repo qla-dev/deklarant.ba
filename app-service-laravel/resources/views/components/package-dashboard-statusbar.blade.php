@@ -18,7 +18,7 @@
 
 
 @else
-    <div class="text-info  status-text">Aktivna pretplata: <strong>{{ Auth::user()->getActivePackageName() }}</strong>. Preostalo skeniranja: <strong>{{ Auth::user()->getRemainingScans() }}</strong>.</div>
+    <div class="text-info  status-text">Aktivna pretplata: <strong>{{ Auth::user()->getActivePackageName() }}</strong>. Preostalo AI tokena: <strong>{{ Auth::user()->getRemainingScans() }}</strong>.</div>
 @endif
 
 

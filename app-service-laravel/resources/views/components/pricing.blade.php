@@ -40,9 +40,9 @@
             </div>
             <div class="card-body p-4 m-2 d-flex flex-column">
                 @if ($isActive)
-                    <div class="ribbon-two ribbon-two-info"><span>Aktivan</span></div>
+                    <div class="ribbon-two ribbon-two-info" style="z-index: 10;"><span>Aktivan</span></div>
                 @elseif (!$anyActive && $package->id === 2)
-                    <div class="ribbon-two ribbon-two-info"><span>Popularno</span></div>
+                    <div class="ribbon-two ribbon-two-info" style="z-index: 10;"><span>Popularno</span></div>
                 @endif
 
                 <div class="d-flex align-items-center mb-3">

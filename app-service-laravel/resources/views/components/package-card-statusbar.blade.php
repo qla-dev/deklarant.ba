@@ -42,7 +42,7 @@
 @elseif ($remainingScans < 10)
     <div class="bg-danger text-white text-center py-1 rounded-0">
         <i class="ri-alert-line me-1"></i>
-        <span><b>{{ $remainingScans }}</b> dostupno. <b>Nadopuni!</b></span>
+        <span><b>{{ $remainingScans }}</b> dostupnih AI tokena. <b>Nadopuni!</b></span>
     </div>
 
 @else
