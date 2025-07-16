@@ -16,11 +16,19 @@ class Package extends Model
         'available_scans',
         'page_limit',
         'document_history',
-        'description' ,
+        'description',
         'icon',
-    'speed_limit',
-'duration'
-];
+        'speed_limit',
+        'duration',
+        'token_price',
+        'price_monthly',
+        'price_yearly',
+        'declaration_token_cost',
+        'declaration_price',
+        'extra_page_token_cost',
+        'extra_page_price',
+        'simultaneous_logins',
+    ];
 
     public function userPackages()
     {
