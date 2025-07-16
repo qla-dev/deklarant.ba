@@ -392,9 +392,10 @@ function addRowToInvoice(item = {}, suggestions = []) {
     // --- Custom lock icon styling for visually integrated checkboxes ---
     const style = document.createElement('style');
     style.innerHTML = `
+      /* Unlocked: soft-info bg, no border */
       .lock-checkbox + .custom-lock-icon {
-        background-color: #d1ecfa; /* bg-soft-info for unlocked */
-        border: 1px solid #299cdb;
+        background-color: #d1ecfa; /* soft-info for unlocked */
+        border: none;
         display: inline-block;
         border-radius: 3px;
         text-align: center;
@@ -404,23 +405,24 @@ function addRowToInvoice(item = {}, suggestions = []) {
         position: absolute;
         right: 5px;
         top: 50%;
-        transform: translateY(-55%); /* move up a bit for better centering */
+        transform: translateY(-55%);
       }
+      /* Locked: blue bg, no border */
       .lock-checkbox:checked + .custom-lock-icon {
-        background-color: #e9ecef; /* gray bg for locked */
-        border: 1px solid #ccc;
+        background-color: #299cdb; /* blue for locked */
+        border: none;
       }
       .custom-lock-icon i {
-        color: #299cdb;
+        color: #299cdb; /* blue icon for unlocked */
         font-size: 16px;
         line-height: 26px;
         vertical-align: middle;
         position: relative;
-        top: -1px; /* move icon up for better centering */
+        top: -1px;
         transition: color 0.2s;
       }
       .lock-checkbox:checked + .custom-lock-icon i {
-        color: #888;
+        color: #fff; /* white icon for locked */
       }
       /* For smaller (22px) lock icons */
       .custom-lock-icon[style*='22px'] i {
@@ -428,6 +430,7 @@ function addRowToInvoice(item = {}, suggestions = []) {
         line-height: 22px;
         top: -3px;
       }
+      /* Dark mode: handle in custom.scss */
     `;
     document.head.appendChild(style);
 

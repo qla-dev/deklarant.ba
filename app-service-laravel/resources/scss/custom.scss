@@ -1294,9 +1294,33 @@ table.dataTable thead th.dtfc-fixed-right {
 
 }
 
-[data-bs-theme=dark] .custom-lock-icon.lock-disabled {
-    border: unset !important;
-    background: #212529 !important;
+.custom-lock-icon {
+  background: none !important;
+  border: 1px solid #ccc !important;
+}
+.lock-checkbox:checked + .custom-lock-icon {
+  background: #299cdb !important;
+  border: 1px solid #299cdb !important;
+}
+.custom-lock-icon i {
+  color: #888 !important;
+}
+.lock-checkbox:checked + .custom-lock-icon i {
+  color: #fff !important;
+}
+[data-bs-theme=dark] .custom-lock-icon {
+  background: #212529 !important;
+  border: none !important;
+}
+[data-bs-theme=dark] .lock-checkbox:checked + .custom-lock-icon {
+  background: #299cdb !important;
+  border: none !important;
+}
+[data-bs-theme=dark] .custom-lock-icon i {
+  color: #888 !important;
+}
+[data-bs-theme=dark] .lock-checkbox:checked + .custom-lock-icon i {
+  color: #fff !important;
 }
 
 .dark-remove-bg{
