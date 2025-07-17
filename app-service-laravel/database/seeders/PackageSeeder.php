@@ -30,7 +30,7 @@ class PackageSeeder extends Seeder
                 'description' => 'Za mikro preduzeća i samostalne korisnike koji žele isprobati AI skeniranje deklaracija bez velikih troškova.',
                 'available_scans' => 300,
                 'page_limit' => 5,
-                'document_history' => 30,
+                'document_history' => 90, // 3x (300/10)
                 'declaration_token_cost' => 10,
                 'declaration_price' => 6.00,
                 'extra_page_price' => 0.60,
@@ -48,7 +48,7 @@ class PackageSeeder extends Seeder
                 'description' => 'Savršen izbor za male timove i startupe koji žele ubrzati obradu deklaracija uz povoljnu cijenu.',
                 'available_scans' => 600,
                 'page_limit' => 5,
-                'document_history' => 60,
+                'document_history' => 180, // 3x (600/10)
                 'declaration_token_cost' => 10,
                 'declaration_price' => 5.00,
                 'extra_page_price' => 0.50,
@@ -66,7 +66,7 @@ class PackageSeeder extends Seeder
                 'description' => 'Optimalno rješenje za rastuće firme kojima je potrebna pouzdana i brza AI automatizacija deklaracija.',
                 'available_scans' => 1000,
                 'page_limit' => 5,
-                'document_history' => 100,
+                'document_history' => 300, // 3x (1000/10)
                 'declaration_token_cost' => 10,
                 'declaration_price' => 4.00,
                 'extra_page_price' => 0.40,
@@ -84,7 +84,7 @@ class PackageSeeder extends Seeder
                 'description' => 'Namijenjen ambicioznim kompanijama koje obrađuju veći broj deklaracija i žele vrhunsku efikasnost.',
                 'available_scans' => 3000,
                 'page_limit' => 5,
-                'document_history' => 300,
+                'document_history' => 900, // 3x (3000/10)
                 'declaration_token_cost' => 10,
                 'declaration_price' => 3.50,
                 'extra_page_price' => 0.35,
@@ -102,7 +102,7 @@ class PackageSeeder extends Seeder
                 'description' => 'Za velike firme koje zahtijevaju napredne mogućnosti, visok kapacitet i maksimalnu fleksibilnost u radu.',
                 'available_scans' => 10000,
                 'page_limit' => 5,
-                'document_history' => 1000,
+                'document_history' => 3000, // 3x (10000/10)
                 'declaration_token_cost' => 10,
                 'declaration_price' => 3.00,
                 'extra_page_price' => 0.30,
@@ -120,7 +120,7 @@ class PackageSeeder extends Seeder
                 'description' => 'Enterprise paket za kompanije s najvišim zahtjevima – neograničene mogućnosti, premium podrška i maksimalna sigurnost.',
                 'available_scans' => 15000,
                 'page_limit' => 5,
-                'document_history' => 1500,
+                'document_history' => 4500, // 3x (15000/10)
                 'declaration_token_cost' => 10,
                 'declaration_price' => 2.50,
                 'extra_page_price' => 0.25,
