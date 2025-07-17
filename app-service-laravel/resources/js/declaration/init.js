@@ -205,7 +205,6 @@ async function fillInvoiceData() {
         document.getElementById("invoice-no").value = cleaned;
     }
     thingInitialized();
-    await updateRemainingScans();
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -235,10 +234,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (!invoice.items?.length) {
             await waitForAIResult();
-            if (window.location.href.endsWith('/deklaracija')) {
-                window.location.href = '/deklaracija/' + getInvoiceId();
-                return;
-            }
+            // Redirect will be handled after the user clicks 'Uredu' on the info Swal
         }
 
         Swal.close();
@@ -460,6 +456,30 @@ async function waitForAIResult(showLoader = true) {
                     allowOutsideClick: false,
                     position: "center"
                 });
+
+                // Only show token info if URL does NOT end with /deklaracija/ID
+                const match = window.location.pathname.match(/\/deklaracija\/(\d+)$/);
+                if (!match) {
+                    updateRemainingScans();
+                    setTimeout(() => {
+                        const newRemaining = Math.max(0, (typeof remaining_scans !== 'undefined' ? remaining_scans : 0) - 1);
+                        Swal.fire({
+                            icon: "info",
+                            title: "Ova deklaracija je koštala 1 token",
+                            text: `Preostalo je ${newRemaining} tokena`,
+                            confirmButtonText: "Pregledaj deklaraciju",
+                            allowOutsideClick: false,
+                            position: "center",
+                            customClass: {
+                                confirmButton: 'btn btn-info'
+                            }
+                        }).then(() => {
+                            if (window.location.href.endsWith('/deklaracija')) {
+                                window.location.href = '/deklaracija/' + getInvoiceId();
+                            }
+                        });
+                    }, 3100);
+                }
             }, 300);
 
             _invoice_data = null;
