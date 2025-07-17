@@ -242,7 +242,7 @@ overflow-y: hidden;
               <div class="main-menu">
                 <ul class="mb-0">
                      
-      <li><a href="cjenovnik.html">Cjenovnik</a></li>
+      <li><a href="#cjenovnik">Cjenovnik</a></li>
       <li><a href="kontakt.html">Kontakt</a></li>
                 </ul>
                 <a href="#" class="header-btn2 rounded-1 loginFormShow">Prijava</a>
@@ -674,7 +674,7 @@ overflow-y: hidden;
 <!--===== PROCESS AREA ENDS =======-->
 
 <!--===== PRICING AREA STARTS =======-->
-<div class="pricing-section-area sp5" style="background-color: #f8f9fa;">
+<div class="pricing-section-area sp5" style="background-color: #f8f9fa;" id="cjenovnik">
   <div class="container">
     <div class="row pt-2 pb-4">
       <div class="col-lg-6 m-auto">
