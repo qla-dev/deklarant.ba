@@ -429,7 +429,7 @@ async function fetchAndPrefillImporterOnly() {
 
         } else if (importer) {
             console.log("[IMPORTER] No ID but importer data available. Treating as new.");
-            const newOption = new Option('Novi klijent', 'new', true, true);
+            const newOption = new Option('Novi primatelj', 'new', true, true);
             $("#importer-select2").append(newOption).trigger('change');
 
             $("#carrier-name").val(importer.name || "").prop('readonly', false);
@@ -645,7 +645,7 @@ $(document).ready(function () {
             if (supplier) {
                 // Set select2 to 'Novi klijent'
                 $("#supplier-select2 option[value='new']").remove();
-                var newOption = new Option('Novi klijent', 'new', true, true);
+                var newOption = new Option('Novi pošiljatelj', 'new', true, true);
                 $("#supplier-select2").append(newOption).val('new').trigger('change');
                 // Fill fields
                 $("#billing-name").val(supplier.name || "").prop('readonly', false);
@@ -681,7 +681,7 @@ $(document).ready(function () {
             if (importer) {
                 // Set select2 to 'Novi pošiljatelj'
                 $("#importer-select2 option[value='new']").remove();
-                var newOption = new Option('Novi klijent', 'new', true, true);
+                var newOption = new Option('Novi primatelj', 'new', true, true);
                 $("#importer-select2").append(newOption).val('new').trigger('change');
                 // Fill fields
                 $("#carrier-name").val(importer.name || "").prop('readonly', false);

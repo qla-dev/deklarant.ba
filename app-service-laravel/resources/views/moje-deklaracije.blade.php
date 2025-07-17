@@ -193,17 +193,27 @@ document.addEventListener("DOMContentLoaded", function () {
     render: function(data, type, row) {
         const gross = row.total_weight_gross ?? '';
         const net = row.total_weight_net ?? '';
+        function formatNum(val) {
+            const num = parseFloat(val);
+            if (isNaN(num)) return '';
+            return num.toFixed(2).replace('.', ',');
+        }
         if (!gross && !net) {
             return '<span class="text-muted">Nepoznato</span>';
         }
-        return `${gross} / ${net}`;
+        return `${formatNum(gross)} / ${formatNum(net)}`;
     },
     defaultContent: '<span class="text-muted">Nepoznato</span>'
 },{
     data: 'total_num_packages',
     title: '<i class="fa-regular fa-box-open"></i> Broj Koleta',
     render: function(data, type, row) {
-        return data ? data : '<span class="text-muted">Nepoznato</span>';
+        function formatNum(val) {
+            const num = parseFloat(val);
+            if (isNaN(num)) return '';
+            return num.toFixed(2).replace('.', ',');
+        }
+        return data ? formatNum(data) : '<span class="text-muted">Nepoznato</span>';
     },
     defaultContent: '<span class="text-muted">Nepoznato</span>'
 },
@@ -316,8 +326,8 @@ document.addEventListener("DOMContentLoaded", function () {
         case 0: // U obradi
             return trackBtn;
 
-        case 3: // Obrađena
-            return aiBtn;
+        case 3: // Neuspješna
+            return aiBtn + deleteBtn;
 
         default: // Sve ostalo: draft, spremljena, odbijena
             return viewBtn + editBtn + deleteBtn;
