@@ -240,6 +240,11 @@
         background-color: #f8f9fa !important;
         color: #6c757d !important;
     }
+    @media (max-width: 576.98px) {
+    .footer {
+        bottom: 40px!important;
+    }
+}
 
     /* Wrapper for search input */
 </style>
@@ -364,7 +369,7 @@
             <div class="tab-pane fade show active mb-0" id="overview-tab">
                 <div class="row h-100 align-items-stretch">
                     <!-- Left Side Cards -->
-                    <div class="col-xxl-4 d-flex flex-column order-2 order-md-2 order-lg-1 rounded-0">
+                    <div class="col-xxl-4 d-flex flex-column order-2 order-md-2 order-lg-1 rounded-0 mb-3 mb-md-0">
                         <div class="card mb-3 d-flex flex-column align-items-center justify-content-center rounded-0 d-none d-md-flex">
                             <div class="card-body d-flex align-items-center w-100 justify-content-between" style="min-height: 60px;">
                              @include('components.package-profilebar')
@@ -397,7 +402,7 @@
 <!-- MOJI PRIMAOCI -->
 <div class="card rounded-0 w-100 mb-3 mb-md-2 pb-2 pb-md-0">
      <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="mb-0">Moji pošiljaoci</h5>
+        <h5 class="mb-0">Moji pošiljatelji</h5>
         <a href="moji-dobavljaci" class="text-info text-end fs-13">Pregledaj sve</a>
     </div>
     <div class="card-body d-flex justify-content-start align-items-center flex-column pb-0 pt-0 position-relative" style="min-height: 250px;">

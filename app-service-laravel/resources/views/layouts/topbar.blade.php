@@ -30,7 +30,7 @@
                 <form class="app-search d-none d-md-block me-5" style="width: 77%;" id="global-search-form">
                     <div class="position-relative">
                         <input type="text" class="form-control border"
-                            placeholder="Pretraga po broju deklaracije, imenu dokumenta, pošiljaocu, zemlji projekla..."
+                            placeholder="Pretraga po broju deklaracije, imenu dokumenta, pošiljatelju, primatelju, zemlji projekla..."
                             autocomplete="off" id="global-search" />
                         <span class="mdi mdi-magnify search-widget-icon text-info"></span>
                         <span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none"
@@ -89,7 +89,7 @@
             <div class="form-group m-0">
                 <div class="input-group">
                     <input id="global-mobile-search" type="text" class="form-control border border-2"
-                        placeholder="Pretraga po broju deklaracije, imenu dokumenta, pošiljaocu, zemlji porijekla..."
+                        placeholder="Pretraga po broju deklaracije, imenu dokumenta, pošiljatelju, primatelju, zemlji porijekla..."
                         aria-label="Pretraga">
                     <button class="btn btn-info" type="submit">
                         <i class="mdi mdi-magnify"></i>

@@ -82,7 +82,8 @@ Rezultati pretrage za "<span class="text-info fw-medium ml-0 pl-0">{{ request('k
         item.country_of_origin?.toLowerCase().includes(keyword.toLowerCase()) ||
         item.file_name?.toLowerCase().includes(keyword.toLowerCase()) ||
         item.invoice_number?.toLowerCase().includes(keyword.toLowerCase()) ||
-        item.supplier?.name?.toLowerCase().includes(keyword.toLowerCase())
+        item.supplier?.name?.toLowerCase().includes(keyword.toLowerCase()) ||
+        item.importer?.name?.toLowerCase().includes(keyword.toLowerCase())
       );
 
       if (filtered.length === 0) {
