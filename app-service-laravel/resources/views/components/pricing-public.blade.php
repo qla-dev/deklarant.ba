@@ -5,12 +5,14 @@
 
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-12 mb-4 d-flex justify-content-center align-items-center">
+        <div class="col-12 mb-4 d-flex justify-content-center align-items-center position-relative" style="min-height: 48px;">
             <span class="me-3 fw-semibold h4" id="labelMonthly">Mjesečno</span>
             <div class="form-check form-switch d-flex align-items-center" style="height: 100%; margin-top: -7px; padding:0!important">
                 <input class="form-check-input" type="checkbox" id="toggleYearly" style="width:5em;height:2em; margin:0!important; padding:0!important">
             </div>
-            <span class="ms-3 fw-semibold h4" id="labelYearly">Godišnje</span>
+            <span class="ms-3 fw-semibold h4 d-flex align-items-center position-relative" id="labelYearly" style="z-index:1;">Godišnje
+                <span class="badge bg-info ms-2 position-absolute" style="left: 100%; margin-left: 8px;">15% popusta</span>
+            </span>
         </div>
 
 @foreach ($packages as $package)
@@ -50,6 +52,7 @@
                     <li><i class="fas fa-wand-magic-sparkles text-info me-2"></i>{{ $package->available_scans }} AI tokena</li>
                     <li><i class="ri-money-dollar-circle-line text-info me-2"></i>Cijena tokena: {{ number_format($package->token_price, 2, ',', '.') }} KM</li>
                     <li><i class="ri-file-edit-line text-info me-2"></i>Obrada deklaracije: {{ (int) $package->declaration_token_cost }} AI tokena</li>
+                    <li><i class="ri-check-double-line text-info me-2"></i>Mogućnost kreiranja do {{ floor($package->available_scans / 10) }} deklaracija</li>
                     <li><i class="ri-pages-line text-info me-2"></i>{{ $package->page_limit }} stranica po deklaraciji</li>
                     <li><i class="ri-add-circle-line text-info me-2"></i>Dodatna stranica: 1 AI token</li>
                     <li><i class="ri-archive-line text-info me-2"></i>{{ $package->document_history }} deklaracija u arhivi</li>
