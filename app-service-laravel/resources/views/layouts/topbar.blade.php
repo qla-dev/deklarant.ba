@@ -150,13 +150,13 @@
                                 <div class="col-6">
                                     <a class="dropdown-icon-item" href="/moji-klijenti">
                                         <i class="ri-user-line text-info fs-4 d-block mb-1"></i>
-                                        <span>@lang('translation.primaoci')</span>
+                                        <span>@lang('translation.clients')</span>
                                     </a>
                                 </div>
                                 <div class="col-6">
                                     <a class="dropdown-icon-item" href="/moji-pošiljaoci">
                                         <i class="ri-truck-line text-info fs-4 d-block mb-1"></i>
-                                        <span>@lang('translation.pošiljaoci')</span>
+                                        <span>@lang('translation.importers')</span>
                                     </a>
                                 </div>
                                 <div class="col-6">
