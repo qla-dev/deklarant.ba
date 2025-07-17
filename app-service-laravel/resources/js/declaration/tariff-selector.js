@@ -157,7 +157,7 @@ $(document).on('click', '.show-ai-btn', function () {
 
 async function initializeTariffSelects(row) {
     await waitForFunction(() => processedTariffData.length);
-    $select = $(row).find('.select2-tariff').first();
+    let $select = $(row).find('.select2-tariff').first();
     const prefillValue = $select.data("prefill");
 
     // Reset Select2 if already initialized
@@ -305,7 +305,6 @@ async function initializeTariffSelects(row) {
                         const parent = processedTariffData.find(i => i.id === parentId);
                         parentDesc = parent ? parent.display : "";
                     }
-                    // Remove tariff numbers from tooltip for child
                     function trimToFirstLetter(str) {
                         if (!str) return "";
                         const match = str.match(/[A-Za-zŠĐČĆŽšđčćž]/);
@@ -316,9 +315,11 @@ async function initializeTariffSelects(row) {
                     let onlyDesc = item.display?.replace(/^\s*\d+\s*[-–]?\s*/, '') || "";
                     onlyDesc = trimToFirstLetter(onlyDesc);
                     let onlyParentDesc = parentDesc.replace(/^\s*\d+\s*[-–]?\s*/, '');
-                    const tooltip = onlyParentDesc && onlyParentDesc !== onlyDesc
-                        ? `${onlyParentDesc} — ${onlyDesc}`
-                        : onlyDesc;
+                    onlyParentDesc = trimToFirstLetter(onlyParentDesc);
+                    let tooltip = onlyDesc;
+                    if (onlyParentDesc && onlyParentDesc !== onlyDesc) {
+                        tooltip = `${onlyParentDesc} — ${onlyDesc}`;
+                    }
                     $container.removeAttr('title'); // Remove native
                     $container.attr('data-bs-toggle', 'tooltip');
                     $container.attr('data-bs-placement', 'top');
@@ -368,29 +369,65 @@ async function initializeTariffSelects(row) {
                 input.focus();
                 input.removeEventListener('input', smartMaskHandler);
                 input.addEventListener('input', smartMaskHandler, { passive: true });
-
-                // Prefill search field with selected value
-                const selected = $select.val();
-                if (selected) {
-                    input.value = selected;
-                    const evt = new Event('input', { bubbles: true });
-                    input.dispatchEvent(evt);
-                }
             }
             // Enable Bootstrap tooltips for dropdown items
             setTimeout(() => {
-                if (window.tooltipManager) {
-                    window.tooltipManager.reinitializeTooltips();
-                } else {
-                    $('.select2-results__option [data-bs-toggle="tooltip"]').each(function () {
+                $('.select2-results__option [data-bs-toggle="tooltip"]').each(function () {
+                    console.log('Initializing tooltip for dropdown item:', this, $(this).attr('data-bs-title'));
+                    try {
                         if (!$(this).data('bs.tooltip')) {
                             new bootstrap.Tooltip(this);
+                            console.log('Tooltip initialized for dropdown item.');
+                        } else {
+                            console.log('Tooltip already exists for dropdown item.');
                         }
-                    });
-                }
+                    } catch (e) {
+                        console.error('Tooltip error for dropdown item:', e);
+                    }
+                });
             }, 0);
         }, 0);
     });
+
+    function removeTariffNumber(str) {
+        // Remove leading digits, spaces, and dash
+        return str.replace(/^\s*\d+[\s-–]*\s*/, '').trim();
+    }
+
+    function findParentDesc(selectedId) {
+        // Remove spaces for easier matching
+        const code = selectedId.replace(/\s+/g, '');
+        for (let len = code.length - 2; len >= 4; len -= 2) {
+            const prefix = code.slice(0, len);
+            // Find a parent with this prefix and correct length
+            const parent = processedTariffData.find(i => i.id.replace(/\s+/g, '') === prefix);
+            if (parent) {
+                return removeTariffNumber(parent.display);
+            }
+        }
+        return '';
+    }
+
+    function removeTariffNumberFull(str) {
+        // Remove everything up to the first letter (including digits, spaces, dashes)
+        const match = str.match(/[A-Za-zŠĐČĆŽšđčćž]/);
+        if (!match) return str.trim();
+        const idx = str.indexOf(match[0]);
+        return str.slice(idx).trim();
+    }
+
+    function findParentDescFull(selectedId) {
+        // Use the full code with spaces, try prefixes from shortest to longest (excluding the full code)
+        let parts = selectedId.trim().split(/\s+/);
+        for (let i = 1; i < parts.length; i++) {
+            const prefix = parts.slice(0, i).join(' ');
+            const parent = processedTariffData.find(i => i.id.trim() === prefix);
+            if (parent) {
+                return removeTariffNumberFull(parent.display);
+            }
+        }
+        return '';
+    }
 
     // Set tooltip for selection on initial load and after selection
     function setTooltipForSelection() {
@@ -400,34 +437,28 @@ async function initializeTariffSelects(row) {
             if (!selectedId) return;
             const selectedItem = processedTariffData.find(i => i.id === selectedId);
             if (!selectedItem) return;
-            let parentDesc = "";
-            if (selectedItem.id && selectedItem.id.length > 4) {
-                const parentId = selectedItem.id.slice(0, 4);
-                const parent = processedTariffData.find(i => i.id === parentId);
-                parentDesc = parent ? parent.display : "";
+
+            const childDesc = removeTariffNumberFull(selectedItem.display);
+            const parentDesc = findParentDescFull(selectedId);
+
+            let tooltip = childDesc;
+            if (parentDesc && parentDesc !== childDesc) {
+                tooltip = `${parentDesc} — ${childDesc}`;
             }
-            // Remove tariff numbers from tooltip for child
-            function trimToFirstLetter(str) {
-                if (!str) return "";
-                const match = str.match(/[A-Za-zŠĐČĆŽšđčćž]/);
-                if (!match) return str;
-                const idx = str.indexOf(match[0]);
-                return str.slice(idx);
-            }
-            let onlyDesc = selectedItem.display?.replace(/^\s*\d+\s*[-–]?\s*/, '') || "";
-            onlyDesc = trimToFirstLetter(onlyDesc);
-            let onlyParentDesc = parentDesc.replace(/^\s*\d+\s*[-–]?\s*/, '');
-            const tooltip = onlyParentDesc && onlyParentDesc !== onlyDesc
-                ? `${onlyParentDesc} — ${onlyDesc}`
-                : onlyDesc;
+
             $container.removeAttr('title');
             $container.attr('data-bs-toggle', 'tooltip');
             $container.attr('data-bs-placement', 'top');
             $container.attr('data-bs-title', tooltip);
-            if (typeof bootstrap !== "undefined") {
-                bootstrap.Tooltip.getInstance($container[0])?.dispose();
-                new bootstrap.Tooltip($container[0]);
-            }
+
+            setTimeout(() => {
+                if (typeof bootstrap !== "undefined") {
+                    try {
+                        bootstrap.Tooltip.getInstance($container[0])?.dispose();
+                        new bootstrap.Tooltip($container[0]);
+                    } catch (e) {}
+                }
+            }, 100);
         }, 0);
     }
 
@@ -436,14 +467,33 @@ async function initializeTariffSelects(row) {
     // Also set tooltip on initial load if value is prefilled
     setTooltipForSelection();
 
+    // After select2 initialization
     if (prefillValue) {
         const match = processedTariffData.find(item => item.id === prefillValue);
         if (match) {
-            const digits = (match.id || '').replace(/\D+/g, '');
-            if (digits.length >= 10) {
-                const option = new Option(match.id, match.id, true, true);
-                $select.append(option).trigger('change');
-            }
+            $select.find('option').remove();
+            // Use display text for the option
+            const option = new Option(match.display, match.id, true, true);
+            $select.append(option).trigger('change');
         }
+        // Ensure tooltip is set after select2 renders the selection
+        setTimeout(() => {
+            setTooltipForSelection();
+        }, 200);
     }
+
+    // Prefill search field with selected value on open
+    $select.on('select2:open', function () {
+        setTimeout(() => {
+            const input = document.querySelector('.select2-container--open .select2-search__field');
+            if (input) {
+                const selected = $select.val();
+                if (selected) {
+                    input.value = selected;
+                    const evt = new Event('input', { bubbles: true });
+                    input.dispatchEvent(evt);
+                }
+            }
+        }, 0);
+    });
 }
