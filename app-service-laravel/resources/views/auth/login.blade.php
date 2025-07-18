@@ -634,7 +634,7 @@ overflow-y: hidden;
         <div class="process-images-content heading4" >
           <span data-aos="fade-left" data-aos-duration="800">3. AI analiza i prijedlozi</span>
           <h2 data-aos="fade-left" data-aos-duration="1000" style="text-transform: unset!important;">Automatska detekcija tarifnih oznaka</h2>
-          <p data-aos="fade-left" data-aos-duration="1200">AI prepoznaje sve stavke i njihove povlastice u zavisnosti od zemlje porijekla, te automatski predlaže najtačniju tarifnu oznaku za svaki artikal. Sve prijedloge možete pregledati i ručno prilagoditi.</p>
+          <p data-aos="fade-left" data-aos-duration="1200">AI prepoznaje sve stavke i njihove povlastice u zavisnosti od zemlje porijekla, te automatski predlaže najtačniju tarifnu oznaku za svaki artikal. Pored toga detektuje pojedinačne cijene, količine i valutu proizvoda. Sve prijedloge možete pregledati i ručno prilagoditi.</p>
         </div>
       </div>
     </div>
