@@ -11723,12 +11723,19 @@ a.header-btn9 i {
   .sekcija {
     padding-bottom:3rem;
   }
+  .sekcija1 {
+    padding-bottom:3rem;
+  }
 }
 
 @media (min-width:776px) {
 
   .sekcija {
-    padding-bottom:160px
+    padding-bottom:140px
+  }
+
+  .sekcija1 {
+    padding-bottom:120px
   }
 }
 

@@ -489,8 +489,9 @@ overflow-y: hidden;
         <div class="mb-3">
           <lord-icon
               src="/build/images/lottie/wired-outline-2844-magic-wand-hover-pinch.json"
-              trigger="hover"
+              trigger="loop"
               stroke="regular"
+              speed="0.1"
               colors="primary:#121331,secondary:#289cdb"
               style="width:70px;height:70px">
           </lord-icon>
@@ -503,7 +504,7 @@ overflow-y: hidden;
         <div class="mb-3">
           <lord-icon
               src="/build/images/lottie/wired-outline-245-edit-document-hover-pinch.json"
-              trigger="hover"
+              trigger="loop"
               stroke="regular"
               style="width:65px;height:65px">
           </lord-icon>
@@ -516,7 +517,7 @@ overflow-y: hidden;
         <div class="mb-3">
           <lord-icon
               src="/build/images/lottie/wired-outline-56-document-hover-swipe.json"
-              trigger="hover"
+              trigger="loop"
               stroke="regular"
               style="width:60px;height:60px">
           </lord-icon>
@@ -531,7 +532,7 @@ overflow-y: hidden;
         <div class="mb-3">
           <lord-icon
               src="/build/images/lottie/wired-outline-12-layers-hover-slide.json"
-              trigger="hover"
+              trigger="loop"
               stroke="regular"
               style="width:65px;height:65px">
           </lord-icon>
@@ -544,7 +545,7 @@ overflow-y: hidden;
         <div class="mb-3">
           <lord-icon
               src="/build/images/lottie/wired-outline-212-arrow-1-rounded-hover-pinch.json"
-              trigger="hover"
+              trigger="loop"
               stroke="regular"
               style="width:60px;height:60px">
           </lord-icon>
@@ -557,7 +558,7 @@ overflow-y: hidden;
         <div class="mb-3">
           <lord-icon
               src="/build/images/lottie/wired-outline-1140-error-hover-enlarge.json"
-              trigger="hover"
+              trigger="loop"
               stroke="regular"
               style="width:65px;height:65px">
           </lord-icon>
@@ -580,23 +581,23 @@ overflow-y: hidden;
       <div class="col-lg-6 m-auto">
         <div class="process-header heading4 text-center">
           <span data-aos="fade-up" data-aos-duration="800">Kako funkcioniše</span>
-          <h2 data-aos="fade-up" data-aos-duration="1000" class="main-naslov">Od dokumenta do <strong style=" color: #289cdb!important;">gotove deklaracije</strong> – jednostavno u 5 koraka</h2>
+          <h2 data-aos="fade-up" data-aos-duration="1000" class="main-naslov">Od dokumenta do <strong style=" color: #289cdb!important;">gotove deklaracije</strong> – jednostavno u nekoliko koraka</h2>
         </div>
       </div>
     </div>
     <div class="space60 d-none d-md-block"></div>
 
     <!-- Korak 1 -->
-    <div class="row align-items-center sekcija ">
+    <div class="row align-items-center sekcija1">
       <div class="col-lg-7 order-2 order-md-1">
         <div class="process-images reveal">
-          <img src="build/images/homepage/img/process-img.png" alt="Upload dokumenta" class="aniamtion-key-3">
+          <img src="build/images/homepage/img/korak-1.png" alt="Upload dokumenta" class="aniamtion-key-3">
         </div>
       </div>
       <div class="col-lg-5 order-1 order-md-2">
         <div class="process-images-content heading4">
-          <span data-aos="fade-left" data-aos-duration="800">1. Učitaj deklaraciju</span>
-          <h2 data-aos="fade-left" data-aos-duration="1000">Upload carinske fakture</h2>
+          <span data-aos="fade-left" data-aos-duration="800">1. Učitavanje deklaracije</span>
+          <h2 data-aos="fade-left" data-aos-duration="1000" style="text-transform: unset!important;">Upload carinske fakture i AI obrada deklaracije</h2>
           <p data-aos="fade-left" data-aos-duration="1200">Uvezi PDF, Excel ili uslikaj dokument fakture. Naš sistem automatski prepoznaje sadržaj i priprema ga za obradu.</p>
         </div>
       </div>
@@ -610,13 +611,13 @@ overflow-y: hidden;
         <div class="col-lg-5">
           <div class="process-images-content heading4">
             <span data-aos="fade-right" data-aos-duration="800">2. Prepoznavanje primatelja i pošiljatelja</span>
-            <h2 data-aos="fade-right" data-aos-duration="1000">Automatsko pronalaženje</h2>
+            <h2 data-aos="fade-right" data-aos-duration="1000" style="text-transform: unset!important;">Automatska detekcija primatelja i pošiljatelja</h2>
             <p data-aos="fade-right" data-aos-duration="1200">Sistem automatski traži primatelja i pošiljatelja po nazivu, ID-u ili PIB-u. Ako postoji u tvojoj bazi ili globalnoj bazi deklarant.ai, podaci se odmah popunjavaju.</p>
           </div>
         </div>
         <div class="col-lg-7">
           <div class="process-images reveal">
-            <img src="build/images/homepage/img/process-img-3.png" alt="Prepoznavanje firmi" class="aniamtion-key-1">
+            <img src="build/images/homepage/img/korak-2.png" alt="Prepoznavanje firmi" class="aniamtion-key-1">
           </div>
         </div>
       </div>
@@ -626,14 +627,14 @@ overflow-y: hidden;
     <div class="row align-items-center sekcija" >
       <div class="col-lg-7 order-2 order-md-1">
         <div class="process-images reveal">
-          <img src="build/images/homepage/img/process-img-4.png" alt="AI klasifikacija"  class="aniamtion-key-3">
+          <img src="build/images/homepage/img/korak-3.png" alt="AI klasifikacija"  class="aniamtion-key-3">
         </div>
       </div>
       <div class="col-lg-5 order-1 order-md-2">
         <div class="process-images-content heading4" >
           <span data-aos="fade-left" data-aos-duration="800">3. AI analiza i prijedlozi</span>
-          <h2 data-aos="fade-left" data-aos-duration="1000">Automatska klasifikacija artikala</h2>
-          <p data-aos="fade-left" data-aos-duration="1200">AI prepoznaje sve stavke i automatski predlaže najtačniju tarifnu oznaku za svaki artikal. Sve prijedloge možete pregledati i ručno prilagoditi.</p>
+          <h2 data-aos="fade-left" data-aos-duration="1000" style="text-transform: unset!important;">Automatska detekcija tarifnih oznaka</h2>
+          <p data-aos="fade-left" data-aos-duration="1200">AI prepoznaje sve stavke i njihove povlastice u zavisnosti od zemlje porijekla, te automatski predlaže najtačniju tarifnu oznaku za svaki artikal. Sve prijedloge možete pregledati i ručno prilagoditi.</p>
         </div>
       </div>
     </div>
@@ -642,19 +643,36 @@ overflow-y: hidden;
     <div class="row align-items-center sekcija" >
       <div class="col-lg-5">
         <div class="process-images-content heading4" style="padding:0 50px 0 0!important">
-          <span data-aos="fade-right" data-aos-duration="800">4. Spasi i uređuj deklaraciju</span>
-          <h2 data-aos="fade-right" data-aos-duration="1000">Deklaracija ostaje u tvojoj arhivi</h2>
-          <p data-aos="fade-right" data-aos-duration="1200">Nisi siguran u sve podatke odmah? Nema problema. Svaku deklaraciju možeš spremiti, kasnije uređivati i dovršiti kad god poželiš.</p>
+          <span data-aos="fade-right" data-aos-duration="800">4. Automatsko raspoređivanje</span>
+          <h2 data-aos="fade-right" data-aos-duration="1000" style="text-transform: unset!important;">Raspodjela koleta, bruto i neto kilaže</h2>
+          <p data-aos="fade-right" data-aos-duration="1200">Sistem automatski raspoređuje koleta i kilažu, ali možeš ručno prilagoditi ukupne vrijednosti. Također, pojedinačna koleta, bruto ili neto kilaža mogu biti zaključani i isključeni iz automatskog proračuna.</p>
         </div>
       </div>
       <div class="col-lg-7">
         <div class="process-images reveal">
-           <img src="build/images/homepage/img/process-img-5.png" alt="Upload dokumenta" class="aniamtion-key-1">
+           <img src="build/images/homepage/img/korak-4.png" alt="Automatkso raspoređivanje" class="aniamtion-key-1">
         </div>
       </div>
     </div>
 
-    <!-- Korak 5 -->
+      <!-- Korak 5 -->
+      <div class="row align-items-center sekcija" >
+      <div class="col-lg-7 order-2 order-md-1">
+        <div class="process-images reveal">
+          <img src="build/images/homepage/img/korak-5.png" alt="Upload dokumenta"  class="aniamtion-key-3">
+        </div>
+      </div>
+      
+      <div class="col-lg-5 order-1 order-md-2">
+        <div class="process-images-content heading4">
+          <span data-aos="fade-right" data-aos-duration="800">5. Spasi i uređuj deklaraciju</span>
+          <h2 data-aos="fade-right" data-aos-duration="1000" style="text-transform: unset!important;">Spašavanje deklaracija u cloud arhivu</h2>
+          <p data-aos="fade-right" data-aos-duration="1200">Nisi siguran u sve podatke odmah? Nema problema. Svaku deklaraciju možeš spremiti, kasnije uređivati i dovršiti kad god poželiš.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Korak 6 -->
     <div class="row align-items-center sekcija">
       <div class="col-lg-7 order-2 order-md-1">
         <div class="process-images reveal">
