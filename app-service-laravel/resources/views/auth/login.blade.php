@@ -322,7 +322,7 @@ overflow-y: hidden;
 </h2>
                      
 
-                    <p data-aos="fade-up" data-aos-duration="1000">Automatsko skeniranje carinskih deklaracija uz pomoć AI – bez čekanja. <br>Uz <strong class="logo-span">deklarant<span class="ai-span" style="color:#289cdb!important">.ai</span></strong>, svaki unos postaje jednostavan, precizan i odmah dostupan u nekoliko sekundi – oslobodite se ručne obrade i fokusirajte se na ono što je važno.</p>
+                    <p data-aos="fade-up" data-aos-duration="1000">Automatsko skeniranje carinskih deklaracija uz pomoć AI – bez čekanja. <br>Uz <strong class="logo-span">deklarant<span class="ai-span" style="color:#289cdb!important; background: unset!important; background-color: unset!important;">.ai</span></strong>, svaki unos postaje jednostavan, precizan i odmah dostupan u nekoliko sekundi – oslobodite se ručne obrade i fokusirajte se na ono što je važno.</p>
                     <div data-aos="fade-up" data-aos-duration="1200">
                       <a href="#" class="header-btn2 rounded-1 openRegister">Započni </a>
                     <a href="#functions" class="header-btn2 ms-2 rounded-1">Provjeri funkcionalnosti</a>
@@ -523,7 +523,7 @@ overflow-y: hidden;
           </lord-icon>
         </div>
         <h5 class="fw-bold  text-black">Eksport u više formata</h5>
-        <p>Generiši dokumente u PDF, CSV (za tarifne softvere) i XML formatima – spremno za carinu i štampu.</p>
+        <p>Generiši dokumente u PDF, CSV i XML formatima – spremno za Asycudu ili štampu.</p>
       </div>
     </div>
 
@@ -612,7 +612,7 @@ overflow-y: hidden;
           <div class="process-images-content heading4">
             <span data-aos="fade-right" data-aos-duration="800">2. Prepoznavanje primatelja i pošiljatelja</span>
             <h2 data-aos="fade-right" data-aos-duration="1000" style="text-transform: unset!important;">Automatska detekcija primatelja i pošiljatelja</h2>
-            <p data-aos="fade-right" data-aos-duration="1200">Sistem automatski traži primatelja i pošiljatelja po nazivu, ID-u ili PIB-u. Ako postoji u tvojoj bazi ili globalnoj bazi deklarant.ai, podaci se odmah popunjavaju.</p>
+            <p data-aos="fade-right" data-aos-duration="1200">Sistem automatski traži primatelja i pošiljatelja po nazivu, ID-u ili PIB-u. Ako postoji u tvojoj bazi ili globalnoj bazi deklarant.ai, podaci se odmah popunjavaju. Pored toga, AI automatski prepoznaje incoterm i njegovu destinaciju sa fakture, ako isti postoji</p>
           </div>
         </div>
         <div class="col-lg-7">
@@ -672,21 +672,23 @@ overflow-y: hidden;
       </div>
     </div>
 
-    <!-- Korak 6 -->
-    <div class="row align-items-center sekcija">
-      <div class="col-lg-7 order-2 order-md-1">
-        <div class="process-images reveal">
-          <img src="build/images/homepage/img/process-img-6.png" class="aniamtion-key-2" alt="Eksport fajla">
+       <!-- Korak 6 -->
+       <div class="row align-items-center mb-3" >
+      <div class="col-lg-5">
+        <div class="process-images-content heading4" style="padding:0 50px 0 0!important">
+          <span data-aos="fade-right" data-aos-duration="800">5. Eksport i obrada dokumenta</span>
+          <h2 data-aos="fade-right" data-aos-duration="1000" style="text-transform: unset!important;">Preuzmi gotovu deklaraciju</h2>
+          <p data-aos="fade-right" data-aos-duration="1200">Kada ste zadovoljni, jednim klikom eksportujte podatke u PDF, CSV ili XML format – spremno za carinu, internu arhivu ili tarifne software uključujući Ayscudu.</p>
         </div>
       </div>
-      <div class="col-lg-5 order-1 order-md-2">
-        <div class="process-images-content heading4">
-          <span data-aos="fade-left" data-aos-duration="800">5. Eksport i dostava</span>
-          <h2 data-aos="fade-left" data-aos-duration="1000">Preuzmi gotovu deklaraciju</h2>
-          <p data-aos="fade-left" data-aos-duration="1200">Kada ste zadovoljni, jednim klikom eksportujte podatke u PDF, CSV ili XML format – spremno za carinu, internu arhivu ili tarifne softvere.</p>
+      <div class="col-lg-7">
+        <div class="process-images reveal">
+           <img src="build/images/homepage/img/korak-6.png" alt="Automatkso raspoređivanje" class="aniamtion-key-1">
         </div>
       </div>
     </div>
+
+  
   </div>
 </div>
 <!--===== PROCESS AREA ENDS =======-->

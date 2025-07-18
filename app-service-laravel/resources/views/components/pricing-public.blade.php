@@ -50,15 +50,15 @@
 
                 <!-- Features -->
                 <ul class="list-unstyled text-muted vstack gap-3 mb-4">
-                    <li><i class="fas fa-wand-magic-sparkles text-info me-2"></i>{{ $package->available_scans }} AI tokena</li>
+                    <li><i class="fas fa-wand-magic-sparkles text-info me-2"></i><span class="token-count" data-monthly="{{ $package->available_scans }}">{{ $package->available_scans }}</span> AI tokena</li>
                     <li><i class="ri-money-dollar-circle-line text-info me-2"></i>Cijena tokena: {{ number_format($package->token_price, 2, ',', '.') }} KM</li>
                     <li><i class="ri-file-edit-line text-info me-2"></i>Obrada deklaracije: {{ (int) $package->declaration_token_cost }} AI tokena</li>
-                    <li><i class="ri-check-double-line text-info me-2"></i>Mogućnost kreiranja do {{ floor($package->available_scans / 10) }} deklaracija</li>
+                    <li><i class="ri-check-double-line text-info me-2"></i>Mogućnost kreiranja do: <span class="declaration-count" data-monthly="{{ floor($package->available_scans / 10) }}">{{ floor($package->available_scans / 10) }}</span> deklaracija</li>
                     <li><i class="ri-pages-line text-info me-2"></i>{{ $package->page_limit }} stranica po deklaraciji</li>
                     <li><i class="ri-add-circle-line text-info me-2"></i>Dodatna stranica: 1 AI token</li>
                     <li><i class="ri-archive-line text-info me-2"></i>{{ $package->document_history }} deklaracija u arhivi</li>
                     <li><i class="ri-timer-flash-line text-info me-2"></i>Prosječna brzina skeniranja: {{ $package->speed_limit }}</li>
-                    <li><i class="ri-calendar-check-line text-info me-2"></i>Trajanje paketa: {{ $package->duration }} dana</li>
+                    <li><i class="ri-calendar-check-line text-info me-2"></i>Trajanje paketa: <span class="package-duration" data-monthly="{{ $package->duration }}">{{ $package->duration }} dana</span></li>
                     <li><i class="ri-customer-service-2-line text-info me-2"></i>24/7 Support</li>
                     <li><i class="ri-device-line text-info me-2"></i>Istovremena prijava sa {{ $package->simultaneous_logins }} MAC adresa</li>
                 </ul>
@@ -71,3 +71,36 @@
 
     </div>
 </div> 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    function updateYearlyFields() {
+        const yearly = document.getElementById('toggleYearly').checked;
+        document.querySelectorAll('.token-count').forEach(function(el) {
+            const monthly = parseInt(el.getAttribute('data-monthly'));
+            if (yearly) {
+                el.textContent = (monthly * 12).toString();
+            } else {
+                el.textContent = monthly.toString();
+            }
+        });
+        document.querySelectorAll('.declaration-count').forEach(function(el) {
+            const monthly = parseInt(el.getAttribute('data-monthly'));
+            if (yearly) {
+                el.textContent = (monthly * 12).toString();
+            } else {
+                el.textContent = monthly.toString();
+            }
+        });
+        document.querySelectorAll('.package-duration').forEach(function(el) {
+            const monthlyDuration = el.getAttribute('data-monthly');
+            if (yearly) {
+                el.textContent = '1 godina';
+            } else {
+                el.textContent = monthlyDuration + ' dana';
+            }
+        });
+    }
+    document.getElementById('toggleYearly').addEventListener('change', updateYearlyFields);
+    updateYearlyFields();
+});
+</script> 
