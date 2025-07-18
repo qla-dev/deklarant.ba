@@ -1,12 +1,13 @@
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-12 mb-4 d-flex justify-content-center align-items-center position-relative" style="min-height: 48px;">
+        <div class="col-12 mb-4 d-flex align-items-center justify-content-center position-relative" style="min-height: 48px;">
             <span class="me-3 fw-semibold h4" id="labelMonthly">Mjesečno</span>
             <div class="form-check form-switch d-flex align-items-center" style="height: 100%; margin-top: -7px;">
                 <input class="form-check-input" type="checkbox" id="toggleYearly" style="width:4em;height:2em">
             </div>
-            <span class="ms-3 fw-semibold h4 d-flex align-items-center position-relative" id="labelYearly" style="z-index:1;">Godišnje
-                <span class="badge bg-info ms-2 position-absolute" style="left: 100%;  margin-left: 8px;">15% popusta</span>
+            <span class="ms-3 fw-semibold h4 d-flex align-items-center position-relative g-label-badge-flex" id="labelYearly" style="z-index:1;">
+                Godišnje
+                <span class="badge bg-info ms-2 position-absolute badge-below-label-sm" style="left: 100%; margin-left: 8px;">15% popusta</span>
             </span>
         </div>
 @php
@@ -20,6 +21,13 @@
         !\Carbon\Carbon::parse($stats->expiration_date)->isPast() &&
         $stats->active == 1 &&
         Auth::user()->getRemainingScans() > 0;
+
+    $trialWhitelist = [
+        'amer.zavlan@gmail.com',
+        'armin.poplata@gmail.com',
+        'mladenka.l@arbelsped.com',
+        'kulasinn@gmail.com',
+    ];
 @endphp
 
 @foreach ($packages as $package)
@@ -87,7 +95,7 @@
                     @else
                   <a id="btnAction-{{ $package->id }}"
    href="javascript:void(0);"
-   class="btn btn-info w-100 mt-auto text-white {{ $loop->iteration > 1 ? 'disabled' : '' }}"
+   class="btn btn-info w-100 mt-auto text-white"
    data-package-id="{{ $package->id }}"
    data-duration="{{ $package->duration }}"
    data-available-scans="{{ $package->available_scans }}"
@@ -95,8 +103,7 @@
    data-bs-target="#paymentChoiceModal">
    Započni
 </a>
-
-                    @endif
+    @endif
                
             </div>
         </div>
@@ -139,6 +146,12 @@
                                 <img src="https://img.icons8.com/color/32/000000/mastercard-logo.png"
                                     id="cardLogo" alt="Mastercard" height="20">
                             </span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Opis plaćanja:</label>
+                        <div class="form-control-plaintext">
+                            Uplata za deklarant.ai paket usluga – <span id="selectedPackageName">[paket]</span>
                         </div>
                     </div>
 
@@ -214,12 +227,11 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold">Svrha uplate:</label>
-                    <p class="mb-0">Uplata za deklarant.ai paket usluga – <span class="text-info fw-semibold">[StartUp /
-                            GoBig / Business]</span></p>
+                    <p class="mb-0">Uplata za deklarant.ai paket usluga – <span class="text-info fw-semibold" id="virmanPackageName">[paket]</span></p>
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold">Iznos:</label>
-                    <p class="mb-0 text-info fs-5">[unesi iznos u KM]</p>
+                    <p class="mb-0 text-info fs-5" id="virmanPackageAmount">[unesi iznos u KM]</p>
                 </div>
                 <hr>
                 <p class="text-muted small">
@@ -260,12 +272,13 @@
                             <div class="fw-bold mt-2">Plaćanje virmanom</div>
                         </button>
                     </div>
+                    @if (in_array(Auth::user()->email, $trialWhitelist))
                     <div class="col-12">
                        <button id="btnActivatePackage" class="w-100 btn btn-md btn-success fw-bold">
-    <i class="fa fa-check-circle me-1"></i> Aktiviraj trial
-</button>
-
+                            <i class="fa fa-check-circle me-1"></i> Aktiviraj trial
+                        </button>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -278,6 +291,11 @@
     document.addEventListener("DOMContentLoaded", function () {
         const userId = {{ Auth::id() }};
         let selectedPackageId = null;
+        let selectedPackageName = null;
+        let selectedPackagePrice = null;
+        let selectedPackagePriceYearly = null;
+        let selectedPackagePriceMonthly = null;
+        let selectedPackagePriceMonthly12 = null;
 
         const token = @json(session('auth_token')); 
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
@@ -286,6 +304,21 @@
         document.querySelectorAll('[id^="btnAction-"]').forEach(btn => {
             btn.addEventListener('click', () => {
                 selectedPackageId = btn.getAttribute("data-package-id");
+                // Get the package name from the card
+                const card = btn.closest('.card');
+                selectedPackageName = card ? card.querySelector('h5.fw-semibold').textContent.trim() : '';
+                // Get price data attributes
+                const priceEl = card ? card.querySelector('.package-price') : null;
+                selectedPackagePriceMonthly = priceEl ? parseFloat(priceEl.getAttribute('data-monthly')) : null;
+                selectedPackagePriceYearly = priceEl ? parseFloat(priceEl.getAttribute('data-yearly')) : null;
+                selectedPackagePriceMonthly12 = priceEl ? parseFloat(priceEl.getAttribute('data-monthly12')) : null;
+                // Determine which price to show
+                const isYearly = document.getElementById('toggleYearly').checked;
+                selectedPackagePrice = isYearly ? selectedPackagePriceYearly : selectedPackagePriceMonthly;
+                // Set in both modals
+                document.getElementById('selectedPackageName').textContent = selectedPackageName;
+                document.getElementById('virmanPackageName').textContent = selectedPackageName;
+                document.getElementById('virmanPackageAmount').textContent = selectedPackagePrice ? selectedPackagePrice.toFixed(2) + ' KM' : '';
             });
         });
 
@@ -395,6 +428,11 @@
                     }
                 }
             });
+            // Also update modal amount if a package is selected
+            if(selectedPackageId) {
+                const price = yearly ? selectedPackagePriceYearly : selectedPackagePriceMonthly;
+                document.getElementById('virmanPackageAmount').textContent = price ? price.toFixed(2) + ' KM' : '';
+            }
             document.getElementById('labelMonthly').style.color = yearly ? '#888' : '#222';
             document.getElementById('labelYearly').style.color = yearly ? '#222' : '#888';
         }

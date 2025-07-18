@@ -1334,3 +1334,38 @@ table.dataTable thead th.dtfc-fixed-right {
 
 
 
+
+// Responsive badge for pricing toggle
+@media (max-width: 575.98px) {
+  .pricing-toggle-flex {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.5rem;
+  }
+  .badge-below-label-sm {
+    position: static !important;
+    display: block !important;
+    margin-left: 0 !important;
+    margin-top: 0.5rem !important;
+    left: auto !important;
+    top: auto !important;
+    width: fit-content;
+    text-align: left;
+  }
+}
+
+.g-label-badge-flex {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+@media (max-width: 575.98px) {
+  .g-label-badge-flex {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+
+

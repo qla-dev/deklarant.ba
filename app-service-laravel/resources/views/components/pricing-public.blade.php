@@ -5,13 +5,14 @@
 
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-12 mb-4 d-flex justify-content-center align-items-center position-relative" style="min-height: 48px;">
+        <div class="col-12 mb-4 d-flex align-items-center justify-content-center position-relative" style="min-height: 48px;">
             <span class="me-3 fw-semibold h4" id="labelMonthly">Mjesečno</span>
             <div class="form-check form-switch d-flex align-items-center" style="height: 100%; margin-top: -7px; padding:0!important">
                 <input class="form-check-input" type="checkbox" id="toggleYearly" style="width:5em;height:2em; margin:0!important; padding:0!important">
             </div>
-            <span class="ms-3 fw-semibold h4 d-flex align-items-center position-relative" id="labelYearly" style="z-index:1;">Godišnje
-                <span class="badge bg-info ms-2 position-absolute" style="left: 100%; margin-left: 8px;">15% popusta</span>
+            <span class="ms-3 fw-semibold h4 d-flex align-items-center position-relative g-label-badge-flex" id="labelYearly" style="z-index:1;">
+                Godišnje
+                <span class="badge bg-info ms-2 position-absolute badge-below-label-sm" style="left: 100%; margin-left: 8px;">15% popusta</span>
             </span>
         </div>
 
